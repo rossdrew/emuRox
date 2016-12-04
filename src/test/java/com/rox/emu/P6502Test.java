@@ -6,7 +6,6 @@ import org.junit.Test;
 import static junit.framework.TestCase.assertEquals;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 public class P6502Test {
@@ -42,15 +41,22 @@ public class P6502Test {
         processor.step();
 
         int[] registers = processor.getRegisters();
-        assertEquals(0xAA, registers[P6502.ACC_REG]);       //is the Accumulator loaded with desired value
+        assertEquals(0xAA, registers[P6502.ACC_REG]);
         assertEquals(0x0, registers[P6502.STATUS_FLAGS_REG] & 0);
         assertEquals(processor.getPC(), 2);
     }
 
     @Test
     public void testLDC_I_withZeroResult(){
-        //TODO testLDC_I with Flag:Z on, 2 == (2 & STATUS)
-        fail("not yet implemented");
+        int[] program = {P6502.OPCODE_LDA_I, 0x0};
+        System.arraycopy(program, 0, memory, 0, program.length);
+
+        processor.step();
+
+        int[] registers = processor.getRegisters();
+        assertEquals(0x0, registers[P6502.ACC_REG]);
+        assertEquals(P6502.STATUS_FLAGS_ZERO, registers[P6502.STATUS_FLAGS_REG] & P6502.STATUS_FLAGS_ZERO);
+        assertEquals(processor.getPC(), 2);
     }
 
     @Test

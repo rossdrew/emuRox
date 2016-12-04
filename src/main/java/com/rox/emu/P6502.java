@@ -5,12 +5,13 @@ package com.rox.emu;
  */
 public class P6502 {
     private final String[] registerNames = new String[] {"Accumulator", "", "", "Program Counter Hi", "Program Counter Low", "", "Stack Pointer", "Status Flags"};
+    private final String[] flagNames = new String[] {"Carry", "Zero Result", "IRQ Disable", "Decimal Mode", "Break Command", "<Unused>", "Overflow", "Negative Result"};
 
     public static final int ACC_REG = 0x0;
     public static final int PC_HI_REG = 0x3;
     public static final int PC_LO_REG = 0x4;
     public static final int SP_REG = 0x6;
-    public static final int STATUS_FLAGS_REG = 0x0;
+    public static final int STATUS_FLAGS_REG = 0x7;
     public static final int STATUS_FLAG_CARRY = 0x0;
     public static final int STATUS_FLAGS_ZERO = 0x1;
     public static final int STATUS_FLAGS_IRQ_DISABLE = 0x2;
@@ -76,6 +77,11 @@ public class P6502 {
         registers[registerID] = val;
     }
 
+    private void setFlag(int flagID) {
+        System.out.println("Setting (F)'" + flagNames[flagID] + "'");
+        registers[STATUS_FLAGS_REG] = registers[STATUS_FLAGS_REG] | flagID;
+    }
+
     private int getByteOfMemoryAt(int location){
         final int memoryByte = memory[location];
         System.out.println("Got " + memoryByte + " from mem[" + location + "]");
@@ -104,5 +110,8 @@ public class P6502 {
             default:
                 System.out.println("Unknown OPCODE: " + opCode);
         }
+
+        if (getRegister(ACC_REG) == 0){}
+            setFlag(STATUS_FLAGS_ZERO);
     }
 }
