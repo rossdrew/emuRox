@@ -10,7 +10,15 @@ public class P6502 {
     public static final int PC_HI_REG = 0x3;
     public static final int PC_LO_REG = 0x4;
     public static final int SP_REG = 0x6;
-    public static final int STATUS_FLAGS_REG = 0x7;
+    public static final int STATUS_FLAGS_REG = 0x0;
+    public static final int STATUS_FLAG_CARRY = 0x0;
+    public static final int STATUS_FLAGS_ZERO = 0x1;
+    public static final int STATUS_FLAGS_IRQ_DISABLE = 0x2;
+    public static final int STATUS_FLAGS_DEC = 0x3;
+    public static final int STATUS_FLAGS_BREAK = 0x4;
+    public static final int STATUS_FLAGS_UNUSED = 0x5;
+    public static final int STATUS_FLAGS_OVERFLOW = 0x6;
+    public static final int STATUS_FLAGS_NEGATIVE = 0x7;
 
     public static final int OPCODE_ADC_I = 0x69;  //ADC Immediate
     public static final int OPCODE_LDA_I = 0xA9;  //LDA Immediate
@@ -83,7 +91,8 @@ public class P6502 {
         switch (opCode){
             case OPCODE_ADC_I:
                 System.out.println("Instruction: Immediate ADC...");
-
+                memoryLocation = getAndStepPC(false);
+                setRegister(ACC_REG, getByteOfMemoryAt(memoryLocation) + getRegister(ACC_REG));
                 break;
 
             case OPCODE_LDA_I:
@@ -91,6 +100,9 @@ public class P6502 {
                 memoryLocation = getAndStepPC(false);
                 setRegister(ACC_REG, getByteOfMemoryAt(memoryLocation));
                 break;
+
+            default:
+                System.out.println("Unknown OPCODE: " + opCode);
         }
     }
 }
