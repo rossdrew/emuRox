@@ -61,8 +61,15 @@ public class P6502Test {
 
     @Test
     public void testLDC_I_withNegativeResult(){
-        //TODO testLDC_I with Flag:N on, 128 == (128 & STATUS)
-        fail("not yet implemented");
+        int[] program = {P6502.OPCODE_LDA_I, 0x80}; //XXX Only works with 0x80, I suspect some Java "byte" issues
+        System.arraycopy(program, 0, memory, 0, program.length);
+
+        processor.step();
+
+        int[] registers = processor.getRegisters();
+        assertEquals(0x80, registers[P6502.ACC_REG]);
+        assertEquals(P6502.STATUS_FLAGS_NEGATIVE, registers[P6502.STATUS_FLAGS_REG] & P6502.STATUS_FLAGS_NEGATIVE);
+        assertEquals(processor.getPC(), 2);
     }
 
     @Test
@@ -80,7 +87,6 @@ public class P6502Test {
         assertEquals(0x2, registers[P6502.ACC_REG]);  //Accumulator is 0x2 == (0x1 + 0x1) == (mem[0x1] + mem[0x4])
         assertEquals(processor.getPC(), 4);
         assertEquals(0x0, registers[P6502.STATUS_FLAGS_REG] & 0);
-        //TODO N,Z,C,V are correct
     }
 
     @Test

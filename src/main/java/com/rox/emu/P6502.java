@@ -51,6 +51,18 @@ public class P6502 {
         return registers[registerID];
     }
 
+    public boolean[] getStatusFlags(){
+        boolean[] flags = new boolean[8];
+        flags[0] = (registers[STATUS_FLAGS_REG] & STATUS_FLAG_CARRY) == STATUS_FLAG_CARRY;
+        flags[1] = (registers[STATUS_FLAGS_REG] & STATUS_FLAGS_ZERO) == STATUS_FLAGS_ZERO;
+        flags[2] = (registers[STATUS_FLAGS_REG] & STATUS_FLAGS_IRQ_DISABLE) == STATUS_FLAGS_IRQ_DISABLE;
+        flags[3] = (registers[STATUS_FLAGS_REG] & STATUS_FLAGS_DEC) == STATUS_FLAGS_DEC;
+        flags[4] = (registers[STATUS_FLAGS_REG] & STATUS_FLAGS_BREAK) == STATUS_FLAGS_BREAK;
+        flags[5] = (registers[STATUS_FLAGS_REG] & STATUS_FLAGS_UNUSED) == STATUS_FLAGS_UNUSED;
+        flags[6] = (registers[STATUS_FLAGS_REG] & STATUS_FLAGS_OVERFLOW) == STATUS_FLAGS_OVERFLOW;
+        flags[7] = (registers[STATUS_FLAGS_REG] & STATUS_FLAGS_NEGATIVE) == STATUS_FLAGS_NEGATIVE;
+        return flags;
+    }
 
     /**
      * Get the value of the 16 bit Program Counter (PC) and increment
@@ -111,7 +123,11 @@ public class P6502 {
                 System.out.println("Unknown OPCODE: " + opCode);
         }
 
-        if (getRegister(ACC_REG) == 0){}
+        if (getRegister(ACC_REG) == 0)
             setFlag(STATUS_FLAGS_ZERO);
+
+        if ((getRegister(ACC_REG) | 128) == 128)
+            setFlag(STATUS_FLAGS_NEGATIVE);
+
     }
 }
