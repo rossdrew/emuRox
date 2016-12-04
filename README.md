@@ -8,6 +8,9 @@ Straight away Java doesn't feel like the right choice but it's a good learning e
 
 ###2506
 
+ Resources:
+   - https://skilldrick.github.io/easy6502/
+
 ####Status Flags
     
     NVss DIZC
