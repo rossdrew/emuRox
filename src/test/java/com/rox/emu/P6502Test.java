@@ -66,7 +66,7 @@ public class P6502Test {
     }
 
     @Test
-    public void testImmediateAddToAccumulator(){
+    public void testADC_I(){
         int[] program = {P6502.OPCODE_LDA_I,
                          0x1,
                          P6502.OPCODE_ADC_I,
@@ -79,6 +79,19 @@ public class P6502Test {
         int[] registers = processor.getRegisters();
         assertEquals(0x2, registers[P6502.ACC_REG]);  //Accumulator is 0x2 == (0x1 + 0x1) == (mem[0x1] + mem[0x4])
         assertEquals(processor.getPC(), 4);
+        assertEquals(0x0, registers[P6502.STATUS_FLAGS_REG] & 0);
         //TODO N,Z,C,V are correct
     }
+
+    @Test
+    public void testADC_I_WithZeroResult(){ fail("not yet implemented");}
+
+    @Test
+    public void testADC_I_WithNegativeResult(){ fail("not yet implemented"); }
+
+    @Test
+    public void testADC_I_WithCarry(){ fail("not yet implemented");}
+
+    @Test
+    public void testADC_I_WithOverflow(){ fail("not yet implemented");}
 }
