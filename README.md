@@ -9,6 +9,10 @@ Straight away Java doesn't feel like the right choice but it's a good learning e
 ###Implemented
 
  - Immediate ADC instruction
+ 
+###Notes
+
+ I've kept the PC as two separate registers.  It makes it a little tougher to deal with but more authentic. 
 
 -----
 
