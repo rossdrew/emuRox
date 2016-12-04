@@ -12,7 +12,8 @@ public class P6502 {
     public static final int SP_REG = 0x6;
     public static final int STATUS_FLAGS_REG = 0x7;
 
-    public static final int OPCODE_ADC_I = 0xA9;  //ADC Immediate
+    public static final int OPCODE_ADC_I = 0x69;  //ADC Immediate
+    public static final int OPCODE_LDA_I = 0xA9;  //LDA Immediate
 
     private int[] registers = new int[8];
     private int[] memory;
@@ -74,13 +75,19 @@ public class P6502 {
     }
 
     public void step() {
+        System.out.println("*** Step ***");
         int memoryLocation = getAndStepPC(false);
         int opCode = getByteOfMemoryAt(memoryLocation);
 
         //Execute the opcode
         switch (opCode){
             case OPCODE_ADC_I:
-                System.out.println("Instruction: Immediate ADC...6");
+                System.out.println("Instruction: Immediate ADC...");
+
+                break;
+
+            case OPCODE_LDA_I:
+                System.out.println("Instruction: Immediate LDA...");
                 memoryLocation = getAndStepPC(false);
                 setRegister(ACC_REG, getByteOfMemoryAt(memoryLocation));
                 break;
