@@ -90,10 +90,27 @@ public class P6502Test {
     }
 
     @Test
-    public void testADC_I_WithZeroResult(){ fail("not yet implemented");}
+    public void testADC_I_WithZeroResult(){
+        int[] program = {P6502.OPCODE_LDA_I,
+                         0x0,
+                         P6502.OPCODE_ADC_I,
+                         0x0};
+        System.arraycopy(program, 0, memory, 0, program.length);
+
+        processor.step();
+        processor.step();
+
+        int[] registers = processor.getRegisters();
+        assertEquals(0x0, registers[P6502.ACC_REG]);
+        assertEquals(processor.getPC(), 4);
+        assertEquals(P6502.STATUS_FLAGS_ZERO, registers[P6502.STATUS_FLAGS_REG] & P6502.STATUS_FLAGS_ZERO);
+    }
 
     @Test
-    public void testADC_I_WithNegativeResult(){ fail("not yet implemented"); }
+    public void testADC_I_WithNegativeResult(){
+        //XXX Undestand negation on the 6502
+        fail("not yet implemented");
+    }
 
     @Test
     public void testADC_I_WithCarry(){ fail("not yet implemented");}
