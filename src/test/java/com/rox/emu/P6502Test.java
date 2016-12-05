@@ -84,7 +84,7 @@ public class P6502Test {
         processor.step();
 
         int[] registers = processor.getRegisters();
-        assertEquals(0x2, registers[P6502.ACC_REG]);  //Accumulator is 0x2 == (0x1 + 0x1) == (mem[0x1] + mem[0x4])
+        assertEquals(0x2, registers[P6502.ACC_REG]);  //Accumulator is 0x2 == (0x1 + 0x1) == (mem[0x1] + mem[0x3])
         assertEquals(processor.getPC(), 4);
         assertEquals(0x0, registers[P6502.STATUS_FLAGS_REG] & 0);
     }
