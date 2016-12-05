@@ -12,6 +12,11 @@ Straight away Java doesn't feel like the right choice but it's a good learning e
    - [Online 6502 Emulator](https://skilldrick.github.io/easy6502/)
    - [Overflow Flag explained mathematically](http://www.righto.com/2012/12/the-6502-overflow-flag-explained.html)
 
+####OpCodes
+
+![6502 OpCodes Page 1](https://github.com/rossdrew/emuRox/blob/master/img/6502_ISR_first_page.gif "6502 OpCodes Page 1")
+![6502 OpCodes Page 2](https://github.com/rossdrew/emuRox/blob/master/img/6502_ISR_first_page.gif "6502 OpCodes Page 2")
+
 ####Status Flags
     
     NVss DIZC
