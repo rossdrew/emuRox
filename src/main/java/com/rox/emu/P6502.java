@@ -11,13 +11,14 @@ public class P6502 {
     public static final int PC_HI_REG = 0x3;
     public static final int PC_LO_REG = 0x4;
     public static final int SP_REG = 0x6;
+
     public static final int STATUS_FLAGS_REG = 0x7;
     public static final int STATUS_FLAG_CARRY = 0x0;
     public static final int STATUS_FLAGS_ZERO = 0x1;
     public static final int STATUS_FLAGS_IRQ_DISABLE = 0x2;
     public static final int STATUS_FLAGS_DEC = 0x3;
     public static final int STATUS_FLAGS_BREAK = 0x4;
-    public static final int STATUS_FLAGS_UNUSED = 0x5;
+    public static final int STATUS_FLAGS_UNUSED = 0x5;  //Always true
     public static final int STATUS_FLAGS_OVERFLOW = 0x6;
     public static final int STATUS_FLAGS_NEGATIVE = 0x7;
 
@@ -94,6 +95,11 @@ public class P6502 {
         registers[STATUS_FLAGS_REG] = registers[STATUS_FLAGS_REG] | flagID;
     }
 
+    private void clearFlag(int flagID) {
+        System.out.println("Clearing (F)'" + flagNames[flagID] + "'");
+        registers[STATUS_FLAGS_REG] = registers[STATUS_FLAGS_REG] ^ flagID;
+    }
+
     private int getByteOfMemoryAt(int location){
         final int memoryByte = memory[location];
         System.out.println("Got " + memoryByte + " from mem[" + location + "]");
@@ -122,12 +128,16 @@ public class P6502 {
             default:
                 System.out.println("Unknown OPCODE: " + opCode);
         }
-
+            
         if (getRegister(ACC_REG) == 0)
             setFlag(STATUS_FLAGS_ZERO);
+        else
+            clearFlag(STATUS_FLAGS_ZERO);
 
         if ((getRegister(ACC_REG) | 128) == 128)
             setFlag(STATUS_FLAGS_NEGATIVE);
+        else
+            clearFlag(STATUS_FLAGS_NEGATIVE);
 
     }
 }

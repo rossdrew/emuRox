@@ -34,7 +34,7 @@ public class P6502Test {
     }
 
     @Test
-    public void testLDC_I(){
+    public void testLDA_I(){
         int[] program = {P6502.OPCODE_LDA_I, 0xAA};
         System.arraycopy(program, 0, memory, 0, program.length);
 
@@ -47,7 +47,7 @@ public class P6502Test {
     }
 
     @Test
-    public void testLDC_I_withZeroResult(){
+    public void testLDA_I_withZeroResult(){
         int[] program = {P6502.OPCODE_LDA_I, 0x0};
         System.arraycopy(program, 0, memory, 0, program.length);
 
@@ -60,7 +60,7 @@ public class P6502Test {
     }
 
     @Test
-    public void testLDC_I_withNegativeResult(){
+    public void testLDA_I_withNegativeResult(){
         int[] program = {P6502.OPCODE_LDA_I, 0x80}; //XXX Only works with 0x80, I suspect some Java "byte" issues
         System.arraycopy(program, 0, memory, 0, program.length);
 
