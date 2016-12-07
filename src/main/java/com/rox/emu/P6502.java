@@ -145,8 +145,6 @@ public class P6502 {
         else
             clearFlag(STATUS_FLAG_ZERO);
 
-        //TODO Is negative
-        System.out.println(Integer.toBinaryString(getRegister(ACC_REG)));
         if ((getRegister(ACC_REG) & STATUS_FLAG_NEGATIVE) == STATUS_FLAG_NEGATIVE)
             setFlag(STATUS_FLAG_NEGATIVE);
         else
