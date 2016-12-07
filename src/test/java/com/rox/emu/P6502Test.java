@@ -59,6 +59,19 @@ public class P6502Test {
     }
 
     @Test
+    public void testLDA_I_withNegativeResult(){
+        int[] program = {P6502.OPCODE_LDA_I, 0x80};
+        System.arraycopy(program, 0, memory, 0, program.length);
+
+        processor.step();
+
+        int[] registers = processor.getRegisters();
+        assertEquals(0x80, registers[P6502.ACC_REG]);
+        assertEquals(P6502.STATUS_FLAG_NEGATIVE, registers[P6502.STATUS_FLAGS_REG] & P6502.STATUS_FLAG_NEGATIVE);
+        assertEquals(processor.getPC(), 2);
+    }
+
+    @Test
     public void testADC_I(){
         int[] program = {P6502.OPCODE_LDA_I,
                          0x1,

@@ -28,12 +28,13 @@ class OpCodeSpec extends Specification {
         //B == processor.statusFlags[P6502.STATUS_FLAG_BREAK]
         //U == processor.statusFlags[P6502.STATUS_FLAG_UNUSED]
         //O == processor.statusFlags[P6502.STATUS_FLAG_OVERFLOW]
-        //N == processor.statusFlags[P6502.STATUS_FLAG_NEGATIVE]
+        N == processor.statusFlags[7]
 
         where:
-        loadValue || expectedAccumulator  || PC || Z
-        0x0       || 0x0                  || 2  || true
-        0x1       || 0x1                  || 2  || false
+        loadValue || expectedAccumulator  || PC || Z     || N
+        0x0       || 0x0                  || 2  || true  || false
+        0x1       || 0x1                  || 2  || false || false
+        0x80      || 0x80                 || 2  || false || true
 
         //loadValue || expectedAccumulator  || PC || C      || Z     || I     || D     || B     || U     || O     || N
         //0x0       || 0x0                  || 2  || false  || true  || false || false || false || false || false || false

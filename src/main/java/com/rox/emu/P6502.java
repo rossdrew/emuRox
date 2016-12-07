@@ -5,7 +5,7 @@ package com.rox.emu;
  */
 public class P6502 {
     private final String[] registerNames = new String[] {"Accumulator", "", "", "Program Counter Hi", "Program Counter Low", "", "Stack Pointer", "Status Flags"};
-    private final String[] flagNames = new String[] {"Carry", "Zero Result", "IRQ Disable", "Decimal Mode", "Break Command", "<Unused>", "Overflow", "Negative Result"};
+    //private final String[] flagNames = new String[] {"Carry", "Zero Result", "IRQ Disable", "Decimal Mode", "Break Command", "<Unused>", "Overflow", "Negative Result"};
 
     public static final int ACC_REG = 0x0;
     public static final int PC_HI_REG = 0x3;
@@ -17,10 +17,10 @@ public class P6502 {
         public static final int STATUS_FLAG_ZERO = 0x2;
         public static final int STATUS_FLAG_IRQ_DISABLE = 0x4;
         public static final int STATUS_FLAG_DEC = 0x8;
-        public static final int STATUS_FLAG_BREAK = 0x16;
-        public static final int STATUS_FLAG_UNUSED = 0x32;
-        public static final int STATUS_FLAG_OVERFLOW = 0x64;
-        public static final int STATUS_FLAG_NEGATIVE = 0b10000000;
+        public static final int STATUS_FLAG_BREAK = 0x10;
+        public static final int STATUS_FLAG_UNUSED = 0x20;
+        public static final int STATUS_FLAG_OVERFLOW = 0x40;
+        public static final int STATUS_FLAG_NEGATIVE = 0x80;
 
     public static final int OPCODE_ADC_I = 0x69;  //ADC Immediate
     public static final int OPCODE_LDA_I = 0xA9;  //LDA Immediate
@@ -91,7 +91,7 @@ public class P6502 {
     }
 
     private void setFlag(int flagID) {
-        System.out.println("Setting (F)'" + flagNames[flagID] + "'");
+        System.out.println("Setting (F)'" + flagID + "'");
         registers[STATUS_FLAGS_REG] = registers[STATUS_FLAGS_REG] | flagID;
     }
 
@@ -107,7 +107,7 @@ public class P6502 {
      * @param flagValue int with bits to clear, turned on
      */
     private void clearFlag(int flagValue){
-        System.out.println("Clearing (F)'" + flagNames[flagValue] + "'");
+        System.out.println("Clearing (F)'" + flagValue + "'");
         registers[STATUS_FLAGS_REG] = (~flagValue) & registers[STATUS_FLAGS_REG];
     }
 
@@ -146,6 +146,11 @@ public class P6502 {
             clearFlag(STATUS_FLAG_ZERO);
 
         //TODO Is negative
+        System.out.println(Integer.toBinaryString(getRegister(ACC_REG)));
+        if ((getRegister(ACC_REG) & STATUS_FLAG_NEGATIVE) == STATUS_FLAG_NEGATIVE)
+            setFlag(STATUS_FLAG_NEGATIVE);
+        else
+            clearFlag(STATUS_FLAG_NEGATIVE);
 
     }
 }
