@@ -106,13 +106,9 @@ public class P6502 {
      *
      * @param flagValue int with bits to clear, turned on
      */
-    private void clearFlag2(int flagValue){
+    private void clearFlag(int flagValue){
+        System.out.println("Clearing (F)'" + flagNames[flagValue] + "'");
         registers[STATUS_FLAGS_REG] = (~flagValue) & registers[STATUS_FLAGS_REG];
-    }
-
-    private void clearFlag(int flagID) {
-        System.out.println("Clearing (F)'" + flagNames[flagID] + "'");
-        registers[STATUS_FLAGS_REG] = registers[STATUS_FLAGS_REG] ^ flagID;
     }
 
     private int getByteOfMemoryAt(int location){
