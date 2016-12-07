@@ -13,14 +13,14 @@ public class P6502 {
     public static final int SP_REG = 0x6;
 
     public static final int STATUS_FLAGS_REG = 0x7;
-    public static final int STATUS_FLAG_CARRY = 0x0;
-    public static final int STATUS_FLAGS_ZERO = 0x1;
-    public static final int STATUS_FLAGS_IRQ_DISABLE = 0x2;
-    public static final int STATUS_FLAGS_DEC = 0x3;
-    public static final int STATUS_FLAGS_BREAK = 0x4;
-    public static final int STATUS_FLAGS_UNUSED = 0x5;  //Always true
-    public static final int STATUS_FLAGS_OVERFLOW = 0x6;
-    public static final int STATUS_FLAGS_NEGATIVE = 0x7;
+        public static final int STATUS_FLAG_CARRY = 0x1;
+        public static final int STATUS_FLAG_ZERO = 0x2;
+        public static final int STATUS_FLAG_IRQ_DISABLE = 0x4;
+        public static final int STATUS_FLAG_DEC = 0x8;
+        public static final int STATUS_FLAG_BREAK = 0x16;
+        public static final int STATUS_FLAG_UNUSED = 0x32;
+        public static final int STATUS_FLAG_OVERFLOW = 0x64;
+        public static final int STATUS_FLAG_NEGATIVE = 0b10000000;
 
     public static final int OPCODE_ADC_I = 0x69;  //ADC Immediate
     public static final int OPCODE_LDA_I = 0xA9;  //LDA Immediate
@@ -55,13 +55,13 @@ public class P6502 {
     public boolean[] getStatusFlags(){
         boolean[] flags = new boolean[8];
         flags[0] = (registers[STATUS_FLAGS_REG] & STATUS_FLAG_CARRY) == STATUS_FLAG_CARRY;
-        flags[1] = (registers[STATUS_FLAGS_REG] & STATUS_FLAGS_ZERO) == STATUS_FLAGS_ZERO;
-        flags[2] = (registers[STATUS_FLAGS_REG] & STATUS_FLAGS_IRQ_DISABLE) == STATUS_FLAGS_IRQ_DISABLE;
-        flags[3] = (registers[STATUS_FLAGS_REG] & STATUS_FLAGS_DEC) == STATUS_FLAGS_DEC;
-        flags[4] = (registers[STATUS_FLAGS_REG] & STATUS_FLAGS_BREAK) == STATUS_FLAGS_BREAK;
-        flags[5] = (registers[STATUS_FLAGS_REG] & STATUS_FLAGS_UNUSED) == STATUS_FLAGS_UNUSED;
-        flags[6] = (registers[STATUS_FLAGS_REG] & STATUS_FLAGS_OVERFLOW) == STATUS_FLAGS_OVERFLOW;
-        flags[7] = (registers[STATUS_FLAGS_REG] & STATUS_FLAGS_NEGATIVE) == STATUS_FLAGS_NEGATIVE;
+        flags[1] = (registers[STATUS_FLAGS_REG] & STATUS_FLAG_ZERO) == STATUS_FLAG_ZERO;
+        flags[2] = (registers[STATUS_FLAGS_REG] & STATUS_FLAG_IRQ_DISABLE) == STATUS_FLAG_IRQ_DISABLE;
+        flags[3] = (registers[STATUS_FLAGS_REG] & STATUS_FLAG_DEC) == STATUS_FLAG_DEC;
+        flags[4] = (registers[STATUS_FLAGS_REG] & STATUS_FLAG_BREAK) == STATUS_FLAG_BREAK;
+        flags[5] = (registers[STATUS_FLAGS_REG] & STATUS_FLAG_UNUSED) == STATUS_FLAG_UNUSED;
+        flags[6] = (registers[STATUS_FLAGS_REG] & STATUS_FLAG_OVERFLOW) == STATUS_FLAG_OVERFLOW;
+        flags[7] = (registers[STATUS_FLAGS_REG] & STATUS_FLAG_NEGATIVE) == STATUS_FLAG_NEGATIVE;
         return flags;
     }
 
@@ -93,6 +93,21 @@ public class P6502 {
     private void setFlag(int flagID) {
         System.out.println("Setting (F)'" + flagNames[flagID] + "'");
         registers[STATUS_FLAGS_REG] = registers[STATUS_FLAGS_REG] | flagID;
+    }
+
+    /**
+     * Bitwise clear flag by OR-ing the int carrying flags to be cleared
+     * then AND-ing with status flag register.
+     *
+     * Clear bit 1 (place value 2)
+     *          0000 0010
+     * NOT    > 1111 1101
+     * AND(R) > xxxx xx0x
+     *
+     * @param flagValue int with bits to clear, turned on
+     */
+    private void clearFlag2(int flagValue){
+        registers[STATUS_FLAGS_REG] = (~flagValue) & registers[STATUS_FLAGS_REG];
     }
 
     private void clearFlag(int flagID) {
@@ -128,16 +143,13 @@ public class P6502 {
             default:
                 System.out.println("Unknown OPCODE: " + opCode);
         }
-            
-        if (getRegister(ACC_REG) == 0)
-            setFlag(STATUS_FLAGS_ZERO);
-        else
-            clearFlag(STATUS_FLAGS_ZERO);
 
-        if ((getRegister(ACC_REG) | 128) == 128)
-            setFlag(STATUS_FLAGS_NEGATIVE);
+        if (getRegister(ACC_REG) == 0)
+            setFlag(STATUS_FLAG_ZERO);
         else
-            clearFlag(STATUS_FLAGS_NEGATIVE);
+            clearFlag(STATUS_FLAG_ZERO);
+
+        //TODO Is negative
 
     }
 }

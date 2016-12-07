@@ -6,7 +6,6 @@ import org.junit.Test;
 import static junit.framework.TestCase.assertEquals;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.fail;
 
 public class P6502Test {
     int [] memory;
@@ -55,20 +54,7 @@ public class P6502Test {
 
         int[] registers = processor.getRegisters();
         assertEquals(0x0, registers[P6502.ACC_REG]);
-        assertEquals(P6502.STATUS_FLAGS_ZERO, registers[P6502.STATUS_FLAGS_REG] & P6502.STATUS_FLAGS_ZERO);
-        assertEquals(processor.getPC(), 2);
-    }
-
-    @Test
-    public void testLDA_I_withNegativeResult(){
-        int[] program = {P6502.OPCODE_LDA_I, 0x80}; //XXX Only works with 0x80, I suspect some Java "byte" issues
-        System.arraycopy(program, 0, memory, 0, program.length);
-
-        processor.step();
-
-        int[] registers = processor.getRegisters();
-        assertEquals(0x80, registers[P6502.ACC_REG]);
-        assertEquals(P6502.STATUS_FLAGS_NEGATIVE, registers[P6502.STATUS_FLAGS_REG] & P6502.STATUS_FLAGS_NEGATIVE);
+        assertEquals(P6502.STATUS_FLAG_ZERO, registers[P6502.STATUS_FLAGS_REG] & P6502.STATUS_FLAG_ZERO);
         assertEquals(processor.getPC(), 2);
     }
 
@@ -90,7 +76,7 @@ public class P6502Test {
     }
 
     @Test
-    public void testADC_I_WithZeroResult(){
+    public void testADC_I_withZeroResult(){
         int[] program = {P6502.OPCODE_LDA_I,
                          0x0,
                          P6502.OPCODE_ADC_I,
@@ -103,18 +89,7 @@ public class P6502Test {
         int[] registers = processor.getRegisters();
         assertEquals(0x0, registers[P6502.ACC_REG]);
         assertEquals(processor.getPC(), 4);
-        assertEquals(P6502.STATUS_FLAGS_ZERO, registers[P6502.STATUS_FLAGS_REG] & P6502.STATUS_FLAGS_ZERO);
+        assertEquals(P6502.STATUS_FLAG_ZERO, registers[P6502.STATUS_FLAGS_REG] & P6502.STATUS_FLAG_ZERO);
     }
 
-    @Test
-    public void testADC_I_WithNegativeResult(){
-        //XXX Undestand negation on the 6502
-        fail("not yet implemented");
-    }
-
-    @Test
-    public void testADC_I_WithCarry(){ fail("not yet implemented");}
-
-    @Test
-    public void testADC_I_WithOverflow(){ fail("not yet implemented");}
 }

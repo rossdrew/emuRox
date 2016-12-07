@@ -21,7 +21,7 @@ class OpCodeSpec extends Specification {
         then:
         registers[P6502.ACC_REG] == expectedAccumulator
         PC == processor.getPC()
-        //C == processor.statusFlags[P6502.STATUS_FLAG_CARRY]
+        //C == processor.statusFlags[P6502.STATUS_FLAGS_CARRY]
         Z == processor.statusFlags[P6502.STATUS_FLAGS_ZERO]
         //I == processor.statusFlags[P6502.STATUS_FLAGS_IRQ_DISABLE]
         //D == processor.statusFlags[P6502.STATUS_FLAGS_DEC]
@@ -29,6 +29,8 @@ class OpCodeSpec extends Specification {
         //U == processor.statusFlags[P6502.STATUS_FLAGS_UNUSED]
         //O == processor.statusFlags[P6502.STATUS_FLAGS_OVERFLOW]
         N == processor.statusFlags[P6502.STATUS_FLAGS_NEGATIVE]
+
+        statusFlags == processor.statusFlags
 
         where:
         loadValue || expectedAccumulator  || PC || Z     || N
