@@ -5,7 +5,7 @@ import spock.lang.Unroll
 
 class OpCodeSpec extends Specification {
 
-    @Unroll
+    @Unroll("LDA Immediate #Expected: Load #loadValue")
     def "LDA (Load Accumulator) Test"() {
         when:
         int[] memory = new int[65534]
@@ -31,19 +31,19 @@ class OpCodeSpec extends Specification {
         N == processor.statusFlags[7]
 
         where:
-        loadValue || expectedAccumulator || PC || Z     || N
-        0x0       || 0x0                 || 2  || true  || false
-        0x1       || 0x1                 || 2  || false || false
-        0x7F      || 0x7F                || 2  || false || false
-        0x80      || 0x80                || 2  || false || true
-        0x81      || 0x81                || 2  || false || true
-        0xFF      || 0xFF                || 2  || false || true
+        loadValue || expectedAccumulator || PC || Z     || N     || Expected
+        0x0       || 0x0                 || 2  || true  || false || "With zero result"
+        0x1       || 0x1                 || 2  || false || false || ""
+        0x7F      || 0x7F                || 2  || false || false || ""
+        0x80      || 0x80                || 2  || false || true  || "With negative result"
+        0x81      || 0x81                || 2  || false || true  || "With negative result"
+        0xFF      || 0xFF                || 2  || false || true  || "With negative result"
 
         //loadValue || expectedAccumulator  || PC || C      || Z     || I     || D     || B     || U     || O     || N
     }
 
-    @Unroll
-    def "ADC (ADd with Carry) Test"(){
+    @Unroll("ADC Immediate #Expected:  #firstValue + #secondValue = #expectedAccumulator in Accumulator.")
+    def "ADC (ADd with Carry to Accumulator) Test"(){
         when:
         int[] memory = new int[65534]
         int[] program = [P6502.OPCODE_LDA_I, firstValue, P6502.OPCODE_ADC_I, secondValue]
@@ -65,10 +65,10 @@ class OpCodeSpec extends Specification {
         N == processor.statusFlags[7]
 
         where:
-        firstValue || secondValue || expectedAccumulator || PC  || Z      || N     || C
-        0x0        || 0x0         || 0x0                 || 4   || true   || false || false
-        0x7F       || 0x1         || 0x80                || 4   || false  || true  || false
-        0xFF       || 0xFF        || 0xFE                || 4   || false  || true  || true
-        0xAA       || 0xAA        || 0x54                || 4   || false  || false || true
+        firstValue || secondValue || expectedAccumulator || PC  || Z      || N     || C     || Expected
+        0x0        || 0x0         || 0x0                 || 4   || true   || false || false || "With zero result"
+        0x7F       || 0x1         || 0x80                || 4   || false  || true  || false || "With negative result"
+        0xFF       || 0xFF        || 0xFE                || 4   || false  || true  || true  || "With negative, carried result"
+        0xAA       || 0xAA        || 0x54                || 4   || false  || false || true  || "With positive, carried result"
     }
 }
