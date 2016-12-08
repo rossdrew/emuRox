@@ -141,21 +141,30 @@ public class P6502 {
                 System.out.println("Unknown OPCODE: " + opCode);
         }
 
+        updateZeroFlag();
+        updateNegativeFlag();
+        updateCarryFlag();
+    }
+
+    private void updateZeroFlag() {
         if (getRegister(ACC_REG) == 0)
             setFlag(STATUS_FLAG_ZERO);
         else
             clearFlag(STATUS_FLAG_ZERO);
+    }
 
+    private void updateNegativeFlag() {
         if ((getRegister(ACC_REG) & STATUS_FLAG_NEGATIVE) == STATUS_FLAG_NEGATIVE)
             setFlag(STATUS_FLAG_NEGATIVE);
         else
             clearFlag(STATUS_FLAG_NEGATIVE);
+    }
 
+    private void updateCarryFlag() {
         if ((getRegister(ACC_REG) & OVERFLOW_INDICATOR_BIT) == OVERFLOW_INDICATOR_BIT) {
             setFlag(STATUS_FLAG_CARRY);
             registers[ACC_REG] = (~0x100) & registers[ACC_REG];
         }else
             clearFlag(STATUS_FLAG_CARRY);
-
     }
 }
