@@ -20,6 +20,7 @@ public class P6502 {
         public static final int STATUS_FLAG_BREAK = 0x10;
         public static final int STATUS_FLAG_UNUSED = 0x20;
         public static final int STATUS_FLAG_OVERFLOW = 0x40;
+            public static final int OVERFLOW_INDICATOR_BIT = 0x100;
         public static final int STATUS_FLAG_NEGATIVE = 0x80;
 
     public static final int OPCODE_ADC_I = 0x69;  //ADC Immediate
@@ -149,6 +150,12 @@ public class P6502 {
             setFlag(STATUS_FLAG_NEGATIVE);
         else
             clearFlag(STATUS_FLAG_NEGATIVE);
+
+        if ((getRegister(ACC_REG) & OVERFLOW_INDICATOR_BIT) == OVERFLOW_INDICATOR_BIT) {
+            setFlag(STATUS_FLAG_CARRY);
+            registers[ACC_REG] = (~0x100) & registers[ACC_REG];
+        }else
+            clearFlag(STATUS_FLAG_CARRY);
 
     }
 }

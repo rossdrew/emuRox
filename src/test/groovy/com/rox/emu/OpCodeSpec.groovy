@@ -68,6 +68,7 @@ class OpCodeSpec extends Specification {
         firstValue || secondValue || expectedAccumulator || PC  || Z      || N     || C
         0x0        || 0x0         || 0x0                 || 4   || true   || false || false
         0x7F       || 0x1         || 0x80                || 4   || false  || true  || false
-        0xFF       || 0xFF        || 0xFE                || 4   || false  || false || true
+        0xFF       || 0xFF        || 0xFE                || 4   || false  || true  || true
+        0xAA       || 0xAA        || 0x54                || 4   || false  || false || true
     }
 }
