@@ -122,4 +122,21 @@ public class P6502Test {
         assertEquals(P6502.STATUS_FLAG_NEGATIVE, registers[P6502.STATUS_FLAGS_REG] & P6502.STATUS_FLAG_NEGATIVE);
     }
 
+    @Test
+    public void testADC_I_withCarry(){
+        int[] program = {P6502.OPCODE_LDA_I,
+                0xFF,
+                P6502.OPCODE_ADC_I,
+                0xFF};
+        System.arraycopy(program, 0, memory, 0, program.length);
+
+        processor.step();
+        processor.step();
+
+        int[] registers = processor.getRegisters();
+        assertEquals(0xFE, registers[P6502.ACC_REG]);
+        assertEquals(processor.getPC(), 4);
+        assertEquals(P6502.STATUS_FLAG_CARRY, registers[P6502.STATUS_FLAGS_REG] & P6502.STATUS_FLAG_CARRY);
+    }
+
 }

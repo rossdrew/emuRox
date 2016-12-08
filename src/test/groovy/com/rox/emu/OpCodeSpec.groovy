@@ -59,14 +59,15 @@ class OpCodeSpec extends Specification {
         then:
         registers[P6502.ACC_REG] == expectedAccumulator
         PC == processor.getPC()
-        //C == processor.statusFlags[P6502.STATUS_FLAG_CARRY]
+        C == processor.statusFlags[0]
         Z == processor.statusFlags[1]
         //O == processor.statusFlags[P6502.STATUS_FLAG_OVERFLOW]
         N == processor.statusFlags[7]
 
         where:
-        firstValue || secondValue || expectedAccumulator || PC  || Z     || N
-        0x0        || 0x0         || 0x0                 || 4  || true   || false
-        0x7F       || 0x1         || 0x80                || 4  || false  || true
+        firstValue || secondValue || expectedAccumulator || PC  || Z      || N     || C
+        0x0        || 0x0         || 0x0                 || 4   || true   || false || false
+        0x7F       || 0x1         || 0x80                || 4   || false  || true  || false
+        0xFF       || 0xFF        || 0xFE                || 4   || false  || false || true
     }
 }
