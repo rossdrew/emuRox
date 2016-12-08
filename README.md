@@ -46,6 +46,5 @@ Straight away Java doesn't feel like the right choice but it's a good learning e
 
 ###Problems
 
-######Javas unsigned byte problem.
- - Negative flag relies on bit 7 (128) being set in accumulator but only detects it if only that byte (0x80) is set 
+######Javas unsigned byte problem. 
  - Java bytes are signed, meaning it's a pain to deal with them, instead we have to use ints to represent bytes.
