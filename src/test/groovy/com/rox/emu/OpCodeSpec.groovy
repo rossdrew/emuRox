@@ -61,14 +61,15 @@ class OpCodeSpec extends Specification {
         PC == processor.getPC()
         C == processor.statusFlags[0]
         Z == processor.statusFlags[1]
-        //O == processor.statusFlags[P6502.STATUS_FLAG_OVERFLOW]
+        O == processor.statusFlags[6]
         N == processor.statusFlags[7]
 
         where:
-        firstValue || secondValue || expectedAccumulator || PC  || Z      || N     || C     || Expected
-        0x0        || 0x0         || 0x0                 || 4   || true   || false || false || "With zero result"
-        0x7F       || 0x1         || 0x80                || 4   || false  || true  || false || "With negative result"
-        0xFF       || 0xFF        || 0xFE                || 4   || false  || true  || true  || "With negative, carried result"
-        0xAA       || 0xAA        || 0x54                || 4   || false  || false || true  || "With positive, carried result"
+        firstValue || secondValue || expectedAccumulator || PC  || Z      || N     || C     || O || Expected
+        0x0        || 0x0         || 0x0                 || 4   || true   || false || false || false || "With zero result"
+        0x7F       || 0x1         || 0x80                || 4   || false  || true  || false || false || "With negative result"
+        0xFF       || 0xFF        || 0xFE                || 4   || false  || true  || true  || false || "With negative, carried result"
+        0xAA       || 0xAA        || 0x54                || 4   || false  || false || true  || false || "With positive, carried result"
+        0x50       || 0x50        || 0xA0                || 4   || false  || true  || false || true  || "With negative overflow"
     }
 }
