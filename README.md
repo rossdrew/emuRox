@@ -34,8 +34,8 @@ Straight away Java doesn't feel like the right choice but it's a good learning e
 
 ###Implemented
 
- - Immediate LDC 
- - Immediate ADC 
+ - Immediate LDC (N, Z)
+ - Immediate ADC (N, Z  )
  
 ###Notes
 
