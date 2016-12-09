@@ -72,4 +72,29 @@ class OpCodeSpec extends Specification {
         0x50       || 0xD0        || 0x20                || 4   || false  || false || true  || false || "With positive, carried result"
         0x50       || 0x50        || 0xA0                || 4   || false  || true  || false || true  || "With negative overflow"
     }
+
+    @Unroll("AND Immediate #Expected:  #firstValue + #secondValue = #expectedAccumulator in Accumulator.")
+    def "AND (And with Accumulator) Test"(){
+        when:
+        int[] memory = new int[65534]
+        int[] program = [P6502.OPCODE_LDA_I, firstValue, P6502.OPCODE_AND_I, secondValue]
+        System.arraycopy(program, 0, memory, 0, program.length);
+
+        and:
+        P6502 processor = new P6502(memory)
+        processor.reset()
+        processor.step()
+        processor.step()
+        int[] registers = processor.getRegisters()
+
+        then:
+        registers[P6502.ACC_REG] == expectedAccumulator
+        PC == processor.getPC()
+        Z == processor.statusFlags[1]
+        N == processor.statusFlags[7]
+
+        where:
+        firstValue || secondValue || expectedAccumulator || PC  || Z      || N     || Expected
+        0x01       || 0x01        || 0x01                || 4   || true   || false || "Unchanged accumulator"
+    }
 }

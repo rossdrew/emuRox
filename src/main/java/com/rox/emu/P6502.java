@@ -25,6 +25,7 @@ public class P6502 {
 
     public static final int OPCODE_ADC_I = 0x69;  //ADC Immediate
     public static final int OPCODE_LDA_I = 0xA9;  //LDA Immediate
+    public static final int OPCODE_AND_I = 0x29;  //AND Immediate
 
     private int[] registers = new int[8];
     private int[] memory;
@@ -125,6 +126,12 @@ public class P6502 {
 
         //Execute the opcode
         switch (opCode){
+            case OPCODE_LDA_I:
+                System.out.println("Instruction: Immediate LDA...");
+                memoryLocation = getAndStepPC(false);
+                setRegister(ACC_REG, getByteOfMemoryAt(memoryLocation));
+                break;
+
             case OPCODE_ADC_I:
                 System.out.println("Instruction: Immediate ADC...");
                 memoryLocation = getAndStepPC(false);
@@ -134,14 +141,11 @@ public class P6502 {
                 updateOverflowFlag(accumulatorBeforeAddition, newValue);
                 break;
 
-            case OPCODE_LDA_I:
-                System.out.println("Instruction: Immediate LDA...");
-                memoryLocation = getAndStepPC(false);
-                setRegister(ACC_REG, getByteOfMemoryAt(memoryLocation));
-                break;
+            case OPCODE_AND_I:
+                System.out.println("Instructions: Immediate AND <<UNIMPLEMENTED>>");
 
             default:
-                System.out.println("Unknown OPCODE: " + opCode);
+                System.out.println("ERROR: Unknown OPCODE: " + opCode);
         }
 
         updateZeroFlag();
