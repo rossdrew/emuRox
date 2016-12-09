@@ -128,7 +128,10 @@ public class P6502 {
             case OPCODE_ADC_I:
                 System.out.println("Instruction: Immediate ADC...");
                 memoryLocation = getAndStepPC(false);
-                setRegister(ACC_REG, getByteOfMemoryAt(memoryLocation) + getRegister(ACC_REG));
+                int accumulatorBeforeAddition = getRegister(ACC_REG);
+                int newValue = getByteOfMemoryAt(memoryLocation);
+                setRegister(ACC_REG, newValue + accumulatorBeforeAddition);
+                updateOverflowFlag(accumulatorBeforeAddition, newValue);
                 break;
 
             case OPCODE_LDA_I:
@@ -146,6 +149,22 @@ public class P6502 {
         updateCarryFlag();
     }
 
+    /**
+     * XXX Seems like a lot of operations, any way to optimise this?
+     */
+    private void updateOverflowFlag(int accumulatorBeforeAddition, int newValue) {
+        if (isNegative(accumulatorBeforeAddition) && isNegative(newValue) && !isNegative(getRegister(ACC_REG)) ||
+            !isNegative(accumulatorBeforeAddition) && !isNegative(newValue) && isNegative(getRegister(ACC_REG))){
+            setFlag(STATUS_FLAG_OVERFLOW);
+        }else{
+            clearFlag(STATUS_FLAG_OVERFLOW);
+        }
+    }
+
+    private boolean isNegative(int fakeByte){
+        return (fakeByte & STATUS_FLAG_NEGATIVE) == STATUS_FLAG_NEGATIVE;
+    }
+
     private void updateZeroFlag() {
         if (getRegister(ACC_REG) == 0)
             setFlag(STATUS_FLAG_ZERO);
@@ -154,7 +173,7 @@ public class P6502 {
     }
 
     private void updateNegativeFlag() {
-        if ((getRegister(ACC_REG) & STATUS_FLAG_NEGATIVE) == STATUS_FLAG_NEGATIVE)
+        if ( isNegative(getRegister(ACC_REG)))
             setFlag(STATUS_FLAG_NEGATIVE);
         else
             clearFlag(STATUS_FLAG_NEGATIVE);
