@@ -27,6 +27,7 @@ public class P6502 {
     public static final int OP_LDA_I = 0xA9;  //LDA Immediate
     public static final int OP_AND_I = 0x29;  //AND Immediate
     public static final int OP_OR_I = 0x09;  //OR Immediate
+    public static final int OP_EOR_I = 0x49; //EOR Immediate
 
     private int[] registers = new int[8];
     private int[] memory;
@@ -155,6 +156,13 @@ public class P6502 {
                 memoryLocation = getAndStepPC(false);
                 int orredValue = getByteOfMemoryAt(memoryLocation);
                 setRegister(REG_ACCUMULATOR, orredValue | accumulatorBeforeOperation);
+                break;
+
+            case OP_EOR_I:
+                System.out.println("Instruction: Immediate EOR...");
+                memoryLocation = getAndStepPC(false);
+                int xorredValue = getByteOfMemoryAt(memoryLocation);
+                setRegister(REG_ACCUMULATOR, xorredValue ^ accumulatorBeforeOperation);
                 break;
 
 

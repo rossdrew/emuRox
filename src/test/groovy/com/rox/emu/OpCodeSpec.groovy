@@ -129,4 +129,31 @@ class OpCodeSpec extends Specification {
         0b00000001 || 0b00000010  || 0b00000011          || 4   || false  || false || "One bit fro Accumulator, one from new value"
         0b00000001 || 0b10000010  || 0b10000011          || 4   || false  || true  || "Negative result"
     }
+
+    @Unroll("EOR Immediate #Expected:  #firstValue ^ #secondValue = #expectedAccumulator in Accumulator.")
+    def "EOR (And with Accumulator) Test"(){
+        when:
+        int[] memory = new int[65534]
+        int[] program = [P6502.OP_LDA_I, firstValue, P6502.OP_EOR_I, secondValue]
+        System.arraycopy(program, 0, memory, 0, program.length);
+
+        and:
+        P6502 processor = new P6502(memory)
+        processor.reset()
+        processor.step()
+        processor.step()
+        int[] registers = processor.getRegisters()
+
+        then:
+        registers[P6502.REG_ACCUMULATOR] == expectedAccumulator
+        PC == processor.getPC()
+        Z == processor.statusFlags[1]
+        N == processor.statusFlags[7]
+
+        where:
+        firstValue || secondValue || expectedAccumulator || PC  || Z      || N     || Expected
+        0b00000001 || 0b00000000  || 0b00000001          || 4   || false  || false || "One"
+        0b00000000 || 0b00000001  || 0b00000001          || 4   || false  || false || "The other"
+        0b00000001 || 0b00000001  || 0b00000000          || 4   || true   || false || "Not both"
+    }
 }
