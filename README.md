@@ -35,7 +35,8 @@ Straight away Java doesn't feel like the right choice but it's a good learning e
 ###Implemented
 
  - Immediate LDC (N, Z)
- - Immediate ADC (N, Z, O, C )
+ - Immediate ADC (N, Z, O, C)
+ - Immediate AND/OR/EOR (N, Z)
  
 ###Notes
 
