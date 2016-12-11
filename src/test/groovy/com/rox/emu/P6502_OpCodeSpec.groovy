@@ -3,7 +3,7 @@ package com.rox.emu
 import spock.lang.Specification
 import spock.lang.Unroll
 
-class OpCodeSpec extends Specification {
+class P6502_OpCodeSpec extends Specification {
 
     @Unroll("LDA Immediate #Expected: Load #loadValue")
     def "LDA (Load Accumulator) Test"() {
@@ -102,7 +102,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("OR Immediate #Expected:  #firstValue | #secondValue = #expectedAccumulator in Accumulator.")
-    def "OR (And with Accumulator) Test"(){
+    def "OR (Or with Accumulator) Test"(){
         when:
         int[] memory = new int[65534]
         int[] program = [P6502.OP_LDA_I, firstValue, P6502.OP_OR_I, secondValue]
@@ -131,7 +131,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("EOR Immediate #Expected:  #firstValue ^ #secondValue = #expectedAccumulator in Accumulator.")
-    def "EOR (And with Accumulator) Test"(){
+    def "EOR (Exclusive Or with Accumulator) Test"(){
         when:
         int[] memory = new int[65534]
         int[] program = [P6502.OP_LDA_I, firstValue, P6502.OP_EOR_I, secondValue]
