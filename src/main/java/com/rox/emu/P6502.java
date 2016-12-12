@@ -26,8 +26,9 @@ public class P6502 {
     public static final int OP_ADC_I = 0x69;  //ADC Immediate
     public static final int OP_LDA_I = 0xA9;  //LDA Immediate
     public static final int OP_AND_I = 0x29;  //AND Immediate
-    public static final int OP_OR_I = 0x09;  //OR Immediate
-    public static final int OP_EOR_I = 0x49; //EOR Immediate
+    public static final int OP_OR_I = 0x09;   //OR Immediate
+    public static final int OP_EOR_I = 0x49;  //EOR Immediate
+    public static final int OP_SBC_I = 0xE9;  //SBX Immediate
 
     private int[] registers = new int[8];
     private int[] memory;
@@ -165,6 +166,11 @@ public class P6502 {
                 setRegister(REG_ACCUMULATOR, xorredValue ^ accumulatorBeforeOperation);
                 break;
 
+            case OP_SBC_I:
+                System.out.println("Instruction: Immediate SBC...");
+                memoryLocation = getAndStepPC(false);
+                //TODO
+                break;
 
             default:
                 System.out.println("ERROR: Unknown OPCODE: " + opCode);

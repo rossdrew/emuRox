@@ -156,4 +156,29 @@ class P6502_OpCodeSpec extends Specification {
         0b00000000 || 0b00000001  || 0b00000001          || 4   || false  || false || "The other"
         0b00000001 || 0b00000001  || 0b00000000          || 4   || true   || false || "Not both"
     }
+
+    @Unroll("SBC Immediate #Expected:  #firstValue - #secondValue = #expectedAccumulator in Accumulator.")
+    def "SBC (Subtract from Accumulator) Test"(){
+        when:
+        int[] memory = new int[65534]
+        int[] program = [P6502.OP_LDA_I, firstValue, P6502.OP_SBC_I, secondValue]
+        System.arraycopy(program, 0, memory, 0, program.length);
+
+        and:
+        P6502 processor = new P6502(memory)
+        processor.reset()
+        processor.step()
+        processor.step()
+        int[] registers = processor.getRegisters()
+
+        then:
+        registers[P6502.REG_ACCUMULATOR] == expectedAccumulator
+        PC == processor.getPC()
+        Z == processor.statusFlags[1]
+        N == processor.statusFlags[7]
+
+        where:
+        firstValue || secondValue || expectedAccumulator || PC  || Z      || N     || Expected
+        0x5        || 0x2         || 0x3                 || 4   || false  || false || "Basic subtraction"
+    }
 }
