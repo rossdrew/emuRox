@@ -176,9 +176,13 @@ class P6502_OpCodeSpec extends Specification {
         PC == processor.getPC()
         Z == processor.statusFlags[1]
         N == processor.statusFlags[7]
+        //TODO C
+        //TODO V/O
 
         where:
         firstValue || secondValue || expectedAccumulator || PC  || Z      || N     || Expected
         0x5        || 0x2         || 0x3                 || 4   || false  || false || "Basic subtraction"
+        0x5        || 0x5         || 0x0                 || 4   || true   || false || "Zero subtraction"
+        0x5        || 0x6         || 0x81                || 4   || false  || true  || "Negative subtraction"
     }
 }
