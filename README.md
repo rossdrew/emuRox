@@ -11,6 +11,7 @@ Straight away Java doesn't feel like the right choice but it's a good learning e
  Resources:
    - [Online 6502 Emulator](https://skilldrick.github.io/easy6502/)
    - [Overflow Flag explained mathematically](http://www.righto.com/2012/12/the-6502-overflow-flag-explained.html)
+   - [In-depth analysis of opcodes](http://www.llx.com/~nparker/a2/opcodes.html)
 
 ####OpCodes
 
