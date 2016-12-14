@@ -1,9 +1,9 @@
-package com.rox.emu;
+package com.rox.emu.P6502;
 
 /**
  * @author rossdrew
  */
-public class P6502 {
+public class CPU {
     private final String[] registerNames = new String[] {"Accumulator", "", "", "Program Counter Hi", "Program Counter Low", "", "Stack Pointer", "Status Flags"};
     //private final String[] flagNames = new String[] {"Carry", "Zero Result", "IRQ Disable", "Decimal Mode", "Break Command", "<Unused>", "Overflow", "Negative Result"};
 
@@ -33,7 +33,7 @@ public class P6502 {
     private int[] registers = new int[8];
     private int[] memory;
 
-    public P6502(int[] memory) {
+    public CPU(int[] memory) {
         this.memory = memory;
     }
 
@@ -55,6 +55,11 @@ public class P6502 {
 
     public int getRegister(int registerID){
         return registers[registerID];
+    }
+
+    private void setRegister(int registerID, int val){
+        System.out.println("Setting (R)" + registerNames[registerID] + " to " + val);
+        registers[registerID] = val;
     }
 
     public boolean[] getStatusFlags(){
@@ -88,11 +93,6 @@ public class P6502 {
 
     public int getPC(){
         return (getRegister(REG_PC_HIGH) << 8) | getRegister(REG_PC_LOW);
-    }
-
-    private void setRegister(int registerID, int val){
-        System.out.println("Setting (R)" + registerNames[registerID] + " to " + val);
-        registers[registerID] = val;
     }
 
     private void setFlag(int flagID) {

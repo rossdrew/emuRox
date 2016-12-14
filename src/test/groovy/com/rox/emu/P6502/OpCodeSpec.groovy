@@ -1,33 +1,34 @@
-package com.rox.emu
+package com.rox.emu.P6502
 
+import com.rox.emu.P6502.CPU
 import spock.lang.Specification
 import spock.lang.Unroll
 
-class P6502_OpCodeSpec extends Specification {
+class OpCodeSpec extends Specification {
 
     @Unroll("LDA Immediate #Expected: Load #loadValue")
     def "LDA (Load Accumulator) Test"() {
         when:
         int[] memory = new int[65534]
-        int[] program = [P6502.OP_LDA_I, loadValue]
+        int[] program = [CPU.OP_LDA_I, loadValue]
         System.arraycopy(program, 0, memory, 0, program.length);
 
         and:
-        P6502 processor = new P6502(memory)
+        CPU processor = new CPU(memory)
         processor.reset()
         processor.step()
         int[] registers = processor.getRegisters()
 
         then:
-        registers[P6502.REG_ACCUMULATOR] == expectedAccumulator
+        registers[CPU.REG_ACCUMULATOR] == expectedAccumulator
         PC == processor.getPC()
-        //C == processor.statusFlags[P6502.STATUS_FLAG_CARRY]
+        //C == processor.statusFlags[CPU.STATUS_FLAG_CARRY]
         Z == processor.statusFlags[1]
-        //I == processor.statusFlags[P6502.STATUS_FLAG_IRQ_DISABLE]
-        //D == processor.statusFlags[P6502.STATUS_FLAG_DEC]
-        //B == processor.statusFlags[P6502.STATUS_FLAG_BREAK]
-        //U == processor.statusFlags[P6502.STATUS_FLAG_UNUSED]
-        //O == processor.statusFlags[P6502.STATUS_FLAG_OVERFLOW]
+        //I == processor.statusFlags[CPU.STATUS_FLAG_IRQ_DISABLE]
+        //D == processor.statusFlags[CPU.STATUS_FLAG_DEC]
+        //B == processor.statusFlags[CPU.STATUS_FLAG_BREAK]
+        //U == processor.statusFlags[CPU.STATUS_FLAG_UNUSED]
+        //O == processor.statusFlags[CPU.STATUS_FLAG_OVERFLOW]
         N == processor.statusFlags[7]
 
         where:
@@ -46,18 +47,18 @@ class P6502_OpCodeSpec extends Specification {
     def "ADC (ADd with Carry to Accumulator) Test"(){
         when:
         int[] memory = new int[65534]
-        int[] program = [P6502.OP_LDA_I, firstValue, P6502.OP_ADC_I, secondValue]
+        int[] program = [CPU.OP_LDA_I, firstValue, CPU.OP_ADC_I, secondValue]
         System.arraycopy(program, 0, memory, 0, program.length);
 
         and:
-        P6502 processor = new P6502(memory)
+        CPU processor = new CPU(memory)
         processor.reset()
         processor.step()
         processor.step()
         int[] registers = processor.getRegisters()
 
         then:
-        registers[P6502.REG_ACCUMULATOR] == expectedAccumulator
+        registers[CPU.REG_ACCUMULATOR] == expectedAccumulator
         PC == processor.getPC()
         C == processor.statusFlags[0]
         Z == processor.statusFlags[1]
@@ -77,18 +78,18 @@ class P6502_OpCodeSpec extends Specification {
     def "AND (And with Accumulator) Test"(){
         when:
         int[] memory = new int[65534]
-        int[] program = [P6502.OP_LDA_I, firstValue, P6502.OP_AND_I, secondValue]
+        int[] program = [CPU.OP_LDA_I, firstValue, CPU.OP_AND_I, secondValue]
         System.arraycopy(program, 0, memory, 0, program.length);
 
         and:
-        P6502 processor = new P6502(memory)
+        CPU processor = new CPU(memory)
         processor.reset()
         processor.step()
         processor.step()
         int[] registers = processor.getRegisters()
 
         then:
-        registers[P6502.REG_ACCUMULATOR] == expectedAccumulator
+        registers[CPU.REG_ACCUMULATOR] == expectedAccumulator
         PC == processor.getPC()
         Z == processor.statusFlags[1]
         N == processor.statusFlags[7]
@@ -105,18 +106,18 @@ class P6502_OpCodeSpec extends Specification {
     def "OR (Or with Accumulator) Test"(){
         when:
         int[] memory = new int[65534]
-        int[] program = [P6502.OP_LDA_I, firstValue, P6502.OP_OR_I, secondValue]
+        int[] program = [CPU.OP_LDA_I, firstValue, CPU.OP_OR_I, secondValue]
         System.arraycopy(program, 0, memory, 0, program.length);
 
         and:
-        P6502 processor = new P6502(memory)
+        CPU processor = new CPU(memory)
         processor.reset()
         processor.step()
         processor.step()
         int[] registers = processor.getRegisters()
 
         then:
-        registers[P6502.REG_ACCUMULATOR] == expectedAccumulator
+        registers[CPU.REG_ACCUMULATOR] == expectedAccumulator
         PC == processor.getPC()
         Z == processor.statusFlags[1]
         N == processor.statusFlags[7]
@@ -134,18 +135,18 @@ class P6502_OpCodeSpec extends Specification {
     def "EOR (Exclusive Or with Accumulator) Test"(){
         when:
         int[] memory = new int[65534]
-        int[] program = [P6502.OP_LDA_I, firstValue, P6502.OP_EOR_I, secondValue]
+        int[] program = [CPU.OP_LDA_I, firstValue, CPU.OP_EOR_I, secondValue]
         System.arraycopy(program, 0, memory, 0, program.length);
 
         and:
-        P6502 processor = new P6502(memory)
+        CPU processor = new CPU(memory)
         processor.reset()
         processor.step()
         processor.step()
         int[] registers = processor.getRegisters()
 
         then:
-        registers[P6502.REG_ACCUMULATOR] == expectedAccumulator
+        registers[CPU.REG_ACCUMULATOR] == expectedAccumulator
         PC == processor.getPC()
         Z == processor.statusFlags[1]
         N == processor.statusFlags[7]
@@ -161,18 +162,18 @@ class P6502_OpCodeSpec extends Specification {
     def "SBC (Subtract from Accumulator) Test"(){
         when:
         int[] memory = new int[65534]
-        int[] program = [P6502.OP_LDA_I, firstValue, P6502.OP_SBC_I, secondValue]
+        int[] program = [CPU.OP_LDA_I, firstValue, CPU.OP_SBC_I, secondValue]
         System.arraycopy(program, 0, memory, 0, program.length);
 
         and:
-        P6502 processor = new P6502(memory)
+        CPU processor = new CPU(memory)
         processor.reset()
         processor.step()
         processor.step()
         int[] registers = processor.getRegisters()
 
         then:
-        registers[P6502.REG_ACCUMULATOR] == expectedAccumulator
+        registers[CPU.REG_ACCUMULATOR] == expectedAccumulator
         PC == processor.getPC()
         Z == processor.statusFlags[1]
         N == processor.statusFlags[7]
