@@ -65,6 +65,21 @@ public class CPUTest {
     }
 
     @Test
+    public void testAND_I(){
+        //TODO
+    }
+
+    @Test
+    public void testOR_I(){
+        //TODO
+    }
+
+    @Test
+    public void testEOR_I(){
+        //TODO
+    }
+
+    @Test
     public void testSEC(){
         int[] program = {CPU.OP_SEC};
         System.arraycopy(program, 0, memory, 0, program.length);
