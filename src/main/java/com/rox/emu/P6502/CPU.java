@@ -180,13 +180,10 @@ public class CPU {
                 memoryLocation = getAndStepPC(false);
                 setFlag(STATUS_FLAG_NEGATIVE);
                 int subtrahend = getByteOfMemoryAt(memoryLocation);
-                //XXX Could be done with addition to be more athentic but neither seem to work
-                //    and the online JavaScript emulator seems to give strange results
-                // int difference = ~subtrahend + accumulatorBeforeOperation;
+                //XXX Should be done with addition to be more athentic but neither seem to work
                 int difference = accumulatorBeforeOperation-subtrahend;
-
-                setRegister(REG_ACCUMULATOR, difference);
                 updateOverflowFlag(accumulatorBeforeOperation, difference);
+                setRegister(REG_ACCUMULATOR, difference & 0xFF);
                 break;
 
             default:

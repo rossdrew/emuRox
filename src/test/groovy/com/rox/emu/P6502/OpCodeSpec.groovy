@@ -170,20 +170,21 @@ class OpCodeSpec extends Specification {
         processor.reset()
         processor.step()
         processor.step()
+        processor.step()
         int[] registers = processor.getRegisters()
 
         then:
         registers[CPU.REG_ACCUMULATOR] == expectedAccumulator
         PC == processor.getPC()
         Z == processor.statusFlags[1]
+        O == processor.statusFlags[6]
         N == processor.statusFlags[7]
         //TODO C
-        //TODO V/O
 
         where:
-        firstValue || secondValue || expectedAccumulator || PC  || Z      || N     || Expected
-        0x5        || 0x2         || 0x3                 || 4   || false  || false || "Basic subtraction"
-        0x5        || 0x5         || 0x0                 || 4   || true   || false || "Zero subtraction"
-        0x5        || 0x6         || 0xFF                || 4   || false  || true  || "Negative subtraction"
+        firstValue || secondValue || expectedAccumulator || PC  || Z      || N     || O     || Expected
+        0x5        || 0x3         || 0x2                 || 5   || false  || false || false ||  "Basic subtraction"
+        0x5        || 0x5         || 0x0                 || 5   || true   || false || false ||  "Zero subtraction"
+        0x5        || 0x6         || 0xFF                || 5   || false  || true  || false ||  "Negative subtraction"
     }
 }
