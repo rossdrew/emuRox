@@ -162,7 +162,7 @@ class OpCodeSpec extends Specification {
     def "SBC (Subtract from Accumulator) Test"(){
         when:
         int[] memory = new int[65534]
-        int[] program = [CPU.OP_LDA_I, firstValue, CPU.OP_SBC_I, secondValue]
+        int[] program = [CPU.OP_SEC, CPU.OP_LDA_I, firstValue, CPU.OP_SBC_I, secondValue]
         System.arraycopy(program, 0, memory, 0, program.length);
 
         and:
@@ -184,6 +184,6 @@ class OpCodeSpec extends Specification {
         firstValue || secondValue || expectedAccumulator || PC  || Z      || N     || Expected
         0x5        || 0x2         || 0x3                 || 4   || false  || false || "Basic subtraction"
         0x5        || 0x5         || 0x0                 || 4   || true   || false || "Zero subtraction"
-        0x5        || 0x6         || 0x81                || 4   || false  || true  || "Negative subtraction"
+        0x5        || 0x6         || 0xFF                || 4   || false  || true  || "Negative subtraction"
     }
 }

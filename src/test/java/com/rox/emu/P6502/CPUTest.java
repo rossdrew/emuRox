@@ -1,6 +1,7 @@
 package com.rox.emu.P6502;
 
 import com.rox.emu.P6502.CPU;
+import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -47,37 +48,11 @@ public class CPUTest {
     }
 
     @Test
-    public void testLDA_I_withZeroResult(){
-        int[] program = {CPU.OP_LDA_I, 0x0};
-        System.arraycopy(program, 0, memory, 0, program.length);
-
-        processor.step();
-
-        int[] registers = processor.getRegisters();
-        assertEquals(0x0, registers[CPU.REG_ACCUMULATOR]);
-        assertEquals(CPU.STATUS_FLAG_ZERO, registers[CPU.REG_STATUS] & CPU.STATUS_FLAG_ZERO);
-        assertEquals(processor.getPC(), 2);
-    }
-
-    @Test
-    public void testLDA_I_withNegativeResult(){
-        int[] program = {CPU.OP_LDA_I, 0x80};
-        System.arraycopy(program, 0, memory, 0, program.length);
-
-        processor.step();
-
-        int[] registers = processor.getRegisters();
-        assertEquals(0x80, registers[CPU.REG_ACCUMULATOR]);
-        assertEquals(CPU.STATUS_FLAG_NEGATIVE, registers[CPU.REG_STATUS] & CPU.STATUS_FLAG_NEGATIVE);
-        assertEquals(processor.getPC(), 2);
-    }
-
-    @Test
     public void testADC_I(){
         int[] program = {CPU.OP_LDA_I,
-                         0x1,
-                         CPU.OP_ADC_I,
-                         0x1};
+                0x1,
+                CPU.OP_ADC_I,
+                0x1};
         System.arraycopy(program, 0, memory, 0, program.length);
 
         processor.step();
@@ -90,54 +65,13 @@ public class CPUTest {
     }
 
     @Test
-    public void testADC_I_withZeroResult(){
-        int[] program = {CPU.OP_LDA_I,
-                0x0,
-                CPU.OP_ADC_I,
-                0x0};
+    public void testSEC(){
+        int[] program = {CPU.OP_SEC};
         System.arraycopy(program, 0, memory, 0, program.length);
 
         processor.step();
-        processor.step();
 
-        int[] registers = processor.getRegisters();
-        assertEquals(0x0, registers[CPU.REG_ACCUMULATOR]);
-        assertEquals(processor.getPC(), 4);
-        assertEquals(CPU.STATUS_FLAG_ZERO, registers[CPU.REG_STATUS] & CPU.STATUS_FLAG_ZERO);
+        assertEquals(processor.getPC(), 1);
+        assertEquals(true, processor.getStatusFlags()[0]);
     }
-
-    @Test
-    public void testADC_I_withNegativeResult(){
-        int[] program = {CPU.OP_LDA_I,
-                0x7F,
-                CPU.OP_ADC_I,
-                0x1};
-        System.arraycopy(program, 0, memory, 0, program.length);
-
-        processor.step();
-        processor.step();
-
-        int[] registers = processor.getRegisters();
-        assertEquals(0x80, registers[CPU.REG_ACCUMULATOR]);
-        assertEquals(processor.getPC(), 4);
-        assertEquals(CPU.STATUS_FLAG_NEGATIVE, registers[CPU.REG_STATUS] & CPU.STATUS_FLAG_NEGATIVE);
-    }
-
-    @Test
-    public void testADC_I_withCarry(){
-        int[] program = {CPU.OP_LDA_I,
-                0xFF,
-                CPU.OP_ADC_I,
-                0xFF};
-        System.arraycopy(program, 0, memory, 0, program.length);
-
-        processor.step();
-        processor.step();
-
-        int[] registers = processor.getRegisters();
-        assertEquals(0xFE, registers[CPU.REG_ACCUMULATOR]);
-        assertEquals(processor.getPC(), 4);
-        assertEquals(CPU.STATUS_FLAG_CARRY, registers[CPU.REG_STATUS] & CPU.STATUS_FLAG_CARRY);
-    }
-
 }

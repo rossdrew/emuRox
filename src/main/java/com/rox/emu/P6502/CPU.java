@@ -29,6 +29,7 @@ public class CPU {
     public static final int OP_OR_I = 0x09;   //OR Immediate
     public static final int OP_EOR_I = 0x49;  //EOR Immediate
     public static final int OP_SBC_I = 0xE9;  //SBX Immediate
+    public static final int OP_SEC = 0x38;    //SEC (Implied)
 
     private int[] registers = new int[8];
     private int[] memory;
@@ -129,8 +130,16 @@ public class CPU {
 
         int accumulatorBeforeOperation = getRegister(REG_ACCUMULATOR);
 
+        boolean carryManuallyChanged = false;
+
         //Execute the opcode
         switch (opCode){
+            case OP_SEC:
+                System.out.println("Instruction: Implied SEC...");
+                setFlag(STATUS_FLAG_CARRY);
+                carryManuallyChanged = true;
+                break;
+
             case OP_LDA_I:
                 System.out.println("Instruction: Immediate LDA...");
                 memoryLocation = getAndStepPC(false);
@@ -186,7 +195,8 @@ public class CPU {
 
         updateZeroFlag();
         updateNegativeFlag();
-        updateCarryFlag();
+        if (!carryManuallyChanged)
+            updateCarryFlag();
     }
 
     /**
