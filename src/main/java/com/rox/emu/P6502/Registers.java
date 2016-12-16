@@ -27,15 +27,13 @@ public class Registers {
     private int register[] = new int[8];
 
     public void setRegister(int registerID, int val){
-        int byteSizeValue = val & 0xFFFF00;
-        System.out.println("Setting (R)" + register[registerID] + " to " + byteSizeValue);
-        register[registerID] = byteSizeValue;
+        System.out.println("Setting (R)" + register[registerID] + " to " + val);
+        register[registerID] = val;
     }
 
     public void setPC(int wordPC){
-        register[REG_PC_HIGH] = wordPC >> 8;
-        register[REG_PC_LOW] = wordPC & 0xFF;
-
+        setRegister(REG_PC_HIGH, wordPC >> 8);
+        setRegister(REG_PC_LOW, wordPC & 0xFF);
         System.out.println("Program Counter being set to " + wordPC + " [ " + getRegister(REG_PC_HIGH) + " | " + getRegister(REG_PC_LOW) + " ]");
     }
 
