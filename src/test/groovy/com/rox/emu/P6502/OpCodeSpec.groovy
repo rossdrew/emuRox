@@ -17,19 +17,19 @@ class OpCodeSpec extends Specification {
         CPU processor = new CPU(memory)
         processor.reset()
         processor.step()
-        int[] registers = processor.getRegisters()
+        Registers registers = processor.getRegisters()
 
         then:
-        registers[CPU.REG_ACCUMULATOR] == expectedAccumulator
-        PC == processor.getPC()
-        //C == processor.statusFlags[CPU.STATUS_FLAG_CARRY]
-        Z == processor.statusFlags[1]
-        //I == processor.statusFlags[CPU.STATUS_FLAG_IRQ_DISABLE]
-        //D == processor.statusFlags[CPU.STATUS_FLAG_DEC]
-        //B == processor.statusFlags[CPU.STATUS_FLAG_BREAK]
-        //U == processor.statusFlags[CPU.STATUS_FLAG_UNUSED]
-        //O == processor.statusFlags[CPU.STATUS_FLAG_OVERFLOW]
-        N == processor.statusFlags[7]
+        registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
+        PC == registers.getPC()
+        //C == registers.statusFlags[CPU.STATUS_FLAG_CARRY]
+        Z == registers.getStatusFlags()[1]
+        //I == registers.statusFlags[CPU.STATUS_FLAG_IRQ_DISABLE]
+        //D == registers.statusFlags[CPU.STATUS_FLAG_DEC]
+        //B == registers.statusFlags[CPU.STATUS_FLAG_BREAK]
+        //U == registers.statusFlags[CPU.STATUS_FLAG_UNUSED]
+        //O == registers.statusFlags[CPU.STATUS_FLAG_OVERFLOW]
+        N == registers.statusFlags[7]
 
         where:
         loadValue || expectedAccumulator || PC || Z     || N     || Expected
@@ -55,15 +55,15 @@ class OpCodeSpec extends Specification {
         processor.reset()
         processor.step()
         processor.step()
-        int[] registers = processor.getRegisters()
+        Registers registers = processor.getRegisters()
 
         then:
-        registers[CPU.REG_ACCUMULATOR] == expectedAccumulator
-        PC == processor.getPC()
-        C == processor.statusFlags[0]
-        Z == processor.statusFlags[1]
-        O == processor.statusFlags[6]
-        N == processor.statusFlags[7]
+        registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
+        PC == registers.getPC()
+        C == registers.statusFlags[0]
+        Z == registers.statusFlags[1]
+        O == registers.statusFlags[6]
+        N == registers.statusFlags[7]
 
         where:
         firstValue || secondValue || expectedAccumulator || PC  || Z      || N     || C     || O     || Expected
@@ -86,13 +86,13 @@ class OpCodeSpec extends Specification {
         processor.reset()
         processor.step()
         processor.step()
-        int[] registers = processor.getRegisters()
+        Registers registers = processor.getRegisters()
 
         then:
-        registers[CPU.REG_ACCUMULATOR] == expectedAccumulator
-        PC == processor.getPC()
-        Z == processor.statusFlags[1]
-        N == processor.statusFlags[7]
+        registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
+        PC == registers.getPC()
+        Z == registers.statusFlags[1]
+        N == registers.statusFlags[7]
 
         where:
         firstValue || secondValue || expectedAccumulator || PC  || Z      || N     || Expected
@@ -114,13 +114,13 @@ class OpCodeSpec extends Specification {
         processor.reset()
         processor.step()
         processor.step()
-        int[] registers = processor.getRegisters()
+        Registers registers = processor.getRegisters()
 
         then:
-        registers[CPU.REG_ACCUMULATOR] == expectedAccumulator
-        PC == processor.getPC()
-        Z == processor.statusFlags[1]
-        N == processor.statusFlags[7]
+        registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
+        PC == registers.getPC()
+        Z == registers.statusFlags[1]
+        N == registers.statusFlags[7]
 
         where:
         firstValue || secondValue || expectedAccumulator || PC  || Z      || N     || Expected
@@ -143,13 +143,13 @@ class OpCodeSpec extends Specification {
         processor.reset()
         processor.step()
         processor.step()
-        int[] registers = processor.getRegisters()
+        Registers registers = processor.getRegisters()
 
         then:
-        registers[CPU.REG_ACCUMULATOR] == expectedAccumulator
-        PC == processor.getPC()
-        Z == processor.statusFlags[1]
-        N == processor.statusFlags[7]
+        registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
+        PC == registers.getPC()
+        Z == registers.statusFlags[1]
+        N == registers.statusFlags[7]
 
         where:
         firstValue || secondValue || expectedAccumulator || PC  || Z      || N     || Expected
@@ -171,14 +171,14 @@ class OpCodeSpec extends Specification {
         processor.step()
         processor.step()
         processor.step()
-        int[] registers = processor.getRegisters()
+        Registers registers = processor.getRegisters()
 
         then:
-        registers[CPU.REG_ACCUMULATOR] == expectedAccumulator
-        PC == processor.getPC()
-        Z == processor.statusFlags[1]
-        O == processor.statusFlags[6]
-        N == processor.statusFlags[7]
+        registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
+        PC == registers.getPC()
+        Z == registers.statusFlags[1]
+        O == registers.statusFlags[6]
+        N == registers.statusFlags[7]
         //TODO C
 
         where:
