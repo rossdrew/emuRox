@@ -32,11 +32,26 @@ public class Registers {
         register[registerID] = byteSizeValue;
     }
 
+    public void setPC(int wordPC){
+        setRegister(REG_PC_HIGH, wordPC >> 8);
+        setRegister(REG_PC_LOW,  wordPC & 0xFF);
+
+        System.out.println("Program Counter being set to " + wordPC + " [ " + getRegister(REG_PC_HIGH) + " | " + getRegister(REG_PC_LOW) + " ]");
+    }
+
+    public int getPC(){
+        return (getRegister(REG_PC_HIGH) << 8) | getRegister(REG_PC_LOW);
+    }
+
+    public String getRegisterName(int registerID){
+        return registerNames[registerID];
+    }
+
     public int getRegister(int registerID){
         return register[registerID];
     }
 
-    private void setFlag(int flagID) {
+    public void setFlag(int flagID) {
         System.out.println("Setting (F)'" + flagID + "'");
         register[REG_STATUS] = register[REG_STATUS] | flagID;
     }
@@ -53,7 +68,7 @@ public class Registers {
      *
      * @param flagValue int with bits to clear, turned on
      */
-    private void clearFlag(int flagValue){
+    public void clearFlag(int flagValue){
         System.out.println("Clearing (F)'" + flagValue + "'");
         register[REG_STATUS] = (~flagValue) & register[REG_STATUS];
     }
@@ -69,10 +84,6 @@ public class Registers {
         flags[6] = (register[REG_STATUS] & STATUS_FLAG_OVERFLOW) == STATUS_FLAG_OVERFLOW;
         flags[7] = (register[REG_STATUS] & STATUS_FLAG_NEGATIVE) == STATUS_FLAG_NEGATIVE;
         return flags;
-    }
-
-    public int getPC(){
-        return (getRegister(REG_PC_HIGH) << 8) | getRegister(REG_PC_LOW);
     }
 
     public int getNextProgramCounter(){

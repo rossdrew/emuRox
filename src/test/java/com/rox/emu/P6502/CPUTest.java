@@ -25,13 +25,12 @@ public class CPUTest {
 
     @Test
     public void testStartup(){
-        int[] registers = processor.getRegisters();
+        Registers registers = processor.getRegisters();
 
-        assertThat(registers.length, is(8));
-        assertEquals(0x34, registers[CPU.REG_STATUS]); //Status flags reset
-        assertEquals(0x0, registers[CPU.REG_PC_LOW]);         //PC Set to location pointed to by mem[FFFC:FFFD]
-        assertEquals(0x0, registers[CPU.REG_PC_HIGH]);
-        assertEquals(0xFF, registers[CPU.REG_SP]);           //Stack Pointer at top of stack
+        assertEquals(0x34, registers.getRegister(registers.REG_STATUS)); //Status flags reset
+        assertEquals(0x0, registers.getRegister(registers.REG_PC_LOW));  //PC Set to location pointed to by mem[FFFC:FFFD]
+        assertEquals(0x0, registers.getRegister(registers.REG_PC_HIGH)); // ...
+        assertEquals(0xFF, registers.getRegister(registers.REG_SP));     //Stack Pointer at top of stack
     }
 
     @Test
@@ -41,10 +40,10 @@ public class CPUTest {
 
         processor.step();
 
-        int[] registers = processor.getRegisters();
-        assertEquals(0xAA, registers[CPU.REG_ACCUMULATOR]);
-        assertEquals(0x0, registers[CPU.REG_STATUS] & 0);
-        assertEquals(processor.getPC(), 2);
+        Registers registers = processor.getRegisters();
+        assertEquals(0xAA, registers.getRegister(registers.REG_ACCUMULATOR));
+        assertEquals(0x0, registers.getRegister(registers.REG_STATUS) & 0);
+        assertEquals(2, registers.getPC());
     }
 
     @Test
@@ -58,10 +57,10 @@ public class CPUTest {
         processor.step();
         processor.step();
 
-        int[] registers = processor.getRegisters();
-        assertEquals(0x2, registers[CPU.REG_ACCUMULATOR]);  //Accumulator is 0x2 == (0x1 + 0x1) == (mem[0x1] + mem[0x3])
-        assertEquals(processor.getPC(), 4);
-        assertEquals(0x0, registers[CPU.REG_STATUS] & 0);
+        Registers registers = processor.getRegisters();
+        assertEquals(0x2, registers.getRegister(registers.REG_ACCUMULATOR));  //Accumulator is 0x2 == (0x1 + 0x1) == (mem[0x1] + mem[0x3])
+        assertEquals(4, registers.getPC());
+        assertEquals(0x0, registers.getRegister(registers.REG_STATUS) & 0);
     }
 
     @Test
@@ -83,10 +82,11 @@ public class CPUTest {
     public void testSEC(){
         int[] program = {CPU.OP_SEC};
         System.arraycopy(program, 0, memory, 0, program.length);
+        Registers registers = processor.getRegisters();
 
         processor.step();
 
-        assertEquals(processor.getPC(), 1);
-        assertEquals(true, processor.getStatusFlags()[0]);
+        assertEquals(1, registers.getPC());
+        assertEquals(true, registers.getStatusFlags()[0]);
     }
 }
