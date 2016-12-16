@@ -33,8 +33,8 @@ public class Registers {
     }
 
     public void setPC(int wordPC){
-        setRegister(REG_PC_HIGH, wordPC >> 8);
-        setRegister(REG_PC_LOW,  wordPC & 0xFF);
+        register[REG_PC_HIGH] = wordPC >> 8;
+        register[REG_PC_LOW] = wordPC & 0xFF;
 
         System.out.println("Program Counter being set to " + wordPC + " [ " + getRegister(REG_PC_HIGH) + " | " + getRegister(REG_PC_LOW) + " ]");
     }
