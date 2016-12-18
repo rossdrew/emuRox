@@ -34,7 +34,7 @@ public class CPUTest {
     }
 
     @Test
-    public void testLDA_I(){
+    public void testLDA(){
         int[] program = {CPU.OP_LDA_I, 0xAA};
         System.arraycopy(program, 0, memory, 0, program.length);
 
@@ -47,7 +47,7 @@ public class CPUTest {
     }
 
     @Test
-    public void testADC_I(){
+    public void testADC(){
         int[] program = {CPU.OP_LDA_I,
                 0x1,
                 CPU.OP_ADC_I,
@@ -64,18 +64,54 @@ public class CPUTest {
     }
 
     @Test
-    public void testAND_I(){
-        //TODO
+    public void testAND(){
+        int[] program = {CPU.OP_LDA_I,
+                0b00000101,
+                CPU.OP_AND_I,
+                0b00000101};
+        System.arraycopy(program, 0, memory, 0, program.length);
+
+        processor.step();
+        processor.step();
+
+        Registers registers = processor.getRegisters();
+        assertEquals(0b00000101, registers.getRegister(registers.REG_ACCUMULATOR));
+        assertEquals(4, registers.getPC());
+        assertEquals(0x0, registers.getRegister(registers.REG_STATUS) & 0);
     }
 
     @Test
-    public void testOR_I(){
-        //TODO
+    public void testOR(){
+        int[] program = {CPU.OP_LDA_I,
+                0b00010101,
+                CPU.OP_OR_I,
+                0b00000101};
+        System.arraycopy(program, 0, memory, 0, program.length);
+
+        processor.step();
+        processor.step();
+
+        Registers registers = processor.getRegisters();
+        assertEquals(0b00010101, registers.getRegister(registers.REG_ACCUMULATOR));
+        assertEquals(4, registers.getPC());
+        assertEquals(0x0, registers.getRegister(registers.REG_STATUS) & 0);
     }
 
     @Test
-    public void testEOR_I(){
-        //TODO
+    public void testEOR(){
+        int[] program = {CPU.OP_LDA_I,
+                0b00010101,
+                CPU.OP_EOR_I,
+                0b00000101};
+        System.arraycopy(program, 0, memory, 0, program.length);
+
+        processor.step();
+        processor.step();
+
+        Registers registers = processor.getRegisters();
+        assertEquals(0b00010000, registers.getRegister(registers.REG_ACCUMULATOR));
+        assertEquals(4, registers.getPC());
+        assertEquals(0x0, registers.getRegister(registers.REG_STATUS) & 0);
     }
 
     @Test
