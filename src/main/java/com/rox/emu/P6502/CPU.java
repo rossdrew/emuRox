@@ -5,6 +5,7 @@ package com.rox.emu.P6502;
  */
 public class CPU {
     public static final int OP_ADC_I = 0x69;  //ADC Immediate
+    public static final int OP_LDA_Z = 0xA5;  //LDA (Zero Page)
     public static final int OP_LDA_I = 0xA9;  //LDA Immediate
     public static final int OP_AND_I = 0x29;  //AND Immediate
     public static final int OP_OR_I = 0x09;   //OR Immediate
@@ -73,6 +74,8 @@ public class CPU {
                 carryManuallyChanged = true;
                 break;
 
+            case OP_LDA_Z:
+                //TODO
             case OP_LDA_I:
                 System.out.println("Instruction: Immediate LDA...");
                 memoryLocation = getAndStepPC(false);
