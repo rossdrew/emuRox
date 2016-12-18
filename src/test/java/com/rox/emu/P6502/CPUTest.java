@@ -1,13 +1,9 @@
 package com.rox.emu.P6502;
 
-import com.rox.emu.P6502.CPU;
-import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import static junit.framework.TestCase.assertEquals;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
 
 public class CPUTest {
     int [] memory;
@@ -25,11 +21,18 @@ public class CPUTest {
 
     @Test
     public void testStartup(){
+        memory = new int[65534];
+        memory[0xFFFC] = 0x1;
+        memory[0xFFFD] = 0x1;
+
+        processor = new CPU(memory);
+        processor.reset();
+
         Registers registers = processor.getRegisters();
 
         assertEquals(0x34, registers.getRegister(registers.REG_STATUS)); //Status flags reset
-        assertEquals(0x0, registers.getRegister(registers.REG_PC_LOW));  //PC Set to location pointed to by mem[FFFC:FFFD]
-        assertEquals(0x0, registers.getRegister(registers.REG_PC_HIGH)); // ...
+        assertEquals(0x1, registers.getRegister(registers.REG_PC_LOW));  //PC Set to location pointed to by mem[FFFC:FFFD]
+        assertEquals(0x1, registers.getRegister(registers.REG_PC_HIGH)); // ...
         assertEquals(0xFF, registers.getRegister(registers.REG_SP));     //Stack Pointer at top of stack
     }
 

@@ -25,7 +25,7 @@ public class CPU {
      */
     public void reset(){
         System.out.println("Resetting...");
-        registers.setRegister(registers.REG_STATUS, 0x34);    //= 00110100  XXX EnumSet might be better here
+        registers.setRegister(registers.REG_STATUS, 0x34);
         registers.setRegister(registers.REG_PC_HIGH, memory[0xFFFC]);
         registers.setRegister(registers.REG_PC_LOW, memory[0xFFFD]);
         registers.setRegister(registers.REG_SP, 0xFF);

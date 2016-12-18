@@ -152,10 +152,10 @@ class OpCodeSpec extends Specification {
         N == registers.statusFlags[7]
 
         where:
-        firstValue || secondValue || expectedAccumulator || PC  || Z      || N     || Expected
-        0b00000001 || 0b00000000  || 0b00000001          || 4   || false  || false || "One"
-        0b00000000 || 0b00000001  || 0b00000001          || 4   || false  || false || "The other"
-        0b00000001 || 0b00000001  || 0b00000000          || 4   || true   || false || "Not both"
+        firstValue | secondValue | expectedAccumulator || PC  || Z      || N     || Expected
+        0b00000001 | 0b00000000  | 0b00000001          || 4   || false  || false || "One"
+        0b00000000 | 0b00000001  | 0b00000001          || 4   || false  || false || "The other"
+        0b00000001 | 0b00000001  | 0b00000000          || 4   || true   || false || "Not both"
     }
 
     @Unroll("SBC Immediate #Expected:  #firstValue - #secondValue = #expectedAccumulator in Accumulator.")

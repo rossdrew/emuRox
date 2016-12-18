@@ -7,10 +7,13 @@ package com.rox.emu.P6502;
  */
 public class Registers {
     public static final int REG_ACCUMULATOR = 0;
-    public static final int REG_PC_HIGH = 1;
-    public static final int REG_PC_LOW = 2;
-    public static final int REG_SP = 3;
-    public static final int REG_STATUS = 4;
+    public static final int REG_Y_INDEX = 1;
+    public static final int REG_X_INDEX = 2;
+    public static final int REG_PC_HIGH = 3;
+    public static final int REG_PC_LOW = 4;
+    public static final int REG_SP_X = 5;
+    public static final int REG_SP = 6;
+    public static final int REG_STATUS = 7;
 
     private final String[] registerNames = new String[] {"Accumulator", "Y Index", "X Index", "Program Counter Hi", "Program Counter Low", "<SP>", "Stack Pointer", "Status Flags"};
 
@@ -25,6 +28,11 @@ public class Registers {
     public static final int STATUS_FLAG_NEGATIVE = 0x80;
 
     private int register[] = new int[8];
+
+    public Registers(){
+        register[REG_SP_X]   = 0b11111111;
+        register[REG_STATUS] = 0b00110100;
+    }
 
     public void setRegister(int registerID, int val){
         System.out.println("Setting (R)" + registerNames[registerID] + " to " + val);
