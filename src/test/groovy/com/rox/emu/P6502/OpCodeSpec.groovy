@@ -1,6 +1,5 @@
 package com.rox.emu.P6502
 
-import com.rox.emu.P6502.CPU
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -32,15 +31,15 @@ class OpCodeSpec extends Specification {
         N == registers.statusFlags[7]
 
         where:
-        loadValue || expectedAccumulator || PC || Z     || N     || Expected
-        0x0       || 0x0                 || 2  || true  || false || "With zero result"
-        0x1       || 0x1                 || 2  || false || false || ""
-        0x7F      || 0x7F                || 2  || false || false || ""
-        0x80      || 0x80                || 2  || false || true  || "With negative result"
-        0x81      || 0x81                || 2  || false || true  || "With negative result"
-        0xFF      || 0xFF                || 2  || false || true  || "With negative result"
+        loadValue | expectedAccumulator | PC | Z     | N     | Expected
+        0x0       | 0x0                 | 2  | true  | false | "With zero result"
+        0x1       | 0x1                 | 2  | false | false | ""
+        0x7F      | 0x7F                | 2  | false | false | ""
+        0x80      | 0x80                | 2  | false | true  | "With negative result"
+        0x81      | 0x81                | 2  | false | true  | "With negative result"
+        0xFF      | 0xFF                | 2  | false | true  | "With negative result"
 
-        //loadValue || expectedAccumulator  || PC || C      || Z     || I     || D     || B     || U     || O     || N
+        //loadValue | expectedAccumulator  | PC | C      | Z     | I     | D     | B     | U     | O     | N
     }
 
     @Unroll("ADC Immediate #Expected:  #firstValue + #secondValue = #expectedAccumulator in Accumulator.")
@@ -66,12 +65,12 @@ class OpCodeSpec extends Specification {
         N == registers.statusFlags[7]
 
         where:
-        firstValue || secondValue || expectedAccumulator || PC  || Z      || N     || C     || O     || Expected
-        0x0        || 0x0         || 0x0                 || 4   || true   || false || false || false || "With zero result"
-        0x80       || 0x1         || 0x81                || 4   || false  || true  || false || false || "With valid negative result"
-        0xFF       || 0xFF        || 0xFE                || 4   || false  || true  || true  || false || "With negative, carried result"
-        0x50       || 0xD0        || 0x20                || 4   || false  || false || true  || false || "With positive, carried result"
-        0x50       || 0x50        || 0xA0                || 4   || false  || true  || false || true  || "With negative overflow"
+        firstValue | secondValue | expectedAccumulator | PC  | Z      | N     | C     | O     | Expected
+        0x0        | 0x0         | 0x0                 | 4   | true   | false | false | false | "With zero result"
+        0x80       | 0x1         | 0x81                | 4   | false  | true  | false | false | "With valid negative result"
+        0xFF       | 0xFF        | 0xFE                | 4   | false  | true  | true  | false | "With negative, carried result"
+        0x50       | 0xD0        | 0x20                | 4   | false  | false | true  | false | "With positive, carried result"
+        0x50       | 0x50        | 0xA0                | 4   | false  | true  | false | true  | "With negative overflow"
     }
 
     @Unroll("AND Immediate #Expected:  #firstValue & #secondValue = #expectedAccumulator in Accumulator.")
@@ -95,11 +94,11 @@ class OpCodeSpec extends Specification {
         N == registers.statusFlags[7]
 
         where:
-        firstValue || secondValue || expectedAccumulator || PC  || Z      || N     || Expected
-        0b00000001 || 0b00000001  || 0b00000001          || 4   || false  || false || "Unchanged accumulator"
-        0b00000001 || 0b00000010  || 0b00000000          || 4   || true   || false || "No matching bits"
-        0b00000011 || 0b00000010  || 0b00000010          || 4   || false  || false || "1 matched bit, 1 unmatched"
-        0b00101010 || 0b00011010  || 0b00001010          || 4   || false  || false || "Multiple matched/unmatched bits"
+        firstValue | secondValue | expectedAccumulator | PC  | Z      | N     | Expected
+        0b00000001 | 0b00000001  | 0b00000001          | 4   | false  | false | "Unchanged accumulator"
+        0b00000001 | 0b00000010  | 0b00000000          | 4   | true   | false | "No matching bits"
+        0b00000011 | 0b00000010  | 0b00000010          | 4   | false  | false | "1 matched bit, 1 unmatched"
+        0b00101010 | 0b00011010  | 0b00001010          | 4   | false  | false | "Multiple matched/unmatched bits"
     }
 
     @Unroll("OR Immediate #Expected:  #firstValue | #secondValue = #expectedAccumulator in Accumulator.")
@@ -123,12 +122,12 @@ class OpCodeSpec extends Specification {
         N == registers.statusFlags[7]
 
         where:
-        firstValue || secondValue || expectedAccumulator || PC  || Z      || N     || Expected
-        0b00000001 || 0b00000001  || 0b00000001          || 4   || false  || false || "Duplicate bits"
-        0b00000000 || 0b00000001  || 0b00000001          || 4   || false  || false || "One bit in Accumulator"
-        0b00000001 || 0b00000000  || 0b00000001          || 4   || false  || false || "One bit from passed value"
-        0b00000001 || 0b00000010  || 0b00000011          || 4   || false  || false || "One bit fro Accumulator, one from new value"
-        0b00000001 || 0b10000010  || 0b10000011          || 4   || false  || true  || "Negative result"
+        firstValue | secondValue | expectedAccumulator | PC  | Z      | N     | Expected
+        0b00000001 | 0b00000001  | 0b00000001          | 4   | false  | false | "Duplicate bits"
+        0b00000000 | 0b00000001  | 0b00000001          | 4   | false  | false | "One bit in Accumulator"
+        0b00000001 | 0b00000000  | 0b00000001          | 4   | false  | false | "One bit from passed value"
+        0b00000001 | 0b00000010  | 0b00000011          | 4   | false  | false | "One bit fro Accumulator, one from new value"
+        0b00000001 | 0b10000010  | 0b10000011          | 4   | false  | true  | "Negative result"
     }
 
     @Unroll("EOR Immediate #Expected:  #firstValue ^ #secondValue = #expectedAccumulator in Accumulator.")
@@ -152,10 +151,10 @@ class OpCodeSpec extends Specification {
         N == registers.statusFlags[7]
 
         where:
-        firstValue | secondValue | expectedAccumulator || PC  || Z      || N     || Expected
-        0b00000001 | 0b00000000  | 0b00000001          || 4   || false  || false || "One"
-        0b00000000 | 0b00000001  | 0b00000001          || 4   || false  || false || "The other"
-        0b00000001 | 0b00000001  | 0b00000000          || 4   || true   || false || "Not both"
+        firstValue | secondValue | expectedAccumulator | PC  | Z      | N     | Expected
+        0b00000001 | 0b00000000  | 0b00000001          | 4   | false  | false | "One"
+        0b00000000 | 0b00000001  | 0b00000001          | 4   | false  | false | "The other"
+        0b00000001 | 0b00000001  | 0b00000000          | 4   | true   | false | "Not both"
     }
 
     @Unroll("SBC Immediate #Expected:  #firstValue - #secondValue = #expectedAccumulator in Accumulator.")
@@ -182,9 +181,9 @@ class OpCodeSpec extends Specification {
         //TODO C
 
         where:
-        firstValue || secondValue || expectedAccumulator || PC  || Z      || N     || O     || Expected
-        0x5        || 0x3         || 0x2                 || 5   || false  || false || false ||  "Basic subtraction"
-        0x5        || 0x5         || 0x0                 || 5   || true   || false || false ||  "Zero subtraction"
-        0x5        || 0x6         || 0xFF                || 5   || false  || true  || false ||  "Negative subtraction"
+        firstValue | secondValue | expectedAccumulator | PC  | Z      | N     | O     | Expected
+        0x5        | 0x3         | 0x2                 | 5   | false  | false | false | "Basic subtraction"
+        0x5        | 0x5         | 0x0                 | 5   | true   | false | false | "Zero subtraction"
+        0x5        | 0x6         | 0xFF                | 5   | false  | true  | false | "Negative subtraction"
     }
 }
