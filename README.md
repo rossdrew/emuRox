@@ -5,7 +5,7 @@
 
 At the moment, it's invisioned as an emulator for the 6502 processor in order to fit into a NES emulator which this is the first stage of development for.
 
-Straight away Java doesn't feel like the right choice but it's a good learning excercise. I may switch language later.
+Straight away Java doesn't feel like the right choice but it's a good learning exercise. I may switch language later.
 
 -----
 
@@ -42,10 +42,18 @@ Straight away Java doesn't feel like the right choice but it's a good learning e
  - Immediate ADC (N, Z, O, C)
  - Immediate AND/OR/EOR (N, Z)
  
+###Testing
+
+ The testing strategy uses 4 different technologies:- 
+ 
+ - [Java](https://www.java.com/)/[JUnit](http://junit.org/junit4/) for basic functionality tests.  Can classes be created, initialised and called.
+ - [Groovy](http://www.groovy-lang.org/)/[Spock](http://spockframework.org/) for [data-driven tests](https://en.wikipedia.org/wiki/Data-driven_testing) .  For covering various variations of class creation and method use in a clear, concise way.
+ - [JaCoCo](http://www.eclemma.org/jacoco/) reports. To allow us to strive for high [code coverage](https://en.wikipedia.org/wiki/Code_coverage) .
+ - [Pitest](http://pitest.org/) reports. To allow us to use [mutation testing](https://en.wikipedia.org/wiki/Mutation_testing) to validate and improve our ( [Spock](http://spockframework.org/) & [JUnit](http://junit.org/junit4/)) unit tests.
+ 
 ###Notes
 
  - I've kept the PC as two separate registers.  It makes it a little tougher to deal with but more authentic.
- - Perhaps abstract out the registers and further abstract out the flags for clarity
 
 -----
 
