@@ -75,7 +75,11 @@ public class CPU {
                 break;
 
             case OP_LDA_Z:
-                //TODO
+                memoryLocation = getAndStepPC(false);
+                memoryLocation = getByteOfMemoryAt(memoryLocation);
+                registers.setRegister(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(memoryLocation));
+                break;
+
             case OP_LDA_I:
                 System.out.println("Instruction: Immediate LDA...");
                 memoryLocation = getAndStepPC(false);
