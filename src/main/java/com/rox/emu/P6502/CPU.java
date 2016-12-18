@@ -6,7 +6,8 @@ package com.rox.emu.P6502;
 public class CPU {
     public static final int OP_ADC_I = 0x69;  //ADC Immediate
     public static final int OP_LDA_Z = 0xA5;  //LDA (Zero Page)
-    public static final int OP_LDA_I = 0xA9;  //LDA Immediate
+    public static final int OP_LDA_I = 0xA9;  //... Immediate
+    public static final int OP_LDA_A = 0xAD;  //... Absolute
     public static final int OP_AND_I = 0x29;  //AND Immediate
     public static final int OP_OR_I = 0x09;   //OR Immediate
     public static final int OP_EOR_I = 0x49;  //EOR Immediate
@@ -47,6 +48,7 @@ public class CPU {
         return incrementFirst ? incrementedPC : originalPC;
     }
 
+    //XXX I should really be loading this value into the accumulator, right?
     private int getByteOfMemoryAt(int location){
         final int memoryByte = memory[location];
         System.out.println("Got " + memoryByte + " from mem[" + location + "]");
@@ -74,7 +76,14 @@ public class CPU {
                 carryManuallyChanged = true;
                 break;
 
+            case OP_LDA_A: // [op] [low order byte] [high order byte]
+                System.out.println("Instruction: Absolute LDA...");
+                //TODO
+
+                break;
+
             case OP_LDA_Z:
+                System.out.println("Instruction: Zero Page LDA...");
                 memoryLocation = getAndStepPC(false);
                 memoryLocation = getByteOfMemoryAt(memoryLocation);
                 registers.setRegister(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(memoryLocation));

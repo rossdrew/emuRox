@@ -72,6 +72,38 @@ class OpCodeSpec extends Specification {
         0xFF      | 0xFF                | 2  | false | true  | "With negative result"
     }
 
+    @Unroll("LDA Absolute #Expected: Load #loadValue")
+    def "LDA (Load Accumulator) Absolute Test"() {
+        when:
+        int[] memory = new int[65534]
+        //Load a memory address above Zero Page (>256) using [Opcode] [Low Order Byte] [High Order Byte]
+        //   [2C, 1] == [1, 2C] == 0b100101100 == 300
+        int[] program = [CPU.OP_LDA_A, 0x2C, 0x1]
+        memory[300] = loadValue
+        System.arraycopy(program, 0, memory, 0, program.length);
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        processor.step()
+        Registers registers = processor.getRegisters()
+
+        then:
+        registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
+        PC == registers.getPC()
+        Z == registers.getStatusFlags()[1]
+        N == registers.statusFlags[7]
+
+        where:
+        loadValue | expectedAccumulator | PC | Z     | N     | Expected
+        0x0       | 0x0                 | 2  | true  | false | "With zero result"
+        0x1       | 0x1                 | 2  | false | false | ""
+        0x7F      | 0x7F                | 2  | false | false | ""
+        0x80      | 0x80                | 2  | false | true  | "With negative result"
+        0x81      | 0x81                | 2  | false | true  | "With negative result"
+        0xFF      | 0xFF                | 2  | false | true  | "With negative result"
+    }
+
     @Unroll("ADC Immediate #Expected:  #firstValue + #secondValue = #expectedAccumulator in Accumulator.")
     def "ADC (ADd with Carry to Accumulator) Test"(){
         when:
