@@ -96,12 +96,12 @@ class OpCodeSpec extends Specification {
 
         where:
         loadValue | expectedAccumulator | PC | Z     | N     | Expected
-        0x0       | 0x0                 | 2  | true  | false | "With zero result"
-        0x1       | 0x1                 | 2  | false | false | ""
-        0x7F      | 0x7F                | 2  | false | false | ""
-        0x80      | 0x80                | 2  | false | true  | "With negative result"
-        0x81      | 0x81                | 2  | false | true  | "With negative result"
-        0xFF      | 0xFF                | 2  | false | true  | "With negative result"
+        0x0       | 0x0                 | 3  | true  | false | "With zero result"
+        0x1       | 0x1                 | 3  | false | false | ""
+        0x7F      | 0x7F                | 3  | false | false | ""
+        0x80      | 0x80                | 3  | false | true  | "With negative result"
+        0x81      | 0x81                | 3  | false | true  | "With negative result"
+        0xFF      | 0xFF                | 3  | false | true  | "With negative result"
     }
 
     @Unroll("ADC Immediate #Expected:  #firstValue + #secondValue = #expectedAccumulator in Accumulator.")

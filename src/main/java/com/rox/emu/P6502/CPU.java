@@ -77,15 +77,18 @@ public class CPU {
                 break;
 
             case OP_LDA_A: // [op] [low order byte] [high order byte]
-                System.out.println("Instruction: Absolute LDA...");
-                //TODO
-
+                memoryLocation = getAndStepPC(false);
+                int lowByte = getByteOfMemoryAt(memoryLocation);
+                memoryLocation = getAndStepPC(false);
+                int pointerWord = lowByte | (getByteOfMemoryAt(memoryLocation) << 8);
+                System.out.println("Instruction: Absolute LDA from " + pointerWord + "]...");
+                registers.setRegister(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(pointerWord));
                 break;
 
             case OP_LDA_Z:
-                System.out.println("Instruction: Zero Page LDA...");
                 memoryLocation = getAndStepPC(false);
                 memoryLocation = getByteOfMemoryAt(memoryLocation);
+                System.out.println("Instruction: Zero Page LDA from " + memoryLocation + "...");
                 registers.setRegister(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(memoryLocation));
                 break;
 
