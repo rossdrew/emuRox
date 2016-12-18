@@ -3,8 +3,10 @@ version '1.0-SNAPSHOT'
 
 apply plugin: 'groovy'
 apply plugin: 'java'
+apply plugin: "info.solidsoft.pitest"
+apply plugin: "jacoco"
 
-sourceCompatibility = 1.5
+sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
@@ -31,5 +33,3 @@ buildscript {
         classpath "info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.1.4"
     }
 }
-
-apply plugin: "info.solidsoft.pitest"
