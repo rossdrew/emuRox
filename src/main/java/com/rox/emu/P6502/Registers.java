@@ -12,7 +12,7 @@ public class Registers {
     public static final int REG_SP = 3;
     public static final int REG_STATUS = 4;
 
-    private final String[] registerNames = new String[] {"Accumulator", "", "", "Program Counter Hi", "Program Counter Low", "", "Stack Pointer", "Status Flags"};
+    private final String[] registerNames = new String[] {"Accumulator", "Y Index", "X Index", "Program Counter Hi", "Program Counter Low", "<SP>", "Stack Pointer", "Status Flags"};
 
     public static final int STATUS_FLAG_CARRY = 0x1;
     public static final int CARRY_INDICATOR_BIT = 0x100;
@@ -27,7 +27,7 @@ public class Registers {
     private int register[] = new int[8];
 
     public void setRegister(int registerID, int val){
-        System.out.println("Setting (R)" + register[registerID] + " to " + val);
+        System.out.println("Setting (R)" + registerNames[registerID] + " to " + val);
         register[registerID] = val;
     }
 
@@ -39,10 +39,6 @@ public class Registers {
 
     public int getPC(){
         return (getRegister(REG_PC_HIGH) << 8) | getRegister(REG_PC_LOW);
-    }
-
-    public String getRegisterName(int registerID){
-        return registerNames[registerID];
     }
 
     public int getRegister(int registerID){
@@ -73,14 +69,13 @@ public class Registers {
 
     public boolean[] getStatusFlags(){
         boolean[] flags = new boolean[8];
-        flags[0] = (register[REG_STATUS] & STATUS_FLAG_CARRY) == STATUS_FLAG_CARRY;
-        flags[1] = (register[REG_STATUS] & STATUS_FLAG_ZERO) == STATUS_FLAG_ZERO;
-        flags[2] = (register[REG_STATUS] & STATUS_FLAG_IRQ_DISABLE) == STATUS_FLAG_IRQ_DISABLE;
-        flags[3] = (register[REG_STATUS] & STATUS_FLAG_DEC) == STATUS_FLAG_DEC;
-        flags[4] = (register[REG_STATUS] & STATUS_FLAG_BREAK) == STATUS_FLAG_BREAK;
-        flags[5] = (register[REG_STATUS] & STATUS_FLAG_UNUSED) == STATUS_FLAG_UNUSED;
-        flags[6] = (register[REG_STATUS] & STATUS_FLAG_OVERFLOW) == STATUS_FLAG_OVERFLOW;
-        flags[7] = (register[REG_STATUS] & STATUS_FLAG_NEGATIVE) == STATUS_FLAG_NEGATIVE;
+
+        int status_flags = getRegister(REG_STATUS);
+        for (int i=0, j=1; i<8; i++){
+            flags[i] = (status_flags & j) == j;
+            j*=2;
+        }
+
         return flags;
     }
 
