@@ -11,7 +11,7 @@ public class Registers {
     public static final int REG_X_INDEX = 2;
     public static final int REG_PC_HIGH = 3;
     public static final int REG_PC_LOW = 4;
-    public static final int REG_SP_X = 5;
+    private static final int REG_SP_X = 5;
     public static final int REG_SP = 6;
     public static final int REG_STATUS = 7;
 
@@ -27,9 +27,10 @@ public class Registers {
     public static final int STATUS_FLAG_OVERFLOW = 0x40;
     public static final int STATUS_FLAG_NEGATIVE = 0x80;
 
-    private int register[] = new int[8];
+    private final int[] register;
 
     public Registers(){
+        register = new int[8];
         register[REG_SP_X]   = 0b11111111;
         register[REG_STATUS] = 0b00110100;
     }

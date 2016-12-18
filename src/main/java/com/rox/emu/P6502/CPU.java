@@ -14,7 +14,7 @@ public class CPU {
 
     private int[] memory;
 
-    Registers registers = new Registers();
+    private Registers registers = new Registers();
 
     public CPU(int[] memory) {
         this.memory = memory;
@@ -25,10 +25,10 @@ public class CPU {
      */
     public void reset(){
         System.out.println("Resetting...");
-        registers.setRegister(registers.REG_STATUS, 0x34);
-        registers.setRegister(registers.REG_PC_HIGH, memory[0xFFFC]);
-        registers.setRegister(registers.REG_PC_LOW, memory[0xFFFD]);
-        registers.setRegister(registers.REG_SP, 0xFF);
+        registers.setRegister(Registers.REG_STATUS, 0x34);
+        registers.setRegister(Registers.REG_PC_HIGH, memory[0xFFFC]);
+        registers.setRegister(Registers.REG_PC_LOW, memory[0xFFFD]);
+        registers.setRegister(Registers.REG_SP, 0xFF);
         System.out.println("...READY!");
     }
 
@@ -61,7 +61,7 @@ public class CPU {
         int memoryLocation = getAndStepPC(false);
         int opCode = getByteOfMemoryAt(memoryLocation);
 
-        int accumulatorBeforeOperation = registers.getRegister(registers.REG_ACCUMULATOR);
+        int accumulatorBeforeOperation = registers.getRegister(Registers.REG_ACCUMULATOR);
 
         boolean carryManuallyChanged = false;
 
@@ -69,21 +69,21 @@ public class CPU {
         switch (opCode){
             case OP_SEC:
                 System.out.println("Instruction: Implied SEC...");
-                registers.setFlag(registers.STATUS_FLAG_CARRY);
+                registers.setFlag(Registers.STATUS_FLAG_CARRY);
                 carryManuallyChanged = true;
                 break;
 
             case OP_LDA_I:
                 System.out.println("Instruction: Immediate LDA...");
                 memoryLocation = getAndStepPC(false);
-                registers.setRegister(registers.REG_ACCUMULATOR, getByteOfMemoryAt(memoryLocation));
+                registers.setRegister(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(memoryLocation));
                 break;
 
             case OP_ADC_I:
                 System.out.println("Instruction: Immediate ADC...");
                 memoryLocation = getAndStepPC(false);
                 int newTerm = getByteOfMemoryAt(memoryLocation);
-                registers.setRegister(registers.REG_ACCUMULATOR, newTerm + accumulatorBeforeOperation);
+                registers.setRegister(Registers.REG_ACCUMULATOR, newTerm + accumulatorBeforeOperation);
                 updateOverflowFlag(accumulatorBeforeOperation, newTerm);
                 break;
 
@@ -91,32 +91,32 @@ public class CPU {
                 System.out.println("Instruction: Immediate AND...");
                 memoryLocation = getAndStepPC(false);
                 int andedValue = getByteOfMemoryAt(memoryLocation);
-                registers.setRegister(registers.REG_ACCUMULATOR, andedValue & accumulatorBeforeOperation);
+                registers.setRegister(Registers.REG_ACCUMULATOR, andedValue & accumulatorBeforeOperation);
                 break;
 
             case OP_OR_I:
                 System.out.println("Instruction: Immediate OR...");
                 memoryLocation = getAndStepPC(false);
                 int orredValue = getByteOfMemoryAt(memoryLocation);
-                registers.setRegister(registers.REG_ACCUMULATOR, orredValue | accumulatorBeforeOperation);
+                registers.setRegister(Registers.REG_ACCUMULATOR, orredValue | accumulatorBeforeOperation);
                 break;
 
             case OP_EOR_I:
                 System.out.println("Instruction: Immediate EOR...");
                 memoryLocation = getAndStepPC(false);
                 int xorredValue = getByteOfMemoryAt(memoryLocation);
-                registers.setRegister(registers.REG_ACCUMULATOR, xorredValue ^ accumulatorBeforeOperation);
+                registers.setRegister(Registers.REG_ACCUMULATOR, xorredValue ^ accumulatorBeforeOperation);
                 break;
 
             case OP_SBC_I:
                 System.out.println("Instruction: Immediate SBC...");
                 memoryLocation = getAndStepPC(false);
-                registers.setFlag(registers.STATUS_FLAG_NEGATIVE);
+                registers.setFlag(Registers.STATUS_FLAG_NEGATIVE);
                 int subtrahend = getByteOfMemoryAt(memoryLocation);
                 //XXX Should be done with addition to be more athentic but neither seem to work
                 int difference = accumulatorBeforeOperation-subtrahend;
                 updateOverflowFlag(accumulatorBeforeOperation, difference);
-                registers.setRegister(registers.REG_ACCUMULATOR, difference & 0xFF);
+                registers.setRegister(Registers.REG_ACCUMULATOR, difference & 0xFF);
                 break;
 
             default:
@@ -133,40 +133,40 @@ public class CPU {
      * XXX Seems like a lot of operations, any way to optimise this?
      */
     private void updateOverflowFlag(int accumulatorBeforeAddition, int newValue) {
-        if (isNegative(accumulatorBeforeAddition) && isNegative(newValue) && !isNegative(registers.getRegister(registers.REG_ACCUMULATOR)) ||
-            !isNegative(accumulatorBeforeAddition) && !isNegative(newValue) && isNegative(registers.getRegister(registers.REG_ACCUMULATOR))){
-            registers.setFlag(registers.STATUS_FLAG_OVERFLOW);
+        if (isNegative(accumulatorBeforeAddition) && isNegative(newValue) && !isNegative(registers.getRegister(Registers.REG_ACCUMULATOR)) ||
+            !isNegative(accumulatorBeforeAddition) && !isNegative(newValue) && isNegative(registers.getRegister(Registers.REG_ACCUMULATOR))){
+            registers.setFlag(Registers.STATUS_FLAG_OVERFLOW);
         }else{
-            registers.clearFlag(registers.STATUS_FLAG_OVERFLOW);
+            registers.clearFlag(Registers.STATUS_FLAG_OVERFLOW);
         }
     }
 
     private boolean isNegative(int fakeByte){
-        return (fakeByte & registers.STATUS_FLAG_NEGATIVE) == registers.STATUS_FLAG_NEGATIVE;
+        return (fakeByte & Registers.STATUS_FLAG_NEGATIVE) == Registers.STATUS_FLAG_NEGATIVE;
     }
 
     private void updateZeroFlag() {
-        if (registers.getRegister(registers.REG_ACCUMULATOR) == 0)
-            registers.setFlag(registers.STATUS_FLAG_ZERO);
+        if (registers.getRegister(Registers.REG_ACCUMULATOR) == 0)
+            registers.setFlag(Registers.STATUS_FLAG_ZERO);
         else
-            registers.clearFlag(registers.STATUS_FLAG_ZERO);
+            registers.clearFlag(Registers.STATUS_FLAG_ZERO);
     }
 
     private void updateNegativeFlag() {
-        if ( isNegative(registers.getRegister(registers.REG_ACCUMULATOR)))
-            registers.setFlag(registers.STATUS_FLAG_NEGATIVE);
+        if ( isNegative(registers.getRegister(Registers.REG_ACCUMULATOR)))
+            registers.setFlag(Registers.STATUS_FLAG_NEGATIVE);
         else
-            registers.clearFlag(registers.STATUS_FLAG_NEGATIVE);
+            registers.clearFlag(Registers.STATUS_FLAG_NEGATIVE);
     }
 
     private void updateCarryFlag() {
-        if ((registers.getRegister(registers.REG_ACCUMULATOR) & registers.CARRY_INDICATOR_BIT) == registers.CARRY_INDICATOR_BIT) {
-            registers.setFlag(registers.STATUS_FLAG_CARRY);
+        if ((registers.getRegister(Registers.REG_ACCUMULATOR) & Registers.CARRY_INDICATOR_BIT) == Registers.CARRY_INDICATOR_BIT) {
+            registers.setFlag(Registers.STATUS_FLAG_CARRY);
             //registers[REG_ACCUMULATOR] = (~0x100) & registers[REG_ACCUMULATOR]; //TODO
-            registers.setRegister(registers.REG_ACCUMULATOR, (~0x100) & registers.getRegister(registers.REG_ACCUMULATOR));
+            registers.setRegister(Registers.REG_ACCUMULATOR, (~0x100) & registers.getRegister(Registers.REG_ACCUMULATOR));
 
         }else
-            registers.clearFlag(registers.STATUS_FLAG_CARRY);
+            registers.clearFlag(Registers.STATUS_FLAG_CARRY);
     }
 
 }
