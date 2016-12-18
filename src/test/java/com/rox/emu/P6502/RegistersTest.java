@@ -2,6 +2,7 @@ package com.rox.emu.P6502;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.omg.PortableInterceptor.Interceptor;
 
 import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -52,7 +53,10 @@ public class RegistersTest {
     @Test
     public void testSetAndGetNextProgramCounter(){
         registers.setPC(0);
-        assertEquals(1, registers.getNextProgramCounter());
+        for (int i=1; i<300; i++) {
+            int result = registers.getNextProgramCounter();
+            assertEquals("Expected: " + Integer.toBinaryString(i) + ", got " + Integer.toBinaryString(result), i, result);
+        }
     }
 
     @Test

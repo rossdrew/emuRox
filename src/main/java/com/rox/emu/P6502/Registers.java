@@ -90,12 +90,7 @@ public class Registers {
     public int getNextProgramCounter(){
         final int originalPC = getPC();
         final int incrementedPC = originalPC + 1;
-
-        setRegister(REG_PC_HIGH, incrementedPC & 0xFF00);
-        setRegister(REG_PC_LOW, incrementedPC & 0x00FF);
-
-        System.out.println("Program Counter now " + incrementedPC);
-
+        setPC(incrementedPC);
         return incrementedPC;
     }
 }
