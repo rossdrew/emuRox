@@ -23,11 +23,11 @@
 ----
 #### OpCodes
 
-![6502 OpCodes Page 1](https://github.com/rossdrew/emuRox/blob/master/img/6502_ISR_first_page.gif "6502 OpCodes Page 1")
-![6502 OpCodes Page 2](https://github.com/rossdrew/emuRox/blob/master/img/6502_ISR_second_page.gif "6502 OpCodes Page 2")
+![6502 OpCodes Page 1](https://github.com/rossdrew/emuRox/blob/master/docs/6502/img/6502_ISR_first_page.gif "6502 OpCodes Page 1")
+![6502 OpCodes Page 2](https://github.com/rossdrew/emuRox/blob/master/docs/6502/img/6502_ISR_second_page.gif "6502 OpCodes Page 2")
 
 ----
 
 #### Block Diagram
 
-![6502 Block Diagram](https://github.com/rossdrew/emuRox/blob/master/img/6502_block_diagram.jpg "6502 Block Diagram")
+![6502 Block Diagram](https://github.com/rossdrew/emuRox/blob/master/docs/6502/img/6502_block_diagram.jpg "6502 Block Diagram")
