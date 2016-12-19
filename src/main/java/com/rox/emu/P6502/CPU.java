@@ -4,15 +4,16 @@ package com.rox.emu.P6502;
  * @author rossdrew
  */
 public class CPU {
-    public static final int OP_ADC_I = 0x69;  //ADC Immediate
-    public static final int OP_LDA_Z = 0xA5;  //LDA (Zero Page)
-    public static final int OP_LDA_I = 0xA9;  //... Immediate
-    public static final int OP_LDA_A = 0xAD;  //... Absolute
-    public static final int OP_AND_I = 0x29;  //AND Immediate
-    public static final int OP_OR_I = 0x09;   //OR Immediate
-    public static final int OP_EOR_I = 0x49;  //EOR Immediate
-    public static final int OP_SBC_I = 0xE9;  //SBX Immediate
-    public static final int OP_SEC = 0x38;    //SEC (Implied)
+    public static final int OP_ADC_I = 0x69;   //ADC Immediate
+    public static final int OP_LDA_Z = 0xA5;   //LDA (Zero Page)
+    public static final int OP_LDA_I = 0xA9;   //... Immediate
+    public static final int OP_LDA_A = 0xAD;   //... Absolute
+    public static final int OP_LDA_IND = 0xF6; //... Indirect using X with Zero Page
+    public static final int OP_AND_I = 0x29;   //AND Immediate
+    public static final int OP_OR_I = 0x09;    //OR Immediate
+    public static final int OP_EOR_I = 0x49;   //EOR Immediate
+    public static final int OP_SBC_I = 0xE9;   //SBX Immediate
+    public static final int OP_SEC = 0x38;     //SEC (Implied)
 
     private int[] memory;
 
