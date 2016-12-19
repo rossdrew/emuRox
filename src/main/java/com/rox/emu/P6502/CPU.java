@@ -14,6 +14,7 @@ public class CPU {
     public static final int OP_EOR_I = 0x49;   //EOR Immediate
     public static final int OP_SBC_I = 0xE9;   //SBX Immediate
     public static final int OP_SEC = 0x38;     //SEC (Implied)
+    public static final int OP_LDX_I = 0xA2;   //LDX Immediate
 
     private int[] memory;
 
@@ -81,7 +82,7 @@ public class CPU {
                 System.out.println("Instruction: Indirect LDA on Zero Page using X...");
                 //TODO After LDX implemented
                 break;
-            
+
             case OP_LDA_A: // [op] [low order byte] [high order byte]
                 memoryLocation = getAndStepPC(false);
                 int lowByte = getByteOfMemoryAt(memoryLocation);

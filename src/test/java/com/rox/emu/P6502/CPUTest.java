@@ -50,6 +50,19 @@ public class CPUTest {
     }
 
     @Test
+    public void testLDX(){
+        int[] program = {CPU.OP_LDX_I, 0xAA};
+        System.arraycopy(program, 0, memory, 0, program.length);
+
+        processor.step();
+
+        Registers registers = processor.getRegisters();
+        assertEquals(0xAA, registers.getRegister(registers.REG_X_INDEX));
+        assertEquals(0x0, registers.getRegister(registers.REG_STATUS) & 0);
+        assertEquals(2, registers.getPC());
+    }
+
+    @Test
     public void testADC(){
         int[] program = {CPU.OP_LDA_I,
                 0x1,
