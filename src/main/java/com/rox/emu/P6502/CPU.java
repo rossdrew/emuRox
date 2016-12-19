@@ -85,8 +85,11 @@ public class CPU {
                 break;
 
             case OP_LDA_IND:
-                System.out.println("Instruction: Indirect LDA on Zero Page using X...");
-                //TODO After LDX implemented
+                memoryLocation = getAndStepPC(false);
+                memoryLocation += registers.getRegister(Registers.REG_X_INDEX);
+                System.out.println("Instruction: Indirect LDA on Zero Page using X to [" + memoryLocation + "]...");
+                registers.setRegister(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(memoryLocation));
+                //TODO
                 break;
 
             case OP_LDA_I:

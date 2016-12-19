@@ -65,9 +65,9 @@ public class CPUTest {
     @Test
     public void testADC(){
         int[] program = {CPU.OP_LDA_I,
-                0x1,
-                CPU.OP_ADC_I,
-                0x1};
+                         0x1,
+                         CPU.OP_ADC_I,
+                         0x1};
         System.arraycopy(program, 0, memory, 0, program.length);
 
         processor.step();
