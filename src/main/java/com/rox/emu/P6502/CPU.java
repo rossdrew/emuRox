@@ -78,9 +78,21 @@ public class CPU {
                 carryManuallyChanged = true;
                 break;
 
+            case OP_LDX_I:
+                System.out.println("Instruction: Immediate LDX...");
+                memoryLocation = getAndStepPC(false);
+                registers.setRegister(Registers.REG_X_INDEX, getByteOfMemoryAt(memoryLocation));
+                break;
+
             case OP_LDA_IND:
                 System.out.println("Instruction: Indirect LDA on Zero Page using X...");
                 //TODO After LDX implemented
+                break;
+
+            case OP_LDA_I:
+                System.out.println("Instruction: Immediate LDA...");
+                memoryLocation = getAndStepPC(false);
+                registers.setRegister(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(memoryLocation));
                 break;
 
             case OP_LDA_A: // [op] [low order byte] [high order byte]
@@ -96,12 +108,6 @@ public class CPU {
                 memoryLocation = getAndStepPC(false);
                 memoryLocation = getByteOfMemoryAt(memoryLocation);
                 System.out.println("Instruction: Zero Page LDA from " + memoryLocation + "...");
-                registers.setRegister(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(memoryLocation));
-                break;
-
-            case OP_LDA_I:
-                System.out.println("Instruction: Immediate LDA...");
-                memoryLocation = getAndStepPC(false);
                 registers.setRegister(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(memoryLocation));
                 break;
 
