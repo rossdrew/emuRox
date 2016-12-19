@@ -8,7 +8,7 @@ public class CPU {
     public static final int OP_LDA_Z = 0xA5;   //LDA (Zero Page)
     public static final int OP_LDA_I = 0xA9;   //... Immediate
     public static final int OP_LDA_A = 0xAD;   //... Absolute
-    public static final int OP_LDA_IND = 0xF6; //... Indirect using X with Zero Page
+    public static final int OP_LDA_Z_IND = 0xF6; //... Indirect using X with Zero Page
     public static final int OP_AND_I = 0x29;   //AND Immediate
     public static final int OP_OR_I = 0x09;    //OR Immediate
     public static final int OP_EOR_I = 0x49;   //EOR Immediate
@@ -84,12 +84,12 @@ public class CPU {
                 registers.setRegister(Registers.REG_X_INDEX, getByteOfMemoryAt(memoryLocation));
                 break;
 
-            case OP_LDA_IND:
+            case OP_LDA_Z_IND:
                 memoryLocation = getAndStepPC(false);
-                memoryLocation += registers.getRegister(Registers.REG_X_INDEX);
-                System.out.println("Instruction: Indirect LDA on Zero Page using X to [" + memoryLocation + "]...");
-                registers.setRegister(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(memoryLocation));
-                //TODO
+                memoryLocation = getByteOfMemoryAt(memoryLocation);
+                int index = registers.getRegister(Registers.REG_X_INDEX);
+                System.out.println("Instruction: Zero Page LDA from [" + memoryLocation + "[" + index + "]]...");
+                registers.setRegister(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(memoryLocation + index));
                 break;
 
             case OP_LDA_I:
@@ -103,7 +103,7 @@ public class CPU {
                 int lowByte = getByteOfMemoryAt(memoryLocation);
                 memoryLocation = getAndStepPC(false);
                 int pointerWord = lowByte | (getByteOfMemoryAt(memoryLocation) << 8);
-                System.out.println("Instruction: Absolute LDA from " + pointerWord + "]...");
+                System.out.println("Instruction: Absolute LDA from [" + pointerWord + "]...");
                 registers.setRegister(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(pointerWord));
                 break;
 

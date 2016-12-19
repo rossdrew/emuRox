@@ -108,12 +108,10 @@ class OpCodeSpec extends Specification {
     def "LDA (Load Accumulator) Indirectly using X from Zero Page Test"() {
         when:
         int[] memory = new int[65534]
-        int[] program = [CPU.OP_LDX_I, index, CPU.OP_LDA_IND, 0x2C, 0x1] //F6
-        memory[34] = 55
-        memory[33] = 44
-        memory[32] = 44
-        memory[31] = 33
-        memory[30] = 22
+        int[] program = [CPU.OP_LDX_I, index, CPU.OP_LDA_Z_IND, 0x30] //F6
+        memory[0x30] = 0
+        memory[0x31] = 11
+        memory[0x32] = 0b11111111
         System.arraycopy(program, 0, memory, 0, program.length);
 
         and:
@@ -130,13 +128,10 @@ class OpCodeSpec extends Specification {
         N == registers.statusFlags[7]
 
         where:
-        loadValue | index | expectedAccumulator | PC | Z     | N     | Expected
-        0x0       |   0   | 0x0                 | 4  | true  | false | "With zero result"
-        0x1       |   0   | 0x1                 | 4  | false | false | ""
-        0x7F      |   0   | 0x7F                | 4  | false | false | ""
-        0x80      |   0   | 0x80                | 4  | false | true  | "With negative result"
-        0x81      |   0   | 0x81                | 4  | false | true  | "With negative result"
-        0xFF      |   0   | 0xFF                | 4  | false | true  | "With negative result"
+        index | expectedAccumulator | PC | Z     | N     | Expected
+          0   | 0                   | 4  | true  | false | "With zero result"
+          1   | 11                  | 4  | false | false | "With normal result"
+          2   | 0b11111111          | 4  | false | true  | "With negative result"
     }
 
     @Unroll("ADC Immediate #Expected:  #firstValue + #secondValue = #expectedAccumulator in Accumulator.")
