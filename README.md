@@ -16,10 +16,6 @@ Straight away Java doesn't feel like the right choice but it's a good learning e
  - [JaCoCo](http://www.eclemma.org/jacoco/) reports. To allow us to strive for high [code coverage](https://en.wikipedia.org/wiki/Code_coverage) .
  - [Pitest](http://pitest.org/) reports. To allow us to use [mutation testing](https://en.wikipedia.org/wiki/Mutation_testing) to validate and improve our ([Spock](http://spockframework.org/) & [JUnit](http://junit.org/junit4/)) unit tests.
 
-###Notes
-
- - I've kept the PC as two separate registers.  It makes it a little tougher to deal with but more authentic.
-
 -----
 
 ###Problems
