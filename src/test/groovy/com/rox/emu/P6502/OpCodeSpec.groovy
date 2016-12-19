@@ -108,7 +108,7 @@ class OpCodeSpec extends Specification {
     def "LDA (Load Accumulator) Indirectly using X from Zero Page Test"() {
         when:
         int[] memory = new int[65534]
-        int[] program = [CPU.OP_LDX_I, index, CPU.OP_LDA_Z_IND, 0x30] //F6
+        int[] program = [CPU.OP_LDX_I, index, CPU.OP_LDA_Z_IND, 0x30]
         memory[0x30] = 0
         memory[0x31] = 11
         memory[0x32] = 0b11111111
@@ -131,7 +131,7 @@ class OpCodeSpec extends Specification {
         index | expectedAccumulator | PC | Z     | N     | Expected
           0   | 0                   | 4  | true  | false | "With zero result"
           1   | 11                  | 4  | false | false | "With normal result"
-          2   | 0b11111111          | 4  | false | true  | "With negative result"
+          2   | 0xFF                | 4  | false | true  | "With negative result"
     }
 
     @Unroll("ADC Immediate #Expected:  #firstValue + #secondValue = #expectedAccumulator in Accumulator.")
