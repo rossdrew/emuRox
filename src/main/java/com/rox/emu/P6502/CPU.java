@@ -77,6 +77,11 @@ public class CPU {
                 carryManuallyChanged = true;
                 break;
 
+            case OP_LDA_IND:
+                System.out.println("Instruction: Indirect LDA on Zero Page using X...");
+                //TODO After LDX implemented
+                break;
+            
             case OP_LDA_A: // [op] [low order byte] [high order byte]
                 memoryLocation = getAndStepPC(false);
                 int lowByte = getByteOfMemoryAt(memoryLocation);
