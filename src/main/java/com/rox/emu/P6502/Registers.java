@@ -15,14 +15,14 @@ public class Registers {
     public static final int REG_SP = 6;
     public static final int REG_STATUS = 7;
 
-    private final String[] registerNames = new String[] {"Accumulator", "Y Index", "X Index", "Program Counter Hi", "Program Counter Low", "<SP>", "Stack Pointer", "Status Flags"};
+    private final String[] registerNames = new String[] {"Accumulator", "Y Index", "X Index", "Program Counter (Hi)", "Program Counter (Low)", "<SP>", "Stack Pointer", "Status Flags"};
 
     public static final int STATUS_FLAG_CARRY = 0x1;
     public static final int STATUS_FLAG_ZERO = 0x2;
     public static final int STATUS_FLAG_IRQ_DISABLE = 0x4;
     public static final int STATUS_FLAG_DEC = 0x8;
     public static final int STATUS_FLAG_BREAK = 0x10;
-    public static final int STATUS_FLAG_UNUSED = 0x20;
+    private static final int STATUS_FLAG_UNUSED = 0x20; //Placeholder only
     public static final int STATUS_FLAG_OVERFLOW = 0x40;
     public static final int STATUS_FLAG_NEGATIVE = 0x80;
 
@@ -30,12 +30,14 @@ public class Registers {
 
     public static final int N = 7;
     public static final int V = 6;
-    public static final int U = 5;
+    private static final int U = 5; //Placeholder only
     public static final int B = 4;
     public static final int D = 3;
     public static final int I = 2;
     public static final int Z = 1;
     public static final int C = 0;
+
+    private final String[] flagNames = new String[] {"Carry", "Zero", "IRQ Disable", "Decimal Mode", "BRK Command", "<UNUSED>", "Overflow", "Negative"};
 
     private final int[] register;
 
@@ -45,30 +47,59 @@ public class Registers {
         register[REG_STATUS] = 0b00110100;
     }
 
+    private String getRegisterName(int registerID){
+        return registerNames[registerID];
+    }
+
     public void setRegister(int registerID, int val){
-        System.out.println("Setting (R)" + registerNames[registerID] + " to " + val);
+        System.out.println("'R:" + getRegisterName(registerID) + "' := " + val);
         register[registerID] = val;
-    }
-
-    public void setPC(int wordPC){
-        setRegister(REG_PC_HIGH, wordPC >> 8);
-        setRegister(REG_PC_LOW, wordPC & 0xFF);
-        System.out.println("Program Counter being set to " + wordPC + " [ " + getRegister(REG_PC_HIGH) + " | " + getRegister(REG_PC_LOW) + " ]");
-    }
-
-    public int getPC(){
-        return (getRegister(REG_PC_HIGH) << 8) | getRegister(REG_PC_LOW);
     }
 
     public int getRegister(int registerID){
         return register[registerID];
     }
 
-    public void setFlag(int flagID) {
-        System.out.println("Setting (F)'" + flagID + "'");
-        register[REG_STATUS] = register[REG_STATUS] | flagID;
+    public void setPC(int wordPC){
+        setRegister(REG_PC_HIGH, wordPC >> 8);
+        setRegister(REG_PC_LOW, wordPC & 0xFF);
+        System.out.println("'R+:Program Counter' := " + wordPC + " [ " + getRegister(REG_PC_HIGH) + " | " + getRegister(REG_PC_LOW) + " ]");
     }
 
+    public int getPC(){
+        return (getRegister(REG_PC_HIGH) << 8) | getRegister(REG_PC_LOW);
+    }
+
+    public int getNextProgramCounter(){
+        final int originalPC = getPC();
+        final int incrementedPC = originalPC + 1;
+        setPC(incrementedPC);
+        return incrementedPC;
+    }
+
+    private int getFlagID(int flagValue) throws IllegalArgumentException {
+        switch (flagValue){
+            case STATUS_FLAG_CARRY: return C;
+            case STATUS_FLAG_ZERO: return Z;
+            case STATUS_FLAG_IRQ_DISABLE: return I;
+            case STATUS_FLAG_DEC: return D;
+            case STATUS_FLAG_BREAK: return B;
+            case STATUS_FLAG_UNUSED: return U;
+            case STATUS_FLAG_OVERFLOW: return V;
+            case STATUS_FLAG_NEGATIVE: return N;
+            default:
+                throw new IllegalArgumentException("Unknown 6502 Flag ID:" + flagValue);
+        }
+    }
+
+    private String getFlagName(int flagValue){
+        return flagNames[getFlagID(flagValue)];
+    }
+
+    public void setFlag(int flagPlaceValue) {
+        System.out.println("'F:" + getFlagName(flagPlaceValue) +"' -> SET");
+        register[REG_STATUS] = register[REG_STATUS] | flagPlaceValue;
+    }
 
     /**
      * Bitwise clear flag by OR-ing the int carrying flags to be cleared
@@ -79,11 +110,11 @@ public class Registers {
      * NOT    > 1111 1101
      * AND(R) > xxxx xx0x
      *
-     * @param flagValue int with bits to clear, turned on
+     * @param flagPlaceValue int with bits to clear, turned on
      */
-    public void clearFlag(int flagValue){
-        System.out.println("Clearing (F)'" + flagValue + "'");
-        register[REG_STATUS] = (~flagValue) & register[REG_STATUS];
+    public void clearFlag(int flagPlaceValue){
+        System.out.println("'F:" + getFlagName(flagPlaceValue) + "' -> CLEARED");
+        register[REG_STATUS] = (~flagPlaceValue) & register[REG_STATUS];
     }
 
     public boolean[] getStatusFlags(){
@@ -96,12 +127,5 @@ public class Registers {
         }
 
         return flags;
-    }
-
-    public int getNextProgramCounter(){
-        final int originalPC = getPC();
-        final int incrementedPC = originalPC + 1;
-        setPC(incrementedPC);
-        return incrementedPC;
     }
 }

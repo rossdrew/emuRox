@@ -5,7 +5,7 @@ import spock.lang.Unroll
 
 class OpCodeSpec extends Specification {
 
-    @Unroll("LDA Immediate #Expected: Load #loadValue")
+    @Unroll("LDA Immediate #Expected: Load #loadValue == #expectedAccumulator")
     def testImmediateLDA() {
         when:
         int[] memory = new int[65534]

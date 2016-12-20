@@ -31,7 +31,7 @@ public class CPU {
      * IRL this takes 6 CPU cycles but we'll cross that bridge IF we come to it
      */
     public void reset(){
-        System.out.println("Resetting...");
+        System.out.println("*** RESETTING >>>");
         registers.setRegister(Registers.REG_STATUS, 0x34);
         registers.setRegister(Registers.REG_PC_HIGH, memory[0xFFFC]);
         registers.setRegister(Registers.REG_PC_LOW, memory[0xFFFD]);
@@ -65,7 +65,7 @@ public class CPU {
     }
 
     public void step() {
-        System.out.println("*** Step ***");
+        System.out.println("*** STEP >>>");
         int memoryLocation = getAndStepPC(false);
         int opCode = getByteOfMemoryAt(memoryLocation);
 
