@@ -78,10 +78,10 @@ public class CPU {
         int accumulatorBeforeOperation = registers.getRegister(Registers.REG_ACCUMULATOR);
         int opCode = nextProgramByte();
         boolean carryManuallyChanged = false;
-        int addressRegister;
+        int temporaryByte;
 
         //Execute the opcode
-        switch (opCode){
+        switch (opCode) {
             case OP_SEC:
                 System.out.println("Instruction: Implied SEC...");
                 registers.setFlag(Registers.STATUS_FLAG_CARRY);
@@ -99,38 +99,40 @@ public class CPU {
                 break;
 
             case OP_LDA_Z_IX:
-                addressRegister = nextProgramByte();
+                temporaryByte = nextProgramByte();
                 int zIndex = registers.getRegister(Registers.REG_X_INDEX);
-                System.out.println("Instruction: Zero Page LDA from [" + addressRegister + "[" + zIndex + "]]...");
-                registers.setRegister(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(addressRegister + zIndex));
+                System.out.println("Instruction: Zero Page LDA from [" + temporaryByte + "[" + zIndex + "]]...");
+                registers.setRegister(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(temporaryByte + zIndex));
                 break;
 
             case OP_LDA_IY:
-            case OP_LDA_IX:
-                int l = nextProgramByte();
-                int mp = l | (nextProgramByte() << 8);
+            case OP_LDA_IX: {
+                int lowOrderByte = nextProgramByte();
+                int pointerWord = lowOrderByte | (nextProgramByte() << 8);
 
                 int index = registers.getRegister(opCode == OP_LDA_IX ? Registers.REG_X_INDEX : Registers.REG_Y_INDEX);
-                System.out.println("Instruction: LDA from [" + mp + "[" + index + "]]...");
-                registers.setRegister(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(mp + index));
-                break;
+                System.out.println("Instruction: LDA from [" + pointerWord + "[" + index + "]]...");
+                registers.setRegister(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(pointerWord + index));
+            }
+            break;
 
             case OP_LDA_I:
                 System.out.println("Instruction: Immediate LDA...");
                 registers.setRegister(Registers.REG_ACCUMULATOR, nextProgramByte());
                 break;
 
-            case OP_LDA_A: // [op] [low order byte] [high order byte]
-                int lowByte = nextProgramByte();
-                int pointerWord = lowByte | (nextProgramByte() << 8);
+            case OP_LDA_A: {// [op] [low order byte] [high order byte]
+                int lowOrderByte = nextProgramByte();
+                int pointerWord = lowOrderByte | (nextProgramByte() << 8);
                 System.out.println("Instruction: Absolute LDA from [" + pointerWord + "]...");
                 registers.setRegister(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(pointerWord));
+            }
                 break;
 
             case OP_LDA_Z:
-                addressRegister = nextProgramByte();
-                System.out.println("Instruction: Zero Page LDA from " + addressRegister + "...");
-                registers.setRegister(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(addressRegister));
+                temporaryByte = nextProgramByte();
+                System.out.println("Instruction: Zero Page LDA from " + temporaryByte + "...");
+                registers.setRegister(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(temporaryByte));
                 break;
 
             case OP_ADC_I:
@@ -142,27 +144,24 @@ public class CPU {
 
             case OP_AND_I:
                 System.out.println("Instruction: Immediate AND...");
-                int andedValue = nextProgramByte();
-                registers.setRegister(Registers.REG_ACCUMULATOR, andedValue & accumulatorBeforeOperation);
+                registers.setRegister(Registers.REG_ACCUMULATOR, nextProgramByte() & accumulatorBeforeOperation);
                 break;
 
             case OP_OR_I:
                 System.out.println("Instruction: Immediate OR...");
-                int orredValue = nextProgramByte();
-                registers.setRegister(Registers.REG_ACCUMULATOR, orredValue | accumulatorBeforeOperation);
+                registers.setRegister(Registers.REG_ACCUMULATOR, nextProgramByte() | accumulatorBeforeOperation);
                 break;
 
             case OP_EOR_I:
                 System.out.println("Instruction: Immediate EOR...");
-                int xorredValue = nextProgramByte();
-                registers.setRegister(Registers.REG_ACCUMULATOR, xorredValue ^ accumulatorBeforeOperation);
+                registers.setRegister(Registers.REG_ACCUMULATOR, nextProgramByte() ^ accumulatorBeforeOperation);
                 break;
 
             case OP_SBC_I:
                 System.out.println("Instruction: Immediate SBC...");
                 registers.setFlag(Registers.STATUS_FLAG_NEGATIVE);
                 int subtrahend = nextProgramByte();
-                //XXX Should be done with addition to be more athentic but neither seem to work
+                //XXX Should be done with addition to be more authentic but neither seem to work
                 int difference = accumulatorBeforeOperation-subtrahend;
                 updateOverflowFlag(accumulatorBeforeOperation, difference);
                 registers.setRegister(Registers.REG_ACCUMULATOR, difference & 0xFF);
