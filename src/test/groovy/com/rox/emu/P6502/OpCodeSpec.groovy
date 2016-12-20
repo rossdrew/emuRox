@@ -6,7 +6,7 @@ import spock.lang.Unroll
 class OpCodeSpec extends Specification {
 
     @Unroll("LDA Immediate #Expected: Load #loadValue")
-    def "LDA (Load Accumulator) Test"() {
+    def testImmediateLDA() {
         when:
         int[] memory = new int[65534]
         int[] program = [CPU.OP_LDA_I, loadValue]
@@ -34,8 +34,8 @@ class OpCodeSpec extends Specification {
         0xFF      | 0xFF                | 2  | false | true  | "With negative result"
     }
 
-    @Unroll("LDA ZeroPage #Expected: Load #loadValue")
-    def "LDA (Load Accumulator) from Zero Page Test"() {
+    @Unroll("LDA ZeroPage #Expected: Expecting #loadValue @ [30]")
+    def testLDAFromZeroPage() {
         when:
         int[] memory = new int[65534]
         int[] program = [CPU.OP_LDA_Z, 30]
@@ -64,8 +64,8 @@ class OpCodeSpec extends Specification {
         0xFF      | 0xFF                | 2  | false | true  | "With negative result"
     }
 
-    @Unroll("LDA Absolute #Expected: Load #loadValue")
-    def "LDA (Load Accumulator) Absolute Test"() {
+    @Unroll("LDA Absolute #Expected: Expecting #loadValue @ [300]")
+    def testAbsoluteLDA() {
         when:
         int[] memory = new int[65534]
         //Load a memory address above Zero Page (>256) using [Opcode] [Low Order Byte] [High Order Byte]
@@ -96,8 +96,8 @@ class OpCodeSpec extends Specification {
         0xFF      | 0xFF                | 3  | false | true  | "With negative result"
     }
 
-    @Unroll("LDA Indexed Zero Page, X #Expected: Load #loadValue")
-    def "LDA (Load Accumulator) Indexed using X from Zero Page Test"() {
+    @Unroll("LDA Indexed Zero Page, X #Expected: Load [0x30 + X(#index)] -> #expectedAccumulator")
+    def testLDAFromZeroPageIndexedByX() {
         when:
         int[] memory = new int[65534]
         int[] program = [CPU.OP_LDX_I, index, CPU.OP_LDA_Z_IX, 0x30]
@@ -127,7 +127,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("LDA Indexed by X. #Expected: 300[#index] = #expectedAccumulator")
-    def "LDA Absolute Indirect via X"() {
+    def testLDAIndexedByX() {
         when:
         int[] memory = new int[65534]
         int[] program = [CPU.OP_LDX_I, index, CPU.OP_LDA_IX, 0x2C, 1]
@@ -157,7 +157,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("LDA Indexed by Y. #Expected: 300[#index] = #expectedAccumulator")
-    def "LDA Absolute Indirect via Y"() {
+    def testLDAIndexedByY() {
         when:
         int[] memory = new int[65534]
         int[] program = [CPU.OP_LDY_I, index, CPU.OP_LDA_IY, 0x2C, 1]
@@ -187,7 +187,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("ADC Immediate #Expected:  #firstValue + #secondValue = #expectedAccumulator in Accumulator.")
-    def "ADC (ADd with Carry to Accumulator) Test"(){
+    def testADC(){
         when:
         int[] memory = new int[65534]
         int[] program = [CPU.OP_LDA_I, firstValue, CPU.OP_ADC_I, secondValue]
@@ -218,7 +218,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("AND Immediate #Expected:  #firstValue & #secondValue = #expectedAccumulator in Accumulator.")
-    def "AND (And with Accumulator) Test"(){
+    def testAND(){
         when:
         int[] memory = new int[65534]
         int[] program = [CPU.OP_LDA_I, firstValue, CPU.OP_AND_I, secondValue]
@@ -246,7 +246,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("OR Immediate #Expected:  #firstValue | #secondValue = #expectedAccumulator in Accumulator.")
-    def "OR (Or with Accumulator) Test"(){
+    def testOR(){
         when:
         int[] memory = new int[65534]
         int[] program = [CPU.OP_LDA_I, firstValue, CPU.OP_OR_I, secondValue]
@@ -275,7 +275,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("EOR Immediate #Expected:  #firstValue ^ #secondValue = #expectedAccumulator in Accumulator.")
-    def "EOR (Exclusive Or with Accumulator) Test"(){
+    def testEOR(){
         when:
         int[] memory = new int[65534]
         int[] program = [CPU.OP_LDA_I, firstValue, CPU.OP_EOR_I, secondValue]
@@ -302,7 +302,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("SBC Immediate #Expected:  #firstValue - #secondValue = #expectedAccumulator in Accumulator.")
-    def "SBC (Subtract from Accumulator) Test"(){
+    def testSBC(){
         when:
         int[] memory = new int[65534]
         int[] program = [CPU.OP_SEC, CPU.OP_LDA_I, firstValue, CPU.OP_SBC_I, secondValue]
