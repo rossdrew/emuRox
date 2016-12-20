@@ -18,7 +18,6 @@ public class Registers {
     private final String[] registerNames = new String[] {"Accumulator", "Y Index", "X Index", "Program Counter Hi", "Program Counter Low", "<SP>", "Stack Pointer", "Status Flags"};
 
     public static final int STATUS_FLAG_CARRY = 0x1;
-    public static final int CARRY_INDICATOR_BIT = 0x100;
     public static final int STATUS_FLAG_ZERO = 0x2;
     public static final int STATUS_FLAG_IRQ_DISABLE = 0x4;
     public static final int STATUS_FLAG_DEC = 0x8;
@@ -26,6 +25,17 @@ public class Registers {
     public static final int STATUS_FLAG_UNUSED = 0x20;
     public static final int STATUS_FLAG_OVERFLOW = 0x40;
     public static final int STATUS_FLAG_NEGATIVE = 0x80;
+
+    public static final int CARRY_INDICATOR_BIT = 0x100; //The bit set on a word when a byte has overflown
+
+    public static final int N = 7;
+    public static final int V = 6;
+    public static final int U = 5;
+    public static final int B = 4;
+    public static final int D = 3;
+    public static final int I = 2;
+    public static final int Z = 1;
+    public static final int C = 0;
 
     private final int[] register;
 

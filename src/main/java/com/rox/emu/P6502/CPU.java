@@ -53,7 +53,7 @@ public class CPU {
         return incrementFirst ? incrementedPC : originalPC;
     }
 
-    //XXX I should really be loading this value into the accumulator, right?
+
     private int getByteOfMemoryAt(int location){
         final int memoryByte = memory[location];
         System.out.println("Got " + memoryByte + " from mem[" + location + "]");

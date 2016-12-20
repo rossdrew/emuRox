@@ -22,13 +22,13 @@ class OpCodeSpec extends Specification {
         registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
         PC == registers.getPC()
         //C == registers.statusFlags[CPU.STATUS_FLAG_CARRY]
-        Z == registers.getStatusFlags()[1]
+        Z == registers.statusFlags[Registers.Z]
         //I == registers.statusFlags[CPU.STATUS_FLAG_IRQ_DISABLE]
         //D == registers.statusFlags[CPU.STATUS_FLAG_DEC]
         //B == registers.statusFlags[CPU.STATUS_FLAG_BREAK]
         //U == registers.statusFlags[CPU.STATUS_FLAG_UNUSED]
         //O == registers.statusFlags[CPU.STATUS_FLAG_OVERFLOW]
-        N == registers.statusFlags[7]
+        N == registers.statusFlags[Registers.N]
 
         where:
         loadValue | expectedAccumulator | PC | Z     | N     | Expected
@@ -59,8 +59,8 @@ class OpCodeSpec extends Specification {
         then:
         registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
         PC == registers.getPC()
-        Z == registers.getStatusFlags()[1]
-        N == registers.statusFlags[7]
+        Z == registers.statusFlags[Registers.Z]
+        N == registers.statusFlags[Registers.N]
 
         where:
         loadValue | expectedAccumulator | PC | Z     | N     | Expected
@@ -91,8 +91,8 @@ class OpCodeSpec extends Specification {
         then:
         registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
         PC == registers.getPC()
-        Z == registers.getStatusFlags()[1]
-        N == registers.statusFlags[7]
+        Z == registers.statusFlags[Registers.Z]
+        N == registers.statusFlags[Registers.N]
 
         where:
         loadValue | expectedAccumulator | PC | Z     | N     | Expected
@@ -124,8 +124,8 @@ class OpCodeSpec extends Specification {
         then:
         registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
         PC == registers.getPC()
-        Z == registers.getStatusFlags()[1]
-        N == registers.statusFlags[7]
+        Z == registers.statusFlags[Registers.Z]
+        N == registers.statusFlags[Registers.N]
 
         where:
         index | expectedAccumulator | PC | Z     | N     | Expected
@@ -154,8 +154,8 @@ class OpCodeSpec extends Specification {
         then:
         registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
         PC == registers.getPC()
-        Z == registers.getStatusFlags()[1]
-        N == registers.statusFlags[7]
+        Z == registers.statusFlags[Registers.Z]
+        N == registers.statusFlags[Registers.N]
 
         where:
         index | expectedAccumulator | PC | Z     | N     | Expected
@@ -184,8 +184,8 @@ class OpCodeSpec extends Specification {
         then:
         registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
         PC == registers.getPC()
-        Z == registers.getStatusFlags()[1]
-        N == registers.statusFlags[7]
+        Z == registers.statusFlags[Registers.Z]
+        N == registers.statusFlags[Registers.N]
 
         where:
         index | expectedAccumulator | PC | Z     | N     | Expected
@@ -211,10 +211,10 @@ class OpCodeSpec extends Specification {
         then:
         registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
         PC == registers.getPC()
-        C == registers.statusFlags[0]
-        Z == registers.statusFlags[1]
-        O == registers.statusFlags[6]
-        N == registers.statusFlags[7]
+        C == registers.statusFlags[Registers.C]
+        Z == registers.statusFlags[Registers.Z]
+        O == registers.statusFlags[Registers.V]
+        N == registers.statusFlags[Registers.N]
 
         where:
         firstValue | secondValue | expectedAccumulator | PC  | Z      | N     | C     | O     | Expected
@@ -242,8 +242,8 @@ class OpCodeSpec extends Specification {
         then:
         registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
         PC == registers.getPC()
-        Z == registers.statusFlags[1]
-        N == registers.statusFlags[7]
+        Z == registers.statusFlags[Registers.Z]
+        N == registers.statusFlags[Registers.N]
 
         where:
         firstValue | secondValue | expectedAccumulator | PC  | Z      | N     | Expected
@@ -270,8 +270,8 @@ class OpCodeSpec extends Specification {
         then:
         registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
         PC == registers.getPC()
-        Z == registers.statusFlags[1]
-        N == registers.statusFlags[7]
+        Z == registers.statusFlags[Registers.Z]
+        N == registers.statusFlags[Registers.N]
 
         where:
         firstValue | secondValue | expectedAccumulator | PC  | Z      | N     | Expected
@@ -299,8 +299,8 @@ class OpCodeSpec extends Specification {
         then:
         registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
         PC == registers.getPC()
-        Z == registers.statusFlags[1]
-        N == registers.statusFlags[7]
+        Z == registers.statusFlags[Registers.Z]
+        N == registers.statusFlags[Registers.N]
 
         where:
         firstValue | secondValue | expectedAccumulator | PC  | Z      | N     | Expected
@@ -327,9 +327,9 @@ class OpCodeSpec extends Specification {
         then:
         registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
         PC == registers.getPC()
-        Z == registers.statusFlags[1]
-        O == registers.statusFlags[6]
-        N == registers.statusFlags[7]
+        Z == registers.statusFlags[Registers.Z]
+        O == registers.statusFlags[Registers.V]
+        N == registers.statusFlags[Registers.N]
         //TODO C
 
         where:
