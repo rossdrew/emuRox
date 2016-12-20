@@ -2,7 +2,6 @@ package com.rox.emu.P6502;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.omg.PortableInterceptor.Interceptor;
 
 import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.assertFalse;
