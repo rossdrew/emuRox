@@ -164,6 +164,11 @@ class OpCodeSpec extends Specification {
         2     | 0xFF                | 5  | false | true  | "With negative result"
     }
 
+
+    //TODO Absolute Y LDA
+    //TODO (Indirect, X) LDA  <-- Indexed indirect
+    //TODO (Indirect),Y LDA   <-- Indirect indexed
+
     @Unroll("ADC Immediate #Expected:  #firstValue + #secondValue = #expectedAccumulator in Accumulator.")
     def "ADC (ADd with Carry to Accumulator) Test"(){
         when:

@@ -15,6 +15,7 @@ public class CPU {
     public static final int OP_EOR_I = 0x49;   //EOR Immediate
     public static final int OP_SBC_I = 0xE9;   //SBX Immediate
     public static final int OP_SEC = 0x38;     //SEC (Implied)
+    public static final int OP_LDY_I = 0xA0;   //LDX Immediate
     public static final int OP_LDX_I = 0xA2;   //LDX Immediate
 
     private int[] memory;
@@ -83,6 +84,12 @@ public class CPU {
                 System.out.println("Instruction: Immediate LDX...");
                 memoryLocation = getAndStepPC(false);
                 registers.setRegister(Registers.REG_X_INDEX, getByteOfMemoryAt(memoryLocation));
+                break;
+
+            case OP_LDY_I:
+                System.out.println("Instruction: Immediate LDY...");
+                memoryLocation = getAndStepPC(false);
+                registers.setRegister(Registers.REG_Y_INDEX, getByteOfMemoryAt(memoryLocation));
                 break;
 
             case OP_LDA_Z_IX:
