@@ -193,7 +193,7 @@ class OpCodeSpec extends Specification {
         1     | 11                  | 5  | false | false | "With normal result"
         2     | 0xFF                | 5  | false | true  | "With negative result"
     }
-    
+
     @Unroll("ADC Immediate #Expected:  #firstValue + #secondValue = #expectedAccumulator in Accumulator.")
     def "ADC (ADd with Carry to Accumulator) Test"(){
         when:

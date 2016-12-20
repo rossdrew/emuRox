@@ -9,6 +9,7 @@ public class CPU {
     public static final int OP_LDA_I = 0xA9;   //... Immediate
     public static final int OP_LDA_A = 0xAD;   //... Absolute
     public static final int OP_LDA_Z_IX = 0xB5;//... Zero Page indexed with X
+    public static final int OP_LDA_IY = 0xB9;  //... Indexed with Y
     public static final int OP_LDA_IX = 0xBD;  //... Indexed with X
     public static final int OP_AND_I = 0x29;   //AND Immediate
     public static final int OP_OR_I = 0x09;    //OR Immediate
@@ -100,15 +101,14 @@ public class CPU {
                 registers.setRegister(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(memoryLocation + zIndex));
                 break;
 
+            case OP_LDA_IY:
             case OP_LDA_IX:
                 memoryLocation = getAndStepPC(false);
                 int l = getByteOfMemoryAt(memoryLocation);
-                System.out.println(">>>>>>>>>>>>> " + l);
                 memoryLocation = getAndStepPC(false);
                 int mp = l | (getByteOfMemoryAt(memoryLocation) << 8);
-                //TODO Needs to be a two byte memory address
 
-                int index = registers.getRegister(Registers.REG_X_INDEX);
+                int index = registers.getRegister(opCode == OP_LDA_IX ? Registers.REG_X_INDEX : Registers.REG_Y_INDEX);
                 System.out.println("Instruction: LDA from [" + mp + "[" + index + "]]...");
                 registers.setRegister(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(mp + index));
                 break;
