@@ -104,11 +104,11 @@ class OpCodeSpec extends Specification {
         0xFF      | 0xFF                | 3  | false | true  | "With negative result"
     }
 
-    @Unroll("LDA Zero Page Indirect, X #Expected: Load #loadValue")
-    def "LDA (Load Accumulator) Indirectly using X from Zero Page Test"() {
+    @Unroll("LDA Indexed Zero Page, X #Expected: Load #loadValue")
+    def "LDA (Load Accumulator) Indexed using X from Zero Page Test"() {
         when:
         int[] memory = new int[65534]
-        int[] program = [CPU.OP_LDX_I, index, CPU.OP_LDA_Z_IND, 0x30]
+        int[] program = [CPU.OP_LDX_I, index, CPU.OP_LDA_Z_IX, 0x30]
         memory[0x30] = 0
         memory[0x31] = 11
         memory[0x32] = 0b11111111
