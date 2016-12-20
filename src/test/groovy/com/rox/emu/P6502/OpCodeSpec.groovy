@@ -21,13 +21,7 @@ class OpCodeSpec extends Specification {
         then:
         registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
         PC == registers.getPC()
-        //C == registers.statusFlags[CPU.STATUS_FLAG_CARRY]
         Z == registers.statusFlags[Registers.Z]
-        //I == registers.statusFlags[CPU.STATUS_FLAG_IRQ_DISABLE]
-        //D == registers.statusFlags[CPU.STATUS_FLAG_DEC]
-        //B == registers.statusFlags[CPU.STATUS_FLAG_BREAK]
-        //U == registers.statusFlags[CPU.STATUS_FLAG_UNUSED]
-        //O == registers.statusFlags[CPU.STATUS_FLAG_OVERFLOW]
         N == registers.statusFlags[Registers.N]
 
         where:
@@ -38,8 +32,6 @@ class OpCodeSpec extends Specification {
         0x80      | 0x80                | 2  | false | true  | "With negative result"
         0x81      | 0x81                | 2  | false | true  | "With negative result"
         0xFF      | 0xFF                | 2  | false | true  | "With negative result"
-
-        //loadValue | expectedAccumulator  | PC | C      | Z     | I     | D     | B     | U     | O     | N
     }
 
     @Unroll("LDA ZeroPage #Expected: Load #loadValue")
