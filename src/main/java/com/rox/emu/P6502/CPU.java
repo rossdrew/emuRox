@@ -88,9 +88,22 @@ public class CPU {
             case OP_LDA_Z_IX:
                 memoryLocation = getAndStepPC(false);
                 memoryLocation = getByteOfMemoryAt(memoryLocation);
+                int zIndex = registers.getRegister(Registers.REG_X_INDEX);
+                System.out.println("Instruction: Zero Page LDA from [" + memoryLocation + "[" + zIndex + "]]...");
+                registers.setRegister(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(memoryLocation + zIndex));
+                break;
+
+            case OP_LDA_IX:
+                memoryLocation = getAndStepPC(false);
+                int l = getByteOfMemoryAt(memoryLocation);
+                System.out.println(">>>>>>>>>>>>> " + l);
+                memoryLocation = getAndStepPC(false);
+                int mp = l | (getByteOfMemoryAt(memoryLocation) << 8);
+                //TODO Needs to be a two byte memory address
+
                 int index = registers.getRegister(Registers.REG_X_INDEX);
-                System.out.println("Instruction: Zero Page LDA from [" + memoryLocation + "[" + index + "]]...");
-                registers.setRegister(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(memoryLocation + index));
+                System.out.println("Instruction: LDA from [" + mp + "[" + index + "]]...");
+                registers.setRegister(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(mp + index));
                 break;
 
             case OP_LDA_I:
