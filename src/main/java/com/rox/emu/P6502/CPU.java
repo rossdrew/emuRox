@@ -1,5 +1,7 @@
 package com.rox.emu.P6502;
 
+import com.rox.emu.UnknownOpCodeException;
+
 /**
  * @author rossdrew
  */
@@ -177,6 +179,7 @@ public class CPU {
 
             default:
                 System.out.println("ERROR: Unknown OPCODE: " + opCode);
+                throw new UnknownOpCodeException("Unknown 6502 OpCode:" + opCode + " encountered.", opCode);
         }
 
         updateZeroFlag();

@@ -1,9 +1,12 @@
 package com.rox.emu.P6502;
 
+import com.rox.emu.UnknownOpCodeException;
+import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import static junit.framework.TestCase.assertEquals;
+import static org.spockframework.util.Assert.fail;
 
 public class CPUTest {
     int [] memory;
@@ -153,5 +156,18 @@ public class CPUTest {
 
         assertEquals(1, registers.getPC());
         assertEquals(true, registers.getStatusFlags()[0]);
+    }
+
+    @Test
+    public void testInvalidOpCode(){
+        int[] program = {999};
+        System.arraycopy(program, 0, memory, 0, program.length);
+
+        try {
+            processor.step();
+            fail("Invalid opCode exception expected!");
+        }catch(UnknownOpCodeException e){
+            assertEquals(999, e.getOpCode());
+        }
     }
 }
