@@ -164,11 +164,36 @@ class OpCodeSpec extends Specification {
         2     | 0xFF                | 5  | false | true  | "With negative result"
     }
 
+    @Unroll("LDA Indexed by Y. #Expected: 300[#index] = #expectedAccumulator")
+    def "LDA Absolute Indirect via Y"() {
+        when:
+        int[] memory = new int[65534]
+        int[] program = [CPU.OP_LDY_I, index, CPU.OP_LDA_IY, 0x2C, 1]
+        memory[300] = 0
+        memory[301] = 11
+        memory[302] = 0b11111111
+        System.arraycopy(program, 0, memory, 0, program.length);
 
-    //TODO Absolute Y LDA
-    //TODO (Indirect, X) LDA  <-- Indexed indirect
-    //TODO (Indirect),Y LDA   <-- Indirect indexed
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        processor.step()
+        processor.step()
+        Registers registers = processor.getRegisters()
 
+        then:
+        registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
+        PC == registers.getPC()
+        Z == registers.getStatusFlags()[1]
+        N == registers.statusFlags[7]
+
+        where:
+        index | expectedAccumulator | PC | Z     | N     | Expected
+        0     | 0                   | 5  | true  | false | "With zero result"
+        1     | 11                  | 5  | false | false | "With normal result"
+        2     | 0xFF                | 5  | false | true  | "With negative result"
+    }
+    
     @Unroll("ADC Immediate #Expected:  #firstValue + #secondValue = #expectedAccumulator in Accumulator.")
     def "ADC (ADd with Carry to Accumulator) Test"(){
         when:
