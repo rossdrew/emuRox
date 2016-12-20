@@ -185,9 +185,8 @@ public class CPU {
             case OP_SBC_I:
                 System.out.println("Instruction: Immediate SBC...");
                 registers.setFlag(Registers.STATUS_FLAG_NEGATIVE);
-                int subtrahend = nextProgramByte();
                 //XXX Should be done with addition to be more authentic but neither seem to work
-                int difference = accumulatorBeforeOperation-subtrahend;
+                int difference = accumulatorBeforeOperation - nextProgramByte();
                 updateOverflowFlag(accumulatorBeforeOperation, difference);
                 registers.setRegister(Registers.REG_ACCUMULATOR, difference & 0xFF);
                 break;
