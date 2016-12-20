@@ -55,11 +55,14 @@ public class CPU {
         return incrementFirst ? incrementedPC : originalPC;
     }
 
+    private int getByteOfMemoryAt(int location, int index){
+        final int memoryByte = memory[location + index];
+        System.out.println("FETCH mem[" + location + (index != 0 ? "[" + index + "]" : "") +"] --> " + memoryByte);
+        return memoryByte;
+    }
 
     private int getByteOfMemoryAt(int location){
-        final int memoryByte = memory[location];
-        System.out.println("Got " + memoryByte + " from mem[" + location + "]");
-        return memoryByte;
+        return getByteOfMemoryAt(location, 0);
     }
 
     public Registers getRegisters(){
@@ -122,19 +125,20 @@ public class CPU {
                 registers.setRegister(Registers.REG_Y_INDEX, nextProgramByte());
                 break;
 
-            case OP_LDA_Z_IX:
+            case OP_LDA_Z_IX: {
                 temporaryByte = nextProgramByte();
-                int zIndex = registers.getRegister(Registers.REG_X_INDEX);
-                System.out.println("Instruction: Zero Page LDA from [" + temporaryByte + "[" + zIndex + "]]...");
-                registers.setRegister(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(temporaryByte + zIndex));
+                int index = registers.getRegister(Registers.REG_X_INDEX);
+                System.out.println("Instruction: Zero Page LDA...");
+                registers.setRegister(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(temporaryByte, index));
+            }
                 break;
 
             case OP_LDA_IY:
             case OP_LDA_IX: {
                 int pointerWord = nextProgramWord();
                 int index = registers.getRegister(opCode == OP_LDA_IX ? Registers.REG_X_INDEX : Registers.REG_Y_INDEX);
-                System.out.println("Instruction: LDA from [" + pointerWord + "[" + index + "]]...");
-                registers.setRegister(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(pointerWord + index));
+                System.out.println("Instruction: LDA...");
+                registers.setRegister(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(pointerWord, index));
             }
             break;
 
@@ -145,14 +149,14 @@ public class CPU {
 
             case OP_LDA_A: {
                 int pointerWord = nextProgramWord();
-                System.out.println("Instruction: Absolute LDA from [" + pointerWord + "]...");
+                System.out.println("Instruction: Absolute LDA...");
                 registers.setRegister(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(pointerWord));
             }
                 break;
 
             case OP_LDA_Z:
                 temporaryByte = nextProgramByte();
-                System.out.println("Instruction: Zero Page LDA from " + temporaryByte + "...");
+                System.out.println("Instruction: Zero Page LDA...");
                 registers.setRegister(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(temporaryByte));
                 break;
 
