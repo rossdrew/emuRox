@@ -8,7 +8,8 @@ public class CPU {
     public static final int OP_LDA_Z = 0xA5;   //LDA (Zero Page)
     public static final int OP_LDA_I = 0xA9;   //... Immediate
     public static final int OP_LDA_A = 0xAD;   //... Absolute
-    public static final int OP_LDA_Z_IX = 0xF6; //... Zero Page indexed with X
+    public static final int OP_LDA_Z_IX = 0xB5;//... Zero Page indexed with X
+    public static final int OP_LDA_IX = 0xBD;  //... Indexed with X
     public static final int OP_AND_I = 0x29;   //AND Immediate
     public static final int OP_OR_I = 0x09;    //OR Immediate
     public static final int OP_EOR_I = 0x49;   //EOR Immediate
