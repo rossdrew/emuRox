@@ -66,10 +66,34 @@ public class CPU {
         return registers;
     }
 
+    /**
+     * Return the next byte from program memory, as defined
+     * by the Program Counter.
+     * <em>Increments the Program Counter by 1</em>
+     *
+     * @return byte from PC[0]
+     */
     private int nextProgramByte(){
         int memoryLocation = getAndStepPC(false);
         int newByte = getByteOfMemoryAt(memoryLocation);
         return newByte;
+    }
+
+    /**
+     * Combine the next two bytes in program memory, as defined by
+     * the Program Counter into a word so that
+     *
+     * PC[0] = low order byte
+     * PC[1] = high order byte
+     *
+     * <em>Increments the Program Counter by 1</em>
+     *
+     * @return word made up of both bytes
+     */
+    private int nextProgramWord(){
+        int lowOrderByte = nextProgramByte();
+        int newWord = lowOrderByte | (nextProgramByte() << 8);
+        return newWord;
     }
 
     public void step() {
@@ -107,9 +131,7 @@ public class CPU {
 
             case OP_LDA_IY:
             case OP_LDA_IX: {
-                int lowOrderByte = nextProgramByte();
-                int pointerWord = lowOrderByte | (nextProgramByte() << 8);
-
+                int pointerWord = nextProgramWord();
                 int index = registers.getRegister(opCode == OP_LDA_IX ? Registers.REG_X_INDEX : Registers.REG_Y_INDEX);
                 System.out.println("Instruction: LDA from [" + pointerWord + "[" + index + "]]...");
                 registers.setRegister(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(pointerWord + index));
@@ -121,9 +143,8 @@ public class CPU {
                 registers.setRegister(Registers.REG_ACCUMULATOR, nextProgramByte());
                 break;
 
-            case OP_LDA_A: {// [op] [low order byte] [high order byte]
-                int lowOrderByte = nextProgramByte();
-                int pointerWord = lowOrderByte | (nextProgramByte() << 8);
+            case OP_LDA_A: {
+                int pointerWord = nextProgramWord();
                 System.out.println("Instruction: Absolute LDA from [" + pointerWord + "]...");
                 registers.setRegister(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(pointerWord));
             }
