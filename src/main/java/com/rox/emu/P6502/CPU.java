@@ -17,6 +17,7 @@ public class CPU {
     public static final int OP_OR_I = 0x09;    //OR Immediate
     public static final int OP_EOR_I = 0x49;   //EOR Immediate
     public static final int OP_SBC_I = 0xE9;   //SBX Immediate
+    public static final int OP_CLC = 0x18;     //CLC Implied
     public static final int OP_SEC = 0x38;     //SEC (Implied)
     public static final int OP_LDY_I = 0xA0;   //LDX Immediate
     public static final int OP_LDX_I = 0xA2;   //LDX Immediate
@@ -115,6 +116,12 @@ public class CPU {
                 carryManuallyChanged = true;
                 break;
 
+            case OP_CLC:
+                System.out.println("Instruction: Implied CLC...");
+                registers.clearFlag(Registers.STATUS_FLAG_CARRY);
+                carryManuallyChanged = true;
+                break;
+
             case OP_LDX_I:
                 System.out.println("Instruction: Immediate LDX...");
                 registers.setRegister(Registers.REG_X_INDEX, nextProgramByte());
@@ -185,8 +192,7 @@ public class CPU {
             case OP_SBC_I:
                 System.out.println("Instruction: Immediate SBC...");
                 registers.setFlag(Registers.STATUS_FLAG_NEGATIVE);
-                //XXX Should be done with addition to be more authentic 
-                int difference = accumulatorBeforeOperation - nextProgramByte();
+                int difference = accumulatorBeforeOperation - nextProgramByte(); //XXX Should be done with addition to be more authentic
                 updateOverflowFlag(accumulatorBeforeOperation, difference);
                 registers.setRegister(Registers.REG_ACCUMULATOR, difference & 0xFF);
                 break;
@@ -235,7 +241,6 @@ public class CPU {
     private void updateCarryFlag() {
         if ((registers.getRegister(Registers.REG_ACCUMULATOR) & Registers.CARRY_INDICATOR_BIT) == Registers.CARRY_INDICATOR_BIT) {
             registers.setFlag(Registers.STATUS_FLAG_CARRY);
-            //registers[REG_ACCUMULATOR] = (~0x100) & registers[REG_ACCUMULATOR]; //TODO
             registers.setRegister(Registers.REG_ACCUMULATOR, (~0x100) & registers.getRegister(Registers.REG_ACCUMULATOR));
 
         }else

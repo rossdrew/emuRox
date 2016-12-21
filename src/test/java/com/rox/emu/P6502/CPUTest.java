@@ -158,6 +158,18 @@ public class CPUTest {
     }
 
     @Test
+    public void testCLC(){
+        int[] program = {CPU.OP_CLC};
+        System.arraycopy(program, 0, memory, 0, program.length);
+        Registers registers = processor.getRegisters();
+
+        processor.step();
+
+        assertEquals(1, registers.getPC());
+        assertEquals(false, registers.getStatusFlags()[0]);
+    }
+
+    @Test
     public void testInvalidOpCode(){
         int[] program = {999};
         System.arraycopy(program, 0, memory, 0, program.length);

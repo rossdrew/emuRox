@@ -44,7 +44,7 @@ public class Registers {
     public Registers(){
         register = new int[8];
         register[REG_SP_X]   = 0b11111111;
-        register[REG_STATUS] = 0b00110100;
+        register[REG_STATUS] = 0b00000000;
     }
 
     private String getRegisterName(int registerID){
