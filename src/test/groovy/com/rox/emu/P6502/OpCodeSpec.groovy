@@ -211,10 +211,10 @@ class OpCodeSpec extends Specification {
         where:
         firstValue | secondValue | expectedAccumulator | PC  | Z      | N     | C     | O     | Expected
         0x0        | 0x0         | 0x0                 | 4   | true   | false | false | false | "With zero result"
-        0x80       | 0x1         | 0x81                | 4   | false  | true  | false | false | "With valid negative result"
-        0xFF       | 0xFF        | 0xFE                | 4   | false  | true  | true  | false | "With negative, carried result"
         0x50       | 0xD0        | 0x20                | 4   | false  | false | true  | false | "With positive, carried result"
         0x50       | 0x50        | 0xA0                | 4   | false  | true  | false | true  | "With negative overflow"
+        0x80       | 0x1         | 0x81                | 4   | false  | true  | false | false | "With valid negative result"     //Essentially subtractions
+        0xFF       | 0xFF        | 0xFE                | 4   | false  | true  | false | false | "With negative, carried result"
     }
 
     @Unroll("AND Immediate #Expected:  #firstValue & #secondValue = #expectedAccumulator in Accumulator.")

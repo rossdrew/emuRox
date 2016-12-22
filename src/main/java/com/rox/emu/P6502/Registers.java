@@ -96,6 +96,10 @@ public class Registers {
         return flagNames[getFlagID(flagValue)];
     }
 
+    public boolean getFlag(int flagPlaceValue){
+        return ((register[REG_STATUS] & flagPlaceValue) == flagPlaceValue);
+    }
+
     public void setFlag(int flagPlaceValue) {
         System.out.println("'F:" + getFlagName(flagPlaceValue) +"' -> SET");
         register[REG_STATUS] = register[REG_STATUS] | flagPlaceValue;

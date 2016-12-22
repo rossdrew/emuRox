@@ -169,9 +169,7 @@ public class CPU {
 
             case OP_ADC_I:
                 System.out.println("Instruction: Immediate ADC...");
-                int newTerm = nextProgramByte();
-                registers.setRegister(Registers.REG_ACCUMULATOR, newTerm + accumulatorBeforeOperation);
-                updateOverflowFlag(accumulatorBeforeOperation, newTerm);
+                executeADC(nextProgramByte());
                 break;
 
             case OP_AND_I:
@@ -193,9 +191,7 @@ public class CPU {
                 System.out.println("Instruction: Immediate SBC...");
                 registers.setFlag(Registers.STATUS_FLAG_NEGATIVE);
                 int negatedValue = twosComplimentOf(nextProgramByte());
-                int difference = accumulatorBeforeOperation + negatedValue;
-                updateOverflowFlag(accumulatorBeforeOperation, difference);
-                registers.setRegister(Registers.REG_ACCUMULATOR, difference & 0xFF);
+                executeADC(negatedValue);
                 break;
 
             default:
@@ -205,8 +201,6 @@ public class CPU {
 
         updateZeroFlag();
         updateNegativeFlag();
-        if (!carryManuallyChanged)
-            updateCarryFlag();
     }
 
     private final int twosComplimentOf(int byteValue){
@@ -214,15 +208,28 @@ public class CPU {
     }
 
     /**
-     * XXX Seems like a lot of operations, any way to optimise this?
+     * Perform a binary addition, setting Carry and Overflow flags as required.
+     *
+     * Note, for subtraction (SBC), the Negative status flag must be set first
+     *
+     * @param term term to add to the accumulator
      */
-    private void updateOverflowFlag(int accumulatorBeforeAddition, int newValue) {
-        if (isNegative(accumulatorBeforeAddition) && isNegative(newValue) && !isNegative(registers.getRegister(Registers.REG_ACCUMULATOR)) ||
-            !isNegative(accumulatorBeforeAddition) && !isNegative(newValue) && isNegative(registers.getRegister(Registers.REG_ACCUMULATOR))){
+    private void executeADC(int term){
+        int result = registers.getRegister(Registers.REG_ACCUMULATOR) + term;
+
+        //Set Overflow if the sign of both inputs is different from the sign of the result
+        if (((registers.getRegister(Registers.REG_ACCUMULATOR) ^ result) & (term ^ result) & 0x80) != 0)
             registers.setFlag(Registers.STATUS_FLAG_OVERFLOW);
-        }else{
+        else
             registers.clearFlag(Registers.STATUS_FLAG_OVERFLOW);
-        }
+
+        //Set Carry, if bit 8 is set, ignoring in 2s compliment addition (subtraction)
+        if (!registers.getFlag(Registers.STATUS_FLAG_NEGATIVE) && ((result & 0x100) == 0x100))
+            registers.setFlag(Registers.STATUS_FLAG_CARRY);
+        else
+            registers.clearFlag(Registers.STATUS_FLAG_CARRY);
+
+        registers.setRegister(Registers.REG_ACCUMULATOR, result & 0xFF);
     }
 
     private boolean isNegative(int fakeByte){
