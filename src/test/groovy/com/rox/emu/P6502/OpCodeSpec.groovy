@@ -7,8 +7,8 @@ import static com.rox.emu.P6502.InstructionSet.*;
 
 class OpCodeSpec extends Specification {
 
-    @Unroll("LDA Immediate #Expected: Load #loadValue")
-    def "LDA (Load Accumulator) Test"() {
+    @Unroll("LDA Immediate #Expected: Load #loadValue == #expectedAccumulator")
+    def testImmediateLDA() {
         when:
         int[] memory = new int[65534]
         int[] program = [OP_LDA_I, loadValue]
@@ -23,29 +23,21 @@ class OpCodeSpec extends Specification {
         then:
         registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
         PC == registers.getPC()
-        //C == registers.statusFlags[STATUS_FLAG_CARRY]
-        Z == registers.getStatusFlags()[1]
-        //I == registers.statusFlags[STATUS_FLAG_IRQ_DISABLE]
-        //D == registers.statusFlags[STATUS_FLAG_DEC]
-        //B == registers.statusFlags[STATUS_FLAG_BREAK]
-        //U == registers.statusFlags[STATUS_FLAG_UNUSED]
-        //O == registers.statusFlags[STATUS_FLAG_OVERFLOW]
-        N == registers.statusFlags[7]
+        Z == registers.statusFlags[Registers.Z]
+        N == registers.statusFlags[Registers.N]
 
         where:
         loadValue | expectedAccumulator | PC | Z     | N     | Expected
         0x0       | 0x0                 | 2  | true  | false | "With zero result"
-        0x1       | 0x1                 | 2  | false | false | ""
-        0x7F      | 0x7F                | 2  | false | false | ""
+        0x1       | 0x1                 | 2  | false | false | "Generic test 1"
+        0x7F      | 0x7F                | 2  | false | false | "Generic test 2"
         0x80      | 0x80                | 2  | false | true  | "With negative result"
-        0x81      | 0x81                | 2  | false | true  | "With negative result"
-        0xFF      | 0xFF                | 2  | false | true  | "With negative result"
-
-        //loadValue | expectedAccumulator  | PC | C      | Z     | I     | D     | B     | U     | O     | N
+        0x81      | 0x81                | 2  | false | true  | "With (boundary test) negative result "
+        0xFF      | 0xFF                | 2  | false | true  | "With max negative result"
     }
 
-    @Unroll("LDA ZeroPage #Expected: Load #loadValue")
-    def "LDA (Load Accumulator) from Zero Page Test"() {
+    @Unroll("LDA ZeroPage #Expected: Expecting #loadValue @ [30]")
+    def testLDAFromZeroPage() {
         when:
         int[] memory = new int[65534]
         int[] program = [OP_LDA_Z, 30]
@@ -61,21 +53,21 @@ class OpCodeSpec extends Specification {
         then:
         registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
         PC == registers.getPC()
-        Z == registers.getStatusFlags()[1]
-        N == registers.statusFlags[7]
+        Z == registers.statusFlags[Registers.Z]
+        N == registers.statusFlags[Registers.N]
 
         where:
         loadValue | expectedAccumulator | PC | Z     | N     | Expected
         0x0       | 0x0                 | 2  | true  | false | "With zero result"
-        0x1       | 0x1                 | 2  | false | false | ""
-        0x7F      | 0x7F                | 2  | false | false | ""
+        0x1       | 0x1                 | 2  | false | false | "Generic test 1"
+        0x7F      | 0x7F                | 2  | false | false | "Generic test 2"
         0x80      | 0x80                | 2  | false | true  | "With negative result"
-        0x81      | 0x81                | 2  | false | true  | "With negative result"
-        0xFF      | 0xFF                | 2  | false | true  | "With negative result"
+        0x81      | 0x81                | 2  | false | true  | "With (boundary test) negative result "
+        0xFF      | 0xFF                | 2  | false | true  | "With max negative result"
     }
 
-    @Unroll("LDA Absolute #Expected: Load #loadValue")
-    def "LDA (Load Accumulator) Absolute Test"() {
+    @Unroll("LDA Absolute #Expected: Expecting #loadValue @ [300]")
+    def testAbsoluteLDA() {
         when:
         int[] memory = new int[65534]
         //Load a memory address above Zero Page (>256) using [Opcode] [Low Order Byte] [High Order Byte]
@@ -93,21 +85,21 @@ class OpCodeSpec extends Specification {
         then:
         registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
         PC == registers.getPC()
-        Z == registers.getStatusFlags()[1]
-        N == registers.statusFlags[7]
+        Z == registers.statusFlags[Registers.Z]
+        N == registers.statusFlags[Registers.N]
 
         where:
         loadValue | expectedAccumulator | PC | Z     | N     | Expected
         0x0       | 0x0                 | 3  | true  | false | "With zero result"
-        0x1       | 0x1                 | 3  | false | false | ""
-        0x7F      | 0x7F                | 3  | false | false | ""
+        0x1       | 0x1                 | 3  | false | false | "Generic test 1"
+        0x7F      | 0x7F                | 3  | false | false | "Generic test 2"
         0x80      | 0x80                | 3  | false | true  | "With negative result"
-        0x81      | 0x81                | 3  | false | true  | "With negative result"
-        0xFF      | 0xFF                | 3  | false | true  | "With negative result"
+        0x81      | 0x81                | 3  | false | true  | "With (boundary test) negative result "
+        0xFF      | 0xFF                | 3  | false | true  | "With max negative result"
     }
 
-    @Unroll("LDA Indexed Zero Page, X #Expected: Load #loadValue")
-    def "LDA (Load Accumulator) Indexed using X from Zero Page Test"() {
+    @Unroll("LDA Indexed Zero Page, X #Expected: Load [0x30 + X(#index)] -> #expectedAccumulator")
+    def testLDAFromZeroPageIndexedByX() {
         when:
         int[] memory = new int[65534]
         int[] program = [OP_LDX_I, index, OP_LDA_Z_IX, 0x30]
@@ -126,8 +118,8 @@ class OpCodeSpec extends Specification {
         then:
         registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
         PC == registers.getPC()
-        Z == registers.getStatusFlags()[1]
-        N == registers.statusFlags[7]
+        Z == registers.statusFlags[Registers.Z]
+        N == registers.statusFlags[Registers.N]
 
         where:
         index | expectedAccumulator | PC | Z     | N     | Expected
@@ -137,7 +129,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("LDA Indexed by X. #Expected: 300[#index] = #expectedAccumulator")
-    def "LDA Absolute Indirect via X"() {
+    def testLDAIndexedByX() {
         when:
         int[] memory = new int[65534]
         int[] program = [OP_LDX_I, index, OP_LDA_IX, 0x2C, 1]
@@ -156,8 +148,8 @@ class OpCodeSpec extends Specification {
         then:
         registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
         PC == registers.getPC()
-        Z == registers.getStatusFlags()[1]
-        N == registers.statusFlags[7]
+        Z == registers.statusFlags[Registers.Z]
+        N == registers.statusFlags[Registers.N]
 
         where:
         index | expectedAccumulator | PC | Z     | N     | Expected
@@ -167,7 +159,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("LDA Indexed by Y. #Expected: 300[#index] = #expectedAccumulator")
-    def "LDA Absolute Indirect via Y"() {
+    def testLDAIndexedByY() {
         when:
         int[] memory = new int[65534]
         int[] program = [OP_LDY_I, index, OP_LDA_IY, 0x2C, 1]
@@ -186,8 +178,8 @@ class OpCodeSpec extends Specification {
         then:
         registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
         PC == registers.getPC()
-        Z == registers.getStatusFlags()[1]
-        N == registers.statusFlags[7]
+        Z == registers.statusFlags[Registers.Z]
+        N == registers.statusFlags[Registers.N]
 
         where:
         index | expectedAccumulator | PC | Z     | N     | Expected
@@ -197,7 +189,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("ADC Immediate #Expected:  #firstValue + #secondValue = #expectedAccumulator in Accumulator.")
-    def "ADC (ADd with Carry to Accumulator) Test"(){
+    def testADC(){
         when:
         int[] memory = new int[65534]
         int[] program = [OP_LDA_I, firstValue, OP_ADC_I, secondValue]
@@ -213,22 +205,22 @@ class OpCodeSpec extends Specification {
         then:
         registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
         PC == registers.getPC()
-        C == registers.statusFlags[0]
-        Z == registers.statusFlags[1]
-        O == registers.statusFlags[6]
-        N == registers.statusFlags[7]
+        C == registers.statusFlags[Registers.C]
+        Z == registers.statusFlags[Registers.Z]
+        O == registers.statusFlags[Registers.V]
+        N == registers.statusFlags[Registers.N]
 
         where:
         firstValue | secondValue | expectedAccumulator | PC  | Z      | N     | C     | O     | Expected
         0x0        | 0x0         | 0x0                 | 4   | true   | false | false | false | "With zero result"
-        0x80       | 0x1         | 0x81                | 4   | false  | true  | false | false | "With valid negative result"
-        0xFF       | 0xFF        | 0xFE                | 4   | false  | true  | true  | false | "With negative, carried result"
         0x50       | 0xD0        | 0x20                | 4   | false  | false | true  | false | "With positive, carried result"
         0x50       | 0x50        | 0xA0                | 4   | false  | true  | false | true  | "With negative overflow"
+        0x80       | 0x1         | 0x81                | 4   | false  | true  | false | false | "With valid negative result"     //Essentially subtractions
+        0xFF       | 0xFF        | 0xFE                | 4   | false  | true  | false | false | "With negative, carried result"
     }
 
     @Unroll("AND Immediate #Expected:  #firstValue & #secondValue = #expectedAccumulator in Accumulator.")
-    def "AND (And with Accumulator) Test"(){
+    def testAND(){
         when:
         int[] memory = new int[65534]
         int[] program = [OP_LDA_I, firstValue, OP_AND_I, secondValue]
@@ -244,8 +236,8 @@ class OpCodeSpec extends Specification {
         then:
         registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
         PC == registers.getPC()
-        Z == registers.statusFlags[1]
-        N == registers.statusFlags[7]
+        Z == registers.statusFlags[Registers.Z]
+        N == registers.statusFlags[Registers.N]
 
         where:
         firstValue | secondValue | expectedAccumulator | PC  | Z      | N     | Expected
@@ -256,7 +248,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("OR Immediate #Expected:  #firstValue | #secondValue = #expectedAccumulator in Accumulator.")
-    def "OR (Or with Accumulator) Test"(){
+    def testOR(){
         when:
         int[] memory = new int[65534]
         int[] program = [OP_LDA_I, firstValue, OP_OR_I, secondValue]
@@ -272,8 +264,8 @@ class OpCodeSpec extends Specification {
         then:
         registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
         PC == registers.getPC()
-        Z == registers.statusFlags[1]
-        N == registers.statusFlags[7]
+        Z == registers.statusFlags[Registers.Z]
+        N == registers.statusFlags[Registers.N]
 
         where:
         firstValue | secondValue | expectedAccumulator | PC  | Z      | N     | Expected
@@ -285,7 +277,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("EOR Immediate #Expected:  #firstValue ^ #secondValue = #expectedAccumulator in Accumulator.")
-    def "EOR (Exclusive Or with Accumulator) Test"(){
+    def testEOR(){
         when:
         int[] memory = new int[65534]
         int[] program = [OP_LDA_I, firstValue, OP_EOR_I, secondValue]
@@ -301,8 +293,8 @@ class OpCodeSpec extends Specification {
         then:
         registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
         PC == registers.getPC()
-        Z == registers.statusFlags[1]
-        N == registers.statusFlags[7]
+        Z == registers.statusFlags[Registers.Z]
+        N == registers.statusFlags[Registers.N]
 
         where:
         firstValue | secondValue | expectedAccumulator | PC  | Z      | N     | Expected
@@ -312,7 +304,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("SBC Immediate #Expected:  #firstValue - #secondValue = #expectedAccumulator in Accumulator.")
-    def "SBC (Subtract from Accumulator) Test"(){
+    def testSBC(){
         when:
         int[] memory = new int[65534]
         int[] program = [OP_SEC, OP_LDA_I, firstValue, OP_SBC_I, secondValue]
@@ -329,15 +321,16 @@ class OpCodeSpec extends Specification {
         then:
         registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
         PC == registers.getPC()
-        Z == registers.statusFlags[1]
-        O == registers.statusFlags[6]
-        N == registers.statusFlags[7]
-        //TODO C
+        Z == registers.statusFlags[Registers.Z]
+        O == registers.statusFlags[Registers.V]
+        N == registers.statusFlags[Registers.N]
+        C == registers.statusFlags[Registers.C]
 
         where:
-        firstValue | secondValue | expectedAccumulator | PC  | Z      | N     | O     | Expected
-        0x5        | 0x3         | 0x2                 | 5   | false  | false | false | "Basic subtraction"
-        0x5        | 0x5         | 0x0                 | 5   | true   | false | false | "Zero subtraction"
-        0x5        | 0x6         | 0xFF                | 5   | false  | true  | false | "Negative subtraction"
+        firstValue | secondValue | expectedAccumulator | PC  | Z      | N     | O     | C     | Expected
+        0x5        | 0x3         | 0x2                 | 5   | false  | false | false | false | "Basic subtraction"
+        0x5        | 0x5         | 0x0                 | 5   | true   | false | false | false | "With zero result"
+        0x5        | 0x6         | 0xFF                | 5   | false  | true  | false | false | "with negative result"
+
     }
 }

@@ -1,6 +1,7 @@
 package com.rox.emu.P6502;
 
 import static com.rox.emu.P6502.InstructionSet.*;
+import com.rox.emu.UnknownOpCodeException;
 
 /**
  * @author rossdrew
@@ -18,7 +19,7 @@ public class CPU {
      * IRL this takes 6 CPU cycles but we'll cross that bridge IF we come to it
      */
     public void reset(){
-        System.out.println("Resetting...");
+        System.out.println("*** RESETTING >>>");
         registers.setRegister(Registers.REG_STATUS, 0x34);
         registers.setRegister(Registers.REG_PC_HIGH, memory[0xFFFC]);
         registers.setRegister(Registers.REG_PC_LOW, memory[0xFFFD]);
@@ -40,24 +41,57 @@ public class CPU {
         return incrementFirst ? incrementedPC : originalPC;
     }
 
-    private int getByteOfMemoryAt(int location){
-        final int memoryByte = memory[location];
-        System.out.println("Got " + memoryByte + " from mem[" + location + "]");
+    private int getByteOfMemoryAt(int location, int index){
+        final int memoryByte = memory[location + index];
+        System.out.println("FETCH mem[" + location + (index != 0 ? "[" + index + "]" : "") +"] --> " + memoryByte);
         return memoryByte;
+    }
+
+    private int getByteOfMemoryAt(int location){
+        return getByteOfMemoryAt(location, 0);
     }
 
     public Registers getRegisters(){
         return registers;
     }
 
-    public void step() {
-        System.out.println("*** Step ***");
+    /**
+     * Return the next byte from program memory, as defined
+     * by the Program Counter.
+     * <em>Increments the Program Counter by 1</em>
+     *
+     * @return byte from PC[0]
+     */
+    private int nextProgramByte(){
         int memoryLocation = getAndStepPC(false);
-        int opCode = getByteOfMemoryAt(memoryLocation);
+        int newByte = getByteOfMemoryAt(memoryLocation);
+        return newByte;
+    }
+
+    /**
+     * Combine the next two bytes in program memory, as defined by
+     * the Program Counter into a word so that
+     *
+     * PC[0] = low order byte
+     * PC[1] = high order byte
+     *
+     * <em>Increments the Program Counter by 1</em>
+     *
+     * @return word made up of both bytes
+     */
+    private int nextProgramWord(){
+        int lowOrderByte = nextProgramByte();
+        int newWord = lowOrderByte | (nextProgramByte() << 8);
+        return newWord;
+    }
+
+    public void step() {
+        System.out.println("*** STEP >>>");
 
         int accumulatorBeforeOperation = registers.getRegister(Registers.REG_ACCUMULATOR);
-
+        int opCode = nextProgramByte();
         boolean carryManuallyChanged = false;
+        int temporaryByte;
 
         //Execute the opcode
         System.out.println("Instruction: " + getName(opCode) + "...");
@@ -67,108 +101,108 @@ public class CPU {
                 carryManuallyChanged = true;
                 break;
 
+            case OP_CLC:
+                System.out.println("Instruction: Implied CLC...");
+                registers.clearFlag(Registers.STATUS_FLAG_CARRY);
+                carryManuallyChanged = true;
+                break;
+
             case OP_LDX_I:
-                memoryLocation = getAndStepPC(false);
-                registers.setRegister(Registers.REG_X_INDEX, getByteOfMemoryAt(memoryLocation));
+                registers.setRegister(Registers.REG_X_INDEX, nextProgramByte());
                 break;
 
             case OP_LDY_I:
-                memoryLocation = getAndStepPC(false);
-                registers.setRegister(Registers.REG_Y_INDEX, getByteOfMemoryAt(memoryLocation));
+                registers.setRegister(Registers.REG_Y_INDEX, nextProgramByte());
                 break;
 
-            case OP_LDA_Z_IX:
-                memoryLocation = getAndStepPC(false);
-                memoryLocation = getByteOfMemoryAt(memoryLocation);
-                int zIndex = registers.getRegister(Registers.REG_X_INDEX);
-                registers.setRegister(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(memoryLocation + zIndex));
+            case OP_LDA_Z_IX: {
+                temporaryByte = nextProgramByte();
+                int index = registers.getRegister(Registers.REG_X_INDEX);
+                registers.setRegister(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(temporaryByte, index));
+            }
                 break;
 
             case OP_LDA_IY:
-            case OP_LDA_IX:
-                memoryLocation = getAndStepPC(false);
-                int l = getByteOfMemoryAt(memoryLocation);
-                memoryLocation = getAndStepPC(false);
-                int mp = l | (getByteOfMemoryAt(memoryLocation) << 8);
-
+            case OP_LDA_IX: {
+                int pointerWord = nextProgramWord();
                 int index = registers.getRegister(opCode == OP_LDA_IX ? Registers.REG_X_INDEX : Registers.REG_Y_INDEX);
-                registers.setRegister(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(mp + index));
-                break;
+                registers.setRegister(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(pointerWord, index));
+            }
+            break;
 
             case OP_LDA_I:
-                memoryLocation = getAndStepPC(false);
-                registers.setRegister(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(memoryLocation));
+                registers.setRegister(Registers.REG_ACCUMULATOR, nextProgramByte());
                 break;
 
-            case OP_LDA_A: // [op] [low order byte] [high order byte]
-                memoryLocation = getAndStepPC(false);
-                int lowByte = getByteOfMemoryAt(memoryLocation);
-                memoryLocation = getAndStepPC(false);
-                int pointerWord = lowByte | (getByteOfMemoryAt(memoryLocation) << 8);
+            case OP_LDA_A: {
+                int pointerWord = nextProgramWord();
                 registers.setRegister(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(pointerWord));
+            }
                 break;
 
             case OP_LDA_Z:
-                memoryLocation = getAndStepPC(false);
-                memoryLocation = getByteOfMemoryAt(memoryLocation);
-                registers.setRegister(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(memoryLocation));
+                temporaryByte = nextProgramByte();
+                registers.setRegister(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(temporaryByte));
                 break;
 
             case OP_ADC_I:
-                memoryLocation = getAndStepPC(false);
-                int newTerm = getByteOfMemoryAt(memoryLocation);
-                registers.setRegister(Registers.REG_ACCUMULATOR, newTerm + accumulatorBeforeOperation);
-                updateOverflowFlag(accumulatorBeforeOperation, newTerm);
+                executeADC(nextProgramByte());
                 break;
 
             case OP_AND_I:
-                memoryLocation = getAndStepPC(false);
-                int andedValue = getByteOfMemoryAt(memoryLocation);
-                registers.setRegister(Registers.REG_ACCUMULATOR, andedValue & accumulatorBeforeOperation);
+                registers.setRegister(Registers.REG_ACCUMULATOR, nextProgramByte() & accumulatorBeforeOperation);
                 break;
 
             case OP_OR_I:
-                memoryLocation = getAndStepPC(false);
-                int orredValue = getByteOfMemoryAt(memoryLocation);
-                registers.setRegister(Registers.REG_ACCUMULATOR, orredValue | accumulatorBeforeOperation);
+                registers.setRegister(Registers.REG_ACCUMULATOR, nextProgramByte() | accumulatorBeforeOperation);
                 break;
 
             case OP_EOR_I:
-                memoryLocation = getAndStepPC(false);
-                int xorredValue = getByteOfMemoryAt(memoryLocation);
-                registers.setRegister(Registers.REG_ACCUMULATOR, xorredValue ^ accumulatorBeforeOperation);
+                registers.setRegister(Registers.REG_ACCUMULATOR, nextProgramByte() ^ accumulatorBeforeOperation);
                 break;
 
             case OP_SBC_I:
-                memoryLocation = getAndStepPC(false);
                 registers.setFlag(Registers.STATUS_FLAG_NEGATIVE);
-                int subtrahend = getByteOfMemoryAt(memoryLocation);
-                //XXX Should be done with addition to be more athentic but neither seem to work
-                int difference = accumulatorBeforeOperation-subtrahend;
-                updateOverflowFlag(accumulatorBeforeOperation, difference);
-                registers.setRegister(Registers.REG_ACCUMULATOR, difference & 0xFF);
+                int negatedValue = twosComplimentOf(nextProgramByte());
+                executeADC(negatedValue);
                 break;
 
             default:
                 System.out.println("ERROR: Unknown OPCODE: " + opCode);
+                throw new UnknownOpCodeException("Unknown 6502 OpCode:" + opCode + " encountered.", opCode);
         }
 
         updateZeroFlag();
         updateNegativeFlag();
-        if (!carryManuallyChanged)
-            updateCarryFlag();
+    }
+
+    private final int twosComplimentOf(int byteValue){
+        return ((~byteValue) + 1) & 0xFF;
     }
 
     /**
-     * XXX Seems like a lot of operations, any way to optimise this?
+     * Perform a binary addition, setting Carry and Overflow flags as required.
+     *
+     * Note, for subtraction (SBC), the Negative status flag must be set first
+     *
+     * @param term term to add to the accumulator
      */
-    private void updateOverflowFlag(int accumulatorBeforeAddition, int newValue) {
-        if (isNegative(accumulatorBeforeAddition) && isNegative(newValue) && !isNegative(registers.getRegister(Registers.REG_ACCUMULATOR)) ||
-            !isNegative(accumulatorBeforeAddition) && !isNegative(newValue) && isNegative(registers.getRegister(Registers.REG_ACCUMULATOR))){
+    private void executeADC(int term){
+        int result = registers.getRegister(Registers.REG_ACCUMULATOR) + term;
+
+        //Set Overflow if the sign of both inputs is different from the sign of the result
+        if (((registers.getRegister(Registers.REG_ACCUMULATOR) ^ result) & (term ^ result) & 0x80) != 0)
             registers.setFlag(Registers.STATUS_FLAG_OVERFLOW);
-        }else{
+        else
             registers.clearFlag(Registers.STATUS_FLAG_OVERFLOW);
-        }
+
+        //Set Carry, if bit 8 is set, ignoring in 2s compliment addition (subtraction)
+        if (!registers.getFlag(Registers.STATUS_FLAG_NEGATIVE) && ((result & 0x100) == 0x100))
+            registers.setFlag(Registers.STATUS_FLAG_CARRY);
+        else
+            registers.clearFlag(Registers.STATUS_FLAG_CARRY);
+
+        registers.setRegister(Registers.REG_ACCUMULATOR, result & 0xFF);
     }
 
     private boolean isNegative(int fakeByte){
@@ -192,7 +226,6 @@ public class CPU {
     private void updateCarryFlag() {
         if ((registers.getRegister(Registers.REG_ACCUMULATOR) & Registers.CARRY_INDICATOR_BIT) == Registers.CARRY_INDICATOR_BIT) {
             registers.setFlag(Registers.STATUS_FLAG_CARRY);
-            //registers[REG_ACCUMULATOR] = (~0x100) & registers[REG_ACCUMULATOR]; //TODO
             registers.setRegister(Registers.REG_ACCUMULATOR, (~0x100) & registers.getRegister(Registers.REG_ACCUMULATOR));
 
         }else
