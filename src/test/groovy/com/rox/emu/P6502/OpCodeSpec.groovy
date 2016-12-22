@@ -3,13 +3,15 @@ package com.rox.emu.P6502
 import spock.lang.Specification
 import spock.lang.Unroll
 
+import static com.rox.emu.P6502.InstructionSet.*;
+
 class OpCodeSpec extends Specification {
 
     @Unroll("LDA Immediate #Expected: Load #loadValue")
     def "LDA (Load Accumulator) Test"() {
         when:
         int[] memory = new int[65534]
-        int[] program = [CPU.OP_LDA_I, loadValue]
+        int[] program = [OP_LDA_I, loadValue]
         System.arraycopy(program, 0, memory, 0, program.length);
 
         and:
@@ -21,13 +23,13 @@ class OpCodeSpec extends Specification {
         then:
         registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
         PC == registers.getPC()
-        //C == registers.statusFlags[CPU.STATUS_FLAG_CARRY]
+        //C == registers.statusFlags[STATUS_FLAG_CARRY]
         Z == registers.getStatusFlags()[1]
-        //I == registers.statusFlags[CPU.STATUS_FLAG_IRQ_DISABLE]
-        //D == registers.statusFlags[CPU.STATUS_FLAG_DEC]
-        //B == registers.statusFlags[CPU.STATUS_FLAG_BREAK]
-        //U == registers.statusFlags[CPU.STATUS_FLAG_UNUSED]
-        //O == registers.statusFlags[CPU.STATUS_FLAG_OVERFLOW]
+        //I == registers.statusFlags[STATUS_FLAG_IRQ_DISABLE]
+        //D == registers.statusFlags[STATUS_FLAG_DEC]
+        //B == registers.statusFlags[STATUS_FLAG_BREAK]
+        //U == registers.statusFlags[STATUS_FLAG_UNUSED]
+        //O == registers.statusFlags[STATUS_FLAG_OVERFLOW]
         N == registers.statusFlags[7]
 
         where:
@@ -46,7 +48,7 @@ class OpCodeSpec extends Specification {
     def "LDA (Load Accumulator) from Zero Page Test"() {
         when:
         int[] memory = new int[65534]
-        int[] program = [CPU.OP_LDA_Z, 30]
+        int[] program = [OP_LDA_Z, 30]
         memory[30] = loadValue
         System.arraycopy(program, 0, memory, 0, program.length);
 
@@ -78,7 +80,7 @@ class OpCodeSpec extends Specification {
         int[] memory = new int[65534]
         //Load a memory address above Zero Page (>256) using [Opcode] [Low Order Byte] [High Order Byte]
         //   [2C, 1] == [1, 2C] == 0b100101100 == 300
-        int[] program = [CPU.OP_LDA_A, 0x2C, 0x1]
+        int[] program = [OP_LDA_A, 0x2C, 0x1]
         memory[300] = loadValue
         System.arraycopy(program, 0, memory, 0, program.length);
 
@@ -108,7 +110,7 @@ class OpCodeSpec extends Specification {
     def "LDA (Load Accumulator) Indexed using X from Zero Page Test"() {
         when:
         int[] memory = new int[65534]
-        int[] program = [CPU.OP_LDX_I, index, CPU.OP_LDA_Z_IX, 0x30]
+        int[] program = [OP_LDX_I, index, OP_LDA_Z_IX, 0x30]
         memory[0x30] = 0
         memory[0x31] = 11
         memory[0x32] = 0b11111111
@@ -138,7 +140,7 @@ class OpCodeSpec extends Specification {
     def "LDA Absolute Indirect via X"() {
         when:
         int[] memory = new int[65534]
-        int[] program = [CPU.OP_LDX_I, index, CPU.OP_LDA_IX, 0x2C, 1]
+        int[] program = [OP_LDX_I, index, OP_LDA_IX, 0x2C, 1]
         memory[300] = 0
         memory[301] = 11
         memory[302] = 0b11111111
@@ -168,7 +170,7 @@ class OpCodeSpec extends Specification {
     def "LDA Absolute Indirect via Y"() {
         when:
         int[] memory = new int[65534]
-        int[] program = [CPU.OP_LDY_I, index, CPU.OP_LDA_IY, 0x2C, 1]
+        int[] program = [OP_LDY_I, index, OP_LDA_IY, 0x2C, 1]
         memory[300] = 0
         memory[301] = 11
         memory[302] = 0b11111111
@@ -198,7 +200,7 @@ class OpCodeSpec extends Specification {
     def "ADC (ADd with Carry to Accumulator) Test"(){
         when:
         int[] memory = new int[65534]
-        int[] program = [CPU.OP_LDA_I, firstValue, CPU.OP_ADC_I, secondValue]
+        int[] program = [OP_LDA_I, firstValue, OP_ADC_I, secondValue]
         System.arraycopy(program, 0, memory, 0, program.length);
 
         and:
@@ -229,7 +231,7 @@ class OpCodeSpec extends Specification {
     def "AND (And with Accumulator) Test"(){
         when:
         int[] memory = new int[65534]
-        int[] program = [CPU.OP_LDA_I, firstValue, CPU.OP_AND_I, secondValue]
+        int[] program = [OP_LDA_I, firstValue, OP_AND_I, secondValue]
         System.arraycopy(program, 0, memory, 0, program.length);
 
         and:
@@ -257,7 +259,7 @@ class OpCodeSpec extends Specification {
     def "OR (Or with Accumulator) Test"(){
         when:
         int[] memory = new int[65534]
-        int[] program = [CPU.OP_LDA_I, firstValue, CPU.OP_OR_I, secondValue]
+        int[] program = [OP_LDA_I, firstValue, OP_OR_I, secondValue]
         System.arraycopy(program, 0, memory, 0, program.length);
 
         and:
@@ -286,7 +288,7 @@ class OpCodeSpec extends Specification {
     def "EOR (Exclusive Or with Accumulator) Test"(){
         when:
         int[] memory = new int[65534]
-        int[] program = [CPU.OP_LDA_I, firstValue, CPU.OP_EOR_I, secondValue]
+        int[] program = [OP_LDA_I, firstValue, OP_EOR_I, secondValue]
         System.arraycopy(program, 0, memory, 0, program.length);
 
         and:
@@ -313,7 +315,7 @@ class OpCodeSpec extends Specification {
     def "SBC (Subtract from Accumulator) Test"(){
         when:
         int[] memory = new int[65534]
-        int[] program = [CPU.OP_SEC, CPU.OP_LDA_I, firstValue, CPU.OP_SBC_I, secondValue]
+        int[] program = [OP_SEC, OP_LDA_I, firstValue, OP_SBC_I, secondValue]
         System.arraycopy(program, 0, memory, 0, program.length);
 
         and:

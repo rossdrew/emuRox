@@ -60,21 +60,19 @@ public class CPU {
         boolean carryManuallyChanged = false;
 
         //Execute the opcode
+        System.out.println("Instruction: " + getName(opCode) + "...");
         switch (opCode){
             case OP_SEC:
-                System.out.println("Instruction: Implied SEC...");
                 registers.setFlag(Registers.STATUS_FLAG_CARRY);
                 carryManuallyChanged = true;
                 break;
 
             case OP_LDX_I:
-                System.out.println("Instruction: Immediate LDX...");
                 memoryLocation = getAndStepPC(false);
                 registers.setRegister(Registers.REG_X_INDEX, getByteOfMemoryAt(memoryLocation));
                 break;
 
             case OP_LDY_I:
-                System.out.println("Instruction: Immediate LDY...");
                 memoryLocation = getAndStepPC(false);
                 registers.setRegister(Registers.REG_Y_INDEX, getByteOfMemoryAt(memoryLocation));
                 break;
@@ -83,7 +81,6 @@ public class CPU {
                 memoryLocation = getAndStepPC(false);
                 memoryLocation = getByteOfMemoryAt(memoryLocation);
                 int zIndex = registers.getRegister(Registers.REG_X_INDEX);
-                System.out.println("Instruction: Zero Page LDA from [" + memoryLocation + "[" + zIndex + "]]...");
                 registers.setRegister(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(memoryLocation + zIndex));
                 break;
 
@@ -95,12 +92,10 @@ public class CPU {
                 int mp = l | (getByteOfMemoryAt(memoryLocation) << 8);
 
                 int index = registers.getRegister(opCode == OP_LDA_IX ? Registers.REG_X_INDEX : Registers.REG_Y_INDEX);
-                System.out.println("Instruction: LDA from [" + mp + "[" + index + "]]...");
                 registers.setRegister(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(mp + index));
                 break;
 
             case OP_LDA_I:
-                System.out.println("Instruction: Immediate LDA...");
                 memoryLocation = getAndStepPC(false);
                 registers.setRegister(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(memoryLocation));
                 break;
@@ -110,19 +105,16 @@ public class CPU {
                 int lowByte = getByteOfMemoryAt(memoryLocation);
                 memoryLocation = getAndStepPC(false);
                 int pointerWord = lowByte | (getByteOfMemoryAt(memoryLocation) << 8);
-                System.out.println("Instruction: Absolute LDA from [" + pointerWord + "]...");
                 registers.setRegister(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(pointerWord));
                 break;
 
             case OP_LDA_Z:
                 memoryLocation = getAndStepPC(false);
                 memoryLocation = getByteOfMemoryAt(memoryLocation);
-                System.out.println("Instruction: Zero Page LDA from " + memoryLocation + "...");
                 registers.setRegister(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(memoryLocation));
                 break;
 
             case OP_ADC_I:
-                System.out.println("Instruction: Immediate ADC...");
                 memoryLocation = getAndStepPC(false);
                 int newTerm = getByteOfMemoryAt(memoryLocation);
                 registers.setRegister(Registers.REG_ACCUMULATOR, newTerm + accumulatorBeforeOperation);
@@ -130,28 +122,24 @@ public class CPU {
                 break;
 
             case OP_AND_I:
-                System.out.println("Instruction: Immediate AND...");
                 memoryLocation = getAndStepPC(false);
                 int andedValue = getByteOfMemoryAt(memoryLocation);
                 registers.setRegister(Registers.REG_ACCUMULATOR, andedValue & accumulatorBeforeOperation);
                 break;
 
             case OP_OR_I:
-                System.out.println("Instruction: Immediate OR...");
                 memoryLocation = getAndStepPC(false);
                 int orredValue = getByteOfMemoryAt(memoryLocation);
                 registers.setRegister(Registers.REG_ACCUMULATOR, orredValue | accumulatorBeforeOperation);
                 break;
 
             case OP_EOR_I:
-                System.out.println("Instruction: Immediate EOR...");
                 memoryLocation = getAndStepPC(false);
                 int xorredValue = getByteOfMemoryAt(memoryLocation);
                 registers.setRegister(Registers.REG_ACCUMULATOR, xorredValue ^ accumulatorBeforeOperation);
                 break;
 
             case OP_SBC_I:
-                System.out.println("Instruction: Immediate SBC...");
                 memoryLocation = getAndStepPC(false);
                 registers.setFlag(Registers.STATUS_FLAG_NEGATIVE);
                 int subtrahend = getByteOfMemoryAt(memoryLocation);
