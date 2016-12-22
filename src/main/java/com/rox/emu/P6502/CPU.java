@@ -219,14 +219,4 @@ public class CPU {
         else
             registers.clearFlag(Registers.STATUS_FLAG_NEGATIVE);
     }
-
-    private void updateCarryFlag() {
-        if ((registers.getRegister(Registers.REG_ACCUMULATOR) & Registers.CARRY_INDICATOR_BIT) == Registers.CARRY_INDICATOR_BIT) {
-            registers.setFlag(Registers.STATUS_FLAG_CARRY);
-            registers.setRegister(Registers.REG_ACCUMULATOR, (~0x100) & registers.getRegister(Registers.REG_ACCUMULATOR));
-
-        }else
-            registers.clearFlag(Registers.STATUS_FLAG_CARRY);
-    }
-
 }
