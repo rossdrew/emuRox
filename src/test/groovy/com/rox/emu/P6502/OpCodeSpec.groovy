@@ -220,7 +220,39 @@ class OpCodeSpec extends Specification {
 
     @Unroll()
     def testMultiByteADC(){
-        //TODO Needs STA implemented!
+        when:
+        Memory memory = new SimpleMemory(65534);
+        int[] program = [OP_CLC,
+                         OP_LDA_I, lowFirstByte,
+                         OP_ADC_I, lowSecondByte,
+                         OP_STA_Z, 40,
+                         OP_LDA_I, highFirstByte,
+                         OP_ADC_I, highSecondByte]
+        memory.setMemory(0, program);
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        processor.step()  //XXX Neater way to do all this?
+        processor.step()
+        processor.step()
+        processor.step()
+        processor.step()
+        processor.step()
+        Registers registers = processor.getRegisters()
+
+        then:
+        registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
+        PC == registers.getPC()
+        C == registers.statusFlags[Registers.C]
+        Z == registers.statusFlags[Registers.Z]
+        O == registers.statusFlags[Registers.V]
+        N == registers.statusFlags[Registers.N]
+
+        where:
+        lowFirstByte | lowSecondByte | highFirstByte | highSecondByte | expectedAccumulator | PC  | Z      | N     | C     | O     | Expected
+        0            | 0             | 0             | 0              | 0                   | 11  | true   | false | false | false | "With zero result"
+        //TODO test cases for carries and not carries
     }
 
     @Unroll("AND Immediate #Expected:  #firstValue & #secondValue = #expectedAccumulator in Accumulator.")
