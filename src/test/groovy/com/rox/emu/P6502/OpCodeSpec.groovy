@@ -3,13 +3,15 @@ package com.rox.emu.P6502
 import spock.lang.Specification
 import spock.lang.Unroll
 
+import static com.rox.emu.P6502.InstructionSet.*;
+
 class OpCodeSpec extends Specification {
 
     @Unroll("LDA Immediate #Expected: Load #loadValue == #expectedAccumulator")
     def testImmediateLDA() {
         when:
         int[] memory = new int[65534]
-        int[] program = [CPU.OP_LDA_I, loadValue]
+        int[] program = [OP_LDA_I, loadValue]
         System.arraycopy(program, 0, memory, 0, program.length);
 
         and:
@@ -38,7 +40,7 @@ class OpCodeSpec extends Specification {
     def testLDAFromZeroPage() {
         when:
         int[] memory = new int[65534]
-        int[] program = [CPU.OP_LDA_Z, 30]
+        int[] program = [OP_LDA_Z, 30]
         memory[30] = loadValue
         System.arraycopy(program, 0, memory, 0, program.length);
 
@@ -70,7 +72,7 @@ class OpCodeSpec extends Specification {
         int[] memory = new int[65534]
         //Load a memory address above Zero Page (>256) using [Opcode] [Low Order Byte] [High Order Byte]
         //   [2C, 1] == [1, 2C] == 0b100101100 == 300
-        int[] program = [CPU.OP_LDA_A, 0x2C, 0x1]
+        int[] program = [OP_LDA_A, 0x2C, 0x1]
         memory[300] = loadValue
         System.arraycopy(program, 0, memory, 0, program.length);
 
@@ -100,7 +102,7 @@ class OpCodeSpec extends Specification {
     def testLDAFromZeroPageIndexedByX() {
         when:
         int[] memory = new int[65534]
-        int[] program = [CPU.OP_LDX_I, index, CPU.OP_LDA_Z_IX, 0x30]
+        int[] program = [OP_LDX_I, index, OP_LDA_Z_IX, 0x30]
         memory[0x30] = 0
         memory[0x31] = 11
         memory[0x32] = 0b11111111
@@ -130,7 +132,7 @@ class OpCodeSpec extends Specification {
     def testLDAIndexedByX() {
         when:
         int[] memory = new int[65534]
-        int[] program = [CPU.OP_LDX_I, index, CPU.OP_LDA_IX, 0x2C, 1]
+        int[] program = [OP_LDX_I, index, OP_LDA_IX, 0x2C, 1]
         memory[300] = 0
         memory[301] = 11
         memory[302] = 0b11111111
@@ -160,7 +162,7 @@ class OpCodeSpec extends Specification {
     def testLDAIndexedByY() {
         when:
         int[] memory = new int[65534]
-        int[] program = [CPU.OP_LDY_I, index, CPU.OP_LDA_IY, 0x2C, 1]
+        int[] program = [OP_LDY_I, index, OP_LDA_IY, 0x2C, 1]
         memory[300] = 0
         memory[301] = 11
         memory[302] = 0b11111111
@@ -190,7 +192,7 @@ class OpCodeSpec extends Specification {
     def testADC(){
         when:
         int[] memory = new int[65534]
-        int[] program = [CPU.OP_LDA_I, firstValue, CPU.OP_ADC_I, secondValue]
+        int[] program = [OP_LDA_I, firstValue, OP_ADC_I, secondValue]
         System.arraycopy(program, 0, memory, 0, program.length);
 
         and:
@@ -221,7 +223,7 @@ class OpCodeSpec extends Specification {
     def testAND(){
         when:
         int[] memory = new int[65534]
-        int[] program = [CPU.OP_LDA_I, firstValue, CPU.OP_AND_I, secondValue]
+        int[] program = [OP_LDA_I, firstValue, OP_AND_I, secondValue]
         System.arraycopy(program, 0, memory, 0, program.length);
 
         and:
@@ -249,7 +251,7 @@ class OpCodeSpec extends Specification {
     def testOR(){
         when:
         int[] memory = new int[65534]
-        int[] program = [CPU.OP_LDA_I, firstValue, CPU.OP_OR_I, secondValue]
+        int[] program = [OP_LDA_I, firstValue, OP_OR_I, secondValue]
         System.arraycopy(program, 0, memory, 0, program.length);
 
         and:
@@ -278,7 +280,7 @@ class OpCodeSpec extends Specification {
     def testEOR(){
         when:
         int[] memory = new int[65534]
-        int[] program = [CPU.OP_LDA_I, firstValue, CPU.OP_EOR_I, secondValue]
+        int[] program = [OP_LDA_I, firstValue, OP_EOR_I, secondValue]
         System.arraycopy(program, 0, memory, 0, program.length);
 
         and:
@@ -305,7 +307,7 @@ class OpCodeSpec extends Specification {
     def testSBC(){
         when:
         int[] memory = new int[65534]
-        int[] program = [CPU.OP_SEC, CPU.OP_LDA_I, firstValue, CPU.OP_SBC_I, secondValue]
+        int[] program = [OP_SEC, OP_LDA_I, firstValue, OP_SBC_I, secondValue]
         System.arraycopy(program, 0, memory, 0, program.length);
 
         and:

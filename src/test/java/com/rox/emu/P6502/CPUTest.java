@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static junit.framework.TestCase.assertEquals;
+import static com.rox.emu.P6502.InstructionSet.*;
 import static org.spockframework.util.Assert.fail;
 
 public class CPUTest {
@@ -40,7 +41,7 @@ public class CPUTest {
 
     @Test
     public void testLDA(){
-        int[] program = {CPU.OP_LDA_I, 0xAA};
+        int[] program = {OP_LDA_I, 0xAA};
         System.arraycopy(program, 0, memory, 0, program.length);
 
         processor.step();
@@ -53,7 +54,7 @@ public class CPUTest {
 
     @Test
     public void testLDX(){
-        int[] program = {CPU.OP_LDX_I, 0xAA};
+        int[] program = {OP_LDX_I, 0xAA};
         System.arraycopy(program, 0, memory, 0, program.length);
 
         processor.step();
@@ -66,7 +67,7 @@ public class CPUTest {
 
     @Test
     public void testLDY(){
-        int[] program = {CPU.OP_LDY_I, 0xAA};
+        int[] program = {OP_LDY_I, 0xAA};
         System.arraycopy(program, 0, memory, 0, program.length);
 
         processor.step();
@@ -79,9 +80,9 @@ public class CPUTest {
 
     @Test
     public void testADC(){
-        int[] program = {CPU.OP_LDA_I,
+        int[] program = {OP_LDA_I,
                          0x1,
-                         CPU.OP_ADC_I,
+                         OP_ADC_I,
                          0x1};
         System.arraycopy(program, 0, memory, 0, program.length);
 
@@ -96,9 +97,9 @@ public class CPUTest {
 
     @Test
     public void testAND(){
-        int[] program = {CPU.OP_LDA_I,
+        int[] program = {OP_LDA_I,
                 0b00000101,
-                CPU.OP_AND_I,
+                OP_AND_I,
                 0b00000101};
         System.arraycopy(program, 0, memory, 0, program.length);
 
@@ -113,9 +114,9 @@ public class CPUTest {
 
     @Test
     public void testOR(){
-        int[] program = {CPU.OP_LDA_I,
+        int[] program = {OP_LDA_I,
                 0b00010101,
-                CPU.OP_OR_I,
+                OP_OR_I,
                 0b00000101};
         System.arraycopy(program, 0, memory, 0, program.length);
 
@@ -130,9 +131,9 @@ public class CPUTest {
 
     @Test
     public void testEOR(){
-        int[] program = {CPU.OP_LDA_I,
+        int[] program = {OP_LDA_I,
                 0b00010101,
-                CPU.OP_EOR_I,
+                OP_EOR_I,
                 0b00000101};
         System.arraycopy(program, 0, memory, 0, program.length);
 
@@ -147,7 +148,7 @@ public class CPUTest {
 
     @Test
     public void testSEC(){
-        int[] program = {CPU.OP_SEC};
+        int[] program = {OP_SEC};
         System.arraycopy(program, 0, memory, 0, program.length);
         Registers registers = processor.getRegisters();
 

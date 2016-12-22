@@ -1,27 +1,12 @@
 package com.rox.emu.P6502;
 
+import static com.rox.emu.P6502.InstructionSet.*;
 import com.rox.emu.UnknownOpCodeException;
 
 /**
  * @author rossdrew
  */
 public class CPU {
-    public static final int OP_ADC_I = 0x69;   //ADC Immediate
-    public static final int OP_LDA_Z = 0xA5;   //LDA (Zero Page)
-    public static final int OP_LDA_I = 0xA9;   //... Immediate
-    public static final int OP_LDA_A = 0xAD;   //... Absolute
-    public static final int OP_LDA_Z_IX = 0xB5;//... Zero Page indexed with X
-    public static final int OP_LDA_IY = 0xB9;  //... Indexed with Y
-    public static final int OP_LDA_IX = 0xBD;  //... Indexed with X
-    public static final int OP_AND_I = 0x29;   //AND Immediate
-    public static final int OP_OR_I = 0x09;    //OR Immediate
-    public static final int OP_EOR_I = 0x49;   //EOR Immediate
-    public static final int OP_SBC_I = 0xE9;   //SBX Immediate
-    public static final int OP_CLC = 0x18;     //CLC Implied
-    public static final int OP_SEC = 0x38;     //SEC (Implied)
-    public static final int OP_LDY_I = 0xA0;   //LDX Immediate
-    public static final int OP_LDX_I = 0xA2;   //LDX Immediate
-
     private int[] memory;
 
     private Registers registers = new Registers();
@@ -109,9 +94,9 @@ public class CPU {
         int temporaryByte;
 
         //Execute the opcode
-        switch (opCode) {
+        System.out.println("Instruction: " + getName(opCode) + "...");
+        switch (opCode){
             case OP_SEC:
-                System.out.println("Instruction: Implied SEC...");
                 registers.setFlag(Registers.STATUS_FLAG_CARRY);
                 carryManuallyChanged = true;
                 break;
@@ -123,19 +108,16 @@ public class CPU {
                 break;
 
             case OP_LDX_I:
-                System.out.println("Instruction: Immediate LDX...");
                 registers.setRegister(Registers.REG_X_INDEX, nextProgramByte());
                 break;
 
             case OP_LDY_I:
-                System.out.println("Instruction: Immediate LDY...");
                 registers.setRegister(Registers.REG_Y_INDEX, nextProgramByte());
                 break;
 
             case OP_LDA_Z_IX: {
                 temporaryByte = nextProgramByte();
                 int index = registers.getRegister(Registers.REG_X_INDEX);
-                System.out.println("Instruction: Zero Page LDA...");
                 registers.setRegister(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(temporaryByte, index));
             }
                 break;
@@ -144,51 +126,42 @@ public class CPU {
             case OP_LDA_IX: {
                 int pointerWord = nextProgramWord();
                 int index = registers.getRegister(opCode == OP_LDA_IX ? Registers.REG_X_INDEX : Registers.REG_Y_INDEX);
-                System.out.println("Instruction: LDA...");
                 registers.setRegister(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(pointerWord, index));
             }
             break;
 
             case OP_LDA_I:
-                System.out.println("Instruction: Immediate LDA...");
                 registers.setRegister(Registers.REG_ACCUMULATOR, nextProgramByte());
                 break;
 
             case OP_LDA_A: {
                 int pointerWord = nextProgramWord();
-                System.out.println("Instruction: Absolute LDA...");
                 registers.setRegister(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(pointerWord));
             }
                 break;
 
             case OP_LDA_Z:
                 temporaryByte = nextProgramByte();
-                System.out.println("Instruction: Zero Page LDA...");
                 registers.setRegister(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(temporaryByte));
                 break;
 
             case OP_ADC_I:
-                System.out.println("Instruction: Immediate ADC...");
                 executeADC(nextProgramByte());
                 break;
 
             case OP_AND_I:
-                System.out.println("Instruction: Immediate AND...");
                 registers.setRegister(Registers.REG_ACCUMULATOR, nextProgramByte() & accumulatorBeforeOperation);
                 break;
 
             case OP_OR_I:
-                System.out.println("Instruction: Immediate OR...");
                 registers.setRegister(Registers.REG_ACCUMULATOR, nextProgramByte() | accumulatorBeforeOperation);
                 break;
 
             case OP_EOR_I:
-                System.out.println("Instruction: Immediate EOR...");
                 registers.setRegister(Registers.REG_ACCUMULATOR, nextProgramByte() ^ accumulatorBeforeOperation);
                 break;
 
             case OP_SBC_I:
-                System.out.println("Instruction: Immediate SBC...");
                 registers.setFlag(Registers.STATUS_FLAG_NEGATIVE);
                 int negatedValue = twosComplimentOf(nextProgramByte());
                 executeADC(negatedValue);
