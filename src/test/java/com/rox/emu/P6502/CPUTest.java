@@ -61,6 +61,7 @@ public class CPUTest {
         memory.setMemory(0, program);
 
         processor.step();
+        processor.step();
 
         Registers registers = processor.getRegisters();
         assertEquals(4, registers.getPC());

@@ -161,6 +161,10 @@ public class CPU {
                 executeADC(twosComplimentOf(nextProgramByte()));
                 break;
 
+            case OP_STA_Z:
+                memory.setByte(nextProgramByte(), registers.getRegister(Registers.REG_ACCUMULATOR));
+                break;
+
             default:
                 throw new UnknownOpCodeException("Unknown 6502 OpCode:" + opCode + " encountered.", opCode);
         }
