@@ -19,6 +19,7 @@ public class InstructionSet {
     public static final int OP_SEC = 0x38;
     public static final int OP_LDY_I = 0xA0;
     public static final int OP_LDX_I = 0xA2;
+    public static final int OP_STA_Z = 0x85;
 
     public static String getName(int opCode){
         switch (opCode){
@@ -37,6 +38,7 @@ public class InstructionSet {
             case OP_SEC:        return "SEC";
             case OP_LDY_I:      return "LDX (Immediate)";
             case OP_LDX_I:      return "LDX (Immediate)";
+            case OP_STA_Z:      return "STA (Zero Page)";
             default:
                 return "<Unknown Opcode: " + opCode + ">";
         }

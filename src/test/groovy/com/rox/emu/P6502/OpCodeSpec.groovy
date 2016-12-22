@@ -218,6 +218,11 @@ class OpCodeSpec extends Specification {
         0xFF       | 0xFF        | 0xFE                | 4   | false  | true  | false | false | "With negative, carried result"
     }
 
+    @Unroll()
+    def testMultiByteADC(){
+        //TODO Needs STA implemented!
+    }
+
     @Unroll("AND Immediate #Expected:  #firstValue & #secondValue = #expectedAccumulator in Accumulator.")
     def testAND(){
         when:
@@ -330,6 +335,5 @@ class OpCodeSpec extends Specification {
         0x5        | 0x3         | 0x2                 | 5   | false  | false | false | false | "Basic subtraction"
         0x5        | 0x5         | 0x0                 | 5   | true   | false | false | false | "With zero result"
         0x5        | 0x6         | 0xFF                | 5   | false  | true  | false | false | "with negative result"
-
     }
 }
