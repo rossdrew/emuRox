@@ -15,6 +15,7 @@ public class InstructionSet {
     public static final int OP_OR_I = 0x09;
     public static final int OP_EOR_I = 0x49;
     public static final int OP_SBC_I = 0xE9;
+    public static final int OP_CLC = 0x18;
     public static final int OP_SEC = 0x38;
     public static final int OP_LDY_I = 0xA0;
     public static final int OP_LDX_I = 0xA2;
@@ -32,7 +33,8 @@ public class InstructionSet {
             case OP_OR_I:       return "OR (Immediate)";
             case OP_EOR_I:      return "EOR (Immediate)";
             case OP_SBC_I:      return "SBX (Immediate)";
-            case OP_SEC:        return "SEC (Implied)";
+            case OP_CLC:        return "Clear Carry";
+            case OP_SEC:        return "SEC";
             case OP_LDY_I:      return "LDX (Immediate)";
             case OP_LDX_I:      return "LDX (Immediate)";
             default:

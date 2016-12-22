@@ -160,7 +160,7 @@ public class CPUTest {
 
     @Test
     public void testCLC(){
-        int[] program = {CPU.OP_CLC};
+        int[] program = {OP_CLC};
         System.arraycopy(program, 0, memory, 0, program.length);
         Registers registers = processor.getRegisters();
 

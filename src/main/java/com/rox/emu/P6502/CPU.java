@@ -90,7 +90,6 @@ public class CPU {
 
         int accumulatorBeforeOperation = registers.getRegister(Registers.REG_ACCUMULATOR);
         int opCode = nextProgramByte();
-        boolean carryManuallyChanged = false;
         int temporaryByte;
 
         //Execute the opcode
@@ -98,13 +97,11 @@ public class CPU {
         switch (opCode){
             case OP_SEC:
                 registers.setFlag(Registers.STATUS_FLAG_CARRY);
-                carryManuallyChanged = true;
                 break;
 
             case OP_CLC:
                 System.out.println("Instruction: Implied CLC...");
                 registers.clearFlag(Registers.STATUS_FLAG_CARRY);
-                carryManuallyChanged = true;
                 break;
 
             case OP_LDX_I:
