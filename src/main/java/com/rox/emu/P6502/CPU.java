@@ -90,7 +90,6 @@ public class CPU {
 
         int accumulatorBeforeOperation = registers.getRegister(Registers.REG_ACCUMULATOR);
         int opCode = nextProgramByte();
-        int temporaryByte;
 
         //Execute the opcode
         System.out.println("Instruction: " + getName(opCode) + "...");
@@ -113,17 +112,15 @@ public class CPU {
                 break;
 
             case OP_LDA_Z_IX: {
-                temporaryByte = nextProgramByte();
                 int index = registers.getRegister(Registers.REG_X_INDEX);
-                registers.setRegister(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(temporaryByte, index));
+                registers.setRegister(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(nextProgramByte(), index));
             }
                 break;
 
             case OP_LDA_IY:
             case OP_LDA_IX: {
-                int pointerWord = nextProgramWord();
                 int index = registers.getRegister(opCode == OP_LDA_IX ? Registers.REG_X_INDEX : Registers.REG_Y_INDEX);
-                registers.setRegister(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(pointerWord, index));
+                registers.setRegister(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(nextProgramWord(), index));
             }
             break;
 
@@ -138,8 +135,7 @@ public class CPU {
                 break;
 
             case OP_LDA_Z:
-                temporaryByte = nextProgramByte();
-                registers.setRegister(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(temporaryByte));
+                registers.setRegister(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(nextProgramByte()));
                 break;
 
             case OP_ADC_I:
@@ -160,12 +156,10 @@ public class CPU {
 
             case OP_SBC_I:
                 registers.setFlag(Registers.STATUS_FLAG_NEGATIVE);
-                int negatedValue = twosComplimentOf(nextProgramByte());
-                executeADC(negatedValue);
+                executeADC(twosComplimentOf(nextProgramByte()));
                 break;
 
             default:
-                System.out.println("ERROR: Unknown OPCODE: " + opCode);
                 throw new UnknownOpCodeException("Unknown 6502 OpCode:" + opCode + " encountered.", opCode);
         }
 
