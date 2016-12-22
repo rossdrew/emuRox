@@ -322,12 +322,13 @@ class OpCodeSpec extends Specification {
         Z == registers.statusFlags[Registers.Z]
         O == registers.statusFlags[Registers.V]
         N == registers.statusFlags[Registers.N]
-        //TODO C
+        C == registers.statusFlags[Registers.C]
 
         where:
-        firstValue | secondValue | expectedAccumulator | PC  | Z      | N     | O     | Expected
-        0x5        | 0x3         | 0x2                 | 5   | false  | false | false | "Basic subtraction"
-        0x5        | 0x5         | 0x0                 | 5   | true   | false | false | "Zero subtraction"
-        0x5        | 0x6         | 0xFF                | 5   | false  | true  | false | "Negative subtraction"
+        firstValue | secondValue | expectedAccumulator | PC  | Z      | N     | O     | C     | Expected
+        0x5        | 0x3         | 0x2                 | 5   | false  | false | false | false | "Basic subtraction"
+        0x5        | 0x5         | 0x0                 | 5   | true   | false | false | false | "With zero result"
+        0x5        | 0x6         | 0xFF                | 5   | false  | true  | false | false | "with negative result"
+
     }
 }

@@ -192,7 +192,8 @@ public class CPU {
             case OP_SBC_I:
                 System.out.println("Instruction: Immediate SBC...");
                 registers.setFlag(Registers.STATUS_FLAG_NEGATIVE);
-                int difference = accumulatorBeforeOperation - nextProgramByte(); //XXX Should be done with addition to be more authentic
+                int negatedValue = twosComplimentOf(nextProgramByte());
+                int difference = accumulatorBeforeOperation + negatedValue;
                 updateOverflowFlag(accumulatorBeforeOperation, difference);
                 registers.setRegister(Registers.REG_ACCUMULATOR, difference & 0xFF);
                 break;
@@ -206,6 +207,10 @@ public class CPU {
         updateNegativeFlag();
         if (!carryManuallyChanged)
             updateCarryFlag();
+    }
+
+    private final int twosComplimentOf(int byteValue){
+        return ((~byteValue) + 1) & 0xFF;
     }
 
     /**
