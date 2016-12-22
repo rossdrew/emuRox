@@ -1,17 +1,19 @@
 package com.rox.emu.P6502;
 
 import static com.rox.emu.P6502.InstructionSet.*;
+
+import com.rox.emu.Memory;
 import com.rox.emu.UnknownOpCodeException;
 
 /**
  * @author rossdrew
  */
 public class CPU {
-    private int[] memory;
+    private Memory memory;
 
     private Registers registers = new Registers();
 
-    public CPU(int[] memory) {
+    public CPU(Memory memory) {
         this.memory = memory;
     }
 
@@ -21,8 +23,8 @@ public class CPU {
     public void reset(){
         System.out.println("*** RESETTING >>>");
         registers.setRegister(Registers.REG_STATUS, 0x34);
-        registers.setRegister(Registers.REG_PC_HIGH, memory[0xFFFC]);
-        registers.setRegister(Registers.REG_PC_LOW, memory[0xFFFD]);
+        registers.setRegister(Registers.REG_PC_HIGH, memory.getByte(0xFFFC));
+        registers.setRegister(Registers.REG_PC_LOW, memory.getByte(0xFFFD));
         registers.setRegister(Registers.REG_SP, 0xFF);
         System.out.println("...READY!");
     }
@@ -42,7 +44,7 @@ public class CPU {
     }
 
     private int getByteOfMemoryAt(int location, int index){
-        final int memoryByte = memory[location + index];
+        final int memoryByte = memory.getByte(location + index);
         System.out.println("FETCH mem[" + location + (index != 0 ? "[" + index + "]" : "") +"] --> " + memoryByte);
         return memoryByte;
     }

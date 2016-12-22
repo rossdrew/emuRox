@@ -1,5 +1,7 @@
 package com.rox.emu.P6502
 
+import com.rox.emu.Memory
+import com.rox.emu.SimpleMemory
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -10,9 +12,9 @@ class OpCodeSpec extends Specification {
     @Unroll("LDA Immediate #Expected: Load #loadValue == #expectedAccumulator")
     def testImmediateLDA() {
         when:
-        int[] memory = new int[65534]
+        Memory memory = new SimpleMemory(65534);
         int[] program = [OP_LDA_I, loadValue]
-        System.arraycopy(program, 0, memory, 0, program.length);
+        memory.setMemory(0, program);
 
         and:
         CPU processor = new CPU(memory)
@@ -39,10 +41,10 @@ class OpCodeSpec extends Specification {
     @Unroll("LDA ZeroPage #Expected: Expecting #loadValue @ [30]")
     def testLDAFromZeroPage() {
         when:
-        int[] memory = new int[65534]
+        Memory memory = new SimpleMemory(65534);
         int[] program = [OP_LDA_Z, 30]
-        memory[30] = loadValue
-        System.arraycopy(program, 0, memory, 0, program.length);
+        memory.setByte(30, loadValue)
+        memory.setMemory(0, program)
 
         and:
         CPU processor = new CPU(memory)
@@ -69,12 +71,12 @@ class OpCodeSpec extends Specification {
     @Unroll("LDA Absolute #Expected: Expecting #loadValue @ [300]")
     def testAbsoluteLDA() {
         when:
-        int[] memory = new int[65534]
+        Memory memory = new SimpleMemory(65534);
         //Load a memory address above Zero Page (>256) using [Opcode] [Low Order Byte] [High Order Byte]
         //   [2C, 1] == [1, 2C] == 0b100101100 == 300
         int[] program = [OP_LDA_A, 0x2C, 0x1]
-        memory[300] = loadValue
-        System.arraycopy(program, 0, memory, 0, program.length);
+        memory.setByte(300, loadValue)
+        memory.setMemory(0, program);
 
         and:
         CPU processor = new CPU(memory)
@@ -101,12 +103,11 @@ class OpCodeSpec extends Specification {
     @Unroll("LDA Indexed Zero Page, X #Expected: Load [0x30 + X(#index)] -> #expectedAccumulator")
     def testLDAFromZeroPageIndexedByX() {
         when:
-        int[] memory = new int[65534]
+        Memory memory = new SimpleMemory(65534);
         int[] program = [OP_LDX_I, index, OP_LDA_Z_IX, 0x30]
-        memory[0x30] = 0
-        memory[0x31] = 11
-        memory[0x32] = 0b11111111
-        System.arraycopy(program, 0, memory, 0, program.length);
+        int[] values = [0, 11, 0b11111111]
+        memory.setMemory(0x30, values)
+        memory.setMemory(0, program);
 
         and:
         CPU processor = new CPU(memory)
@@ -131,12 +132,11 @@ class OpCodeSpec extends Specification {
     @Unroll("LDA Indexed by X. #Expected: 300[#index] = #expectedAccumulator")
     def testLDAIndexedByX() {
         when:
-        int[] memory = new int[65534]
+        Memory memory = new SimpleMemory(65534);
         int[] program = [OP_LDX_I, index, OP_LDA_IX, 0x2C, 1]
-        memory[300] = 0
-        memory[301] = 11
-        memory[302] = 0b11111111
-        System.arraycopy(program, 0, memory, 0, program.length);
+        int[] values = [0, 11, 0b11111111]
+        memory.setMemory(300, values)
+        memory.setMemory(0, program);
 
         and:
         CPU processor = new CPU(memory)
@@ -161,12 +161,11 @@ class OpCodeSpec extends Specification {
     @Unroll("LDA Indexed by Y. #Expected: 300[#index] = #expectedAccumulator")
     def testLDAIndexedByY() {
         when:
-        int[] memory = new int[65534]
+        Memory memory = new SimpleMemory(65534);
         int[] program = [OP_LDY_I, index, OP_LDA_IY, 0x2C, 1]
-        memory[300] = 0
-        memory[301] = 11
-        memory[302] = 0b11111111
-        System.arraycopy(program, 0, memory, 0, program.length);
+        int[] values = [0, 11, 0b11111111]
+        memory.setMemory(300, values)
+        memory.setMemory(0, program);
 
         and:
         CPU processor = new CPU(memory)
@@ -191,9 +190,9 @@ class OpCodeSpec extends Specification {
     @Unroll("ADC Immediate #Expected:  #firstValue + #secondValue = #expectedAccumulator in Accumulator.")
     def testADC(){
         when:
-        int[] memory = new int[65534]
+        Memory memory = new SimpleMemory(65534);
         int[] program = [OP_LDA_I, firstValue, OP_ADC_I, secondValue]
-        System.arraycopy(program, 0, memory, 0, program.length);
+        memory.setMemory(0, program);
 
         and:
         CPU processor = new CPU(memory)
@@ -222,9 +221,9 @@ class OpCodeSpec extends Specification {
     @Unroll("AND Immediate #Expected:  #firstValue & #secondValue = #expectedAccumulator in Accumulator.")
     def testAND(){
         when:
-        int[] memory = new int[65534]
+        Memory memory = new SimpleMemory(65534);
         int[] program = [OP_LDA_I, firstValue, OP_AND_I, secondValue]
-        System.arraycopy(program, 0, memory, 0, program.length);
+        memory.setMemory(0, program);
 
         and:
         CPU processor = new CPU(memory)
@@ -250,9 +249,9 @@ class OpCodeSpec extends Specification {
     @Unroll("OR Immediate #Expected:  #firstValue | #secondValue = #expectedAccumulator in Accumulator.")
     def testOR(){
         when:
-        int[] memory = new int[65534]
+        Memory memory = new SimpleMemory(65534);
         int[] program = [OP_LDA_I, firstValue, OP_OR_I, secondValue]
-        System.arraycopy(program, 0, memory, 0, program.length);
+        memory.setMemory(0, program);
 
         and:
         CPU processor = new CPU(memory)
@@ -279,9 +278,9 @@ class OpCodeSpec extends Specification {
     @Unroll("EOR Immediate #Expected:  #firstValue ^ #secondValue = #expectedAccumulator in Accumulator.")
     def testEOR(){
         when:
-        int[] memory = new int[65534]
+        Memory memory = new SimpleMemory(65534);
         int[] program = [OP_LDA_I, firstValue, OP_EOR_I, secondValue]
-        System.arraycopy(program, 0, memory, 0, program.length);
+        memory.setMemory(0, program);
 
         and:
         CPU processor = new CPU(memory)
@@ -306,9 +305,9 @@ class OpCodeSpec extends Specification {
     @Unroll("SBC Immediate #Expected:  #firstValue - #secondValue = #expectedAccumulator in Accumulator.")
     def testSBC(){
         when:
-        int[] memory = new int[65534]
+        Memory memory = new SimpleMemory(65534);
         int[] program = [OP_SEC, OP_LDA_I, firstValue, OP_SBC_I, secondValue]
-        System.arraycopy(program, 0, memory, 0, program.length);
+        memory.setMemory(0, program);
 
         and:
         CPU processor = new CPU(memory)
