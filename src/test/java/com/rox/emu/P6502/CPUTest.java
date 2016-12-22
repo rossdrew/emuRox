@@ -1,5 +1,7 @@
 package com.rox.emu.P6502;
 
+import com.rox.emu.Memory;
+import com.rox.emu.SimpleMemory;
 import com.rox.emu.UnknownOpCodeException;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,14 +11,14 @@ import static com.rox.emu.P6502.InstructionSet.*;
 import static org.spockframework.util.Assert.fail;
 
 public class CPUTest {
-    int [] memory;
+    Memory memory;
     CPU processor;
 
     @Before
     public void setup(){
-        memory = new int[65534];
-        memory[0xFFFC] = 0x0;
-        memory[0xFFFD] = 0x0;
+        memory = new SimpleMemory(65534);
+        memory.setByte(0x0, 0xFFFC);
+        memory.setByte(0x0, 0xFFFD);
 
         processor = new CPU(memory);
         processor.reset();
@@ -24,9 +26,9 @@ public class CPUTest {
 
     @Test
     public void testStartup(){
-        memory = new int[65534];
-        memory[0xFFFC] = 0x1;
-        memory[0xFFFD] = 0x1;
+        memory = new SimpleMemory(65534);
+        memory.setByte(0xFFFC, 0x1);
+        memory.setByte(0xFFFD, 0x1);
 
         processor = new CPU(memory);
         processor.reset();
@@ -42,7 +44,7 @@ public class CPUTest {
     @Test
     public void testLDA(){
         int[] program = {OP_LDA_I, 0xAA};
-        System.arraycopy(program, 0, memory, 0, program.length);
+        memory.setMemory(0, program);
 
         processor.step();
 
@@ -55,7 +57,7 @@ public class CPUTest {
     @Test
     public void testLDX(){
         int[] program = {OP_LDX_I, 0xAA};
-        System.arraycopy(program, 0, memory, 0, program.length);
+        memory.setMemory(0, program);
 
         processor.step();
 
@@ -68,7 +70,7 @@ public class CPUTest {
     @Test
     public void testLDY(){
         int[] program = {OP_LDY_I, 0xAA};
-        System.arraycopy(program, 0, memory, 0, program.length);
+        memory.setMemory(0, program);
 
         processor.step();
 
@@ -84,7 +86,7 @@ public class CPUTest {
                          0x1,
                          OP_ADC_I,
                          0x1};
-        System.arraycopy(program, 0, memory, 0, program.length);
+        memory.setMemory(0, program);
 
         processor.step();
         processor.step();
@@ -101,7 +103,7 @@ public class CPUTest {
                 0b00000101,
                 OP_AND_I,
                 0b00000101};
-        System.arraycopy(program, 0, memory, 0, program.length);
+        memory.setMemory(0, program);
 
         processor.step();
         processor.step();
@@ -118,7 +120,7 @@ public class CPUTest {
                 0b00010101,
                 OP_OR_I,
                 0b00000101};
-        System.arraycopy(program, 0, memory, 0, program.length);
+        memory.setMemory(0, program);
 
         processor.step();
         processor.step();
@@ -135,7 +137,7 @@ public class CPUTest {
                 0b00010101,
                 OP_EOR_I,
                 0b00000101};
-        System.arraycopy(program, 0, memory, 0, program.length);
+        memory.setMemory(0, program);
 
         processor.step();
         processor.step();
@@ -149,7 +151,7 @@ public class CPUTest {
     @Test
     public void testSEC(){
         int[] program = {OP_SEC};
-        System.arraycopy(program, 0, memory, 0, program.length);
+        memory.setMemory(0, program);
         Registers registers = processor.getRegisters();
 
         processor.step();
@@ -161,7 +163,7 @@ public class CPUTest {
     @Test
     public void testCLC(){
         int[] program = {OP_CLC};
-        System.arraycopy(program, 0, memory, 0, program.length);
+        memory.setMemory(0, program);
         Registers registers = processor.getRegisters();
 
         processor.step();
@@ -173,7 +175,7 @@ public class CPUTest {
     @Test
     public void testInvalidOpCode(){
         int[] program = {999};
-        System.arraycopy(program, 0, memory, 0, program.length);
+        memory.setMemory(0, program);
 
         try {
             processor.step();
