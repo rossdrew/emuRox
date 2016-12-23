@@ -263,6 +263,34 @@ public class CPUTest {
     }
 
     @Test
+    public void testDEY(){
+        int[] program = {OP_LDY_I, 0x01, OP_DEY};
+        memory.setMemory(0, program);
+        Registers registers = processor.getRegisters();
+
+        processor.step();
+        assert(processor.getRegisters().getRegister(Registers.REG_Y_INDEX) == 1);
+        processor.step();
+
+        assertEquals(program.length, registers.getPC());
+        assertEquals(0, processor.getRegisters().getRegister(Registers.REG_Y_INDEX));
+    }
+
+    @Test
+    public void testDEX(){
+        int[] program = {OP_LDX_I, 0x01, OP_DEX};
+        memory.setMemory(0, program);
+        Registers registers = processor.getRegisters();
+
+        processor.step();
+        assert(processor.getRegisters().getRegister(Registers.REG_X_INDEX) == 1);
+        processor.step();
+
+        assertEquals(program.length, registers.getPC());
+        assertEquals(0, processor.getRegisters().getRegister(Registers.REG_X_INDEX));
+    }
+
+    @Test
     public void testInvalidOpCode(){
         int[] program = {999};
         memory.setMemory(0, program);
