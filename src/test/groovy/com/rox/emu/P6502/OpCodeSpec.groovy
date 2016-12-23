@@ -212,7 +212,7 @@ class OpCodeSpec extends Specification {
         0x50       | 0x50        | 0xA0                | 4   | false  | true  | false | true  | "With negative overflow"
     }
 
-    @Unroll()
+    @Unroll("ADC over 16bits [#lowFirstByte|#highFirstByte] + [#lowSecondByte|#highSecondByte] = #expectedResult")
     def testMultiByteADC(){
         when:
         Memory memory = new SimpleMemory(65534);
@@ -237,10 +237,11 @@ class OpCodeSpec extends Specification {
         Z == registers.statusFlags[Registers.Z]
         O == registers.statusFlags[Registers.V]
         N == registers.statusFlags[Registers.N]
+        storedValue == memory.getByte(40)
 
         where:
-        lowFirstByte | lowSecondByte | highFirstByte | highSecondByte | expectedAccumulator | PC  | Z      | N     | C     | O     | Expected
-        0            | 0             | 0             | 0              | 0                   | 11  | true   | false | false | false | "With zero result"
+        lowFirstByte | lowSecondByte | highFirstByte | highSecondByte | expectedAccumulator | storedValue | PC  | Z      | N     | C     | O     | Expected
+        0            | 0             | 0             | 0              | 0                   | 0           | 11  |true    | false | false | false | "With zero result"
         //TODO test cases for carries and not carries
     }
 
