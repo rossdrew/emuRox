@@ -221,22 +221,4 @@ public class CPU {
 
         registers.setAccumulatorAndFlags(result & 0xFF);
     }
-
-//    private boolean isNegative(int fakeByte){
-//        return (fakeByte & STATUS_FLAG_NEGATIVE) == STATUS_FLAG_NEGATIVE;
-//    }
-//
-//    private void updateZeroFlag() {
-//        if (registers.getRegister(REG_ACCUMULATOR) == 0)
-//            registers.setFlag(STATUS_FLAG_ZERO);
-//        else
-//            registers.clearFlag(STATUS_FLAG_ZERO);
-//    }
-//
-//    private void updateNegativeFlag() {
-//        if ( isNegative(registers.getRegister(REG_ACCUMULATOR)))
-//            registers.setFlag(STATUS_FLAG_NEGATIVE);
-//        else
-//            registers.clearFlag(STATUS_FLAG_NEGATIVE);
-//    }
 }
