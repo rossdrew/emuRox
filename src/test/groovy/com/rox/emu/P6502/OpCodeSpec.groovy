@@ -356,4 +356,56 @@ class OpCodeSpec extends Specification {
         0x5        | 0x5         | 0x0                 | 5   | true   | false | false | false | "With zero result"
         0x5        | 0x6         | 0xFF                | 5   | false  | true  | false | false | "with negative result"
     }
+
+    @Unroll("INX on #firstValue = #expectedX")
+    def testINX(){
+        when:
+        Memory memory = new SimpleMemory(65534);
+        int[] program = [OP_LDX_I, firstValue, OP_INX]
+        memory.setMemory(0, program);
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        processor.step(2)
+        Registers registers = processor.getRegisters()
+
+        then:
+        registers.getRegister(Registers.REG_X_INDEX) == expectedX
+        PC == registers.getPC()
+        Z == registers.statusFlags[Registers.Z]
+        N == registers.statusFlags[Registers.N]
+
+        where:
+        firstValue | expectedX | PC  | Z      | N     | Expected
+        0          | 1         | 3   | false  | false | "Simple increment"
+        0xFE       | 0xFF      | 3   | false  | true  | "Increment to negative value"
+        0b11111111 | 0x0       | 3   | true   | false | "Increment to zero"
+    }
+
+    @Unroll("INY on #firstValue = #expectedX")
+    def testINY(){
+        when:
+        Memory memory = new SimpleMemory(65534);
+        int[] program = [OP_LDY_I, firstValue, OP_INY]
+        memory.setMemory(0, program);
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        processor.step(2)
+        Registers registers = processor.getRegisters()
+
+        then:
+        registers.getRegister(Registers.REG_Y_INDEX) == expectedX
+        PC == registers.getPC()
+        Z == registers.statusFlags[Registers.Z]
+        N == registers.statusFlags[Registers.N]
+
+        where:
+        firstValue | expectedX | PC  | Z      | N     | Expected
+        0          | 1         | 3   | false  | false | "Simple increment"
+        0xFE       | 0xFF      | 3   | false  | true  | "Increment to negative value"
+        0b11111111 | 0x0       | 3   | true   | false | "Increment to zero"
+    }
 }

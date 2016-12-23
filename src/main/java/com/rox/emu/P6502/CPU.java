@@ -117,55 +117,55 @@ public class CPU {
                 break;
 
             case OP_INX:
-                registers.setRegister(REG_X_INDEX, registers.getRegister(REG_X_INDEX) + 1);
+                registers.setXAndFlags(registers.getRegister(REG_X_INDEX) + 1);
                 break;
 
             case OP_INY:
-                registers.setRegister(REG_Y_INDEX, registers.getRegister(REG_Y_INDEX) + 1);
+                registers.setYAndFlags(registers.getRegister(REG_Y_INDEX) + 1);
                 break;
 
-            case OP_LDX_I:
-                registers.setRegister(REG_X_INDEX, nextProgramByte());
+            case OP_LDX_I: //TODO needs flag testing
+                registers.setXAndFlags(nextProgramByte());
                 break;
 
-            case OP_LDY_I:
-                registers.setRegister(REG_Y_INDEX, nextProgramByte());
+            case OP_LDY_I: //TODO needs flag testing
+                registers.setYAndFlags(nextProgramByte());
                 break;
 
             case OP_LDA_Z_IX:
-                registers.setRegister(REG_ACCUMULATOR, getByteOfMemoryXIndexedAt(nextProgramByte()));
+                registers.setAccumulatorAndFlags(getByteOfMemoryXIndexedAt(nextProgramByte()));
                 break;
 
             case OP_LDA_IY:
-                registers.setRegister(REG_ACCUMULATOR, getByteOfMemoryYIndexedAt(nextProgramWord()));
+                registers.setAccumulatorAndFlags(getByteOfMemoryYIndexedAt(nextProgramWord()));
                 break;
 
             case OP_LDA_IX:
-                registers.setRegister(REG_ACCUMULATOR, getByteOfMemoryXIndexedAt(nextProgramWord()));
+                registers.setAccumulatorAndFlags(getByteOfMemoryXIndexedAt(nextProgramWord()));
                 break;
 
             case OP_LDA_I:
-                registers.setRegister(REG_ACCUMULATOR, nextProgramByte());
+                registers.setAccumulatorAndFlags(nextProgramByte());
                 break;
 
             case OP_LDA_A:
-                registers.setRegister(REG_ACCUMULATOR, getByteOfMemoryAt(nextProgramWord()));
+                registers.setAccumulatorAndFlags(getByteOfMemoryAt(nextProgramWord()));
                 break;
 
             case OP_LDA_Z:
-                registers.setRegister(REG_ACCUMULATOR, getByteOfMemoryAt(nextProgramByte()));
+                registers.setAccumulatorAndFlags(getByteOfMemoryAt(nextProgramByte()));
                 break;
 
             case OP_AND_I:
-                registers.setRegister(REG_ACCUMULATOR, nextProgramByte() & accumulatorBeforeOperation);
+                registers.setAccumulatorAndFlags(nextProgramByte() & accumulatorBeforeOperation);
                 break;
 
             case OP_OR_I:
-                registers.setRegister(REG_ACCUMULATOR, nextProgramByte() | accumulatorBeforeOperation);
+                registers.setAccumulatorAndFlags(nextProgramByte() | accumulatorBeforeOperation);
                 break;
 
             case OP_EOR_I:
-                registers.setRegister(REG_ACCUMULATOR, nextProgramByte() ^ accumulatorBeforeOperation);
+                registers.setAccumulatorAndFlags(nextProgramByte() ^ accumulatorBeforeOperation);
                 break;
 
             case OP_ADC_I:
@@ -188,9 +188,6 @@ public class CPU {
             default:
                 throw new UnknownOpCodeException("Unknown 6502 OpCode:" + opCode + " encountered.", opCode);
         }
-
-        updateZeroFlag();
-        updateNegativeFlag();
     }
 
     private int twosComplimentOf(int byteValue){
@@ -222,24 +219,24 @@ public class CPU {
         else
             registers.clearFlag(STATUS_FLAG_OVERFLOW);
 
-        registers.setRegister(REG_ACCUMULATOR, result & 0xFF);
+        registers.setAccumulatorAndFlags(result & 0xFF);
     }
 
-    private boolean isNegative(int fakeByte){
-        return (fakeByte & STATUS_FLAG_NEGATIVE) == STATUS_FLAG_NEGATIVE;
-    }
-
-    private void updateZeroFlag() {
-        if (registers.getRegister(REG_ACCUMULATOR) == 0)
-            registers.setFlag(STATUS_FLAG_ZERO);
-        else
-            registers.clearFlag(STATUS_FLAG_ZERO);
-    }
-
-    private void updateNegativeFlag() {
-        if ( isNegative(registers.getRegister(REG_ACCUMULATOR)))
-            registers.setFlag(STATUS_FLAG_NEGATIVE);
-        else
-            registers.clearFlag(STATUS_FLAG_NEGATIVE);
-    }
+//    private boolean isNegative(int fakeByte){
+//        return (fakeByte & STATUS_FLAG_NEGATIVE) == STATUS_FLAG_NEGATIVE;
+//    }
+//
+//    private void updateZeroFlag() {
+//        if (registers.getRegister(REG_ACCUMULATOR) == 0)
+//            registers.setFlag(STATUS_FLAG_ZERO);
+//        else
+//            registers.clearFlag(STATUS_FLAG_ZERO);
+//    }
+//
+//    private void updateNegativeFlag() {
+//        if ( isNegative(registers.getRegister(REG_ACCUMULATOR)))
+//            registers.setFlag(STATUS_FLAG_NEGATIVE);
+//        else
+//            registers.clearFlag(STATUS_FLAG_NEGATIVE);
+//    }
 }

@@ -60,6 +60,24 @@ public class Registers {
         return register[registerID];
     }
 
+    public void setAccumulatorAndFlags(int value){
+        setRegister(REG_ACCUMULATOR, value);
+        updateZeroFlag(REG_ACCUMULATOR);
+        updateNegativeFlag(REG_ACCUMULATOR);
+    }
+
+    public void setXAndFlags(int value){
+        setRegister(REG_X_INDEX, value & 0xFF);
+        updateZeroFlag(REG_X_INDEX);
+        updateNegativeFlag(REG_X_INDEX);
+    }
+
+    public void setYAndFlags(int value){
+        setRegister(REG_Y_INDEX, value & 0xFF);
+        updateZeroFlag(REG_Y_INDEX);
+        updateNegativeFlag(REG_Y_INDEX);
+    }
+
     public void setPC(int wordPC){
         setRegister(REG_PC_HIGH, wordPC >> 8);
         setRegister(REG_PC_LOW, wordPC & 0xFF);
@@ -121,6 +139,20 @@ public class Registers {
         register[REG_STATUS] = (~flagPlaceValue) & register[REG_STATUS];
     }
 
+    private void updateZeroFlag(int forRegisterID) {
+        if (getRegister(forRegisterID) == 0)
+            setFlag(STATUS_FLAG_ZERO);
+        else
+            clearFlag(STATUS_FLAG_ZERO);
+    }
+
+    private void updateNegativeFlag(int forRegisterID) {
+        if ( isNegative(getRegister(forRegisterID)))
+            setFlag(STATUS_FLAG_NEGATIVE);
+        else
+            clearFlag(STATUS_FLAG_NEGATIVE);
+    }
+
     public boolean[] getStatusFlags(){
         boolean[] flags = new boolean[8];
 
@@ -131,5 +163,9 @@ public class Registers {
         }
 
         return flags;
+    }
+
+    private boolean isNegative(int fakeByte){
+        return (fakeByte & STATUS_FLAG_NEGATIVE) == STATUS_FLAG_NEGATIVE;
     }
 }
