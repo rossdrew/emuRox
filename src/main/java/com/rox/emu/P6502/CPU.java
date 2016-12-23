@@ -49,6 +49,14 @@ public class CPU {
         return memoryByte;
     }
 
+    private int getByteOfMemoryXIndexedAt(int location){
+        return getByteOfMemoryAt(location, registers.getRegister(Registers.REG_X_INDEX));
+    }
+
+    private int getByteOfMemoryYIndexedAt(int location){
+        return getByteOfMemoryAt(location, registers.getRegister(Registers.REG_Y_INDEX));
+    }
+
     private int getByteOfMemoryAt(int location){
         return getByteOfMemoryAt(location, 0);
     }
@@ -117,27 +125,24 @@ public class CPU {
                 registers.setRegister(Registers.REG_Y_INDEX, nextProgramByte());
                 break;
 
-            case OP_LDA_Z_IX: {
-                int index = registers.getRegister(Registers.REG_X_INDEX);
-                registers.setRegister(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(nextProgramByte(), index));
-            }
+            case OP_LDA_Z_IX:
+                registers.setRegister(Registers.REG_ACCUMULATOR, getByteOfMemoryXIndexedAt(nextProgramByte()));
                 break;
 
             case OP_LDA_IY:
-            case OP_LDA_IX: {
-                int index = registers.getRegister(opCode == OP_LDA_IX ? Registers.REG_X_INDEX : Registers.REG_Y_INDEX);
-                registers.setRegister(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(nextProgramWord(), index));
-            }
-            break;
+                registers.setRegister(Registers.REG_ACCUMULATOR, getByteOfMemoryYIndexedAt(nextProgramWord()));
+                break;
+
+            case OP_LDA_IX:
+                registers.setRegister(Registers.REG_ACCUMULATOR, getByteOfMemoryXIndexedAt(nextProgramWord()));
+                break;
 
             case OP_LDA_I:
                 registers.setRegister(Registers.REG_ACCUMULATOR, nextProgramByte());
                 break;
 
-            case OP_LDA_A: {
-                int pointerWord = nextProgramWord();
-                registers.setRegister(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(pointerWord));
-            }
+            case OP_LDA_A: 
+                registers.setRegister(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(nextProgramWord()));
                 break;
 
             case OP_LDA_Z:
