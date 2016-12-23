@@ -3,9 +3,7 @@ package com.rox.emu.P6502;
 import com.rox.emu.Memory;
 import com.rox.emu.SimpleMemory;
 import com.rox.emu.UnknownOpCodeException;
-import junit.framework.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static junit.framework.TestCase.assertEquals;
@@ -234,6 +232,34 @@ public class CPUTest {
 
         assertEquals(5, registers.getPC());
         assertEquals(false, registers.getStatusFlags()[Registers.V]);
+    }
+
+    @Test
+    public void testINX(){
+        int[] program = {OP_LDX_I, 0x01, OP_INX};
+        memory.setMemory(0, program);
+        Registers registers = processor.getRegisters();
+
+        processor.step();
+        assert(processor.getRegisters().getRegister(Registers.REG_X_INDEX) == 1);
+        processor.step();
+
+        assertEquals(program.length, registers.getPC());
+        assertEquals(2, processor.getRegisters().getRegister(Registers.REG_X_INDEX));
+    }
+
+    @Test
+    public void testINY(){
+        int[] program = {OP_LDY_I, 0x01, OP_INY};
+        memory.setMemory(0, program);
+        Registers registers = processor.getRegisters();
+
+        processor.step();
+        assert(processor.getRegisters().getRegister(Registers.REG_Y_INDEX) == 1);
+        processor.step();
+
+        assertEquals(program.length, registers.getPC());
+        assertEquals(2, processor.getRegisters().getRegister(Registers.REG_Y_INDEX));
     }
 
     @Test

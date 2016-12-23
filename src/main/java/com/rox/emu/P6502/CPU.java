@@ -116,6 +116,14 @@ public class CPU {
                 registers.clearFlag(STATUS_FLAG_OVERFLOW);
                 break;
 
+            case OP_INX:
+                registers.setRegister(REG_X_INDEX, registers.getRegister(REG_X_INDEX) + 1);
+                break;
+
+            case OP_INY:
+                registers.setRegister(REG_Y_INDEX, registers.getRegister(REG_Y_INDEX) + 1);
+                break;
+
             case OP_LDX_I:
                 registers.setRegister(REG_X_INDEX, nextProgramByte());
                 break;
