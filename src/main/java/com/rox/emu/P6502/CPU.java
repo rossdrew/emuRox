@@ -176,30 +176,20 @@ public class CPU {
                 registers.setAccumulatorAndFlags(nextProgramByte() ^ accumulatorBeforeOperation);
                 break;
 
-            case OP_ADC_Z: {
-                int carry = (registers.getFlag(STATUS_FLAG_CARRY) ? 1 : 0);
-                executeADC(getByteOfMemoryAt(nextProgramByte()) + carry);
+            case OP_ADC_Z:
+                performADC(getByteOfMemoryAt(nextProgramByte()));
                 break;
-            }
 
-            case OP_ADC_I: {
-                int carry = (registers.getFlag(STATUS_FLAG_CARRY) ? 1 : 0);
-                executeADC(nextProgramByte() + carry);
+            case OP_ADC_I:
+                performADC(nextProgramByte());
                 break;
-            }
 
-            case OP_ADC_A: {
-                int carry = (registers.getFlag(STATUS_FLAG_CARRY) ? 1 : 0);
-                executeADC(getByteOfMemoryAt(nextProgramWord()) + carry);
+            case OP_ADC_A:
+                performADC(getByteOfMemoryAt(nextProgramWord()));
                 break;
-            }
 
-            //(1) compliment of carry flag added (so subtracted) as well
-            //(2) set carry if no borrow required (A >= M[v])
             case OP_SBC_I:
-                registers.setFlag(STATUS_FLAG_NEGATIVE);
-                int borrow = (registers.getFlag(STATUS_FLAG_CARRY) ? 0 : 1);
-                executeADC(twosComplimentOf(nextProgramByte() + borrow));
+                performSBC(nextProgramByte());
                 break;
 
             case OP_STA_Z:
@@ -209,6 +199,19 @@ public class CPU {
             default:
                 throw new UnknownOpCodeException("Unknown 6502 OpCode:" + opCode + " encountered.", opCode);
         }
+    }
+    
+    private void performADC(int byteTerm){
+        int carry = (registers.getFlag(STATUS_FLAG_CARRY) ? 1 : 0);
+        addToAccumulator(byteTerm + carry);
+    }
+
+    //(1) compliment of carry flag added (so subtracted) as well
+    //(2) set carry if no borrow required (A >= M[v])
+    private void performSBC(int byteTerm){
+        registers.setFlag(STATUS_FLAG_NEGATIVE);
+        int borrow = (registers.getFlag(STATUS_FLAG_CARRY) ? 0 : 1);
+        addToAccumulator(twosComplimentOf(byteTerm + borrow));
     }
 
     private int twosComplimentOf(int byteValue){
@@ -223,7 +226,7 @@ public class CPU {
      *
      * @param term term to add to the accumulator
      */
-    private void executeADC(int term){
+    private void addToAccumulator(int term){
         int result = registers.getRegister(REG_ACCUMULATOR) + term;
 
         //Set Carry, if bit 8 is set on new accumulator value, ignoring in 2s compliment addition (subtraction)
