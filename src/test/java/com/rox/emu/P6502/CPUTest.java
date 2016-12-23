@@ -96,17 +96,18 @@ public class CPUTest {
 
     @Test
     public void testADC(){
-        int[] program = {OP_LDA_I,
+        int[] program = {OP_CLC,
+                         OP_LDA_I,
                          0x1,
                          OP_ADC_I,
                          0x1};
         memory.setMemory(0, program);
 
-        processor.step(2);
+        processor.step(3);
 
         Registers registers = processor.getRegisters();
         assertEquals(0x2, registers.getRegister(registers.REG_ACCUMULATOR));  //Accumulator is 0x2 == (0x1 + 0x1) == (mem[0x1] + mem[0x3])
-        assertEquals(4, registers.getPC());
+        assertEquals(5, registers.getPC());
         assertEquals(0x0, registers.getRegister(registers.REG_STATUS) & 0);
     }
 
@@ -139,7 +140,7 @@ public class CPUTest {
     }
 
     @Test
-    @Ignore //TODO (1) carry flag compliment subtracted as well, (2) set carry if no borrow required (A >= M[v])
+    //@Ignore //TODO (1) carry flag compliment subtracted as well, (2) set carry if no borrow required (A >= M[v])
     public void testSBCWithCarry(){
         int[] program = {OP_CLC, OP_LDA_I, 0xA, OP_SBC_I, 0x5};
         memory.setMemory(0, program);
