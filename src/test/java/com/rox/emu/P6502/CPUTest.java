@@ -223,6 +223,20 @@ public class CPUTest {
     }
 
     @Test
+    public void testCLV(){
+        int[] program = {OP_LDA_I, 0x50, OP_ADC_I, 0x50, OP_CLV};
+        memory.setMemory(0, program);
+        Registers registers = processor.getRegisters();
+
+        processor.step(2);
+        assert(processor.getRegisters().getStatusFlags()[Registers.V]);
+        processor.step();
+
+        assertEquals(5, registers.getPC());
+        assertEquals(false, registers.getStatusFlags()[Registers.V]);
+    }
+
+    @Test
     public void testInvalidOpCode(){
         int[] program = {999};
         memory.setMemory(0, program);

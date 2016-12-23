@@ -9,6 +9,7 @@ public class InstructionSet {
     public static final int OP_LDA_I = 0xA9;
     public static final int OP_LDA_A = 0xAD;
     public static final int OP_LDA_Z_IX = 0xB5;
+    public static final int OP_CLV = 0xB8;
     public static final int OP_LDA_IY = 0xB9;
     public static final int OP_LDA_IX = 0xBD;
     public static final int OP_AND_I = 0x29;
@@ -28,6 +29,7 @@ public class InstructionSet {
             case OP_LDA_I:      return "LDA (Immediate)";
             case OP_LDA_A:      return "LDA (Absolute)";
             case OP_LDA_Z_IX:   return "LDA (Zero Page[X])";
+            case OP_CLV:        return "Clear Overflow";
             case OP_LDA_IY:     return "LDA ([Y])";
             case OP_LDA_IX:     return "LDA ([X])";
             case OP_AND_I:      return "AND (Immediate)";

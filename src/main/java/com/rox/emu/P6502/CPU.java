@@ -124,6 +124,10 @@ public class CPU {
                 registers.clearFlag(STATUS_FLAG_CARRY);
                 break;
 
+            case OP_CLV:
+                registers.clearFlag(STATUS_FLAG_OVERFLOW);
+                break;
+
             case OP_LDX_I:
                 registers.setRegister(REG_X_INDEX, nextProgramByte());
                 break;
