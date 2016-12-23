@@ -5,6 +5,7 @@ package com.rox.emu.P6502;
  */
 public class InstructionSet {
     public static final int OP_ADC_I = 0x69;
+    public static final int OP_ADC_Z = 0x65;
     public static final int OP_LDA_Z = 0xA5;
     public static final int OP_LDA_I = 0xA9;
     public static final int OP_LDA_A = 0xAD;
@@ -29,6 +30,7 @@ public class InstructionSet {
     public static String getName(int opCode){
         switch (opCode){
             case OP_ADC_I:      return "ADC (Immediate)";
+            case OP_ADC_Z:      return "ADC (Zero Page)";
             case OP_LDA_Z:      return "LDA (Zero Page)";
             case OP_LDA_I:      return "LDA (Immediate)";
             case OP_LDA_A:      return "LDA (Absolute)";
