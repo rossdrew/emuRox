@@ -106,7 +106,6 @@ public class CPU {
                 break;
 
             case OP_CLC:
-                System.out.println("Instruction: Implied CLC...");
                 registers.clearFlag(Registers.STATUS_FLAG_CARRY);
                 break;
 
