@@ -289,6 +289,37 @@ class OpCodeSpec extends Specification {
         where:
         firstValue | secondValue | expectedAccumulator | PC  | Z      | N     | C     | O     | Expected
         0x0        | 0x0         | 0x0                 | 4   | true   | false | false | false | "With zero result"
+        0x50       | 0xD0        | 0x20                | 4   | false  | false | true  | false | "With positive, carried result"
+        0x50       | 0x50        | 0xA0                | 4   | false  | true  | false | true  | "With negative overflow"
+    }
+
+    @Unroll("ADC Absolute #Expected:  #firstValue + #secondValue = #expectedAccumulator in Accumulator.")
+    def testADCAbsolute(){
+        when:
+        Memory memory = new SimpleMemory(65534);
+        int[] program = [OP_LDA_I, firstValue, OP_ADC_A, 0x2C, 0x1]
+        memory.setMemory(0, program);
+        memory.setByte(300, secondValue)
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        processor.step(2)
+        Registers registers = processor.getRegisters()
+
+        then:
+        registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
+        PC == registers.getPC()
+        C == registers.statusFlags[Registers.C]
+        Z == registers.statusFlags[Registers.Z]
+        O == registers.statusFlags[Registers.V]
+        N == registers.statusFlags[Registers.N]
+
+        where:
+        firstValue | secondValue | expectedAccumulator | PC  | Z      | N     | C     | O     | Expected
+        0x0        | 0x0         | 0x0                 | 4   | true   | false | false | false | "With zero result"
+        0x50       | 0xD0        | 0x20                | 4   | false  | false | true  | false | "With positive, carried result"
+        0x50       | 0x50        | 0xA0                | 4   | false  | true  | false | true  | "With negative overflow"
     }
 
     @Unroll("ADC 16bit [#lowFirstByte|#highFirstByte] + [#lowSecondByte|#highSecondByte] = #Expected")
