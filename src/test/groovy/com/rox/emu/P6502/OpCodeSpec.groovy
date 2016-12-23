@@ -545,7 +545,7 @@ class OpCodeSpec extends Specification {
         0b11111111 | 0x0       | 3   | true   | false | "Increment to zero"
     }
 
-    @Unroll("DEY on #firstValue = #expectedX")
+    @Unroll("DEY on #firstValue = #expectedY")
     def testDEY(){
         when:
         Memory memory = new SimpleMemory(65534);

@@ -200,7 +200,7 @@ public class CPU {
                 throw new UnknownOpCodeException("Unknown 6502 OpCode:" + opCode + " encountered.", opCode);
         }
     }
-    
+
     private void performADC(int byteTerm){
         int carry = (registers.getFlag(STATUS_FLAG_CARRY) ? 1 : 0);
         addToAccumulator(byteTerm + carry);
