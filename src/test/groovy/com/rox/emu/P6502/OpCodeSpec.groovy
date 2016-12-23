@@ -212,7 +212,7 @@ class OpCodeSpec extends Specification {
         0x50       | 0x50        | 0xA0                | 4   | false  | true  | false | true  | "With negative overflow"
     }
 
-    @Unroll("ADC over 16bits [#lowFirstByte|#highFirstByte] + [#lowSecondByte|#highSecondByte] = #expectedResult")
+    @Unroll("ADC over 16bits [#lowFirstByte|#highFirstByte] + [#lowSecondByte|#highSecondByte] = #Expected")
     def testMultiByteADC(){
         when:
         Memory memory = new SimpleMemory(65534);
@@ -244,8 +244,8 @@ class OpCodeSpec extends Specification {
         0            | 0             | 0             | 0              | 0                   | 0           | 11  |true  | false | false | false | "With zero result"
         0x50         | 0xD0          | 0             | 0              | 1                   | 0x20        | 11  |false | false | true  | false | "With simple carry to high byte"
         0x50         | 0xD3          | 0             | 1              | 2                   | 0x23        | 11  |false | false | true  | false | "With carry to high byte and changed high"
+        0x0          | 0x0           | 0x50          | 0xD0           | 0x20                | 0           | 11  |false | false | true  | false | "With overflow"
         //TODO negative result
-        //TODO overflow result
     }
 
     @Unroll("AND Immediate #Expected:  #firstValue & #secondValue = #expectedAccumulator in Accumulator.")
