@@ -51,7 +51,7 @@ public class CPUTest {
         Registers registers = processor.getRegisters();
         assertEquals(0xAA, registers.getRegister(Registers.REG_ACCUMULATOR));
         assertEquals(0x0, 0);
-        assertEquals(2, registers.getPC());
+        assertEquals(program.length, registers.getPC());
     }
 
     @Test
@@ -62,7 +62,7 @@ public class CPUTest {
         processor.step(2);
 
         Registers registers = processor.getRegisters();
-        assertEquals(4, registers.getPC());
+        assertEquals(program.length, registers.getPC());
         assertEquals(0xAA, memory.getByte(100));
     }
 
@@ -76,7 +76,7 @@ public class CPUTest {
         Registers registers = processor.getRegisters();
         assertEquals(0xAA, registers.getRegister(Registers.REG_X_INDEX));
         assertEquals(0x0, 0);
-        assertEquals(2, registers.getPC());
+        assertEquals(program.length, registers.getPC());
     }
 
     @Test
@@ -89,7 +89,7 @@ public class CPUTest {
         Registers registers = processor.getRegisters();
         assertEquals(0xAA, registers.getRegister(Registers.REG_Y_INDEX));
         assertEquals(0x0, 0);
-        assertEquals(2, registers.getPC());
+        assertEquals(program.length, registers.getPC());
     }
 
     @Test
@@ -105,7 +105,7 @@ public class CPUTest {
 
         Registers registers = processor.getRegisters();
         assertEquals(0x2, registers.getRegister(Registers.REG_ACCUMULATOR));  //Accumulator is 0x2 == (0x1 + 0x1) == (mem[0x1] + mem[0x3])
-        assertEquals(5, registers.getPC());
+        assertEquals(program.length, registers.getPC());
         assertEquals(0x0, 0);
     }
 
@@ -122,7 +122,7 @@ public class CPUTest {
 
         Registers registers = processor.getRegisters();
         assertEquals(0x3, registers.getRegister(Registers.REG_ACCUMULATOR));
-        assertEquals(5, registers.getPC());
+        assertEquals(program.length, registers.getPC());
         assertEquals(0x0, 0);
     }
 
@@ -134,7 +134,7 @@ public class CPUTest {
 
         Registers registers = processor.getRegisters();
         assertEquals(0x5, registers.getRegister(Registers.REG_ACCUMULATOR));
-        assertEquals(5, registers.getPC());
+        assertEquals(program.length, registers.getPC());
     }
 
     @Test
@@ -145,7 +145,7 @@ public class CPUTest {
 
         Registers registers = processor.getRegisters();
         assertEquals(0x4, registers.getRegister(Registers.REG_ACCUMULATOR));
-        assertEquals(5, registers.getPC());
+        assertEquals(program.length, registers.getPC());
     }
 
     @Test
@@ -160,7 +160,7 @@ public class CPUTest {
 
         Registers registers = processor.getRegisters();
         assertEquals(0b00000101, registers.getRegister(Registers.REG_ACCUMULATOR));
-        assertEquals(4, registers.getPC());
+        assertEquals(program.length, registers.getPC());
         assertEquals(0x0, 0);
     }
 
@@ -176,7 +176,7 @@ public class CPUTest {
 
         Registers registers = processor.getRegisters();
         assertEquals(0b00010101, registers.getRegister(Registers.REG_ACCUMULATOR));
-        assertEquals(4, registers.getPC());
+        assertEquals(program.length, registers.getPC());
         assertEquals(0x0, 0);
     }
 
@@ -192,7 +192,7 @@ public class CPUTest {
 
         Registers registers = processor.getRegisters();
         assertEquals(0b00010000, registers.getRegister(Registers.REG_ACCUMULATOR));
-        assertEquals(4, registers.getPC());
+        assertEquals(program.length, registers.getPC());
         assertEquals(0x0, 0);
     }
 
@@ -204,7 +204,7 @@ public class CPUTest {
 
         processor.step();
 
-        assertEquals(1, registers.getPC());
+        assertEquals(program.length, registers.getPC());
         assertEquals(true, registers.getStatusFlags()[0]);
     }
 
@@ -216,7 +216,7 @@ public class CPUTest {
 
         processor.step();
 
-        assertEquals(1, registers.getPC());
+        assertEquals(program.length, registers.getPC());
         assertEquals(false, registers.getStatusFlags()[0]);
     }
 
@@ -230,7 +230,7 @@ public class CPUTest {
         assert(processor.getRegisters().getStatusFlags()[Registers.V]);
         processor.step();
 
-        assertEquals(5, registers.getPC());
+        assertEquals(program.length, registers.getPC());
         assertEquals(false, registers.getStatusFlags()[Registers.V]);
     }
 
