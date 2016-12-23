@@ -435,6 +435,32 @@ class OpCodeSpec extends Specification {
         0b11111111 | 0x0       | 3   | true   | false | "Increment to zero"
     }
 
+    @Unroll("DEX on #firstValue = #expectedX")
+    def testDEX(){
+        when:
+        Memory memory = new SimpleMemory(65534);
+        int[] program = [OP_LDX_I, firstValue, OP_DEX]
+        memory.setMemory(0, program);
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        processor.step(2)
+        Registers registers = processor.getRegisters()
+
+        then:
+        registers.getRegister(Registers.REG_X_INDEX) == expectedX
+        PC == registers.getPC()
+        Z == registers.statusFlags[Registers.Z]
+        N == registers.statusFlags[Registers.N]
+
+        where:
+        firstValue | expectedX | PC  | Z      | N     | Expected
+        5          | 4         | 3   | false  | false | "Simple increment"
+        0          | 0xFF      | 3   | false  | true  | "Decrement to negative value"
+        1          | 0x0       | 3   | true   | false | "Increment to zero"
+    }
+
     @Unroll("INY on #firstValue = #expectedX")
     def testINY(){
         when:
@@ -459,5 +485,31 @@ class OpCodeSpec extends Specification {
         0          | 1         | 3   | false  | false | "Simple increment"
         0xFE       | 0xFF      | 3   | false  | true  | "Increment to negative value"
         0b11111111 | 0x0       | 3   | true   | false | "Increment to zero"
+    }
+
+    @Unroll("DEY on #firstValue = #expectedX")
+    def testDEY(){
+        when:
+        Memory memory = new SimpleMemory(65534);
+        int[] program = [OP_LDY_I, firstValue, OP_DEY]
+        memory.setMemory(0, program);
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        processor.step(2)
+        Registers registers = processor.getRegisters()
+
+        then:
+        registers.getRegister(Registers.REG_Y_INDEX) == expectedY
+        PC == registers.getPC()
+        Z == registers.statusFlags[Registers.Z]
+        N == registers.statusFlags[Registers.N]
+
+        where:
+        firstValue | expectedY | PC  | Z      | N     | Expected
+        5          | 4         | 3   | false  | false | "Simple increment"
+        0          | 0xFF      | 3   | false  | true  | "Decrement to negative value"
+        1          | 0x0       | 3   | true   | false | "Increment to zero"
     }
 }
