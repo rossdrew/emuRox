@@ -176,10 +176,17 @@ public class CPU {
                 registers.setAccumulatorAndFlags(nextProgramByte() ^ accumulatorBeforeOperation);
                 break;
 
-            case OP_ADC_I:
+            case OP_ADC_I: {
                 int carry = (registers.getFlag(STATUS_FLAG_CARRY) ? 1 : 0);
                 executeADC(nextProgramByte() + carry);
                 break;
+            }
+
+            case OP_ADC_Z: {
+                int carry = (registers.getFlag(STATUS_FLAG_CARRY) ? 1 : 0);
+                executeADC(getByteOfMemoryAt(nextProgramByte()) + carry);
+                break;
+            }
 
             //(1) compliment of carry flag added (so subtracted) as well
             //(2) set carry if no borrow required (A >= M[v])
