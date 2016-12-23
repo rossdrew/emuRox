@@ -110,11 +110,28 @@ public class CPUTest {
     }
 
     @Test
+    public void testADCWithCarry(){
+        int[] program = {OP_SEC,
+                         OP_LDA_I,
+                         0x1,
+                         OP_ADC_I,
+                         0x1};
+        memory.setMemory(0, program);
+
+        processor.step(3);
+
+        Registers registers = processor.getRegisters();
+        assertEquals(0x3, registers.getRegister(registers.REG_ACCUMULATOR));
+        assertEquals(5, registers.getPC());
+        assertEquals(0x0, registers.getRegister(registers.REG_STATUS) & 0);
+    }
+
+    @Test
     public void testAND(){
         int[] program = {OP_LDA_I,
-                0b00000101,
-                OP_AND_I,
-                0b00000101};
+                         0b00000101,
+                         OP_AND_I,
+                         0b00000101};
         memory.setMemory(0, program);
 
         processor.step(2);
@@ -128,9 +145,9 @@ public class CPUTest {
     @Test
     public void testOR(){
         int[] program = {OP_LDA_I,
-                0b00010101,
-                OP_OR_I,
-                0b00000101};
+                         0b00010101,
+                         OP_OR_I,
+                         0b00000101};
         memory.setMemory(0, program);
 
         processor.step(2);
@@ -144,9 +161,9 @@ public class CPUTest {
     @Test
     public void testEOR(){
         int[] program = {OP_LDA_I,
-                0b00010101,
-                OP_EOR_I,
-                0b00000101};
+                         0b00010101,
+                         OP_EOR_I,
+                         0b00000101};
         memory.setMemory(0, program);
 
         processor.step(2);

@@ -199,10 +199,13 @@ public class CPU {
             registers.clearFlag(Registers.STATUS_FLAG_OVERFLOW);
 
         //Set Carry, if bit 8 is set, ignoring in 2s compliment addition (subtraction)
-        if (!registers.getFlag(Registers.STATUS_FLAG_NEGATIVE) && ((result & 0x100) == 0x100))
-            registers.setFlag(Registers.STATUS_FLAG_CARRY);
-        else
+        if (!registers.getFlag(Registers.STATUS_FLAG_NEGATIVE)){
+            result += registers.getFlag(Registers.STATUS_FLAG_CARRY) ? 1 : 0;  //XXX CARRY: Only for ADC, ABC to be looked into
+            if ((result & Registers.CARRY_INDICATOR_BIT) == Registers.CARRY_INDICATOR_BIT)
+                registers.setFlag(Registers.STATUS_FLAG_CARRY);
+        }else
             registers.clearFlag(Registers.STATUS_FLAG_CARRY);
+
 
         registers.setRegister(Registers.REG_ACCUMULATOR, result & 0xFF);
     }
