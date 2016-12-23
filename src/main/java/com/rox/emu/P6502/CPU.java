@@ -176,15 +176,21 @@ public class CPU {
                 registers.setAccumulatorAndFlags(nextProgramByte() ^ accumulatorBeforeOperation);
                 break;
 
+            case OP_ADC_Z: {
+                int carry = (registers.getFlag(STATUS_FLAG_CARRY) ? 1 : 0);
+                executeADC(getByteOfMemoryAt(nextProgramByte()) + carry);
+                break;
+            }
+
             case OP_ADC_I: {
                 int carry = (registers.getFlag(STATUS_FLAG_CARRY) ? 1 : 0);
                 executeADC(nextProgramByte() + carry);
                 break;
             }
 
-            case OP_ADC_Z: {
+            case OP_ADC_A: {
                 int carry = (registers.getFlag(STATUS_FLAG_CARRY) ? 1 : 0);
-                executeADC(getByteOfMemoryAt(nextProgramByte()) + carry);
+                executeADC(getByteOfMemoryAt(nextProgramWord()) + carry);
                 break;
             }
 

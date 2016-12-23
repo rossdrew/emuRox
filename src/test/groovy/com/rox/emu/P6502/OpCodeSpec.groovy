@@ -317,9 +317,9 @@ class OpCodeSpec extends Specification {
 
         where:
         firstValue | secondValue | expectedAccumulator | PC  | Z      | N     | C     | O     | Expected
-        0x0        | 0x0         | 0x0                 | 4   | true   | false | false | false | "With zero result"
-        0x50       | 0xD0        | 0x20                | 4   | false  | false | true  | false | "With positive, carried result"
-        0x50       | 0x50        | 0xA0                | 4   | false  | true  | false | true  | "With negative overflow"
+        0x0        | 0x0         | 0x0                 | 5   | true   | false | false | false | "With zero result"
+        0x50       | 0xD0        | 0x20                | 5   | false  | false | true  | false | "With positive, carried result"
+        0x50       | 0x50        | 0xA0                | 5   | false  | true  | false | true  | "With negative overflow"
     }
 
     @Unroll("ADC 16bit [#lowFirstByte|#highFirstByte] + [#lowSecondByte|#highSecondByte] = #Expected")
