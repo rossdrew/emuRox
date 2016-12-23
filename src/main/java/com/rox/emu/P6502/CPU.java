@@ -87,6 +87,11 @@ public class CPU {
         return newWord;
     }
 
+    public void step(int steps){
+        for (int i=0; i<steps; i++)
+            step();
+    }
+
     public void step() {
         System.out.println("*** STEP >>>");
 

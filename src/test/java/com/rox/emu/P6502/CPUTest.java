@@ -60,8 +60,7 @@ public class CPUTest {
         int[] program = {OP_LDA_I, 0xAA, OP_STA_Z, 100};
         memory.setMemory(0, program);
 
-        processor.step();
-        processor.step();
+        processor.step(2);
 
         Registers registers = processor.getRegisters();
         assertEquals(4, registers.getPC());
@@ -102,8 +101,7 @@ public class CPUTest {
                          0x1};
         memory.setMemory(0, program);
 
-        processor.step();
-        processor.step();
+        processor.step(2);
 
         Registers registers = processor.getRegisters();
         assertEquals(0x2, registers.getRegister(registers.REG_ACCUMULATOR));  //Accumulator is 0x2 == (0x1 + 0x1) == (mem[0x1] + mem[0x3])
@@ -119,8 +117,7 @@ public class CPUTest {
                 0b00000101};
         memory.setMemory(0, program);
 
-        processor.step();
-        processor.step();
+        processor.step(2);
 
         Registers registers = processor.getRegisters();
         assertEquals(0b00000101, registers.getRegister(registers.REG_ACCUMULATOR));
@@ -136,8 +133,7 @@ public class CPUTest {
                 0b00000101};
         memory.setMemory(0, program);
 
-        processor.step();
-        processor.step();
+        processor.step(2);
 
         Registers registers = processor.getRegisters();
         assertEquals(0b00010101, registers.getRegister(registers.REG_ACCUMULATOR));
@@ -153,8 +149,7 @@ public class CPUTest {
                 0b00000101};
         memory.setMemory(0, program);
 
-        processor.step();
-        processor.step();
+        processor.step(2);
 
         Registers registers = processor.getRegisters();
         assertEquals(0b00010000, registers.getRegister(registers.REG_ACCUMULATOR));

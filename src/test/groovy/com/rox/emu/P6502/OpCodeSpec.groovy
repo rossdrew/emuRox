@@ -112,8 +112,7 @@ class OpCodeSpec extends Specification {
         and:
         CPU processor = new CPU(memory)
         processor.reset()
-        processor.step()
-        processor.step()
+        processor.step(2)
         Registers registers = processor.getRegisters()
 
         then:
@@ -141,8 +140,7 @@ class OpCodeSpec extends Specification {
         and:
         CPU processor = new CPU(memory)
         processor.reset()
-        processor.step()
-        processor.step()
+        processor.step(2)
         Registers registers = processor.getRegisters()
 
         then:
@@ -170,8 +168,7 @@ class OpCodeSpec extends Specification {
         and:
         CPU processor = new CPU(memory)
         processor.reset()
-        processor.step()
-        processor.step()
+        processor.step(2)
         Registers registers = processor.getRegisters()
 
         then:
@@ -197,8 +194,7 @@ class OpCodeSpec extends Specification {
         and:
         CPU processor = new CPU(memory)
         processor.reset()
-        processor.step()
-        processor.step()
+        processor.step(2)
         Registers registers = processor.getRegisters()
 
         then:
@@ -233,12 +229,7 @@ class OpCodeSpec extends Specification {
         and:
         CPU processor = new CPU(memory)
         processor.reset()
-        processor.step()  //XXX Neater way to do all this?
-        processor.step()
-        processor.step()
-        processor.step()
-        processor.step()
-        processor.step()
+        processor.step(6)
         Registers registers = processor.getRegisters()
 
         then:
@@ -265,8 +256,7 @@ class OpCodeSpec extends Specification {
         and:
         CPU processor = new CPU(memory)
         processor.reset()
-        processor.step()
-        processor.step()
+        processor.step(2)
         Registers registers = processor.getRegisters()
 
         then:
@@ -293,8 +283,7 @@ class OpCodeSpec extends Specification {
         and:
         CPU processor = new CPU(memory)
         processor.reset()
-        processor.step()
-        processor.step()
+        processor.step(2)
         Registers registers = processor.getRegisters()
 
         then:
@@ -322,8 +311,7 @@ class OpCodeSpec extends Specification {
         and:
         CPU processor = new CPU(memory)
         processor.reset()
-        processor.step()
-        processor.step()
+        processor.step(2)
         Registers registers = processor.getRegisters()
 
         then:
@@ -349,9 +337,7 @@ class OpCodeSpec extends Specification {
         and:
         CPU processor = new CPU(memory)
         processor.reset()
-        processor.step()
-        processor.step()
-        processor.step()
+        processor.step(3)
         Registers registers = processor.getRegisters()
 
         then:
