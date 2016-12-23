@@ -6,7 +6,7 @@ package com.rox.emu;
  * @author rossdrew
  */
 public class SimpleMemory implements Memory{
-    private int[] memoryArray;
+    private final int[] memoryArray;
 
     public SimpleMemory(int size){
         memoryArray = new int[size];

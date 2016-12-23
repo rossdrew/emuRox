@@ -5,20 +5,14 @@ import static com.rox.emu.P6502.Registers.*;
 
 import com.rox.emu.Memory;
 import com.rox.emu.UnknownOpCodeException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.logging.Level;
 
 /**
  * @author rossdrew
  */
 public class CPU {
-    private Logger LOG = LoggerFactory.getLogger(CPU.class);
+    private final Memory memory;
 
-    private Memory memory;
-
-    private Registers registers = new Registers();
+    private final Registers registers = new Registers();
 
     public CPU(Memory memory) {
         this.memory = memory;
@@ -38,16 +32,12 @@ public class CPU {
 
     /**
      * Get the value of the 16 bit Program Counter (PC) and increment
-     *
-     * @param incrementFirst true = increment before returning, false = return then increment
-     * @return the PC value before or after increment as per <i>incrementFirst</i>
      */
-    private int getAndStepPC(boolean incrementFirst){
+    private int getAndStepPC(){
         final int originalPC = registers.getPC();
-        final int incrementedPC = originalPC + 1;
-        registers.setPC(incrementedPC);
+        registers.setPC(originalPC + 1);
 
-        return incrementFirst ? incrementedPC : originalPC;
+        return originalPC;
     }
 
     private int getByteOfMemoryAt(int location, int index){
@@ -80,9 +70,8 @@ public class CPU {
      * @return byte from PC[0]
      */
     private int nextProgramByte(){
-        int memoryLocation = getAndStepPC(false);
-        int newByte = getByteOfMemoryAt(memoryLocation);
-        return newByte;
+        int memoryLocation = getAndStepPC();
+        return getByteOfMemoryAt(memoryLocation);
     }
 
     /**
@@ -98,8 +87,7 @@ public class CPU {
      */
     private int nextProgramWord(){
         int lowOrderByte = nextProgramByte();
-        int newWord = lowOrderByte | (nextProgramByte() << 8);
-        return newWord;
+        return lowOrderByte | (nextProgramByte() << 8);
     }
 
     public void step(int steps){
@@ -197,7 +185,7 @@ public class CPU {
         updateNegativeFlag();
     }
 
-    private final int twosComplimentOf(int byteValue){
+    private int twosComplimentOf(int byteValue){
         return ((~byteValue) + 1) & 0xFF;
     }
 

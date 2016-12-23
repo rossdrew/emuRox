@@ -13,8 +13,8 @@ import static com.rox.emu.P6502.InstructionSet.*;
 import static org.spockframework.util.Assert.fail;
 
 public class CPUTest {
-    Memory memory;
-    CPU processor;
+    private Memory memory;
+    private CPU processor;
 
     @Before
     public void setup(){
@@ -37,10 +37,10 @@ public class CPUTest {
 
         Registers registers = processor.getRegisters();
 
-        assertEquals(0x34, registers.getRegister(registers.REG_STATUS)); //Status flags reset
-        assertEquals(0x1, registers.getRegister(registers.REG_PC_LOW));  //PC Set to location pointed to by mem[FFFC:FFFD]
-        assertEquals(0x1, registers.getRegister(registers.REG_PC_HIGH)); // ...
-        assertEquals(0xFF, registers.getRegister(registers.REG_SP));     //Stack Pointer at top of stack
+        assertEquals(0x34, registers.getRegister(Registers.REG_STATUS)); //Status flags reset
+        assertEquals(0x1, registers.getRegister(Registers.REG_PC_LOW));  //PC Set to location pointed to by mem[FFFC:FFFD]
+        assertEquals(0x1, registers.getRegister(Registers.REG_PC_HIGH)); // ...
+        assertEquals(0xFF, registers.getRegister(Registers.REG_SP));     //Stack Pointer at top of stack
     }
 
     @Test
@@ -51,8 +51,8 @@ public class CPUTest {
         processor.step();
 
         Registers registers = processor.getRegisters();
-        assertEquals(0xAA, registers.getRegister(registers.REG_ACCUMULATOR));
-        assertEquals(0x0, registers.getRegister(registers.REG_STATUS) & 0);
+        assertEquals(0xAA, registers.getRegister(Registers.REG_ACCUMULATOR));
+        assertEquals(0x0, 0);
         assertEquals(2, registers.getPC());
     }
 
@@ -76,8 +76,8 @@ public class CPUTest {
         processor.step();
 
         Registers registers = processor.getRegisters();
-        assertEquals(0xAA, registers.getRegister(registers.REG_X_INDEX));
-        assertEquals(0x0, registers.getRegister(registers.REG_STATUS) & 0);
+        assertEquals(0xAA, registers.getRegister(Registers.REG_X_INDEX));
+        assertEquals(0x0, 0);
         assertEquals(2, registers.getPC());
     }
 
@@ -89,8 +89,8 @@ public class CPUTest {
         processor.step();
 
         Registers registers = processor.getRegisters();
-        assertEquals(0xAA, registers.getRegister(registers.REG_Y_INDEX));
-        assertEquals(0x0, registers.getRegister(registers.REG_STATUS) & 0);
+        assertEquals(0xAA, registers.getRegister(Registers.REG_Y_INDEX));
+        assertEquals(0x0, 0);
         assertEquals(2, registers.getPC());
     }
 
@@ -106,9 +106,9 @@ public class CPUTest {
         processor.step(3);
 
         Registers registers = processor.getRegisters();
-        assertEquals(0x2, registers.getRegister(registers.REG_ACCUMULATOR));  //Accumulator is 0x2 == (0x1 + 0x1) == (mem[0x1] + mem[0x3])
+        assertEquals(0x2, registers.getRegister(Registers.REG_ACCUMULATOR));  //Accumulator is 0x2 == (0x1 + 0x1) == (mem[0x1] + mem[0x3])
         assertEquals(5, registers.getPC());
-        assertEquals(0x0, registers.getRegister(registers.REG_STATUS) & 0);
+        assertEquals(0x0, 0);
     }
 
     @Test
@@ -123,9 +123,9 @@ public class CPUTest {
         processor.step(3);
 
         Registers registers = processor.getRegisters();
-        assertEquals(0x3, registers.getRegister(registers.REG_ACCUMULATOR));
+        assertEquals(0x3, registers.getRegister(Registers.REG_ACCUMULATOR));
         assertEquals(5, registers.getPC());
-        assertEquals(0x0, registers.getRegister(registers.REG_STATUS) & 0);
+        assertEquals(0x0, 0);
     }
 
     @Test
@@ -135,7 +135,7 @@ public class CPUTest {
         processor.step(3);
 
         Registers registers = processor.getRegisters();
-        assertEquals(0x5, registers.getRegister(registers.REG_ACCUMULATOR));
+        assertEquals(0x5, registers.getRegister(Registers.REG_ACCUMULATOR));
         assertEquals(5, registers.getPC());
     }
 
@@ -146,7 +146,7 @@ public class CPUTest {
         processor.step(3);
 
         Registers registers = processor.getRegisters();
-        assertEquals(0x4, registers.getRegister(registers.REG_ACCUMULATOR));
+        assertEquals(0x4, registers.getRegister(Registers.REG_ACCUMULATOR));
         assertEquals(5, registers.getPC());
     }
 
@@ -161,9 +161,9 @@ public class CPUTest {
         processor.step(2);
 
         Registers registers = processor.getRegisters();
-        assertEquals(0b00000101, registers.getRegister(registers.REG_ACCUMULATOR));
+        assertEquals(0b00000101, registers.getRegister(Registers.REG_ACCUMULATOR));
         assertEquals(4, registers.getPC());
-        assertEquals(0x0, registers.getRegister(registers.REG_STATUS) & 0);
+        assertEquals(0x0, 0);
     }
 
     @Test
@@ -177,9 +177,9 @@ public class CPUTest {
         processor.step(2);
 
         Registers registers = processor.getRegisters();
-        assertEquals(0b00010101, registers.getRegister(registers.REG_ACCUMULATOR));
+        assertEquals(0b00010101, registers.getRegister(Registers.REG_ACCUMULATOR));
         assertEquals(4, registers.getPC());
-        assertEquals(0x0, registers.getRegister(registers.REG_STATUS) & 0);
+        assertEquals(0x0, 0);
     }
 
     @Test
@@ -193,9 +193,9 @@ public class CPUTest {
         processor.step(2);
 
         Registers registers = processor.getRegisters();
-        assertEquals(0b00010000, registers.getRegister(registers.REG_ACCUMULATOR));
+        assertEquals(0b00010000, registers.getRegister(Registers.REG_ACCUMULATOR));
         assertEquals(4, registers.getPC());
-        assertEquals(0x0, registers.getRegister(registers.REG_STATUS) & 0);
+        assertEquals(0x0, 0);
     }
 
     @Test
