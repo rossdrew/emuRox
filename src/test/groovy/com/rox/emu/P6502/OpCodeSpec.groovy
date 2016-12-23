@@ -212,7 +212,7 @@ class OpCodeSpec extends Specification {
         0x50       | 0x50        | 0xA0                | 4   | false  | true  | false | true  | "With negative overflow"
     }
 
-    @Unroll("ADC over 16bits [#lowFirstByte|#highFirstByte] + [#lowSecondByte|#highSecondByte] = #Expected")
+    @Unroll("ADC 16bit [#lowFirstByte|#highFirstByte] + [#lowSecondByte|#highSecondByte] = #Expected")
     def testMultiByteADC(){
         when:
         Memory memory = new SimpleMemory(65534);

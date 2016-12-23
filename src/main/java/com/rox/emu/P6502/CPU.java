@@ -173,6 +173,8 @@ public class CPU {
                 executeADC(nextProgramByte() + carry);
                 break;
 
+            //(1) compliment of carry flag added (so subtracted) as well
+            //(2) set carry if no borrow required (A >= M[v])
             case OP_SBC_I:
                 registers.setFlag(STATUS_FLAG_NEGATIVE);
                 int borrow = (registers.getFlag(STATUS_FLAG_CARRY) ? 0 : 1);

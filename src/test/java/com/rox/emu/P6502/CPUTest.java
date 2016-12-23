@@ -140,7 +140,6 @@ public class CPUTest {
     }
 
     @Test
-    //@Ignore //TODO (1) carry flag compliment subtracted as well, (2) set carry if no borrow required (A >= M[v])
     public void testSBCWithCarry(){
         int[] program = {OP_CLC, OP_LDA_I, 0xA, OP_SBC_I, 0x5};
         memory.setMemory(0, program);
