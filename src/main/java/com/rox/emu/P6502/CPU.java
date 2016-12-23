@@ -124,11 +124,11 @@ public class CPU {
                 registers.setYAndFlags(registers.getRegister(REG_Y_INDEX) + 1);
                 break;
 
-            case OP_LDX_I: //TODO needs flag testing
+            case OP_LDX_I:
                 registers.setXAndFlags(nextProgramByte());
                 break;
 
-            case OP_LDY_I: //TODO needs flag testing
+            case OP_LDY_I:
                 registers.setYAndFlags(nextProgramByte());
                 break;
 

@@ -156,6 +156,58 @@ class OpCodeSpec extends Specification {
         2     | 0xFF                | 5  | false | true  | "With negative result"
     }
 
+    @Unroll("LDX Immediate: Load #firstValue")
+    def testLDX(){
+        when:
+        Memory memory = new SimpleMemory(65534);
+        int[] program = [OP_LDX_I, firstValue]
+        memory.setMemory(0, program)
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        processor.step()
+        Registers registers = processor.getRegisters()
+
+        then:
+        registers.getRegister(Registers.REG_X_INDEX) == expectedX
+        PC == registers.getPC()
+        Z == registers.statusFlags[Registers.Z]
+        N == registers.statusFlags[Registers.N]
+
+        where:
+        firstValue | expectedX  | PC  | Z      | N     | Expected
+        99         | 99         | 2   | false  | false | "Simple load"
+        0          | 0          | 2   | true   | false | "Load zero"
+        0b11111111 | 0b11111111 | 2   | false  | true  | "Load negative value"
+    }
+
+    @Unroll("LDY Immediate: Load #firstValue")
+    def testLDY(){
+        when:
+        Memory memory = new SimpleMemory(65534);
+        int[] program = [OP_LDY_I, firstValue]
+        memory.setMemory(0, program)
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        processor.step()
+        Registers registers = processor.getRegisters()
+
+        then:
+        registers.getRegister(Registers.REG_Y_INDEX) == expectedY
+        PC == registers.getPC()
+        Z == registers.statusFlags[Registers.Z]
+        N == registers.statusFlags[Registers.N]
+
+        where:
+        firstValue | expectedY  | PC  | Z      | N     | Expected
+        99         | 99         | 2   | false  | false | "Simple load"
+        0          | 0          | 2   | true   | false | "Load zero"
+        0b11111111 | 0b11111111 | 2   | false  | true  | "Load negative value"
+    }
+
     @Unroll("LDA Indexed by Y. #Expected: 300[#index] = #expectedAccumulator")
     def testLDAIndexedByY() {
         when:
