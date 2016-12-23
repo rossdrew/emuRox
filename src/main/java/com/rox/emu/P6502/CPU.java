@@ -192,13 +192,7 @@ public class CPU {
     private void executeADC(int term){
         int result = registers.getRegister(Registers.REG_ACCUMULATOR) + term;
 
-        //Set Overflow if the sign of both inputs is different from the sign of the result
-        if (((registers.getRegister(Registers.REG_ACCUMULATOR) ^ result) & (term ^ result) & 0x80) != 0)
-            registers.setFlag(Registers.STATUS_FLAG_OVERFLOW);
-        else
-            registers.clearFlag(Registers.STATUS_FLAG_OVERFLOW);
-
-        //Set Carry, if bit 8 is set, ignoring in 2s compliment addition (subtraction)
+        //Set Carry, if bit 8 is set on new accumulator value, ignoring in 2s compliment addition (subtraction)
         if (!registers.getFlag(Registers.STATUS_FLAG_NEGATIVE)){
             result += registers.getFlag(Registers.STATUS_FLAG_CARRY) ? 1 : 0;  //XXX CARRY: Only for ADC, ABC to be looked into
             if ((result & Registers.CARRY_INDICATOR_BIT) == Registers.CARRY_INDICATOR_BIT)
@@ -206,6 +200,11 @@ public class CPU {
         }else
             registers.clearFlag(Registers.STATUS_FLAG_CARRY);
 
+        //Set Overflow if the sign of both inputs is different from the sign of the result
+        if (((registers.getRegister(Registers.REG_ACCUMULATOR) ^ result) & (term ^ result) & 0x80) != 0)
+            registers.setFlag(Registers.STATUS_FLAG_OVERFLOW);
+        else
+            registers.clearFlag(Registers.STATUS_FLAG_OVERFLOW);
 
         registers.setRegister(Registers.REG_ACCUMULATOR, result & 0xFF);
     }
