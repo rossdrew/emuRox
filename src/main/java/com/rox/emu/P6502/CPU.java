@@ -120,8 +120,16 @@ public class CPU {
                 registers.setXAndFlags(registers.getRegister(REG_X_INDEX) + 1);
                 break;
 
+            case OP_DEX:
+                registers.setXAndFlags(registers.getRegister(REG_X_INDEX) - 1);
+                break;
+
             case OP_INY:
                 registers.setYAndFlags(registers.getRegister(REG_Y_INDEX) + 1);
+                break;
+
+            case OP_DEY:
+                registers.setYAndFlags(registers.getRegister(REG_Y_INDEX) - 1);
                 break;
 
             case OP_LDX_I:
