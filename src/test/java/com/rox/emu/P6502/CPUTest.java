@@ -127,6 +127,17 @@ public class CPUTest {
     }
 
     @Test
+    public void testSBC(){
+        int[] program = {OP_SEC, OP_LDA_I, 0xA, OP_SBC_I, 0x5};
+        memory.setMemory(0, program);
+        processor.step(3);
+
+        Registers registers = processor.getRegisters();
+        assertEquals(0x5, registers.getRegister(registers.REG_ACCUMULATOR));
+        assertEquals(5, registers.getPC());
+    }
+
+    @Test
     public void testAND(){
         int[] program = {OP_LDA_I,
                          0b00000101,
