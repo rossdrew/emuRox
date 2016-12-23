@@ -240,9 +240,12 @@ class OpCodeSpec extends Specification {
         storedValue == memory.getByte(40)
 
         where:
-        lowFirstByte | lowSecondByte | highFirstByte | highSecondByte | expectedAccumulator | storedValue | PC  | Z      | N     | C     | O     | Expected
-        0            | 0             | 0             | 0              | 0                   | 0           | 11  |true    | false | false | false | "With zero result"
-        //TODO test cases for carries and not carries
+        lowFirstByte | lowSecondByte | highFirstByte | highSecondByte | expectedAccumulator | storedValue | PC  | Z    | N     | C     | O     | Expected
+        0            | 0             | 0             | 0              | 0                   | 0           | 11  |true  | false | false | false | "With zero result"
+        0x50         | 0xD0          | 0             | 0              | 1                   | 0x20        | 11  |false | false | true  | false | "With simple carry to high byte"
+        0x50         | 0xD3          | 0             | 1              | 2                   | 0x23        | 11  |false | false | true  | false | "With carry to high byte and changed high"
+        //TODO negative result
+        //TODO overflow result
     }
 
     @Unroll("AND Immediate #Expected:  #firstValue & #secondValue = #expectedAccumulator in Accumulator.")
