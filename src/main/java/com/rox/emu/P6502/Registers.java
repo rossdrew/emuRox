@@ -15,7 +15,7 @@ public class Registers {
     public static final int REG_SP = 6;
     public static final int REG_STATUS = 7;
 
-    private final String[] registerNames = new String[] {"Accumulator", "Y Index", "X Index", "Program Counter (Hi)", "Program Counter (Low)", "<SP>", "Stack Pointer", "Status Flags"};
+    private static final String[] registerNames = new String[] {"Accumulator", "Y Index", "X Index", "Program Counter (Hi)", "Program Counter (Low)", "<SP>", "Stack Pointer", "Status Flags"};
 
     public static final int STATUS_FLAG_CARRY = 0x1;
     public static final int STATUS_FLAG_ZERO = 0x2;
@@ -37,7 +37,7 @@ public class Registers {
     public static final int Z = 1;
     public static final int C = 0;
 
-    private final String[] flagNames = new String[] {"Carry", "Zero", "IRQ Disable", "Decimal Mode", "BRK Command", "<UNUSED>", "Overflow", "Negative"};
+    private static final String[] flagNames = new String[] {"Carry", "Zero", "IRQ Disable", "Decimal Mode", "BRK Command", "<UNUSED>", "Overflow", "Negative"};
 
     private final int[] register;
 
@@ -47,7 +47,7 @@ public class Registers {
         register[REG_STATUS] = 0b00000000;
     }
 
-    private String getRegisterName(int registerID){
+    public static String getRegisterName(int registerID){
         return registerNames[registerID];
     }
 
@@ -95,7 +95,7 @@ public class Registers {
         return incrementedPC;
     }
 
-    private int getFlagID(int flagValue) throws IllegalArgumentException {
+    private static int getFlagID(int flagValue) throws IllegalArgumentException {
         switch (flagValue){
             case STATUS_FLAG_CARRY: return C;
             case STATUS_FLAG_ZERO: return Z;
@@ -110,7 +110,7 @@ public class Registers {
         }
     }
 
-    private String getFlagName(int flagValue){
+    public static String getFlagName(int flagValue){
         return flagNames[getFlagID(flagValue)];
     }
 

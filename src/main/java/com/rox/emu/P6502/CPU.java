@@ -221,9 +221,6 @@ public class CPU {
     /**
      * Perform a binary addition, setting Carry and Overflow flags as required.
      *
-     * Note, for subtraction (SBC), the Negative status flag must be set first
-     *
-     *
      * @param term term to add to the accumulator
      */
     private void addToAccumulator(int term){
@@ -240,8 +237,6 @@ public class CPU {
         //Set Overflow if the sign of both inputs is different from the sign of the result
         if (((registers.getRegister(REG_ACCUMULATOR) ^ result) & (term ^ result) & 0x80) != 0)
             registers.setFlag(STATUS_FLAG_OVERFLOW);
-        else
-            registers.clearFlag(STATUS_FLAG_OVERFLOW);
 
         registers.setAccumulatorAndFlags(result & 0xFF);
     }

@@ -210,10 +210,12 @@ public class CPUTest {
 
     @Test
     public void testCLC(){
-        int[] program = {OP_CLC};
+        int[] program = {OP_SEC, OP_CLC};
         memory.setMemory(0, program);
         Registers registers = processor.getRegisters();
 
+        processor.step();
+        assert(processor.getRegisters().getFlag(Registers.STATUS_FLAG_CARRY));
         processor.step();
 
         assertEquals(program.length, registers.getPC());

@@ -11,9 +11,9 @@ public class InstructionSet {
     public static final int OP_LDA_I = 0xA9;
     public static final int OP_LDA_A = 0xAD;
     public static final int OP_LDA_Z_IX = 0xB5;
-    public static final int OP_CLV = 0xB8;
     public static final int OP_LDA_IY = 0xB9;
     public static final int OP_LDA_IX = 0xBD;
+    public static final int OP_CLV = 0xB8;
     public static final int OP_AND_I = 0x29;
     public static final int OP_OR_I = 0x09;
     public static final int OP_EOR_I = 0x49;
@@ -27,6 +27,15 @@ public class InstructionSet {
     public static final int OP_DEY = 0x88;
     public static final int OP_INX = 0xE8;
     public static final int OP_DEX = 0xCA;
+
+    public static final int[] instructionSet = {OP_ADC_Z, OP_ADC_I, OP_ADC_A,
+                                                OP_SBC_I,
+                                                OP_LDA_Z, OP_LDA_I, OP_LDA_A, OP_LDA_Z_IX, OP_LDA_IY, OP_LDA_IX,
+                                                OP_STA_Z,
+                                                OP_AND_I, OP_OR_I, OP_EOR_I,
+                                                OP_SEC, OP_CLC, OP_CLV,
+                                                OP_LDY_I, OP_INY, OP_DEY,
+                                                OP_LDX_I, OP_INX, OP_DEX };
 
     public static String getName(int opCode){
         switch (opCode){

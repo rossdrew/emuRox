@@ -6,6 +6,7 @@ import org.junit.Test;
 import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.spockframework.util.Assert.fail;
 
 /**
  * @author rossdrew
@@ -95,4 +96,41 @@ public class RegistersTest {
                     registers.getStatusFlags()[5]);
     }
 
+    @Test
+    public void testGetValidRegisterName(){
+        for (int i=0; i<8; i++){
+            Registers.getRegisterName(i);
+        }
+    }
+
+    @Test
+    public void testGetInvalidRegisterName(){
+        for (int i=9; i<11; i++){
+            try {
+                Registers.getRegisterName(i);
+                fail(i + " is an invalid register ID");
+            }catch(Exception e){
+
+            }
+        }
+    }
+
+    @Test
+    public void testGetValidFlagName(){
+        for (int i=1; i<8; i=(i<<1)){
+            Registers.getFlagName(i);
+        }
+    }
+
+    @Test
+    public void testGetInvalidFlagName(){
+        for (int i=9; i<11; i++){
+            try {
+                Registers.getFlagName(i);
+                fail(i + " is an invalid flag ID");
+            }catch(Exception e){
+
+            }
+        }
+    }
 }
