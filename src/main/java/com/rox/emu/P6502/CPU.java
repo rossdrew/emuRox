@@ -76,12 +76,14 @@ public class CPU {
 
     /**
      * Combine the next two bytes in program memory, as defined by
-     * the Program Counter into a word so that
+     * the Program Counter into a word so that:-
      *
      * PC[0] = low order byte
      * PC[1] = high order byte
      *
      * <em>Increments the Program Counter by 1</em>
+     *
+     * TODO Change to little-endian
      *
      * @return word made up of both bytes
      */

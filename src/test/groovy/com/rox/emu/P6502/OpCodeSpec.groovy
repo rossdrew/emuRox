@@ -72,9 +72,7 @@ class OpCodeSpec extends Specification {
     def testAbsoluteLDA() {
         when:
         Memory memory = new SimpleMemory(65534);
-        //Load a memory address above Zero Page (>256) using [Opcode] [Low Order Byte] [High Order Byte]
-        //   [2C, 1] == [1, 2C] == 0b100101100 == 300
-        int[] program = [OP_LDA_A, 0x2C, 0x1]
+        int[] program = [OP_LDA_A, 0x2C, 0x1] //TODO change to little-endian [2C, 1] == [1, 2C] == 0b100101100 == 300
         memory.setByte(300, loadValue)
         memory.setMemory(0, program);
 
@@ -297,7 +295,7 @@ class OpCodeSpec extends Specification {
     def testADCAbsolute(){
         when:
         Memory memory = new SimpleMemory(65534);
-        int[] program = [OP_LDA_I, firstValue, OP_ADC_A, 0x2C, 0x1]
+        int[] program = [OP_LDA_I, firstValue, OP_ADC_A, 0x2C, 0x1] //TODO change to little-endian [2C, 1] == [1, 2C] == 0b100101100 == 300
         memory.setMemory(0, program);
         memory.setByte(300, secondValue)
 
