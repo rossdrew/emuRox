@@ -95,7 +95,7 @@ public class Registers {
         return incrementedPC;
     }
 
-    private static int getFlagID(int flagValue) throws IllegalArgumentException {
+    public static int getFlagID(int flagValue) throws IllegalArgumentException {
         switch (flagValue){
             case STATUS_FLAG_CARRY: return C;
             case STATUS_FLAG_ZERO: return Z;

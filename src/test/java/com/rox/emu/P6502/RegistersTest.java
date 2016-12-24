@@ -97,6 +97,14 @@ public class RegistersTest {
     }
 
     @Test
+    public void testFlagPlaceValueToFlagID(){
+        for (int i=0; i<8; i++){
+            int placevalue = 1 << i;
+            assertEquals(i, Registers.getFlagID(placevalue));
+        }
+    }
+
+    @Test
     public void testGetValidRegisterName(){
         for (int i=0; i<8; i++){
             Registers.getRegisterName(i);
@@ -117,9 +125,14 @@ public class RegistersTest {
 
     @Test
     public void testGetValidFlagName(){
-        for (int i=1; i<8; i=(i<<1)){
-            Registers.getFlagName(i);
-        }
+        assertTrue(Registers.getFlagName(1).contains("Carry"));
+        assertTrue(Registers.getFlagName(2).contains("Zero"));
+        assertTrue(Registers.getFlagName(4).contains("IRQ"));
+        assertTrue(Registers.getFlagName(8).contains("Decimal") || Registers.getFlagName(8).contains("BCD"));
+        assertTrue(Registers.getFlagName(16).contains("BRK"));
+        assertTrue(Registers.getFlagName(32).contains("<"));
+        assertTrue(Registers.getFlagName(64).contains("Overflow"));
+        assertTrue(Registers.getFlagName(128).contains("Negative"));
     }
 
     @Test
