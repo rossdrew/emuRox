@@ -3,6 +3,7 @@ package com.rox.emu.P6502;
 import com.rox.emu.Memory;
 import com.rox.emu.SimpleMemory;
 import com.rox.emu.UnknownOpCodeException;
+import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -303,5 +304,19 @@ public class CPUTest {
         }catch(UnknownOpCodeException e){
             assertEquals(999, e.getOpCode());
         }
+    }
+
+    @Test
+    public void testPHA(){
+        int[] program = {OP_LDA_I, 0x99, OP_PHA};
+        memory.setMemory(0, program);
+        Registers registers = processor.getRegisters();
+
+        assert(processor.getRegisters().getRegister(Registers.REG_SP) == 0xFF);
+        processor.step();
+
+        assertEquals(program.length, registers.getPC());
+        assertEquals(0xFE, processor.getRegisters().getRegister(Registers.REG_SP));
+        assertEquals(0x99, memory.getByte(0xFF));
     }
 }

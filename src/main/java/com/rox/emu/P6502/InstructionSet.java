@@ -27,15 +27,16 @@ public class InstructionSet {
     public static final int OP_DEY = 0x88;
     public static final int OP_INX = 0xE8;
     public static final int OP_DEX = 0xCA;
+    public static final int OP_PHA = 0x48;
 
     public static final int[] instructionSet = {OP_ADC_Z, OP_ADC_I, OP_ADC_A,
                                                 OP_SBC_I,
                                                 OP_LDA_Z, OP_LDA_I, OP_LDA_A, OP_LDA_Z_IX, OP_LDA_IY, OP_LDA_IX,
                                                 OP_STA_Z,
                                                 OP_AND_I, OP_OR_I, OP_EOR_I,
-                                                OP_SEC, OP_CLC, OP_CLV,
+                                                OP_SEC, OP_CLC, OP_CLV, OP_PHA,
                                                 OP_LDY_I, OP_INY, OP_DEY,
-                                                OP_LDX_I, OP_INX, OP_DEX };
+                                                OP_LDX_I, OP_INX, OP_DEX};
 
     public static String getName(int opCode){
         switch (opCode){
@@ -62,6 +63,7 @@ public class InstructionSet {
             case OP_DEY:        return "Decrement Y";
             case OP_INX:        return "Increment X";
             case OP_DEX:        return "Decrement X";
+            case OP_PHA:        return "Push Accumulator";
             default:
                 return "<Unknown Opcode: " + opCode + ">";
         }
