@@ -320,4 +320,21 @@ public class CPUTest {
         assertEquals(0xFE, processor.getRegisters().getRegister(Registers.REG_SP));
         assertEquals(0x99, memory.getByte(0xFF));
     }
+
+    @Test
+    public void testPLA(){
+        int[] program = {OP_LDA_I, 0x99, OP_PHA, OP_LDA_I, 0x11, OP_PLA};
+        memory.setMemory(0, program);
+        Registers registers = processor.getRegisters();
+
+        processor.step(2);
+        assert(processor.getRegisters().getRegister(Registers.REG_ACCUMULATOR) == 0x99);
+        processor.step();
+        assert(processor.getRegisters().getRegister(Registers.REG_ACCUMULATOR) == 0x11);
+        processor.step();
+
+        assertEquals(program.length, registers.getPC());
+        assertEquals(0xFF, processor.getRegisters().getRegister(Registers.REG_SP));
+        assertEquals(0x99, processor.getRegisters().getRegister(Registers.REG_ACCUMULATOR));
+    }
 }
