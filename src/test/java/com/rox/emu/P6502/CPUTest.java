@@ -312,6 +312,7 @@ public class CPUTest {
         memory.setMemory(0, program);
         Registers registers = processor.getRegisters();
 
+        processor.step();
         assert(processor.getRegisters().getRegister(Registers.REG_SP) == 0xFF);
         processor.step();
 

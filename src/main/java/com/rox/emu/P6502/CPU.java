@@ -196,6 +196,11 @@ public class CPU {
                 memory.setByte(nextProgramByte(), registers.getRegister(REG_ACCUMULATOR));
                 break;
 
+            case OP_PHA:
+                memory.setByte(registers.getRegister(REG_SP), registers.getRegister(REG_ACCUMULATOR));
+                registers.setRegister(REG_SP, registers.getRegister(REG_SP) - 1);
+                break;
+
             default:
                 throw new UnknownOpCodeException("Unknown 6502 OpCode:" + opCode + " encountered.", opCode);
         }
