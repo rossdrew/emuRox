@@ -78,18 +78,16 @@ public class CPU {
      * Combine the next two bytes in program memory, as defined by
      * the Program Counter into a word so that:-
      *
-     * PC[0] = low order byte
-     * PC[1] = high order byte
+     * PC[0] = high order byte
+     * PC[1] = low order byte
      *
      * <em>Increments the Program Counter by 1</em>
-     *
-     * TODO Change to little-endian
      *
      * @return word made up of both bytes
      */
     private int nextProgramWord(){
-        int lowOrderByte = nextProgramByte();
-        return lowOrderByte | (nextProgramByte() << 8);
+        int byte1 = nextProgramByte();
+        return (byte1 << 8) | nextProgramByte() ;
     }
 
     public void step(int steps){

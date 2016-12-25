@@ -72,7 +72,7 @@ class OpCodeSpec extends Specification {
     def testAbsoluteLDA() {
         when:
         Memory memory = new SimpleMemory(65534);
-        int[] program = [OP_LDA_A, 0x2C, 0x1] //TODO change to little-endian [2C, 1] == [1, 2C] == 0b100101100 == 300
+        int[] program = [OP_LDA_A, 0x1, 0x2C]
         memory.setByte(300, loadValue)
         memory.setMemory(0, program);
 
@@ -130,7 +130,7 @@ class OpCodeSpec extends Specification {
     def testLDAIndexedByX() {
         when:
         Memory memory = new SimpleMemory(65534);
-        int[] program = [OP_LDX_I, index, OP_LDA_IX, 0x2C, 1]
+        int[] program = [OP_LDX_I, index, OP_LDA_IX, 1, 0x2C]
         int[] values = [0, 11, 0b11111111]
         memory.setMemory(300, values)
         memory.setMemory(0, program);
@@ -210,7 +210,7 @@ class OpCodeSpec extends Specification {
     def testLDAIndexedByY() {
         when:
         Memory memory = new SimpleMemory(65534);
-        int[] program = [OP_LDY_I, index, OP_LDA_IY, 0x2C, 1]
+        int[] program = [OP_LDY_I, index, OP_LDA_IY, 1, 0x2C]
         int[] values = [0, 11, 0b11111111]
         memory.setMemory(300, values)
         memory.setMemory(0, program);
@@ -295,7 +295,7 @@ class OpCodeSpec extends Specification {
     def testADCAbsolute(){
         when:
         Memory memory = new SimpleMemory(65534);
-        int[] program = [OP_LDA_I, firstValue, OP_ADC_A, 0x2C, 0x1] //TODO change to little-endian [2C, 1] == [1, 2C] == 0b100101100 == 300
+        int[] program = [OP_LDA_I, firstValue, OP_ADC_A, 0x1, 0x2C]
         memory.setMemory(0, program);
         memory.setByte(300, secondValue)
 
