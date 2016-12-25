@@ -352,8 +352,7 @@ class OpCodeSpec extends Specification {
         0            | 0             | 0             | 0              | 0                   | 0           | 11  |true  | false | false | false | "With zero result"
         0x50         | 0xD0          | 0             | 0              | 1                   | 0x20        | 11  |false | false | true  | false | "With simple carry to high byte"
         0x50         | 0xD3          | 0             | 1              | 2                   | 0x23        | 11  |false | false | true  | false | "With carry to high byte and changed high"
-        //TODO Overflow
-        //TODO negative result
+        0            | 0             | 0x50          | 0x50           | 0xA0                | 0           | 11  |false | true  | false | true  | "With negative overflow"
     }
 
     @Unroll("AND Immediate #Expected:  #firstValue & #secondValue = #expectedAccumulator in Accumulator.")
