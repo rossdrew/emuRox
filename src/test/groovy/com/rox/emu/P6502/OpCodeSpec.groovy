@@ -386,7 +386,7 @@ class OpCodeSpec extends Specification {
     def testOR(){
         when:
         Memory memory = new SimpleMemory(65534);
-        int[] program = [OP_LDA_I, firstValue, OP_OR_I, secondValue]
+        int[] program = [OP_LDA_I, firstValue, OP_ORA_I, secondValue]
         memory.setMemory(0, program);
 
         and:

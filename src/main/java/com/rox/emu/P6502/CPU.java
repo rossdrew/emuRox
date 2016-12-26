@@ -168,7 +168,7 @@ public class CPU {
                 registers.setAccumulatorAndFlags(nextProgramByte() & accumulatorBeforeOperation);
                 break;
 
-            case OP_OR_I:
+            case OP_ORA_I:
                 registers.setAccumulatorAndFlags(nextProgramByte() | accumulatorBeforeOperation);
                 break;
 
