@@ -192,8 +192,16 @@ public class CPU {
                 performSBC(nextProgramByte());
                 break;
 
+            case OP_STY_Z:
+                memory.setByte(nextProgramByte(), registers.getRegister(REG_Y_INDEX));
+                break;
+
             case OP_STA_Z:
                 memory.setByte(nextProgramByte(), registers.getRegister(REG_ACCUMULATOR));
+                break;
+
+            case OP_STX_Z:
+                memory.setByte(nextProgramByte(), registers.getRegister(REG_X_INDEX));
                 break;
 
             /* XXX
