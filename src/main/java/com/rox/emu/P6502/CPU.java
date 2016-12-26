@@ -11,8 +11,9 @@ import com.rox.emu.UnknownOpCodeException;
  */
 public class CPU {
     private final Memory memory;
-
     private final Registers registers = new Registers();
+
+    public static final int CARRY_INDICATOR_BIT = 0x100; //The bit set on a word when a byte has overflown
 
     public CPU(Memory memory) {
         this.memory = memory;
@@ -104,6 +105,15 @@ public class CPU {
         //Execute the opcode
         System.out.println("Instruction: " + getName(opCode) + "...");
         switch (opCode){
+            case OP_ASL_A:
+                int newFakeByte = registers.getRegister(REG_ACCUMULATOR) << 1;
+                //XXX Could maybe just move this logic into setAccumulatorAndFlags()
+                if ((newFakeByte & CARRY_INDICATOR_BIT) == CARRY_INDICATOR_BIT)
+                    registers.setFlag(STATUS_FLAG_CARRY);
+
+                registers.setAccumulatorAndFlags(newFakeByte);
+                break;
+
             case OP_SEC:
                 registers.setFlag(STATUS_FLAG_CARRY);
                 break;

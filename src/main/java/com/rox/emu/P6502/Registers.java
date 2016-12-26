@@ -26,8 +26,6 @@ public class Registers {
     public static final int STATUS_FLAG_OVERFLOW = 0x40;
     public static final int STATUS_FLAG_NEGATIVE = 0x80;
 
-    public static final int CARRY_INDICATOR_BIT = 0x100; //The bit set on a word when a byte has overflown
-
     public static final int N = 7;
     public static final int V = 6;
     private static final int U = 5; //Placeholder only
@@ -61,7 +59,7 @@ public class Registers {
     }
 
     public void setAccumulatorAndFlags(int value){
-        setRegister(REG_ACCUMULATOR, value);
+        setRegister(REG_ACCUMULATOR, value & 0xFF);
         updateZeroFlag(REG_ACCUMULATOR);
         updateNegativeFlag(REG_ACCUMULATOR);
     }

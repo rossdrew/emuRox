@@ -370,6 +370,7 @@ public class CPUTest {
         processor.step(2);
 
         assertEquals(program.length, registers.getPC());
-        assertEquals(0b10101010, processor.getRegisters().getRegister(Registers.REG_ACCUMULATOR));
+        assertEquals("Expected 10101010, got " + Integer.toBinaryString(processor.getRegisters().getRegister(Registers.REG_ACCUMULATOR)),
+                     0b10101010, processor.getRegisters().getRegister(Registers.REG_ACCUMULATOR));
     }
 }
