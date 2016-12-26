@@ -307,7 +307,7 @@ public class CPUTest {
     }
 
     @Test
-    public void testPHA(){//TODO Expand test cases to data driven for Z & N
+    public void testPHA(){
         int[] program = {OP_LDA_I, 0x99, OP_PHA};
         memory.setMemory(0, program);
         Registers registers = processor.getRegisters();
@@ -322,7 +322,7 @@ public class CPUTest {
     }
 
     @Test
-    public void testPLA(){//TODO Expand test cases to data driven for Z & N
+    public void testPLA(){
         int[] program = {OP_LDA_I, 0x99, OP_PHA, OP_LDA_I, 0x11, OP_PLA};
         memory.setMemory(0, program);
         Registers registers = processor.getRegisters();
