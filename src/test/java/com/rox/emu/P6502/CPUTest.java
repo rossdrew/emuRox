@@ -360,4 +360,16 @@ public class CPUTest {
         assertEquals(0xFF, processor.getRegisters().getRegister(Registers.REG_SP));
         assertEquals(0x99, processor.getRegisters().getRegister(Registers.REG_ACCUMULATOR));
     }
+
+    @Test
+    public void testASL(){
+        int[] program = {OP_LDA_I, 0b01010101, OP_ASL_A};
+        memory.setMemory(0, program);
+        Registers registers = processor.getRegisters();
+
+        processor.step(2);
+
+        assertEquals(program.length, registers.getPC());
+        assertEquals(0b10101010, processor.getRegisters().getRegister(Registers.REG_ACCUMULATOR));
+    }
 }

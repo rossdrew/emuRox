@@ -4,6 +4,7 @@ package com.rox.emu.P6502;
  * @author rossdrew
  */
 public class InstructionSet {
+    public static final int OP_ASL_A = 0x0A;
     public static final int OP_ADC_Z = 0x65;
     public static final int OP_ADC_I = 0x69;
     public static final int OP_ADC_A = 0x6D;
@@ -32,7 +33,8 @@ public class InstructionSet {
     public static final int OP_PHA = 0x48;
     public static final int OP_PLA = 0x68;
 
-    public static final int[] instructionSet = {OP_ADC_Z, OP_ADC_I, OP_ADC_A,
+    public static final int[] instructionSet = {OP_ASL_A,
+                                                OP_ADC_Z, OP_ADC_I, OP_ADC_A,
                                                 OP_SBC_I,
                                                 OP_LDA_Z, OP_LDA_I, OP_LDA_A, OP_LDA_Z_IX, OP_LDA_IY, OP_LDA_IX,
                                                 OP_STA_Z, OP_STX_Z, OP_STY_Z,
@@ -43,6 +45,7 @@ public class InstructionSet {
 
     public static String getName(int opCode){
         switch (opCode){
+            case OP_ASL_A:      return "ASL (Accumulator)";
             case OP_ADC_Z:      return "ADC (Zero Page)";
             case OP_ADC_I:      return "ADC (Immediate)";
             case OP_ADC_A:      return "ADC (Absolute)";
