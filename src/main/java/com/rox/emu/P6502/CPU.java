@@ -105,17 +105,22 @@ public class CPU {
         //Execute the opcode
         System.out.println("Instruction: " + getName(opCode) + "...");
         switch (opCode){
-            case OP_ASL_A:
+            case OP_ASL_A: {
                 int newFakeByte = registers.getRegister(REG_ACCUMULATOR) << 1;
                 //XXX Could maybe just move this logic into setAccumulatorAndFlags()
                 if ((newFakeByte & CARRY_INDICATOR_BIT) == CARRY_INDICATOR_BIT)
                     registers.setFlag(STATUS_FLAG_CARRY);
 
                 registers.setAccumulatorAndFlags(newFakeByte);
+            }
                 break;
 
-            case OP_LSR_A:
-                registers.setAccumulatorAndFlags((registers.getRegister(REG_ACCUMULATOR) >> 1));
+            case OP_LSR_A: {
+                int newFakeByte = registers.getRegister(REG_ACCUMULATOR);
+                if ((newFakeByte & 0x1) == 0x1)
+                    registers.setFlag(STATUS_FLAG_CARRY);
+                registers.setAccumulatorAndFlags(newFakeByte >> 1);
+            }
                 break;
 
             case OP_SEC:

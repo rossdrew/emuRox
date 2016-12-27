@@ -629,4 +629,34 @@ class OpCodeSpec extends Specification {
         0b10000000 | 0b00000000          | true  | false | true  | "Carried, zero shift"
         0b11000000 | 0b10000000          | false | true  | true  | "Carried, negative shift"
     }
+
+    @Unroll("LSR (Accumulator) #Expected: #firstValue becomes #expectedAccumulator")
+    def testLSR(){
+        when:
+        Memory memory = new SimpleMemory(65534);
+        int[] program = [OP_LDA_I, firstValue, OP_LSR_A];
+        memory.setMemory(0, program);
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        Registers registers = processor.getRegisters()
+
+        and:
+        processor.step(2)
+
+        then:
+        registers.getPC() == program.length
+        registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
+        Z == registers.statusFlags[Registers.Z]
+        N == registers.statusFlags[Registers.N]
+        C == registers.statusFlags[Registers.C]
+
+        where:
+        firstValue | expectedAccumulator | Z     | N     | C     | Expected
+        0b01000000 | 0b00100000          | false | false | false | "Basic shift"
+        0b00000000 | 0b00000000          | true  | false | false | "Shift to zero"
+        0b00000011 | 0b00000001          | false | false | true  | "Shift with carry"
+        0b00000001 | 0b00000000          | true  | false | true  | "Shift to zero with carry"
+    }
 }
