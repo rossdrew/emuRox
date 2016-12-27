@@ -110,11 +110,10 @@ public class CPU {
         switch (opCode){
             case OP_ASL_A: {
                 int newFakeByte = registers.getRegister(REG_ACCUMULATOR) << 1;
-                //XXX Could maybe just move this logic into setAccumulatorAndFlags()
                 if ((newFakeByte & CARRY_INDICATOR_BIT) == CARRY_INDICATOR_BIT)
                     registers.setFlag(STATUS_FLAG_CARRY);
 
-                registers.setAccumulatorAndFlags(newFakeByte);
+                registers.setRegisterAndFlags(REG_ACCUMULATOR, newFakeByte);
             }
                 break;
 
@@ -122,7 +121,8 @@ public class CPU {
                 int newFakeByte = registers.getRegister(REG_ACCUMULATOR);
                 if ((newFakeByte & 0x1) == 0x1)
                     registers.setFlag(STATUS_FLAG_CARRY);
-                registers.setAccumulatorAndFlags(newFakeByte >> 1);
+
+                registers.setRegisterAndFlags(REG_ACCUMULATOR, newFakeByte >> 1);
             }
                 break;
 
@@ -139,63 +139,63 @@ public class CPU {
                 break;
 
             case OP_INX:
-                registers.setXAndFlags(registers.getRegister(REG_X_INDEX) + 1);
+                registers.incrementRegisterWithFlags(REG_X_INDEX);
                 break;
 
             case OP_DEX:
-                registers.setXAndFlags(registers.getRegister(REG_X_INDEX) - 1);
+                registers.decrementRegisterWithFlags(REG_X_INDEX);
                 break;
 
             case OP_INY:
-                registers.setYAndFlags(registers.getRegister(REG_Y_INDEX) + 1);
+                registers.incrementRegisterWithFlags(REG_Y_INDEX);
                 break;
 
             case OP_DEY:
-                registers.setYAndFlags(registers.getRegister(REG_Y_INDEX) - 1);
+                registers.decrementRegisterWithFlags(REG_Y_INDEX);
                 break;
 
             case OP_LDX_I:
-                registers.setXAndFlags(nextProgramByte());
+                registers.setRegisterAndFlags(REG_X_INDEX, nextProgramByte());
                 break;
 
             case OP_LDY_I:
-                registers.setYAndFlags(nextProgramByte());
+                registers.setRegisterAndFlags(REG_Y_INDEX, nextProgramByte());
                 break;
 
             case OP_LDA_Z_IX:
-                registers.setAccumulatorAndFlags(getByteOfMemoryXIndexedAt(nextProgramByte()));
+                registers.setRegisterAndFlags(REG_ACCUMULATOR, getByteOfMemoryXIndexedAt(nextProgramByte()));
                 break;
 
             case OP_LDA_IY:
-                registers.setAccumulatorAndFlags(getByteOfMemoryYIndexedAt(nextProgramWord()));
+                registers.setRegisterAndFlags(REG_ACCUMULATOR, getByteOfMemoryYIndexedAt(nextProgramWord()));
                 break;
 
             case OP_LDA_IX:
-                registers.setAccumulatorAndFlags(getByteOfMemoryXIndexedAt(nextProgramWord()));
+                registers.setRegisterAndFlags(REG_ACCUMULATOR, getByteOfMemoryXIndexedAt(nextProgramWord()));
                 break;
 
             case OP_LDA_I:
-                registers.setAccumulatorAndFlags(nextProgramByte());
+                registers.setRegisterAndFlags(REG_ACCUMULATOR, nextProgramByte());
                 break;
 
             case OP_LDA_A:
-                registers.setAccumulatorAndFlags(getByteOfMemoryAt(nextProgramWord()));
+                registers.setRegisterAndFlags(REG_ACCUMULATOR, getByteOfMemoryAt(nextProgramWord()));
                 break;
 
             case OP_LDA_Z:
-                registers.setAccumulatorAndFlags(getByteOfMemoryAt(nextProgramByte()));
+                registers.setRegisterAndFlags(REG_ACCUMULATOR, getByteOfMemoryAt(nextProgramByte()));
                 break;
 
             case OP_AND_I:
-                registers.setAccumulatorAndFlags(nextProgramByte() & accumulatorBeforeOperation);
+                registers.setRegisterAndFlags(REG_ACCUMULATOR, nextProgramByte() & accumulatorBeforeOperation);
                 break;
 
             case OP_ORA_I:
-                registers.setAccumulatorAndFlags(nextProgramByte() | accumulatorBeforeOperation);
+                registers.setRegisterAndFlags(REG_ACCUMULATOR, nextProgramByte() | accumulatorBeforeOperation);
                 break;
 
             case OP_EOR_I:
-                registers.setAccumulatorAndFlags(nextProgramByte() ^ accumulatorBeforeOperation);
+                registers.setRegisterAndFlags(REG_ACCUMULATOR, nextProgramByte() ^ accumulatorBeforeOperation);
                 break;
 
             case OP_ADC_Z:
@@ -240,7 +240,7 @@ public class CPU {
             case OP_PLA:
                 registers.setRegister(REG_SP, registers.getRegister(REG_SP) + 1);
                 int stackItemAddress = registers.getRegister(REG_SP);
-                registers.setAccumulatorAndFlags(getByteOfMemoryAt(stackItemAddress));
+                registers.setRegisterAndFlags(REG_ACCUMULATOR, getByteOfMemoryAt(stackItemAddress));
                 break;
 
             case OP_JMP_A:
@@ -296,6 +296,6 @@ public class CPU {
         if (((registers.getRegister(REG_ACCUMULATOR) ^ result) & (term ^ result) & 0x80) != 0)
             registers.setFlag(STATUS_FLAG_OVERFLOW);
 
-        registers.setAccumulatorAndFlags(result & 0xFF);
+        registers.setRegisterAndFlags(REG_ACCUMULATOR, result & 0xFF);
     }
 }

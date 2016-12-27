@@ -58,22 +58,18 @@ public class Registers {
         return register[registerID];
     }
 
-    public void setAccumulatorAndFlags(int value){
-        setRegister(REG_ACCUMULATOR, value & 0xFF);
-        updateZeroFlag(REG_ACCUMULATOR);
-        updateNegativeFlag(REG_ACCUMULATOR);
+    public void setRegisterAndFlags(int registerID, int value){
+        setRegister(registerID, value & 0xFF);
+        updateZeroFlag(registerID);
+        updateNegativeFlag(registerID);
     }
 
-    public void setXAndFlags(int value){
-        setRegister(REG_X_INDEX, value & 0xFF);
-        updateZeroFlag(REG_X_INDEX);
-        updateNegativeFlag(REG_X_INDEX);
+    public void incrementRegisterWithFlags(int registerID){
+        setRegisterAndFlags(registerID, getRegister(registerID) + 1);
     }
 
-    public void setYAndFlags(int value){
-        setRegister(REG_Y_INDEX, value & 0xFF);
-        updateZeroFlag(REG_Y_INDEX);
-        updateNegativeFlag(REG_Y_INDEX);
+    public void decrementRegisterWithFlags(int registerID){
+        setRegisterAndFlags(registerID, getRegister(registerID) - 1);
     }
 
     public void setPC(int wordPC){
