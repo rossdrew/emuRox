@@ -15,7 +15,7 @@ public class CPUTest {
     private CPU processor;
 
     @Before
-    public void setup(){
+    public void setup() {
         memory = new SimpleMemory(65534);
         memory.setByte(0x0, 0xFFFC);
         memory.setByte(0x0, 0xFFFD);
@@ -25,7 +25,7 @@ public class CPUTest {
     }
 
     @Test
-    public void testStartup(){
+    public void testStartup() {
         memory = new SimpleMemory(65534);
         memory.setByte(0xFFFC, 0x1);
         memory.setByte(0xFFFD, 0x1);
@@ -42,7 +42,7 @@ public class CPUTest {
     }
 
     @Test
-    public void testLDA(){
+    public void testLDA() {
         int[] program = {OP_LDA_I, 0xAA};
         memory.setMemory(0, program);
 
@@ -55,7 +55,7 @@ public class CPUTest {
     }
 
     @Test
-    public void testSTA(){
+    public void testSTA() {
         int[] program = {OP_LDA_I, 0xAA, OP_STA_Z, 100};
         memory.setMemory(0, program);
 
@@ -67,7 +67,7 @@ public class CPUTest {
     }
 
     @Test
-    public void testSTX(){
+    public void testSTX() {
         int[] program = {OP_LDX_I, 0xAA, OP_STX_Z, 100};
         memory.setMemory(0, program);
 
@@ -79,7 +79,7 @@ public class CPUTest {
     }
 
     @Test
-    public void testSTY(){
+    public void testSTY() {
         int[] program = {OP_LDY_I, 0xAA, OP_STY_Z, 100};
         memory.setMemory(0, program);
 
@@ -91,7 +91,7 @@ public class CPUTest {
     }
 
     @Test
-    public void testLDX(){
+    public void testLDX() {
         int[] program = {OP_LDX_I, 0xAA};
         memory.setMemory(0, program);
 
@@ -104,7 +104,7 @@ public class CPUTest {
     }
 
     @Test
-    public void testLDY(){
+    public void testLDY() {
         int[] program = {OP_LDY_I, 0xAA};
         memory.setMemory(0, program);
 
@@ -117,12 +117,12 @@ public class CPUTest {
     }
 
     @Test
-    public void testADC(){
+    public void testADC() {
         int[] program = {OP_CLC,
-                         OP_LDA_I,
-                         0x1,
-                         OP_ADC_I,
-                         0x1};
+                OP_LDA_I,
+                0x1,
+                OP_ADC_I,
+                0x1};
         memory.setMemory(0, program);
 
         processor.step(3);
@@ -134,12 +134,12 @@ public class CPUTest {
     }
 
     @Test
-    public void testADCWithCarry(){
+    public void testADCWithCarry() {
         int[] program = {OP_SEC,
-                         OP_LDA_I,
-                         0x1,
-                         OP_ADC_I,
-                         0x1};
+                OP_LDA_I,
+                0x1,
+                OP_ADC_I,
+                0x1};
         memory.setMemory(0, program);
 
         processor.step(3);
@@ -151,7 +151,7 @@ public class CPUTest {
     }
 
     @Test
-    public void testSBC(){
+    public void testSBC() {
         int[] program = {OP_SEC, OP_LDA_I, 0xA, OP_SBC_I, 0x5};
         memory.setMemory(0, program);
         processor.step(3);
@@ -162,7 +162,7 @@ public class CPUTest {
     }
 
     @Test
-    public void testSBCWithCarry(){
+    public void testSBCWithCarry() {
         int[] program = {OP_CLC, OP_LDA_I, 0xA, OP_SBC_I, 0x5};
         memory.setMemory(0, program);
         processor.step(3);
@@ -173,11 +173,11 @@ public class CPUTest {
     }
 
     @Test
-    public void testAND(){
+    public void testAND() {
         int[] program = {OP_LDA_I,
-                         0b00000101,
-                         OP_AND_I,
-                         0b00000101};
+                0b00000101,
+                OP_AND_I,
+                0b00000101};
         memory.setMemory(0, program);
 
         processor.step(2);
@@ -189,11 +189,11 @@ public class CPUTest {
     }
 
     @Test
-    public void testOR(){
+    public void testOR() {
         int[] program = {OP_LDA_I,
-                         0b00010101,
+                0b00010101,
                 OP_ORA_I,
-                         0b00000101};
+                0b00000101};
         memory.setMemory(0, program);
 
         processor.step(2);
@@ -205,11 +205,11 @@ public class CPUTest {
     }
 
     @Test
-    public void testEOR(){
+    public void testEOR() {
         int[] program = {OP_LDA_I,
-                         0b00010101,
-                         OP_EOR_I,
-                         0b00000101};
+                0b00010101,
+                OP_EOR_I,
+                0b00000101};
         memory.setMemory(0, program);
 
         processor.step(2);
@@ -221,7 +221,7 @@ public class CPUTest {
     }
 
     @Test
-    public void testSEC(){
+    public void testSEC() {
         int[] program = {OP_SEC};
         memory.setMemory(0, program);
         Registers registers = processor.getRegisters();
@@ -233,13 +233,13 @@ public class CPUTest {
     }
 
     @Test
-    public void testCLC(){
+    public void testCLC() {
         int[] program = {OP_SEC, OP_CLC};
         memory.setMemory(0, program);
         Registers registers = processor.getRegisters();
 
         processor.step();
-        assert(processor.getRegisters().getFlag(Registers.STATUS_FLAG_CARRY));
+        assert (processor.getRegisters().getFlag(Registers.STATUS_FLAG_CARRY));
         processor.step();
 
         assertEquals(program.length, registers.getPC());
@@ -247,13 +247,13 @@ public class CPUTest {
     }
 
     @Test
-    public void testCLV(){
+    public void testCLV() {
         int[] program = {OP_LDA_I, 0x50, OP_ADC_I, 0x50, OP_CLV};
         memory.setMemory(0, program);
         Registers registers = processor.getRegisters();
 
         processor.step(2);
-        assert(processor.getRegisters().getStatusFlags()[Registers.V]);
+        assert (processor.getRegisters().getStatusFlags()[Registers.V]);
         processor.step();
 
         assertEquals(program.length, registers.getPC());
@@ -261,13 +261,13 @@ public class CPUTest {
     }
 
     @Test
-    public void testINX(){
+    public void testINX() {
         int[] program = {OP_LDX_I, 0x01, OP_INX};
         memory.setMemory(0, program);
         Registers registers = processor.getRegisters();
 
         processor.step();
-        assert(processor.getRegisters().getRegister(Registers.REG_X_INDEX) == 1);
+        assert (processor.getRegisters().getRegister(Registers.REG_X_INDEX) == 1);
         processor.step();
 
         assertEquals(program.length, registers.getPC());
@@ -275,13 +275,13 @@ public class CPUTest {
     }
 
     @Test
-    public void testINY(){
+    public void testINY() {
         int[] program = {OP_LDY_I, 0x01, OP_INY};
         memory.setMemory(0, program);
         Registers registers = processor.getRegisters();
 
         processor.step();
-        assert(processor.getRegisters().getRegister(Registers.REG_Y_INDEX) == 1);
+        assert (processor.getRegisters().getRegister(Registers.REG_Y_INDEX) == 1);
         processor.step();
 
         assertEquals(program.length, registers.getPC());
@@ -289,13 +289,13 @@ public class CPUTest {
     }
 
     @Test
-    public void testDEY(){
+    public void testDEY() {
         int[] program = {OP_LDY_I, 0x01, OP_DEY};
         memory.setMemory(0, program);
         Registers registers = processor.getRegisters();
 
         processor.step();
-        assert(processor.getRegisters().getRegister(Registers.REG_Y_INDEX) == 1);
+        assert (processor.getRegisters().getRegister(Registers.REG_Y_INDEX) == 1);
         processor.step();
 
         assertEquals(program.length, registers.getPC());
@@ -303,13 +303,13 @@ public class CPUTest {
     }
 
     @Test
-    public void testDEX(){
+    public void testDEX() {
         int[] program = {OP_LDX_I, 0x01, OP_DEX};
         memory.setMemory(0, program);
         Registers registers = processor.getRegisters();
 
         processor.step();
-        assert(processor.getRegisters().getRegister(Registers.REG_X_INDEX) == 1);
+        assert (processor.getRegisters().getRegister(Registers.REG_X_INDEX) == 1);
         processor.step();
 
         assertEquals(program.length, registers.getPC());
@@ -317,26 +317,26 @@ public class CPUTest {
     }
 
     @Test
-    public void testInvalidOpCode(){
+    public void testInvalidOpCode() {
         int[] program = {999};
         memory.setMemory(0, program);
 
         try {
             processor.step();
             fail("Invalid opCode exception expected!");
-        }catch(UnknownOpCodeException e){
+        } catch (UnknownOpCodeException e) {
             assertEquals(999, e.getOpCode());
         }
     }
 
     @Test
-    public void testPHA(){
+    public void testPHA() {
         int[] program = {OP_LDA_I, 0x99, OP_PHA};
         memory.setMemory(0, program);
         Registers registers = processor.getRegisters();
 
         processor.step();
-        assert(processor.getRegisters().getRegister(Registers.REG_SP) == 0xFF);
+        assert (processor.getRegisters().getRegister(Registers.REG_SP) == 0xFF);
         processor.step();
 
         assertEquals(program.length, registers.getPC());
@@ -345,15 +345,15 @@ public class CPUTest {
     }
 
     @Test
-    public void testPLA(){
+    public void testPLA() {
         int[] program = {OP_LDA_I, 0x99, OP_PHA, OP_LDA_I, 0x11, OP_PLA};
         memory.setMemory(0, program);
         Registers registers = processor.getRegisters();
 
         processor.step(2);
-        assert(processor.getRegisters().getRegister(Registers.REG_ACCUMULATOR) == 0x99);
+        assert (processor.getRegisters().getRegister(Registers.REG_ACCUMULATOR) == 0x99);
         processor.step();
-        assert(processor.getRegisters().getRegister(Registers.REG_ACCUMULATOR) == 0x11);
+        assert (processor.getRegisters().getRegister(Registers.REG_ACCUMULATOR) == 0x11);
         processor.step();
 
         assertEquals(program.length, registers.getPC());
@@ -362,7 +362,7 @@ public class CPUTest {
     }
 
     @Test
-    public void testASL(){
+    public void testASL() {
         int[] program = {OP_LDA_I, 0b01010101, OP_ASL_A};
         memory.setMemory(0, program);
         Registers registers = processor.getRegisters();
@@ -371,6 +371,19 @@ public class CPUTest {
 
         assertEquals(program.length, registers.getPC());
         assertEquals("Expected 10101010, got " + Integer.toBinaryString(processor.getRegisters().getRegister(Registers.REG_ACCUMULATOR)),
-                     0b10101010, processor.getRegisters().getRegister(Registers.REG_ACCUMULATOR));
+                0b10101010, processor.getRegisters().getRegister(Registers.REG_ACCUMULATOR));
+    }
+
+    @Test
+    public void testLSR(){
+        int[] program = {OP_LDA_I, 0b01011010, OP_LSR_A};
+        memory.setMemory(0, program);
+        Registers registers = processor.getRegisters();
+
+        processor.step(2);
+
+        assertEquals(program.length, registers.getPC());
+        assertEquals("Expected 00101101, got " + Integer.toBinaryString(processor.getRegisters().getRegister(Registers.REG_ACCUMULATOR)),
+                0b00101101, processor.getRegisters().getRegister(Registers.REG_ACCUMULATOR));
     }
 }
