@@ -3,6 +3,7 @@ package com.rox.emu.P6502;
 import com.rox.emu.Memory;
 import com.rox.emu.SimpleMemory;
 import com.rox.emu.UnknownOpCodeException;
+import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -385,5 +386,17 @@ public class CPUTest {
         assertEquals(program.length, registers.getPC());
         assertEquals("Expected 00101101, got " + Integer.toBinaryString(processor.getRegisters().getRegister(Registers.REG_ACCUMULATOR)),
                 0b00101101, processor.getRegisters().getRegister(Registers.REG_ACCUMULATOR));
+    }
+
+    @Test
+    public void testNOP(){
+        int[] program = {OP_NOP, OP_NOP, OP_NOP};
+        memory.setMemory(0, program);
+        Registers registers = processor.getRegisters();
+
+        for (int i=0; i<program.length; i++){
+            processor.step();
+            assertEquals(i, registers.getPC());
+        }
     }
 }
