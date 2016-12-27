@@ -114,6 +114,10 @@ public class CPU {
                 registers.setAccumulatorAndFlags(newFakeByte);
                 break;
 
+            case OP_LSR_A:
+                registers.setAccumulatorAndFlags((registers.getRegister(REG_ACCUMULATOR) >> 1));
+                break;
+
             case OP_SEC:
                 registers.setFlag(STATUS_FLAG_CARRY);
                 break;
