@@ -394,7 +394,7 @@ public class CPUTest {
         memory.setMemory(0, program);
         Registers registers = processor.getRegisters();
 
-        for (int i=0; i<program.length; i++){
+        for (int i=1; i<=program.length; i++){
             processor.step();
             assertEquals(i, registers.getPC());
         }

@@ -240,6 +240,10 @@ public class CPU {
                 registers.setAccumulatorAndFlags(getByteOfMemoryAt(stackItemAddress));
                 break;
 
+            case OP_NOP:
+                //Do nothing
+                break;
+
             default:
                 throw new UnknownOpCodeException("Unknown 6502 OpCode:" + opCode + " encountered.", opCode);
         }
