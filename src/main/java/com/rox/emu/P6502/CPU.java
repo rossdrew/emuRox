@@ -100,7 +100,7 @@ public class CPU {
     }
 
     public void step() {
-        System.out.println("*** STEP >>>");
+        System.out.println("\n*** STEP >>>");
 
         int accumulatorBeforeOperation = registers.getRegister(REG_ACCUMULATOR);
         int opCode = nextProgramByte();
@@ -241,6 +241,13 @@ public class CPU {
                 registers.setRegister(REG_SP, registers.getRegister(REG_SP) + 1);
                 int stackItemAddress = registers.getRegister(REG_SP);
                 registers.setAccumulatorAndFlags(getByteOfMemoryAt(stackItemAddress));
+                break;
+
+            case OP_JMP_A:
+                int h = nextProgramByte();
+                int l = nextProgramByte();
+                registers.setRegister(REG_PC_HIGH, h);
+                registers.setRegister(REG_PC_LOW, l);
                 break;
 
             case OP_NOP:

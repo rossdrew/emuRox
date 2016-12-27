@@ -401,13 +401,18 @@ public class CPUTest {
 
     @Test
     public void testJMP_A(){
-        int[] program = {OP_LDX_I, 0x8, OP_JMP_A, 0x0, 0x5, OP_LDY_I, 0x9, OP_LDA_I, 0x10};
+        int[] program = {OP_LDX_I, 0x8,
+                         OP_JMP_A, 0x0, 0x7,
+                         OP_LDY_I, 0x9,
+                         OP_LDA_I, 0x10};
         memory.setMemory(0, program);
         Registers registers = processor.getRegisters();
 
+        processor.step(3);
+
         assertEquals(program.length, registers.getPC());
-        assertEquals(0x8, registers.getRegister(Registers.REG_ACCUMULATOR));
+        assertEquals(0x8, registers.getRegister(Registers.REG_X_INDEX));
         assertEquals(0x0, registers.getRegister(Registers.REG_Y_INDEX));
-        assertEquals(0x10, registers.getRegister(Registers.REG_X_INDEX));
+        assertEquals(0x10, registers.getRegister(Registers.REG_ACCUMULATOR));
     }
 }
