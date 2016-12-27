@@ -3,7 +3,7 @@ package com.rox.emu;
 /**
  * Simple array representing memory, implementing the memory interface
  *
- * @author rossdrew
+ * @author Ross Drew
  */
 public class SimpleMemory implements Memory{
     private final int[] memoryArray;

@@ -3,7 +3,7 @@ package com.rox.emu.P6502;
 /**
  * A representation of the 6502 CPU registers
  *
- * @author rossdrew
+ * @author Ross Drew
  */
 public class Registers {
     public static final int REG_ACCUMULATOR = 0;

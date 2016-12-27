@@ -1,7 +1,10 @@
 package com.rox.emu;
 
 /**
- * @author rossdrew
+ * An interface to any "memory" store in which data can
+ * be saved and retrieved from specific locations.
+ *
+ * @author Ross Drew
  */
 public interface Memory {
     void setByte(int location, int byteValue);

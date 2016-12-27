@@ -1,7 +1,7 @@
 package com.rox.emu;
 
 /**
- * @author rossdrew
+ * @author Ross Drew
  */
 public class UnknownOpCodeException extends RuntimeException{
     private Object opCode = null;

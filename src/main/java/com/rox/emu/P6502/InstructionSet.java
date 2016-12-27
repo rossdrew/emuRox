@@ -1,7 +1,15 @@
 package com.rox.emu.P6502;
 
 /**
- * @author rossdrew
+ * A representation of the 6502 instruction set.
+ *
+ * XXX
+ * This isn't a very OO way to do things and is actually kinda
+ * bad coding but it makes life so much easier to have this in
+ * a separate file which essentially mimics a struct-type data
+ * structure
+ *
+ * @author Ross Drew
  */
 public class InstructionSet {
     public static final int OP_ASL_A = 0x0A;

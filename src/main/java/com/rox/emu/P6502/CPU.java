@@ -7,7 +7,10 @@ import com.rox.emu.Memory;
 import com.rox.emu.UnknownOpCodeException;
 
 /**
- * @author rossdrew
+ * A emulated representation of MOS 6502, 8 bit
+ * microprocessor functionality.
+ *
+ * @author Ross Drew
  */
 public class CPU {
     private final Memory memory;
