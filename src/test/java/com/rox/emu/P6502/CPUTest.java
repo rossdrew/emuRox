@@ -432,13 +432,13 @@ public class CPUTest {
 
     @Test
     public void testROL(){
-        int[] program = {OP_SEC, OP_LDA_I, 0b00110001, OP_ROL_A};
+        int[] program = {OP_SEC, OP_LDA_I, 0b00000001, OP_ROL_A};
         memory.setMemory(0, program);
         Registers registers = processor.getRegisters();
 
         processor.step(3);
 
         assertEquals(program.length, registers.getPC());
-        assertEquals(0b01100011, registers.getRegister(Registers.REG_ACCUMULATOR));
+        assertEquals(0b00000011, registers.getRegister(Registers.REG_ACCUMULATOR));
     }
 }

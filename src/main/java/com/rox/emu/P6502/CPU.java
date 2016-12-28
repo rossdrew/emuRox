@@ -261,6 +261,11 @@ public class CPU {
             }
                 break;
 
+            case OP_ROL_A:
+                int rotatedValue = (registers.getRegister(REG_ACCUMULATOR) << 1) | (registers.getFlag(STATUS_FLAG_CARRY) ? 1 : 0);
+                registers.setRegister(REG_ACCUMULATOR, rotatedValue);
+                break;
+
             case OP_NOP:
                 //Do nothing
                 break;
