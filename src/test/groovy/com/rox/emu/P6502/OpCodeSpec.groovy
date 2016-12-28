@@ -661,4 +661,5 @@ class OpCodeSpec extends Specification {
     }
 
     //TODO BCC: jump forward, jump back, carry set, carry not set
+    //TODO ROL: with/without carry in/out, with/without negative, with/without zero
 }
