@@ -699,7 +699,10 @@ class OpCodeSpec extends Specification {
     def testLSR_Z(){
         when:
         Memory memory = new SimpleMemory(65534);
-        int[] program = [OP_LDA_I, firstValue, OP_STA_Z, 0x20, OP_LDA_A, 1, OP_LSR_Z, 0x20];
+        int[] program = [OP_LDA_I, firstValue,
+                         OP_STA_Z, 0x20,
+                         OP_LDA_I, 1,
+                         OP_LSR_Z, 0x20];
         memory.setMemory(0, program);
 
         and:
