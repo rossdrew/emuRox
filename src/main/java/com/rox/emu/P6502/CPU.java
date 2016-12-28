@@ -261,6 +261,17 @@ public class CPU {
             }
                 break;
 
+            case OP_BNE:
+                if (registers.getFlag(STATUS_FLAG_ZERO)){
+                    int displacement = nextProgramByte() & 0xFF;
+                    int absoluteDisplacement = displacement & 0b01111111;
+                    if ((displacement & NEGATIVE_INDICATOR_BIT) == NEGATIVE_INDICATOR_BIT)
+                        registers.setRegister(REG_PC_LOW, registers.getRegister(REG_PC_LOW) - absoluteDisplacement);
+                    else
+                        registers.setRegister(REG_PC_LOW, registers.getRegister(REG_PC_LOW) + absoluteDisplacement);
+                }
+                break;
+
             case OP_ROL_A:
                 int rotatedValue = (registers.getRegister(REG_ACCUMULATOR) << 1) | (registers.getFlag(STATUS_FLAG_CARRY) ? 1 : 0);
                 registers.setRegister(REG_ACCUMULATOR, rotatedValue);
