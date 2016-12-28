@@ -695,6 +695,36 @@ class OpCodeSpec extends Specification {
         0b00000001 | 0b00000000          | true  | false | true  | "Shift to zero with carry"
     }
 
+    @Unroll("LSR (Zero Page) #Expected: #firstValue becomes #expectedMem")
+    def testLSR_Z(){
+        when:
+        Memory memory = new SimpleMemory(65534);
+        int[] program = [OP_LDA_I, firstValue, OP_STA_Z, 0x20, OP_LDA_A, 1, OP_LSR_Z, 0x20];
+        memory.setMemory(0, program);
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        Registers registers = processor.getRegisters()
+
+        and:
+        processor.step(4)
+
+        then:
+        registers.getPC() == program.length
+        memory.getByte(0x20) == expectedMem
+        Z == registers.statusFlags[Registers.Z]
+        N == registers.statusFlags[Registers.N]
+        C == registers.statusFlags[Registers.C]
+
+        where:
+        firstValue | expectedMem | Z     | N     | C     | Expected
+        0b01000000 | 0b00100000  | false | false | false | "Basic shift"
+        0b00000000 | 0b00000000  | true  | false | false | "Shift to zero"
+        0b00000011 | 0b00000001  | false | false | true  | "Shift with carry"
+        0b00000001 | 0b00000000  | true  | false | true  | "Shift to zero with carry"
+    }
+
     @Unroll("ROL ZeroPage #Expected: #firstValue -> #expectedMem")
     def testROL_Z(){
         when:
