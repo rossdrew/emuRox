@@ -660,10 +660,11 @@ class OpCodeSpec extends Specification {
         0b00000001 | 0b00000000          | true  | false | true  | "Shift to zero with carry"
     }
 
+    @Unroll("ROL ZeroPage #Expected: #firstValue -> #expectedMem")
     def testROL_Z(){
         when:
         Memory memory = new SimpleMemory(65534);
-        int[] program = [OP_CLC, OP_LDA_I, firstValue, OP_STA_Z, 0x20 , OP_ROL_Z];
+        int[] program = [OP_CLC, OP_LDA_I, firstValue, OP_STA_Z, 0x20 , OP_ROL_Z, 0x20];
         memory.setMemory(0, program);
 
         and:
@@ -684,6 +685,7 @@ class OpCodeSpec extends Specification {
         where:
         firstValue | expectedMem | Z     | N     | C     | Expected
         0b00000001 | 0b00000010  | false | false | false | "Basic rotate left"
+        //TODO with/without carry in/out, with/without negative, with/without zero
     }
 
     //TODO BCC: jump forward/back, carry set/not set

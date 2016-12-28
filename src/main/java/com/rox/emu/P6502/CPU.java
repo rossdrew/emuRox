@@ -272,9 +272,17 @@ public class CPU {
                 }
                 break;
 
-            case OP_ROL_A:
+            case OP_ROL_A: {
                 int rotatedValue = (registers.getRegister(REG_ACCUMULATOR) << 1) | (registers.getFlag(STATUS_FLAG_CARRY) ? 1 : 0);
                 registers.setRegister(REG_ACCUMULATOR, rotatedValue);
+            }
+                break;
+
+            case OP_ROL_Z: {
+                int location = nextProgramByte();
+                int rotatedValue = (memory.getByte(location) << 1) | (registers.getFlag(STATUS_FLAG_CARRY) ? 1 : 0);
+                memory.setByte(location, rotatedValue);
+            }
                 break;
 
             case OP_NOP:
