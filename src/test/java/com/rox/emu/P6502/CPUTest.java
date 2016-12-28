@@ -7,6 +7,8 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.util.Arrays;
+
 import static junit.framework.TestCase.assertEquals;
 import static com.rox.emu.P6502.InstructionSet.*;
 import static org.spockframework.util.Assert.fail;
@@ -458,33 +460,51 @@ public class CPUTest {
     }
 
     @Test
-    @Ignore
+    @Ignore //XXX Code runs but no correct answer..why?
     public void testMultiplicationLoop(){
-        int[] program = {OP_LDA_I, 7,
-                         OP_STA_Z, 0x10,  //MPD
-                         OP_LDA_I, 4,
-                         OP_STA_Z, 0x11,  //MPR
-                         OP_LDA_I, 0,
-                         OP_STA_Z, 0x20,  //TMP
-                         OP_STA_Z, 0x30,  //RESAD
-                         OP_STA_Z, 0x31,  //RESAD+1
-                         OP_LDX_I, 8,     //X is counter
-               //TODO    OP_LSR_Z, 0x10,  //:MULT LSR(MPR)
-                         OP_BCC,   0x11,  //Test carry and jump to NOADD
-                         OP_LDA_Z, 0x30,  //RESAD -> A
-                         OP_ADC_Z, 0x10,  //+MPD
-                         OP_STA_Z, 0x10,  //MPD <- A
-                         OP_LDA_Z, 0x31,  //RESAD+1 -> A
-                         OP_ADC_Z, 0x20,  //+TMP
-                         OP_STA_Z, 0x31,  //RESAD+1 <- A
-                         OP_ASL_Z, 0x10,  //:NOADD ASL(MPD)
-                         OP_ROL_Z, 0x20,  //Save bit from MPD
-                         OP_DEX,          //--X
-                         OP_BNE,   0x9    //Test equal and jump to MULT
+        int data_offset = 0x32;
+        int MPD =       data_offset + 0x10;
+        int MPR =       data_offset + 0x11;
+        int TMP =       data_offset + 0x20;
+        int RESAD_0 =   data_offset + 0x30;
+        int RESAD_1 =   data_offset + 0x31;
 
+        int valMPD = 7;
+        int valMPR = 4;
 
+        int[] program = {OP_LDA_I, valMPD,
+                         OP_STA_Z, MPD,
+                         OP_LDA_I, valMPR,
+                         OP_STA_Z, MPR,
+                         OP_LDA_I, 0,         //<---- start
+                         OP_STA_Z, TMP,       //Clear
+                         OP_STA_Z, RESAD_0,   //...
+                         OP_STA_Z, RESAD_1,   //...
+                         OP_LDX_I, 8,         //X counts each bit
+                         OP_LSR_Z, MPR,       //:MULT(18) LSR(MPR)
+                         OP_BCC,   13,        //Test carry and jump (forward 13) to NOADD
+                         OP_LDA_Z, RESAD_0,   //RESAD -> A
+                         OP_CLC,              //Prepare to add
+                         OP_ADC_Z, MPD,       //+MPD
+                         OP_STA_Z, RESAD_0,   //Save result
+                         OP_LDA_Z, RESAD_1,   //RESAD+1 -> A
+                         OP_ADC_Z, TMP,       //+TMP
+                         OP_STA_Z, RESAD_1,   //RESAD+1 <- A
+                         OP_ASL_Z, MPD,       //:NOADD(35) ASL(MPD)
+                         OP_ROL_Z, TMP,       //Save bit from MPD
+                         OP_DEX,              //--X
+                         OP_BNE,   0b10011000 //Test equal and jump (back 24) to MULT
         };
+
         memory.setMemory(0, program);
         Registers registers = processor.getRegisters();
+
+        processor.step(15);
+
+        System.out.println("RESAD = " + Integer.toBinaryString(memory.getByte(RESAD_0)) + "|" + Integer.toBinaryString(memory.getByte(RESAD_1)) );
+        System.out.println("MPD = " + memory.getByte(MPD));
+        System.out.println("MPR = " + memory.getByte(MPR));
+        System.out.println("TMP = " + memory.getByte(TMP));
+        System.out.println("[A] = " + registers.getRegister(Registers.REG_ACCUMULATOR));
     }
 }
