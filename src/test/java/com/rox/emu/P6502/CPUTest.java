@@ -4,6 +4,7 @@ import com.rox.emu.Memory;
 import com.rox.emu.SimpleMemory;
 import com.rox.emu.UnknownOpCodeException;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static junit.framework.TestCase.assertEquals;
@@ -454,5 +455,36 @@ public class CPUTest {
 
         assertEquals(program.length, registers.getPC());
         assertEquals(0b00000011, registers.getRegister(Registers.REG_ACCUMULATOR));
+    }
+
+    @Test
+    @Ignore
+    public void testMultiplicationLoop(){
+        int[] program = {OP_LDA_I, 7,
+                         OP_STA_Z, 0x10,  //MPD
+                         OP_LDA_I, 4,
+                         OP_STA_Z, 0x11,  //MPR
+                         OP_LDA_I, 0,
+                         OP_STA_Z, 0x20,  //TMP
+                         OP_STA_Z, 0x30,  //RESAD
+                         OP_STA_Z, 0x31,  //RESAD+1
+                         OP_LDX_I, 8,     //X is counter
+               //TODO    OP_LSR_M, 0x10,  //:MULT LSR(MPR)
+                         OP_BCC,   0x11,  //Test carry and jump to NOADD
+                         OP_LDA_Z, 0x30,  //RESAD -> A
+                         OP_ADC_Z, 0x10,  //+MPD
+                         OP_STA_Z, 0x10,  //MPD <- A
+                         OP_LDA_Z, 0x31,  //RESAD+1 -> A
+                         OP_ADC_Z, 0x20,  //+TMP
+                         OP_STA_Z, 0x31,  //RESAD+1 <- A
+               //TODO    OP_ASL_Z, 0x10,  //:NOADD ASL(MPD)
+               //TODO    OP_ROL_M, 0x20,  //Save bit from MPD
+                         OP_DEX,          //--X
+                         OP_BNE,   0x9    //Test equal and jump to MULT
+
+
+        };
+        memory.setMemory(0, program);
+        Registers registers = processor.getRegisters();
     }
 }
