@@ -59,9 +59,15 @@ public class Registers {
     }
 
     public void setRegisterAndFlags(int registerID, int value){
-        setRegister(registerID, value & 0xFF);
-        updateZeroFlag(registerID);
-        updateNegativeFlag(registerID);
+        value = value & 0xFF;
+        setRegister(registerID, value);
+        setFlagsBasedOn(value);
+    }
+
+    public void setFlagsBasedOn(int value){
+        value = value & 0xFF;
+        updateZeroFlagBasedOn(value);
+        updateNegativeFlagBasedOn(value);
     }
 
     public void incrementRegisterWithFlags(int registerID){
@@ -133,15 +139,15 @@ public class Registers {
         register[REG_STATUS] = (~flagPlaceValue) & register[REG_STATUS];
     }
 
-    private void updateZeroFlag(int forRegisterID) {
-        if (getRegister(forRegisterID) == 0)
+    public void updateZeroFlagBasedOn(int value){
+        if (value == 0)
             setFlag(STATUS_FLAG_ZERO);
         else
             clearFlag(STATUS_FLAG_ZERO);
     }
 
-    private void updateNegativeFlag(int forRegisterID) {
-        if ( isNegative(getRegister(forRegisterID)))
+    public void updateNegativeFlagBasedOn(int value){
+        if ( isNegative(value))
             setFlag(STATUS_FLAG_NEGATIVE);
         else
             clearFlag(STATUS_FLAG_NEGATIVE);

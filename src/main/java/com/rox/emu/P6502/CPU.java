@@ -116,7 +116,18 @@ public class CPU {
 
                 registers.setRegisterAndFlags(REG_ACCUMULATOR, newFakeByte);
             }
-                break;
+            break;
+
+            case OP_ASL_Z: {
+                int location = nextProgramByte();
+                int newFakeByte = memory.getByte(location) << 1;
+                if ((newFakeByte & CARRY_INDICATOR_BIT) == CARRY_INDICATOR_BIT)
+                    registers.setFlag(STATUS_FLAG_CARRY);
+
+                memory.setByte(location, newFakeByte & 0xFF);
+                registers.setFlagsBasedOn(newFakeByte);
+            }
+            break;
 
             case OP_LSR_A: {
                 int newFakeByte = registers.getRegister(REG_ACCUMULATOR);

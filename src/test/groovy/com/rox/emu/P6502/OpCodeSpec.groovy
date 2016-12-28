@@ -630,11 +630,14 @@ class OpCodeSpec extends Specification {
         0b11000000 | 0b10000000          | false | true  | true  | "Carried, negative shift"
     }
 
-    @Unroll("ASL (ZeroPage) #Expected: #firstValue becomes #expectedAccumulator")
+    @Unroll("ASL (ZeroPage) #Expected: #firstValue becomes #expectedMem")
     def testASL_Z(){
         when:
         Memory memory = new SimpleMemory(65534);
-        int[] program = [OP_LDA_I, firstValue, OP_STA_Z, 0x20, OP_ASL_Z, 0x20];
+        int[] program = [OP_LDA_I, firstValue,
+                         OP_STA_Z, 0x20,
+                         OP_LDA_I, 0,
+                         OP_ASL_Z, 0x20];
         memory.setMemory(0, program);
 
         and:
@@ -643,23 +646,23 @@ class OpCodeSpec extends Specification {
         Registers registers = processor.getRegisters()
 
         and:
-        processor.step(3)
+        processor.step(4)
 
         then:
         registers.getPC() == program.length
-        registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
+        memory.getByte(0x20) == expectedMem
         Z == registers.statusFlags[Registers.Z]
         N == registers.statusFlags[Registers.N]
         C == registers.statusFlags[Registers.C]
 
         where:
-        firstValue | expectedAccumulator | Z     | N     | C     | Expected
-        0b00010101 | 0b00101010          | false | false | false | "Basic shift"
-        0b00000000 | 0b00000000          | true  | false | false | "Zero shift"
-        0b01000000 | 0b10000000          | false | true  | false | "Negative shift"
-        0b10000001 | 0b00000010          | false | false | true  | "Carried shift"
-        0b10000000 | 0b00000000          | true  | false | true  | "Carried, zero shift"
-        0b11000000 | 0b10000000          | false | true  | true  | "Carried, negative shift"
+        firstValue | expectedMem | Z     | N     | C     | Expected
+        0b00010101 | 0b00101010  | false | false | false | "Basic shift"
+        0b00000000 | 0b00000000  | true  | false | false | "Zero shift"
+        0b01000000 | 0b10000000  | false | true  | false | "Negative shift"
+        0b10000001 | 0b00000010  | false | false | true  | "Carried shift"
+        0b10000000 | 0b00000000  | true  | false | true  | "Carried, zero shift"
+        0b11000000 | 0b10000000  | false | true  | true  | "Carried, negative shift"
     }
 
     @Unroll("LSR (Accumulator) #Expected: #firstValue becomes #expectedAccumulator")
