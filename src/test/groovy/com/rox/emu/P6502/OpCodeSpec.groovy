@@ -660,6 +660,7 @@ class OpCodeSpec extends Specification {
         0b00000001 | 0b00000000          | true  | false | true  | "Shift to zero with carry"
     }
 
-    //TODO BCC: jump forward, jump back, carry set, carry not set
+    //TODO BCC: jump forward/back, carry set/not set
     //TODO ROL: with/without carry in/out, with/without negative, with/without zero
+    //TODO BNE: jump forward/back, zero set/not set
 }
