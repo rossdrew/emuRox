@@ -660,6 +660,32 @@ class OpCodeSpec extends Specification {
         0b00000001 | 0b00000000          | true  | false | true  | "Shift to zero with carry"
     }
 
+    def testROL_Z(){
+        when:
+        Memory memory = new SimpleMemory(65534);
+        int[] program = [OP_CLC, OP_LDA_I, firstValue, OP_STA_Z, 0x20 , OP_ROL_Z];
+        memory.setMemory(0, program);
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        Registers registers = processor.getRegisters()
+
+        and:
+        processor.step(4)
+
+        then:
+        registers.getPC() == program.length
+        expectedMem == memory.getByte(0x20)
+        Z == registers.statusFlags[Registers.Z]
+        N == registers.statusFlags[Registers.N]
+        C == registers.statusFlags[Registers.C]
+
+        where:
+        firstValue | expectedMem | Z     | N     | C     | Expected
+        0b00000001 | 0b00000010  | false | false | false | "Basic rotate left"
+    }
+
     //TODO BCC: jump forward/back, carry set/not set
     //TODO ROL: with/without carry in/out, with/without negative, with/without zero
     //TODO BNE: jump forward/back, zero set/not set

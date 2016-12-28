@@ -469,7 +469,7 @@ public class CPUTest {
                          OP_STA_Z, 0x30,  //RESAD
                          OP_STA_Z, 0x31,  //RESAD+1
                          OP_LDX_I, 8,     //X is counter
-               //TODO    OP_LSR_M, 0x10,  //:MULT LSR(MPR)
+               //TODO    OP_LSR_Z, 0x10,  //:MULT LSR(MPR)
                          OP_BCC,   0x11,  //Test carry and jump to NOADD
                          OP_LDA_Z, 0x30,  //RESAD -> A
                          OP_ADC_Z, 0x10,  //+MPD
@@ -478,7 +478,7 @@ public class CPUTest {
                          OP_ADC_Z, 0x20,  //+TMP
                          OP_STA_Z, 0x31,  //RESAD+1 <- A
                //TODO    OP_ASL_Z, 0x10,  //:NOADD ASL(MPD)
-               //TODO    OP_ROL_M, 0x20,  //Save bit from MPD
+               //TODO    OP_ROL_Z, 0x20,  //Save bit from MPD
                          OP_DEX,          //--X
                          OP_BNE,   0x9    //Test equal and jump to MULT
 
