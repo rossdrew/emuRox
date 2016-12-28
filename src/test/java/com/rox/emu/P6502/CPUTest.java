@@ -478,7 +478,7 @@ public class CPUTest {
                          OP_ADC_Z, 0x20,  //+TMP
                          OP_STA_Z, 0x31,  //RESAD+1 <- A
                //TODO    OP_ASL_Z, 0x10,  //:NOADD ASL(MPD)
-               //TODO    OP_ROL_Z, 0x20,  //Save bit from MPD
+                         OP_ROL_Z, 0x20,  //Save bit from MPD
                          OP_DEX,          //--X
                          OP_BNE,   0x9    //Test equal and jump to MULT
 
