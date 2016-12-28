@@ -400,7 +400,7 @@ public class CPUTest {
     }
 
     @Test
-    public void testJMP_A(){
+    public void testJMP(){
         int[] program = {OP_LDX_I, 0x8,
                          OP_JMP_A, 0x0, 0x7,
                          OP_LDY_I, 0x9,
@@ -428,5 +428,17 @@ public class CPUTest {
         assertEquals(0x0, registers.getRegister(Registers.REG_ACCUMULATOR));
         assertEquals(0x0, registers.getRegister(Registers.REG_X_INDEX));
         assertEquals(0x97, registers.getRegister(Registers.REG_Y_INDEX));
+    }
+
+    @Test
+    public void testROL(){
+        int[] program = {OP_SEC, OP_LDA_I, 0b00110001, OP_ROL_A};
+        memory.setMemory(0, program);
+        Registers registers = processor.getRegisters();
+
+        processor.step(3);
+
+        assertEquals(program.length, registers.getPC());
+        assertEquals(0b01100011, registers.getRegister(Registers.REG_ACCUMULATOR));
     }
 }
