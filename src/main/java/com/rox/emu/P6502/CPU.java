@@ -262,8 +262,8 @@ public class CPU {
                 break;
 
             case OP_BNE:
+                int displacement = nextProgramByte() & 0xFF;
                 if (registers.getFlag(STATUS_FLAG_ZERO)){
-                    int displacement = nextProgramByte() & 0xFF;
                     int absoluteDisplacement = displacement & 0b01111111;
                     if ((displacement & NEGATIVE_INDICATOR_BIT) == NEGATIVE_INDICATOR_BIT)
                         registers.setRegister(REG_PC_LOW, registers.getRegister(REG_PC_LOW) - absoluteDisplacement);
