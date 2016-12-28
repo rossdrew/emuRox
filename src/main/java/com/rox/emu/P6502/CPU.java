@@ -16,7 +16,8 @@ public class CPU {
     private final Memory memory;
     private final Registers registers = new Registers();
 
-    public static final int CARRY_INDICATOR_BIT = 0x100; //The bit set on a word when a byte has overflown
+    public static final int CARRY_INDICATOR_BIT = 0x100;    //The bit set on a word when a byte has overflown
+    public static final int NEGATIVE_INDICATOR_BIT = 0x80;  //The bit set on a byte when a it is negative
 
     public CPU(Memory memory) {
         this.memory = memory;
@@ -248,6 +249,16 @@ public class CPU {
                 int l = nextProgramByte();
                 registers.setRegister(REG_PC_HIGH, h);
                 registers.setRegister(REG_PC_LOW, l);
+                break;
+
+            case OP_BCC: {
+                int displacement = nextProgramByte() & 0xFF;
+                int absoluteDisplacement = displacement & 0b01111111;
+                if ((displacement & NEGATIVE_INDICATOR_BIT) == NEGATIVE_INDICATOR_BIT)
+                    registers.setRegister(REG_PC_LOW, registers.getRegister(REG_PC_LOW) - absoluteDisplacement);
+                else
+                    registers.setRegister(REG_PC_LOW, registers.getRegister(REG_PC_LOW) + absoluteDisplacement);
+            }
                 break;
 
             case OP_NOP:

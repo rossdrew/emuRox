@@ -418,11 +418,11 @@ public class CPUTest {
 
     @Test
     public void testBCC(){
-        int[] program = {OP_BCC, 0x6, OP_LDA_I, 0x99, OP_LDX_I, 0x98, OP_LDY_I, 0x97};
+        int[] program = {OP_CLC, OP_BCC, 0x4, OP_LDA_I, 0x99, OP_LDX_I, 0x98, OP_LDY_I, 0x97};
         memory.setMemory(0, program);
         Registers registers = processor.getRegisters();
 
-        processor.step(2);
+        processor.step(3);
 
         assertEquals(program.length, registers.getPC());
         assertEquals(0x0, registers.getRegister(Registers.REG_ACCUMULATOR));
