@@ -137,7 +137,7 @@ public class CPU {
             case OP_LSR_Z: {
                 int location = nextProgramByte();
                 int newFakeByte = memory.getByte(location);
-                
+
                 setBorrowFlagFor(newFakeByte);
                 newFakeByte = newFakeByte >> 1;
                 memory.setByte(location, newFakeByte & 0xFF);
@@ -269,10 +269,9 @@ public class CPU {
                 registers.setRegister(REG_PC_LOW, l);
                 break;
 
-            case OP_BCC: {
+            case OP_BCC: 
                 if (!registers.getFlag(STATUS_FLAG_CARRY))
                     branchTo(nextProgramByte());
-            }
                 break;
 
             case OP_BNE:
