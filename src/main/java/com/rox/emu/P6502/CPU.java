@@ -16,7 +16,7 @@ public class CPU {
     private final Memory memory;
     private final Registers registers = new Registers();
 
-    public static final int CARRY_INDICATOR_BIT = 0x100;    //The bit set on a word when a byte has overflown
+    public static final int CARRY_INDICATOR_BIT = 0x100;    //The bit set on a word when a byte has carried up
     public static final int NEGATIVE_INDICATOR_BIT = 0x80;  //The bit set on a byte when a it is negative
 
     public CPU(Memory memory) {
@@ -111,8 +111,7 @@ public class CPU {
         switch (opCode){
             case OP_ASL_A: {
                 int newFakeByte = registers.getRegister(REG_ACCUMULATOR) << 1;
-                if ((newFakeByte & CARRY_INDICATOR_BIT) == CARRY_INDICATOR_BIT)
-                    registers.setFlag(STATUS_FLAG_CARRY);
+                setCarryFlagBasedOn(newFakeByte);
 
                 registers.setRegisterAndFlags(REG_ACCUMULATOR, newFakeByte);
             }
@@ -121,8 +120,7 @@ public class CPU {
             case OP_ASL_Z: {
                 int location = nextProgramByte();
                 int newFakeByte = memory.getByte(location) << 1;
-                if ((newFakeByte & CARRY_INDICATOR_BIT) == CARRY_INDICATOR_BIT)
-                    registers.setFlag(STATUS_FLAG_CARRY);
+                setCarryFlagBasedOn(newFakeByte);
 
                 memory.setByte(location, newFakeByte & 0xFF);
                 registers.setFlagsBasedOn(newFakeByte);
@@ -131,9 +129,7 @@ public class CPU {
 
             case OP_LSR_A: {
                 int newFakeByte = registers.getRegister(REG_ACCUMULATOR);
-                if ((newFakeByte & 0x1) == 0x1)
-                    registers.setFlag(STATUS_FLAG_CARRY);
-
+                setBorrowFlagFor(newFakeByte);
                 registers.setRegisterAndFlags(REG_ACCUMULATOR, newFakeByte >> 1);
             }
             break;
@@ -141,9 +137,8 @@ public class CPU {
             case OP_LSR_Z: {
                 int location = nextProgramByte();
                 int newFakeByte = memory.getByte(location);
-                if ((newFakeByte & 0x1) == 0x1)
-                    registers.setFlag(STATUS_FLAG_CARRY);
-
+                
+                setBorrowFlagFor(newFakeByte);
                 newFakeByte = newFakeByte >> 1;
                 memory.setByte(location, newFakeByte & 0xFF);
                 registers.setFlagsBasedOn(newFakeByte);
@@ -275,24 +270,14 @@ public class CPU {
                 break;
 
             case OP_BCC: {
-                int displacement = nextProgramByte() & 0xFF;
-                int absoluteDisplacement = displacement & 0b01111111;
-                if ((displacement & NEGATIVE_INDICATOR_BIT) == NEGATIVE_INDICATOR_BIT)
-                    registers.setRegister(REG_PC_LOW, registers.getRegister(REG_PC_LOW) - absoluteDisplacement);
-                else
-                    registers.setRegister(REG_PC_LOW, registers.getRegister(REG_PC_LOW) + absoluteDisplacement);
+                if (!registers.getFlag(STATUS_FLAG_CARRY))
+                    branchTo(nextProgramByte());
             }
                 break;
 
             case OP_BNE:
-                int displacement = nextProgramByte() & 0xFF;
-                if (registers.getFlag(STATUS_FLAG_ZERO)){
-                    int absoluteDisplacement = displacement & 0b01111111;
-                    if ((displacement & NEGATIVE_INDICATOR_BIT) == NEGATIVE_INDICATOR_BIT)
-                        registers.setRegister(REG_PC_LOW, registers.getRegister(REG_PC_LOW) - absoluteDisplacement);
-                    else
-                        registers.setRegister(REG_PC_LOW, registers.getRegister(REG_PC_LOW) + absoluteDisplacement);
-                }
+                if (registers.getFlag(STATUS_FLAG_ZERO))
+                    branchTo(nextProgramByte());
                 break;
 
             case OP_ROL_A: {
@@ -315,6 +300,30 @@ public class CPU {
             default:
                 throw new UnknownOpCodeException("Unknown 6502 OpCode:" + opCode + " encountered.", opCode);
         }
+    }
+
+    private void setBorrowFlagFor(int newFakeByte) {
+        if ((newFakeByte & 0x1) == 0x1)
+            registers.setFlag(STATUS_FLAG_CARRY);
+    }
+
+    private void setCarryFlagBasedOn(int newFakeByte) {
+        if ((newFakeByte & CARRY_INDICATOR_BIT) == CARRY_INDICATOR_BIT)
+            registers.setFlag(STATUS_FLAG_CARRY);
+    }
+
+    /**
+     * Branch to a relative location as defined by a signed byte
+     *
+     * @param displacement relative (-127 -> 128) location from end of branch instruction
+     */
+    private void branchTo(int displacement) {
+        displacement &= 0xFF;
+        int absoluteDisplacement = displacement & 0b01111111;
+        if ((displacement & NEGATIVE_INDICATOR_BIT) == NEGATIVE_INDICATOR_BIT)
+            registers.setRegister(REG_PC_LOW, registers.getRegister(REG_PC_LOW) - absoluteDisplacement);
+        else
+            registers.setRegister(REG_PC_LOW, registers.getRegister(REG_PC_LOW) + absoluteDisplacement);
     }
 
     private void performADC(int byteTerm){
@@ -344,8 +353,7 @@ public class CPU {
 
         //Set Carry, if bit 8 is set on new accumulator value, ignoring in 2s compliment addition (subtraction)
         if (!registers.getFlag(STATUS_FLAG_NEGATIVE)){
-            if ((result & CARRY_INDICATOR_BIT) == CARRY_INDICATOR_BIT)
-                registers.setFlag(STATUS_FLAG_CARRY);
+            setCarryFlagBasedOn(result);
         }else {
             registers.clearFlag(STATUS_FLAG_CARRY);
         }
