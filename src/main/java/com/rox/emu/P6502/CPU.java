@@ -269,7 +269,7 @@ public class CPU {
                 registers.setRegister(REG_PC_LOW, l);
                 break;
 
-            case OP_BCC: 
+            case OP_BCC:
                 if (!registers.getFlag(STATUS_FLAG_CARRY))
                     branchTo(nextProgramByte());
                 break;
