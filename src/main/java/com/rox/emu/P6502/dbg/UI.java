@@ -23,44 +23,32 @@ public class UI extends JFrame{
     }
 
     private class RegistersPanel extends JPanel {
-        private int bitSize = 20;
+        private int bitSize = 40;
         private int byteSize = (bitSize*8);
-        private int padding = 2;
-
-        private void drawByte(Graphics g, int startX, int startY){
-            g.setColor(Color.lightGray);
-            for (int i=1; i<7; i++){
-                drawBit(g, startX + (i*bitSize), startY);
-            }
-            g.setColor(Color.BLACK);
-            g.drawRect(startX, startY, byteSize, bitSize); //F
-        }
-
-        private void drawBit(Graphics g, int startX, int startY){
-            g.drawRect(startX, startY, bitSize, bitSize);
-        }
+        private int padding = 4;
 
         @Override
         public void paint(Graphics g) {
             super.paint(g);
+            drawRegisters(g, 20, 20);
+        }
 
-            g.setColor(Color.BLACK);
-
-            int yLocation = 20;
-            int xSecondByte = byteSize + bitSize + padding;
+        private void drawRegisters(Graphics g, int xLocation, int yLocation) {
+            int rowSize = padding + bitSize;
+            int xSecondByte = byteSize + xLocation + padding;
             drawByte(g, xSecondByte, yLocation);
 
-            yLocation += padding + bitSize;
+            yLocation += rowSize;
             drawByte(g, xSecondByte, yLocation);
 
-            yLocation += padding + bitSize;
+            yLocation += rowSize;
             drawByte(g, xSecondByte, yLocation);
 
-            yLocation += padding + bitSize;
-            drawByte(g, bitSize, yLocation);
+            yLocation += rowSize;
+            drawByte(g, xLocation, yLocation);
             drawByte(g, xSecondByte, yLocation);
 
-            yLocation += padding + bitSize;
+            yLocation += rowSize;
             g.setColor(Color.lightGray);
             for (int i=1; i<7; i++){
                 if (i==2)
@@ -70,6 +58,20 @@ public class UI extends JFrame{
             }
             g.setColor(Color.BLACK);
             g.drawRect(xSecondByte, yLocation, byteSize, bitSize);
+        }
+
+        private void drawByte(Graphics g, int startX, int startY){
+            g.setColor(Color.lightGray);
+            for (int i=1; i<7; i++){
+                drawBit(g, startX + (i*bitSize), startY);
+                //   g.drawChars(new char[] {'N'}, 0, 1, startX + (i*bitSize) + bitSize/2, startY + bitSize/2);
+            }
+            g.setColor(Color.BLACK);
+            g.drawRect(startX, startY, byteSize, bitSize);
+        }
+
+        private void drawBit(Graphics g, int startX, int startY){
+            g.drawRect(startX, startY, bitSize, bitSize);
         }
     }
 }
