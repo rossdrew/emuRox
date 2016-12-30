@@ -38,7 +38,7 @@ public class UI extends JFrame{
         stepButton.addActionListener(e -> step());
         add(stepButton, BorderLayout.SOUTH);
 
-        loadProgram(new int[] {OP_LDA_I, 99});
+        loadProgram(new int[] {OP_LDA_I, 0});
     }
 
     public void loadProgram(int[] program){
@@ -71,6 +71,7 @@ public class UI extends JFrame{
         private int bitSize = 40;
         private int byteSize = (bitSize*8);
         private int padding = 4;
+        private int bitFontSize = 40;
 
         @Override
         public void paint(Graphics g) {
@@ -81,8 +82,10 @@ public class UI extends JFrame{
         private void drawRegisters(Graphics g, int xLocation, int yLocation) {
             int rowSize = padding + bitSize;
             int xSecondByte = byteSize + xLocation + padding;
-            g.setFont(new Font("TimesRoman", Font.PLAIN, 40));
+
             if (registers != null) {
+                g.setFont(new Font("TimesRoman", Font.PLAIN, bitFontSize));
+
                 drawByte(g, xSecondByte, yLocation, registers.getRegister(Registers.REG_ACCUMULATOR));
 
                 yLocation += rowSize;
@@ -97,14 +100,8 @@ public class UI extends JFrame{
 
                 yLocation += rowSize;
                 g.setColor(Color.lightGray);
-                for (int i = 1; i < 7; i++) {
-                    if (i == 2)
-                        g.fillRect(xSecondByte + (i * bitSize), yLocation, bitSize, bitSize);
-                    else
-                        g.drawRect(xSecondByte + (i * bitSize), yLocation, bitSize, bitSize);
-                }
-                g.setColor(Color.BLACK);
-                g.drawRect(xSecondByte, yLocation, byteSize, bitSize);
+                g.fillRect(xSecondByte + (2 * bitSize), yLocation, bitSize, bitSize);
+                drawByte(g, xSecondByte, yLocation, registers.getRegister(Registers.REG_STATUS));
             }
         }
 
@@ -115,7 +112,6 @@ public class UI extends JFrame{
             for (int i=0; i<8; i++){
                 drawBit(g, startX + (i*bitSize), startY, bitValues[i]);
             }
-          //  g.drawChars(bitValues, 0, 8, startX + (bitSize) + bitSize/2, startY + bitSize/2);
             g.setColor(Color.BLACK);
             g.drawRect(startX, startY, byteSize, bitSize);
         }
