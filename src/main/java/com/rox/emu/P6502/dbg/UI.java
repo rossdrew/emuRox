@@ -7,11 +7,8 @@ import com.rox.emu.SimpleMemory;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import static com.rox.emu.P6502.InstructionSet.*;
-import static com.rox.emu.P6502.InstructionSet.OP_LDA_Z_IX;
 
 /**
  * A UI for debugging 6502 CPU code
@@ -38,7 +35,7 @@ public class UI extends JFrame{
         stepButton.addActionListener(e -> step());
         add(stepButton, BorderLayout.SOUTH);
 
-        loadProgram(new int[] {OP_LDA_I, 0});
+        loadProgram(new int[] {OP_LDA_I, 1, OP_LDA_I, 0b10000001, OP_LDA_I, 0, OP_LDA_I, 0xFF});
     }
 
     public void loadProgram(int[] program){
@@ -101,8 +98,20 @@ public class UI extends JFrame{
                 yLocation += rowSize;
                 g.setColor(Color.lightGray);
                 g.fillRect(xSecondByte + (2 * bitSize), yLocation, bitSize, bitSize);
-                drawByte(g, xSecondByte, yLocation, registers.getRegister(Registers.REG_STATUS));
+                drawByteBitsAsFlags(g, xSecondByte, yLocation, registers.getRegister(Registers.REG_STATUS), "NV BDIZC".toCharArray());
             }
+        }
+
+        private void drawByteBitsAsFlags(Graphics g, int startX, int startY, int byteValue, char[] values){
+            char[] bitValues = to8BitString(byteValue).toCharArray();
+
+            g.setColor(Color.lightGray);
+            for (int i=0; i<8; i++){
+                g.setColor((bitValues[i] == '1') ? Color.black : Color.lightGray);
+                drawBit(g, startX + (i*bitSize), startY, values[i]);
+            }
+            g.setColor(Color.BLACK);
+            g.drawRect(startX, startY, byteSize, bitSize);
         }
 
         private void drawByte(Graphics g, int startX, int startY, int byteValue){
@@ -118,7 +127,8 @@ public class UI extends JFrame{
 
         private void drawBit(Graphics g, int startX, int startY, char val){
             g.drawRect(startX, startY, bitSize, bitSize);
-            g.drawChars(new char[] {val}, 0, 1, startX+10, startY+35);
+            //XXX Don't like these numbers, they're not relative to anything
+            g.drawChars(new char[] {val}, 0, 1, startX+5, startY+35);
         }
 
         public void setRegisters(Registers registers) {
