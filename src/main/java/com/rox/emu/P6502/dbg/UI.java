@@ -35,12 +35,7 @@ public class UI extends JFrame{
         add(registersPanel, BorderLayout.CENTER);
 
         JButton stepButton = new JButton("Step >>");
-        stepButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                step();
-            }
-        });
+        stepButton.addActionListener(e -> step());
         add(stepButton, BorderLayout.SOUTH);
 
         loadProgram(new int[] {OP_LDA_I, 99});
@@ -56,12 +51,14 @@ public class UI extends JFrame{
 
     public void reset(){
         processor.reset();
-        registersPanel.invalidate();
+        invalidate();
+        repaint();
     }
 
     public void step(){
         processor.step();
-        registersPanel.invalidate();
+        invalidate();
+        repaint();
     }
 
     public static void main(String[] args){
@@ -78,52 +75,68 @@ public class UI extends JFrame{
         @Override
         public void paint(Graphics g) {
             super.paint(g);
-            drawRegisters(g, 20, 20);
+            drawRegisters(g, 50, 50);
         }
 
         private void drawRegisters(Graphics g, int xLocation, int yLocation) {
             int rowSize = padding + bitSize;
             int xSecondByte = byteSize + xLocation + padding;
-            drawByte(g, xSecondByte, yLocation);
+            g.setFont(new Font("TimesRoman", Font.PLAIN, 40));
+            if (registers != null) {
+                drawByte(g, xSecondByte, yLocation, registers.getRegister(Registers.REG_ACCUMULATOR));
 
-            yLocation += rowSize;
-            drawByte(g, xSecondByte, yLocation);
+                yLocation += rowSize;
+                drawByte(g, xSecondByte, yLocation, registers.getRegister(Registers.REG_Y_INDEX));
 
-            yLocation += rowSize;
-            drawByte(g, xSecondByte, yLocation);
+                yLocation += rowSize;
+                drawByte(g, xSecondByte, yLocation, registers.getRegister(Registers.REG_X_INDEX));
 
-            yLocation += rowSize;
-            drawByte(g, xLocation, yLocation);
-            drawByte(g, xSecondByte, yLocation);
+                yLocation += rowSize;
+                drawByte(g, xLocation, yLocation, registers.getRegister(Registers.REG_PC_HIGH));
+                drawByte(g, xSecondByte, yLocation, registers.getRegister(Registers.REG_PC_LOW));
 
-            yLocation += rowSize;
-            g.setColor(Color.lightGray);
-            for (int i=1; i<7; i++){
-                if (i==2)
-                    g.fillRect(xSecondByte+(i*bitSize), yLocation, bitSize, bitSize);
-                else
-                    g.drawRect(xSecondByte+(i*bitSize), yLocation, bitSize, bitSize);
+                yLocation += rowSize;
+                g.setColor(Color.lightGray);
+                for (int i = 1; i < 7; i++) {
+                    if (i == 2)
+                        g.fillRect(xSecondByte + (i * bitSize), yLocation, bitSize, bitSize);
+                    else
+                        g.drawRect(xSecondByte + (i * bitSize), yLocation, bitSize, bitSize);
+                }
+                g.setColor(Color.BLACK);
+                g.drawRect(xSecondByte, yLocation, byteSize, bitSize);
             }
-            g.setColor(Color.BLACK);
-            g.drawRect(xSecondByte, yLocation, byteSize, bitSize);
         }
 
-        private void drawByte(Graphics g, int startX, int startY){
+        private void drawByte(Graphics g, int startX, int startY, int byteValue){
+            char[] bitValues = to8BitString(byteValue).toCharArray();
+
             g.setColor(Color.lightGray);
-            for (int i=1; i<7; i++){
-                drawBit(g, startX + (i*bitSize), startY);
-                //g.drawChars(new char[] {'N'}, 0, 1, startX + (i*bitSize) + bitSize/2, startY + bitSize/2);
+            for (int i=0; i<8; i++){
+                drawBit(g, startX + (i*bitSize), startY, bitValues[i]);
             }
+          //  g.drawChars(bitValues, 0, 8, startX + (bitSize) + bitSize/2, startY + bitSize/2);
             g.setColor(Color.BLACK);
             g.drawRect(startX, startY, byteSize, bitSize);
         }
 
-        private void drawBit(Graphics g, int startX, int startY){
+        private void drawBit(Graphics g, int startX, int startY, char val){
             g.drawRect(startX, startY, bitSize, bitSize);
+            g.drawChars(new char[] {val}, 0, 1, startX+10, startY+35);
         }
 
         public void setRegisters(Registers registers) {
             this.registers = registers;
+        }
+
+        private String to8BitString(int fakeByte){
+            String formattedByteString = Integer.toBinaryString(fakeByte);
+            if (formattedByteString.length() < 8){
+                for (int i=formattedByteString.length(); i<8; i++){
+                    formattedByteString = "0" + formattedByteString;
+                }
+            }
+            return formattedByteString;
         }
     }
 }
