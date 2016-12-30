@@ -67,42 +67,40 @@ public class UI extends JFrame{
 
         private int bitSize = 40;
         private int byteSize = (bitSize*8);
-        private int padding = 4;
+        private int padding = 10;
         private int bitFontSize = 40;
+        private int valueFontSize = 10;
 
         @Override
         public void paint(Graphics g) {
             super.paint(g);
-            drawRegisters(g, 50, 50);
+            if (registers != null)
+                drawRegisters(g, 20, 20);
         }
 
         private void drawRegisters(Graphics g, int xLocation, int yLocation) {
             int rowSize = padding + bitSize;
-            int xSecondByte = byteSize + xLocation + padding;
+            int secondByteColumn = byteSize + xLocation + padding;
 
-            if (registers != null) {
-                g.setFont(new Font("TimesRoman", Font.PLAIN, bitFontSize));
+            drawByte(g, secondByteColumn, yLocation, registers.getRegister(Registers.REG_ACCUMULATOR));
 
-                drawByte(g, xSecondByte, yLocation, registers.getRegister(Registers.REG_ACCUMULATOR));
+            yLocation += rowSize;
+            drawByte(g, secondByteColumn, yLocation, registers.getRegister(Registers.REG_Y_INDEX));
 
-                yLocation += rowSize;
-                drawByte(g, xSecondByte, yLocation, registers.getRegister(Registers.REG_Y_INDEX));
+            yLocation += rowSize;
+            drawByte(g, secondByteColumn, yLocation, registers.getRegister(Registers.REG_X_INDEX));
 
-                yLocation += rowSize;
-                drawByte(g, xSecondByte, yLocation, registers.getRegister(Registers.REG_X_INDEX));
+            yLocation += rowSize;
+            drawByte(g, xLocation, yLocation, registers.getRegister(Registers.REG_PC_HIGH));
+            drawByte(g, secondByteColumn, yLocation, registers.getRegister(Registers.REG_PC_LOW));
 
-                yLocation += rowSize;
-                drawByte(g, xLocation, yLocation, registers.getRegister(Registers.REG_PC_HIGH));
-                drawByte(g, xSecondByte, yLocation, registers.getRegister(Registers.REG_PC_LOW));
-
-                yLocation += rowSize;
-                g.setColor(Color.lightGray);
-                g.fillRect(xSecondByte + (2 * bitSize), yLocation, bitSize, bitSize);
-                drawByteBitsAsFlags(g, xSecondByte, yLocation, registers.getRegister(Registers.REG_STATUS), "NV BDIZC".toCharArray());
-            }
+            yLocation += rowSize;
+            g.setColor(Color.lightGray);
+            g.fillRect(secondByteColumn + (2 * bitSize), yLocation, bitSize, bitSize);
+            drawFlags(g, secondByteColumn, yLocation, registers.getRegister(Registers.REG_STATUS), "NV BDIZC".toCharArray());
         }
 
-        private void drawByteBitsAsFlags(Graphics g, int startX, int startY, int byteValue, char[] values){
+        private void drawFlags(Graphics g, int startX, int startY, int byteValue, char[] values){
             char[] bitValues = to8BitString(byteValue).toCharArray();
 
             g.setColor(Color.lightGray);
@@ -123,9 +121,16 @@ public class UI extends JFrame{
             }
             g.setColor(Color.BLACK);
             g.drawRect(startX, startY, byteSize, bitSize);
+
+            g.setColor(Color.RED);
+
+            g.setFont(new Font("Courier New", Font.PLAIN, valueFontSize));
+            String values = "(" + fromSignedByte(byteValue) + ", 0x" + Integer.toHexString(byteValue) + ")";
+            g.drawChars(values.toCharArray(), 0, values.length(), (startX+byteSize-bitSize), startY-1);
         }
 
         private void drawBit(Graphics g, int startX, int startY, char val){
+            g.setFont(new Font("Courier New", Font.PLAIN, bitFontSize));
             g.drawRect(startX, startY, bitSize, bitSize);
             //XXX Don't like these numbers, they're not relative to anything
             g.drawChars(new char[] {val}, 0, 1, startX+5, startY+35);
@@ -133,6 +138,14 @@ public class UI extends JFrame{
 
         public void setRegisters(Registers registers) {
             this.registers = registers;
+        }
+
+        private int fromSignedByte(int signedByte){
+            signedByte &= 0xFF;
+            if ((signedByte & 128) == 128)
+                return -( ( (~signedByte) +1) & 0xFF); //Twos compliment compensation
+            else
+                return signedByte & 0b01111111;
         }
 
         private String to8BitString(int fakeByte){
