@@ -503,8 +503,10 @@ public class CPUTest {
                          OP_STA_Z, RESAD_0,   //...
                          OP_STA_Z, RESAD_1,   //...
                          OP_LDX_I, 8,         //X counts each bit
+
                          OP_LSR_Z, MPR,       //:MULT(18) LSR(MPR)
                          OP_BCC,   13,        //Test carry and jump (forward 13) to NOADD
+
                          OP_LDA_Z, RESAD_0,   //RESAD -> A
                          OP_CLC,              //Prepare to add
                          OP_ADC_Z, MPD,       //+MPD
@@ -515,7 +517,7 @@ public class CPUTest {
                          OP_ASL_Z, MPD,       //:NOADD(35) ASL(MPD)
                          OP_ROL_Z, TMP,       //Save bit from MPD
                          OP_DEX,              //--X
-                         OP_BNE,   0b10011000 //Test equal and jump (back 24) to MULT
+                         OP_BNE,   0b10011000 //Test equal and jump (back 24) to MULT XXX Wrong, should be twos compliment
         };
 
         memory.setMemory(0, program);
