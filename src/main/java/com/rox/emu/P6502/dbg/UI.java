@@ -21,10 +21,10 @@ public class UI extends JFrame{
 
     private RegistersPanel registersPanel = new RegistersPanel();
 
-    public UI(){
+    public UI() {
         super("6502 Debugger");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(800,500);
+        setSize(800, 500);
         setVisible(true);
 
         setLayout(new BorderLayout());
@@ -33,9 +33,56 @@ public class UI extends JFrame{
 
         JButton stepButton = new JButton("Step >>");
         stepButton.addActionListener(e -> step());
-        add(stepButton, BorderLayout.SOUTH);
 
-        loadProgram(new int[] {OP_LDA_I, 1, OP_LDA_I, 0b10000001, OP_LDA_I, 0, OP_LDA_I, 0xFF});
+        JButton resetButton = new JButton("Reset!");
+        resetButton.addActionListener(e -> reset());
+
+        JPanel controls = new JPanel();
+        controls.setLayout(new FlowLayout());
+        controls.add(resetButton);
+        controls.add(stepButton);
+
+        add(controls, BorderLayout.SOUTH);
+
+        loadProgram(getProgram());
+    }
+
+    private int[] getProgram(){
+        int data_offset = 0x32;
+        int MPD = data_offset + 0x10;
+        int MPR = data_offset + 0x11;
+        int TMP = data_offset + 0x20;
+        int RESAD_0 = data_offset + 0x30;
+        int RESAD_1 = data_offset + 0x31;
+
+        int valMPD = 7;
+        int valMPR = 4;
+
+        int[] program = new int[]{  OP_LDA_I, valMPD,
+                                    OP_STA_Z, MPD,
+                                    OP_LDA_I, valMPR,
+                                    OP_STA_Z, MPR,
+                                    OP_LDA_I, 0,         //<---- start
+                                    OP_STA_Z, TMP,       //Clear
+                                    OP_STA_Z, RESAD_0,   //...
+                                    OP_STA_Z, RESAD_1,   //...
+                                    OP_LDX_I, 8,         //X counts each bit
+                                    OP_LSR_Z, MPR,       //:MULT(18) LSR(MPR)
+                                    OP_BCC, 13,          //Test carry and jump (forward 13) to NOADD
+                                    OP_LDA_Z, RESAD_0,   //RESAD -> A
+                                    OP_CLC,              //Prepare to add
+                                    OP_ADC_Z, MPD,       //+MPD
+                                    OP_STA_Z, RESAD_0,   //Save result
+                                    OP_LDA_Z, RESAD_1,   //RESAD+1 -> A
+                                    OP_ADC_Z, TMP,       //+TMP
+                                    OP_STA_Z, RESAD_1,   //RESAD+1 <- A
+                                    OP_ASL_Z, MPD,       //:NOADD(35) ASL(MPD)
+                                    OP_ROL_Z, TMP,       //Save bit from MPD
+                                    OP_DEX,              //--X
+                                    OP_BNE, 0b10011000   //Test equal and jump (back 24) to MULT});
+        };
+
+        return program;
     }
 
     public void loadProgram(int[] program){
@@ -90,6 +137,7 @@ public class UI extends JFrame{
             yLocation += rowSize;
             drawByte(g, secondByteColumn, yLocation, registers.getRegister(Registers.REG_X_INDEX));
 
+            //TODO this needs a combined value display
             yLocation += rowSize;
             drawByte(g, xLocation, yLocation, registers.getRegister(Registers.REG_PC_HIGH));
             drawByte(g, secondByteColumn, yLocation, registers.getRegister(Registers.REG_PC_LOW));
