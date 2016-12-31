@@ -7,8 +7,6 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.util.Arrays;
-
 import static junit.framework.TestCase.assertEquals;
 import static com.rox.emu.P6502.InstructionSet.*;
 import static org.spockframework.util.Assert.fail;

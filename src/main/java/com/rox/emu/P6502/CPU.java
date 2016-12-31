@@ -292,6 +292,7 @@ public class CPU {
                 int location = nextProgramByte();
                 int rotatedValue = (memory.getByte(location) << 1) | (registers.getFlag(STATUS_FLAG_CARRY) ? 1 : 0);
                 memory.setByte(location, rotatedValue);
+                registers.setFlagsBasedOn(rotatedValue);
             }
                 break;
 

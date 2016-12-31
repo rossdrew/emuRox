@@ -753,7 +753,10 @@ class OpCodeSpec extends Specification {
         where:
         firstValue | expectedMem | Z     | N     | C     | Expected
         0b00000001 | 0b00000010  | false | false | false | "Basic rotate left"
-        //TODO with/without carry in/out, with/without negative, with/without zero
+        0b01000000 | 0b10000000  | false | true  | false | "Rotate to negative"
+        0b00000000 | 0b00000000  | true  | false | false | "Rotate to zero without carry"
+      //  0b10000000 | 0b00000000  | true  | false | true  | "Rotate to zero with carry" TODO
+        //TODO with/without carry in/out
     }
 
     //TODO BCC: jump forward/back, carry set/not set
