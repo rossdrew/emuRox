@@ -732,7 +732,7 @@ class OpCodeSpec extends Specification {
     def testROL_Z(){
         when:
         Memory memory = new SimpleMemory(65534);
-        int[] program = [OP_CLC, OP_LDA_I, firstValue, OP_STA_Z, 0x20, OP_ROL_Z, 0x20];
+        int[] program = [firstInstr, OP_LDA_I, firstValue, OP_STA_Z, 0x20, OP_ROL_Z, 0x20];
         memory.setMemory(0, program);
 
         and:
@@ -751,12 +751,12 @@ class OpCodeSpec extends Specification {
         C == registers.statusFlags[Registers.C]
 
         where:
-        firstValue | expectedMem | Z     | N     | C     | Expected
-        0b00000001 | 0b00000010  | false | false | false | "Basic rotate left"
-        0b01000000 | 0b10000000  | false | true  | false | "Rotate to negative"
-        0b00000000 | 0b00000000  | true  | false | false | "Rotate to zero without carry"
-        0b10000000 | 0b00000000  | true  | false | true  | "Rotate to zero with carry"
-        //TODO with/without carry in
+        firstInstr |firstValue  | expectedMem | Z     | N     | C     | Expected
+        OP_CLC     | 0b00000001 | 0b00000010  | false | false | false | "Basic rotate left"
+        OP_CLC     | 0b01000000 | 0b10000000  | false | true  | false | "Rotate to negative"
+        OP_CLC     | 0b00000000 | 0b00000000  | true  | false | false | "Rotate to zero without carry"
+        OP_CLC     | 0b10000000 | 0b00000000  | true  | false | true  | "Rotate to zero with carry"
+       // OP_SEC     | 0b00000000 | 0b00000001  | false | false | false | "Rotate from zero to carry in" //TODO Why is carry being set?
     }
 
     //TODO BCC: jump forward/back, carry set/not set
