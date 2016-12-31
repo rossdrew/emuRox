@@ -59,12 +59,11 @@ public class CPUTest {
         processor.reset();
         Registers registers = processor.getRegisters();
 
-        assertEquals(0x34, registers.getRegister(Registers.REG_STATUS)); //Status flags reset
-        assertEquals(0x0, registers.getRegister(Registers.REG_PC_LOW));  //PC Set to location pointed to by mem[FFFC:FFFD]
-        assertEquals(0x0, registers.getRegister(Registers.REG_PC_HIGH)); // ...
-        assertEquals(0xFF, registers.getRegister(Registers.REG_SP));     //Stack Pointer at top of stack
-
-        assertEquals(0, registers.getRegister(Registers.REG_ACCUMULATOR)); //All cleared
+        assertEquals(0x34, registers.getRegister(Registers.REG_STATUS));
+        assertEquals(0x0, registers.getRegister(Registers.REG_PC_LOW));
+        assertEquals(0x0, registers.getRegister(Registers.REG_PC_HIGH));
+        assertEquals(0xFF, registers.getRegister(Registers.REG_SP));
+        assertEquals(0, registers.getRegister(Registers.REG_ACCUMULATOR));
         assertEquals(0, registers.getRegister(Registers.REG_X_INDEX));
         assertEquals(0, registers.getRegister(Registers.REG_Y_INDEX));
     }
