@@ -485,7 +485,7 @@ public class CPUTest {
     }
 
     @Test
-    @Ignore //XXX Code runs but no correct answer..why?
+    @Ignore //XXX Code runs but no correct answer..why?  Robin...to the debugger!
     public void testMultiplicationLoop(){
         int data_offset = 0x32;
         int MPD =       data_offset + 0x10;
