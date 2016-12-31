@@ -42,6 +42,31 @@ public class CPUTest {
         assertEquals(0x1, registers.getRegister(Registers.REG_PC_LOW));  //PC Set to location pointed to by mem[FFFC:FFFD]
         assertEquals(0x1, registers.getRegister(Registers.REG_PC_HIGH)); // ...
         assertEquals(0xFF, registers.getRegister(Registers.REG_SP));     //Stack Pointer at top of stack
+
+        assertEquals(0, registers.getRegister(Registers.REG_ACCUMULATOR)); //All cleared
+        assertEquals(0, registers.getRegister(Registers.REG_X_INDEX));
+        assertEquals(0, registers.getRegister(Registers.REG_Y_INDEX));
+    }
+
+    @Test
+    public void testReset() {
+        int[] program = {OP_LDA_I, 0xAA, OP_LDX_I, 0xBB, OP_LDX_I, 0xCC};
+        memory.setMemory(0, program);
+        memory.setByte(0xFFFC, 0x1); //XXX Why does this not seem right?
+        memory.setByte(0xFFFD, 0x1);
+
+        processor.step(3);
+        processor.reset();
+        Registers registers = processor.getRegisters();
+
+        assertEquals(0x34, registers.getRegister(Registers.REG_STATUS)); //Status flags reset
+        assertEquals(0x1, registers.getRegister(Registers.REG_PC_LOW));  //PC Set to location pointed to by mem[FFFC:FFFD]
+        assertEquals(0x1, registers.getRegister(Registers.REG_PC_HIGH)); // ...
+        assertEquals(0xFF, registers.getRegister(Registers.REG_SP));     //Stack Pointer at top of stack
+
+        assertEquals(0, registers.getRegister(Registers.REG_ACCUMULATOR)); //All cleared
+        assertEquals(0, registers.getRegister(Registers.REG_X_INDEX));
+        assertEquals(0, registers.getRegister(Registers.REG_Y_INDEX));
     }
 
     @Test
