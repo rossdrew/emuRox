@@ -28,6 +28,9 @@ public class CPU {
      */
     public void reset(){
         System.out.println("*** RESETTING >>>");
+        registers.setRegister(REG_ACCUMULATOR, 0x0);
+        registers.setRegister(REG_X_INDEX, 0x0);
+        registers.setRegister(REG_Y_INDEX, 0x0);
         registers.setRegister(REG_STATUS, 0x34);
         registers.setRegister(REG_PC_HIGH, memory.getByte(0xFFFC));
         registers.setRegister(REG_PC_LOW, memory.getByte(0xFFFD));
