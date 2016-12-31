@@ -291,8 +291,9 @@ public class CPU {
             case OP_ROL_Z: {
                 int location = nextProgramByte();
                 int rotatedValue = (memory.getByte(location) << 1) | (registers.getFlag(STATUS_FLAG_CARRY) ? 1 : 0);
-                memory.setByte(location, rotatedValue);
+                setCarryFlagBasedOn(rotatedValue);
                 registers.setFlagsBasedOn(rotatedValue);
+                memory.setByte(location, rotatedValue & 0xFF);
             }
                 break;
 
