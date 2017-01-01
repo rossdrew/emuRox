@@ -789,20 +789,6 @@ class OpCodeSpec extends Specification {
         0b00000001    | 0b00000001     | 4            | 257        | "Double byte jump"
     }
 
-//    @Test
-//    public void testBCC(){
-//        int[] program = {OP_CLC, OP_BCC, 0x4, OP_LDA_I, 0x99, OP_LDX_I, 0x98, OP_LDY_I, 0x97};
-//        memory.setMemory(0, program);
-//        Registers registers = processor.getRegisters();
-//
-//        processor.step(3);
-//
-//        assertEquals(program.length, registers.getPC());
-//        assertEquals(0x0, registers.getRegister(Registers.REG_ACCUMULATOR));
-//        assertEquals(0x0, registers.getRegister(Registers.REG_X_INDEX));
-//        assertEquals(0x97, registers.getRegister(Registers.REG_Y_INDEX));
-//    }
-
     @Unroll("JMP #expected: ending up at mem[#expectedPC] after #instructions steps")
     def testBCC(){
         when:
@@ -828,9 +814,64 @@ class OpCodeSpec extends Specification {
         OP_CLC   | 1          | 6            | 0x8        | "Basic forward jump and step"
         OP_CLC   | 0b10000100 | 5            | 0x2        | "Basic backward jump"
         OP_CLC   | 0b10000100 | 6            | 0x3        | "Basic backward jump and step"
-
     }
 
-    //TODO ROL: with/without carry in/out, with/without negative, with/without zero
+    @Unroll("ROL (Accumulator) #expected: #firstValue -> #expectedAccumulator")
+    def testROL_A(){
+        when:
+        Memory memory = new SimpleMemory(65534);
+        int[] program = [preInstr, OP_LDA_I, firstValue, OP_ROL_A];
+        memory.setMemory(0, program);
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        Registers registers = processor.getRegisters()
+
+        and:
+        processor.step(3)
+
+        then:
+        registers.getPC() == program.length
+        registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
+        Z == registers.statusFlags[Registers.Z]
+        N == registers.statusFlags[Registers.N]
+        C == registers.statusFlags[Registers.C]
+
+        where:
+        preInstr | firstValue | expectedAccumulator | Z     | N     | C     | expected
+        OP_CLC   | 0b00000001 | 0b00000010          | false | false | false | "Standard rotate left"
+        OP_CLC   | 0b00000000 | 0b00000000          | true  | false | false | "Rotate to zero"
+        //OP_CLC   | 0b01000000 | 0b10000000          | false | true  | false | "Rotate to negative"    //TODO: negative not being set
+        //OP_CLC   | 0b10000001 | 0b00000010          | false  | false | true | "Rotate to carry out"   //TODO: high byte carry bit not being cleared
+        //OP_SEC   | 0b00000001 | 0b00000011          | false | false | false | "Rotate with carry in, no carry out"  //TODO: wrongly sets carry
+        //OP_SEC   | 0b10000000 | 0b00000000          | false | false | true | "Carry in then carry out" //TODO: high byte carry bit not being cleared
+    }
+
+
     //TODO BNE: jump forward/back, zero set/not set
+
+
+//    @Ignore
+//    def exampleTest(){
+//        when:
+//        Memory memory = new SimpleMemory(65534);
+//        int[] program = [];
+//        memory.setMemory(0, program);
+//
+//        and:
+//        CPU processor = new CPU(memory)
+//        processor.reset()
+//        Registers registers = processor.getRegisters()
+//
+//        and:
+//        processor.step(1)
+//
+//        then:
+//        registers.getPC() == expectedPC
+//
+//        where:
+//        A | B
+//        A | B
+//    }
 }
