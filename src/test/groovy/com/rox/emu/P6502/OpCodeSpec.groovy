@@ -759,6 +759,35 @@ class OpCodeSpec extends Specification {
        // OP_SEC     | 0b00000000 | 0b00000001  | false | false | false | "Rotate from zero to carry in" //TODO Why is carry being set?
     }
 
+
+    @Unroll("JMP #expected: [#jmpLocationHi | #jmpLocationLow] -> #expectedPC")
+    def testJMP(){
+        when:
+        Memory memory = new SimpleMemory(65534);
+        int[] program = [OP_NOP, OP_NOP, OP_NOP, OP_JMP_A, jmpLocationHi, jmpLocationLow, OP_NOP, OP_NOP, OP_NOP];
+        memory.setMemory(0, program);
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        Registers registers = processor.getRegisters()
+
+        and:
+        processor.step(instructions)
+
+        then:
+        registers.getPC() == expectedPC
+
+        where:
+        jmpLocationHi | jmpLocationLow | instructions | expectedPC | expected
+        0b00000000    | 0b00000001     | 4            | 1          | "Standard jump back"
+        0b00000000    | 0b00000000     | 5            | 1          | "Standard jump back then step"
+        0b00000000    | 0b00000111     | 4            | 7          | "Standard jump forward"
+        0b00000000    | 0b00000111     | 5            | 8          | "Standard jump forward then step"
+        0b00000001    | 0b00000000     | 4            | 256        | "High byte jump"
+        0b00000001    | 0b00000001     | 4            | 257        | "Double byte jump"
+    }
+
     //TODO BCC: jump forward/back, carry set/not set
     //TODO ROL: with/without carry in/out, with/without negative, with/without zero
     //TODO BNE: jump forward/back, zero set/not set
