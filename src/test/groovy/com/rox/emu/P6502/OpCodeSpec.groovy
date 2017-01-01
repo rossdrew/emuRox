@@ -354,6 +354,7 @@ class OpCodeSpec extends Specification {
         0x50         | 0xD0          | 0             | 0              | 1                   | 0x20        | false | false | false | false | "With simple carry to high byte"
         0x50         | 0xD3          | 0             | 1              | 2                   | 0x23        | false | false | false | false | "With carry to high byte and changed high"
         0            | 0             | 0x50          | 0x50           | 0xA0                | 0           | false | true  | false | true  | "With negative overflow"
+        //TODO carry: which would be over to third byte
     }
 
     @Unroll("AND Immediate #Expected:  #firstValue & #secondValue = #expectedAccumulator in Accumulator.")
@@ -729,38 +730,6 @@ class OpCodeSpec extends Specification {
         0b00000001 | 0b00000000  | true  | false | true  | "Shift to zero with carry"
     }
 
-    @Unroll("ROL ZeroPage #Expected: #firstValue -> #expectedMem")
-    def testROL_Z(){
-        when:
-        Memory memory = new SimpleMemory(65534);
-        int[] program = [firstInstr, OP_LDA_I, firstValue, OP_STA_Z, 0x20, OP_ROL_Z, 0x20];
-        memory.setMemory(0, program);
-
-        and:
-        CPU processor = new CPU(memory)
-        processor.reset()
-        Registers registers = processor.getRegisters()
-
-        and:
-        processor.step(4)
-
-        then:
-        registers.getPC() == program.length
-        expectedMem == memory.getByte(0x20)
-        Z == registers.statusFlags[Registers.Z]
-        N == registers.statusFlags[Registers.N]
-        C == registers.statusFlags[Registers.C]
-
-        where:
-        firstInstr |firstValue  | expectedMem | Z     | N     | C     | Expected
-        OP_CLC     | 0b00000001 | 0b00000010  | false | false | false | "Basic rotate left"
-        OP_CLC     | 0b01000000 | 0b10000000  | false | true  | false | "Rotate to negative"
-        OP_CLC     | 0b00000000 | 0b00000000  | true  | false | false | "Rotate to zero without carry"
-        OP_CLC     | 0b10000000 | 0b00000000  | true  | false | true  | "Rotate to zero with carry"
-       // OP_SEC     | 0b00000000 | 0b00000001  | false | false | false | "Rotate from zero to carry in" //TODO Why is carry being set?
-    }
-
-
     @Unroll("JMP #expected: [#jmpLocationHi | #jmpLocationLow] -> #expectedPC")
     def testJMP(){
         when:
@@ -816,6 +785,37 @@ class OpCodeSpec extends Specification {
         OP_CLC   | 0b10000100 | 6            | 0x3        | "Basic backward jump and step"
     }
 
+    @Unroll("ROL ZeroPage #Expected: #firstValue -> #expectedMem")
+    def testROL_Z(){
+        when:
+        Memory memory = new SimpleMemory(65534);
+        int[] program = [firstInstr, OP_LDA_I, firstValue, OP_STA_Z, 0x20, OP_ROL_Z, 0x20];
+        memory.setMemory(0, program);
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        Registers registers = processor.getRegisters()
+
+        and:
+        processor.step(4)
+
+        then:
+        registers.getPC() == program.length
+        expectedMem == memory.getByte(0x20)
+        Z == registers.statusFlags[Registers.Z]
+        N == registers.statusFlags[Registers.N]
+        C == registers.statusFlags[Registers.C]
+
+        where:
+        firstInstr |firstValue  | expectedMem | Z     | N     | C     | Expected
+        OP_CLC     | 0b00000001 | 0b00000010  | false | false | false | "Basic rotate left"
+        OP_CLC     | 0b01000000 | 0b10000000  | false | true  | false | "Rotate to negative"
+        OP_CLC     | 0b00000000 | 0b00000000  | true  | false | false | "Rotate to zero without carry"
+        OP_CLC     | 0b10000000 | 0b00000000  | true  | false | true  | "Rotate to zero with carry"
+        OP_SEC     | 0b00000000 | 0b00000001  | false | false | false | "Rotate from zero to carry in"
+    }
+
     @Unroll("ROL (Accumulator) #expected: #firstValue -> #expectedAccumulator")
     def testROL_A(){
         when:
@@ -849,8 +849,30 @@ class OpCodeSpec extends Specification {
         OP_SEC   | 0b01000000 | 0b10000001          | false | true  | false | "Carry in to negative"
     }
 
-    //TODO BNE: jump forward/back, zero set/not set
+    def testBNE(){
+        when:
+        Memory memory = new SimpleMemory(65534);
+        int[] program = [OP_NOP, OP_NOP, OP_NOP, OP_LDA_I, accumulatorValue, OP_BNE, jumpSteps, OP_NOP, OP_NOP, OP_NOP];
+        memory.setMemory(0, program);
 
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        Registers registers = processor.getRegisters()
+
+        and:
+        processor.step(instructions)
+
+        then:
+        registers.getPC() == expectedPC
+
+        where:
+        accumulatorValue | jumpSteps  | instructions | expectedPC | expected
+        0                | 4          | 5            | 0xB        | "Standard forward jump"
+        0                | 0b10000100 | 5            | 0x3        | "Standard backward jump"
+        1                | 0b10000100 | 5            | 0x6        | "No jump"
+
+    }
 
 //    @Ignore
 //    def exampleTest(){
