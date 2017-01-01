@@ -803,7 +803,7 @@ class OpCodeSpec extends Specification {
 //        assertEquals(0x97, registers.getRegister(Registers.REG_Y_INDEX));
 //    }
 
-    @Ignore
+    @Unroll("JMP #expected: ending up at mem[#expectedPC] after #instructions steps")
     def testBCC(){
         when:
         Memory memory = new SimpleMemory(65534);
@@ -822,12 +822,15 @@ class OpCodeSpec extends Specification {
         registers.getPC() == expectedPC
 
         where:
-        preInstr | jmpSteps | instructions | expectedPC | expected
-        OP_SEC   | 4        | 5            | 5          | "Basic forward jump"  //TODO Doesn't seem to work
+        preInstr | jmpSteps   | instructions | expectedPC | expected
+        OP_SEC   | 4          | 5            | 0x5        | "No jump"
+        OP_CLC   | 4          | 5            | 0xA        | "Basic forward jump"
+        OP_CLC   | 1          | 6            | 0x8        | "Basic forward jump and step"
+        OP_CLC   | 0b10000100 | 5            | 0x2        | "Basic backward jump"
+        OP_CLC   | 0b10000100 | 6            | 0x3        | "Basic backward jump and step"
 
     }
 
-    //TODO BCC: jump forward/back, carry set/not set
     //TODO ROL: with/without carry in/out, with/without negative, with/without zero
     //TODO BNE: jump forward/back, zero set/not set
 }
