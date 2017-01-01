@@ -5,6 +5,7 @@ import static com.rox.emu.P6502.Registers.*;
 
 import com.rox.emu.Memory;
 import com.rox.emu.UnknownOpCodeException;
+import com.sun.org.apache.xml.internal.security.algorithms.implementations.IntegrityHmac;
 
 /**
  * A emulated representation of MOS 6502, 8 bit
@@ -284,7 +285,10 @@ public class CPU {
 
             case OP_ROL_A: {
                 int rotatedValue = (registers.getRegister(REG_ACCUMULATOR) << 1) | (registers.getFlag(STATUS_FLAG_CARRY) ? 1 : 0);
-                registers.setRegister(REG_ACCUMULATOR, rotatedValue);
+                registers.setFlagsBasedOn(rotatedValue);
+                System.out.println("=======> " + Integer.toBinaryString(rotatedValue));
+                setCarryFlagBasedOn(rotatedValue);
+                registers.setRegister(REG_ACCUMULATOR, rotatedValue & 0xFF);
             }
                 break;
 
@@ -314,6 +318,8 @@ public class CPU {
     private void setCarryFlagBasedOn(int newFakeByte) {
         if ((newFakeByte & CARRY_INDICATOR_BIT) == CARRY_INDICATOR_BIT)
             registers.setFlag(STATUS_FLAG_CARRY);
+        else
+            registers.clearFlag(STATUS_FLAG_CARRY);
     }
 
     /**

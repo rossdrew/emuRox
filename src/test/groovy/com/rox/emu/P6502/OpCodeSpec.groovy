@@ -349,10 +349,10 @@ class OpCodeSpec extends Specification {
         storedValue == memory.getByte(40)
 
         where:
-        lowFirstByte | lowSecondByte | highFirstByte | highSecondByte | expectedAccumulator | storedValue | Z    | N     | C     | O     | Expected
+        lowFirstByte | lowSecondByte | highFirstByte | highSecondByte | expectedAccumulator | storedValue | Z     | N     | C     | O     | Expected
         0            | 0             | 0             | 0              | 0                   | 0           | true  | false | false | false | "With zero result"
-        0x50         | 0xD0          | 0             | 0              | 1                   | 0x20        | false | false | true  | false | "With simple carry to high byte"
-        0x50         | 0xD3          | 0             | 1              | 2                   | 0x23        | false | false | true  | false | "With carry to high byte and changed high"
+        0x50         | 0xD0          | 0             | 0              | 1                   | 0x20        | false | false | false | false | "With simple carry to high byte"
+        0x50         | 0xD3          | 0             | 1              | 2                   | 0x23        | false | false | false | false | "With carry to high byte and changed high"
         0            | 0             | 0x50          | 0x50           | 0xA0                | 0           | false | true  | false | true  | "With negative overflow"
     }
 
@@ -842,12 +842,12 @@ class OpCodeSpec extends Specification {
         preInstr | firstValue | expectedAccumulator | Z     | N     | C     | expected
         OP_CLC   | 0b00000001 | 0b00000010          | false | false | false | "Standard rotate left"
         OP_CLC   | 0b00000000 | 0b00000000          | true  | false | false | "Rotate to zero"
-        //OP_CLC   | 0b01000000 | 0b10000000          | false | true  | false | "Rotate to negative"    //TODO: negative not being set
-        //OP_CLC   | 0b10000001 | 0b00000010          | false  | false | true | "Rotate to carry out"   //TODO: high byte carry bit not being cleared
-        //OP_SEC   | 0b00000001 | 0b00000011          | false | false | false | "Rotate with carry in, no carry out"  //TODO: wrongly sets carry
-        //OP_SEC   | 0b10000000 | 0b00000000          | false | false | true | "Carry in then carry out" //TODO: high byte carry bit not being cleared
+        OP_CLC   | 0b01000000 | 0b10000000          | false | true  | false | "Rotate to negative"
+        OP_CLC   | 0b10000001 | 0b00000010          | false | false | true  | "Rotate to carry out"
+        OP_SEC   | 0b00000001 | 0b00000011          | false | false | false | "Rotate with carry in, no carry out"
+        OP_SEC   | 0b10000000 | 0b00000001          | false | false | true  | "Carry in then carry out"
+        OP_SEC   | 0b01000000 | 0b10000001          | false | true  | false | "Carry in to negative"
     }
-
 
     //TODO BNE: jump forward/back, zero set/not set
 
