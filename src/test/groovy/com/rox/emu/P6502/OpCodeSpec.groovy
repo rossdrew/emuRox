@@ -849,6 +849,7 @@ class OpCodeSpec extends Specification {
         OP_SEC   | 0b01000000 | 0b10000001          | false | true  | false | "Carry in to negative"
     }
 
+    @Unroll("BNE #expected: With accumulator set to #accumulatorValue, we end up at mem[#expectedPC] after #instructions steps")
     def testBNE(){
         when:
         Memory memory = new SimpleMemory(65534);
@@ -871,7 +872,6 @@ class OpCodeSpec extends Specification {
         0                | 4          | 5            | 0xB        | "Standard forward jump"
         0                | 0b10000100 | 5            | 0x3        | "Standard backward jump"
         1                | 0b10000100 | 5            | 0x6        | "No jump"
-
     }
 
 //    @Ignore
