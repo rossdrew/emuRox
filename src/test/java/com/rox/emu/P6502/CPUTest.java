@@ -552,6 +552,20 @@ public class CPUTest {
     }
 
     @Test
+    public void testBVC(){
+        int[] program = {OP_LDA_I, 0x0, OP_ADC_I, 0x10, OP_BVC, 0x4, OP_LDA_I, 0x99, OP_LDX_I, 0x98, OP_LDY_I, 0x97};
+        memory.setMemory(0, program);
+        Registers registers = processor.getRegisters();
+
+        processor.step(4);
+
+        assertEquals(program.length, registers.getPC());
+        assertEquals(0x10, registers.getRegister(Registers.REG_ACCUMULATOR));
+        assertEquals(0x0, registers.getRegister(Registers.REG_X_INDEX));
+        assertEquals(0x97, registers.getRegister(Registers.REG_Y_INDEX));
+    }
+
+    @Test
     @Ignore //XXX Code runs but no correct answer..why?  Robin...to the debugger!
     public void testMultiplicationLoop(){
         int data_offset = 0x32;
