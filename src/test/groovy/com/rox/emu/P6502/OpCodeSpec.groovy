@@ -901,6 +901,31 @@ class OpCodeSpec extends Specification {
         0                | 0b10000100 | 5            | 0x6        | "No jump"
     }
 
+    @Unroll("BEQ #expected: With accumulator set to #accumulatorValue, we end up at mem[#expectedPC] after #instructions steps")
+    def testBEQ(){
+        when:
+        Memory memory = new SimpleMemory(65534);
+        int[] program = [OP_NOP, OP_NOP, OP_NOP, OP_LDA_I, accumulatorValue, OP_BEQ, jumpSteps, OP_NOP, OP_NOP, OP_NOP];
+        memory.setMemory(0, program);
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        Registers registers = processor.getRegisters()
+
+        and:
+        processor.step(instructions)
+
+        then:
+        registers.getPC() == expectedPC
+
+        where:
+        accumulatorValue | jumpSteps  | instructions | expectedPC | expected
+        0                | 4          | 5            | 0xB        | "Standard forward jump"
+        0                | 0b10000100 | 5            | 0x3        | "Standard backward jump"
+        1                | 0b10000100 | 5            | 0x6        | "No jump"
+    }
+
 //    @Ignore
 //    def exampleTest(){
 //        when:
