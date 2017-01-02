@@ -758,7 +758,7 @@ class OpCodeSpec extends Specification {
         0b00000001    | 0b00000001     | 4            | 257        | "Double byte jump"
     }
 
-    @Unroll("JMP #expected: ending up at mem[#expectedPC] after #instructions steps")
+    @Unroll("BCC #expected: ending up at mem[#expectedPC] after #instructions steps")
     def testBCC(){
         when:
         Memory memory = new SimpleMemory(65534);
@@ -783,6 +783,33 @@ class OpCodeSpec extends Specification {
         OP_CLC   | 1          | 6            | 0x8        | "Basic forward jump and step"
         OP_CLC   | 0b10000100 | 5            | 0x2        | "Basic backward jump"
         OP_CLC   | 0b10000100 | 6            | 0x3        | "Basic backward jump and step"
+    }
+
+    @Unroll("BCS #expected: ending up at mem[#expectedPC] after #instructions steps")
+    def testBCS(){
+        when:
+        Memory memory = new SimpleMemory(65534);
+        int[] program = [OP_NOP, OP_NOP, OP_NOP, preInstr, OP_BCS, jmpSteps, OP_NOP, OP_NOP, OP_NOP, OP_NOP];
+        memory.setMemory(0, program);
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        Registers registers = processor.getRegisters()
+
+        and:
+        processor.step(instructions)
+
+        then:
+        registers.getPC() == expectedPC
+
+        where:
+        preInstr | jmpSteps   | instructions | expectedPC | expected
+        OP_CLC   | 4          | 5            | 0x5        | "No jump"
+        OP_SEC   | 4          | 5            | 0xA        | "Basic forward jump"
+        OP_SEC   | 1          | 6            | 0x8        | "Basic forward jump and step"
+        OP_SEC   | 0b10000100 | 5            | 0x2        | "Basic backward jump"
+        OP_SEC   | 0b10000100 | 6            | 0x3        | "Basic backward jump and step"
     }
 
     @Unroll("ROL ZeroPage #Expected: #firstValue -> #expectedMem")

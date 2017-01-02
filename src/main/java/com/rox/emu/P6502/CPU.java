@@ -273,6 +273,11 @@ public class CPU {
                 registers.setRegister(REG_PC_LOW, l);
                 break;
 
+            case OP_BCS:
+                if (registers.getFlag(STATUS_FLAG_CARRY))
+                    branchTo(nextProgramByte());
+                break;
+
             case OP_BCC:
                 if (!registers.getFlag(STATUS_FLAG_CARRY))
                     branchTo(nextProgramByte());
@@ -286,7 +291,6 @@ public class CPU {
             case OP_ROL_A: {
                 int rotatedValue = (registers.getRegister(REG_ACCUMULATOR) << 1) | (registers.getFlag(STATUS_FLAG_CARRY) ? 1 : 0);
                 registers.setFlagsBasedOn(rotatedValue);
-                System.out.println("=======> " + Integer.toBinaryString(rotatedValue));
                 setCarryFlagBasedOn(rotatedValue);
                 registers.setRegister(REG_ACCUMULATOR, rotatedValue & 0xFF);
             }
