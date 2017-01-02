@@ -471,7 +471,21 @@ public class CPUTest {
 
     @Test
     public void testBNE(){
-        int[] program = {OP_LDA_I, 0x0, OP_BNE, 0x4, OP_LDA_I, 0x99, OP_LDX_I, 0x98, OP_LDY_I, 0x97};
+        int[] program = {OP_LDA_I, 0x1, OP_BNE, 0x4, OP_LDA_I, 0x99, OP_LDX_I, 0x98, OP_LDY_I, 0x97};
+        memory.setMemory(0, program);
+        Registers registers = processor.getRegisters();
+
+        processor.step(3);
+
+        assertEquals(program.length, registers.getPC());
+        assertEquals(0x1, registers.getRegister(Registers.REG_ACCUMULATOR));
+        assertEquals(0x0, registers.getRegister(Registers.REG_X_INDEX));
+        assertEquals(0x97, registers.getRegister(Registers.REG_Y_INDEX));
+    }
+
+    @Test
+    public void testBEQ(){
+        int[] program = {OP_LDA_I, 0x0, OP_BEQ, 0x4, OP_LDA_I, 0x99, OP_LDX_I, 0x98, OP_LDY_I, 0x97};
         memory.setMemory(0, program);
         Registers registers = processor.getRegisters();
 
