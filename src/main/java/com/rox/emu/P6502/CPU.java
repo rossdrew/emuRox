@@ -282,7 +282,12 @@ public class CPU {
                 if (!registers.getFlag(STATUS_FLAG_CARRY))
                     branchTo(nextProgramByte());
                 break;
-            
+
+            case OP_BEQ:
+                if (registers.getFlag(STATUS_FLAG_ZERO))
+                    branchTo(nextProgramByte());
+                break;
+
             case OP_BNE:
                 if (!registers.getFlag(STATUS_FLAG_ZERO))
                     branchTo(nextProgramByte());

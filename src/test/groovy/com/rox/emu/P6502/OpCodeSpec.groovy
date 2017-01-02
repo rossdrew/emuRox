@@ -896,9 +896,9 @@ class OpCodeSpec extends Specification {
 
         where:
         accumulatorValue | jumpSteps  | instructions | expectedPC | expected
-        0                | 4          | 5            | 0xB        | "Standard forward jump"
-        0                | 0b10000100 | 5            | 0x3        | "Standard backward jump"
-        1                | 0b10000100 | 5            | 0x6        | "No jump"
+        1                | 4          | 5            | 0xB        | "Standard forward jump"
+        1                | 0b10000100 | 5            | 0x3        | "Standard backward jump"
+        0                | 0b10000100 | 5            | 0x6        | "No jump"
     }
 
 //    @Ignore
