@@ -5,7 +5,6 @@ import static com.rox.emu.P6502.Registers.*;
 
 import com.rox.emu.Memory;
 import com.rox.emu.UnknownOpCodeException;
-import com.sun.org.apache.xml.internal.security.algorithms.implementations.IntegrityHmac;
 
 /**
  * A emulated representation of MOS 6502, 8 bit
