@@ -308,6 +308,11 @@ public class CPU {
                     branchTo(nextProgramByte());
                 break;
 
+            case OP_BVC:
+                if (!registers.getFlag(STATUS_FLAG_OVERFLOW))
+                    branchTo(nextProgramByte());
+                break;
+
             case OP_ROL_A: {
                 int rotatedValue = (registers.getRegister(REG_ACCUMULATOR) << 1) | (registers.getFlag(STATUS_FLAG_CARRY) ? 1 : 0);
                 registers.setFlagsBasedOn(rotatedValue);
