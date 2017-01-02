@@ -976,6 +976,31 @@ class OpCodeSpec extends Specification {
         0b11111110       | 0b10000100 | 5            | 0x6        | "No jump"
     }
 
+    @Unroll("BVC #expected: With accumulator set to #accumulatorValue, we end up at mem[#expectedPC] after #instructions steps")
+    def testBVC(){
+        when:
+        Memory memory = new SimpleMemory(65534);
+        int[] program = [OP_NOP, OP_NOP, OP_NOP, OP_LDA_I, accumulatorValue, OP_ADC_I, addedValue, OP_BVC, jumpSteps, OP_NOP, OP_NOP, OP_NOP];
+        memory.setMemory(0, program);
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        Registers registers = processor.getRegisters()
+
+        and:
+        processor.step(instructions)
+
+        then:
+        registers.getPC() == expectedPC
+
+        where:
+        accumulatorValue | addedValue | jumpSteps  | instructions | expectedPC | expected
+        0                | 0          | 4          | 6            | 0xD        | "Standard forward jump"
+        0                | 0          | 0b10000100 | 6            | 0x5        | "Standard backward jump"
+        0x50             | 0x50       | 0b10000100 | 6            | 0x8        | "No jump"
+    }
+
 //    @Ignore
 //    def exampleTest(){
 //        when:
