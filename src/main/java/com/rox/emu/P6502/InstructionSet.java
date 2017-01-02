@@ -50,6 +50,7 @@ public class InstructionSet {
     public static final int OP_BNE = 0xD0;
     public static final int OP_BEQ = 0xF0;
     public static final int OP_BMI = 0x30;
+    public static final int OP_BPL = 0x10;
     public static final int OP_ROL_A = 0x2A;
     public static final int OP_ROL_Z = 0x26;
 
@@ -62,7 +63,7 @@ public class InstructionSet {
                                                 OP_SEC, OP_CLC, OP_CLV, OP_PHA, OP_PLA,
                                                 OP_LDY_I, OP_INY, OP_DEY,
                                                 OP_LDX_I, OP_INX, OP_DEX,
-                                                OP_NOP, OP_JMP_A, OP_BCC, OP_BCS, OP_BNE, OP_BEQ, OP_BMI};
+                                                OP_NOP, OP_JMP_A, OP_BCC, OP_BCS, OP_BNE, OP_BEQ, OP_BMI, OP_BPL};
 
     public static String getName(int opCode){
         switch (opCode){
@@ -105,6 +106,7 @@ public class InstructionSet {
             case OP_BNE:        return "BNE Branch if NOT equal";
             case OP_BEQ:        return "BEQ Branch if Equal";
             case OP_BMI:        return "BMI Branch if Minus";
+            case OP_BPL:        return "BPL Branch on Plus";
             case OP_NOP:        return "NOP - No Operation";
             default:
                 return "<Unknown Opcode: " + opCode + ">";
