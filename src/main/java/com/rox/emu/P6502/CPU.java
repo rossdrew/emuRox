@@ -350,17 +350,14 @@ public class CPU {
     /**
      * Branch to a relative location as defined by a signed byte
      *
-     * XXX This should be using twos-compliment numbers
-     *
      * @param displacement relative (-127 -> 128) location from end of branch instruction
      */
     private void branchTo(int displacement) {
         displacement &= 0xFF;
-        int absoluteDisplacement = displacement & 0b01111111;
         if ((displacement & NEGATIVE_INDICATOR_BIT) == NEGATIVE_INDICATOR_BIT)
-            registers.setRegister(REG_PC_LOW, registers.getRegister(REG_PC_LOW) - absoluteDisplacement);
+            registers.setRegister(REG_PC_LOW, registers.getRegister(REG_PC_LOW) - fromTwosComplimented(displacement));
         else
-            registers.setRegister(REG_PC_LOW, registers.getRegister(REG_PC_LOW) + absoluteDisplacement);
+            registers.setRegister(REG_PC_LOW, registers.getRegister(REG_PC_LOW) + displacement);
     }
 
     private void performADC(int byteTerm){
@@ -378,6 +375,10 @@ public class CPU {
 
     private int twosComplimentOf(int byteValue){
         return ((~byteValue) + 1) & 0xFF;
+    }
+
+    private int fromTwosComplimented(int byteValue){
+        return ((~byteValue)) & 0xFF;
     }
 
     /**

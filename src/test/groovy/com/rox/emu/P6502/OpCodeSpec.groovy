@@ -781,8 +781,8 @@ class OpCodeSpec extends Specification {
         OP_SEC   | 4          | 5            | 0x6        | "No jump"
         OP_CLC   | 4          | 5            | 0xA        | "Basic forward jump"
         OP_CLC   | 1          | 6            | 0x8        | "Basic forward jump and step"
-        OP_CLC   | 0b10000100 | 5            | 0x2        | "Basic backward jump"
-        OP_CLC   | 0b10000100 | 6            | 0x3        | "Basic backward jump and step"
+        OP_CLC   | 0b11111011 | 5            | 0x2        | "Basic backward jump"
+        OP_CLC   | 0b11111011 | 6            | 0x3        | "Basic backward jump and step"
     }
 
     @Unroll("BCS #expected: ending up at mem[#expectedPC] after #instructions steps")
@@ -808,8 +808,8 @@ class OpCodeSpec extends Specification {
         OP_CLC   | 4          | 5            | 0x6        | "No jump"
         OP_SEC   | 4          | 5            | 0xA        | "Basic forward jump"
         OP_SEC   | 1          | 6            | 0x8        | "Basic forward jump and step"
-        OP_SEC   | 0b10000100 | 5            | 0x2        | "Basic backward jump"
-        OP_SEC   | 0b10000100 | 6            | 0x3        | "Basic backward jump and step"
+        OP_SEC   | 0b11111011 | 5            | 0x2        | "Basic backward jump"
+        OP_SEC   | 0b11111011 | 6            | 0x3        | "Basic backward jump and step"
     }
 
     @Unroll("ROL ZeroPage #Expected: #firstValue -> #expectedMem")
@@ -897,8 +897,8 @@ class OpCodeSpec extends Specification {
         where:
         accumulatorValue | jumpSteps  | instructions | expectedPC | expected
         1                | 4          | 5            | 0xB        | "Standard forward jump"
-        1                | 0b10000100 | 5            | 0x3        | "Standard backward jump"
-        0                | 0b10000100 | 5            | 0x7        | "No jump"
+        1                | 0b11111011 | 5            | 0x3        | "Standard backward jump"
+        0                | 0b11111011 | 5            | 0x7        | "No jump"
     }
 
     @Unroll("BEQ #expected: With accumulator set to #accumulatorValue, we end up at mem[#expectedPC] after #instructions steps")
@@ -922,8 +922,8 @@ class OpCodeSpec extends Specification {
         where:
         accumulatorValue | jumpSteps  | instructions | expectedPC | expected
         0                | 4          | 5            | 0xB        | "Standard forward jump"
-        0                | 0b10000100 | 5            | 0x3        | "Standard backward jump"
-        1                | 0b10000100 | 5            | 0x7        | "No jump"
+        0                | 0b11111011 | 5            | 0x3        | "Standard backward jump"
+        1                | 0b11111011 | 5            | 0x7        | "No jump"
     }
 
     @Unroll("BMI #expected: With accumulator set to #accumulatorValue, we end up at mem[#expectedPC] after #instructions steps")
@@ -947,8 +947,8 @@ class OpCodeSpec extends Specification {
         where:
         accumulatorValue | jumpSteps  | instructions | expectedPC | expected
         0b11111110       | 4          | 5            | 0xB        | "Standard forward jump"
-        0b11111100       | 0b10000100 | 5            | 0x3        | "Standard backward jump"
-        0b00000001       | 0b10000100 | 5            | 0x7        | "No jump"
+        0b11111100       | 0b11111011 | 5            | 0x3        | "Standard backward jump"
+        0b00000001       | 0b11111011 | 5            | 0x7        | "No jump"
     }
 
     @Unroll("BPL #expected: With accumulator set to #accumulatorValue, we end up at mem[#expectedPC] after #instructions steps")
@@ -972,8 +972,8 @@ class OpCodeSpec extends Specification {
         where:
         accumulatorValue | jumpSteps  | instructions | expectedPC | expected
         0b00000001       | 4          | 5            | 0xB        | "Standard forward jump"
-        0b01001001       | 0b10000100 | 5            | 0x3        | "Standard backward jump"
-        0b11111110       | 0b10000100 | 5            | 0x7        | "No jump"
+        0b01001001       | 0b11111011 | 5            | 0x3        | "Standard backward jump"
+        0b11111110       | 0b11111011 | 5            | 0x7        | "No jump"
     }
 
     @Unroll("BVC #expected: #accumulatorValue + #addedValue, checking overflow we end up at mem[#expectedPC] after #instructions steps")
@@ -997,8 +997,8 @@ class OpCodeSpec extends Specification {
         where:
         accumulatorValue | addedValue | jumpSteps  | instructions | expectedPC | expected
         0                | 0          | 4          | 6            | 0xD        | "Standard forward jump"
-        0                | 0          | 0b10000100 | 6            | 0x5        | "Standard backward jump"
-        0x50             | 0x50       | 0b10000100 | 6            | 0x9        | "No jump"
+        0                | 0          | 0b11111011 | 6            | 0x5        | "Standard backward jump"
+        0x50             | 0x50       | 0b11111011 | 6            | 0x9        | "No jump"
     }
 
     @Unroll("BVC #expected: #accumulatorValue + #addedValue, checking overflow we end up at mem[#expectedPC] after #instructions steps")
@@ -1022,8 +1022,8 @@ class OpCodeSpec extends Specification {
         where:
         accumulatorValue | addedValue | jumpSteps  | instructions | expectedPC | expected
         0x50             | 0x50       | 4          | 6            | 0xD        | "Standard forward jump"
-        0x50             | 0x50       | 0b10000100 | 6            | 0x5        | "Standard backward jump"
-        0                | 0          | 0b10000100 | 6            | 0x9        | "No jump"
+        0x50             | 0x50       | 0b11111011 | 6            | 0x5        | "Standard backward jump"
+        0                | 0          | 0b11111011 | 6            | 0x9        | "No jump"
     }
 
 //    @Ignore
