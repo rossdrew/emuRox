@@ -350,6 +350,8 @@ public class CPU {
     /**
      * Branch to a relative location as defined by a signed byte
      *
+     * XXX This should be using twos-compliment numbers
+     *
      * @param displacement relative (-127 -> 128) location from end of branch instruction
      */
     private void branchTo(int displacement) {

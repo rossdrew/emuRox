@@ -566,7 +566,7 @@ public class CPUTest {
     }
 
     @Test
-    @Ignore //XXX Code runs but no correct answer..why?  Robin...to the debugger!
+    @Ignore
     public void testMultiplicationLoop(){
         int data_offset = 0x32;
         int MPD =       data_offset + 0x10;
@@ -607,7 +607,7 @@ public class CPUTest {
         memory.setMemory(0, program);
         Registers registers = processor.getRegisters();
 
-        processor.step(15);
+        processor.step(64);
 
         System.out.println("RESAD = " + Integer.toBinaryString(memory.getByte(RESAD_0)) + "|" + Integer.toBinaryString(memory.getByte(RESAD_1)) );
         System.out.println("MPD = " + memory.getByte(MPD));
