@@ -272,53 +272,37 @@ public class CPU {
                 registers.setRegister(REG_PC_LOW, l);
                 break;
 
-            case OP_BCS: {
-                int location = nextProgramByte();
-                if (registers.getFlag(STATUS_FLAG_CARRY))
-                    branchTo(location);
-            } break;
+            case OP_BCS:
+                branchIf(registers.getFlag(STATUS_FLAG_CARRY));
+                break;
 
-            case OP_BCC: {
-                int location = nextProgramByte();
-                if (!registers.getFlag(STATUS_FLAG_CARRY))
-                    branchTo(location);
-            } break;
+            case OP_BCC:
+                branchIf(!registers.getFlag(STATUS_FLAG_CARRY));
+                break;
 
-            case OP_BEQ: {
-                int location = nextProgramByte();
-                if (registers.getFlag(STATUS_FLAG_ZERO))
-                    branchTo(location);
-            } break;
+            case OP_BEQ:
+                branchIf(registers.getFlag(STATUS_FLAG_ZERO));
+                break;
 
-            case OP_BNE: {
-                int location = nextProgramByte();
-                if (!registers.getFlag(STATUS_FLAG_ZERO))
-                    branchTo(location);
-            }break;
+            case OP_BNE:
+                branchIf(!registers.getFlag(STATUS_FLAG_ZERO));
+                break;
 
-            case OP_BMI: {
-                int location = nextProgramByte();
-                if (registers.getFlag(STATUS_FLAG_NEGATIVE))
-                    branchTo(location);
-            }break;
+            case OP_BMI:
+                branchIf(registers.getFlag(STATUS_FLAG_NEGATIVE));
+                break;
 
-            case OP_BPL: {
-                int location = nextProgramByte();
-                if (!registers.getFlag(STATUS_FLAG_NEGATIVE))
-                    branchTo(location);
-            }break;
+            case OP_BPL:
+                branchIf(!registers.getFlag(STATUS_FLAG_NEGATIVE));
+                break;
 
-            case OP_BVS: {
-                int location = nextProgramByte();
-                if (registers.getFlag(STATUS_FLAG_OVERFLOW))
-                    branchTo(location);
-            }break;
+            case OP_BVS:
+                branchIf(registers.getFlag(STATUS_FLAG_OVERFLOW));
+                break;
 
-            case OP_BVC: {
-                int location = nextProgramByte();
-                if (!registers.getFlag(STATUS_FLAG_OVERFLOW))
-                    branchTo(location);
-            }break;
+            case OP_BVC:
+                branchIf(!registers.getFlag(STATUS_FLAG_OVERFLOW));
+                break;
 
             case OP_ROL_A: {
                 int rotatedValue = (registers.getRegister(REG_ACCUMULATOR) << 1) | (registers.getFlag(STATUS_FLAG_CARRY) ? 1 : 0);
@@ -344,6 +328,11 @@ public class CPU {
             default:
                 throw new UnknownOpCodeException("Unknown 6502 OpCode:" + opCode + " encountered.", opCode);
         }
+    }
+
+    private void branchIf(boolean condition){
+        int location = nextProgramByte();
+        if (condition) branchTo(location);
     }
 
     private void setBorrowFlagFor(int newFakeByte) {
