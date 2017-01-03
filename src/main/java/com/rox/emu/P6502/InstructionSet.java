@@ -45,14 +45,16 @@ public class InstructionSet {
     public static final int OP_PLA = 0x68;
     public static final int OP_NOP = 0xEA;
     public static final int OP_JMP_A = 0x4C;
+
+    public static final int OP_BPL = 0x10;
+    public static final int OP_BMI = 0x30;
+    public static final int OP_BVC = 0x50;
+    public static final int OP_BVS = 0x70;
     public static final int OP_BCC = 0x90;
     public static final int OP_BCS = 0xB0;
     public static final int OP_BNE = 0xD0;
     public static final int OP_BEQ = 0xF0;
-    public static final int OP_BMI = 0x30;
-    public static final int OP_BPL = 0x10;
-    public static final int OP_BVS = 0x70;
-    public static final int OP_BVC = 0x50;
+
     public static final int OP_ROL_A = 0x2A;
     public static final int OP_ROL_Z = 0x26;
 
@@ -103,14 +105,14 @@ public class InstructionSet {
             case OP_PHA:        return "Push Accumulator";
             case OP_PLA:        return "Pull Accumulator";
             case OP_JMP_A:      return "JMP (Absolute)";
-            case OP_BCC:        return "BCC Branch on Carry Clear";
-            case OP_BCS:        return "BCS Branch on Carry Set";
-            case OP_BNE:        return "BNE Branch if NOT equal";
-            case OP_BEQ:        return "BEQ Branch if Equal";
-            case OP_BMI:        return "BMI Branch if Minus";
-            case OP_BPL:        return "BPL Branch on Plus";
-            case OP_BVS:        return "BVS Branch on Overflow Set";
-            case OP_BVC:        return "BVC Branch on Overflow Clear";
+            case OP_BCC:        return "BCC 'Branch on Carry Clear'";
+            case OP_BCS:        return "BCS 'Branch on Carry Set'";
+            case OP_BNE:        return "BNE 'Branch if NOT equal'";
+            case OP_BEQ:        return "BEQ 'Branch if Equal'";
+            case OP_BMI:        return "BMI 'Branch if Minus'";
+            case OP_BPL:        return "BPL 'Branch on Plus'";
+            case OP_BVS:        return "BVS 'Branch on Overflow Set'";
+            case OP_BVC:        return "BVC 'Branch on Overflow Clear'";
             case OP_NOP:        return "NOP - No Operation";
             default:
                 return "<Unknown Opcode: " + opCode + ">";

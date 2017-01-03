@@ -330,11 +330,6 @@ public class CPU {
         }
     }
 
-    private void branchIf(boolean condition){
-        int location = nextProgramByte();
-        if (condition) branchTo(location);
-    }
-
     private void setBorrowFlagFor(int newFakeByte) {
         if ((newFakeByte & 0x1) == 0x1)
             registers.setFlag(STATUS_FLAG_CARRY);
@@ -345,6 +340,11 @@ public class CPU {
             registers.setFlag(STATUS_FLAG_CARRY);
         else
             registers.clearFlag(STATUS_FLAG_CARRY);
+    }
+
+    private void branchIf(boolean condition){
+        int location = nextProgramByte();
+        if (condition) branchTo(location);
     }
 
     /**
