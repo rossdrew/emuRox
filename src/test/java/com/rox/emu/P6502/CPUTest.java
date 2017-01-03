@@ -144,10 +144,10 @@ public class CPUTest {
     @Test
     public void testADC() {
         int[] program = {OP_CLC,
-                OP_LDA_I,
-                0x1,
-                OP_ADC_I,
-                0x1};
+                         OP_LDA_I,
+                         0x1,
+                         OP_ADC_I,
+                         0x1};
         memory.setMemory(0, program);
 
         processor.step(3);
@@ -161,10 +161,10 @@ public class CPUTest {
     @Test
     public void testADCWithCarry() {
         int[] program = {OP_SEC,
-                OP_LDA_I,
-                0x1,
-                OP_ADC_I,
-                0x1};
+                         OP_LDA_I,
+                         0x1,
+                         OP_ADC_I,
+                         0x1};
         memory.setMemory(0, program);
 
         processor.step(3);

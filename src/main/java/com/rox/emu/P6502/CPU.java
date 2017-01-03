@@ -115,7 +115,6 @@ public class CPU {
             case OP_ASL_A: {
                 int newFakeByte = registers.getRegister(REG_ACCUMULATOR) << 1;
                 setCarryFlagBasedOn(newFakeByte);
-
                 registers.setRegisterAndFlags(REG_ACCUMULATOR, newFakeByte);
             }
             break;
@@ -124,9 +123,8 @@ public class CPU {
                 int location = nextProgramByte();
                 int newFakeByte = memory.getByte(location) << 1;
                 setCarryFlagBasedOn(newFakeByte);
-
-                memory.setByte(location, newFakeByte & 0xFF);
                 registers.setFlagsBasedOn(newFakeByte);
+                memory.setByte(location, newFakeByte & 0xFF);
             }
             break;
 
@@ -143,8 +141,25 @@ public class CPU {
 
                 setBorrowFlagFor(newFakeByte);
                 newFakeByte = newFakeByte >> 1;
-                memory.setByte(location, newFakeByte & 0xFF);
                 registers.setFlagsBasedOn(newFakeByte);
+                memory.setByte(location, newFakeByte & 0xFF);
+            }
+            break;
+
+            case OP_ROL_A: {
+                int rotatedValue = (registers.getRegister(REG_ACCUMULATOR) << 1) | (registers.getFlag(STATUS_FLAG_CARRY) ? 1 : 0);
+                registers.setFlagsBasedOn(rotatedValue);
+                setCarryFlagBasedOn(rotatedValue);
+                registers.setRegister(REG_ACCUMULATOR, rotatedValue & 0xFF);
+            }
+            break;
+
+            case OP_ROL_Z: {
+                int location = nextProgramByte();
+                int rotatedValue = (memory.getByte(location) << 1) | (registers.getFlag(STATUS_FLAG_CARRY) ? 1 : 0);
+                registers.setFlagsBasedOn(rotatedValue);
+                setCarryFlagBasedOn(rotatedValue);
+                memory.setByte(location, rotatedValue & 0xFF);
             }
             break;
 
@@ -302,23 +317,6 @@ public class CPU {
 
             case OP_BVC:
                 branchIf(!registers.getFlag(STATUS_FLAG_OVERFLOW));
-                break;
-
-            case OP_ROL_A: {
-                int rotatedValue = (registers.getRegister(REG_ACCUMULATOR) << 1) | (registers.getFlag(STATUS_FLAG_CARRY) ? 1 : 0);
-                registers.setFlagsBasedOn(rotatedValue);
-                setCarryFlagBasedOn(rotatedValue);
-                registers.setRegister(REG_ACCUMULATOR, rotatedValue & 0xFF);
-            }
-                break;
-
-            case OP_ROL_Z: {
-                int location = nextProgramByte();
-                int rotatedValue = (memory.getByte(location) << 1) | (registers.getFlag(STATUS_FLAG_CARRY) ? 1 : 0);
-                setCarryFlagBasedOn(rotatedValue);
-                registers.setFlagsBasedOn(rotatedValue);
-                memory.setByte(location, rotatedValue & 0xFF);
-            }
                 break;
 
             case OP_NOP:
