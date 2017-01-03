@@ -24,7 +24,7 @@ public class CPU {
     }
 
     /**
-     * IRL this takes 6 CPU cycles but we'll cross that bridge IF we come to it
+     * IRL this takes 6 CPU cycles but we'll cross that bridge IF we come to it-
      */
     public void reset(){
         System.out.println("*** RESETTING >>>");
@@ -272,45 +272,53 @@ public class CPU {
                 registers.setRegister(REG_PC_LOW, l);
                 break;
 
-            case OP_BCS:
+            case OP_BCS: {
+                int location = nextProgramByte();
                 if (registers.getFlag(STATUS_FLAG_CARRY))
-                    branchTo(nextProgramByte());
-                break;
+                    branchTo(location);
+            } break;
 
-            case OP_BCC:
+            case OP_BCC: {
+                int location = nextProgramByte();
                 if (!registers.getFlag(STATUS_FLAG_CARRY))
-                    branchTo(nextProgramByte());
-                break;
+                    branchTo(location);
+            } break;
 
-            case OP_BEQ:
+            case OP_BEQ: {
+                int location = nextProgramByte();
                 if (registers.getFlag(STATUS_FLAG_ZERO))
-                    branchTo(nextProgramByte());
-                break;
+                    branchTo(location);
+            } break;
 
-            case OP_BNE:
+            case OP_BNE: {
+                int location = nextProgramByte();
                 if (!registers.getFlag(STATUS_FLAG_ZERO))
-                    branchTo(nextProgramByte());
-                break;
+                    branchTo(location);
+            }break;
 
-            case OP_BMI:
+            case OP_BMI: {
+                int location = nextProgramByte();
                 if (registers.getFlag(STATUS_FLAG_NEGATIVE))
-                    branchTo(nextProgramByte());
-            break;
+                    branchTo(location);
+            }break;
 
-            case OP_BPL:
+            case OP_BPL: {
+                int location = nextProgramByte();
                 if (!registers.getFlag(STATUS_FLAG_NEGATIVE))
-                    branchTo(nextProgramByte());
-                break;
+                    branchTo(location);
+            }break;
 
-            case OP_BVS:
+            case OP_BVS: {
+                int location = nextProgramByte();
                 if (registers.getFlag(STATUS_FLAG_OVERFLOW))
-                    branchTo(nextProgramByte());
-                break;
+                    branchTo(location);
+            }break;
 
-            case OP_BVC:
+            case OP_BVC: {
+                int location = nextProgramByte();
                 if (!registers.getFlag(STATUS_FLAG_OVERFLOW))
-                    branchTo(nextProgramByte());
-                break;
+                    branchTo(location);
+            }break;
 
             case OP_ROL_A: {
                 int rotatedValue = (registers.getRegister(REG_ACCUMULATOR) << 1) | (registers.getFlag(STATUS_FLAG_CARRY) ? 1 : 0);
