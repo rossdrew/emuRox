@@ -601,7 +601,7 @@ public class CPUTest {
                          OP_ASL_Z, MPD,       //:NOADD(35) ASL(MPD)
                          OP_ROL_Z, TMP,       //Save bit from MPD
                          OP_DEX,              //--X
-                         OP_BNE,   0b11100111 //Test equal and jump (back 24) to MULT XXX Wrong, should be twos compliment
+                         OP_BNE,   0b11100111 //Test equal and jump (back 24) to MULT
         };
 
         memory.setMemory(0, program);
