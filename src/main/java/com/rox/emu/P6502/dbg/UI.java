@@ -79,7 +79,7 @@ public class UI extends JFrame{
                                     OP_ASL_Z, MPD,       //:NOADD(35) ASL(MPD)
                                     OP_ROL_Z, TMP,       //Save bit from MPD
                                     OP_DEX,              //--X
-                                    OP_BNE, 0b10011000   //Test equal and jump (back 24) to MULT});
+                                    OP_BNE, 0b11100111   //Test equal and jump (back 24) to MULT});
         };
 
         return program;
@@ -129,18 +129,18 @@ public class UI extends JFrame{
             int rowSize = padding + bitSize;
             int secondByteColumn = byteSize + xLocation + padding;
 
-            drawByte(g, secondByteColumn, yLocation, registers.getRegister(Registers.REG_ACCUMULATOR));
+            drawByte(g, secondByteColumn, yLocation, registers.getRegister(Registers.REG_ACCUMULATOR), "Accumulator");
 
             yLocation += rowSize;
-            drawByte(g, secondByteColumn, yLocation, registers.getRegister(Registers.REG_Y_INDEX));
+            drawByte(g, secondByteColumn, yLocation, registers.getRegister(Registers.REG_Y_INDEX), "Y Index");
 
             yLocation += rowSize;
-            drawByte(g, secondByteColumn, yLocation, registers.getRegister(Registers.REG_X_INDEX));
+            drawByte(g, secondByteColumn, yLocation, registers.getRegister(Registers.REG_X_INDEX), "X Index");
 
             //TODO this needs a combined value display
             yLocation += rowSize;
-            drawByte(g, xLocation, yLocation, registers.getRegister(Registers.REG_PC_HIGH));
-            drawByte(g, secondByteColumn, yLocation, registers.getRegister(Registers.REG_PC_LOW));
+            drawByte(g, xLocation, yLocation, registers.getRegister(Registers.REG_PC_HIGH), "PC High");
+            drawByte(g, secondByteColumn, yLocation, registers.getRegister(Registers.REG_PC_LOW), "PC Low");
 
             yLocation += rowSize;
             g.setColor(Color.lightGray);
@@ -160,7 +160,7 @@ public class UI extends JFrame{
             g.drawRect(startX, startY, byteSize, bitSize);
         }
 
-        private void drawByte(Graphics g, int startX, int startY, int byteValue){
+        private void drawByte(Graphics g, int startX, int startY, int byteValue, String name){
             char[] bitValues = to8BitString(byteValue).toCharArray();
 
             g.setColor(Color.lightGray);
@@ -175,6 +175,9 @@ public class UI extends JFrame{
             g.setFont(new Font("Courier New", Font.PLAIN, valueFontSize));
             String values = "(" + fromSignedByte(byteValue) + ", 0x" + Integer.toHexString(byteValue) + ")";
             g.drawChars(values.toCharArray(), 0, values.length(), (startX+byteSize-bitSize), startY-1);
+
+            g.setColor(Color.blue);
+            g.drawChars(name.toCharArray(), 0, name.length(), startX, startY);
         }
 
         private void drawBit(Graphics g, int startX, int startY, char val){
