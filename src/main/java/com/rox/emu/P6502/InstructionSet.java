@@ -48,6 +48,7 @@ public class InstructionSet {
     public static final int OP_TAX = 0xAA;
     public static final int OP_TAY = 0xA8;
     public static final int OP_TYA = 0x98;
+    public static final int OP_TXA = 0x8A;
 
     public static final int OP_BPL = 0x10;
     public static final int OP_BMI = 0x30;
@@ -71,7 +72,7 @@ public class InstructionSet {
                                                 OP_LDY_I, OP_INY, OP_DEY,
                                                 OP_LDX_I, OP_INX, OP_DEX,
                                                 OP_NOP, OP_JMP_A, OP_BCC, OP_BCS, OP_BNE, OP_BEQ, OP_BMI, OP_BPL, OP_BVS, OP_BVC,
-                                                OP_TAX, OP_TAY, OP_TYA};
+                                                OP_TAX, OP_TAY, OP_TYA, OP_TXA};
 
     public static String getName(int opCode){
         switch (opCode){
@@ -120,6 +121,7 @@ public class InstructionSet {
             case OP_TAX:        return "TAX 'A->X";
             case OP_TAY:        return "TAX 'A->Y";
             case OP_TYA:        return "TYA 'Y->A'";
+            case OP_TXA:        return "TYA 'X->A'";
             case OP_NOP:        return "NOP - No Operation";
             default:
                 return "<Unknown Opcode: " + opCode + ">";
