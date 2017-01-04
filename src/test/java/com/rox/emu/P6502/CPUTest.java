@@ -606,7 +606,7 @@ public class CPUTest {
 
     @Test
     public void testTXA(){
-        int[] program = {OP_LDY_I, 0x0D, OP_TXA};
+        int[] program = {OP_LDX_I, 0x0D, OP_TXA};
         memory.setMemory(0, program);
         Registers registers = processor.getRegisters();
 
