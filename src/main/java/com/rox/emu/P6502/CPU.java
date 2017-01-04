@@ -319,6 +319,10 @@ public class CPU {
                 branchIf(!registers.getFlag(STATUS_FLAG_OVERFLOW));
                 break;
 
+            case OP_TAX:
+                registers.setRegister(REG_X_INDEX, registers.getRegister(REG_ACCUMULATOR));
+                break;
+
             case OP_NOP:
                 //Do nothing
                 break;
