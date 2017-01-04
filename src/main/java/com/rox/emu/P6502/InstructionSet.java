@@ -45,6 +45,7 @@ public class InstructionSet {
     public static final int OP_PLA = 0x68;
     public static final int OP_NOP = 0xEA;
     public static final int OP_JMP_A = 0x4C;
+    public static final int OP_TAX = 0xAA;
 
     public static final int OP_BPL = 0x10;
     public static final int OP_BMI = 0x30;
@@ -67,7 +68,8 @@ public class InstructionSet {
                                                 OP_SEC, OP_CLC, OP_CLV, OP_PHA, OP_PLA,
                                                 OP_LDY_I, OP_INY, OP_DEY,
                                                 OP_LDX_I, OP_INX, OP_DEX,
-                                                OP_NOP, OP_JMP_A, OP_BCC, OP_BCS, OP_BNE, OP_BEQ, OP_BMI, OP_BPL, OP_BVS, OP_BVC};
+                                                OP_NOP, OP_JMP_A, OP_BCC, OP_BCS, OP_BNE, OP_BEQ, OP_BMI, OP_BPL, OP_BVS, OP_BVC,
+                                                OP_TAX};
 
     public static String getName(int opCode){
         switch (opCode){
@@ -113,6 +115,7 @@ public class InstructionSet {
             case OP_BPL:        return "BPL 'Branch on Plus'";
             case OP_BVS:        return "BVS 'Branch on Overflow Set'";
             case OP_BVC:        return "BVC 'Branch on Overflow Clear'";
+            case OP_TAX:        return "TAX 'A->X";
             case OP_NOP:        return "NOP - No Operation";
             default:
                 return "<Unknown Opcode: " + opCode + ">";

@@ -566,6 +566,19 @@ public class CPUTest {
     }
 
     @Test
+    public void testTAX(){
+        int[] program = {OP_LDA_I, 0x0F, OP_TAX};
+        memory.setMemory(0, program);
+        Registers registers = processor.getRegisters();
+
+        processor.step(4);
+
+        assertEquals(program.length, registers.getPC());
+        assertEquals(0x0F, registers.getRegister(Registers.REG_ACCUMULATOR));
+        assertEquals(0x0F, registers.getRegister(Registers.REG_X_INDEX));
+    }
+
+    @Test
     @Ignore
     public void testMultiplicationLoop(){
         int data_offset = 0x32;
