@@ -2,10 +2,12 @@ package com.rox.emu.P6502.dbg;
 
 import com.rox.emu.Memory;
 import com.rox.emu.P6502.CPU;
+import com.rox.emu.P6502.InstructionSet;
 import com.rox.emu.P6502.Registers;
 import com.rox.emu.SimpleMemory;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 
 import static com.rox.emu.P6502.InstructionSet.*;
@@ -20,6 +22,9 @@ public class UI extends JFrame{
     private Memory memory;
 
     private RegistersPanel registersPanel = new RegistersPanel();
+
+    private String instructionName = "...";
+    private JLabel instruction = new JLabel(instructionName);
 
     public UI() {
         super("6502 Debugger");
@@ -43,6 +48,8 @@ public class UI extends JFrame{
         controls.add(stepButton);
 
         add(controls, BorderLayout.SOUTH);
+
+        add(instruction, BorderLayout.EAST);
 
         loadProgram(getProgram());
     }
@@ -100,6 +107,14 @@ public class UI extends JFrame{
     }
 
     public void step(){
+        //Get the next instruction
+        Registers registers = processor.getRegisters();
+        int pointer = registers.getRegister(Registers.REG_PC_LOW) | (registers.getRegister(Registers.REG_PC_HIGH) << 8);
+        int instr = memory.getByte(pointer);
+
+        instructionName = InstructionSet.getName(instr);
+        instruction.setText(instructionName);
+
         processor.step();
         invalidate();
         repaint();
