@@ -618,6 +618,19 @@ public class CPUTest {
     }
 
     @Test
+    public void testTXS(){
+        int[] program = {OP_LDX_I, 0xAA, OP_TXS};
+        memory.setMemory(0, program);
+        Registers registers = processor.getRegisters();
+
+        processor.step(2);
+
+        assertEquals(program.length, registers.getPC());
+        assertEquals(0x0D, registers.getRegister(Registers.REG_X_INDEX));
+        assertEquals(0x0D, registers.getRegister(Registers.REG_SP));
+    }
+
+    @Test
     @Ignore
     public void testMultiplicationLoop(){
         int data_offset = 0x32;
