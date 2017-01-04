@@ -1026,6 +1026,34 @@ class OpCodeSpec extends Specification {
         0                | 0          | 0b11111011 | 6            | 0x9        | "No jump"
     }
 
+    @Unroll("TAX #expected: #loadedValue to X")
+    def testTAX(){
+        when:
+        Memory memory = new SimpleMemory(65534);
+        int[] program = [OP_LDA_I, loadedValue, OP_TAX];
+        memory.setMemory(0, program);
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        Registers registers = processor.getRegisters()
+
+        and:
+        processor.step(2)
+
+        then:
+        registers.getPC() == program.length
+        registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
+        Z == registers.statusFlags[Registers.Z]
+        N == registers.statusFlags[Registers.N]
+
+        where:
+        loadedValue | expectedAccumulator | N      | Z     | expected
+        0x10        | 0x10                | false  | false | "Basic transfer"
+        0x0         | 0x0                 | false  | true  | "Zero transferred"
+        0b11111110  | 0b11111110          | true   | false | "Negative transferred"
+    }
+
 //    @Ignore
 //    def exampleTest(){
 //        when:
