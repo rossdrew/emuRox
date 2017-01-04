@@ -593,15 +593,15 @@ public class CPUTest {
 
     @Test
     public void testTYA(){
-        int[] program = {OP_LDX_I, 0x0D, OP_TYA};
+        int[] program = {OP_LDY_I, 0x0D, OP_TYA};
         memory.setMemory(0, program);
         Registers registers = processor.getRegisters();
 
         processor.step(2);
 
         assertEquals(program.length, registers.getPC());
-        assertEquals(0x0D, registers.getRegister(Registers.REG_ACCUMULATOR));
         assertEquals(0x0D, registers.getRegister(Registers.REG_Y_INDEX));
+        assertEquals(0x0D, registers.getRegister(Registers.REG_ACCUMULATOR));
     }
 
     @Test
