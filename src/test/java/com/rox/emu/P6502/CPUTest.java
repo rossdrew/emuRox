@@ -626,8 +626,8 @@ public class CPUTest {
         processor.step(2);
 
         assertEquals(program.length, registers.getPC());
-        assertEquals(0x0D, registers.getRegister(Registers.REG_X_INDEX));
-        assertEquals(0x0D, registers.getRegister(Registers.REG_SP));
+        assertEquals(0xAA, registers.getRegister(Registers.REG_X_INDEX));
+        assertEquals(0xAA, registers.getRegister(Registers.REG_SP));
     }
 
     @Test

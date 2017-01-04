@@ -335,6 +335,10 @@ public class CPU {
                 registers.setRegister(REG_ACCUMULATOR, registers.getRegister(REG_X_INDEX));
                 break;
 
+            case OP_TXS:
+                registers.setRegister(REG_SP, registers.getRegister(REG_X_INDEX));
+                break;
+
             case OP_NOP:
                 //Do nothing
                 break;
