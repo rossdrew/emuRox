@@ -1142,6 +1142,36 @@ class OpCodeSpec extends Specification {
         0b11111110  | 0b11111110          | 0b11111110 | true   | false | "Negative transferred"
     }
 
+    @Unroll("TSX #expected: load #SPValue in SP into X")
+    def testTSX(){
+        when:
+        Memory memory = new SimpleMemory(65534);
+        int[] program = [OP_TSX];
+        memory.setMemory(0, program);
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        Registers registers = processor.getRegisters()
+
+        and:
+        registers.setRegister(Registers.REG_SP, SPValue)
+        processor.step()
+
+        then:
+        registers.getPC() == program.length
+        registers.getRegister(Registers.REG_X_INDEX) == X
+        registers.getRegister(Registers.REG_SP) == expectedSP
+        Z == registers.statusFlags[Registers.Z]
+        N == registers.statusFlags[Registers.N]
+
+        where:
+        SPValue | expectedSP | X    | Z     | N     | expected
+        0xFF    | 0xFF       | 0xFF | false | true  | "Empty stack"
+        0x0F    | 0x0F       | 0x0F | false | false | "No flags set"
+        0x0     | 0x0        | 0x0  | true  | false | "Zero stack"
+    }
+
 //    @Ignore
 //    def exampleTest(){
 //        when:

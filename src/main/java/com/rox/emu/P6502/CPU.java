@@ -341,6 +341,7 @@ public class CPU {
 
             case OP_TSX:
                 registers.setRegister(REG_X_INDEX, registers.getRegister(REG_SP));
+                registers.setFlagsBasedOn(registers.getRegister(REG_X_INDEX));
                 break;
 
             case OP_NOP:
