@@ -39,6 +39,12 @@ public class UI extends JFrame{
 
         add(registersPanel, BorderLayout.CENTER);
 
+        add(getControlPanel(), BorderLayout.SOUTH);
+
+        loadProgram(getProgram());
+    }
+
+    private JPanel getControlPanel() {
         JButton stepButton = new JButton("Step >>");
         stepButton.addActionListener(e -> step());
 
@@ -49,10 +55,7 @@ public class UI extends JFrame{
         controls.setLayout(new FlowLayout());
         controls.add(resetButton);
         controls.add(stepButton);
-
-        add(controls, BorderLayout.SOUTH);
-
-        loadProgram(getProgram());
+        return controls;
     }
 
     private int[] getProgram(){
