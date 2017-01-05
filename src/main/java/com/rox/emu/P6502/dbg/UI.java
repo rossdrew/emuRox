@@ -34,6 +34,9 @@ public class UI extends JFrame{
 
         setLayout(new BorderLayout());
 
+        instruction.setHorizontalAlignment(JLabel.CENTER);
+        add(instruction, BorderLayout.NORTH);
+
         add(registersPanel, BorderLayout.CENTER);
 
         JButton stepButton = new JButton("Step >>");
@@ -48,8 +51,6 @@ public class UI extends JFrame{
         controls.add(stepButton);
 
         add(controls, BorderLayout.SOUTH);
-
-        add(instruction, BorderLayout.EAST);
 
         loadProgram(getProgram());
     }
