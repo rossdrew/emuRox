@@ -26,20 +26,27 @@ public class UI extends JFrame{
     private String instructionName = "...";
     private JLabel instruction = new JLabel(instructionName);
 
+    private DefaultListModel listModel;
+
     public UI() {
         super("6502 Debugger");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 500);
         setVisible(true);
 
+        listModel= new DefaultListModel();
+
         setLayout(new BorderLayout());
 
         instruction.setHorizontalAlignment(JLabel.CENTER);
+
         add(instruction, BorderLayout.NORTH);
-
         add(registersPanel, BorderLayout.CENTER);
-
         add(getControlPanel(), BorderLayout.SOUTH);
+
+        JList instructionList = new JList<>(listModel);
+        JScrollPane instructionScroller = new JScrollPane(instructionList);
+        add(instructionScroller, BorderLayout.EAST);
 
         loadProgram(getProgram());
     }
@@ -115,9 +122,11 @@ public class UI extends JFrame{
         Registers registers = processor.getRegisters();
         int pointer = registers.getRegister(Registers.REG_PC_LOW) | (registers.getRegister(Registers.REG_PC_HIGH) << 8);
         int instr = memory.getByte(pointer);
+        //TODO get arguments
 
         instructionName = InstructionSet.getName(instr);
         instruction.setText(instructionName);
+        listModel.addElement(instructionName);
 
         processor.step();
         invalidate();
