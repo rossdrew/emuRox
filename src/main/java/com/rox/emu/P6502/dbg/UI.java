@@ -126,7 +126,7 @@ public class UI extends JFrame{
 
         instructionName = InstructionSet.getName(instr);
         instruction.setText(instructionName);
-        listModel.addElement(instructionName);
+        listModel.add(0, instructionName);
 
         processor.step();
         invalidate();
