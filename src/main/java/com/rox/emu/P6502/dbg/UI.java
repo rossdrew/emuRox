@@ -31,8 +31,7 @@ public class UI extends JFrame{
     public UI() {
         super("6502 Debugger");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(800, 500);
-        setVisible(true);
+        setSize(1000, 500);
 
         listModel= new DefaultListModel();
 
@@ -49,6 +48,7 @@ public class UI extends JFrame{
         add(instructionScroller, BorderLayout.EAST);
 
         loadProgram(getProgram());
+        setVisible(true);
     }
 
     private JPanel getControlPanel() {
@@ -113,6 +113,7 @@ public class UI extends JFrame{
 
     public void reset(){
         processor.reset();
+        listModel.clear();
         invalidate();
         repaint();
     }
