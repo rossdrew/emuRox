@@ -2,7 +2,6 @@ package com.rox.emu.P6502
 
 import com.rox.emu.Memory
 import com.rox.emu.SimpleMemory
-import org.junit.Ignore
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -368,6 +367,36 @@ class OpCodeSpec extends Specification {
         CPU processor = new CPU(memory)
         processor.reset()
         processor.step(2)
+        Registers registers = processor.getRegisters()
+
+        then:
+        registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
+        registers.getPC() == program.length
+        Z == registers.statusFlags[Registers.Z]
+        N == registers.statusFlags[Registers.N]
+
+        where:
+        firstValue | secondValue | expectedAccumulator | Z      | N     | Expected
+        0b00000001 | 0b00000001  | 0b00000001          | false  | false | "Unchanged accumulator"
+        0b00000001 | 0b00000010  | 0b00000000          | true   | false | "No matching bits"
+        0b00000011 | 0b00000010  | 0b00000010          | false  | false | "1 matched bit, 1 unmatched"
+        0b00101010 | 0b00011010  | 0b00001010          | false  | false | "Multiple matched/unmatched bits"
+    }
+
+    @Unroll("AND (Zero Page) #Expected:  #firstValue & #secondValue = #expectedAccumulator in Accumulator.")
+    def testAND_Z(){
+        when:
+        Memory memory = new SimpleMemory(65534);
+        int[] program = [OP_LDA_I, firstValue,
+                         OP_STA_Z, 0x20,
+                         OP_LDA_I, secondValue,
+                         OP_AND_Z, 0x20];
+        memory.setMemory(0, program);
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        processor.step(4)
         Registers registers = processor.getRegisters()
 
         then:

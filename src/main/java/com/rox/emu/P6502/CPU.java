@@ -223,6 +223,11 @@ public class CPU {
                 registers.setRegisterAndFlags(REG_ACCUMULATOR, getByteOfMemoryAt(nextProgramByte()));
                 break;
 
+            case OP_AND_Z:
+                int location = nextProgramByte();
+                registers.setRegisterAndFlags(REG_ACCUMULATOR, getByteOfMemoryAt(location) & accumulatorBeforeOperation);
+                break;
+
             case OP_AND_I:
                 registers.setRegisterAndFlags(REG_ACCUMULATOR, nextProgramByte() & accumulatorBeforeOperation);
                 break;

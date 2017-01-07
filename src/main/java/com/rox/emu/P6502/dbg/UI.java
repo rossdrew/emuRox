@@ -7,7 +7,6 @@ import com.rox.emu.P6502.Registers;
 import com.rox.emu.SimpleMemory;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 
 import static com.rox.emu.P6502.InstructionSet.*;

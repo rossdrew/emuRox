@@ -26,6 +26,7 @@ public class InstructionSet {
     public static final int OP_LDA_IY = 0xB9;
     public static final int OP_LDA_IX = 0xBD;
     public static final int OP_CLV = 0xB8;
+    public static final int OP_AND_Z = 0x25;
     public static final int OP_AND_I = 0x29;
     public static final int OP_ORA_I = 0x09;
     public static final int OP_EOR_I = 0x49;
