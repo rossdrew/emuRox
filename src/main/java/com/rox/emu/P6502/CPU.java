@@ -224,12 +224,11 @@ public class CPU {
                 break;
 
             case OP_AND_Z:
-                int location = nextProgramByte();
-                registers.setRegisterAndFlags(REG_ACCUMULATOR, getByteOfMemoryAt(location) & accumulatorBeforeOperation);
+                performAND(getByteOfMemoryAt(nextProgramByte()));
                 break;
 
             case OP_AND_I:
-                registers.setRegisterAndFlags(REG_ACCUMULATOR, nextProgramByte() & accumulatorBeforeOperation);
+                performAND(nextProgramByte());
                 break;
 
             case OP_ORA_I:
@@ -386,6 +385,10 @@ public class CPU {
             registers.setRegister(REG_PC_LOW, registers.getRegister(REG_PC_LOW) - fromTwosComplimented(displacement));
         else
             registers.setRegister(REG_PC_LOW, registers.getRegister(REG_PC_LOW) + displacement);
+    }
+
+    private void performAND(int byteTerm){
+        registers.setRegisterAndFlags(REG_ACCUMULATOR, byteTerm & registers.getRegister(REG_ACCUMULATOR));
     }
 
     private void performADC(int byteTerm){
