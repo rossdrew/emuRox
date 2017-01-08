@@ -235,6 +235,24 @@ public class CPU {
                 performAND(nextProgramByte());
                 break;
 
+            case OP_BIT_Z:
+                int memData = memory.getByte(nextProgramByte());
+                if ((memData & registers.getRegister(REG_ACCUMULATOR)) == memData)
+                    registers.setFlag(STATUS_FLAG_ZERO);
+                else
+                    registers.clearFlag(STATUS_FLAG_ZERO);
+
+                if ((memData & 0b01000000) == 0b01000000)
+                    registers.setFlag(STATUS_FLAG_OVERFLOW);
+                else
+                    registers.clearFlag(STATUS_FLAG_OVERFLOW);
+
+                if ((memData & 0b10000000) == 0b10000000)
+                    registers.setFlag(STATUS_FLAG_NEGATIVE);
+                else
+                    registers.clearFlag(STATUS_FLAG_NEGATIVE);
+                break;
+
             case OP_ORA_I:
                 registers.setRegisterAndFlags(REG_ACCUMULATOR, nextProgramByte() | accumulatorBeforeOperation);
                 break;
