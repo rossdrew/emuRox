@@ -3,6 +3,7 @@ package com.rox.emu.P6502;
 import com.rox.emu.Memory;
 import com.rox.emu.SimpleMemory;
 import com.rox.emu.UnknownOpCodeException;
+import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -652,6 +653,21 @@ public class CPUTest {
 
         assertEquals(program.length, registers.getPC());
         assertEquals(0xFF, registers.getRegister(Registers.REG_X_INDEX));
+    }
+
+    @Test
+    public void testBIT(){
+        //bitwise and compare
+        int[] program = {OP_LDA_I, 0x01, OP_STA_Z, 0x20, OP_LDA_I, 0x01, OP_BIT_Z};
+        memory.setMemory(0, program);
+        Registers registers = processor.getRegisters();
+
+        processor.step();
+
+        assertEquals(program.length, registers.getPC());
+        assertEquals(true, registers.getFlag(Registers.STATUS_FLAG_ZERO));
+        assertEquals(false, registers.getFlag(Registers.STATUS_FLAG_NEGATIVE));
+        assertEquals(false, registers.getFlag(Registers.STATUS_FLAG_OVERFLOW));
     }
 
     @Test
