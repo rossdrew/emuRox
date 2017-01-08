@@ -37,6 +37,7 @@ public class InstructionSet {
     public static final int OP_LDX_I = 0xA2;
     public static final int OP_STY_Z = 0x84;
     public static final int OP_STA_Z = 0x85;
+    public static final int OP_STA_A = 0x8D;
     public static final int OP_STX_Z = 0x86;
     public static final int OP_INY = 0xC8;
     public static final int OP_DEY = 0x88;
@@ -69,7 +70,7 @@ public class InstructionSet {
                                                 OP_ADC_Z, OP_ADC_I, OP_ADC_A,
                                                 OP_SBC_I,
                                                 OP_LDA_Z, OP_LDA_I, OP_LDA_A, OP_LDA_Z_IX, OP_LDA_IY, OP_LDA_IX,
-                                                OP_STA_Z, OP_STX_Z, OP_STY_Z,
+                                                OP_STA_Z, OP_STA_A, OP_STX_Z, OP_STY_Z,
                                                 OP_AND_I, OP_ORA_I, OP_EOR_I,
                                                 OP_SEC, OP_CLC, OP_CLV, OP_PHA, OP_PLA,
                                                 OP_LDY_I, OP_INY, OP_DEY,
@@ -105,6 +106,7 @@ public class InstructionSet {
             case OP_LDX_I:      return "LDX (Immediate)";
             case OP_STY_Z:      return "STY (Zero Page)";
             case OP_STA_Z:      return "STA (Zero Page)";
+            case OP_STA_A:      return "STA (Absolute)";
             case OP_STX_Z:      return "STX (Zero Page)";
             case OP_INY:        return "Increment Y";
             case OP_DEY:        return "Decrement Y";
