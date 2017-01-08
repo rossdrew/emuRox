@@ -27,6 +27,7 @@ public class InstructionSet {
     public static final int OP_LDA_IX = 0xBD;
     public static final int OP_CLV = 0xB8;
     public static final int OP_AND_Z = 0x25;
+    public static final int OP_AND_A = 0x2D;
     public static final int OP_AND_I = 0x29;
     public static final int OP_ORA_I = 0x09;
     public static final int OP_EOR_I = 0x49;
@@ -71,7 +72,7 @@ public class InstructionSet {
                                                 OP_SBC_I,
                                                 OP_LDA_Z, OP_LDA_I, OP_LDA_A, OP_LDA_Z_IX, OP_LDA_IY, OP_LDA_IX,
                                                 OP_STA_Z, OP_STA_A, OP_STX_Z, OP_STY_Z,
-                                                OP_AND_I, OP_ORA_I, OP_EOR_I,
+                                                OP_AND_I, OP_AND_Z, OP_AND_A, OP_ORA_I, OP_EOR_I,
                                                 OP_SEC, OP_CLC, OP_CLV, OP_PHA, OP_PLA,
                                                 OP_LDY_I, OP_INY, OP_DEY,
                                                 OP_LDX_I, OP_INX, OP_DEX,
@@ -97,6 +98,8 @@ public class InstructionSet {
             case OP_LDA_IY:     return "LDA ([Y])";
             case OP_LDA_IX:     return "LDA ([X])";
             case OP_AND_I:      return "AND (Immediate)";
+            case OP_AND_Z:      return "AND (Zero Page)";
+            case OP_AND_A:      return "AND (Absolute)";
             case OP_ORA_I:      return "OR (Immediate)";
             case OP_EOR_I:      return "EOR (Immediate)";
             case OP_SBC_I:      return "SBX (Immediate)";
