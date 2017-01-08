@@ -242,15 +242,8 @@ public class CPU {
                 else
                     registers.clearFlag(STATUS_FLAG_ZERO);
 
-                if ((memData & 0b01000000) == 0b01000000)
-                    registers.setFlag(STATUS_FLAG_OVERFLOW);
-                else
-                    registers.clearFlag(STATUS_FLAG_OVERFLOW);
-
-                if ((memData & 0b10000000) == 0b10000000)
-                    registers.setFlag(STATUS_FLAG_NEGATIVE);
-                else
-                    registers.clearFlag(STATUS_FLAG_NEGATIVE);
+                //Set N, V to bits 7 and 6 of memory data
+                registers.setRegister(REG_STATUS, (memData & 0b11000000) | (registers.getRegister(REG_STATUS) & 0b00111111));
                 break;
 
             case OP_ORA_I:
