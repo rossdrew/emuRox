@@ -227,6 +227,10 @@ public class CPU {
                 performAND(getByteOfMemoryAt(nextProgramByte()));
                 break;
 
+            case OP_AND_A:
+                performAND(getByteOfMemoryAt(nextProgramWord()));
+                break;
+
             case OP_AND_I:
                 performAND(nextProgramByte());
                 break;
