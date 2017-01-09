@@ -146,21 +146,13 @@ public class CPU {
             }
             break;
 
-            case OP_ROL_A: {
-                int rotatedValue = (registers.getRegister(REG_ACCUMULATOR) << 1) | (registers.getFlag(STATUS_FLAG_CARRY) ? 1 : 0);
-                registers.setFlagsBasedOn(rotatedValue);
-                setCarryFlagBasedOn(rotatedValue);
-                registers.setRegister(REG_ACCUMULATOR, rotatedValue & 0xFF);
-            }
+            case OP_ROL_A:
+                registers.setRegister(REG_ACCUMULATOR, performROL(registers.getRegister(REG_ACCUMULATOR)));
             break;
 
-            case OP_ROL_Z: {
+            case OP_ROL_Z:
                 int location = nextProgramByte();
-                int rotatedValue = (memory.getByte(location) << 1) | (registers.getFlag(STATUS_FLAG_CARRY) ? 1 : 0);
-                registers.setFlagsBasedOn(rotatedValue);
-                setCarryFlagBasedOn(rotatedValue);
-                memory.setByte(location, rotatedValue & 0xFF);
-            }
+                memory.setByte(location, performROL(memory.getByte(location)));
             break;
 
             case OP_SEC:
@@ -374,6 +366,13 @@ public class CPU {
             default:
                 throw new UnknownOpCodeException("Unknown 6502 OpCode:" + opCode + " encountered.", opCode);
         }
+    }
+
+    private int performROL(int initialValue){
+        int rotatedValue = (initialValue << 1) | (registers.getFlag(STATUS_FLAG_CARRY) ? 1 : 0);
+        registers.setFlagsBasedOn(rotatedValue);
+        setCarryFlagBasedOn(rotatedValue);
+        return rotatedValue & 0xFF;
     }
 
     private void setBorrowFlagFor(int newFakeByte) {
