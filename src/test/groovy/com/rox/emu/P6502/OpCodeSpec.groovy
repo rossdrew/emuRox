@@ -267,7 +267,7 @@ class OpCodeSpec extends Specification {
         when:
         Memory memory = new SimpleMemory(65534);
         int[] program = [OP_LDA_I, firstValue, OP_LDX_I, index, OP_ADC_Z_IX, indexPoint]
-        memory.getByte(memLoc, secondValue)
+        memory.setByte(memLoc, secondValue)
         memory.setMemory(0, program)
 
         and:
