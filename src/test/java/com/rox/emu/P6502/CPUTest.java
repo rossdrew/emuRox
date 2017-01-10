@@ -379,7 +379,7 @@ public class CPUTest {
 
         assertEquals(program.length, registers.getPC());
         assertEquals(0xFE, processor.getRegisters().getRegister(Registers.REG_SP));
-        assertEquals(0x99, memory.getByte(0xFF));
+        assertEquals(0x99, memory.getByte(0x01FF));
     }
 
     @Test

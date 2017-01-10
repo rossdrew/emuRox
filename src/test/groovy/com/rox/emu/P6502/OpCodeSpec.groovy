@@ -679,13 +679,13 @@ class OpCodeSpec extends Specification {
         registers.getPC() == program.length
         registers.getRegister(Registers.REG_SP) == expectedSP
         registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
-        stackItem == memory.getByte(0xFF)
+        stackItem == memory.getByte(0x01FF)
 
         where:
         firstValue | expectedSP | stackItem  | expectedAccumulator | Z     | N     | Expected
-        0x99       | 0xFF       | 0x99       | 0x99                | false | false | "Basic stack push"
-        0x0        | 0xFF       | 0x0        | 0x0                 | false | true  | "Zero stack push"
-        0b10001111 | 0xFF       | 0b10001111 | 0b10001111          | true  | true  | "Negative stack push"
+        0x99       | 0x0FF      | 0x99       | 0x99                | false | false | "Basic stack push"
+        0x0        | 0x0FF      | 0x0        | 0x0                 | false | true  | "Zero stack push"
+        0b10001111 | 0x0FF      | 0b10001111 | 0b10001111          | true  | true  | "Negative stack push"
     }
 
     @Unroll("ASL (Accumulator) #Expected: #firstValue becomes #expectedAccumulator")
