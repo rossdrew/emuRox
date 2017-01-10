@@ -273,7 +273,7 @@ class OpCodeSpec extends Specification {
         and:
         CPU processor = new CPU(memory)
         processor.reset()
-        processor.step(2)
+        processor.step(3)
         Registers registers = processor.getRegisters()
 
         then:
@@ -285,10 +285,10 @@ class OpCodeSpec extends Specification {
         N == registers.statusFlags[Registers.N]
 
         where:
-        memLoc | secondValue | firstValue | index | indexPoint  | expectedAccumulator | Z      | N     | C     | O     | Expected
-        0x51   | 0x0         | 0x0        | 1     | 0x50        | 0x0                 | true   | false | false | false | "With zero result"
-        0x51   | 0x20        | 0x50       | 1     | 0x50        | 0x20                | false  | false | true  | false | "With positive, carried result"
-        0x51   | 0xA0        | 0x50       | 1     | 0x50        | 0xA0                | false  | true  | false | true  | "With negative overflow"
+        memLoc | firstValue  | secondValue | indexPoint  | index | expectedAccumulator | Z      | N     | C     | O     | Expected
+        0x51   | 0x0         | 0x0         | 0x50        | 1     | 0x0                 | true   | false | false | false | "With zero result"
+        0x53   | 0x50        | 0xD0        | 0x50        | 3     | 0x20                | false  | false | true  | false | "With positive, carried result"
+        0x97   | 0x50        | 0x50        | 0x90        | 7     | 0xA0                | false  | true  | false | true  | "With negative overflow"
     }
 
     @Unroll("ADC ZeroPage #Expected:  #firstValue + #secondValue = #expectedAccumulator in Accumulator.")

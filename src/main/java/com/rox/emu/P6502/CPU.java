@@ -258,6 +258,10 @@ public class CPU {
                 performADC(getByteOfMemoryAt(nextProgramWord()));
                 break;
 
+            case OP_ADC_Z_IX:
+                performADC(getByteOfMemoryXIndexedAt(nextProgramByte()));
+                break;
+
             case OP_SBC_I:
                 performSBC(nextProgramByte());
                 break;
