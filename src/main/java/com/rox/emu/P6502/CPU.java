@@ -124,7 +124,7 @@ public class CPU {
                 int newFakeByte = memory.getByte(location) << 1;
                 setCarryFlagBasedOn(newFakeByte);
                 registers.setFlagsBasedOn(newFakeByte);
-                memory.setByte(location, newFakeByte & 0xFF);
+                memory.setByte(location, newFakeByte);
             }
             break;
 
@@ -142,7 +142,7 @@ public class CPU {
                 setBorrowFlagFor(newFakeByte);
                 newFakeByte = newFakeByte >> 1;
                 registers.setFlagsBasedOn(newFakeByte);
-                memory.setByte(location, newFakeByte & 0xFF);
+                memory.setByte(location, newFakeByte);
             }
             break;
 
