@@ -291,35 +291,6 @@ class OpCodeSpec extends Specification {
         0x97   | 0x50        | 0x50        | 0x90        | 7     | 0xA0                | false  | true  | false | true  | "With negative overflow"
     }
 
-    @Unroll("ADC Zero Page at Y #Expected: #firstValue + #secondValue = #expectedAccumulator in Accumulator.")
-    def testADC_Z_IY(){
-        when:
-        Memory memory = new SimpleMemory(65534);
-        int[] program = [OP_LDA_I, firstValue, OP_LDY_I, index, OP_ADC_Z_IY, indexPoint]
-        memory.setByte(memLoc, secondValue)
-        memory.setMemory(0, program)
-
-        and:
-        CPU processor = new CPU(memory)
-        processor.reset()
-        processor.step(3)
-        Registers registers = processor.getRegisters()
-
-        then:
-        registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
-        registers.getPC() == program.length
-        C == registers.statusFlags[Registers.C]
-        Z == registers.statusFlags[Registers.Z]
-        O == registers.statusFlags[Registers.V]
-        N == registers.statusFlags[Registers.N]
-
-        where:
-        memLoc | firstValue  | secondValue | indexPoint  | index | expectedAccumulator | Z      | N     | C     | O     | Expected
-        0x51   | 0x0         | 0x0         | 0x50        | 1     | 0x0                 | true   | false | false | false | "With zero result"
-        0x53   | 0x50        | 0xD0        | 0x50        | 3     | 0x20                | false  | false | true  | false | "With positive, carried result"
-        0x97   | 0x50        | 0x50        | 0x90        | 7     | 0xA0                | false  | true  | false | true  | "With negative overflow"
-    }
-
     @Unroll("ADC ZeroPage #Expected:  #firstValue + #secondValue = #expectedAccumulator in Accumulator.")
     def testADCFromZeroPage(){
         when:
