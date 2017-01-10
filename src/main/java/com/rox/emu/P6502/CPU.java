@@ -289,14 +289,12 @@ public class CPU {
              * i.e. should SP point at the top item or the next slot
              */
             case OP_PHA:
-                memory.setByte(registers.getRegister(REG_SP), registers.getRegister(REG_ACCUMULATOR));
-                registers.setRegister(REG_SP, registers.getRegister(REG_SP) - 1);
+                push(registers.getRegister(REG_ACCUMULATOR));
                 break;
 
             case OP_PLA:
-                registers.setRegister(REG_SP, registers.getRegister(REG_SP) + 1);
-                int stackItemAddress = registers.getRegister(REG_SP);
-                registers.setRegisterAndFlags(REG_ACCUMULATOR, getByteOfMemoryAt(stackItemAddress));
+                registers.setRegisterAndFlags(REG_ACCUMULATOR, pop());
+
                 break;
 
             case OP_JMP_A:
@@ -372,14 +370,17 @@ public class CPU {
         }
     }
 
+    //XXX Do set this to something after a pop?
     private int pop(){
-        int location = registers.getRegister(REG_SP);
-        int value = memory.getByte(location);
-        registers.setRegister(REG_SP, location+1);
-        return value;
+        registers.setRegister(REG_SP, registers.getRegister(REG_SP) + 1);
+        int address = 0x0100 | registers.getRegister(REG_SP);
+        return getByteOfMemoryAt(address);
     }
 
-
+    private void push(int value){
+        memory.setByte(0x0100 | registers.getRegister(REG_SP), registers.getRegister(REG_ACCUMULATOR));
+        registers.setRegister(REG_SP, registers.getRegister(REG_SP) - 1);
+    }
 
     private int performROL(int initialValue){
         int rotatedValue = (initialValue << 1) | (registers.getFlag(STATUS_FLAG_CARRY) ? 1 : 0);
