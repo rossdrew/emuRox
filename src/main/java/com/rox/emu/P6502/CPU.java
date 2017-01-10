@@ -368,6 +368,15 @@ public class CPU {
         }
     }
 
+    private int pop(){
+        int location = registers.getRegister(REG_SP);
+        int value = memory.getByte(location);
+        registers.setRegister(REG_SP, location+1);
+        return value;
+    }
+
+
+
     private int performROL(int initialValue){
         int rotatedValue = (initialValue << 1) | (registers.getFlag(STATUS_FLAG_CARRY) ? 1 : 0);
         registers.setFlagsBasedOn(rotatedValue);
