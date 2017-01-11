@@ -282,12 +282,6 @@ public class CPU {
                 memory.setByte(nextProgramByte(), registers.getRegister(REG_X_INDEX));
                 break;
 
-            /* XXX
-             * Do I get an item from the stack then increment so that it
-             * points at nothing or increment then add so that it points
-             * at the last item?
-             * i.e. should SP point at the top item or the next slot
-             */
             case OP_PHA:
                 push(registers.getRegister(REG_ACCUMULATOR));
                 break;
