@@ -6,7 +6,10 @@
 
 At the moment, it's invisioned as an emulator for the 6502 processor in order to fit into a NES emulator which this is the first stage of development for.
 
-Straight away Java doesn't feel like the right choice but it's a good learning exercise. I may switch language later.
+Most simply addressed opcodes now implemented, only a few to go then it's just churning out each in all of the addressing modes.
+
+##
+ 
  
 ###Testing
 
