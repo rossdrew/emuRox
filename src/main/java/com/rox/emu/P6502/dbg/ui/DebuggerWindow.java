@@ -1,4 +1,4 @@
-package com.rox.emu.P6502.dbg;
+package com.rox.emu.P6502.dbg.ui;
 
 import com.rox.emu.Memory;
 import com.rox.emu.P6502.CPU;
@@ -12,11 +12,11 @@ import java.awt.*;
 import static com.rox.emu.P6502.InstructionSet.*;
 
 /**
- * A UI for debugging 6502 CPU code
+ * A DebuggerWindow for debugging 6502 CPU code
  *
  * @author Ross Drew
  */
-public class UI extends JFrame{
+public class DebuggerWindow extends JFrame{
     private CPU processor;
     private Memory memory;
 
@@ -27,7 +27,7 @@ public class UI extends JFrame{
 
     private DefaultListModel listModel;
 
-    public UI() {
+    public DebuggerWindow() {
         super("6502 Debugger");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1000, 500);
@@ -134,7 +134,7 @@ public class UI extends JFrame{
     }
 
     public static void main(String[] args){
-        UI debugger = new UI();
+        DebuggerWindow debugger = new DebuggerWindow();
     }
 
     private class RegistersPanel extends JPanel {
