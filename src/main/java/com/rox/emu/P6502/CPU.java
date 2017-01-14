@@ -54,8 +54,18 @@ public class CPU {
         return memoryByte;
     }
 
+    private int setByteOfMemoryAt(int location, int index, int newByte){
+        memory.setByte(location + index, newByte);
+        System.out.println("STORE " + newByte + " --> mem[" + location + (index != 0 ? "[" + index + "]" : "") +"]");
+        return (location + index);
+    }
+
     private int getByteOfMemoryXIndexedAt(int location){
         return getByteOfMemoryAt(location, registers.getRegister(REG_X_INDEX));
+    }
+
+    private int setByteOfMemoryXIndexedAt(int location, int newByte){
+        return setByteOfMemoryAt(location, registers.getRegister(REG_X_INDEX), newByte);
     }
 
     private int getByteOfMemoryYIndexedAt(int location){
@@ -133,7 +143,7 @@ public class CPU {
                 int newFakeByte = getByteOfMemoryXIndexedAt(location) << 1;
                 setCarryFlagBasedOn(newFakeByte);
                 registers.setFlagsBasedOn(newFakeByte);
-                memory.setByte(location, newFakeByte);
+                setByteOfMemoryXIndexedAt(location, newFakeByte);
             }
             break;
 

@@ -795,7 +795,7 @@ class OpCodeSpec extends Specification {
         when:
         Memory memory = new SimpleMemory(65534);
         int[] program = [OP_LDA_I, firstValue,
-                         OP_STA_Z, 0x20,
+                         OP_STA_Z, 0x20 + index, //TODO use STA_Z_IX when it's implemented instead
                          OP_LDA_I, 0,
                          OP_LDX_I, index,
                          OP_ASL_Z_IX, 0x20];
