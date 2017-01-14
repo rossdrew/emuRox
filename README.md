@@ -6,7 +6,9 @@
 
 At the moment, it's invisioned as an emulator for the 6502 processor in order to fit into a NES emulator which this is the first stage of development for.
 
-Straight away Java doesn't feel like the right choice but it's a good learning exercise. I may switch language later.
+##Progress
+
+Most simply addressed opcodes now implemented, only a few to go then it's just churning out each in all of the addressing modes.
  
 ###Testing
 
@@ -16,6 +18,7 @@ Straight away Java doesn't feel like the right choice but it's a good learning e
  - [Groovy](http://www.groovy-lang.org/)/[Spock](http://spockframework.org/) for [data-driven tests](https://en.wikipedia.org/wiki/Data-driven_testing) .  For covering various variations of class creation and method use in a clear, concise way.
  - [JaCoCo](http://www.eclemma.org/jacoco/) reports. To allow us to strive for high [code coverage](https://en.wikipedia.org/wiki/Code_coverage) .
  - [Pitest](http://pitest.org/) reports. To allow us to use [mutation testing](https://en.wikipedia.org/wiki/Mutation_testing) to validate and improve our ([Spock](http://spockframework.org/) & [JUnit](http://junit.org/junit4/)) unit tests.
+ - [Debugger](https://github.com/rossdrew/emuRox/tree/master/src/main/java/com/rox/emu/P6502/dbg): A custom debugger so that I can step through pieces of code and view the status of all registers.
 
 -----
 
