@@ -28,7 +28,7 @@ buildscript {
     }
 }
 
-task runDebugUI(type: JavaExec) {
+task runDebugUI(type: JavaExec, group: 'run') {
     classpath sourceSets.main.runtimeClasspath
     main = mainClassName = 'com.rox.emu.P6502.dbg.UI'
 }
