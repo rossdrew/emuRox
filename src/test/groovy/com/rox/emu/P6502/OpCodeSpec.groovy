@@ -726,7 +726,6 @@ class OpCodeSpec extends Specification {
         Memory memory = new SimpleMemory(65534);
         int[] program = [OP_LDA_I, firstValue,
                          OP_STA_Z, 0x20,
-                         OP_LDA_I, 0,
                          OP_ASL_Z, 0x20];
         memory.setMemory(0, program);
 
@@ -736,7 +735,7 @@ class OpCodeSpec extends Specification {
         Registers registers = processor.getRegisters()
 
         and:
-        processor.step(4)
+        processor.step(3)
 
         then:
         registers.getPC() == program.length
@@ -761,7 +760,6 @@ class OpCodeSpec extends Specification {
         Memory memory = new SimpleMemory(65534);
         int[] program = [OP_LDA_I, firstValue,
                          OP_STA_ABS, 0x01, 0x20,
-                         OP_LDA_I, 0,
                          OP_ASL_ABS, 0x01, 0x20];
         memory.setMemory(0, program);
 
@@ -771,7 +769,7 @@ class OpCodeSpec extends Specification {
         Registers registers = processor.getRegisters()
 
         and:
-        processor.step(4)
+        processor.step(3)
 
         then:
         registers.getPC() == program.length
@@ -797,8 +795,6 @@ class OpCodeSpec extends Specification {
         int[] program = [OP_LDA_I, firstValue,
                          OP_LDX_I, index,
                          OP_STA_Z_IX, 0x20,
-                         OP_LDA_I, 0,
-                         OP_LDX_I, index,
                          OP_ASL_Z_IX, 0x20];
         memory.setMemory(0, program);
 
@@ -808,7 +804,7 @@ class OpCodeSpec extends Specification {
         Registers registers = processor.getRegisters()
 
         and:
-        processor.step(6)
+        processor.step(4)
 
         then:
         registers.getPC() == program.length
@@ -834,8 +830,6 @@ class OpCodeSpec extends Specification {
         int[] program = [OP_LDA_I, firstValue,
                          OP_LDX_I, index,
                          OP_STA_ABS_IX, 0x01, 0x20,
-                         OP_LDA_I, 0,
-                         OP_LDX_I, index,
                          OP_ASL_ABS_IX, 0x01, 0x20];
         memory.setMemory(0, program);
 
@@ -845,7 +839,7 @@ class OpCodeSpec extends Specification {
         Registers registers = processor.getRegisters()
 
         and:
-        processor.step(6)
+        processor.step(4)
 
         then:
         registers.getPC() == program.length
