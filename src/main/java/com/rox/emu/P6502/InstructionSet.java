@@ -14,6 +14,7 @@ package com.rox.emu.P6502;
 public class InstructionSet {
     public static final int OP_ASL_A = 0x0A;
     public static final int OP_ASL_Z = 0x16;
+    public static final int OP_ASL_ABS = 0x0E;
     public static final int OP_LSR_A = 0x4A;
     public static final int OP_LSR_Z = 0x56;
     public static final int OP_ADC_Z = 0x65;
@@ -69,7 +70,7 @@ public class InstructionSet {
     public static final int OP_ROL_A = 0x2A;
     public static final int OP_ROL_Z = 0x26;
 
-    public static final int[] instructionSet = {OP_ASL_A, OP_ASL_Z, OP_LSR_A, OP_LSR_Z, OP_ROL_A, OP_ROL_Z,
+    public static final int[] instructionSet = {OP_ASL_A, OP_ASL_Z, OP_ASL_ABS, OP_LSR_A, OP_LSR_Z, OP_ROL_A, OP_ROL_Z,
                                                 OP_ADC_Z, OP_ADC_I, OP_ADC_ABS, OP_ADC_Z_IX,
                                                 OP_SBC_I,
                                                 OP_LDA_Z, OP_LDA_I, OP_LDA_ABS, OP_LDA_Z_IX, OP_LDA_IY, OP_LDA_IX,
@@ -85,6 +86,7 @@ public class InstructionSet {
         switch (opCode){
             case OP_ASL_A:      return "ASL (Accumulator)";
             case OP_ASL_Z:      return "ASL (Zero Page)";
+            case OP_ASL_ABS:    return "ASL (Absolute)";
             case OP_LSR_A:      return "LSR (Accumulator)";
             case OP_LSR_Z:      return "LSR (Zero Page)";
             case OP_ROL_A:      return "ROL (Accumulator)";
