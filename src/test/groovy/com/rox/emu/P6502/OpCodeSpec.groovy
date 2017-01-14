@@ -1428,6 +1428,35 @@ class OpCodeSpec extends Specification {
         0x20     | 3     | 0x0C  | "Store at index 3"
     }
 
+    @Unroll("STA (Absolute[X]) #expected: Store #value at #location[#index]")
+    def testOP_STA_ABS_IX(){
+        when:
+        Memory memory = new SimpleMemory(65534);
+        int[] program = [OP_LDA_I, value,
+                         OP_LDX_I, index,
+                         OP_STA_ABS_IX, locationHi, locationLo];
+        memory.setMemory(0, program);
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        Registers registers = processor.getRegisters()
+
+        and:
+        processor.step(3)
+
+        then:
+        registers.getPC() == program.length
+        memory.getByte((locationHi << 8 | locationLo) + index) == value
+
+        where:
+        locationHi | locationLo | index | value | expected
+        0x20       |  0         | 0     | 0x0F  | "Store with 0 index"
+        0x20       |  0         | 1     | 0x0E  | "Store at index 1"
+        0x20       |  0         | 2     | 0x0D  | "Store at index 2"
+        0x20       |  0         | 3     | 0x0C  | "Store at index 3"
+    }
+
 //    @Ignore
 //    def exampleTest(){
 //        when:
