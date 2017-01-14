@@ -409,7 +409,6 @@ public class CPU {
         }
     }
 
-    //XXX Do set this to something after a pop?
     private int pop(){
         registers.setRegister(REG_SP, registers.getRegister(REG_SP) + 1);
         int address = 0x0100 | registers.getRegister(REG_SP);
