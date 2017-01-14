@@ -790,12 +790,13 @@ class OpCodeSpec extends Specification {
         0b11000000 | 0b10000000  | false | true  | true  | "Carried, negative shift"
     }
 
-    @Unroll("ASL (Zero Page at X) #Expected: #firstValue becomes #expectedMem")
+    @Unroll("ASL (Zero Page at X) #Expected: #firstValue (@ 0x20[#index]) becomes #expectedMem")
     def testASL_Z_IX(){
         when:
         Memory memory = new SimpleMemory(65534);
         int[] program = [OP_LDA_I, firstValue,
-                         OP_STA_Z, 0x20 + index, //TODO use STA_Z_IX when it's implemented instead
+                         OP_LDX_I, index,
+                         OP_STA_Z_IX, 0x20,
                          OP_LDA_I, 0,
                          OP_LDX_I, index,
                          OP_ASL_Z_IX, 0x20];
@@ -807,7 +808,7 @@ class OpCodeSpec extends Specification {
         Registers registers = processor.getRegisters()
 
         and:
-        processor.step(5)
+        processor.step(6)
 
         then:
         registers.getPC() == program.length
