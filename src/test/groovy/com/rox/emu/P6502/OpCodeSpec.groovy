@@ -72,7 +72,7 @@ class OpCodeSpec extends Specification {
     def testAbsoluteLDA() {
         when:
         Memory memory = new SimpleMemory(65534);
-        int[] program = [OP_LDA_A, 0x1, 0x2C]
+        int[] program = [OP_LDA_ABS, 0x1, 0x2C]
         memory.setByte(300, loadValue)
         memory.setMemory(0, program);
 
@@ -324,7 +324,7 @@ class OpCodeSpec extends Specification {
     def testADCAbsolute(){
         when:
         Memory memory = new SimpleMemory(65534);
-        int[] program = [OP_LDA_I, firstValue, OP_ADC_A, 0x1, 0x2C]
+        int[] program = [OP_LDA_I, firstValue, OP_ADC_ABS, 0x1, 0x2C]
         memory.setMemory(0, program);
         memory.setByte(300, secondValue)
 
@@ -447,9 +447,9 @@ class OpCodeSpec extends Specification {
         when:
         Memory memory = new SimpleMemory(65534);
         int[] program = [OP_LDA_I, firstValue,
-                         OP_STA_A, 0x20, 0x01,
+                         OP_STA_ABS, 0x20, 0x01,
                          OP_LDA_I, secondValue,
-                         OP_AND_A, 0x20, 0x01];
+                         OP_AND_ABS, 0x20, 0x01];
         memory.setMemory(0, program);
 
         and:
@@ -822,7 +822,7 @@ class OpCodeSpec extends Specification {
     def testJMP(){
         when:
         Memory memory = new SimpleMemory(65534);
-        int[] program = [OP_NOP, OP_NOP, OP_NOP, OP_JMP_A, jmpLocationHi, jmpLocationLow, OP_NOP, OP_NOP, OP_NOP];
+        int[] program = [OP_NOP, OP_NOP, OP_NOP, OP_JMP_ABS, jmpLocationHi, jmpLocationLow, OP_NOP, OP_NOP, OP_NOP];
         memory.setMemory(0, program);
 
         and:

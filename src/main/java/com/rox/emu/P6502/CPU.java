@@ -207,7 +207,7 @@ public class CPU {
                 registers.setRegisterAndFlags(REG_ACCUMULATOR, nextProgramByte());
                 break;
 
-            case OP_LDA_A:
+            case OP_LDA_ABS:
                 registers.setRegisterAndFlags(REG_ACCUMULATOR, getByteOfMemoryAt(nextProgramWord()));
                 break;
 
@@ -219,7 +219,7 @@ public class CPU {
                 performAND(getByteOfMemoryAt(nextProgramByte()));
                 break;
 
-            case OP_AND_A:
+            case OP_AND_ABS:
                 performAND(getByteOfMemoryAt(nextProgramWord()));
                 break;
 
@@ -254,7 +254,7 @@ public class CPU {
                 performADC(nextProgramByte());
                 break;
 
-            case OP_ADC_A:
+            case OP_ADC_ABS:
                 performADC(getByteOfMemoryAt(nextProgramWord()));
                 break;
 
@@ -274,7 +274,7 @@ public class CPU {
                 memory.setByte(nextProgramByte(), registers.getRegister(REG_ACCUMULATOR));
                 break;
 
-            case OP_STA_A:
+            case OP_STA_ABS:
                 memory.setByte(nextProgramWord(), registers.getRegister(REG_ACCUMULATOR));
                 break;
 
@@ -291,7 +291,7 @@ public class CPU {
 
                 break;
 
-            case OP_JMP_A:
+            case OP_JMP_ABS:
                 int h = nextProgramByte();
                 int l = nextProgramByte();
                 registers.setRegister(REG_PC_HIGH, h);

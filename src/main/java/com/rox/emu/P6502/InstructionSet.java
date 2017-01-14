@@ -18,17 +18,17 @@ public class InstructionSet {
     public static final int OP_LSR_Z = 0x56;
     public static final int OP_ADC_Z = 0x65;
     public static final int OP_ADC_I = 0x69;
-    public static final int OP_ADC_A = 0x6D;
+    public static final int OP_ADC_ABS = 0x6D;
     public static final int OP_ADC_Z_IX = 0x75;
     public static final int OP_LDA_Z = 0xA5;
     public static final int OP_LDA_I = 0xA9;
-    public static final int OP_LDA_A = 0xAD;
+    public static final int OP_LDA_ABS = 0xAD;
     public static final int OP_LDA_Z_IX = 0xB5;
     public static final int OP_LDA_IY = 0xB9;
     public static final int OP_LDA_IX = 0xBD;
     public static final int OP_CLV = 0xB8;
     public static final int OP_AND_Z = 0x25;
-    public static final int OP_AND_A = 0x2D;
+    public static final int OP_AND_ABS = 0x2D;
     public static final int OP_AND_I = 0x29;
     public static final int OP_ORA_I = 0x09;
     public static final int OP_EOR_I = 0x49;
@@ -39,7 +39,7 @@ public class InstructionSet {
     public static final int OP_LDX_I = 0xA2;
     public static final int OP_STY_Z = 0x84;
     public static final int OP_STA_Z = 0x85;
-    public static final int OP_STA_A = 0x8D;
+    public static final int OP_STA_ABS = 0x8D;
     public static final int OP_STX_Z = 0x86;
     public static final int OP_INY = 0xC8;
     public static final int OP_DEY = 0x88;
@@ -48,7 +48,7 @@ public class InstructionSet {
     public static final int OP_PHA = 0x48;
     public static final int OP_PLA = 0x68;
     public static final int OP_NOP = 0xEA;
-    public static final int OP_JMP_A = 0x4C;
+    public static final int OP_JMP_ABS = 0x4C;
     public static final int OP_TAX = 0xAA;
     public static final int OP_TAY = 0xA8;
     public static final int OP_TYA = 0x98;
@@ -70,15 +70,15 @@ public class InstructionSet {
     public static final int OP_ROL_Z = 0x26;
 
     public static final int[] instructionSet = {OP_ASL_A, OP_ASL_Z, OP_LSR_A, OP_LSR_Z, OP_ROL_A, OP_ROL_Z,
-                                                OP_ADC_Z, OP_ADC_I, OP_ADC_A, OP_ADC_Z_IX,
+                                                OP_ADC_Z, OP_ADC_I, OP_ADC_ABS, OP_ADC_Z_IX,
                                                 OP_SBC_I,
-                                                OP_LDA_Z, OP_LDA_I, OP_LDA_A, OP_LDA_Z_IX, OP_LDA_IY, OP_LDA_IX,
-                                                OP_STA_Z, OP_STA_A, OP_STX_Z, OP_STY_Z,
-                                                OP_AND_I, OP_AND_Z, OP_AND_A, OP_ORA_I, OP_EOR_I, OP_BIT_Z,
+                                                OP_LDA_Z, OP_LDA_I, OP_LDA_ABS, OP_LDA_Z_IX, OP_LDA_IY, OP_LDA_IX,
+                                                OP_STA_Z, OP_STA_ABS, OP_STX_Z, OP_STY_Z,
+                                                OP_AND_I, OP_AND_Z, OP_AND_ABS, OP_ORA_I, OP_EOR_I, OP_BIT_Z,
                                                 OP_SEC, OP_CLC, OP_CLV, OP_PHA, OP_PLA,
                                                 OP_LDY_I, OP_INY, OP_DEY,
                                                 OP_LDX_I, OP_INX, OP_DEX,
-                                                OP_NOP, OP_JMP_A, OP_BCC, OP_BCS, OP_BNE, OP_BEQ, OP_BMI, OP_BPL, OP_BVS, OP_BVC,
+                                                OP_NOP, OP_JMP_ABS, OP_BCC, OP_BCS, OP_BNE, OP_BEQ, OP_BMI, OP_BPL, OP_BVS, OP_BVC,
                                                 OP_TAX, OP_TAY, OP_TYA, OP_TXA, OP_TXS, OP_TSX};
 
     public static String getName(int opCode){
@@ -91,18 +91,18 @@ public class InstructionSet {
             case OP_ROL_Z:      return "ROL (Zero Page)";
             case OP_ADC_Z:      return "ADC (Zero Page)";
             case OP_ADC_I:      return "ADC (Immediate)";
-            case OP_ADC_A:      return "ADC (Absolute)";
+            case OP_ADC_ABS:    return "ADC (Absolute)";
             case OP_ADC_Z_IX:   return "ADC (Zero Page[X]";
             case OP_LDA_Z:      return "LDA (Zero Page)";
             case OP_LDA_I:      return "LDA (Immediate)";
-            case OP_LDA_A:      return "LDA (Absolute)";
+            case OP_LDA_ABS:    return "LDA (Absolute)";
             case OP_LDA_Z_IX:   return "LDA (Zero Page[X])";
             case OP_CLV:        return "Clear Overflow";
             case OP_LDA_IY:     return "LDA ([Y])";
             case OP_LDA_IX:     return "LDA ([X])";
             case OP_AND_I:      return "AND (Immediate)";
             case OP_AND_Z:      return "AND (Zero Page)";
-            case OP_AND_A:      return "AND (Absolute)";
+            case OP_AND_ABS:    return "AND (Absolute)";
             case OP_BIT_Z:      return "BIT (Zero Page)";
             case OP_ORA_I:      return "OR (Immediate)";
             case OP_EOR_I:      return "EOR (Immediate)";
@@ -113,7 +113,7 @@ public class InstructionSet {
             case OP_LDX_I:      return "LDX (Immediate)";
             case OP_STY_Z:      return "STY (Zero Page)";
             case OP_STA_Z:      return "STA (Zero Page)";
-            case OP_STA_A:      return "STA (Absolute)";
+            case OP_STA_ABS:    return "STA (Absolute)";
             case OP_STX_Z:      return "STX (Zero Page)";
             case OP_INY:        return "Increment Y";
             case OP_DEY:        return "Decrement Y";
@@ -121,7 +121,7 @@ public class InstructionSet {
             case OP_DEX:        return "Decrement X";
             case OP_PHA:        return "Push Accumulator";
             case OP_PLA:        return "Pull Accumulator";
-            case OP_JMP_A:      return "JMP (Absolute)";
+            case OP_JMP_ABS:    return "JMP (Absolute)";
             case OP_BCC:        return "BCC 'Branch on Carry Clear'";
             case OP_BCS:        return "BCS 'Branch on Carry Set'";
             case OP_BNE:        return "BNE 'Branch if NOT equal'";
