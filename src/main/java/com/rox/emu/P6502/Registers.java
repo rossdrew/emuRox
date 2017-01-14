@@ -130,7 +130,7 @@ public class Registers {
      * Clear bit 1 (place value 2)
      *          0000 0010
      * NOT    > 1111 1101
-     * AND(R) > xxxx xx0x
+     * AND(R) > .... ..0.
      *
      * @param flagPlaceValue int with bits to clear, turned on
      */

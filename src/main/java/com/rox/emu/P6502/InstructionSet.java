@@ -3,7 +3,6 @@ package com.rox.emu.P6502;
 /**
  * A representation of the 6502 instruction set.
  *
- * XXX
  * This isn't a very OO way to do things and is actually kinda
  * bad coding but it makes life so much easier to have this in
  * a separate file which essentially mimics a struct-type data
