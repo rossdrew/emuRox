@@ -833,7 +833,7 @@ class OpCodeSpec extends Specification {
         Memory memory = new SimpleMemory(65534);
         int[] program = [OP_LDA_I, firstValue,
                          OP_LDX_I, index,
-                         OP_STA_ABS, 0x01, (0x20+index),  //TODO Change for STA_ABS_X when implemented
+                         OP_STA_ABS_IX, 0x01, 0x20,
                          OP_LDA_I, 0,
                          OP_LDX_I, index,
                          OP_ASL_ABS_IX, 0x01, 0x20];
