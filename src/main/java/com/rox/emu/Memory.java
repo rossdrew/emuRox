@@ -7,7 +7,7 @@ package com.rox.emu;
  * @author Ross Drew
  */
 public interface Memory {
-    void setByte(int location, int byteValue);
+    void setByteAt(int location, int byteValue);
     void setMemory(int startLocation, int[] byteValues);
     int getByte(int location);
 }

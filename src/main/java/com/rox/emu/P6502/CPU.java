@@ -55,7 +55,7 @@ public class CPU {
     }
 
     private int setByteOfMemoryAt(int location, int index, int newByte){
-        memory.setByte(location + index, newByte);
+        memory.setByteAt(location + index, newByte);
         System.out.println("STORE " + newByte + " --> mem[" + location + (index != 0 ? "[" + index + "]" : "") +"]");
         return (location + index);
     }
@@ -134,7 +134,7 @@ public class CPU {
                 int newFakeByte = memory.getByte(location) << 1;
                 setCarryFlagBasedOn(newFakeByte);
                 registers.setFlagsBasedOn(newFakeByte);
-                memory.setByte(location, newFakeByte);
+                memory.setByteAt(location, newFakeByte);
             }
             break;
 
@@ -161,7 +161,7 @@ public class CPU {
                 int newFakeByte = memory.getByte(location) << 1;
                 setCarryFlagBasedOn(newFakeByte);
                 registers.setFlagsBasedOn(newFakeByte);
-                memory.setByte(location, newFakeByte);
+                memory.setByteAt(location, newFakeByte);
             }
             break;
 
@@ -179,7 +179,7 @@ public class CPU {
                 setBorrowFlagFor(newFakeByte);
                 newFakeByte = newFakeByte >> 1;
                 registers.setFlagsBasedOn(newFakeByte);
-                memory.setByte(location, newFakeByte);
+                memory.setByteAt(location, newFakeByte);
             }
             break;
 
@@ -189,7 +189,7 @@ public class CPU {
 
             case OP_ROL_Z:
                 int location = nextProgramByte();
-                memory.setByte(location, performROL(memory.getByte(location)));
+                memory.setByteAt(location, performROL(memory.getByte(location)));
             break;
 
             case OP_SEC:
@@ -304,15 +304,15 @@ public class CPU {
                 break;
 
             case OP_STY_Z:
-                memory.setByte(nextProgramByte(), registers.getRegister(REG_Y_INDEX));
+                memory.setByteAt(nextProgramByte(), registers.getRegister(REG_Y_INDEX));
                 break;
 
             case OP_STA_Z:
-                memory.setByte(nextProgramByte(), registers.getRegister(REG_ACCUMULATOR));
+                memory.setByteAt(nextProgramByte(), registers.getRegister(REG_ACCUMULATOR));
                 break;
 
             case OP_STA_ABS:
-                memory.setByte(nextProgramWord(), registers.getRegister(REG_ACCUMULATOR));
+                memory.setByteAt(nextProgramWord(), registers.getRegister(REG_ACCUMULATOR));
                 break;
 
             case OP_STA_Z_IX:
@@ -324,7 +324,7 @@ public class CPU {
                 break;
 
             case OP_STX_Z:
-                memory.setByte(nextProgramByte(), registers.getRegister(REG_X_INDEX));
+                memory.setByteAt(nextProgramByte(), registers.getRegister(REG_X_INDEX));
                 break;
 
             case OP_PHA:
@@ -416,7 +416,7 @@ public class CPU {
     }
 
     private void push(int value){
-        memory.setByte(0x0100 | registers.getRegister(REG_SP), registers.getRegister(REG_ACCUMULATOR));
+        memory.setByteAt(0x0100 | registers.getRegister(REG_SP), registers.getRegister(REG_ACCUMULATOR));
         registers.setRegister(REG_SP, registers.getRegister(REG_SP) - 1);
     }
 

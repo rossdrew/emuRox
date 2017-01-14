@@ -18,8 +18,8 @@ public class CPUTest {
     @Before
     public void setup() {
         memory = new SimpleMemory(65534);
-        memory.setByte(0x0, 0xFFFC);
-        memory.setByte(0x0, 0xFFFD);
+        memory.setByteAt(0x0, 0xFFFC);
+        memory.setByteAt(0x0, 0xFFFD);
 
         processor = new CPU(memory);
         processor.reset();
@@ -28,8 +28,8 @@ public class CPUTest {
     @Test
     public void testStartup() {
         memory = new SimpleMemory(65534);
-        memory.setByte(0xFFFC, 0x1);
-        memory.setByte(0xFFFD, 0x1);
+        memory.setByteAt(0xFFFC, 0x1);
+        memory.setByteAt(0xFFFD, 0x1);
 
         processor = new CPU(memory);
         processor.reset();
@@ -50,8 +50,8 @@ public class CPUTest {
     public void testReset() {
         int[] program = {OP_LDA_I, 0xAA, OP_LDX_I, 0xBB, OP_LDX_I, 0xCC};
         memory.setMemory(0, program);
-        memory.setByte(0xFFFC, 0x0);
-        memory.setByte(0xFFFD, 0x0);
+        memory.setByteAt(0xFFFC, 0x0);
+        memory.setByteAt(0xFFFD, 0x0);
 
         processor.step(3);
         processor.reset();

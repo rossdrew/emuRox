@@ -15,9 +15,9 @@ public class SimpleMemoryTest {
 
     @Test
     public void testGetAndSetByte(){
-        memory.setByte(0, 99);
-        memory.setByte(0x10, 101);
-        memory.setByte(0b00000001, 1);
+        memory.setByteAt(0, 99);
+        memory.setByteAt(0x10, 101);
+        memory.setByteAt(0b00000001, 1);
 
         assertEquals(99, memory.getByte(0));
         assertEquals(101, memory.getByte(16));

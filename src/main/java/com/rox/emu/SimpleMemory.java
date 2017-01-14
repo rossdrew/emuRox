@@ -13,7 +13,7 @@ public class SimpleMemory implements Memory{
     }
 
     @Override
-    public void setByte(int location, int byteValue) {
+    public void setByteAt(int location, int byteValue) {
         memoryArray[location] = byteValue & 0xFF;
     }
 
