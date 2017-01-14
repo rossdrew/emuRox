@@ -827,7 +827,7 @@ class OpCodeSpec extends Specification {
         0b11000000 | 0b10000000  | 5     | false | true  | true  | "Carried, negative shift"
     }
 
-    @Unroll("ASL (Absolute at X) #Expected: #firstValue (@ 0x20[#index]) becomes #expectedMem")
+    @Unroll("ASL (Absolute[X]) #Expected: #firstValue (@ 0x20[#index]) becomes #expectedMem")
     def testASL_ABS_IX(){
         when:
         Memory memory = new SimpleMemory(65534);

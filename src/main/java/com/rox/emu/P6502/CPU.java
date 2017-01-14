@@ -147,6 +147,15 @@ public class CPU {
             }
             break;
 
+            case OP_ASL_ABS_IX: {
+                int location = nextProgramWord();
+                int newFakeByte = getByteOfMemoryXIndexedAt(location) << 1;
+                setCarryFlagBasedOn(newFakeByte);
+                registers.setFlagsBasedOn(newFakeByte);
+                setByteOfMemoryXIndexedAt(location, newFakeByte);
+            }
+            break;
+
             case OP_ASL_ABS: {
                 int location = nextProgramWord();
                 int newFakeByte = memory.getByte(location) << 1;
