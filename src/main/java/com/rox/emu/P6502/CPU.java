@@ -306,6 +306,10 @@ public class CPU {
                 memory.setByte(nextProgramWord(), registers.getRegister(REG_ACCUMULATOR));
                 break;
 
+            case OP_STA_Z_IX:
+                setByteOfMemoryXIndexedAt(nextProgramByte(), registers.getRegister(REG_ACCUMULATOR));
+                break;
+
             case OP_STX_Z:
                 memory.setByte(nextProgramByte(), registers.getRegister(REG_X_INDEX));
                 break;
