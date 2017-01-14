@@ -104,6 +104,18 @@ public class CPUTest {
     }
 
     @Test
+    public void testSTA_Z_IX() {
+        int[] program = {OP_LDA_I, 0xAA, OP_LDX_I, 0x1, OP_STA_Z_IX, 0x20};
+        memory.setMemory(0, program);
+
+        processor.step(3);
+
+        Registers registers = processor.getRegisters();
+        assertEquals(program.length, registers.getPC());
+        assertEquals(0xAA, memory.getByte(0x21));
+    }
+
+    @Test
     public void testSTX() {
         int[] program = {OP_LDX_I, 0xAA, OP_STX_Z, 100};
         memory.setMemory(0, program);
