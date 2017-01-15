@@ -2,7 +2,7 @@ platform: linux
 
 image_resource:
   type: docker-image
-  source: {repository: unico, tag: centos-7.0-develop}
+  source: {repository: unico/centos-7.0-develop}
 
 #Need to make my own vagrant file with Java/Groovy/gradle/maven
 
