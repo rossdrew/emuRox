@@ -2,9 +2,7 @@ platform: linux
 
 image_resource:
   type: docker-image
-  source: {repository: tcthien/java-dev-server, username: vagrant, password: vagrant}
-
-#Need to make my own vagrant file with Java/Groovy/gradle/maven
+  source: {repository: unico, tag: centos-7.0-develop}
 
 inputs:
   - name: sources
