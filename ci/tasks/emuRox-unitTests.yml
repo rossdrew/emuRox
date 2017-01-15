@@ -1,6 +1,6 @@
 platform: linux
 
-#image: docker:///datianshi/gradle
+image: docker:///concourse/lite
 
 inputs:
   - name: sources
