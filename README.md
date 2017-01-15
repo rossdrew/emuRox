@@ -32,4 +32,5 @@ Most simply addressed opcodes now implemented, only a few to go then it's just c
  
 ###Sources
  - JaCoCo [Was missing Spock tests](http://stackoverflow.com/questions/41652981/why-does-jacoco-ignore-myspock-tests-yet-sees-my-junit-tests), thanks [Godin](http://stackoverflow.com/users/244993/godin) of Stack Overflow
+ - The [6502 Programming](https://www.facebook.com/groups/6502CPU/) Facebook group has been invaluable in resolving small questions 
  
