@@ -8,4 +8,4 @@ inputs:
   - name: sources
 
 run:
-  path: sources/ci/tasks/runUnitTests.sh
+  path: ./sources/ci/tasks/runUnitTests.sh
