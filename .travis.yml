@@ -5,6 +5,4 @@ jdk:
 
 after_success:
 - ./gradlew check jacocoTestReport coveralls
-
-after_failure:
-- ./gradlew clean check --debug
+- bash <(curl -s https://codecov.io/bash)
