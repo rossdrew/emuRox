@@ -1,0 +1,9 @@
+platform: linux
+
+#image: docker:///datianshi/gradle
+
+inputs:
+  - name: sources
+
+run:
+path: runUnitTests.sh
