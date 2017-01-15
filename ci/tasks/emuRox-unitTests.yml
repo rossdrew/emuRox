@@ -2,7 +2,7 @@ platform: linux
 
 image_resource:
   type: docker-image
-  source: {repository: anielgazineu/trusty64-eclipse}
+  source: {repository: tcthien/java-dev-server}
 
 inputs:
   - name: sources
