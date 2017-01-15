@@ -30,8 +30,17 @@ buildscript {
 
 jacocoTestReport {
     reports {
-        xml.enabled true
-        xml.destination "jacocoTestReport.xml"
+        xml {
+            enabled true
+            destination "jacocoTestReport.xml"
+        }
+    }
+
+    afterEvaluate {
+        classDirectories = files(classDirectories.files.collect {
+            fileTree(dir: it,
+                     exclude: ['**/ui/**'])
+        })
     }
 }
 
