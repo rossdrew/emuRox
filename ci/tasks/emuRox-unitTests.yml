@@ -1,6 +1,8 @@
 platform: linux
 
-image: docker:///concourse/lite
+image_resource:
+  type: docker-image
+  source: {repository: concourse, tag: lite}
 
 inputs:
   - name: sources
