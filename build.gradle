@@ -28,6 +28,12 @@ buildscript {
     }
 }
 
+jacocoTestReport {
+    reports {
+        xml.enabled true
+    }
+}
+
 task runDebugUI(type: JavaExec, group: 'run') {
     classpath sourceSets.main.runtimeClasspath
     main = mainClassName = 'com.rox.emu.P6502.dbg.ui.DebuggerWindow'
