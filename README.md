@@ -28,5 +28,8 @@ Most simply addressed opcodes now implemented, only a few to go then it's just c
 
 ######Javas unsigned byte problem. 
  - Java bytes are signed, meaning it's a pain to deal with them, instead we have to use ints to represent bytes.
- - System.out is confusing Pitest, need to invest some time in moving to a loggin framework
- - JaCoCo [seems to have a problem](http://stackoverflow.com/questions/41652981/why-does-jacoco-ignore-myspock-tests-yet-sees-my-junit-tests) picking up both the Spock and JUnit tests, resulting in bad coverage.  Pitest however picks up both.
+ - `System.out` is confusing Pitest, need to invest some time in moving to a loggin framework
+ 
+###Sources
+ - JaCoCo [Was missing Spock tests](http://stackoverflow.com/questions/41652981/why-does-jacoco-ignore-myspock-tests-yet-sees-my-junit-tests), thanks [Godin](http://stackoverflow.com/users/244993/godin) of Stack Overflow
+ 
