@@ -31,6 +31,7 @@ buildscript {
 jacocoTestReport {
     reports {
         xml.enabled true
+        xml.destination "jacocoTestReport.xml"
     }
 }
 
