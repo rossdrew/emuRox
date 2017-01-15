@@ -6,4 +6,4 @@ inputs:
   - name: sources
 
 run:
-path: runUnitTests.sh
+- path: runUnitTests.sh
