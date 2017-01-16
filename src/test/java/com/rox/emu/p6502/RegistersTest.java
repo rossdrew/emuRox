@@ -1,4 +1,4 @@
-package com.rox.emu.P6502;
+package com.rox.emu.p6502;
 
 import junit.framework.TestCase;
 import org.junit.Before;

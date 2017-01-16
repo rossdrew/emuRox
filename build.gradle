@@ -46,7 +46,7 @@ jacocoTestReport {
 
 task runDebugUI(type: JavaExec, group: 'run') {
     classpath sourceSets.main.runtimeClasspath
-    main = mainClassName = 'com.rox.emu.P6502.dbg.ui.DebuggerWindow'
+    main = mainClassName = 'com.rox.emu.p6502.dbg.ui.DebuggerWindow'
 }
 
 

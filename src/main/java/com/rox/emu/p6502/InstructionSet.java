@@ -1,4 +1,4 @@
-package com.rox.emu.P6502;
+package com.rox.emu.p6502;
 
 /**
  * A representation of the 6502 instruction set.

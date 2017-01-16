@@ -1,11 +1,13 @@
-package com.rox.emu.P6502
+package com.rox.emu.p6502
 
 import com.rox.emu.Memory
 import com.rox.emu.SimpleMemory
+import com.rox.emu.p6502.CPU
+import com.rox.emu.p6502.Registers
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import static com.rox.emu.P6502.InstructionSet.*;
+import static com.rox.emu.p6502.InstructionSet.*;
 
 class OpCodeSpec extends Specification {
 

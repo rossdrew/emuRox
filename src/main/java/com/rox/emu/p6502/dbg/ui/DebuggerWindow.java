@@ -1,14 +1,13 @@
-package com.rox.emu.P6502.dbg.ui;
+package com.rox.emu.p6502.dbg.ui;
 
 import com.rox.emu.Memory;
-import com.rox.emu.P6502.CPU;
-import com.rox.emu.P6502.Registers;
+import com.rox.emu.p6502.CPU;
+import com.rox.emu.p6502.Registers;
 import com.rox.emu.SimpleMemory;
+import com.rox.emu.p6502.InstructionSet;
 
 import javax.swing.*;
 import java.awt.*;
-
-import static com.rox.emu.P6502.InstructionSet.*;
 
 /**
  * A DebuggerWindow for debugging 6502 CPU code
@@ -74,28 +73,28 @@ public class DebuggerWindow extends JFrame{
         int valMPD = 7;
         int valMPR = 4;
 
-        int[] program = new int[]{  OP_LDA_I, valMPD,
-                                    OP_STA_Z, MPD,
-                                    OP_LDA_I, valMPR,
-                                    OP_STA_Z, MPR,
-                                    OP_LDA_I, 0,         //<---- start
-                                    OP_STA_Z, TMP,       //Clear
-                                    OP_STA_Z, RESAD_0,   //...
-                                    OP_STA_Z, RESAD_1,   //...
-                                    OP_LDX_I, 8,         //X counts each bit
-                                    OP_LSR_Z, MPR,       //:MULT(18) LSR(MPR)
-                                    OP_BCC, 13,          //Test carry and jump (forward 13) to NOADD
-                                    OP_LDA_Z, RESAD_0,   //RESAD -> A
-                                    OP_CLC,              //Prepare to add
-                                    OP_ADC_Z, MPD,       //+MPD
-                                    OP_STA_Z, RESAD_0,   //Save result
-                                    OP_LDA_Z, RESAD_1,   //RESAD+1 -> A
-                                    OP_ADC_Z, TMP,       //+TMP
-                                    OP_STA_Z, RESAD_1,   //RESAD+1 <- A
-                                    OP_ASL_Z, MPD,       //:NOADD(35) ASL(MPD)
-                                    OP_ROL_Z, TMP,       //Save bit from MPD
-                                    OP_DEX,              //--X
-                                    OP_BNE, 0b11100111   //Test equal and jump (back 24) to MULT});
+        int[] program = new int[]{  InstructionSet.OP_LDA_I, valMPD,
+                                    InstructionSet.OP_STA_Z, MPD,
+                                    InstructionSet.OP_LDA_I, valMPR,
+                                    InstructionSet.OP_STA_Z, MPR,
+                                    InstructionSet.OP_LDA_I, 0,         //<---- start
+                                    InstructionSet.OP_STA_Z, TMP,       //Clear
+                                    InstructionSet.OP_STA_Z, RESAD_0,   //...
+                                    InstructionSet.OP_STA_Z, RESAD_1,   //...
+                                    InstructionSet.OP_LDX_I, 8,         //X counts each bit
+                                    InstructionSet.OP_LSR_Z, MPR,       //:MULT(18) LSR(MPR)
+                                    InstructionSet.OP_BCC, 13,          //Test carry and jump (forward 13) to NOADD
+                                    InstructionSet.OP_LDA_Z, RESAD_0,   //RESAD -> A
+                                    InstructionSet.OP_CLC,              //Prepare to add
+                                    InstructionSet.OP_ADC_Z, MPD,       //+MPD
+                                    InstructionSet.OP_STA_Z, RESAD_0,   //Save result
+                                    InstructionSet.OP_LDA_Z, RESAD_1,   //RESAD+1 -> A
+                                    InstructionSet.OP_ADC_Z, TMP,       //+TMP
+                                    InstructionSet.OP_STA_Z, RESAD_1,   //RESAD+1 <- A
+                                    InstructionSet.OP_ASL_Z, MPD,       //:NOADD(35) ASL(MPD)
+                                    InstructionSet.OP_ROL_Z, TMP,       //Save bit from MPD
+                                    InstructionSet.OP_DEX,              //--X
+                                    InstructionSet.OP_BNE, 0b11100111   //Test equal and jump (back 24) to MULT});
         };
 
         return program;
@@ -123,7 +122,7 @@ public class DebuggerWindow extends JFrame{
         int instr = memory.getByte(pointer);
         //TODO get arguments
 
-        instructionName = getOpCodeName(instr);
+        instructionName = InstructionSet.getOpCodeName(instr);
         instruction.setText(instructionName);
         listModel.add(0, instructionName);
 
