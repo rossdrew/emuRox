@@ -124,7 +124,7 @@ public class DebuggerWindow extends JFrame{
         int instr = memory.getByte(pointer);
         //TODO get arguments
 
-        instructionName = InstructionSet.getName(instr);
+        instructionName = getOpCodeName(instr);
         instruction.setText(instructionName);
         listModel.add(0, instructionName);
 
@@ -153,7 +153,9 @@ public class DebuggerWindow extends JFrame{
                 drawRegisters(g, 20, 20);
         }
 
-        private void drawRegisters(Graphics g, int xLocation, int yLocation) {
+        private void drawRegisters(Graphics g, int x, int y) {
+            int yLocation = y;
+            int xLocation = x;
             int rowSize = padding + bitSize;
             int secondByteColumn = byteSize + xLocation + padding;
 
@@ -220,11 +222,11 @@ public class DebuggerWindow extends JFrame{
         }
 
         private int fromSignedByte(int signedByte){
-            signedByte &= 0xFF;
-            if ((signedByte & 128) == 128)
-                return -( ( (~signedByte) +1) & 0xFF); //Twos compliment compensation
+            int signedByteByte = signedByte & 0xFF;
+            if ((signedByteByte & 128) == 128)
+                return -( ( (~signedByteByte) +1) & 0xFF); //Twos compliment compensation
             else
-                return signedByte & 0b01111111;
+                return signedByteByte & 0b01111111;
         }
 
         private String to8BitString(int fakeByte){

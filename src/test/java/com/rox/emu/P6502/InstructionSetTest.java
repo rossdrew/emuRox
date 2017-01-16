@@ -8,13 +8,13 @@ public class InstructionSetTest {
     @Test
     public void testGetValidName() throws Exception {
         for (int i : InstructionSet.instructionSet){
-            assertFalse("Instruction " + i + " has no textual description", InstructionSet.getName(i).startsWith("<Unknown Opcode"));
+            assertFalse("Instruction " + i + " has no textual description", InstructionSet.getOpCodeName(i).startsWith("<Unknown Opcode"));
         }
     }
 
     @Test
     public void testGetInvalidName() throws Exception {
-        assertTrue("Instruction 256 should be invalid", InstructionSet.getName(256).startsWith("<Unknown Opcode"));
+        assertTrue("Instruction 256 should be invalid", InstructionSet.getOpCodeName(256).startsWith("<Unknown Opcode"));
 
     }
 }

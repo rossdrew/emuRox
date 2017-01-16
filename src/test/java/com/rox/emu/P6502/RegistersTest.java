@@ -1,10 +1,12 @@
 package com.rox.emu.P6502;
 
+import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 
 import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 import static org.spockframework.util.Assert.fail;
 
@@ -15,7 +17,7 @@ public class RegistersTest {
     private Registers registers;
 
     @Before
-    public void setup(){
+    public void setUp(){
         registers = new Registers();
     }
 
@@ -107,7 +109,11 @@ public class RegistersTest {
     @Test
     public void testGetValidRegisterName(){
         for (int i=0; i<8; i++){
-            Registers.getRegisterName(i);
+            try {
+                assertNotEquals("", Registers.getRegisterName(i));
+            }catch(Exception e){
+                TestCase.fail("Register #" + i + " should have a name");
+            }
         }
     }
 

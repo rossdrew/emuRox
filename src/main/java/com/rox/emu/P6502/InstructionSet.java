@@ -85,7 +85,7 @@ public class InstructionSet {
                                                 OP_NOP, OP_JMP_ABS, OP_BCC, OP_BCS, OP_BNE, OP_BEQ, OP_BMI, OP_BPL, OP_BVS, OP_BVC,
                                                 OP_TAX, OP_TAY, OP_TYA, OP_TXA, OP_TXS, OP_TSX};
 
-    public static String getName(int opCode){
+    public static String getOpCodeName(int opCode){
         switch (opCode){
             case OP_ASL_A:      return "ASL (Accumulator)";
             case OP_ASL_Z:      return "ASL (Zero Page)";

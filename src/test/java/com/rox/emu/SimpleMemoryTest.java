@@ -9,7 +9,7 @@ public class SimpleMemoryTest {
     private Memory memory;
 
     @Before
-    public void setup(){
+    public void setUp(){
         memory = new SimpleMemory(65534);
     }
 

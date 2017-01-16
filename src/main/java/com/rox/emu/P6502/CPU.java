@@ -120,7 +120,7 @@ public class CPU {
         int opCode = nextProgramByte();
 
         //Execute the opcode
-        System.out.println("Instruction: " + getName(opCode) + "...");
+        System.out.println("Instruction: " + getOpCodeName(opCode) + "...");
         switch (opCode){
             case OP_ASL_A: {
                 int newFakeByte = registers.getRegister(REG_ACCUMULATOR) << 1;
@@ -450,11 +450,11 @@ public class CPU {
      * @param displacement relative (-127 -> 128) location from end of branch instruction
      */
     private void branchTo(int displacement) {
-        displacement &= 0xFF;
-        if ((displacement & NEGATIVE_INDICATOR_BIT) == NEGATIVE_INDICATOR_BIT)
-            registers.setRegister(REG_PC_LOW, registers.getRegister(REG_PC_LOW) - fromTwosComplimented(displacement));
+        int displacementByte = displacement & 0xFF;
+        if ((displacementByte & NEGATIVE_INDICATOR_BIT) == NEGATIVE_INDICATOR_BIT)
+            registers.setRegister(REG_PC_LOW, registers.getRegister(REG_PC_LOW) - fromTwosComplimented(displacementByte));
         else
-            registers.setRegister(REG_PC_LOW, registers.getRegister(REG_PC_LOW) + displacement);
+            registers.setRegister(REG_PC_LOW, registers.getRegister(REG_PC_LOW) + displacementByte);
     }
 
     private void performAND(int byteTerm){

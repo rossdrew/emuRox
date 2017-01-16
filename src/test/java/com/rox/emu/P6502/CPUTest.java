@@ -3,6 +3,7 @@ package com.rox.emu.P6502;
 import com.rox.emu.Memory;
 import com.rox.emu.SimpleMemory;
 import com.rox.emu.UnknownOpCodeException;
+import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -16,7 +17,7 @@ public class CPUTest {
     private CPU processor;
 
     @Before
-    public void setup() {
+    public void setUp() {
         memory = new SimpleMemory(65534);
         memory.setByteAt(0x0, 0xFFFC);
         memory.setByteAt(0x0, 0xFFFD);
@@ -729,5 +730,7 @@ public class CPUTest {
         System.out.println("MPR = " + memory.getByte(MPR));
         System.out.println("TMP = " + memory.getByte(TMP));
         System.out.println("[A] = " + registers.getRegister(Registers.REG_ACCUMULATOR));
+
+        TestCase.fail();
     }
 }

@@ -59,15 +59,15 @@ public class Registers {
     }
 
     public void setRegisterAndFlags(int registerID, int value){
-        value = value & 0xFF;
-        setRegister(registerID, value);
-        setFlagsBasedOn(value);
+        int valueByte = value & 0xFF;
+        setRegister(registerID, valueByte);
+        setFlagsBasedOn(valueByte);
     }
 
     public void setFlagsBasedOn(int value){
-        value = value & 0xFF;
-        updateZeroFlagBasedOn(value);
-        updateNegativeFlagBasedOn(value);
+        int valueByte = value & 0xFF;
+        updateZeroFlagBasedOn(valueByte);
+        updateNegativeFlagBasedOn(valueByte);
     }
 
     public void incrementRegisterWithFlags(int registerID){
