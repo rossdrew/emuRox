@@ -2,7 +2,6 @@ package com.rox.emu.P6502.dbg.ui;
 
 import com.rox.emu.Memory;
 import com.rox.emu.P6502.CPU;
-import com.rox.emu.P6502.InstructionSet;
 import com.rox.emu.P6502.Registers;
 import com.rox.emu.SimpleMemory;
 
@@ -134,7 +133,7 @@ public class DebuggerWindow extends JFrame{
     }
 
     public static void main(String[] args){
-        DebuggerWindow debugger = new DebuggerWindow();
+        new DebuggerWindow();
     }
 
     private class RegistersPanel extends JPanel {

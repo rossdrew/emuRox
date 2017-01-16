@@ -416,7 +416,7 @@ public class CPU {
     }
 
     private void push(int value){
-        memory.setByteAt(0x0100 | registers.getRegister(REG_SP), registers.getRegister(REG_ACCUMULATOR));
+        memory.setByteAt(0x0100 | registers.getRegister(REG_SP), value);
         registers.setRegister(REG_SP, registers.getRegister(REG_SP) - 1);
     }
 
