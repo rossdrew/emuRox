@@ -464,7 +464,7 @@ class OpCodeSpec extends Specification {
         then:
         registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAcc
         registers.getPC() == program.length
-        Z == registers.statusFlags[Registers.Z] 
+        Z == registers.statusFlags[Registers.Z]
         N == registers.statusFlags[Registers.N]
 
         where:
@@ -473,6 +473,37 @@ class OpCodeSpec extends Specification {
         0b00000001 | 1     | 0b00000010  | 0b00000000  | true   | false | "No matching bits"
         0b00000011 | 2     | 0b00000010  | 0b00000010  | false  | false | "1 matched bit, 1 unmatched"
         0b00101010 | 3     | 0b00011010  | 0b00001010  | false  | false | "Multiple matched/unmatched bits"
+    }
+
+    @Unroll("AND (Absolute[X]) #Expected: #firstValue & #secondValue = #expectedAcc")
+    def testAND_ABS_IX(){
+        when:
+        Memory memory = new SimpleMemory(65534);
+        int[] program = [OP_LDX_I, index,
+                         OP_LDA_I, firstValue,
+                         OP_STA_ABS_IX, 0x20,
+                         OP_LDA_I, secondValue,
+                         OP_AND_ABS_IX, locationHi, locationLo];
+        memory.setMemory(0, program);
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        processor.step(5)
+        Registers registers = processor.getRegisters()
+
+        then:
+        registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAcc
+        registers.getPC() == program.length
+        Z == registers.statusFlags[Registers.Z]
+        N == registers.statusFlags[Registers.N]
+
+        where:
+        locationHi | locationLo | firstValue | index | secondValue | expectedAcc | Z      | N     | Expected
+        0x1        | 0x0        | 0b00000001 | 0     | 0b00000001  | 0b00000001  | false  | false | "Unchanged accumulator"
+        0x1        | 0x0        | 0b00000001 | 1     | 0b00000010  | 0b00000000  | true   | false | "No matching bits"
+        0x1        | 0x0        | 0b00000011 | 2     | 0b00000010  | 0b00000010  | false  | false | "1 matched bit, 1 unmatched"
+        0x1        | 0x0        | 0b00101010 | 3     | 0b00011010  | 0b00001010  | false  | false | "Multiple matched/unmatched bits"
     }
 
     @Unroll("AND (Absolute) #Expected:  #firstValue & #secondValue = #expectedAccumulator in Accumulator.")
