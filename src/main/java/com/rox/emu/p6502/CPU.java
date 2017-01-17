@@ -261,6 +261,10 @@ public class CPU {
                 performAND(nextProgramByte());
                 break;
 
+            case InstructionSet.OP_AND_Z_IX:
+                performAND(getByteOfMemoryXIndexedAt(nextProgramByte()));
+                break;
+
             case InstructionSet.OP_BIT_Z:
                 int memData = memory.getByte(nextProgramByte());
                 if ((memData & registers.getRegister(Registers.REG_ACCUMULATOR)) == memData)

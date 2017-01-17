@@ -414,7 +414,7 @@ class OpCodeSpec extends Specification {
         0b00101010 | 0b00011010  | 0b00001010          | false  | false | "Multiple matched/unmatched bits"
     }
 
-    @Unroll("AND (Zero Page) #Expected:  #firstValue & #secondValue = #expectedAccumulator in Accumulator.")
+    @Unroll("AND (Zero Page) #Expected: #firstValue & #secondValue = #expectedAccumulator in Accumulator.")
     def testAND_Z(){
         when:
         Memory memory = new SimpleMemory(65534);
@@ -444,13 +444,13 @@ class OpCodeSpec extends Specification {
         0b00101010 | 0b00011010  | 0b00001010          | false  | false | "Multiple matched/unmatched bits"
     }
 
-    @Unroll("AND (Zero Page[X]) #Expected:  #firstValue & #secondValue = #expectedAccumulator in Accumulator.")
+    @Unroll("AND (Zero Page[X]) #Expected: #firstValue & #secondValue = #expectedAcc")
     def testAND_Z_IX(){
         when:
         Memory memory = new SimpleMemory(65534);
         int[] program = [OP_LDX_I, index,
                          OP_LDA_I, firstValue,
-                         OP_STA_Z_IX, 0x20, index,
+                         OP_STA_Z_IX, 0x20,
                          OP_LDA_I, secondValue,
                          OP_AND_Z_IX, 0x20];
         memory.setMemory(0, program);
@@ -462,14 +462,14 @@ class OpCodeSpec extends Specification {
         Registers registers = processor.getRegisters()
 
         then:
-        memory.getByte(firstValue + index) == expectedMem
+        registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAcc
         registers.getPC() == program.length
         Z == registers.statusFlags[Registers.Z]
         N == registers.statusFlags[Registers.N]
 
         where:
-        firstValue | index | secondValue | expectedMem | Z      | N     | Expected
-        0b00000001 | 0     | 0b00000001  | 0b00000001  | false  | false | "Unchanged memory"
+        firstValue | index | secondValue | expectedAcc | Z      | N     | Expected
+        0b00000001 | 0     | 0b00000001  | 0b00000001  | false  | false | "Unchanged accumulator"
         0b00000001 | 1     | 0b00000010  | 0b00000000  | true   | false | "No matching bits"
         0b00000011 | 2     | 0b00000010  | 0b00000010  | false  | false | "1 matched bit, 1 unmatched"
         0b00101010 | 3     | 0b00011010  | 0b00001010  | false  | false | "Multiple matched/unmatched bits"
