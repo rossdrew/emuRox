@@ -481,7 +481,7 @@ class OpCodeSpec extends Specification {
         Memory memory = new SimpleMemory(65534);
         int[] program = [OP_LDX_I, index,
                          OP_LDA_I, firstValue,
-                         OP_STA_ABS_IX, 0x20,
+                         OP_STA_ABS_IX, locationHi, locationLo,
                          OP_LDA_I, secondValue,
                          OP_AND_ABS_IX, locationHi, locationLo];
         memory.setMemory(0, program);
@@ -500,10 +500,10 @@ class OpCodeSpec extends Specification {
 
         where:
         locationHi | locationLo | firstValue | index | secondValue | expectedAcc | Z      | N     | Expected
-        0x1        | 0x0        | 0b00000001 | 0     | 0b00000001  | 0b00000001  | false  | false | "Unchanged accumulator"
-        0x1        | 0x0        | 0b00000001 | 1     | 0b00000010  | 0b00000000  | true   | false | "No matching bits"
-        0x1        | 0x0        | 0b00000011 | 2     | 0b00000010  | 0b00000010  | false  | false | "1 matched bit, 1 unmatched"
-        0x1        | 0x0        | 0b00101010 | 3     | 0b00011010  | 0b00001010  | false  | false | "Multiple matched/unmatched bits"
+        0x1        | 0x10       | 0b00000001 | 0     | 0b00000001  | 0b00000001  | false  | false | "Unchanged accumulator"
+        0x2        | 0x20       | 0b00000001 | 1     | 0b00000010  | 0b00000000  | true   | false | "No matching bits"
+        0x3        | 0x30       | 0b00000011 | 2     | 0b00000010  | 0b00000010  | false  | false | "1 matched bit, 1 unmatched"
+        0x4        | 0x40       | 0b00101010 | 3     | 0b00011010  | 0b00001010  | false  | false | "Multiple matched/unmatched bits"
     }
 
     @Unroll("AND (Absolute) #Expected:  #firstValue & #secondValue = #expectedAccumulator in Accumulator.")
