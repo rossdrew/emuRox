@@ -464,7 +464,7 @@ class OpCodeSpec extends Specification {
         then:
         registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAcc
         registers.getPC() == program.length
-        Z == registers.statusFlags[Registers.Z]
+        Z == registers.statusFlags[Registers.Z] 
         N == registers.statusFlags[Registers.N]
 
         where:
