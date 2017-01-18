@@ -292,6 +292,10 @@ public class CPU {
                 registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, nextProgramByte() ^ accumulatorBeforeOperation);
                 break;
 
+            case InstructionSet.OP_EOR_Z:
+                registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(nextProgramByte()) ^ accumulatorBeforeOperation);
+                break;
+
             case InstructionSet.OP_ADC_Z:
                 performADC(getByteOfMemoryAt(nextProgramByte()));
                 break;
