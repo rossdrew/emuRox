@@ -312,6 +312,10 @@ public class CPU {
                 performSBC(nextProgramByte());
                 break;
 
+            case InstructionSet.OP_SBC_Z:
+                performSBC(getByteOfMemoryAt(nextProgramByte()));
+                break;
+
             case InstructionSet.OP_STY_Z:
                 memory.setByteAt(nextProgramByte(), registers.getRegister(Registers.REG_Y_INDEX));
                 break;

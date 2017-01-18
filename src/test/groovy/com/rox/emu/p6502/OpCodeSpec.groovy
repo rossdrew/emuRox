@@ -653,9 +653,9 @@ class OpCodeSpec extends Specification {
     def testSBC_Z(){
         when:
         Memory memory = new SimpleMemory(65534);
-        int[] program = [OP_LDA_I, firstValue,
+        int[] program = [OP_LDA_I, secondValue,
                          OP_STA_Z, 0x20,
-                         OP_LDA_I, secondValue,
+                         OP_LDA_I, firstValue,
                          OP_SEC,
                          OP_SBC_Z, 0x20]
         memory.setMemory(0, program);
