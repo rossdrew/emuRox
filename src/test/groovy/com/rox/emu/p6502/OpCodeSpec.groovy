@@ -564,19 +564,20 @@ class OpCodeSpec extends Specification {
         0b00000001 | 0b10000010  | 0b10000011          | false  | true  | "Negative result"
     }
 
-    @Unroll("OR (Zero PagE) #Expected:  #firstValue | #secondValue = #expectedAccumulator in Accumulator.")
+    @Unroll("OR (Zero Page) #Expected:  #firstValue | #secondValue = #expectedAccumulator in Accumulator.")
     def testOR_Z(){
         when:
         Memory memory = new SimpleMemory(65534);
         int[] program = [OP_LDA_I, firstValue,
                          OP_STA_Z, 0x20,
-                         OP_ORA_Z, secondValue]
+                         OP_LDA_I, secondValue,
+                         OP_ORA_Z, 0x20]
         memory.setMemory(0, program);
 
         and:
         CPU processor = new CPU(memory)
         processor.reset()
-        processor.step(3)
+        processor.step(4)
         Registers registers = processor.getRegisters()
 
         then:
