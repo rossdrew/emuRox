@@ -37,6 +37,7 @@ public class InstructionSet {
     public static final int OP_ORA_I = 0x09;
     public static final int OP_ORA_Z = 0x05;
     public static final int OP_EOR_I = 0x49;
+    public static final int OP_EOR_Z = 0x45;
     public static final int OP_SBC_I = 0xE9;
     public static final int OP_SBC_Z = 0xE5;
     public static final int OP_CLC = 0x18;
@@ -82,7 +83,7 @@ public class InstructionSet {
                                                 OP_SBC_I, OP_SBC_Z,
                                                 OP_LDA_Z, OP_LDA_I, OP_LDA_ABS, OP_LDA_Z_IX, OP_LDA_IY, OP_LDA_IX,
                                                 OP_STA_Z, OP_STA_ABS, OP_STA_Z_IX, OP_STA_ABS_IX, OP_STX_Z, OP_STY_Z,
-                                                OP_AND_I, OP_AND_Z, OP_AND_Z_IX, OP_AND_ABS_IX, OP_AND_ABS, OP_ORA_I, OP_ORA_Z, OP_EOR_I, OP_BIT_Z,
+                                                OP_AND_I, OP_AND_Z, OP_AND_Z_IX, OP_AND_ABS_IX, OP_AND_ABS, OP_ORA_I, OP_ORA_Z, OP_EOR_I, OP_EOR_Z, OP_BIT_Z,
                                                 OP_SEC, OP_CLC, OP_CLV, OP_PHA, OP_PLA,
                                                 OP_LDY_I, OP_INY, OP_DEY,
                                                 OP_LDX_I, OP_INX, OP_DEX,
@@ -120,6 +121,7 @@ public class InstructionSet {
             case OP_ORA_I:      return "OR (Immediate)";
             case OP_ORA_Z:      return "OR (Zero Page)";
             case OP_EOR_I:      return "EOR (Immediate)";
+            case OP_EOR_Z:      return "EOR (Zero Page)";
             case OP_SBC_I:      return "SBX (Immediate)";
             case OP_SBC_Z:      return "SBX (Zero Page)";
             case OP_CLC:        return "Clear Carry";
