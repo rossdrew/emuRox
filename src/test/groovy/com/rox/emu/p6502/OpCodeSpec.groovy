@@ -621,7 +621,7 @@ class OpCodeSpec extends Specification {
         0b00000001 | 0b00000001  | 0b00000000          | true   | false | "Not both"
     }
 
-    @Unroll("SBC Immediate #Expected:  #firstValue - #secondValue = #expectedAccumulator in Accumulator.")
+    @Unroll("SBC (Immediate) #Expected:  #firstValue - #secondValue = #expectedAccumulator in Accumulator.")
     def testSBC(){
         when:
         Memory memory = new SimpleMemory(65534);
@@ -632,6 +632,38 @@ class OpCodeSpec extends Specification {
         CPU processor = new CPU(memory)
         processor.reset()
         processor.step(3)
+        Registers registers = processor.getRegisters()
+
+        then:
+        registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
+        registers.getPC() == program.length
+        Z == registers.statusFlags[Registers.Z]
+        O == registers.statusFlags[Registers.V]
+        N == registers.statusFlags[Registers.N]
+        C == registers.statusFlags[Registers.C]
+
+        where:
+        firstValue | secondValue | expectedAccumulator | Z      | N     | O     | C     | Expected
+        0x5        | 0x3         | 0x2                 | false  | false | false | false | "Basic subtraction"
+        0x5        | 0x5         | 0x0                 | true   | false | false | false | "With zero result"
+        0x5        | 0x6         | 0xFF                | false  | true  | false | false | "with negative result"
+    }
+
+    @Unroll("SBC (Zero Page) #Expected:  #firstValue - #secondValue = #expectedAccumulator in Accumulator.")
+    def testSBC_Z(){
+        when:
+        Memory memory = new SimpleMemory(65534);
+        int[] program = [OP_LDA_I, firstValue,
+                         OP_STA_Z, 0x20,
+                         OP_LDA_I, secondValue,
+                         OP_SEC,
+                         OP_SBC_Z, 0x20]
+        memory.setMemory(0, program);
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        processor.step(5)
         Registers registers = processor.getRegisters()
 
         then:
