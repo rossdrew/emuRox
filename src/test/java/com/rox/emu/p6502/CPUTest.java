@@ -535,6 +535,18 @@ public class CPUTest {
     }
 
     @Test
+    public void testROR(){
+        int[] program = {OP_SEC, OP_LDA_I, 0b00000010, OP_ROR_A};
+        memory.setMemory(0, program);
+        Registers registers = processor.getRegisters();
+
+        processor.step(3);
+
+        assertEquals(program.length, registers.getPC());
+        assertEquals(0b10000001, registers.getRegister(Registers.REG_ACCUMULATOR));
+    }
+
+    @Test
     public void testBMI(){
         int[] program = {OP_LDA_I, 0b11111110, OP_BMI, 0x4, OP_LDA_I, 0x99, OP_LDX_I, 0x98, OP_LDY_I, 0x97};
         memory.setMemory(0, program);
