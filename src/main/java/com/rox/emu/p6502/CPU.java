@@ -189,6 +189,7 @@ public class CPU {
                 memory.setByteAt(location, performROL(memory.getByte(location)));
             break;
 
+            /* Not implemented and/or not published on older 6502s */
             case InstructionSet.OP_ROR_A:
                 registers.setRegister(Registers.REG_ACCUMULATOR, performROR(registers.getRegister(Registers.REG_ACCUMULATOR)));
                 break;
