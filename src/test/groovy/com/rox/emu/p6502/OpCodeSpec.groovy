@@ -1223,6 +1223,39 @@ class OpCodeSpec extends Specification {
         OP_SEC   | 0b01000000 | 0b10000001          | false | true  | false | "Carry in to negative"
     }
 
+    @Unroll("ROR (Accumulator) #expected: #firstValue -> #expectedAccumulator")
+    def testROR_A(){
+        when:
+        Memory memory = new SimpleMemory(65534);
+        int[] program = [preInstr, OP_LDA_I, firstValue, OP_ROR_A];
+        memory.setMemory(0, program);
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        Registers registers = processor.getRegisters()
+
+        and:
+        processor.step(3)
+
+        then:
+        registers.getPC() == program.length
+        registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
+        Z == registers.statusFlags[Registers.Z]
+        N == registers.statusFlags[Registers.N]
+        C == registers.statusFlags[Registers.C]
+
+        where:
+        preInstr | firstValue | expectedAccumulator | Z     | N     | C     | expected
+        OP_CLC   | 0b00000010 | 0b00000001          | false | false | false | "Standard rotate right"
+        OP_CLC   | 0b00000001 | 0b00000000          | true  | false | true  | "Rotate to zero"
+        OP_SEC   | 0b00000000 | 0b10000000          | false | true  | false | "Rotate to negative"
+        OP_CLC   | 0b00000011 | 0b00000001          | false | false | true  | "Rotate to carry out"
+        OP_SEC   | 0b00000010 | 0b10000001          | false | false | false | "Rotate with carry in, no carry out"
+        OP_SEC   | 0b00000001 | 0b10000000          | false | false | true  | "Carry in then carry out"
+        OP_SEC   | 0b01000000 | 0b10000001          | false | true  | false | "Carry in to negative"
+    }
+
     @Unroll("BNE #expected: With accumulator set to #accumulatorValue, we end up at mem[#expectedPC] after #instructions steps")
     def testBNE(){
         when:

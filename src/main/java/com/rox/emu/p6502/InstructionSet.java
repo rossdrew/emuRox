@@ -78,7 +78,9 @@ public class InstructionSet {
     public static final int OP_ROL_A = 0x2A;
     public static final int OP_ROL_Z = 0x26;
 
-    public static final int[] instructionSet = {OP_ASL_A, OP_ASL_Z, OP_ASL_ABS, OP_ASL_Z_IX, OP_ASL_ABS_IX, OP_LSR_A, OP_LSR_Z, OP_ROL_A, OP_ROL_Z,
+    public static final int OP_ROR_A = 0x6A;
+
+    public static final int[] instructionSet = {OP_ASL_A, OP_ASL_Z, OP_ASL_ABS, OP_ASL_Z_IX, OP_ASL_ABS_IX, OP_LSR_A, OP_LSR_Z, OP_ROL_A, OP_ROL_Z, OP_ROR_A,
                                                 OP_ADC_Z, OP_ADC_I, OP_ADC_ABS, OP_ADC_Z_IX,
                                                 OP_SBC_I, OP_SBC_Z,
                                                 OP_LDA_Z, OP_LDA_I, OP_LDA_ABS, OP_LDA_Z_IX, OP_LDA_IY, OP_LDA_IX,
@@ -101,6 +103,7 @@ public class InstructionSet {
             case OP_LSR_Z:      return "LSR (Zero Page)";
             case OP_ROL_A:      return "ROL (Accumulator)";
             case OP_ROL_Z:      return "ROL (Zero Page)";
+            case OP_ROR_A:      return "ROR (Accumulator)";
             case OP_ADC_Z:      return "ADC (Zero Page)";
             case OP_ADC_I:      return "ADC (Immediate)";
             case OP_ADC_ABS:    return "ADC (Absolute)";
