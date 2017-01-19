@@ -189,6 +189,10 @@ public class CPU {
                 memory.setByteAt(location, performROL(memory.getByte(location)));
             break;
 
+            case InstructionSet.OP_ROR_A:
+                registers.setRegister(Registers.REG_ACCUMULATOR, performROR(registers.getRegister(Registers.REG_ACCUMULATOR)));
+                break;
+
             case InstructionSet.OP_SEC:
                 registers.setFlag(Registers.STATUS_FLAG_CARRY);
                 break;
@@ -444,9 +448,18 @@ public class CPU {
         return rotatedValue & 0xFF;
     }
 
+    private int performROR(int initialValue){
+        int rotatedValue = (initialValue >> 1) | (registers.getFlag(Registers.STATUS_FLAG_CARRY) ? 0b10000000 : 0);
+        setBorrowFlagFor(initialValue);
+        registers.setFlagsBasedOn(rotatedValue);
+        return rotatedValue & 0xFF;
+    }
+
     private void setBorrowFlagFor(int newFakeByte) {
         if ((newFakeByte & 0x1) == 0x1)
             registers.setFlag(Registers.STATUS_FLAG_CARRY);
+        else
+            registers.clearFlag(Registers.STATUS_FLAG_CARRY);
     }
 
     private void setCarryFlagBasedOn(int newFakeByte) {
