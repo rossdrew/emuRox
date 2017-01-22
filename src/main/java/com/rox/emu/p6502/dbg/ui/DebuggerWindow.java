@@ -157,18 +157,18 @@ public class DebuggerWindow extends JFrame{
             int rowSize = padding + bitSize;
             int secondByteColumn = byteSize + xLocation + padding;
 
-            drawByte(g, secondByteColumn, yLocation, registers.getRegister(Registers.REG_ACCUMULATOR), "Accumulator");
+            drawByte(g, secondByteColumn, yLocation, registers.getRegister(Registers.REG_ACCUMULATOR), Registers.getRegisterName(Registers.REG_ACCUMULATOR));
 
             yLocation += rowSize;
-            drawByte(g, secondByteColumn, yLocation, registers.getRegister(Registers.REG_Y_INDEX), "Y Index");
+            drawByte(g, secondByteColumn, yLocation, registers.getRegister(Registers.REG_Y_INDEX), Registers.getRegisterName(Registers.REG_Y_INDEX));
 
             yLocation += rowSize;
-            drawByte(g, secondByteColumn, yLocation, registers.getRegister(Registers.REG_X_INDEX), "X Index");
+            drawByte(g, secondByteColumn, yLocation, registers.getRegister(Registers.REG_X_INDEX), Registers.getRegisterName(Registers.REG_X_INDEX));
 
             //TODO this needs a combined value display
             yLocation += rowSize;
-            drawByte(g, xLocation, yLocation, registers.getRegister(Registers.REG_PC_HIGH), "PC High");
-            drawByte(g, secondByteColumn, yLocation, registers.getRegister(Registers.REG_PC_LOW), "PC Low");
+            drawByte(g, xLocation, yLocation, registers.getRegister(Registers.REG_PC_HIGH), Registers.getRegisterName(Registers.REG_PC_HIGH));
+            drawByte(g, secondByteColumn, yLocation, registers.getRegister(Registers.REG_PC_LOW), Registers.getRegisterName(Registers.REG_PC_LOW));
 
             yLocation += rowSize;
             g.setColor(Color.lightGray);
