@@ -208,7 +208,9 @@ public class CPU {
 
             case InstructionSet.OP_INC_Z:
                 int incrementLocation = nextProgramByte();
-                memory.setByteAt(incrementLocation, memory.getByte(incrementLocation) + 1);
+                int incrementedValue = (memory.getByte(incrementLocation) + 1) & 0xFF;
+                registers.setFlagsBasedOn(incrementedValue);
+                memory.setByteAt(incrementLocation, incrementedValue);
                 break;
 
             case InstructionSet.OP_INX:
