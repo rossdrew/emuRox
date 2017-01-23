@@ -206,6 +206,11 @@ public class CPU {
                 registers.clearFlag(Registers.STATUS_FLAG_OVERFLOW);
                 break;
 
+            case InstructionSet.OP_INC_Z:
+                int incrementLocation = nextProgramByte();
+                memory.setByteAt(incrementLocation, memory.getByte(incrementLocation) + 1);
+                break;
+
             case InstructionSet.OP_INX:
                 registers.incrementRegisterWithFlags(Registers.REG_X_INDEX);
                 break;

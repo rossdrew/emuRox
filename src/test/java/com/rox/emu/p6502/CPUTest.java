@@ -340,13 +340,11 @@ public class CPUTest {
 
     @Test
     public void testINC() {
-        int[] program = {OP_LDX_I, 0x01, OP_STA_Z, 0x20, OP_INC_Z, 0x20};
+        int[] program = {OP_LDA_I, 1, OP_STA_Z, 0x20, OP_INC_Z, 0x20};
         memory.setMemory(0, program);
         Registers registers = processor.getRegisters();
 
-        processor.step();
-        assert (processor.getRegisters().getRegister(Registers.REG_X_INDEX) == 1);
-        processor.step();
+        processor.step(3);
 
         assertEquals(program.length, registers.getPC());
         assertEquals(2, memory.getByte(0x20));
