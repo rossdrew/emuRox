@@ -16,7 +16,7 @@ Most simply addressed opcodes now implemented, only a few to go then it's just c
  The plan was to develop this, a larger personal project, in a TDD (Test Driven Development) centric way.  This means writing failing tests that describe functionality then writing that functionality to make the tests pass and iteratively writing a complete application.
  This larger personal project that you are now looking at I am using to test out other technologies and resources.  Here is a list of those that I am using or have used along the way:-
  
- - [Trello](https://trello.com) for work breakdown, starting with all tasks to get a functioning 6502 with some added work for a compiler and [Debugger](https://github.com/rossdrew/emuRox/tree/master/src/main/java/com/rox/emu/P6502/dbg).
+ - [Trello](https://trello.com) for work breakdown, starting with all tasks to get a functioning 6502 with some added work for a [compiler](https://github.com/rossdrew/emuRox/commits/assembler) and [Debugger](https://github.com/rossdrew/emuRox/tree/master/src/main/java/com/rox/emu/P6502/dbg).
  - [Java](https://www.java.com/)/[JUnit](http://junit.org/junit4/) for basic functionality tests.  
  - [Groovy](http://www.groovy-lang.org/)/[Spock](http://spockframework.org/) for [data-driven tests](https://en.wikipedia.org/wiki/Data-driven_testing) .  For covering various variations of class creation and method use in a clear, concise way.  GitHub shield using [TravisCI](https://travis-ci.org/).
  - [JaCoCo](http://www.eclemma.org/jacoco/) reports. To allow us to strive for high [code coverage](https://en.wikipedia.org/wiki/Code_coverage).  GitHub shield using [CodeCov](https://codecov.io).
