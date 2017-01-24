@@ -2,12 +2,16 @@ package com.rox.emu.p6502
 
 import com.rox.emu.Memory
 import com.rox.emu.SimpleMemory
+import org.junit.Rule
+import org.junit.rules.Timeout
 import spock.lang.Specification
 import spock.lang.Unroll
 
 import static com.rox.emu.p6502.InstructionSet.*;
 
 class OpCodeSpec extends Specification {
+
+    @Rule public Timeout testTimeout = new Timeout(200);
 
     @Unroll("LDA Immediate #Expected: Load #loadValue == #expectedAccumulator")
     def testImmediateLDA() {

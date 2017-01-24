@@ -351,6 +351,18 @@ public class CPUTest {
     }
 
     @Test
+    public void testDEC() {
+        int[] program = {OP_LDA_I, 9, OP_STA_Z, 0x20, OP_DEC_Z, 0x20};
+        memory.setMemory(0, program);
+        Registers registers = processor.getRegisters();
+
+        processor.step(3);
+
+        assertEquals(program.length, registers.getPC());
+        assertEquals(8, memory.getByte(0x20));
+    }
+
+    @Test
     public void testDEY() {
         int[] program = {OP_LDY_I, 0x01, OP_DEY};
         memory.setMemory(0, program);
