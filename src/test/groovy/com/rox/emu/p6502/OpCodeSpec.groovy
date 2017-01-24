@@ -768,7 +768,7 @@ class OpCodeSpec extends Specification {
     def testINC_ABS(){
         when:
         Memory memory = new SimpleMemory(65534);
-        int[] program = [OP_LDA_I, firstValue, OP_STA_Z, 0x01, 0x20, OP_INC_ABS, 0x01, 0x20]
+        int[] program = [OP_LDA_I, firstValue, OP_STA_ABS, 0x01, 0x20, OP_INC_ABS, 0x01, 0x20]
         memory.setMemory(0, program);
 
         and:
@@ -778,7 +778,7 @@ class OpCodeSpec extends Specification {
         Registers registers = processor.getRegisters()
 
         then:
-        memory.getByte(0x20) == expectedMem
+        memory.getByte(0x0120) == expectedMem
         registers.getPC() == program.length
         Z == registers.statusFlags[Registers.Z]
         N == registers.statusFlags[Registers.N]
