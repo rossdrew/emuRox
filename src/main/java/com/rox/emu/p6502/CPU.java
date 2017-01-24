@@ -206,19 +206,26 @@ public class CPU {
                 registers.clearFlag(Registers.STATUS_FLAG_OVERFLOW);
                 break;
 
-            case InstructionSet.OP_INC_Z:
+            case InstructionSet.OP_INC_Z: {
                 int incrementLocation = nextProgramByte();
                 int incrementedValue = (memory.getByte(incrementLocation) + 1) & 0xFF;
                 registers.setFlagsBasedOn(incrementedValue);
                 memory.setByteAt(incrementLocation, incrementedValue);
-                break;
+            }break;
 
-            case InstructionSet.OP_DEC_Z:
+            case InstructionSet.OP_DEC_Z: {
                 int decrementLocation = nextProgramByte();
                 int decrementedValue = (memory.getByte(decrementLocation) - 1) & 0xFF;
                 registers.setFlagsBasedOn(decrementedValue);
                 memory.setByteAt(decrementLocation, decrementedValue);
-                break;
+            }break;
+
+            case InstructionSet.OP_DEC_ABS: {
+                int decrementLocation = nextProgramWord();
+                int decrementedValue = (memory.getByte(decrementLocation) - 1) & 0xFF;
+                registers.setFlagsBasedOn(decrementedValue);
+                memory.setByteAt(decrementLocation, decrementedValue);
+            }break;
 
             case InstructionSet.OP_INX:
                 registers.incrementRegisterWithFlags(Registers.REG_X_INDEX);
