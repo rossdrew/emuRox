@@ -213,6 +213,13 @@ public class CPU {
                 memory.setByteAt(incrementLocation, incrementedValue);
                 break;
 
+            case InstructionSet.OP_DEC_Z:
+                int decrementLocation = nextProgramByte();
+                int decrementedValue = (memory.getByte(decrementLocation) - 1) & 0xFF;
+                registers.setFlagsBasedOn(decrementedValue);
+                memory.setByteAt(decrementLocation, decrementedValue);
+                break;
+
             case InstructionSet.OP_INX:
                 registers.incrementRegisterWithFlags(Registers.REG_X_INDEX);
                 break;
