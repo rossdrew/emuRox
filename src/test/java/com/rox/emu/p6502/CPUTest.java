@@ -723,7 +723,7 @@ public class CPUTest {
         memory.setMemory(0, program);
         Registers registers = processor.getRegisters();
 
-        processor.step(4);
+        processor.step(2);
 
         assertEquals(program.length, registers.getPC());
         assertEquals(true, registers.getFlag(Registers.STATUS_FLAG_ZERO));
