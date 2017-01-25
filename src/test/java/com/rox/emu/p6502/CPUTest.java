@@ -718,6 +718,20 @@ public class CPUTest {
     }
 
     @Test
+    public void testCMP(){
+        int[] program = {OP_LDA_I, 0x10, OP_CMP_I, 0x10};
+        memory.setMemory(0, program);
+        Registers registers = processor.getRegisters();
+
+        processor.step(4);
+
+        assertEquals(program.length, registers.getPC());
+        assertEquals(true, registers.getFlag(Registers.STATUS_FLAG_ZERO));
+        assertEquals(false, registers.getFlag(Registers.STATUS_FLAG_NEGATIVE));
+        assertEquals(false, registers.getFlag(Registers.STATUS_FLAG_CARRY));
+    }
+
+    @Test
     @Ignore
     public void testMultiplicationLoop(){
         try {
