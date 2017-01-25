@@ -3,6 +3,7 @@ package com.rox.emu.p6502;
 import com.rox.emu.Memory;
 import com.rox.emu.SimpleMemory;
 import com.rox.emu.UnknownOpCodeException;
+import junit.framework.Assert;
 import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -726,6 +727,7 @@ public class CPUTest {
         processor.step(2);
 
         assertEquals(program.length, registers.getPC());
+        assertEquals(0x10, registers.getRegister(Registers.REG_ACCUMULATOR));
         assertEquals(true, registers.getFlag(Registers.STATUS_FLAG_ZERO));
         assertEquals(false, registers.getFlag(Registers.STATUS_FLAG_NEGATIVE));
         assertEquals(false, registers.getFlag(Registers.STATUS_FLAG_CARRY));

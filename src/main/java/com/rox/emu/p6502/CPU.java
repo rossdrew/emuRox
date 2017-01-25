@@ -351,7 +351,6 @@ public class CPU {
                 int value = nextProgramByte();
                 int result = registers.getRegister(Registers.REG_ACCUMULATOR) - value;
                 registers.setFlagsBasedOn(result & 0xFF);
-                registers.setRegister(Registers.REG_ACCUMULATOR, result);
                 break;
 
             case InstructionSet.OP_SBC_I:
