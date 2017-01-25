@@ -330,19 +330,19 @@ public class CPU {
                 break;
 
             case InstructionSet.OP_ADC_Z:
-                performADC(getByteOfMemoryAt(nextProgramByte()));
+                registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, performADC(getByteOfMemoryAt(nextProgramByte())));
                 break;
 
             case InstructionSet.OP_ADC_I:
-                performADC(nextProgramByte());
+                registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, performADC(nextProgramByte()));
                 break;
 
             case InstructionSet.OP_ADC_ABS:
-                performADC(getByteOfMemoryAt(nextProgramWord()));
+                registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, performADC(getByteOfMemoryAt(nextProgramWord())));
                 break;
 
             case InstructionSet.OP_ADC_Z_IX:
-                performADC(getByteOfMemoryXIndexedAt(nextProgramByte()));
+                registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, performADC(getByteOfMemoryXIndexedAt(nextProgramByte())));
                 break;
 
             //XXX Need to use 2s compliment addition (subtraction)
@@ -355,11 +355,11 @@ public class CPU {
                 break;
 
             case InstructionSet.OP_SBC_I:
-                performSBC(nextProgramByte());
+                registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, performSBC(nextProgramByte()));
                 break;
 
             case InstructionSet.OP_SBC_Z:
-                performSBC(getByteOfMemoryAt(nextProgramByte()));
+                registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, performSBC(getByteOfMemoryAt(nextProgramByte())));
                 break;
 
             case InstructionSet.OP_STY_Z:
@@ -529,17 +529,17 @@ public class CPU {
         registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, byteTerm & registers.getRegister(Registers.REG_ACCUMULATOR));
     }
 
-    private void performADC(int byteTerm){
+    private int performADC(int byteTerm){
         int carry = (registers.getFlag(Registers.STATUS_FLAG_CARRY) ? 1 : 0);
-        addToAccumulator(byteTerm + carry);
+        return addToAccumulator(byteTerm + carry);
     }
 
     //(1) compliment of carry flag added (so subtracted) as well
     //(2) set carry if no borrow required (A >= M[v])
-    private void performSBC(int byteTerm){
+    private int performSBC(int byteTerm){
         registers.setFlag(Registers.STATUS_FLAG_NEGATIVE);
         int borrow = (registers.getFlag(Registers.STATUS_FLAG_CARRY) ? 0 : 1);
-        addToAccumulator(twosComplimentOf(byteTerm + borrow));
+        return addToAccumulator(twosComplimentOf(byteTerm + borrow));
     }
 
     private int twosComplimentOf(int byteValue){
@@ -555,7 +555,7 @@ public class CPU {
      *
      * @param term term to add to the accumulator
      */
-    private void addToAccumulator(int term){
+    private int addToAccumulator(int term){
         int result = registers.getRegister(Registers.REG_ACCUMULATOR) + term;
 
         //Set Carry, if bit 8 is set on new accumulator value, ignoring in 2s compliment addition (subtraction)
@@ -569,6 +569,6 @@ public class CPU {
         if (((registers.getRegister(Registers.REG_ACCUMULATOR) ^ result) & (term ^ result) & 0x80) != 0)
             registers.setFlag(Registers.STATUS_FLAG_OVERFLOW);
 
-        registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, result & 0xFF);
+        return (result & 0xFF);
     }
 }
