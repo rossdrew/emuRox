@@ -750,12 +750,15 @@ public class CPUTest {
 
     @Test
     public void testPLP(){
-        int[] program = {OP_PLP};
+        int[] program = {OP_PHP, OP_PLP};
         memory.setMemory(0, program);
-        memory.setByteAt(0x1FF, 0b11111111);
         Registers registers = processor.getRegisters();
 
-        processor.step();
+        //Load status, push to stack then clear it and pull it from stack
+        registers.setRegister(Registers.REG_STATUS, 0b11111111);
+        processor.step(1);
+        registers.setRegister(Registers.REG_STATUS, 0b00000000);
+        processor.step(1);
 
         assertEquals(program.length, registers.getPC());
         assertEquals(0b11111111, registers.getRegister(Registers.REG_STATUS));

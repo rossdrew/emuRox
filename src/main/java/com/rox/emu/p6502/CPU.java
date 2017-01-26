@@ -397,6 +397,10 @@ public class CPU {
                 push(registers.getRegister(Registers.REG_STATUS));
                 break;
 
+            case InstructionSet.OP_PLP://XXX
+                registers.setRegister(Registers.REG_STATUS, pop());
+                break;
+
             case InstructionSet.OP_JMP_ABS:
                 int h = nextProgramByte();
                 int l = nextProgramByte();
