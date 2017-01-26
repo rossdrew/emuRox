@@ -734,6 +734,17 @@ public class CPUTest {
     }
 
     @Test
+    public void testPHP(){
+        int[] program = {OP_PHP};
+        memory.setMemory(0, program);
+        Registers registers = processor.getRegisters();
+
+        processor.step();
+        assertEquals(program.length, registers.getPC());
+        assertEquals(registers.getRegister(Registers.REG_STATUS) ,memory.getByte(registers.getRegister(Registers.REG_SP) + 1));
+    }
+
+    @Test
     @Ignore
     public void testMultiplicationLoop(){
         try {
