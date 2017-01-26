@@ -26,8 +26,8 @@ public class InstructionSet {
     public static final int OP_LDA_I = 0xA9;
     public static final int OP_LDA_ABS = 0xAD;
     public static final int OP_LDA_Z_IX = 0xB5;
-    public static final int OP_LDA_IY = 0xB9;
-    public static final int OP_LDA_IX = 0xBD;
+    public static final int OP_LDA_ABS_IY = 0xB9;
+    public static final int OP_LDA_ABS_IX = 0xBD;
     public static final int OP_CLV = 0xB8;
     public static final int OP_AND_Z = 0x25;
     public static final int OP_AND_Z_IX = 0x35;
@@ -89,7 +89,7 @@ public class InstructionSet {
     public static final int[] instructionSet = {OP_ASL_A, OP_ASL_Z, OP_ASL_ABS, OP_ASL_Z_IX, OP_ASL_ABS_IX, OP_LSR_A, OP_LSR_Z, OP_ROL_A, OP_ROL_Z, OP_ROR_A,
                                                 OP_ADC_Z, OP_ADC_I, OP_ADC_ABS, OP_ADC_Z_IX,
                                                 OP_SBC_I, OP_SBC_Z,
-                                                OP_LDA_Z, OP_LDA_I, OP_LDA_ABS, OP_LDA_Z_IX, OP_LDA_IY, OP_LDA_IX,
+                                                OP_LDA_Z, OP_LDA_I, OP_LDA_ABS, OP_LDA_Z_IX, OP_LDA_ABS_IY, OP_LDA_ABS_IX,
                                                 OP_STA_Z, OP_STA_ABS, OP_STA_Z_IX, OP_STA_ABS_IX, OP_STX_Z, OP_STY_Z,
                                                 OP_AND_I, OP_AND_Z, OP_AND_Z_IX, OP_AND_ABS_IX, OP_AND_ABS, OP_ORA_I, OP_ORA_Z, OP_EOR_I, OP_EOR_Z, OP_BIT_Z,
                                                 OP_SEC, OP_CLC, OP_CLV, OP_PHA, OP_PLA,
@@ -120,8 +120,8 @@ public class InstructionSet {
             case OP_LDA_ABS:    return "LDA (Absolute)";
             case OP_LDA_Z_IX:   return "LDA (Zero Page[X])";
             case OP_CLV:        return "Clear Overflow";
-            case OP_LDA_IY:     return "LDA ([Y])";
-            case OP_LDA_IX:     return "LDA ([X])";
+            case OP_LDA_ABS_IY:     return "LDA ([Y])";
+            case OP_LDA_ABS_IX:     return "LDA ([X])";
             case OP_AND_I:      return "AND (Immediate)";
             case OP_AND_Z:      return "AND (Zero Page)";
             case OP_AND_Z_IX:   return "AND (Zero Page[X])";

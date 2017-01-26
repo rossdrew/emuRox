@@ -134,7 +134,7 @@ class OpCodeSpec extends Specification {
     def testLDAIndexedByX() {
         when:
         Memory memory = new SimpleMemory(65534);
-        int[] program = [OP_LDX_I, index, OP_LDA_IX, 1, 0x2C]
+        int[] program = [OP_LDX_I, index, OP_LDA_ABS_IX, 1, 0x2C]
         int[] values = [0, 11, 0b11111111]
         memory.setMemory(300, values)
         memory.setMemory(0, program);
@@ -214,7 +214,7 @@ class OpCodeSpec extends Specification {
     def testLDAIndexedByY() {
         when:
         Memory memory = new SimpleMemory(65534);
-        int[] program = [OP_LDY_I, index, OP_LDA_IY, 1, 0x2C]
+        int[] program = [OP_LDY_I, index, OP_LDA_ABS_IY, 1, 0x2C]
         int[] values = [0, 11, 0b11111111]
         memory.setMemory(300, values)
         memory.setMemory(0, program);
