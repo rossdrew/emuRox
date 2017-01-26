@@ -749,6 +749,19 @@ public class CPUTest {
     }
 
     @Test
+    public void testPLP(){
+        int[] program = {OP_PLP};
+        memory.setMemory(0, program);
+        memory.setByteAt(0x1FF, 0b11111111);
+        Registers registers = processor.getRegisters();
+
+        processor.step();
+
+        assertEquals(program.length, registers.getPC());
+        assertEquals(0b11111111, registers.getRegister(Registers.REG_STATUS));
+    }
+
+    @Test
     @Ignore
     public void testMultiplicationLoop(){
         try {
