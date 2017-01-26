@@ -391,7 +391,10 @@ public class CPU {
 
             case InstructionSet.OP_PLA:
                 registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, pop());
+                break;
 
+            case InstructionSet.OP_PHP:
+                push(registers.getRegister(Registers.REG_STATUS));
                 break;
 
             case InstructionSet.OP_JMP_ABS:
@@ -470,10 +473,13 @@ public class CPU {
     private int pop(){
         registers.setRegister(Registers.REG_SP, registers.getRegister(Registers.REG_SP) + 1);
         int address = 0x0100 | registers.getRegister(Registers.REG_SP);
-        return getByteOfMemoryAt(address);
+        int value = getByteOfMemoryAt(address);
+        System.out.println("POP " + value + "(" + Integer.toBinaryString(value) + ") from mem[" + address + "]");
+        return value;
     }
 
     private void push(int value){
+        System.out.println("PUSH " + value + "(" + Integer.toBinaryString(value) + ") to mem[" + registers.getRegister(Registers.REG_SP) + "]");
         memory.setByteAt(0x0100 | registers.getRegister(Registers.REG_SP), value);
         registers.setRegister(Registers.REG_SP, registers.getRegister(Registers.REG_SP) - 1);
     }

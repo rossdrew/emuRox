@@ -740,8 +740,12 @@ public class CPUTest {
         Registers registers = processor.getRegisters();
 
         processor.step();
+
+        int stackLoc = (registers.getRegister(Registers.REG_SP) + 1);
+        int stackValue = (memory.getByte(0x100 | stackLoc));
+
         assertEquals(program.length, registers.getPC());
-        assertEquals(registers.getRegister(Registers.REG_STATUS) ,memory.getByte(registers.getRegister(Registers.REG_SP) + 1));
+        assertEquals(registers.getRegister(Registers.REG_STATUS), stackValue);
     }
 
     @Test
