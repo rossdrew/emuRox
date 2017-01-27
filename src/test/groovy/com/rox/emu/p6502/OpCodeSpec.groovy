@@ -1692,7 +1692,10 @@ class OpCodeSpec extends Specification {
     def testBIT_ABS(){
         when:
         Memory memory = new SimpleMemory(65534);
-        int[] program = [OP_LDA_I, firstValue, OP_STA_ABS, memLocHi, memLocLo, OP_LDA_I, secondValue, OP_BIT_ABS, memLocHi, memLocLo];
+        int[] program = [OP_LDA_I, firstValue,
+                         OP_STA_ABS, memLocHi, memLocLo,
+                         OP_LDA_I, secondValue,
+                         OP_BIT_ABS, memLocHi, memLocLo];
         memory.setMemory(0, program);
 
         and:

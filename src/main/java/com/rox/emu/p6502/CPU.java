@@ -302,7 +302,7 @@ public class CPU {
                 performAND(getByteOfMemoryXIndexedAt(nextProgramWord()));
                 break;
 
-            case InstructionSet.OP_BIT_Z:
+            case InstructionSet.OP_BIT_Z: {
                 int memData = memory.getByte(nextProgramByte());
                 if ((memData & registers.getRegister(Registers.REG_ACCUMULATOR)) == memData)
                     registers.setFlag(Registers.STATUS_FLAG_ZERO);
@@ -311,7 +311,7 @@ public class CPU {
 
                 //Set N, V to bits 7 and 6 of memory data
                 registers.setRegister(Registers.REG_STATUS, (memData & 0b11000000) | (registers.getRegister(Registers.REG_STATUS) & 0b00111111));
-                break;
+            }break;
 
             case InstructionSet.OP_ORA_I:
                 registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, nextProgramByte() | accumulatorBeforeOperation);

@@ -69,6 +69,7 @@ public class InstructionSet {
     public static final int OP_TXS = 0x9A;
     public static final int OP_TSX = 0xBA;
     public static final int OP_BIT_Z = 0x24;
+    public static final int OP_BIT_ABS = 0x2C;
 
     public static final int OP_CMP_I = 0xC9;
     public static final int OP_PHP = 0x08;
@@ -93,7 +94,7 @@ public class InstructionSet {
                                                 OP_SBC_I, OP_SBC_Z,
                                                 OP_LDA_Z, OP_LDA_I, OP_LDA_ABS, OP_LDA_Z_IX, OP_LDA_ABS_IY, OP_LDA_ABS_IX,
                                                 OP_STA_Z, OP_STA_ABS, OP_STA_Z_IX, OP_STA_ABS_IX, OP_STX_Z, OP_STY_Z,
-                                                OP_AND_I, OP_AND_Z, OP_AND_Z_IX, OP_AND_ABS_IX, OP_AND_ABS, OP_ORA_I, OP_ORA_Z, OP_EOR_I, OP_EOR_Z, OP_BIT_Z,
+                                                OP_AND_I, OP_AND_Z, OP_AND_Z_IX, OP_AND_ABS_IX, OP_AND_ABS, OP_ORA_I, OP_ORA_Z, OP_EOR_I, OP_EOR_Z, OP_BIT_Z, OP_BIT_ABS,
                                                 OP_SEC, OP_CLC, OP_CLV, OP_PHA, OP_PLA,
                                                 OP_LDY_I, OP_INY, OP_INC_Z, OP_INC_ABS, OP_DEC_Z, OP_DEC_ABS, OP_DEY,
                                                 OP_LDX_I, OP_INX, OP_DEX,
@@ -130,6 +131,7 @@ public class InstructionSet {
             case OP_AND_ABS_IX: return "AND (Absolute[X])";
             case OP_AND_ABS:    return "AND (Absolute)";
             case OP_BIT_Z:      return "BIT (Zero Page)";
+            case OP_BIT_ABS:    return "BIT (Absolute)";
             case OP_CMP_I:      return "CMP (Immediate)";
             case OP_PHP:        return "PHP";
             case OP_PLP:        return "PLP";
