@@ -1686,8 +1686,36 @@ class OpCodeSpec extends Specification {
         0b10000000 | 0b00000000  | 0x20   | false | false | true  | "Negative flag on"
         0b01000000 | 0b00000000  | 0x20   | true  | false | false | "Overflow flag on"
         0b11000000 | 0b00000000  | 0x20   | true  | false | true  | "Negative & Overflow flag on"
+    }
 
+    @Unroll("BIT (Absolute) #expected: #firstValue and #secondValue")
+    def testBIT_ABS(){
+        when:
+        Memory memory = new SimpleMemory(65534);
+        int[] program = [OP_LDA_I, firstValue, OP_STA_ABS, memLocHi, memLocLo, OP_LDA_I, secondValue, OP_BIT_ABS, memLocHi, memLocLo];
+        memory.setMemory(0, program);
 
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        Registers registers = processor.getRegisters()
+
+        and:
+        processor.step(4)
+
+        then:
+        registers.getPC() == program.length
+        Z == registers.statusFlags[Registers.Z]
+        N == registers.statusFlags[Registers.N]
+        O == registers.statusFlags[Registers.V]
+
+        where:
+        firstValue | secondValue | memLocHi | memLocLo | O     | Z     | N     | expected
+        0x01       | 0x01        | 1        | 0x20     | false | true  | false | "Equal values"
+        0x01       | 0x12        | 2        | 0x20     | false | false | false | "Unequal values"
+        0b10000000 | 0b00000000  | 3        | 0x20     | false | false | true  | "Negative flag on"
+        0b01000000 | 0b00000000  | 4        | 0x20     | true  | false | false | "Overflow flag on"
+        0b11000000 | 0b00000000  | 5        | 0x20     | true  | false | true  | "Negative & Overflow flag on"
     }
 
     @Unroll("STA (Zero Page[X]) #expected: Store #value at #location[#index]")
