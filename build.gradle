@@ -1,5 +1,6 @@
 group 'com.rox'
 version '1.0-SNAPSHOT'
+description '6502 Emulator'
 
 apply plugin: 'java'
 apply plugin: 'groovy'
@@ -45,6 +46,7 @@ jacocoTestReport {
 }
 
 task runDebugUI(type: JavaExec, group: 'run') {
+    println "Running Debugger UI for ${project.name}"
     classpath sourceSets.main.runtimeClasspath
     main = mainClassName = 'com.rox.emu.p6502.dbg.ui.DebuggerWindow'
 }
