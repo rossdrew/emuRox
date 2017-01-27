@@ -303,25 +303,11 @@ public class CPU {
                 break;
 
             case InstructionSet.OP_BIT_Z: {
-                int memData = memory.getByte(nextProgramByte());
-                if ((memData & registers.getRegister(Registers.REG_ACCUMULATOR)) == memData)
-                    registers.setFlag(Registers.STATUS_FLAG_ZERO);
-                else
-                    registers.clearFlag(Registers.STATUS_FLAG_ZERO);
-
-                //Set N, V to bits 7 and 6 of memory data
-                registers.setRegister(Registers.REG_STATUS, (memData & 0b11000000) | (registers.getRegister(Registers.REG_STATUS) & 0b00111111));
+                performBIT(memory.getByte(nextProgramByte()));
             }break;
 
             case InstructionSet.OP_BIT_ABS: {
-                int memData = memory.getByte(nextProgramWord());
-                if ((memData & registers.getRegister(Registers.REG_ACCUMULATOR)) == memData)
-                    registers.setFlag(Registers.STATUS_FLAG_ZERO);
-                else
-                    registers.clearFlag(Registers.STATUS_FLAG_ZERO);
-
-                //Set N, V to bits 7 and 6 of memory data
-                registers.setRegister(Registers.REG_STATUS, (memData & 0b11000000) | (registers.getRegister(Registers.REG_STATUS) & 0b00111111));
+                performBIT(memory.getByte(nextProgramWord()));
             }break;
 
             case InstructionSet.OP_ORA_I:
@@ -511,6 +497,16 @@ public class CPU {
         setBorrowFlagFor(initialValue);
         registers.setFlagsBasedOn(rotatedValue);
         return rotatedValue & 0xFF;
+    }
+
+    private void performBIT(int memData) {
+        if ((memData & registers.getRegister(Registers.REG_ACCUMULATOR)) == memData)
+            registers.setFlag(Registers.STATUS_FLAG_ZERO);
+        else
+            registers.clearFlag(Registers.STATUS_FLAG_ZERO);
+
+        //Set N, V to bits 7 and 6 of memory data
+        registers.setRegister(Registers.REG_STATUS, (memData & 0b11000000) | (registers.getRegister(Registers.REG_STATUS) & 0b00111111));
     }
 
     private void setBorrowFlagFor(int newFakeByte) {
