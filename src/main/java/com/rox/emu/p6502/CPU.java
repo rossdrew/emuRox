@@ -313,6 +313,17 @@ public class CPU {
                 registers.setRegister(Registers.REG_STATUS, (memData & 0b11000000) | (registers.getRegister(Registers.REG_STATUS) & 0b00111111));
             }break;
 
+            case InstructionSet.OP_BIT_ABS: {
+                int memData = memory.getByte(nextProgramWord());
+                if ((memData & registers.getRegister(Registers.REG_ACCUMULATOR)) == memData)
+                    registers.setFlag(Registers.STATUS_FLAG_ZERO);
+                else
+                    registers.clearFlag(Registers.STATUS_FLAG_ZERO);
+
+                //Set N, V to bits 7 and 6 of memory data
+                registers.setRegister(Registers.REG_STATUS, (memData & 0b11000000) | (registers.getRegister(Registers.REG_STATUS) & 0b00111111));
+            }break;
+
             case InstructionSet.OP_ORA_I:
                 registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, nextProgramByte() | accumulatorBeforeOperation);
                 break;
