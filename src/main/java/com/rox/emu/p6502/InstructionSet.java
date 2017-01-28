@@ -93,6 +93,7 @@ public class InstructionSet {
 
     public static final int OP_CLI = 0x58;
     public static final int OP_SEI = 0x78;
+    public static final int OP_SED = 0xF8;
 
     public static final int[] instructionSet = {OP_ASL_A, OP_ASL_Z, OP_ASL_ABS, OP_ASL_Z_IX, OP_ASL_ABS_IX, OP_LSR_A, OP_LSR_Z, OP_ROL_A, OP_ROL_Z, OP_ROR_A,
                                                 OP_ADC_Z, OP_ADC_I, OP_ADC_ABS, OP_ADC_Z_IX,
@@ -106,7 +107,7 @@ public class InstructionSet {
                                                 OP_NOP, OP_JMP_ABS, OP_BCC, OP_BCS, OP_BNE, OP_BEQ, OP_BMI, OP_BPL, OP_BVS, OP_BVC,
                                                 OP_TAX, OP_TAY, OP_TYA, OP_TXA, OP_TXS, OP_TSX,
                                                 OP_CMP_I, OP_CPX_I, OP_CPY_I, OP_PHP, OP_PLP,
-                                                OP_CLI, OP_SEI};
+                                                OP_CLI, OP_SEI, OP_SED};
 
     public static String getOpCodeName(int opCode){
         switch (opCode){
@@ -188,6 +189,7 @@ public class InstructionSet {
 
             case OP_CLI:        return "CLI";
             case OP_SEI:        return "SEI";
+            case OP_SED:        return "SED";
             default:
                 return "<Unknown Opcode: " + opCode + ">";
         }

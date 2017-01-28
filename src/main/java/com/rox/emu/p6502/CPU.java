@@ -470,12 +470,12 @@ public class CPU {
                 //Do nothing
                 break;
 
-            case InstructionSet.OP_CLI:
-                registers.clearFlag(Registers.STATUS_FLAG_IRQ_DISABLE);
-                break;
-
             case InstructionSet.OP_SEI:
                 registers.setFlag(Registers.STATUS_FLAG_IRQ_DISABLE);
+                break;
+
+            case InstructionSet.OP_CLI:
+                registers.clearFlag(Registers.STATUS_FLAG_IRQ_DISABLE);
                 break;
 
             default:

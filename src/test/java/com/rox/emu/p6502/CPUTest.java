@@ -822,6 +822,20 @@ public class CPUTest {
     }
 
     @Test
+    public void testSED(){
+        int[] program = {OP_SED};
+        memory.setMemory(0, program);
+        Registers registers = processor.getRegisters();
+
+        //Load status, push to stack then clear it and pull it from stack
+        registers.setRegister(Registers.REG_STATUS, 0b11110111);
+        processor.step(1);
+
+        assertEquals(program.length, registers.getPC());
+        assertEquals(0b11111111, registers.getRegister(Registers.REG_STATUS));
+    }
+
+    @Test
     @Ignore
     public void testMultiplicationLoop(){
         try {
