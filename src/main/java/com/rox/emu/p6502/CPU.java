@@ -342,27 +342,17 @@ public class CPU {
                 registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, performADC(getByteOfMemoryXIndexedAt(nextProgramByte())));
                 break;
 
-            //XXX Need to use 2s compliment addition (subtraction)
-            //    ? Do I deal with borrow in? does it need to manually set?!
-            case InstructionSet.OP_CMP_I: {
-                int value = nextProgramByte();
-                int result = registers.getRegister(Registers.REG_ACCUMULATOR) - value;
-                registers.setFlagsBasedOn(result & 0xFF);
-            }break;
+            case InstructionSet.OP_CMP_I:
+                performCMP(nextProgramByte(), Registers.REG_ACCUMULATOR);
+            break;
 
-            //XXX As above
-            case InstructionSet.OP_CPX_I: {
-                int value = nextProgramByte();
-                int result = registers.getRegister(Registers.REG_X_INDEX) - value;
-                registers.setFlagsBasedOn(result & 0xFF);
-            }break;
+            case InstructionSet.OP_CPX_I:
+                performCMP(nextProgramByte(), Registers.REG_X_INDEX);
+            break;
 
-            //XXX As above
-            case InstructionSet.OP_CPY_I: {
-                int value = nextProgramByte();
-                int result = registers.getRegister(Registers.REG_Y_INDEX) - value;
-                registers.setFlagsBasedOn(result & 0xFF);
-            }break;
+            case InstructionSet.OP_CPY_I:
+                performCMP(nextProgramByte(), Registers.REG_Y_INDEX);
+            break;
 
             case InstructionSet.OP_SBC_I:
                 registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, performSBC(nextProgramByte()));
@@ -521,6 +511,13 @@ public class CPU {
 
         //Set N, V to bits 7 and 6 of memory data
         registers.setRegister(Registers.REG_STATUS, (memData & 0b11000000) | (registers.getRegister(Registers.REG_STATUS) & 0b00111111));
+    }
+
+    //XXX Need to use 2s compliment addition (subtraction)
+    //    ? Do I deal with borrow in? does it need to manually set?!
+    private void performCMP(int value, int toRegister){
+        int result = registers.getRegister(toRegister) - value;
+        registers.setFlagsBasedOn(result & 0xFF);
     }
 
     private void setBorrowFlagFor(int newFakeByte) {
