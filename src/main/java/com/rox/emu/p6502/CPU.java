@@ -344,11 +344,18 @@ public class CPU {
 
             //XXX Need to use 2s compliment addition (subtraction)
             //    ? Do I deal with borrow in? does it need to manually set?!
-            case InstructionSet.OP_CMP_I:
+            case InstructionSet.OP_CMP_I: {
                 int value = nextProgramByte();
                 int result = registers.getRegister(Registers.REG_ACCUMULATOR) - value;
                 registers.setFlagsBasedOn(result & 0xFF);
-                break;
+            }break;
+
+            //XXX As above
+            case InstructionSet.OP_CPX_I: {
+                int value = nextProgramByte();
+                int result = registers.getRegister(Registers.REG_X_INDEX) - value;
+                registers.setFlagsBasedOn(result & 0xFF);
+            }break;
 
             case InstructionSet.OP_SBC_I:
                 registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, performSBC(nextProgramByte()));
