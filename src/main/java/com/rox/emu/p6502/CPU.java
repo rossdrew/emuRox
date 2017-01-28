@@ -478,6 +478,10 @@ public class CPU {
                 registers.clearFlag(Registers.STATUS_FLAG_IRQ_DISABLE);
                 break;
 
+            case InstructionSet.OP_SED:
+                registers.setFlag(Registers.STATUS_FLAG_DEC);
+                break;
+
             default:
                 throw new UnknownOpCodeException("Unknown 6502 OpCode:" + opCode + " encountered.", opCode);
         }
