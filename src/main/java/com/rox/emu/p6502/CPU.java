@@ -357,6 +357,13 @@ public class CPU {
                 registers.setFlagsBasedOn(result & 0xFF);
             }break;
 
+            //XXX As above
+            case InstructionSet.OP_CPY_I: {
+                int value = nextProgramByte();
+                int result = registers.getRegister(Registers.REG_Y_INDEX) - value;
+                registers.setFlagsBasedOn(result & 0xFF);
+            }break;
+
             case InstructionSet.OP_SBC_I:
                 registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, performSBC(nextProgramByte()));
                 break;
