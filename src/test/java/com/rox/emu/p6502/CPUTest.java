@@ -794,6 +794,20 @@ public class CPUTest {
     }
 
     @Test
+    public void testCLI(){
+        int[] program = {OP_CLI};
+        memory.setMemory(0, program);
+        Registers registers = processor.getRegisters();
+
+        //Load status, push to stack then clear it and pull it from stack
+        registers.setRegister(Registers.REG_STATUS, 0b00000100);
+        processor.step(1);
+
+        assertEquals(program.length, registers.getPC());
+        assertEquals(0b00000000, registers.getRegister(Registers.REG_STATUS));
+    }
+
+    @Test
     @Ignore
     public void testMultiplicationLoop(){
         try {
