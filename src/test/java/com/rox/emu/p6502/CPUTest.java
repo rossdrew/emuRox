@@ -748,6 +748,21 @@ public class CPUTest {
     }
 
     @Test
+    public void testCPY(){
+        int[] program = {OP_LDY_I, 0x10, OP_CPY_I, 0x10};
+        memory.setMemory(0, program);
+        Registers registers = processor.getRegisters();
+
+        processor.step(2);
+
+        assertEquals(program.length, registers.getPC());
+        assertEquals(0x10, registers.getRegister(Registers.REG_Y_INDEX));
+        assertEquals(true, registers.getFlag(Registers.STATUS_FLAG_ZERO));
+        assertEquals(false, registers.getFlag(Registers.STATUS_FLAG_NEGATIVE));
+        assertEquals(false, registers.getFlag(Registers.STATUS_FLAG_CARRY));
+    }
+
+    @Test
     public void testPHP(){
         int[] program = {OP_PHP};
         memory.setMemory(0, program);

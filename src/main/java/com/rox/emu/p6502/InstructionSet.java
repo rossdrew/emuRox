@@ -73,6 +73,7 @@ public class InstructionSet {
 
     public static final int OP_CMP_I = 0xC9;
     public static final int OP_CPX_I = 0xE0;
+    public static final int OP_CPY_I = 0xC0;
     public static final int OP_PHP = 0x08;
     public static final int OP_PLP = 0x28;
 
@@ -101,7 +102,7 @@ public class InstructionSet {
                                                 OP_LDX_I, OP_INX, OP_DEX,
                                                 OP_NOP, OP_JMP_ABS, OP_BCC, OP_BCS, OP_BNE, OP_BEQ, OP_BMI, OP_BPL, OP_BVS, OP_BVC,
                                                 OP_TAX, OP_TAY, OP_TYA, OP_TXA, OP_TXS, OP_TSX,
-                                                OP_CMP_I, OP_CPX_I, OP_PHP, OP_PLP};
+                                                OP_CMP_I, OP_CPX_I, OP_CPY_I, OP_PHP, OP_PLP};
 
     public static String getOpCodeName(int opCode){
         switch (opCode){
@@ -135,6 +136,7 @@ public class InstructionSet {
             case OP_BIT_ABS:    return "BIT (Absolute)";
             case OP_CMP_I:      return "CMP (Immediate)";
             case OP_CPX_I:      return "CPX (Immediate)";
+            case OP_CPY_I:      return "CPY (Immediate)";
             case OP_PHP:        return "PHP";
             case OP_PLP:        return "PLP";
             case OP_ORA_I:      return "OR (Immediate)";
