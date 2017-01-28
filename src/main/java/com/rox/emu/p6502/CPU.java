@@ -482,6 +482,10 @@ public class CPU {
                 registers.setFlag(Registers.STATUS_FLAG_DEC);
                 break;
 
+            case InstructionSet.OP_CLD:
+                registers.clearFlag(Registers.STATUS_FLAG_DEC);
+                break;
+
             default:
                 throw new UnknownOpCodeException("Unknown 6502 OpCode:" + opCode + " encountered.", opCode);
         }
