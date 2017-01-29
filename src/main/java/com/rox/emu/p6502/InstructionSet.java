@@ -77,6 +77,7 @@ public class InstructionSet {
     public static final int OP_PHP = 0x08;
     public static final int OP_PLP = 0x28;
 
+    public static final int OP_JSR = 0x20;
     public static final int OP_BPL = 0x10;
     public static final int OP_BMI = 0x30;
     public static final int OP_BVC = 0x50;
@@ -105,7 +106,7 @@ public class InstructionSet {
                                                 OP_SEC, OP_CLC, OP_CLV, OP_PHA, OP_PLA,
                                                 OP_LDY_I, OP_INY, OP_INC_Z, OP_INC_ABS, OP_DEC_Z, OP_DEC_ABS, OP_DEY,
                                                 OP_LDX_I, OP_INX, OP_DEX,
-                                                OP_NOP, OP_JMP_ABS, OP_BCC, OP_BCS, OP_BNE, OP_BEQ, OP_BMI, OP_BPL, OP_BVS, OP_BVC,
+                                                OP_NOP, OP_JMP_ABS, OP_BCC, OP_BCS, OP_BNE, OP_BEQ, OP_BMI, OP_JSR, OP_BPL, OP_BVS, OP_BVC,
                                                 OP_TAX, OP_TAY, OP_TYA, OP_TXA, OP_TXS, OP_TSX,
                                                 OP_CMP_I, OP_CPX_I, OP_CPY_I, OP_PHP, OP_PLP,
                                                 OP_CLI, OP_SEI, OP_SED, OP_CLD};
@@ -177,6 +178,7 @@ public class InstructionSet {
             case OP_BNE:        return "BNE 'Branch if NOT equal'";
             case OP_BEQ:        return "BEQ 'Branch if Equal'";
             case OP_BMI:        return "BMI 'Branch if Minus'";
+            case OP_JSR:        return "JSR";
             case OP_BPL:        return "BPL 'Branch on Plus'";
             case OP_BVS:        return "BVS 'Branch on Overflow Set'";
             case OP_BVC:        return "BVC 'Branch on Overflow Clear'";
