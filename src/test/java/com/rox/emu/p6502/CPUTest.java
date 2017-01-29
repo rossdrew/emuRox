@@ -857,11 +857,12 @@ public class CPUTest {
 
         processor.step(1);
 
-        assertEquals(program.length, registers.getPC());
-        assertEquals(0x00, memory.getByte(0x1FF)); //Return address
-        assertEquals(0x03, memory.getByte(0x1FE));
+        assertEquals(0x020F, registers.getPC());
         assertEquals(0x02, registers.getRegister(Registers.REG_PC_HIGH)); //Jump address
         assertEquals(0x0F, registers.getRegister(Registers.REG_PC_LOW));
+
+        assertEquals(0x00, memory.getByte(0x1FF)); //Return address
+        assertEquals(0x03, memory.getByte(0x1FE));
     }
 
     @Test

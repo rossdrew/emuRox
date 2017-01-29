@@ -429,6 +429,15 @@ public class CPU {
                 branchIf(registers.getFlag(Registers.STATUS_FLAG_NEGATIVE));
                 break;
 
+            case InstructionSet.OP_JSR:
+                int hi = nextProgramByte();
+                int lo = nextProgramByte();
+                push(registers.getRegister(Registers.REG_PC_HIGH));
+                push(registers.getRegister(Registers.REG_PC_LOW));
+                registers.setRegister(Registers.REG_PC_HIGH, hi);
+                registers.setRegister(Registers.REG_PC_LOW, lo);
+                break;
+
             case InstructionSet.OP_BPL:
                 branchIf(!registers.getFlag(Registers.STATUS_FLAG_NEGATIVE));
                 break;
