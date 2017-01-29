@@ -8,7 +8,7 @@
 ----
 ####Status Flags
     
-    NVss DIZC
+    NVsB DIZC
     |||| ||||
     |||| |||`- Carry: 1 if last addition or shift resulted in a carry, or if last subtraction resulted in no borrow
     |||| ||`-- Zero: 1 if last operation resulted in a 0 value
