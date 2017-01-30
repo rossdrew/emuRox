@@ -816,6 +816,32 @@ class OpCodeSpec extends Specification {
         0b11111111 | 0x0         | true   | false | "Increment to zero"
     }
 
+    @Unroll("INC (Absolute, X) #Expected: on #firstValue = #expectedMem")
+    def testINC_ABS_IX(){
+        when:
+        Memory memory = new SimpleMemory(65534);
+        int[] program = [OP_LDX_I, index, OP_LDA_I, firstValue, OP_STA_ABS, 0x01, 0x20, OP_INC_ABS_IX, 0x01, 0x20]
+        memory.setMemory(0, program);
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        processor.step(4)
+        Registers registers = processor.getRegisters()
+
+        then:
+        memory.getByte(0x0120) == expectedMem
+        registers.getPC() == program.length
+        Z == registers.statusFlags[Registers.Z]
+        N == registers.statusFlags[Registers.N]
+
+        where:
+        firstValue | index | expectedMem | Z      | N     | Expected
+        0          | 0     | 1           | false  | false | "Simple increment"
+        0xFE       | 0     | 0xFF        | false  | true  | "Increment to negative value"
+        0b11111111 | 0     | 0x0         | true   | false | "Increment to zero"
+    }
+
     @Unroll("DEC (Zero Page) #Expected: on #firstValue = #expectedMem")
     def testDEC_Z(){
         when:
