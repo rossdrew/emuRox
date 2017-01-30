@@ -213,6 +213,13 @@ public class CPU {
                 memory.setByteAt(incrementLocation, incrementedValue);
             }break;
 
+            case InstructionSet.OP_INC_Z_IX: {
+                int incrementLocation = nextProgramByte();
+                int incrementedValue = (getByteOfMemoryXIndexedAt(incrementLocation) + 1) & 0xFF;
+                registers.setFlagsBasedOn(incrementedValue);
+                memory.setByteAt(incrementLocation, incrementedValue);
+            }break;
+
             case InstructionSet.OP_INC_ABS: {
                 int incrementLocation = nextProgramWord();
                 int incrementedValue = (memory.getByte(incrementLocation) + 1) & 0xFF;
