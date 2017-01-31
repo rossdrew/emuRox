@@ -43,6 +43,7 @@ public class InstructionSet {
     public static final int OP_CLC = 0x18;
     public static final int OP_SEC = 0x38;
     public static final int OP_LDY_I = 0xA0;
+    public static final int OP_LDY_ABS = 0xAC;
     public static final int OP_LDX_I = 0xA2;
     public static final int OP_LDX_ABS = 0xAE;
     public static final int OP_STY_Z = 0x84;
@@ -107,7 +108,7 @@ public class InstructionSet {
                                                 OP_STA_Z, OP_STA_ABS, OP_STA_Z_IX, OP_STA_ABS_IX, OP_STX_Z, OP_STY_Z,
                                                 OP_AND_I, OP_AND_Z, OP_AND_Z_IX, OP_AND_ABS_IX, OP_AND_ABS, OP_ORA_I, OP_ORA_Z, OP_EOR_I, OP_EOR_Z, OP_BIT_Z, OP_BIT_ABS,
                                                 OP_SEC, OP_CLC, OP_CLV, OP_PHA, OP_PLA,
-                                                OP_LDY_I, OP_INY, OP_INC_Z, OP_INC_Z_IX, OP_INC_ABS, OP_INC_ABS_IX, OP_DEC_Z, OP_DEC_ABS, OP_DEY,
+                                                OP_LDY_I, OP_LDY_ABS, OP_INY, OP_INC_Z, OP_INC_Z_IX, OP_INC_ABS, OP_INC_ABS_IX, OP_DEC_Z, OP_DEC_ABS, OP_DEY,
                                                 OP_LDX_I, OP_LDX_ABS, OP_INX, OP_DEX,
                                                 OP_NOP, OP_JMP_ABS, OP_BCC, OP_BCS, OP_BNE, OP_BEQ, OP_BMI, OP_JSR, OP_BPL, OP_BVS, OP_BVC,
                                                 OP_TAX, OP_TAY, OP_TYA, OP_TXA, OP_TXS, OP_TSX,
@@ -158,6 +159,7 @@ public class InstructionSet {
             case OP_CLC:        return "Clear Carry";
             case OP_SEC:        return "SEC";
             case OP_LDY_I:      return "LDX (Immediate)";
+            case OP_LDY_ABS:    return "LDX (Absolute)";
             case OP_LDX_I:      return "LDX (Immediate)";
             case OP_LDX_ABS:    return "LDX (Absolute)";
             case OP_STY_Z:      return "STY (Zero Page)";

@@ -189,7 +189,7 @@ class OpCodeSpec extends Specification {
         memory.setMemory(0, program)
 
         and:
-        memory.setMemory(addressHi << 8 | addressLo, expectedX)
+        memory.setByteAt(addressHi << 8 | addressLo, expectedX)
 
         and:
         CPU processor = new CPU(memory)
@@ -210,7 +210,7 @@ class OpCodeSpec extends Specification {
         3         | 0b11111111 | 0b11111111 | false  | true  | "Load negative value"
     }
 
-    @Unroll("LDY Immediate: Load #firstValue")
+    @Unroll("LDY (Immediate): Load #firstValue")
     def testLDY(){
         when:
         Memory memory = new SimpleMemory(65534);
@@ -234,6 +234,35 @@ class OpCodeSpec extends Specification {
         99         | 99         | false  | false | "Simple load"
         0          | 0          | true   | false | "Load zero"
         0b11111111 | 0b11111111 | false  | true  | "Load negative value"
+    }
+
+    @Unroll("LDY (Absolute): Load #firstValue")
+    def testLDY_ABS(){
+        when:
+        Memory memory = new SimpleMemory(65534);
+        int[] program = [OP_LDY_ABS, addressHi, addressLo]
+        memory.setMemory(0, program)
+
+        and:
+        memory.setByteAt(addressHi << 8 | addressLo, expectedX)
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        processor.step()
+        Registers registers = processor.getRegisters()
+
+        then:
+        registers.getRegister(Registers.REG_Y_INDEX) == expectedY
+        registers.getPC() == program.length
+        Z == registers.statusFlags[Registers.Z]
+        N == registers.statusFlags[Registers.N]
+
+        where:
+        addressHi | addressLo | firstValue | expectedY  | Z      | N     | Expected
+         1        | 0x20      | 99         | 99         | false  | false | "Simple load"
+         2        | 0x20      | 0          | 0          | true   | false | "Load zero"
+         3        | 0x20      | 0b11111111 | 0b11111111 | false  | true  | "Load negative value"
     }
 
     @Unroll("LDA Indexed by Y. #Expected: 300[#index] = #expectedAccumulator")
