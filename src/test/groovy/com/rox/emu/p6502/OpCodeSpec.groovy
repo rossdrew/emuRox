@@ -181,7 +181,7 @@ class OpCodeSpec extends Specification {
         0b11111111 | 0b11111111 | false  | true  | "Load negative value"
     }
 
-    @Unroll("LDX (Absolute): Load [#addressHi | #addressLo] with #expectedX")
+    @Unroll("LDX (Absolute): Load [#addressHi | #addressLo] with #firstValue")
     def testLDX_ABS(){
         when:
         Memory memory = new SimpleMemory(65534);
@@ -189,7 +189,7 @@ class OpCodeSpec extends Specification {
         memory.setMemory(0, program)
 
         and:
-        memory.setByteAt(addressHi << 8 | addressLo, expectedX)
+        memory.setByteAt(addressHi << 8 | addressLo, firstValue)
 
         and:
         CPU processor = new CPU(memory)
@@ -204,10 +204,10 @@ class OpCodeSpec extends Specification {
         N == registers.statusFlags[Registers.N]
 
         where:
-        addressHi | addressLo  | expectedX  | Z      | N     | Expected
-        1         | 99         | 99         | false  | false | "Simple load"
-        2         | 0          | 0          | true   | false | "Load zero"
-        3         | 0b11111111 | 0b11111111 | false  | true  | "Load negative value"
+        addressHi | addressLo  | firstValue | expectedX  | Z      | N     | Expected
+        1         | 0x20       | 99         | 99         | false  | false | "Simple load"
+        2         | 0x20       | 0          | 0          | true   | false | "Load zero"
+        3         | 0x20       | 0b11111111 | 0b11111111 | false  | true  | "Load negative value"
     }
 
     @Unroll("LDY (Immediate): Load #firstValue")
@@ -260,9 +260,9 @@ class OpCodeSpec extends Specification {
 
         where:
         addressHi | addressLo | firstValue | expectedY  | Z      | N     | Expected
-         1        | 0x20      | 99         | 99         | false  | false | "Simple load"
-         2        | 0x20      | 0          | 0          | true   | false | "Load zero"
-         3        | 0x20      | 0b11111111 | 0b11111111 | false  | true  | "Load negative value"
+         1        | 0x23      | 99         | 99         | false  | false | "Simple load"
+         2        | 0x22      | 0          | 0          | true   | false | "Load zero"
+         3        | 0x21      | 0b11111111 | 0b11111111 | false  | true  | "Load negative value"
     }
 
     @Unroll("LDA Indexed by Y. #Expected: 300[#index] = #expectedAccumulator")
