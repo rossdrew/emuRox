@@ -10,9 +10,6 @@ import spock.lang.Unroll
 import static com.rox.emu.p6502.InstructionSet.*;
 
 class OpCodeSpec extends Specification {
-
-    @Rule public Timeout testTimeout = new Timeout(200);
-
     @Unroll("LDA Immediate #Expected: Load #loadValue == #expectedAccumulator")
     def testImmediateLDA() {
         when:
@@ -158,7 +155,7 @@ class OpCodeSpec extends Specification {
         2     | 0xFF                | false | true  | "With negative result"
     }
 
-    @Unroll("LDX Immediate: Load #firstValue")
+    @Unroll("LDX (Immediate): Load #firstValue")
     def testLDX(){
         when:
         Memory memory = new SimpleMemory(65534);
@@ -182,6 +179,35 @@ class OpCodeSpec extends Specification {
         99         | 99         | false  | false | "Simple load"
         0          | 0          | true   | false | "Load zero"
         0b11111111 | 0b11111111 | false  | true  | "Load negative value"
+    }
+
+    @Unroll("LDX (Absolute): Load #firstValue")
+    def testLDX_ABS(){
+        when:
+        Memory memory = new SimpleMemory(65534);
+        int[] program = [OP_LDX_ABS, addressHi, addressLo]
+        memory.setMemory(0, program)
+
+        and:
+        memory.setMemory(addressHi << 8 | addressLo, expectedX)
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        processor.step()
+        Registers registers = processor.getRegisters()
+
+        then:
+        registers.getRegister(Registers.REG_X_INDEX) == expectedX
+        registers.getPC() == program.length
+        Z == registers.statusFlags[Registers.Z]
+        N == registers.statusFlags[Registers.N]
+
+        where:
+        addressHi | addressLo  | expectedX  | Z      | N     | Expected
+        0         | 99         | 99         | false  | false | "Simple load"
+        0         | 0          | 0          | true   | false | "Load zero"
+        0         | 0b11111111 | 0b11111111 | false  | true  | "Load negative value"
     }
 
     @Unroll("LDY Immediate: Load #firstValue")
@@ -820,7 +846,7 @@ class OpCodeSpec extends Specification {
     def testINC_ABS_IX(){
         when:
         Memory memory = new SimpleMemory(65534);
-        int[] program = [OP_LDX_I, index, OP_LDA_I, firstValue, OP_STA_ABS, 0x01, 0x20, OP_INC_ABS_IX, 0x01, 0x20]
+        int[] program = [OP_LDX_I, index, OP_LDA_I, firstValue, OP_STA_ABS_IX, 0x01, 0x20, OP_INC_ABS_IX, 0x01, 0x20]
         memory.setMemory(0, program);
 
         and:
@@ -830,16 +856,16 @@ class OpCodeSpec extends Specification {
         Registers registers = processor.getRegisters()
 
         then:
-        memory.getByte(0x0120) == expectedMem
+        memory.getByte(0x0120 + index) == expectedMem
         registers.getPC() == program.length
         Z == registers.statusFlags[Registers.Z]
         N == registers.statusFlags[Registers.N]
 
         where:
         firstValue | index | expectedMem | Z      | N     | Expected
-        0          | 0     | 1           | false  | false | "Simple increment"
-        0xFE       | 0     | 0xFF        | false  | true  | "Increment to negative value"
-        0b11111111 | 0     | 0x0         | true   | false | "Increment to zero"
+        0          | 1     | 1           | false  | false | "Simple increment"
+        0xFE       | 2     | 0xFF        | false  | true  | "Increment to negative value"
+        0b11111111 | 3     | 0x0         | true   | false | "Increment to zero"
     }
 
     @Unroll("DEC (Zero Page) #Expected: on #firstValue = #expectedMem")
