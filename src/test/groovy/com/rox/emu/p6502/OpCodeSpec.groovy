@@ -181,7 +181,7 @@ class OpCodeSpec extends Specification {
         0b11111111 | 0b11111111 | false  | true  | "Load negative value"
     }
 
-    @Unroll("LDX (Absolute): Load #firstValue")
+    @Unroll("LDX (Absolute): Load [#addressHi | #addressLo] with #expectedX")
     def testLDX_ABS(){
         when:
         Memory memory = new SimpleMemory(65534);
@@ -205,9 +205,9 @@ class OpCodeSpec extends Specification {
 
         where:
         addressHi | addressLo  | expectedX  | Z      | N     | Expected
-        0         | 99         | 99         | false  | false | "Simple load"
-        0         | 0          | 0          | true   | false | "Load zero"
-        0         | 0b11111111 | 0b11111111 | false  | true  | "Load negative value"
+        1         | 99         | 99         | false  | false | "Simple load"
+        2         | 0          | 0          | true   | false | "Load zero"
+        3         | 0b11111111 | 0b11111111 | false  | true  | "Load negative value"
     }
 
     @Unroll("LDY Immediate: Load #firstValue")
