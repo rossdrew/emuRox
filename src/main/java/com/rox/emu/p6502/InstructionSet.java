@@ -159,7 +159,7 @@ public class InstructionSet {
             case OP_CLC:        return "Clear Carry";
             case OP_SEC:        return "SEC";
             case OP_LDY_I:      return "LDX (Immediate)";
-            case OP_LDY_ABS:    return "LDX (Absolute)";
+            case OP_LDY_ABS:    return "LDY (Absolute)";
             case OP_LDX_I:      return "LDX (Immediate)";
             case OP_LDX_ABS:    return "LDX (Absolute)";
             case OP_STY_Z:      return "STY (Zero Page)";

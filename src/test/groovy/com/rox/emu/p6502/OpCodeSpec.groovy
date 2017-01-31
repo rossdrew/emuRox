@@ -236,7 +236,7 @@ class OpCodeSpec extends Specification {
         0b11111111 | 0b11111111 | false  | true  | "Load negative value"
     }
 
-    @Unroll("LDY (Absolute): Load #firstValue")
+    @Unroll("LDY (Absolute): Load [#addressHi | #addressLo] with #firstValue")
     def testLDY_ABS(){
         when:
         Memory memory = new SimpleMemory(65534);
@@ -244,7 +244,7 @@ class OpCodeSpec extends Specification {
         memory.setMemory(0, program)
 
         and:
-        memory.setByteAt(addressHi << 8 | addressLo, expectedX)
+        memory.setByteAt(addressHi << 8 | addressLo, firstValue)
 
         and:
         CPU processor = new CPU(memory)
