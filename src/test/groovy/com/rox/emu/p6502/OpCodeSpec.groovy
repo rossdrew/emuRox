@@ -842,7 +842,7 @@ class OpCodeSpec extends Specification {
         0b11111111 | 0x0         | true   | false | "Increment to zero"
     }
 
-    @Unroll("INC (Absolute, X) #Expected: on #firstValue = #expectedMem")
+    @Unroll("INC (Absolute, X) #Expected: at 0x120[#index] on #firstValue = #expectedMem")
     def testINC_ABS_IX(){
         when:
         Memory memory = new SimpleMemory(65534);

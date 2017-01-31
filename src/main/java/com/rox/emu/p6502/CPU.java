@@ -231,7 +231,7 @@ public class CPU {
                 int incrementLocation = nextProgramWord();
                 int incrementedValue = (getByteOfMemoryXIndexedAt(incrementLocation) + 1) & 0xFF;
                 registers.setFlagsBasedOn(incrementedValue);
-                memory.setByteAt(incrementLocation, incrementedValue);
+                setByteOfMemoryXIndexedAt(incrementLocation, incrementedValue);
             }break;
 
             case InstructionSet.OP_DEC_Z: {
