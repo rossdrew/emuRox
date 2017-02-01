@@ -262,6 +262,32 @@ class OpCodeSpec extends Specification {
         3       | 0b11111111 | 0b11111111 | false  | true  | "Load negative value"
     }
 
+    @Unroll("LDY (Zero Page[X]): Load #address[#index#] with #firstValue")
+    def testLDY_Z_IX(){
+        when:
+        Memory memory = new SimpleMemory(65534);
+        int[] program = [OP_LDX_I, index, OP_LDA_I, firstValue, OP_STA_Z_IX, address, OP_LDY_Z_IX, address]
+        memory.setMemory(0, program)
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        processor.step(4)
+        Registers registers = processor.getRegisters()
+
+        then:
+        registers.getRegister(Registers.REG_Y_INDEX) == expectedY
+        registers.getPC() == program.length
+        Z == registers.statusFlags[Registers.Z]
+        N == registers.statusFlags[Registers.N]
+
+        where:
+        address |index| firstValue | expectedY  | Z      | N     | Expected
+        0x0F    | 3   | 99         | 99         | false  | false | "Simple load"
+        0x0F    | 7   | 0          | 0          | true   | false | "Load zero"
+        0x0F    | 4   | 0b11111111 | 0b11111111 | false  | true  | "Load negative value"
+    }
+
     @Unroll("LDY (Absolute): Load [#addressHi | #addressLo] with #firstValue")
     def testLDY_ABS(){
         when:
