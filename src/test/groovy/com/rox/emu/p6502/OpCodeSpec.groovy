@@ -236,7 +236,7 @@ class OpCodeSpec extends Specification {
         0b11111111 | 0b11111111 | false  | true  | "Load negative value"
     }
 
-    @Unroll("LDY (Zero PAge): Load [#addressHi | #addressLo] with #firstValue")
+    @Unroll("LDY (Zero Page): Load [#addressHi | #addressLo] with #firstValue")
     def testLDY_Z(){
         when:
         Memory memory = new SimpleMemory(65534);
