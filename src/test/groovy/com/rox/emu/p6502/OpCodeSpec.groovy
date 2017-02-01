@@ -236,6 +236,32 @@ class OpCodeSpec extends Specification {
         0b11111111 | 0b11111111 | false  | true  | "Load negative value"
     }
 
+    @Unroll("LDY (Zero PAge): Load [#addressHi | #addressLo] with #firstValue")
+    def testLDY_Z(){
+        when:
+        Memory memory = new SimpleMemory(65534);
+        int[] program = [OP_LDA_I, firstValue, OP_STA_Z, address, OP_LDY_Z, address]
+        memory.setMemory(0, program)
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        processor.step(3)
+        Registers registers = processor.getRegisters()
+
+        then:
+        registers.getRegister(Registers.REG_Y_INDEX) == expectedY
+        registers.getPC() == program.length
+        Z == registers.statusFlags[Registers.Z]
+        N == registers.statusFlags[Registers.N]
+
+        where:
+        address | firstValue | expectedY  | Z      | N     | Expected
+        1       | 99         | 99         | false  | false | "Simple load"
+        2       | 0          | 0          | true   | false | "Load zero"
+        3       | 0b11111111 | 0b11111111 | false  | true  | "Load negative value"
+    }
+
     @Unroll("LDY (Absolute): Load [#addressHi | #addressLo] with #firstValue")
     def testLDY_ABS(){
         when:
@@ -260,9 +286,9 @@ class OpCodeSpec extends Specification {
 
         where:
         addressHi | addressLo | firstValue | expectedY  | Z      | N     | Expected
-         1        | 0x23      | 99         | 99         | false  | false | "Simple load"
-         2        | 0x22      | 0          | 0          | true   | false | "Load zero"
-         3        | 0x21      | 0b11111111 | 0b11111111 | false  | true  | "Load negative value"
+        1        | 0x23      | 99         | 99         | false  | false | "Simple load"
+        2        | 0x22      | 0          | 0          | true   | false | "Load zero"
+        3        | 0x21      | 0b11111111 | 0b11111111 | false  | true  | "Load negative value"
     }
 
     @Unroll("LDA Indexed by Y. #Expected: 300[#index] = #expectedAccumulator")
