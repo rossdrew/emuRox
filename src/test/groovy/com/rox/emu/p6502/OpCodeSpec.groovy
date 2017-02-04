@@ -570,6 +570,35 @@ class OpCodeSpec extends Specification {
         0x50       | 0x50        | 2     | 0xA0                | false  | true  | false | true  | "With negative overflow"
     }
 
+    @Unroll("ADC (Absolute[Y]) #Expected:  #firstValue + #secondValue = #expectedAccumulator in Accumulator.")
+    def testADC_ABS_IY(){
+        when:
+        Memory memory = new SimpleMemory(65534);
+        int[] program = [OP_LDY_I, index, OP_LDA_I, firstValue, OP_ADC_ABS_IY, 0x1, 0x2C]
+        memory.setMemory(0, program);
+        memory.setByteAt(300 + index, secondValue)
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        processor.step(3)
+        Registers registers = processor.getRegisters()
+
+        then:
+        registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
+        registers.getPC() == program.length
+        C == registers.statusFlags[Registers.C]
+        Z == registers.statusFlags[Registers.Z]
+        O == registers.statusFlags[Registers.V]
+        N == registers.statusFlags[Registers.N]
+
+        where:
+        firstValue | secondValue | index | expectedAccumulator | Z      | N     | C     | O     | Expected
+        0x0        | 0x0         | 0     | 0x0                 | true   | false | false | false | "With zero result"
+        0x50       | 0xD0        | 1     | 0x20                | false  | false | true  | false | "With positive, carried result"
+        0x50       | 0x50        | 2     | 0xA0                | false  | true  | false | true  | "With negative overflow"
+    }
+
     @Unroll("ADC 16bit [#lowFirstByte|#highFirstByte] + [#lowSecondByte|#highSecondByte] = #Expected")
     def testMultiByteADC(){
         when:
