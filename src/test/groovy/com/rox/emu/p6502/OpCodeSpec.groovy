@@ -398,7 +398,7 @@ class OpCodeSpec extends Specification {
         3         | 0x21      | 10    | 0b11111111 | 0b11111111 | false  | true  | "Load negative value"
     }
 
-    @Unroll("LDA Indexed by Y. #Expected: 300[#index] = #expectedAccumulator")
+    @Unroll("LDA (Absolute[Y]). #Expected: 300[#index] = #expectedAccumulator")
     def testLDAIndexedByY() {
         when:
         Memory memory = new SimpleMemory(65534);
@@ -426,7 +426,7 @@ class OpCodeSpec extends Specification {
         2     | 0xFF                | false | true  | "With negative result"
     }
 
-    @Unroll("ADC Immediate #Expected:  #firstValue + #secondValue = #expectedAccumulator in Accumulator.")
+    @Unroll("ADC (Immediate) #Expected:  #firstValue + #secondValue = #expectedAccumulator in Accumulator.")
     def testADC(){
         when:
         Memory memory = new SimpleMemory(65534);
@@ -454,7 +454,7 @@ class OpCodeSpec extends Specification {
         0x50       | 0x50        | 0xA0                | false  | true  | false | true  | "With negative overflow"
     }
 
-    @Unroll("ADC Zero Page at X #Expected: #firstValue + #secondValue = #expectedAccumulator in Accumulator.")
+    @Unroll("ADC (Zero Page[X]) #Expected: #firstValue + #secondValue = #expectedAccumulator in Accumulator.")
     def testADC_Z_IX(){
         when:
         Memory memory = new SimpleMemory(65534);
@@ -483,7 +483,7 @@ class OpCodeSpec extends Specification {
         0x97   | 0x50        | 0x50        | 0x90        | 7     | 0xA0                | false  | true  | false | true  | "With negative overflow"
     }
 
-    @Unroll("ADC ZeroPage #Expected:  #firstValue + #secondValue = #expectedAccumulator in Accumulator.")
+    @Unroll("ADC (Zero Page) #Expected:  #firstValue + #secondValue = #expectedAccumulator in Accumulator.")
     def testADCFromZeroPage(){
         when:
         Memory memory = new SimpleMemory(65534);
@@ -512,7 +512,7 @@ class OpCodeSpec extends Specification {
         0x50       | 0x50        | 0xA0                | false  | true  | false | true  | "With negative overflow"
     }
 
-    @Unroll("ADC Absolute #Expected:  #firstValue + #secondValue = #expectedAccumulator in Accumulator.")
+    @Unroll("ADC (Absolute) #Expected:  #firstValue + #secondValue = #expectedAccumulator in Accumulator.")
     def testADCAbsolute(){
         when:
         Memory memory = new SimpleMemory(65534);
@@ -539,6 +539,35 @@ class OpCodeSpec extends Specification {
         0x0        | 0x0         | 0x0                 | true   | false | false | false | "With zero result"
         0x50       | 0xD0        | 0x20                | false  | false | true  | false | "With positive, carried result"
         0x50       | 0x50        | 0xA0                | false  | true  | false | true  | "With negative overflow"
+    }
+
+    @Unroll("ADC (Absolute[X]) #Expected:  #firstValue + #secondValue = #expectedAccumulator in Accumulator.")
+    def testADC_ABS_IX(){
+        when:
+        Memory memory = new SimpleMemory(65534);
+        int[] program = [OP_LDX_I, index, OP_LDA_I, firstValue, OP_ADC_ABS_IX, 0x1, 0x2C]
+        memory.setMemory(0, program);
+        memory.setByteAt(300, secondValue)
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        processor.step(3)
+        Registers registers = processor.getRegisters()
+
+        then:
+        registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
+        registers.getPC() == program.length
+        C == registers.statusFlags[Registers.C]
+        Z == registers.statusFlags[Registers.Z]
+        O == registers.statusFlags[Registers.V]
+        N == registers.statusFlags[Registers.N]
+
+        where:
+        firstValue | secondValue | index | expectedAccumulator | Z      | N     | C     | O     | Expected
+        0x0        | 0x0         | 0     | 0x0                 | true   | false | false | false | "With zero result"
+        0x50       | 0xD0        | 1     | 0x20                | false  | false | true  | false | "With positive, carried result"
+        0x50       | 0x50        | 2     | 0xA0                | false  | true  | false | true  | "With negative overflow"
     }
 
     @Unroll("ADC 16bit [#lowFirstByte|#highFirstByte] + [#lowSecondByte|#highSecondByte] = #Expected")
