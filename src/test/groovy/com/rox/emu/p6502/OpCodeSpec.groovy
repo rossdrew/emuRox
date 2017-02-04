@@ -547,7 +547,7 @@ class OpCodeSpec extends Specification {
         Memory memory = new SimpleMemory(65534);
         int[] program = [OP_LDX_I, index, OP_LDA_I, firstValue, OP_ADC_ABS_IX, 0x1, 0x2C]
         memory.setMemory(0, program);
-        memory.setByteAt(300, secondValue)
+        memory.setByteAt(300 + index, secondValue)
 
         and:
         CPU processor = new CPU(memory)

@@ -380,6 +380,10 @@ public class CPU {
                 registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, performADC(getByteOfMemoryAt(nextProgramWord())));
                 break;
 
+            case InstructionSet.OP_ADC_ABS_IX:
+                registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, performADC(getByteOfMemoryXIndexedAt(nextProgramWord())));
+                break;
+
             case InstructionSet.OP_ADC_Z_IX:
                 registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, performADC(getByteOfMemoryXIndexedAt(nextProgramByte())));
                 break;
