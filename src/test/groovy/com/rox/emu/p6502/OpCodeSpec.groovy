@@ -1988,6 +1988,32 @@ class OpCodeSpec extends Specification {
         0x20       |  1         | 3     | 0x0C  | "Store at index 3"
     }
 
+    @Unroll("STY (Zero Page[X] #expected: Store #firstValue at #memLocation[#index]")
+    def testOP_STY_Z_IX(){
+        when:
+        Memory memory = new SimpleMemory(65534);
+        int[] program = [OP_LDX_I, index, OP_LDY_I, firstValue, OP_STY_Z_IX, memLocation];
+        memory.setMemory(0, program);
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        Registers registers = processor.getRegisters()
+
+        and:
+        processor.step(3)
+
+        then:
+        registers.getPC() == program.length
+        memory.getByte(memLocation) == expectedValue
+
+        where:
+        firstValue | index | memLocation | expectedValue | expected
+        0x0F       | 0     | 0xF0        | 0x0F          | "Standard copy to memory"
+        0x0F       | 1     | 0xF0        | 0x0F          | "Copy to memory with index"
+
+    }
+
 //    @Ignore
 //    def exampleTest(){
 //        when:
