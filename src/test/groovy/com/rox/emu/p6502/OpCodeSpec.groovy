@@ -2005,12 +2005,12 @@ class OpCodeSpec extends Specification {
 
         then:
         registers.getPC() == program.length
-        memory.getByte(memLocation) == expectedValue
+        memory.getByte(memLocation + index) == expectedValue
 
         where:
         firstValue | index | memLocation | expectedValue | expected
-        0x0F       | 0     | 0xF0        | 0x0F          | "Standard copy to memory"
-        0x0F       | 1     | 0xF0        | 0x0F          | "Copy to memory with index"
+        0x0F       | 0     | 0x20        | 0x0F          | "Standard copy to memory"
+        0x0F       | 1     | 0x20        | 0x0F          | "Copy to memory with index"
 
     }
 
