@@ -46,6 +46,7 @@ public class InstructionSet {
     public static final int OP_LDY_Z = 0xA4;
     public static final int OP_LDY_Z_IX = 0xB4;
     public static final int OP_LDY_ABS = 0xAC;
+    public static final int OP_LDY_ABS_IX = 0xBE;
     public static final int OP_LDX_I = 0xA2;
     public static final int OP_LDX_ABS = 0xAE;
     public static final int OP_LDX_Z = 0xA6;
@@ -113,7 +114,7 @@ public class InstructionSet {
                                                 OP_STA_Z, OP_STA_ABS, OP_STA_Z_IX, OP_STA_ABS_IX, OP_STX_Z, OP_STY_Z, OP_STY_Z_IX,
                                                 OP_AND_I, OP_AND_Z, OP_AND_Z_IX, OP_AND_ABS_IX, OP_AND_ABS, OP_ORA_I, OP_ORA_Z, OP_EOR_I, OP_EOR_Z, OP_BIT_Z, OP_BIT_ABS,
                                                 OP_SEC, OP_CLC, OP_CLV, OP_PHA, OP_PLA,
-                                                OP_LDY_I, OP_LDY_Z, OP_LDY_Z_IX, OP_LDY_ABS, OP_INY, OP_INC_Z, OP_INC_Z_IX, OP_INC_ABS, OP_INC_ABS_IX, OP_DEC_Z, OP_DEC_ABS, OP_DEY,
+                                                OP_LDY_I, OP_LDY_Z, OP_LDY_Z_IX, OP_LDY_ABS, OP_LDY_ABS_IX,OP_INY, OP_INC_Z, OP_INC_Z_IX, OP_INC_ABS, OP_INC_ABS_IX, OP_DEC_Z, OP_DEC_ABS, OP_DEY,
                                                 OP_LDX_I, OP_LDX_Z, OP_LDX_Z_IY, OP_LDX_ABS, OP_INX, OP_DEX,
                                                 OP_NOP, OP_JMP_ABS, OP_BCC, OP_BCS, OP_BNE, OP_BEQ, OP_BMI, OP_JSR, OP_BPL, OP_BVS, OP_BVC,
                                                 OP_TAX, OP_TAY, OP_TYA, OP_TXA, OP_TXS, OP_TSX,
@@ -167,6 +168,7 @@ public class InstructionSet {
             case OP_LDY_Z:      return "LDX (Zero Page)";
             case OP_LDY_Z_IX:   return "LDX (Zero Page[X])";
             case OP_LDY_ABS:    return "LDY (Absolute)";
+            case OP_LDY_ABS_IX: return "LDY (Absolute[X])";
             case OP_LDX_I:      return "LDX (Immediate)";
             case OP_LDX_Z:      return "LDX (Zero Page)";
             case OP_LDX_Z_IY:   return "LDX (Zero Page[Y])";

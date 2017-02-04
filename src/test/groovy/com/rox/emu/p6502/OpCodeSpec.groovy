@@ -314,7 +314,7 @@ class OpCodeSpec extends Specification {
         3       | 0b11111111 | 0b11111111 | false  | true  | "Load negative value"
     }
 
-    @Unroll("LDY (Zero Page[X]): Load #address[#index#] with #firstValue")
+    @Unroll("LDY (Zero Page[X]): Load Y with #firstValue from #address[#index#]")
     def testLDY_Z_IX(){
         when:
         Memory memory = new SimpleMemory(65534);
@@ -340,7 +340,7 @@ class OpCodeSpec extends Specification {
         0x0F    | 4   | 0b11111111 | 0b11111111 | false  | true  | "Load negative value"
     }
 
-    @Unroll("LDY (Absolute): Load [#addressHi | #addressLo] with #firstValue")
+    @Unroll("LDY (Absolute): Load Y with #firstValue at [#addressHi | #addressLo]")
     def testLDY_ABS(){
         when:
         Memory memory = new SimpleMemory(65534);
@@ -364,9 +364,38 @@ class OpCodeSpec extends Specification {
 
         where:
         addressHi | addressLo | firstValue | expectedY  | Z      | N     | Expected
-        1        | 0x23      | 99         | 99         | false  | false | "Simple load"
-        2        | 0x22      | 0          | 0          | true   | false | "Load zero"
-        3        | 0x21      | 0b11111111 | 0b11111111 | false  | true  | "Load negative value"
+        1         | 0x23      | 99         | 99         | false  | false | "Simple load"
+        2         | 0x22      | 0          | 0          | true   | false | "Load zero"
+        3         | 0x21      | 0b11111111 | 0b11111111 | false  | true  | "Load negative value"
+    }
+
+    @Unroll("LDY (Absolute[X]): Load Y with #firstValue at [#addressHi | #addressLo][#index]")
+    def testLDY_ABS_IX(){
+        when:
+        Memory memory = new SimpleMemory(65534);
+        int[] program = [OP_LDX_I, index, OP_LDY_ABS_IX, addressHi, addressLo]
+        memory.setMemory(0, program)
+
+        and:
+        memory.setByteAt((addressHi << 8 | addressLo)+index, firstValue)
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        processor.step(2)
+        Registers registers = processor.getRegisters()
+
+        then:
+        registers.getRegister(Registers.REG_Y_INDEX) == expectedY
+        registers.getPC() == program.length
+        Z == registers.statusFlags[Registers.Z]
+        N == registers.statusFlags[Registers.N]
+
+        where:
+        addressHi | addressLo | index | firstValue | expectedY  | Z      | N     | Expected
+        1         | 0x23      | 0     | 99         | 99         | false  | false | "Simple load"
+        2         | 0x22      | 1     | 0          | 0          | true   | false | "Load zero"
+        3         | 0x21      | 10    | 0b11111111 | 0b11111111 | false  | true  | "Load negative value"
     }
 
     @Unroll("LDA Indexed by Y. #Expected: 300[#index] = #expectedAccumulator")
