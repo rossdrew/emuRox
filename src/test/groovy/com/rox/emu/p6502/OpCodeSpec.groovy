@@ -1623,37 +1623,6 @@ class OpCodeSpec extends Specification {
         OP_SEC   | 0b11111011 | 6            | 0x3        | "Basic backward jump and step"
     }
 
-    @Unroll("ROL ZeroPage #Expected: #firstValue -> #expectedMem")
-    def testROL_Z(){
-        when:
-        Memory memory = new SimpleMemory(65534);
-        int[] program = [firstInstr, OP_LDA_I, firstValue, OP_STA_Z, 0x20, OP_ROL_Z, 0x20];
-        memory.setMemory(0, program);
-
-        and:
-        CPU processor = new CPU(memory)
-        processor.reset()
-        Registers registers = processor.getRegisters()
-
-        and:
-        processor.step(4)
-
-        then:
-        registers.getPC() == program.length
-        expectedMem == memory.getByte(0x20)
-        Z == registers.statusFlags[Registers.Z]
-        N == registers.statusFlags[Registers.N]
-        C == registers.statusFlags[Registers.C]
-
-        where:
-        firstInstr |firstValue  | expectedMem | Z     | N     | C     | Expected
-        OP_CLC     | 0b00000001 | 0b00000010  | false | false | false | "Basic rotate left"
-        OP_CLC     | 0b01000000 | 0b10000000  | false | true  | false | "Rotate to negative"
-        OP_CLC     | 0b00000000 | 0b00000000  | true  | false | false | "Rotate to zero without carry"
-        OP_CLC     | 0b10000000 | 0b00000000  | true  | false | true  | "Rotate to zero with carry"
-        OP_SEC     | 0b00000000 | 0b00000001  | false | false | false | "Rotate from zero to carry in"
-    }
-
     @Unroll("ROL (Accumulator) #expected: #firstValue -> #expectedAccumulator")
     def testROL_A(){
         when:
@@ -1685,6 +1654,68 @@ class OpCodeSpec extends Specification {
         OP_SEC   | 0b00000001 | 0b00000011          | false | false | false | "Rotate with carry in, no carry out"
         OP_SEC   | 0b10000000 | 0b00000001          | false | false | true  | "Carry in then carry out"
         OP_SEC   | 0b01000000 | 0b10000001          | false | true  | false | "Carry in to negative"
+    }
+
+    @Unroll("ROL (Zero Page) #Expected: #firstValue -> #expectedMem")
+    def testROL_Z(){
+        when:
+        Memory memory = new SimpleMemory(65534);
+        int[] program = [firstInstr, OP_LDA_I, firstValue, OP_STA_Z, 0x20, OP_ROL_Z, 0x20];
+        memory.setMemory(0, program);
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        Registers registers = processor.getRegisters()
+
+        and:
+        processor.step(4)
+
+        then:
+        registers.getPC() == program.length
+        expectedMem == memory.getByte(0x20)
+        Z == registers.statusFlags[Registers.Z]
+        N == registers.statusFlags[Registers.N]
+        C == registers.statusFlags[Registers.C]
+
+        where:
+        firstInstr |firstValue  | expectedMem | Z     | N     | C     | Expected
+        OP_CLC     | 0b00000001 | 0b00000010  | false | false | false | "Basic rotate left"
+        OP_CLC     | 0b01000000 | 0b10000000  | false | true  | false | "Rotate to negative"
+        OP_CLC     | 0b00000000 | 0b00000000  | true  | false | false | "Rotate to zero without carry"
+        OP_CLC     | 0b10000000 | 0b00000000  | true  | false | true  | "Rotate to zero with carry"
+        OP_SEC     | 0b00000000 | 0b00000001  | false | false | false | "Rotate from zero to carry in"
+    }
+
+    @Unroll("ROL (Absolute) #Expected: #firstValue -> #expectedMem")
+    def testROL_ABS(){
+        when:
+        Memory memory = new SimpleMemory(65534);
+        int[] program = [firstInstr, OP_LDA_I, firstValue, OP_STA_Z, 0x20, 0x07, OP_ROL_ABS, 0x20, 0x07];
+        memory.setMemory(0, program);
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        Registers registers = processor.getRegisters()
+
+        and:
+        processor.step(4)
+
+        then:
+        registers.getPC() == program.length
+        expectedMem == memory.getByte( 0x2007 )
+        Z == registers.statusFlags[Registers.Z]
+        N == registers.statusFlags[Registers.N]
+        C == registers.statusFlags[Registers.C]
+
+        where:
+        firstInstr |firstValue  | expectedMem | Z     | N     | C     | Expected
+        OP_CLC     | 0b00000001 | 0b00000010  | false | false | false | "Basic rotate left"
+        OP_CLC     | 0b01000000 | 0b10000000  | false | true  | false | "Rotate to negative"
+        OP_CLC     | 0b00000000 | 0b00000000  | true  | false | false | "Rotate to zero without carry"
+        OP_CLC     | 0b10000000 | 0b00000000  | true  | false | true  | "Rotate to zero with carry"
+        OP_SEC     | 0b00000000 | 0b00000001  | false | false | false | "Rotate from zero to carry in"
     }
 
     @Unroll("ROR (Accumulator) #expected: #firstValue -> #expectedAccumulator")
