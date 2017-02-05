@@ -360,6 +360,10 @@ public class CPU {
                 registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(nextProgramByte()) | accumulatorBeforeOperation);
                 break;
 
+            case InstructionSet.OP_ORA_ABS:
+                registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(nextProgramWord()) | accumulatorBeforeOperation);
+                break;
+
             case InstructionSet.OP_EOR_I:
                 registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, nextProgramByte() ^ accumulatorBeforeOperation);
                 break;
