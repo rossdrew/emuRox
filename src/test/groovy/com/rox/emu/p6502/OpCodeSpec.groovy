@@ -784,7 +784,7 @@ class OpCodeSpec extends Specification {
         0b00101010 | 0b00011010  | 0b00001010          | false  | false | "Multiple matched/unmatched bits"
     }
 
-    @Unroll("OR (Immediate) #Expected:  #firstValue | #secondValue = #expectedAccumulator in Accumulator.")
+    @Unroll("ORA (Immediate) #Expected:  #firstValue | #secondValue = #expectedAccumulator in Accumulator.")
     def testOR(){
         when:
         Memory memory = new SimpleMemory(65534);
@@ -812,7 +812,7 @@ class OpCodeSpec extends Specification {
         0b00000001 | 0b10000010  | 0b10000011          | false  | true  | "Negative result"
     }
 
-    @Unroll("OR (Zero Page) #Expected:  #firstValue | #secondValue = #expectedAccumulator in Accumulator.")
+    @Unroll("ORA (Zero Page) #Expected:  #firstValue | #secondValue = #expectedAccumulator in Accumulator.")
     def testOR_Z(){
         when:
         Memory memory = new SimpleMemory(65534);
@@ -820,6 +820,37 @@ class OpCodeSpec extends Specification {
                          OP_STA_Z, 0x20,
                          OP_LDA_I, secondValue,
                          OP_ORA_Z, 0x20]
+        memory.setMemory(0, program);
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        processor.step(4)
+        Registers registers = processor.getRegisters()
+
+        then:
+        registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
+        registers.getPC() == program.length
+        Z == registers.statusFlags[Registers.Z]
+        N == registers.statusFlags[Registers.N]
+
+        where:
+        firstValue | secondValue | expectedAccumulator | Z      | N     | Expected
+        0b00000001 | 0b00000001  | 0b00000001          | false  | false | "Duplicate bits"
+        0b00000000 | 0b00000001  | 0b00000001          | false  | false | "One bit in Accumulator"
+        0b00000001 | 0b00000000  | 0b00000001          | false  | false | "One bit from passed value"
+        0b00000001 | 0b00000010  | 0b00000011          | false  | false | "One bit fro Accumulator, one from new value"
+        0b00000001 | 0b10000010  | 0b10000011          | false  | true  | "Negative result"
+    }
+
+    @Unroll("ORA (Absolute) #Expected:  #firstValue | #secondValue = #expectedAccumulator in Accumulator.")
+    def testOR_ABS(){
+        when:
+        Memory memory = new SimpleMemory(65534);
+        int[] program = [OP_LDA_I, firstValue,
+                         OP_STA_ABS, 0x20, 0x05,
+                         OP_LDA_I, secondValue,
+                         OP_ORA_ABS, 0x20]
         memory.setMemory(0, program);
 
         and:
