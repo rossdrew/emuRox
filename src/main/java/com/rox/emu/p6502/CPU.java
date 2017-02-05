@@ -184,10 +184,15 @@ public class CPU {
                 registers.setRegister(Registers.REG_ACCUMULATOR, performROL(registers.getRegister(Registers.REG_ACCUMULATOR)));
             break;
 
-            case InstructionSet.OP_ROL_Z:
+            case InstructionSet.OP_ROL_Z: {
                 int location = nextProgramByte();
                 memory.setByteAt(location, performROL(memory.getByte(location)));
-            break;
+            }break;
+
+            case InstructionSet.OP_ROL_ABS: {
+                int location = nextProgramWord();
+                memory.setByteAt(location, performROL(memory.getByte(location)));
+            }break;
 
             /* Not implemented and/or not published on older 6502s */
             case InstructionSet.OP_ROR_A:

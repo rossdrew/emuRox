@@ -1691,7 +1691,7 @@ class OpCodeSpec extends Specification {
     def testROL_ABS(){
         when:
         Memory memory = new SimpleMemory(65534);
-        int[] program = [firstInstr, OP_LDA_I, firstValue, OP_STA_Z, 0x20, 0x07, OP_ROL_ABS, 0x20, 0x07];
+        int[] program = [firstInstr, OP_LDA_I, firstValue, OP_STA_ABS, 0x20, 0x07, OP_ROL_ABS, 0x20, 0x07];
         memory.setMemory(0, program);
 
         and:
