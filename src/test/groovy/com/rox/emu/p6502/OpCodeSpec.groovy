@@ -1174,6 +1174,32 @@ class OpCodeSpec extends Specification {
         0b00000001 | 0x0         | true   | false | "Decrement to zero"
     }
 
+    @Unroll("DEC (Zero Page[X]) #Expected: on #firstValue = #expectedMem")
+    def testDEC_Z_IX(){
+        when:
+        Memory memory = new SimpleMemory(65534);
+        int[] program = [OP_LDX_I, index, OP_LDA_I, firstValue, OP_STA_Z, 0x20, OP_DEC_Z_IX, 0x20]
+        memory.setMemory(0, program);
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        processor.step(4)
+        Registers registers = processor.getRegisters()
+
+        then:
+        memory.getByte(0x20 + index) == expectedMem
+        registers.getPC() == program.length
+        Z == registers.statusFlags[Registers.Z]
+        N == registers.statusFlags[Registers.N]
+
+        where:
+        firstValue | index | expectedMem | Z      | N     | Expected
+        9          | 0     | 8           | false  | false | "Simple decrement"
+        0xFF       | 1     | 0xFE        | false  | true  | "Decrement to negative value"
+        0b00000001 | 2     | 0x0         | true   | false | "Decrement to zero"
+    }
+
     @Unroll("DEC (Absolute) #Expected: on #firstValue = #expectedMem")
     def testDEC_ABS(){
         when:
