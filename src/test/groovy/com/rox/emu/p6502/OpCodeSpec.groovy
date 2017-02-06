@@ -1174,11 +1174,11 @@ class OpCodeSpec extends Specification {
         0b00000001 | 0x0         | true   | false | "Decrement to zero"
     }
 
-    @Unroll("DEC (Zero Page[X]) #Expected: on #firstValue = #expectedMem")
+    @Unroll("DEC (Zero Page[X]) #Expected: on #firstValue at #loc[#index] = #expectedMem")
     def testDEC_Z_IX(){
         when:
         Memory memory = new SimpleMemory(65534);
-        int[] program = [OP_LDX_I, index, OP_LDA_I, firstValue, OP_STA_Z, 0x20, OP_DEC_Z_IX, 0x20]
+        int[] program = [OP_LDX_I, index, OP_LDA_I, firstValue, OP_STA_Z_IX, loc, OP_DEC_Z_IX, loc]
         memory.setMemory(0, program);
 
         and:
@@ -1188,16 +1188,16 @@ class OpCodeSpec extends Specification {
         Registers registers = processor.getRegisters()
 
         then:
-        memory.getByte(0x20 + index) == expectedMem
+        memory.getByte(loc + index) == expectedMem
         registers.getPC() == program.length
         Z == registers.statusFlags[Registers.Z]
         N == registers.statusFlags[Registers.N]
 
         where:
-        firstValue | index | expectedMem | Z      | N     | Expected
-        9          | 0     | 8           | false  | false | "Simple decrement"
-        0xFF       | 1     | 0xFE        | false  | true  | "Decrement to negative value"
-        0b00000001 | 2     | 0x0         | true   | false | "Decrement to zero"
+        firstValue | loc  | index | expectedMem | Z      | N     | Expected
+        9          | 0x20 | 0     | 8           | false  | false | "Simple decrement"
+        0xFF       | 0x20 | 1     | 0xFE        | false  | true  | "Decrement to negative value"
+        0b00000001 | 0x20 | 2     | 0x0         | true   | false | "Decrement to zero"
     }
 
     @Unroll("DEC (Absolute) #Expected: on #firstValue = #expectedMem")

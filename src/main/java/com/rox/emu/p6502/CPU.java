@@ -246,6 +246,16 @@ public class CPU {
                 memory.setByteAt(decrementLocation, decrementedValue);
             }break;
 
+            case InstructionSet.OP_DEC_Z_IX: {
+                int decrementLocation = nextProgramByte();
+                int value = getByteOfMemoryXIndexedAt(decrementLocation);
+                int decrementedValue = (value - 1) & 0xFF;
+                System.out.println("#### [" + decrementLocation +"] " + value + " := " + decrementedValue);
+                registers.setFlagsBasedOn(decrementedValue);
+
+                setByteOfMemoryXIndexedAt(decrementLocation, decrementedValue);
+            }break;
+
             case InstructionSet.OP_DEC_ABS: {
                 int decrementLocation = nextProgramWord();
                 int decrementedValue = (memory.getByte(decrementLocation) - 1) & 0xFF;
