@@ -3,6 +3,7 @@ package com.rox.emu.p6502
 import com.rox.emu.Memory
 import com.rox.emu.SimpleMemory
 import org.junit.Rule
+import org.junit.rules.ExpectedException
 import org.junit.rules.Timeout
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -2217,6 +2218,37 @@ class OpCodeSpec extends Specification {
         0x0F       | 1     | 0x20        | 0x0F          | "Copy to memory with index"
 
     }
+
+    @Unroll("CMP (Immediate) #Expected: #firstValue == #secondValue")
+    def testOP_CMP_I(){
+        when:
+        Memory memory = new SimpleMemory(65534);
+        int[] program = [OP_LDA_I, firstValue, OP_CMP_I, secondValue];
+        memory.setMemory(0, program);
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        Registers registers = processor.getRegisters()
+
+        and:
+        processor.step(2)
+
+        then:
+        registers.getPC() == program.length
+        registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
+        Z == registers.statusFlags[Registers.Z]
+        N == registers.statusFlags[Registers.N]
+        C == registers.statusFlags[Registers.C]
+
+        where:
+        firstValue | secondValue | expectedAccumulator | Z     | N     | C     | Expected
+        0x10       | 0x10        | 0x10                | true  | false | true  | "Basic compare"
+        0x11       | 0x10        | 0x11                | false | false | true  | "Carry flag set"
+        0x10       | 0x11        | 0x10                | false | false | false | "Smaller value - larger"
+        0xFF       | 0x01        | 0xFF                | false | true  | false | "Negative result"
+    }
+
 
 //    @Ignore
 //    def exampleTest(){
