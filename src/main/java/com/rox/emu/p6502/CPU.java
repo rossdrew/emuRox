@@ -616,10 +616,14 @@ public class CPU {
     }
 
     //XXX Need to use 2s compliment addition (subtraction)
-    //    ? Do I deal with borrow in? does it need to manually set?!
     private void performCMP(int value, int toRegister){
         int result = registers.getRegister(toRegister) - value;
         registers.setFlagsBasedOn(result & 0xFF);
+
+        if (registers.getRegister(Registers.REG_ACCUMULATOR) >= value)
+            registers.setFlag(Registers.STATUS_FLAG_CARRY);
+        else
+            registers.clearFlag(Registers.STATUS_FLAG_CARRY);
     }
 
     private void setBorrowFlagFor(int newFakeByte) {

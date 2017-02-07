@@ -2245,8 +2245,8 @@ class OpCodeSpec extends Specification {
         firstValue | secondValue | expectedAccumulator | Z     | N     | C     | Expected
         0x10       | 0x10        | 0x10                | true  | false | true  | "Basic compare"
         0x11       | 0x10        | 0x11                | false | false | true  | "Carry flag set"
-        0x10       | 0x11        | 0x10                | false | false | false | "Smaller value - larger"
-        0xFF       | 0x01        | 0xFF                | false | true  | false | "Negative result"
+        0x10       | 0x11        | 0x10                | false | true  | false | "Smaller value - larger"
+        0xFF       | 0x01        | 0xFF                | false | true  | true  | "Negative result"
     }
 
 
