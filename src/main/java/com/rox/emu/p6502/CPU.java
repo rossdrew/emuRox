@@ -454,6 +454,10 @@ public class CPU {
                 memory.setByteAt(nextProgramByte(), registers.getRegister(Registers.REG_Y_INDEX));
                 break;
 
+            case InstructionSet.OP_STY_ABS:
+                memory.setByteAt(nextProgramWord(), registers.getRegister(Registers.REG_Y_INDEX));
+                break;
+
             case InstructionSet.OP_STY_Z_IX:
                 setByteOfMemoryXIndexedAt(nextProgramByte(), registers.getRegister(Registers.REG_Y_INDEX));
                 break;
