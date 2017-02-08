@@ -129,6 +129,18 @@ public class CPUTest {
     }
 
     @Test
+    public void testSTX_ABS() {
+        int[] program = {OP_LDX_I, 0xAA, OP_STX_ABS, 0x02, 0x20};
+        memory.setMemory(0, program);
+
+        processor.step(2);
+
+        Registers registers = processor.getRegisters();
+        assertEquals(program.length, registers.getPC());
+        assertEquals(0xAA, memory.getByte(0x220));
+    }
+
+    @Test
     public void testSTY() {
         int[] program = {OP_LDY_I, 0xAA, OP_STY_Z, 100};
         memory.setMemory(0, program);

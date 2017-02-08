@@ -478,6 +478,10 @@ public class CPU {
                 memory.setByteAt(nextProgramByte(), registers.getRegister(Registers.REG_X_INDEX));
                 break;
 
+            case InstructionSet.OP_STX_ABS:
+                memory.setByteAt(nextProgramWord(), registers.getRegister(Registers.REG_X_INDEX));
+                break;
+
             case InstructionSet.OP_PHA:
                 push(registers.getRegister(Registers.REG_ACCUMULATOR));
                 break;
