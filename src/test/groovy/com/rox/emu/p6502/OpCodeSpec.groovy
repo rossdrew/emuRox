@@ -1568,6 +1568,39 @@ class OpCodeSpec extends Specification {
         0b00000001 | 0b00000000  | true  | false | true  | "Shift to zero with carry"
     }
 
+    @Unroll("LSR (Absolute) #Expected: #firstValue becomes #expectedMem")
+    def testLSR_ABS(){
+        when:
+        Memory memory = new SimpleMemory(65534);
+        int[] program = [OP_LDA_I, firstValue,
+                         OP_STA_ABS, 0x02, 0x20,
+                         OP_LDA_I, 1,
+                         OP_LSR_ABS, 0x02, 0x20];
+        memory.setMemory(0, program);
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        Registers registers = processor.getRegisters()
+
+        and:
+        processor.step(4)
+
+        then:
+        registers.getPC() == program.length
+        memory.getByte(0x220) == expectedMem
+        Z == registers.statusFlags[Registers.Z]
+        N == registers.statusFlags[Registers.N]
+        C == registers.statusFlags[Registers.C]
+
+        where:
+        firstValue | expectedMem | Z     | N     | C     | Expected
+        0b01000000 | 0b00100000  | false | false | false | "Basic shift"
+        0b00000000 | 0b00000000  | true  | false | false | "Shift to zero"
+        0b00000011 | 0b00000001  | false | false | true  | "Shift with carry"
+        0b00000001 | 0b00000000  | true  | false | true  | "Shift to zero with carry"
+    }
+
     @Unroll("JMP #expected: [#jmpLocationHi | #jmpLocationLow] -> #expectedPC")
     def testJMP(){
         when:
@@ -2248,7 +2281,7 @@ class OpCodeSpec extends Specification {
         0x10       | 0x11        | 0x10                | false | true  | false | "Smaller value - larger"
         0xFF       | 0x01        | 0xFF                | false | true  | true  | "Negative result"
     }
-
+    
 
 //    @Ignore
 //    def exampleTest(){
