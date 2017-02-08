@@ -1019,6 +1019,38 @@ class OpCodeSpec extends Specification {
         0x5        | 0x6         | 0xFF                | false  | true  | false | false | "with negative result"
     }
 
+    @Unroll("SBC (Absolute) #Expected:  #firstValue - #secondValue = #expectedAccumulator in Accumulator.")
+    def testSBC_ABS(){
+        when:
+        Memory memory = new SimpleMemory(65534);
+        int[] program = [OP_LDA_I, secondValue,
+                         OP_STA_ABS, 0x02, 0x20,
+                         OP_LDA_I, firstValue,
+                         OP_SEC,
+                         OP_SBC_ABS, 0x02, 0x20]
+        memory.setMemory(0, program);
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        processor.step(5)
+        Registers registers = processor.getRegisters()
+
+        then:
+        registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
+        registers.getPC() == program.length
+        Z == registers.statusFlags[Registers.Z]
+        O == registers.statusFlags[Registers.V]
+        N == registers.statusFlags[Registers.N]
+        C == registers.statusFlags[Registers.C]
+
+        where:
+        firstValue | secondValue | expectedAccumulator | Z      | N     | O     | C     | Expected
+        0x5        | 0x3         | 0x2                 | false  | false | false | false | "Basic subtraction"
+        0x5        | 0x5         | 0x0                 | true   | false | false | false | "With zero result"
+        0x5        | 0x6         | 0xFF                | false  | true  | false | false | "with negative result"
+    }
+
     @Unroll("INX #Expected: on #firstValue = #expectedX")
     def testINX(){
         when:
