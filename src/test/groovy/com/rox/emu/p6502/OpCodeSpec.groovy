@@ -1844,6 +1844,41 @@ class OpCodeSpec extends Specification {
         OP_SEC     | 0b00000000 | 0b00000001  | false | false | false | "Rotate from zero to carry in"
     }
 
+    @Unroll("ROL (Zero Page[X]) #Expected: #firstValue -> #expectedMem")
+    def testROL_Z_IX(){
+        when:
+        Memory memory = new SimpleMemory(65534);
+        int[] program = [OP_LDX_I, index,
+                         firstInstr,
+                         OP_LDA_I, firstValue,
+                         OP_STA_Z_IX, 0x20,
+                         OP_ROL_Z_IX, 0x20];
+        memory.setMemory(0, program);
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        Registers registers = processor.getRegisters()
+
+        and:
+        processor.step(5)
+
+        then:
+        registers.getPC() == program.length
+        expectedMem == memory.getByte(0x20 + index)
+        Z == registers.statusFlags[Registers.Z]
+        N == registers.statusFlags[Registers.N]
+        C == registers.statusFlags[Registers.C]
+
+        where:
+        firstInstr | index | firstValue | expectedMem | Z     | N     | C     | Expected
+        OP_CLC     | 0     | 0b00000001 | 0b00000010  | false | false | false | "Basic rotate left"
+        OP_CLC     | 1     | 0b01000000 | 0b10000000  | false | true  | false | "Rotate to negative"
+        OP_CLC     | 2     | 0b00000000 | 0b00000000  | true  | false | false | "Rotate to zero without carry"
+        OP_CLC     | 3     | 0b10000000 | 0b00000000  | true  | false | true  | "Rotate to zero with carry"
+        OP_SEC     | 4     | 0b00000000 | 0b00000001  | false | false | false | "Rotate from zero to carry in"
+    }
+
     @Unroll("ROL (Absolute) #Expected: #firstValue -> #expectedMem")
     def testROL_ABS(){
         when:

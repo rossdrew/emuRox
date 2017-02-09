@@ -221,6 +221,12 @@ public class CPU {
                 memory.setByteAt(location, performROL(memory.getByte(location)));
             }break;
 
+            case InstructionSet.OP_ROL_Z_IX: {
+                int location = nextProgramByte();
+                int result = performROL(getByteOfMemoryXIndexedAt(location));
+                setByteOfMemoryXIndexedAt(location, result);
+            }break;
+
             case InstructionSet.OP_ROL_ABS: {
                 int location = nextProgramWord();
                 memory.setByteAt(location, performROL(memory.getByte(location)));
