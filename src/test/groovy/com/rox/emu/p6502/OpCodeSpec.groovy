@@ -1541,7 +1541,8 @@ class OpCodeSpec extends Specification {
     def testLSR(){
         when:
         Memory memory = new SimpleMemory(65534);
-        int[] program = [OP_LDA_I, firstValue, OP_LSR_A];
+        int[] program = [OP_LDA_I, firstValue,
+                         OP_LSR_A];
         memory.setMemory(0, program);
 
         and:
@@ -1573,7 +1574,6 @@ class OpCodeSpec extends Specification {
         Memory memory = new SimpleMemory(65534);
         int[] program = [OP_LDA_I, firstValue,
                          OP_STA_Z, 0x20,
-                         OP_LDA_I, 1,
                          OP_LSR_Z, 0x20];
         memory.setMemory(0, program);
 
@@ -1583,7 +1583,7 @@ class OpCodeSpec extends Specification {
         Registers registers = processor.getRegisters()
 
         and:
-        processor.step(4)
+        processor.step(3)
 
         then:
         registers.getPC() == program.length
@@ -1606,7 +1606,6 @@ class OpCodeSpec extends Specification {
         Memory memory = new SimpleMemory(65534);
         int[] program = [OP_LDA_I, firstValue,
                          OP_STA_ABS, 0x02, 0x20,
-                         OP_LDA_I, 1,
                          OP_LSR_ABS, 0x02, 0x20];
         memory.setMemory(0, program);
 
@@ -1616,7 +1615,7 @@ class OpCodeSpec extends Specification {
         Registers registers = processor.getRegisters()
 
         and:
-        processor.step(4)
+        processor.step(3)
 
         then:
         registers.getPC() == program.length
