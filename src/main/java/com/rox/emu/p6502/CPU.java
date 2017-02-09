@@ -201,6 +201,17 @@ public class CPU {
             }
             break;
 
+            case InstructionSet.OP_LSR_ABS_IX: {
+                int location = nextProgramWord();
+                int newFakeByte = getByteOfMemoryXIndexedAt(location);
+
+                setBorrowFlagFor(newFakeByte);
+                newFakeByte = newFakeByte >> 1;
+                registers.setFlagsBasedOn(newFakeByte);
+                setByteOfMemoryXIndexedAt(location, newFakeByte);
+            }
+            break;
+
             case InstructionSet.OP_ROL_A:
                 registers.setRegister(Registers.REG_ACCUMULATOR, performROL(registers.getRegister(Registers.REG_ACCUMULATOR)));
             break;
