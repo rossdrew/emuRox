@@ -180,6 +180,16 @@ public class CPU {
             }
             break;
 
+            case InstructionSet.OP_LSR_Z_IX: {
+                int location = nextProgramByte();
+                int newFakeByte = getByteOfMemoryXIndexedAt(location);
+                setBorrowFlagFor(newFakeByte);
+                newFakeByte = newFakeByte >> 1;
+                registers.setFlagsBasedOn(newFakeByte);
+                setByteOfMemoryXIndexedAt(location, newFakeByte);
+            }
+            break;
+
             case InstructionSet.OP_LSR_ABS: {
                 int location = nextProgramWord();
                 int newFakeByte = memory.getByte(location);
