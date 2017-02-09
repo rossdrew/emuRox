@@ -112,6 +112,7 @@ public class InstructionSet {
     public static final int OP_ROL_Z = 0x26;
     public static final int OP_ROL_Z_IX = 0x36;
     public static final int OP_ROL_ABS = 0x2E;
+    public static final int OP_ROL_ABS_IX = 0x3E;
 
     public static final int OP_ROR_A = 0x6A;
 
@@ -120,7 +121,7 @@ public class InstructionSet {
     public static final int OP_SED = 0xF8;
     public static final int OP_CLD = 0xD8;
 
-    public static final int[] instructionSet = {OP_ASL_A, OP_ASL_Z, OP_ASL_ABS, OP_ASL_Z_IX, OP_ASL_ABS_IX, OP_LSR_A, OP_LSR_Z, OP_LSR_Z_IX, OP_LSR_ABS, OP_LSR_ABS_IX,OP_ROL_A, OP_ROL_Z, OP_ROL_Z_IX, OP_ROL_ABS, OP_ROR_A,
+    public static final int[] instructionSet = {OP_ASL_A, OP_ASL_Z, OP_ASL_ABS, OP_ASL_Z_IX, OP_ASL_ABS_IX, OP_LSR_A, OP_LSR_Z, OP_LSR_Z_IX, OP_LSR_ABS, OP_LSR_ABS_IX,OP_ROL_A, OP_ROL_Z, OP_ROL_Z_IX, OP_ROL_ABS, OP_ROL_ABS_IX, OP_ROR_A,
                                                 OP_ADC_Z, OP_ADC_I, OP_ADC_ABS, OP_ADC_ABS_IX, OP_ADC_ABS_IY, OP_ADC_Z_IX,
                                                 OP_SBC_I, OP_SBC_Z, OP_SBC_ABS,
                                                 OP_LDA_Z, OP_LDA_I, OP_LDA_ABS, OP_LDA_Z_IX, OP_LDA_ABS_IY, OP_LDA_ABS_IX,
@@ -150,6 +151,7 @@ public class InstructionSet {
             case OP_ROL_Z:      return "ROL (Zero Page)";
             case OP_ROL_Z_IX:   return "ROL (Zero Page[X])";
             case OP_ROL_ABS:    return "ROL (Absolute)";
+            case OP_ROL_ABS_IX: return "ROL (Absolute[X])";
             case OP_ROR_A:      return "ROR (Accumulator)";
             case OP_ADC_Z:      return "ADC (Zero Page)";
             case OP_ADC_I:      return "ADC (Immediate)";
