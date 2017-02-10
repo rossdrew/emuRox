@@ -419,6 +419,10 @@ public class CPU {
                 registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(nextProgramByte()) | accumulatorBeforeOperation);
                 break;
 
+            case InstructionSet.OP_ORA_Z_IX:
+                registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, getByteOfMemoryXIndexedAt(nextProgramByte()) | accumulatorBeforeOperation);
+                break;
+
             case InstructionSet.OP_ORA_ABS:
                 registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(nextProgramWord()) | accumulatorBeforeOperation);
                 break;
