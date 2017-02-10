@@ -500,7 +500,7 @@ public class CPUTest {
     @Test
     public void testJMP(){
         int[] program = {OP_LDX_I, 0x8,
-                OP_JMP_ABS, 0x0, 0x7,
+                         OP_JMP_ABS, 0x0, 0x7,
                          OP_LDY_I, 0x9,
                          OP_LDA_I, 0x10};
         memory.setMemory(0, program);

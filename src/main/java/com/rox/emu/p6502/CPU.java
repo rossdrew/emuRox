@@ -479,6 +479,10 @@ public class CPU {
                 registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, performSBC(getByteOfMemoryAt(nextProgramByte())));
                 break;
 
+            case InstructionSet.OP_SBC_Z_IX:
+                registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, performSBC(getByteOfMemoryXIndexedAt(nextProgramByte())));
+                break;
+
             case InstructionSet.OP_SBC_ABS:
                 registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, performSBC(getByteOfMemoryAt(nextProgramWord())));
                 break;
