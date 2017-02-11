@@ -2548,6 +2548,36 @@ class OpCodeSpec extends Specification {
         0x10       | 0x11        | 0x10                | false | true  | false | "Smaller value - larger"
         0xFF       | 0x01        | 0xFF                | false | true  | true  | "Negative result"
     }
+
+    @Unroll("CPY (Immediate) #Expected: #firstValue == #secondValue")
+    def testOP_CPY_I(){
+        when:
+        Memory memory = new SimpleMemory(65534);
+        int[] program = [OP_LDY_I, firstValue, OP_CPY_I, secondValue];
+        memory.setMemory(0, program);
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        Registers registers = processor.getRegisters()
+
+        and:
+        processor.step(2)
+
+        then:
+        registers.getPC() == program.length
+        registers.getRegister(Registers.REG_Y_INDEX) == expectedY
+        Z == registers.statusFlags[Registers.Z]
+        N == registers.statusFlags[Registers.N]
+        C == registers.statusFlags[Registers.C]
+
+        where:
+        firstValue | secondValue | expectedY | Z     | N     | C     | Expected
+        0x10       | 0x10        | 0x10      | true  | false | false | "Basic compare"
+//        0x11       | 0x10        | 0x11      | false | false | true  | "Carry flag set"
+//        0x10       | 0x11        | 0x10      | false | true  | false | "Smaller value - larger"
+//        0xFF       | 0x01        | 0xFF      | false | true  | true  | "Negative result"
+    }
     
 
 //    @Ignore
