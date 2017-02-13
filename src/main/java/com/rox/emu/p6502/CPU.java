@@ -69,6 +69,10 @@ public class CPU {
         return getByteOfMemoryAt(location, registers.getRegister(Registers.REG_Y_INDEX));
     }
 
+    private int setByteOfMemoryYIndexedAt(int location, int newByte){
+        return setByteOfMemoryAt(location, registers.getRegister(Registers.REG_Y_INDEX), newByte);
+    }
+
     private int getByteOfMemoryAt(int location){
         return getByteOfMemoryAt(location, 0);
     }
@@ -537,6 +541,10 @@ public class CPU {
 
             case InstructionSet.OP_STA_ABS_IX:
                 setByteOfMemoryXIndexedAt(nextProgramWord(), registers.getRegister(Registers.REG_ACCUMULATOR));
+                break;
+
+            case InstructionSet.OP_STA_ABS_IY:
+                setByteOfMemoryYIndexedAt(nextProgramWord(), registers.getRegister(Registers.REG_ACCUMULATOR));
                 break;
 
             case InstructionSet.OP_STX_Z:
