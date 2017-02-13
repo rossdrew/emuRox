@@ -2493,6 +2493,35 @@ class OpCodeSpec extends Specification {
         0x20       |  1         | 3     | 0x0C  | "Store at index 3"
     }
 
+    @Unroll("STA (Absolute[Y]) #expected: Store #value at [#locationHi|#locationLo@#index]")
+    def testOP_STA_ABS_IY(){
+        when:
+        Memory memory = new SimpleMemory(65534);
+        int[] program = [OP_LDA_I, value,
+                         OP_LDY_I, index,
+                         OP_STA_ABS_IY, locationHi, locationLo];
+        memory.setMemory(0, program);
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        Registers registers = processor.getRegisters()
+
+        and:
+        processor.step(3)
+
+        then:
+        registers.getPC() == program.length
+        memory.getByte((locationHi << 8 | locationLo) + index) == value
+
+        where:
+        locationHi | locationLo | index | value | expected
+        0x20       |  0         | 0     | 0x0F  | "Store with 0 index"
+        0x20       |  30        | 1     | 0x0E  | "Store at index 1"
+        0x20       |  9         | 2     | 0x0D  | "Store at index 2"
+        0x20       |  1         | 3     | 0x0C  | "Store at index 3"
+    }
+
     @Unroll("STY (Zero Page[X] #expected: Store #firstValue at #memLocation[#index]")
     def testOP_STY_Z_IX(){
         when:
@@ -2659,6 +2688,40 @@ class OpCodeSpec extends Specification {
                          OP_STA_ABS_IX, 0x01, 0x20,
                          OP_LDA_I, firstValue,
                          OP_CMP_ABS_IX, 0x01, 0x20];
+        memory.setMemory(0, program);
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        Registers registers = processor.getRegisters()
+
+        and:
+        processor.step(5)
+
+        then:
+        registers.getPC() == program.length
+        registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
+        Z == registers.statusFlags[Registers.Z]
+        N == registers.statusFlags[Registers.N]
+        C == registers.statusFlags[Registers.C]
+
+        where:
+        firstValue | secondValue | index | expectedAccumulator | Z     | N     | C     | Expected
+        0x10       | 0x10        | 0     | 0x10                | true  | false | true  | "Basic compare"
+        0x11       | 0x10        | 1     | 0x11                | false | false | true  | "Carry flag set"
+        0x10       | 0x11        | 2     | 0x10                | false | true  | false | "Smaller value - larger"
+        0xFF       | 0x01        | 3     | 0xFF                | false | true  | true  | "Negative result"
+    }
+
+    @Unroll("CMP (Absolute[Y]) #Expected: #firstValue == #secondValue")
+    def testOP_CMP_ABS_IY(){
+        when:
+        Memory memory = new SimpleMemory(65534);
+        int[] program = [OP_LDY_I, index,
+                         OP_LDA_I, secondValue,
+                         OP_STA_ABS_IY, 0x01, 0x20,
+                         OP_LDA_I, firstValue,
+                         OP_CMP_ABS_IY, 0x01, 0x20];
         memory.setMemory(0, program);
 
         and:
