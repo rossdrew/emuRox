@@ -2590,7 +2590,7 @@ class OpCodeSpec extends Specification {
         int[] program = [OP_LDA_I, secondValue,
                          OP_STA_ABS, 0x01, 0x20,
                          OP_LDA_I, firstValue,
-                         OP_CMP_Z, 0x01, 0x20];
+                         OP_CMP_ABS, 0x01, 0x20];
         memory.setMemory(0, program);
 
         and:
