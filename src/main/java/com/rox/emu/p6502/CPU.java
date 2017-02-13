@@ -469,7 +469,11 @@ public class CPU {
 
             case InstructionSet.OP_CMP_I:
                 performCMP(nextProgramByte(), Registers.REG_ACCUMULATOR);
-            break;
+                break;
+
+            case InstructionSet.OP_CMP_Z:
+                performCMP(getByteOfMemoryAt(nextProgramByte()), Registers.REG_ACCUMULATOR);
+                break;
 
             case InstructionSet.OP_CPX_I:
                 performCMP(nextProgramByte(), Registers.REG_X_INDEX);
