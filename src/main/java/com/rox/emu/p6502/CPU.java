@@ -475,6 +475,10 @@ public class CPU {
                 performCMP(getByteOfMemoryAt(nextProgramByte()), Registers.REG_ACCUMULATOR);
                 break;
 
+            case InstructionSet.OP_CMP_Z_IX:
+                performCMP(getByteOfMemoryXIndexedAt(nextProgramByte()), Registers.REG_ACCUMULATOR);
+                break;
+
             case InstructionSet.OP_CMP_ABS:
                 performCMP(getByteOfMemoryAt(nextProgramWord()), Registers.REG_ACCUMULATOR);
                 break;

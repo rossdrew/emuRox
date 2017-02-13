@@ -2587,10 +2587,10 @@ class OpCodeSpec extends Specification {
     def testOP_CMP_Z_IX(){
         when:
         Memory memory = new SimpleMemory(65534);
-        int[] program = [OP_LDA_I, secondValue,
+        int[] program = [OP_LDX_I, index,
+                         OP_LDA_I, secondValue,
                          OP_STA_Z_IX, 0x20,
                          OP_LDA_I, firstValue,
-                         OP_LDX_I, index,
                          OP_CMP_Z_IX, 0x20];
         memory.setMemory(0, program);
 
