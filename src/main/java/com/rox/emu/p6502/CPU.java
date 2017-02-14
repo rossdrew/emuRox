@@ -443,6 +443,10 @@ public class CPU {
                 registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(nextProgramByte()) ^ accumulatorBeforeOperation);
                 break;
 
+            case InstructionSet.OP_EOR_Z_IX:
+                registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, getByteOfMemoryXIndexedAt(nextProgramByte()) ^ accumulatorBeforeOperation);
+                break;
+
             case InstructionSet.OP_EOR_ABS:
                 registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(nextProgramWord()) ^ accumulatorBeforeOperation);
                 break;
