@@ -520,6 +520,10 @@ public class CPU {
                 performCMP(getByteOfMemoryAt(nextProgramByte()), Registers.REG_X_INDEX);
                 break;
 
+            case InstructionSet.OP_CPX_ABS:
+                performCMP(getByteOfMemoryAt(nextProgramWord()), Registers.REG_X_INDEX);
+                break;
+
             case InstructionSet.OP_CPY_I:
                 performCMP(nextProgramByte(), Registers.REG_Y_INDEX);
                 break;
