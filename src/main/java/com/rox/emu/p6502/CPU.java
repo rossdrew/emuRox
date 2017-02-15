@@ -51,6 +51,10 @@ public class CPU {
         return memoryByte;
     }
 
+    private int setByteOfMemoryAt(int location, int newByte){
+        return setByteOfMemoryAt(location, 0, newByte);
+    }
+
     private int setByteOfMemoryAt(int location, int index, int newByte){
         memory.setByteAt(location + index, newByte);
         System.out.println("STORE " + newByte + " --> mem[" + location + (index != 0 ? "[" + index + "]" : "") +"]");
@@ -263,7 +267,7 @@ public class CPU {
                 int incrementLocation = nextProgramByte();
                 int incrementedValue = (getByteOfMemoryAt(incrementLocation) + 1) & 0xFF;
                 registers.setFlagsBasedOn(incrementedValue);
-                setByteOfMemoryAt(incrementLocation, 0, incrementedValue);
+                setByteOfMemoryAt(incrementLocation, incrementedValue);
             }break;
 
             case InstructionSet.OP_INC_Z_IX: {
@@ -277,7 +281,7 @@ public class CPU {
                 int incrementLocation = nextProgramWord();
                 int incrementedValue = (getByteOfMemoryAt(incrementLocation) + 1) & 0xFF;
                 registers.setFlagsBasedOn(incrementedValue);
-                setByteOfMemoryAt(incrementLocation, 0, incrementedValue);
+                setByteOfMemoryAt(incrementLocation, incrementedValue);
             }break;
 
             case InstructionSet.OP_INC_ABS_IX: {
@@ -291,7 +295,7 @@ public class CPU {
                 int decrementLocation = nextProgramByte();
                 int decrementedValue = (getByteOfMemoryAt(decrementLocation) - 1) & 0xFF;
                 registers.setFlagsBasedOn(decrementedValue);
-                setByteOfMemoryAt(decrementLocation, 0, decrementedValue);
+                setByteOfMemoryAt(decrementLocation, decrementedValue);
             }break;
 
             case InstructionSet.OP_DEC_Z_IX: {
@@ -306,7 +310,7 @@ public class CPU {
                 int decrementLocation = nextProgramWord();
                 int decrementedValue = (getByteOfMemoryAt(decrementLocation) - 1) & 0xFF;
                 registers.setFlagsBasedOn(decrementedValue);
-                setByteOfMemoryAt(decrementLocation, 0, decrementedValue);
+                setByteOfMemoryAt(decrementLocation, decrementedValue);
             }break;
 
             case InstructionSet.OP_DEC_ABS_IX: {
@@ -573,7 +577,7 @@ public class CPU {
                 break;
 
             case InstructionSet.OP_STX_Z:
-                setByteOfMemoryAt(nextProgramByte(), 0, registers.getRegister(Registers.REG_X_INDEX));
+                setByteOfMemoryAt(nextProgramByte(), registers.getRegister(Registers.REG_X_INDEX));
                 break;
 
             case InstructionSet.OP_STX_Z_IY:
@@ -581,7 +585,7 @@ public class CPU {
                 break;
 
             case InstructionSet.OP_STX_ABS:
-                setByteOfMemoryAt(nextProgramWord(), 0, registers.getRegister(Registers.REG_X_INDEX));
+                setByteOfMemoryAt(nextProgramWord(), registers.getRegister(Registers.REG_X_INDEX));
                 break;
 
             case InstructionSet.OP_PHA:
