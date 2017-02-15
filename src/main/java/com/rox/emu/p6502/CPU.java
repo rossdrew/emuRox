@@ -573,7 +573,7 @@ public class CPU {
                 break;
 
             case InstructionSet.OP_STX_Z:
-                memory.setByteAt(nextProgramByte(), registers.getRegister(Registers.REG_X_INDEX));
+                setByteOfMemoryAt(nextProgramByte(), 0, registers.getRegister(Registers.REG_X_INDEX));
                 break;
 
             case InstructionSet.OP_STX_Z_IY:
@@ -581,7 +581,7 @@ public class CPU {
                 break;
 
             case InstructionSet.OP_STX_ABS:
-                memory.setByteAt(nextProgramWord(), registers.getRegister(Registers.REG_X_INDEX));
+                setByteOfMemoryAt(nextProgramWord(), 0, registers.getRegister(Registers.REG_X_INDEX));
                 break;
 
             case InstructionSet.OP_PHA:
