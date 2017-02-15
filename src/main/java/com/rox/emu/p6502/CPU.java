@@ -532,6 +532,10 @@ public class CPU {
                 performCMP(getByteOfMemoryAt(nextProgramByte()), Registers.REG_Y_INDEX);
                 break;
 
+            case InstructionSet.OP_CPY_ABS:
+                performCMP(getByteOfMemoryAt(nextProgramWord()), Registers.REG_Y_INDEX);
+                break;
+
             case InstructionSet.OP_SBC_I:
                 registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, performSBC(nextProgramByte()));
                 break;

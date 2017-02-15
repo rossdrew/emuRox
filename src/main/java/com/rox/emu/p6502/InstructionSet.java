@@ -113,6 +113,7 @@ public class InstructionSet {
     public static final int OP_CPX_ABS = 0xEC;
     public static final int OP_CPY_I = 0xC0;
     public static final int OP_CPY_Z = 0xC4;
+    public static final int OP_CPY_ABS = 0xCC;
     public static final int OP_PHP = 0x08;
     public static final int OP_PLP = 0x28;
 
@@ -150,7 +151,7 @@ public class InstructionSet {
                                                 OP_LDX_I, OP_LDX_Z, OP_LDX_Z_IY, OP_LDX_ABS, OP_INX, OP_DEX,
                                                 OP_NOP, OP_JMP_ABS, OP_BCC, OP_BCS, OP_BNE, OP_BEQ, OP_BMI, OP_JSR, OP_BPL, OP_BVS, OP_BVC,
                                                 OP_TAX, OP_TAY, OP_TYA, OP_TXA, OP_TXS, OP_TSX,
-                                                OP_CMP_I, OP_CMP_Z, OP_CMP_Z_IX, OP_CMP_ABS, OP_CMP_ABS_IX, OP_CMP_ABS_IY, OP_CPX_I, OP_CPX_Z, OP_CPX_ABS, OP_CPY_I, OP_CPY_Z, OP_PHP, OP_PLP,
+                                                OP_CMP_I, OP_CMP_Z, OP_CMP_Z_IX, OP_CMP_ABS, OP_CMP_ABS_IX, OP_CMP_ABS_IY, OP_CPX_I, OP_CPX_Z, OP_CPX_ABS, OP_CPY_I, OP_CPY_Z, OP_CPY_ABS, OP_PHP, OP_PLP,
                                                 OP_CLI, OP_SEI, OP_SED, OP_CLD};
 
     public static String getOpCodeName(int opCode){
@@ -202,6 +203,7 @@ public class InstructionSet {
             case OP_CPX_ABS:    return "CPX (Absolute)";
             case OP_CPY_I:      return "CPY (Immediate)";
             case OP_CPY_Z:      return "CPY (Zero Page)";
+            case OP_CPY_ABS:    return "CPY (Absolute)";
             case OP_PHP:        return "PHP";
             case OP_PLP:        return "PLP";
             case OP_ORA_I:      return "OR (Immediate)";
