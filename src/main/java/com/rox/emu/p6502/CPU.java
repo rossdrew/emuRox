@@ -518,7 +518,7 @@ public class CPU {
 
             case InstructionSet.OP_CPY_I:
                 performCMP(nextProgramByte(), Registers.REG_Y_INDEX);
-            break;
+                break;
 
             case InstructionSet.OP_SBC_I:
                 registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, performSBC(nextProgramByte()));
