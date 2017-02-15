@@ -2934,6 +2934,36 @@ class OpCodeSpec extends Specification {
         0x10       | 0x11        | 0x10      | false | true  | false | "Second value is greater"
     }
 
+    @Unroll("CPX (Immediate) #Expected: #firstValue == #secondValue")
+    def testOP_CPX_I(){
+        when:
+        Memory memory = new SimpleMemory(65534);
+        int[] program = [OP_LDX_I, firstValue,
+                         OP_CPX_I, secondValue];
+        memory.setMemory(0, program);
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        Registers registers = processor.getRegisters()
+
+        and:
+        processor.step(2)
+
+        then:
+        registers.getPC() == program.length
+        registers.getRegister(Registers.REG_X_INDEX) == expectedX
+        Z == registers.statusFlags[Registers.Z]
+        N == registers.statusFlags[Registers.N]
+        C == registers.statusFlags[Registers.C]
+
+        where:
+        firstValue | secondValue | expectedX | Z     | N     | C     | Expected
+        0x10       | 0x10        | 0x10      | true  | false | true  | "Values are equal"
+        0x11       | 0x10        | 0x11      | false | false | true  | "First value is greater"
+        0x10       | 0x11        | 0x10      | false | true  | false | "Second value is greater"
+    }
+
     @Unroll("STX (Zero Page[X] #expected: #firstValue -> #location[#index]")
     def OP_STX_Z_IY(){
         when:
