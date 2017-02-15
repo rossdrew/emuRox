@@ -261,23 +261,23 @@ public class CPU {
 
             case InstructionSet.OP_INC_Z: {
                 int incrementLocation = nextProgramByte();
-                int incrementedValue = (memory.getByte(incrementLocation) + 1) & 0xFF;
+                int incrementedValue = (getByteOfMemoryAt(incrementLocation) + 1) & 0xFF;
                 registers.setFlagsBasedOn(incrementedValue);
-                memory.setByteAt(incrementLocation, incrementedValue);
+                setByteOfMemoryAt(incrementLocation, 0, incrementedValue);
             }break;
 
             case InstructionSet.OP_INC_Z_IX: {
                 int incrementLocation = nextProgramByte();
                 int incrementedValue = (getByteOfMemoryXIndexedAt(incrementLocation) + 1) & 0xFF;
                 registers.setFlagsBasedOn(incrementedValue);
-                memory.setByteAt(incrementLocation, incrementedValue);
+                setByteOfMemoryXIndexedAt(incrementLocation, incrementedValue);
             }break;
 
             case InstructionSet.OP_INC_ABS: {
                 int incrementLocation = nextProgramWord();
-                int incrementedValue = (memory.getByte(incrementLocation) + 1) & 0xFF;
+                int incrementedValue = (getByteOfMemoryAt(incrementLocation) + 1) & 0xFF;
                 registers.setFlagsBasedOn(incrementedValue);
-                memory.setByteAt(incrementLocation, incrementedValue);
+                setByteOfMemoryAt(incrementLocation, 0, incrementedValue);
             }break;
 
             case InstructionSet.OP_INC_ABS_IX: {
@@ -291,7 +291,7 @@ public class CPU {
                 int decrementLocation = nextProgramByte();
                 int decrementedValue = (getByteOfMemoryAt(decrementLocation) - 1) & 0xFF;
                 registers.setFlagsBasedOn(decrementedValue);
-                setByteOfMemoryXIndexedAt(decrementLocation, decrementedValue);
+                setByteOfMemoryAt(decrementLocation, 0, decrementedValue);
             }break;
 
             case InstructionSet.OP_DEC_Z_IX: {
