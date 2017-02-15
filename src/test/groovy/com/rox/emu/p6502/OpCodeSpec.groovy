@@ -2933,7 +2933,44 @@ class OpCodeSpec extends Specification {
 //        0x10       | 0x11        | 0x10      | false | true  | false | "Smaller value - larger"
 //        0xFF       | 0x01        | 0xFF      | false | true  | true  | "Negative result"
     }
-    
+
+//    int[] program = {OP_LDX_I, 0xAA, OP_STX_Z, 100};
+//    memory.setMemory(0, program);
+//
+//    processor.step(2);
+//
+//    Registers registers = processor.getRegisters();
+//    assertEquals(program.length, registers.getPC());
+//    assertEquals(0xAA, memory.getByte(100));
+
+    @Unroll("STX (Zero Page[X] #expected: #firstValue -> #location[#index]")
+    def OP_STX_Z_IY(){
+        when:
+        Memory memory = new SimpleMemory(65534);
+        int[] program = [OP_LDY_I, index,
+                         OP_LDX_I, firstValue,
+                         OP_STX_Z_IY, location];
+        memory.setMemory(0, program);
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        Registers registers = processor.getRegisters()
+
+        and:
+        processor.step(3)
+
+        then:
+        registers.getPC() == program.length
+        memory.getByte(location + index) == firstValue
+
+        where:
+        location | index | firstValue | expected
+        0x20     | 0     | 0xA1       | "Basic store"
+        0x20     | 1     | 0xA3       | "Store at index"
+        0x60     | 2     | 0xA6       | "Store at higher location at index"
+        0x20     | 50    | 0xAA       | "Store at higher index"
+    }
 
 //    @Ignore
 //    def exampleTest(){
