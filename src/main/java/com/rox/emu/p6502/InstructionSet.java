@@ -52,6 +52,7 @@ public class InstructionSet {
     public static final int OP_SBC_Z = 0xE5;
     public static final int OP_SBC_Z_IX = 0xF5;
     public static final int OP_SBC_ABS = 0xED;
+    public static final int OP_SBC_ABS_IX = 0xFD;
     public static final int OP_CLC = 0x18;
     public static final int OP_SEC = 0x38;
     public static final int OP_LDY_I = 0xA0;
@@ -133,7 +134,7 @@ public class InstructionSet {
 
     public static final int[] instructionSet = {OP_ASL_A, OP_ASL_Z, OP_ASL_ABS, OP_ASL_Z_IX, OP_ASL_ABS_IX, OP_LSR_A, OP_LSR_Z, OP_LSR_Z_IX, OP_LSR_ABS, OP_LSR_ABS_IX,OP_ROL_A, OP_ROL_Z, OP_ROL_Z_IX, OP_ROL_ABS, OP_ROL_ABS_IX, OP_ROR_A,
                                                 OP_ADC_Z, OP_ADC_I, OP_ADC_ABS, OP_ADC_ABS_IX, OP_ADC_ABS_IY, OP_ADC_Z_IX,
-                                                OP_SBC_I, OP_SBC_Z, OP_SBC_Z_IX, OP_SBC_ABS,
+                                                OP_SBC_I, OP_SBC_Z, OP_SBC_Z_IX, OP_SBC_ABS, OP_SBC_ABS_IX,
                                                 OP_LDA_Z, OP_LDA_I, OP_LDA_ABS, OP_LDA_Z_IX, OP_LDA_ABS_IY, OP_LDA_ABS_IX,
                                                 OP_STA_Z, OP_STA_ABS, OP_STA_Z_IX, OP_STA_ABS_IX, OP_STA_ABS_IY, OP_STX_Z, OP_STX_ABS, OP_STY_Z, OP_STY_ABS, OP_STY_Z_IX,
                                                 OP_AND_I, OP_AND_Z, OP_AND_Z_IX, OP_AND_ABS_IX, OP_AND_ABS, OP_ORA_I, OP_ORA_Z, OP_ORA_Z_IX, OP_ORA_ABS, OP_ORA_ABS_IX, OP_EOR_I, OP_EOR_Z, OP_EOR_Z_IX, OP_EOR_ABS,OP_BIT_Z, OP_BIT_ABS,
@@ -206,6 +207,7 @@ public class InstructionSet {
             case OP_SBC_Z:      return "SBC (Zero Page)";
             case OP_SBC_Z_IX:   return "SBC (Zero Page[X])";
             case OP_SBC_ABS:    return "SBC (Absolute)";
+            case OP_SBC_ABS_IX: return "SBC (Absolute[X])";
             case OP_CLC:        return "Clear Carry";
             case OP_SEC:        return "SEC";
             case OP_LDY_I:      return "LDX (Immediate)";
