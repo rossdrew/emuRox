@@ -768,7 +768,7 @@ public class CPUTest {
         assertEquals(0x10, registers.getRegister(Registers.REG_X_INDEX));
         assertEquals(true, registers.getFlag(Registers.STATUS_FLAG_ZERO));
         assertEquals(false, registers.getFlag(Registers.STATUS_FLAG_NEGATIVE));
-        assertEquals(false, registers.getFlag(Registers.STATUS_FLAG_CARRY));
+        assertEquals(true, registers.getFlag(Registers.STATUS_FLAG_CARRY));
     }
 
     @Test
@@ -783,7 +783,7 @@ public class CPUTest {
         assertEquals(0x10, registers.getRegister(Registers.REG_Y_INDEX));
         assertEquals(true, registers.getFlag(Registers.STATUS_FLAG_ZERO));
         assertEquals(false, registers.getFlag(Registers.STATUS_FLAG_NEGATIVE));
-        assertEquals(false, registers.getFlag(Registers.STATUS_FLAG_CARRY));
+        assertEquals(true, registers.getFlag(Registers.STATUS_FLAG_CARRY));
     }
 
     @Test

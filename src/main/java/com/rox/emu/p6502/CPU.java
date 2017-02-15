@@ -745,7 +745,7 @@ public class CPU {
         int result = registers.getRegister(toRegister) - value;
         registers.setFlagsBasedOn(result & 0xFF);
 
-        if (registers.getRegister(Registers.REG_ACCUMULATOR) >= value)
+        if (result >=0)
             registers.setFlag(Registers.STATUS_FLAG_CARRY);
         else
             registers.clearFlag(Registers.STATUS_FLAG_CARRY);

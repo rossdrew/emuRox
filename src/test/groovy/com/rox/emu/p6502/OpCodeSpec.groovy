@@ -2908,7 +2908,8 @@ class OpCodeSpec extends Specification {
     def testOP_CPY_I(){
         when:
         Memory memory = new SimpleMemory(65534);
-        int[] program = [OP_LDY_I, firstValue, OP_CPY_I, secondValue];
+        int[] program = [OP_LDY_I, firstValue,
+                         OP_CPY_I, secondValue];
         memory.setMemory(0, program);
 
         and:
@@ -2928,20 +2929,10 @@ class OpCodeSpec extends Specification {
 
         where:
         firstValue | secondValue | expectedY | Z     | N     | C     | Expected
-        0x10       | 0x10        | 0x10      | true  | false | false | "Basic compare"
-//        0x11       | 0x10        | 0x11      | false | false | true  | "Carry flag set"
-//        0x10       | 0x11        | 0x10      | false | true  | false | "Smaller value - larger"
-//        0xFF       | 0x01        | 0xFF      | false | true  | true  | "Negative result"
+        0x10       | 0x10        | 0x10      | true  | false | true  | "Values are equal"
+        0x11       | 0x10        | 0x11      | false | false | true  | "First value is greater"
+        0x10       | 0x11        | 0x10      | false | true  | false | "Second value is greater"
     }
-
-//    int[] program = {OP_LDX_I, 0xAA, OP_STX_Z, 100};
-//    memory.setMemory(0, program);
-//
-//    processor.step(2);
-//
-//    Registers registers = processor.getRegisters();
-//    assertEquals(program.length, registers.getPC());
-//    assertEquals(0xAA, memory.getByte(100));
 
     @Unroll("STX (Zero Page[X] #expected: #firstValue -> #location[#index]")
     def OP_STX_Z_IY(){
