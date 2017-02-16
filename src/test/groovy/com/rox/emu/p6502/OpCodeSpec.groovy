@@ -211,6 +211,36 @@ class OpCodeSpec extends Specification {
         3         | 0x20       | 0b11111111 | 0b11111111 | false  | true  | "Load negative value"
     }
 
+    @Unroll("LDX (Absolute[Y]): Load [#addressHi | #addressLo] with #firstValue")
+    def testLDX_ABS_IX(){
+        when:
+        Memory memory = new SimpleMemory(65534);
+        int[] program = [OP_LDX_I, index,
+                         OP_LDX_ABS_IY, addressHi, addressLo]
+        memory.setMemory(0, program)
+
+        and:
+        memory.setByteAt((addressHi << 8 | addressLo) + index, firstValue)
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        processor.step(2)
+        Registers registers = processor.getRegisters()
+
+        then:
+        registers.getRegister(Registers.REG_X_INDEX) == expectedX
+        registers.getPC() == program.length
+        Z == registers.statusFlags[Registers.Z]
+        N == registers.statusFlags[Registers.N]
+
+        where:
+        index | addressHi | addressLo  | firstValue | expectedX  | Z      | N     | Expected
+        0     | 1         | 0x20       | 99         | 99         | false  | false | "Simple load"
+        1     | 2         | 0x20       | 0          | 0          | true   | false | "Load zero"
+        2     | 3         | 0x20       | 0b11111111 | 0b11111111 | false  | true  | "Load negative value"
+    }
+
     @Unroll("LDX (Zero Page): Load [#addressHi | #addressLo] with #firstValue")
     def testLX_Z(){
         when:

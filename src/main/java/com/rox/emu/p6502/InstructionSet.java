@@ -62,9 +62,10 @@ public class InstructionSet {
     public static final int OP_LDY_Z = 0xA4;
     public static final int OP_LDY_Z_IX = 0xB4;
     public static final int OP_LDY_ABS = 0xAC;
-    public static final int OP_LDY_ABS_IX = 0xBE;
+    public static final int OP_LDY_ABS_IX = 0xBC;
     public static final int OP_LDX_I = 0xA2;
     public static final int OP_LDX_ABS = 0xAE;
+    public static final int OP_LDX_ABS_IY = 0xBE;
     public static final int OP_LDX_Z = 0xA6;
     public static final int OP_LDX_Z_IY = 0xB6;
     public static final int OP_STY_Z = 0x84;
@@ -149,7 +150,7 @@ public class InstructionSet {
                                                 OP_AND_I, OP_AND_Z, OP_AND_Z_IX, OP_AND_ABS_IX, OP_AND_ABS_IY, OP_AND_ABS, OP_ORA_I, OP_ORA_Z, OP_ORA_Z_IX, OP_ORA_ABS, OP_ORA_ABS_IX, OP_EOR_I, OP_EOR_Z, OP_EOR_Z_IX, OP_EOR_ABS, OP_EOR_ABS_IX, OP_BIT_Z, OP_BIT_ABS,
                                                 OP_SEC, OP_CLC, OP_CLV, OP_PHA, OP_PLA,
                                                 OP_LDY_I, OP_LDY_Z, OP_LDY_Z_IX, OP_LDY_ABS, OP_LDY_ABS_IX,OP_INY, OP_INC_Z, OP_INC_Z_IX, OP_INC_ABS, OP_INC_ABS_IX, OP_DEC_Z, OP_DEC_Z_IX, OP_DEC_ABS, OP_DEC_ABS_IX, OP_DEY,
-                                                OP_LDX_I, OP_LDX_Z, OP_LDX_Z_IY, OP_LDX_ABS, OP_INX, OP_DEX,
+                                                OP_LDX_I, OP_LDX_Z, OP_LDX_Z_IY, OP_LDX_ABS, OP_LDX_ABS_IY, OP_INX, OP_DEX,
                                                 OP_NOP, OP_JMP_ABS, OP_BCC, OP_BCS, OP_BNE, OP_BEQ, OP_BMI, OP_JSR, OP_BPL, OP_BVS, OP_BVC,
                                                 OP_TAX, OP_TAY, OP_TYA, OP_TXA, OP_TXS, OP_TSX,
                                                 OP_CMP_I, OP_CMP_Z, OP_CMP_Z_IX, OP_CMP_ABS, OP_CMP_ABS_IX, OP_CMP_ABS_IY, OP_CPX_I, OP_CPX_Z, OP_CPX_ABS, OP_CPY_I, OP_CPY_Z, OP_CPY_ABS, OP_PHP, OP_PLP,
@@ -235,6 +236,7 @@ public class InstructionSet {
             case OP_LDX_Z:      return "LDX (Zero Page)";
             case OP_LDX_Z_IY:   return "LDX (Zero Page[Y])";
             case OP_LDX_ABS:    return "LDX (Absolute)";
+            case OP_LDX_ABS_IY: return "LDX (Absolute[Y])";
             case OP_STY_Z:      return "STY (Zero Page)";
             case OP_STY_ABS:    return "STY (Absolute)";
             case OP_STY_Z_IX:   return "STY (Zero Page[X])";
