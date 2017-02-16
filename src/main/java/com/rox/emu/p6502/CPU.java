@@ -416,6 +416,10 @@ public class CPU {
                 performAND(getByteOfMemoryXIndexedAt(nextProgramWord()));
                 break;
 
+            case InstructionSet.OP_AND_ABS_IY:
+                performAND(getByteOfMemoryYIndexedAt(nextProgramWord()));
+                break;
+
             case InstructionSet.OP_BIT_Z: {
                 performBIT(memory.getByte(nextProgramByte()));
             }break;
