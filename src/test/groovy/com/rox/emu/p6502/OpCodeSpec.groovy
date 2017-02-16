@@ -215,17 +215,16 @@ class OpCodeSpec extends Specification {
     def testLDX_ABS_IX(){
         when:
         Memory memory = new SimpleMemory(65534);
-        int[] program = [OP_LDX_I, index,
+        int[] program = [OP_LDY_I, index,
+                         OP_LDA_I, firstValue,
+                         OP_STA_ABS_IY, addressHi, addressLo,
                          OP_LDX_ABS_IY, addressHi, addressLo]
         memory.setMemory(0, program)
 
         and:
-        memory.setByteAt((addressHi << 8 | addressLo) + index, firstValue)
-
-        and:
         CPU processor = new CPU(memory)
         processor.reset()
-        processor.step(2)
+        processor.step(4)
         Registers registers = processor.getRegisters()
 
         then:

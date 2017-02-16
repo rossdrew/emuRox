@@ -352,6 +352,10 @@ public class CPU {
                 registers.setRegisterAndFlags(Registers.REG_X_INDEX, getByteOfMemoryAt(nextProgramWord()));
                 break;
 
+            case InstructionSet.OP_LDX_ABS_IY:
+                registers.setRegisterAndFlags(Registers.REG_X_INDEX, getByteOfMemoryYIndexedAt(nextProgramWord()));
+                break;
+
             case InstructionSet.OP_LDY_I:
                 registers.setRegisterAndFlags(Registers.REG_Y_INDEX, nextProgramByte());
                 break;
