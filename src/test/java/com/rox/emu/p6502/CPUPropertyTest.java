@@ -11,19 +11,6 @@ import static org.quicktheories.quicktheories.QuickTheory.qt;
 import static org.quicktheories.quicktheories.generators.SourceDSL.integers;
 
 public class CPUPropertyTest {
-    private Memory memory;
-    private CPU processor;
-
-    @Before
-    public void setUp() {
-        memory = new SimpleMemory(65534);
-        memory.setByteAt(0x0, 0xFFFC);
-        memory.setByteAt(0x0, 0xFFFD);
-
-        processor = new CPU(memory);
-        processor.reset();
-    }
-
     @Test
     public void testValidValuesForLDA_I() {
         qt()
@@ -45,7 +32,7 @@ public class CPUPropertyTest {
     private Registers runProgram(int[] program, int steps){
         SimpleMemory memory = new SimpleMemory(65534);
         memory.setMemory(0, program);
-        processor = new CPU(memory);
+        CPU processor = new CPU(memory);
         processor.reset();
 
         processor.step(steps);
