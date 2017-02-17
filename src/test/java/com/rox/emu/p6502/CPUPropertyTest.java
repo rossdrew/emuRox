@@ -36,6 +36,10 @@ public class CPUPropertyTest {
         qt()
             .forAll(integers().from(0x100).upTo(0xFFFF))
             .check((value) -> (runProgram(new int[] {OP_LDA_I, value}, 1)).getRegister(Registers.REG_ACCUMULATOR) != value);
+
+        qt()
+            .forAll(integers().from(-0xFF).upTo(0x0))
+            .check((value) -> (runProgram(new int[] {OP_LDA_I, value}, 1)).getRegister(Registers.REG_ACCUMULATOR) != value);
     }
 
     private Registers runProgram(int[] program, int steps){
