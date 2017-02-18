@@ -381,8 +381,20 @@ public class CPU {
                 registers.setRegisterAndFlags(Registers.REG_Y_INDEX, getByteOfMemoryXIndexedAt(nextProgramWord()));
                 break;
 
+            case InstructionSet.OP_LDA_I:
+                registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, nextProgramByte());
+                break;
+
+            case InstructionSet.OP_LDA_Z:
+                registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(nextProgramByte()));
+                break;
+
             case InstructionSet.OP_LDA_Z_IX:
                 registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, getByteOfMemoryXIndexedAt(nextProgramByte()));
+                break;
+
+            case InstructionSet.OP_LDA_ABS:
+                registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(nextProgramWord()));
                 break;
 
             case InstructionSet.OP_LDA_ABS_IY:
@@ -397,18 +409,6 @@ public class CPU {
                 int pointerLocation = getWordOfMemoryXIndexedAt(nextProgramByte());
                 registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(pointerLocation));
             }break;
-
-            case InstructionSet.OP_LDA_I:
-                registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, nextProgramByte());
-                break;
-
-            case InstructionSet.OP_LDA_ABS:
-                registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(nextProgramWord()));
-                break;
-
-            case InstructionSet.OP_LDA_Z:
-                registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(nextProgramByte()));
-                break;
 
             case InstructionSet.OP_AND_Z:
                 performAND(getByteOfMemoryAt(nextProgramByte()));
