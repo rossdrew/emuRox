@@ -65,6 +65,11 @@ public class CPU {
         return getByteOfMemoryAt(location, registers.getRegister(Registers.REG_X_INDEX));
     }
 
+    private int getWordOfMemoryXIndexedAt(int location){
+        int indexedLocation = location + registers.getRegister(Registers.REG_X_INDEX);
+        return (getByteOfMemoryAt(indexedLocation) << 8 | getByteOfMemoryAt(indexedLocation + 1));
+    }
+
     private int setByteOfMemoryXIndexedAt(int location, int newByte){
         return setByteOfMemoryAt(location, registers.getRegister(Registers.REG_X_INDEX), newByte);
     }
@@ -389,7 +394,7 @@ public class CPU {
                 break;
 
             case InstructionSet.OP_LDA_IND_IX: {
-                int pointerLocation = getByteOfMemoryXIndexedAt(nextProgramByte());
+                int pointerLocation = getWordOfMemoryXIndexedAt(nextProgramByte());
                 registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(pointerLocation));
             }break;
 

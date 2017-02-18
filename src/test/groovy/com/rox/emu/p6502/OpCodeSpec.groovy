@@ -192,18 +192,20 @@ class OpCodeSpec extends Specification {
     def testLDA_IND_IX() {
         when:
         Memory memory = new SimpleMemory(65534);
-        int[] program = [OP_LDA_I, firstValue,  //Value at indirect address
-                         OP_STA_Z, indAddress,
+        int[] program = [OP_LDA_I, firstValue,    //Value at indirect address
+                         OP_STA_ABS, indAddressHi, indAddressLo,
                          OP_LDX_I, index,
-                         OP_LDA_I, indAddress,  //Indirect address in memory
+                         OP_LDA_I, indAddressHi,  //Indirect address in memory
                          OP_STA_Z_IX, 0x30,
+                         OP_LDA_I, indAddressLo,
+                         OP_STA_Z_IX, 0x31,
                          OP_LDA_IND_IX, 0x30]
         memory.setMemory(0, program);
 
         and:
         CPU processor = new CPU(memory)
         processor.reset()
-        processor.step(6)
+        processor.step(8)
         Registers registers = processor.getRegisters()
 
         then:
@@ -213,10 +215,10 @@ class OpCodeSpec extends Specification {
         N == registers.statusFlags[Registers.N]
 
         where:
-        indAddress | index | firstValue | expectedAccumulator | Z     | N     | Expected
-        0x20       | 0     | 0          | 0                   | true  | false | "With zero result"
-        0x40       | 1     | 11         | 11                  | false | false | "With normal result"
-        0x24       | 2     | 0xFF       | 0xFF                | false | true  | "With negative result"
+        indAddressHi | indAddressLo | index | firstValue | expectedAccumulator | Z     | N     | Expected
+        0x02         | 0x20         | 0     | 0          | 0                   | true  | false | "With zero result"
+        0x03         | 0x40         | 1     | 11         | 11                  | false | false | "With normal result"
+        0x04         | 0x24         | 2     | 0xFF       | 0xFF                | false | true  | "With negative result"
     }
 
     @Unroll("LDX (Immediate): Load #firstValue")
