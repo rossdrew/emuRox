@@ -70,6 +70,35 @@ class OpCodeSpec extends Specification {
         0xFF      | 0xFF                | false | true  | "With max negative result"
     }
 
+    @Unroll("LDA (Zero Page[X]) #Expected: Load [0x30 + X(#index)] -> #expectedAccumulator")
+    def testLDAFromZeroPageIndexedByX() {
+        when:
+        Memory memory = new SimpleMemory(65534);
+        int[] program = [OP_LDX_I, index,
+                         OP_LDA_Z_IX, 0x30]
+        int[] values = [0, 11, 0b11111111]
+        memory.setMemory(0x30, values)
+        memory.setMemory(0, program);
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        processor.step(2)
+        Registers registers = processor.getRegisters()
+
+        then:
+        registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
+        registers.getPC() == program.length
+        Z == registers.statusFlags[Registers.Z]
+        N == registers.statusFlags[Registers.N]
+
+        where:
+        index | expectedAccumulator | Z     | N     | Expected
+          0   | 0                   | true  | false | "With zero result"
+          1   | 11                  | false | false | "With normal result"
+          2   | 0xFF                | false | true  | "With negative result"
+    }
+
     @Unroll("LDA (Absolute) #Expected: Expecting #loadValue @ [300]")
     def testAbsoluteLDA() {
         when:
@@ -100,39 +129,12 @@ class OpCodeSpec extends Specification {
         0xFF      | 0xFF                | false | true  | "With max negative result"
     }
 
-    @Unroll("LDA (Zero Page[X]) #Expected: Load [0x30 + X(#index)] -> #expectedAccumulator")
-    def testLDAFromZeroPageIndexedByX() {
-        when:
-        Memory memory = new SimpleMemory(65534);
-        int[] program = [OP_LDX_I, index, OP_LDA_Z_IX, 0x30]
-        int[] values = [0, 11, 0b11111111]
-        memory.setMemory(0x30, values)
-        memory.setMemory(0, program);
-
-        and:
-        CPU processor = new CPU(memory)
-        processor.reset()
-        processor.step(2)
-        Registers registers = processor.getRegisters()
-
-        then:
-        registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
-        registers.getPC() == program.length
-        Z == registers.statusFlags[Registers.Z]
-        N == registers.statusFlags[Registers.N]
-
-        where:
-        index | expectedAccumulator | Z     | N     | Expected
-          0   | 0                   | true  | false | "With zero result"
-          1   | 11                  | false | false | "With normal result"
-          2   | 0xFF                | false | true  | "With negative result"
-    }
-
     @Unroll("LDA (Absolute[X]). #Expected: 300[#index] = #expectedAccumulator")
     def testLDAIndexedByX() {
         when:
         Memory memory = new SimpleMemory(65534);
-        int[] program = [OP_LDX_I, index, OP_LDA_ABS_IX, 1, 0x2C]
+        int[] program = [OP_LDX_I, index,
+                         OP_LDA_ABS_IX, 1, 0x2C]
         int[] values = [0, 11, 0b11111111]
         memory.setMemory(300, values)
         memory.setMemory(0, program);
@@ -161,7 +163,8 @@ class OpCodeSpec extends Specification {
     def testLDAIndexedByY() {
         when:
         Memory memory = new SimpleMemory(65534);
-        int[] program = [OP_LDY_I, index, OP_LDA_ABS_IY, 1, 0x2C]
+        int[] program = [OP_LDY_I, index,
+                         OP_LDA_ABS_IY, 1, 0x2C]
         int[] values = [0, 11, 0b11111111]
         memory.setMemory(300, values)
         memory.setMemory(0, program);
@@ -183,6 +186,37 @@ class OpCodeSpec extends Specification {
         0     | 0                   | true  | false | "With zero result"
         1     | 11                  | false | false | "With normal result"
         2     | 0xFF                | false | true  | "With negative result"
+    }
+
+    @Unroll("LDA (Indirect, X). #Expected: 0x30[#index] -> #indAddress = #expectedAccumulator")
+    def testLDA_IND_IX() {
+        when:
+        Memory memory = new SimpleMemory(65534);
+        int[] program = [OP_LDX_I, index,
+                         OP_LDA_I, firstValue,  //Value at indirect address
+                         OP_STA_Z_IX, 0x30,
+                         OP_LDA_I, indAddress,  //Indirect address in memory
+                         OP_STA_Z_IX, 0x30,
+                         OP_LDA_IND_IX, 0x30]
+        memory.setMemory(0, program);
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        processor.step(6)
+        Registers registers = processor.getRegisters()
+
+        then:
+        registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
+        registers.getPC() == program.length
+        Z == registers.statusFlags[Registers.Z]
+        N == registers.statusFlags[Registers.N]
+
+        where:
+        indAddress | index | firstValue | expectedAccumulator | Z     | N     | Expected
+        0x20       | 0     | 0          | 0                   | true  | false | "With zero result"
+        0x40       | 1     | 11         | 11                  | false | false | "With normal result"
+        0x24       | 2     | 0xFF       | 0xFF                | false | true  | "With negative result"
     }
 
     @Unroll("LDX (Immediate): Load #firstValue")

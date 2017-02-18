@@ -1,9 +1,6 @@
 package com.rox.emu.p6502;
 
-
-import com.rox.emu.Memory;
 import com.rox.emu.SimpleMemory;
-import org.junit.Before;
 import org.junit.Test;
 
 import static com.rox.emu.p6502.InstructionSet.OP_LDA_I;
