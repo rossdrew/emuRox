@@ -1,16 +1,7 @@
 package com.rox.emu.p6502.com.rox.emu;
 
-import com.pholser.junit.quickcheck.Property;
-import com.pholser.junit.quickcheck.runner.JUnitQuickcheck;
 import com.rox.emu.Memory;
-import com.rox.emu.SimpleMemory;
 import com.rox.emu.p6502.CPU;
-import com.rox.emu.p6502.Registers;
-import org.junit.Before;
-import org.junit.runner.RunWith;
-
-import static com.rox.emu.p6502.InstructionSet.OP_LDA_I;
-import static junit.framework.TestCase.assertEquals;
 
 //@RunWith(JUnitQuickcheck.class)
 public class LDAProperty {
