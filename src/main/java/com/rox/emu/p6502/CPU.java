@@ -801,6 +801,7 @@ public class CPU {
 
     private void branchIf(boolean condition){
         int location = nextProgramByte();
+        System.out.println("{Branch:0x" + Integer.toHexString(registers.getPC()) + " by " + Integer.toBinaryString(location) + "} " + (condition ? "YES->" : "NO..."));
         if (condition) branchTo(location);
     }
 

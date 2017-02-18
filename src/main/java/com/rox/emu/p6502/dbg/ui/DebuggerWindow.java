@@ -9,6 +9,10 @@ import com.rox.emu.p6502.InstructionSet;
 import javax.swing.*;
 import java.awt.*;
 
+import static com.rox.emu.p6502.InstructionSet.*;
+import static com.rox.emu.p6502.InstructionSet.OP_BNE;
+import static com.rox.emu.p6502.InstructionSet.OP_CPX_I;
+
 /**
  * A DebuggerWindow for debugging 6502 CPU code
  *
@@ -73,6 +77,15 @@ public class DebuggerWindow extends JFrame{
         int valMPD = 7;
         int valMPR = 4;
 
+        int[] countToTenProgram = new int[] {   OP_LDX_I, 10,
+                                                OP_LDA_I, 0,
+                                                OP_CLC,
+                                                OP_ADC_I, 0x01,
+                                                OP_DEX,
+                                                OP_CPX_I, 0,
+                                                OP_BNE, 0b11110111
+                                            };
+
         int[] program = new int[]{  InstructionSet.OP_LDA_I, valMPD,
                                     InstructionSet.OP_STA_Z, MPD,
                                     InstructionSet.OP_LDA_I, valMPR,
@@ -97,7 +110,7 @@ public class DebuggerWindow extends JFrame{
                                     InstructionSet.OP_BNE, 0b11100111   //Test equal and jump (back 24) to MULT});
         };
 
-        return program;
+        return countToTenProgram;
     }
 
     public void loadProgram(int[] program){

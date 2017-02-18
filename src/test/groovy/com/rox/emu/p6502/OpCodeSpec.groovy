@@ -2361,7 +2361,10 @@ class OpCodeSpec extends Specification {
     def testBEQ(){
         when:
         Memory memory = new SimpleMemory(65534);
-        int[] program = [OP_NOP, OP_NOP, OP_NOP, OP_LDA_I, accumulatorValue, OP_BEQ, jumpSteps, OP_NOP, OP_NOP, OP_NOP];
+        int[] program = [OP_NOP, OP_NOP, OP_NOP,
+                         OP_LDA_I, accumulatorValue,
+                         OP_BEQ, jumpSteps,
+                         OP_NOP, OP_NOP, OP_NOP];
         memory.setMemory(0, program);
 
         and:

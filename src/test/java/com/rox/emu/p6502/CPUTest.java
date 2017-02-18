@@ -193,10 +193,10 @@ public class CPUTest {
     @Test
     public void testADC() {
         int[] program = {OP_CLC,
-                         OP_LDA_I,
-                         0x1,
-                         OP_ADC_I,
-                         0x1};
+                OP_LDA_I,
+                0x1,
+                OP_ADC_I,
+                0x1};
         memory.setMemory(0, program);
 
         processor.step(3);
@@ -887,6 +887,25 @@ public class CPUTest {
 
         assertEquals(0x00, memory.getByte(0x1FF)); //Return address
         assertEquals(0x03, memory.getByte(0x1FE));
+    }
+
+    @Test
+    public void testLoop(){
+        int[] program = {OP_LDX_I, 10,        //Loop counter
+                         OP_LDA_I, 0,         //Sum
+                         OP_CLC,              //Clear cary before ADC
+                         OP_ADC_I, 1,         //Add one
+                         OP_DEX,              //advance loop counter
+                         OP_CPX_I, 0,         //is it the end of the loop?
+                         OP_BNE, 0b11110111}; //If not, go again
+        memory.setMemory(0, program);
+        Registers registers = processor.getRegisters();
+
+        while (registers.getRegister(Registers.REG_PC_LOW) < program.length)
+            processor.step();
+
+        assertEquals(10, registers.getRegister(Registers.REG_ACCUMULATOR));
+        assertEquals(0, registers.getRegister(Registers.REG_X_INDEX));
     }
 
     @Test
