@@ -388,6 +388,11 @@ public class CPU {
                 registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, getByteOfMemoryXIndexedAt(nextProgramWord()));
                 break;
 
+            case InstructionSet.OP_LDA_IND_IX: {
+                int pointerLocation = getByteOfMemoryXIndexedAt(nextProgramByte());
+                registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(pointerLocation));
+            }break;
+
             case InstructionSet.OP_LDA_I:
                 registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, nextProgramByte());
                 break;

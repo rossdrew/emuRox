@@ -192,9 +192,9 @@ class OpCodeSpec extends Specification {
     def testLDA_IND_IX() {
         when:
         Memory memory = new SimpleMemory(65534);
-        int[] program = [OP_LDX_I, index,
-                         OP_LDA_I, firstValue,  //Value at indirect address
-                         OP_STA_Z_IX, 0x30,
+        int[] program = [OP_LDA_I, firstValue,  //Value at indirect address
+                         OP_STA_Z, indAddress,
+                         OP_LDX_I, index,
                          OP_LDA_I, indAddress,  //Indirect address in memory
                          OP_STA_Z_IX, 0x30,
                          OP_LDA_IND_IX, 0x30]
