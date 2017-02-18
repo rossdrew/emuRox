@@ -11,7 +11,7 @@ import spock.lang.Unroll
 import static com.rox.emu.p6502.InstructionSet.*;
 
 class OpCodeSpec extends Specification {
-    @Unroll("LDA Immediate #Expected: Load #loadValue == #expectedAccumulator")
+    @Unroll("LDA (Immediate) #Expected: Load #loadValue == #expectedAccumulator")
     def testImmediateLDA() {
         when:
         Memory memory = new SimpleMemory(65534);
@@ -40,7 +40,7 @@ class OpCodeSpec extends Specification {
         0xFF      | 0xFF                | false | true  | "With max negative result"
     }
 
-    @Unroll("LDA ZeroPage #Expected: Expecting #loadValue @ [30]")
+    @Unroll("LDA (Zero Page) #Expected: Expecting #loadValue @ [30]")
     def testLDAFromZeroPage() {
         when:
         Memory memory = new SimpleMemory(65534);
@@ -70,7 +70,7 @@ class OpCodeSpec extends Specification {
         0xFF      | 0xFF                | false | true  | "With max negative result"
     }
 
-    @Unroll("LDA Absolute #Expected: Expecting #loadValue @ [300]")
+    @Unroll("LDA (Absolute) #Expected: Expecting #loadValue @ [300]")
     def testAbsoluteLDA() {
         when:
         Memory memory = new SimpleMemory(65534);
@@ -100,7 +100,7 @@ class OpCodeSpec extends Specification {
         0xFF      | 0xFF                | false | true  | "With max negative result"
     }
 
-    @Unroll("LDA Indexed Zero Page, X #Expected: Load [0x30 + X(#index)] -> #expectedAccumulator")
+    @Unroll("LDA (Zero Page[X]) #Expected: Load [0x30 + X(#index)] -> #expectedAccumulator")
     def testLDAFromZeroPageIndexedByX() {
         when:
         Memory memory = new SimpleMemory(65534);
@@ -128,11 +128,40 @@ class OpCodeSpec extends Specification {
           2   | 0xFF                | false | true  | "With negative result"
     }
 
-    @Unroll("LDA Indexed by X. #Expected: 300[#index] = #expectedAccumulator")
+    @Unroll("LDA (Absolute[X]). #Expected: 300[#index] = #expectedAccumulator")
     def testLDAIndexedByX() {
         when:
         Memory memory = new SimpleMemory(65534);
         int[] program = [OP_LDX_I, index, OP_LDA_ABS_IX, 1, 0x2C]
+        int[] values = [0, 11, 0b11111111]
+        memory.setMemory(300, values)
+        memory.setMemory(0, program);
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        processor.step(2)
+        Registers registers = processor.getRegisters()
+
+        then:
+        registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
+        registers.getPC() == program.length
+        Z == registers.statusFlags[Registers.Z]
+        N == registers.statusFlags[Registers.N]
+
+        where:
+        index | expectedAccumulator | Z     | N     | Expected
+        0     | 0                   | true  | false | "With zero result"
+        1     | 11                  | false | false | "With normal result"
+        2     | 0xFF                | false | true  | "With negative result"
+    }
+
+
+    @Unroll("LDA (Absolute[Y]). #Expected: 300[#index] = #expectedAccumulator")
+    def testLDAIndexedByY() {
+        when:
+        Memory memory = new SimpleMemory(65534);
+        int[] program = [OP_LDY_I, index, OP_LDA_ABS_IY, 1, 0x2C]
         int[] values = [0, 11, 0b11111111]
         memory.setMemory(300, values)
         memory.setMemory(0, program);
@@ -426,34 +455,6 @@ class OpCodeSpec extends Specification {
         1         | 0x23      | 0     | 99         | 99         | false  | false | "Simple load"
         2         | 0x22      | 1     | 0          | 0          | true   | false | "Load zero"
         3         | 0x21      | 10    | 0b11111111 | 0b11111111 | false  | true  | "Load negative value"
-    }
-
-    @Unroll("LDA (Absolute[Y]). #Expected: 300[#index] = #expectedAccumulator")
-    def testLDAIndexedByY() {
-        when:
-        Memory memory = new SimpleMemory(65534);
-        int[] program = [OP_LDY_I, index, OP_LDA_ABS_IY, 1, 0x2C]
-        int[] values = [0, 11, 0b11111111]
-        memory.setMemory(300, values)
-        memory.setMemory(0, program);
-
-        and:
-        CPU processor = new CPU(memory)
-        processor.reset()
-        processor.step(2)
-        Registers registers = processor.getRegisters()
-
-        then:
-        registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
-        registers.getPC() == program.length
-        Z == registers.statusFlags[Registers.Z]
-        N == registers.statusFlags[Registers.N]
-
-        where:
-        index | expectedAccumulator | Z     | N     | Expected
-        0     | 0                   | true  | false | "With zero result"
-        1     | 11                  | false | false | "With normal result"
-        2     | 0xFF                | false | true  | "With negative result"
     }
 
     @Unroll("ADC (Immediate) #Expected:  #firstValue + #secondValue = #expectedAccumulator in Accumulator.")
