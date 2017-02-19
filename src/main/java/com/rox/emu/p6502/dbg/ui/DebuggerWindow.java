@@ -4,8 +4,6 @@ import com.rox.emu.Memory;
 import com.rox.emu.p6502.CPU;
 import com.rox.emu.p6502.Registers;
 import com.rox.emu.SimpleMemory;
-import com.rox.emu.p6502.InstructionSet;
-
 import javax.swing.*;
 import java.awt.*;
 
@@ -135,7 +133,7 @@ public class DebuggerWindow extends JFrame{
         int instr = memory.getByte(pointer);
         //TODO get arguments
 
-        instructionName = InstructionSet.getOpCodeName(instr);
+        instructionName = getOpCodeName(instr);
         instruction.setText(instructionName);
         listModel.add(0, instructionName);
 

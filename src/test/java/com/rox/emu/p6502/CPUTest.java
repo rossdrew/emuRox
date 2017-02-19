@@ -893,7 +893,7 @@ public class CPUTest {
     public void testLoop(){
         int[] program = {OP_LDX_I, 10,        //Loop counter
                          OP_LDA_I, 0,         //Sum
-                         OP_CLC,              //Clear cary before ADC
+                         OP_CLC,              //LOOP: Clear cary before ADC
                          OP_ADC_I, 1,         //Add one
                          OP_DEX,              //advance loop counter
                          OP_CPX_I, 0,         //is it the end of the loop?
@@ -933,7 +933,7 @@ public class CPUTest {
                              OP_LDX_I, 8,         //X counts each bit
 
                              OP_LSR_Z, MPR,       //:MULT(18) LSR(MPR)
-                             OP_BCC, 13,        //Test carry and jump (forward 13) to NOADD
+                             OP_BCC, 13,          //Test carry and jump (forward 13) to NOADD
 
                              OP_LDA_Z, RESAD_0,   //RESAD -> A
                              OP_CLC,              //Prepare to add
@@ -951,7 +951,8 @@ public class CPUTest {
             memory.setMemory(0, program);
             Registers registers = processor.getRegisters();
 
-            processor.step(64);
+            while (registers.getRegister(Registers.REG_PC_LOW) < program.length)
+                processor.step();
 
             System.out.println("RESAD = " + Integer.toBinaryString(memory.getByte(RESAD_0)) + "|" + Integer.toBinaryString(memory.getByte(RESAD_1)));
             System.out.println("MPD = " + memory.getByte(MPD));
