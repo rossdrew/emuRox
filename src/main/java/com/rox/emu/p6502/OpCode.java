@@ -11,21 +11,21 @@ public enum OpCode {
             OP_LSR_Z_IX(0x56,"LSR (Zero Page[X])"),
             OP_LSR_ABS(0x4E,"LSR (Absolute)"),
             OP_LSR_ABS_IX(0x5E,"LSR (Absolute[X])"),
-            OP_ADC_Z(0x65,"EMPTY"),
-            OP_ADC_I(0x69,"EMPTY"),
-            OP_ADC_ABS(0x6D,"EMPTY"),
-            OP_ADC_ABS_IX(0x7D,"EMPTY"),
-            OP_ADC_ABS_IY(0x79,"EMPTY"),
-            OP_ADC_Z_IX(0x75,"EMPTY"),
-            OP_LDA_Z(0xA5,"EMPTY"),
-            OP_LDA_I(0xA9,"EMPTY"),
-            OP_LDA_ABS(0xAD,"EMPTY"),
-            OP_LDA_Z_IX(0xB5,"EMPTY"),
-            OP_LDA_ABS_IY(0xB9,"EMPTY"),
-            OP_LDA_IND_IX(0xA1,"EMPTY"),
-            OP_LDA_ABS_IX(0xBD,"EMPTY"),
-            OP_CLV(0xB8,"EMPTY"),
-            OP_AND_Z(0x25,"EMPTY"),
+            OP_ADC_Z(0x65,"ADC (Zero Page)"),
+            OP_ADC_I(0x69,"ADC (Immediate)"),
+            OP_ADC_ABS(0x6D,"ADC (Absolute)"),
+            OP_ADC_ABS_IX(0x7D,"ADC (Absolute[X])"),
+            OP_ADC_ABS_IY(0x79,"ADC (Absolute[Y])"),
+            OP_ADC_Z_IX(0x75,"ADC (Zero Page[X]"),
+            OP_LDA_Z(0xA5,"LDA (Zero Page)"),
+            OP_LDA_I(0xA9,"LDA (Immediate)"),
+            OP_LDA_ABS(0xAD,"LDA (Absolute)"),
+            OP_LDA_Z_IX(0xB5,"LDA (Zero Page[X])"),
+            OP_LDA_ABS_IY(0xB9,"LDA (Absolute[Y])"),
+            OP_LDA_IND_IX(0xA1,"LDA (Indirect, X)"),
+            OP_LDA_ABS_IX(0xBD,"LDA (Absolute[X])"),
+            OP_CLV(0xB8,"CLV"),
+            OP_AND_Z(0x25,"AND (Zero Page)"),
             OP_AND_Z_IX(0x35,"EMPTY"),
             OP_AND_ABS_IX(0x3D,"EMPTY"),
             OP_AND_ABS_IY(0x39,"EMPTY"),
@@ -135,6 +135,8 @@ public enum OpCode {
 
     private int byteValue;
     private String description;
+
+    //TODO store addressing mode and use it to generate toString
 
     public int getByteValue(){
         return byteValue;
