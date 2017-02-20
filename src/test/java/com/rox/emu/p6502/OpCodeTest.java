@@ -8,6 +8,8 @@ public class OpCodeTest {
     @Test
     public void testOpcodes(){
         for (OpCode o : OpCode.values()){
+            System.out.println(o.toString());
+
             assertTrue(!o.toString().isEmpty());
             assertTrue("OpCode byte value (" + o.getByteValue() + ") is not within byte range (0x0-0xFF)", o.getByteValue() > 0x0 && o.getByteValue() < 0x100);
         }
