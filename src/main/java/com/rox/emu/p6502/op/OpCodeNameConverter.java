@@ -1,64 +1,79 @@
 package com.rox.emu.p6502.op;
 
+import com.rox.emu.UnknownOpCodeException;
+
 /**
  * Utility for converting between internal and external OpCode representations.
  *
  * e.g.  OP_ADC_I  ->  "ADC (Immediate)"
  */
 public class OpCodeNameConverter {
-    private static final int OP = 0;
-    private static final int ADD = 1;
-    private static final int I = 2;
+    public static final String SEPERATOR = "_";
+
+    public static final int OP_DELIMETER = 0;
+    public static final int OP_CODE = 1;
+    public static final int OP_ADD = 2;
+    public static final int OP_I = 3;
+
+    public static final String ADDR_IMP = "Implied";
+    public static final String ADDR_I = "Immediate";
+    public static final String ADDR_A = "Accumulator";
+    public static final String ADDR_Z = "Zero Page";
+    public static final String ADDR_ABS = "Absolute";
+    public static final String ADDR_IND = "Indirect";
+
+    public static final String INDEX_X = "[X]";
+    public static final String INDEX_Y = "[Y]";
 
     public static String toDescription(String internalOpCodeName){
-        String description = "<UNKNOWN OPCODE>";
-
         if (internalOpCodeName != null && !internalOpCodeName.isEmpty()){
-            String tokens[] = internalOpCodeName.split("_");
-            description = tokens [OP] + getAddressingMode(tokens);
+            String tokens[] = internalOpCodeName.split(SEPERATOR);
+            if (!tokens[OP_DELIMETER].equalsIgnoreCase("OP"))
+                throw new UnknownOpCodeException("Opcode not properly delimited", internalOpCodeName);
+            return (tokens [OP_CODE] + getAddressingMode(tokens));
+        }else{
+            throw new UnknownOpCodeException("Empty Opcode", internalOpCodeName);
         }
-
-        return description;
     }
 
     private static String getAddressingMode(String[] t) {
         String addressingModeDescription = " (";
 
-        if (t.length > ADD){
-            switch (t[ADD]){
+        if (t.length > OP_ADD){
+            switch (t[OP_ADD]){
                 case "I":
-                    addressingModeDescription += "Immediate";
+                    addressingModeDescription += ADDR_I;
                     break;
                 case "A":
-                    addressingModeDescription += "Accumulator";
+                    addressingModeDescription += ADDR_A;
                     break;
                 case "Z":
-                    addressingModeDescription += "Zero Page";
+                    addressingModeDescription += ADDR_Z;
                     break;
                 case "ABS":
-                    addressingModeDescription += "Absolute";
+                    addressingModeDescription += ADDR_ABS;
                     break;
                 case "IND":
-                    addressingModeDescription += "Indirect";
+                    addressingModeDescription += ADDR_IND;
                     break;
-
+                default:
+                    addressingModeDescription += ADDR_IMP;
+                    break;
             }
             addressingModeDescription += getIndexingMode(t);
-        }else{
-            addressingModeDescription += "Implied";
         }
         return addressingModeDescription + ")";
     }
 
     private static String getIndexingMode(String[] t) {
         String indexingModeDescription = "";
-        if (t.length > I){
-            switch (t[I]){
+        if (t.length > OP_I){
+            switch (t[OP_I]){
                 case "IX":
-                    indexingModeDescription += "[X]";
+                    indexingModeDescription += INDEX_X;
                     break;
                 case "IY":
-                    indexingModeDescription += "[Y]";
+                    indexingModeDescription += INDEX_Y;
                     break;
             }
         }
