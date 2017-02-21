@@ -1,4 +1,4 @@
-package com.rox.emu.p6502;
+package com.rox.emu.p6502.op;
 
 public enum OpCode {
             OP_ASL_A(0x0A),
@@ -157,16 +157,12 @@ public enum OpCode {
             OP_SED(0xF8),
             OP_CLD(0xD8);
 
-    private static final int OP = 0;
-    private static final int ADD = 1;
-    private static final int I = 2;
-
     private int byteValue;
     private String description;
 
     OpCode(int byteValue){
         this.byteValue = byteValue;
-        this.description = generateDescription();
+        description = OpCodeNameConverter.toDescription(this.name());
     }
 
     public int getByteValue(){
@@ -176,54 +172,5 @@ public enum OpCode {
     @Override
     public String toString(){
         return description;
-    }
-
-    private String generateDescription() {
-        String t[] = this.name().split("_");
-        return t[OP] + getAddressingMode(t);
-    }
-
-    private String getAddressingMode(String[] t) {
-        String addressingModeDescription = " (";
-
-        if (t.length > ADD){
-            switch (t[ADD]){
-                case "I":
-                    addressingModeDescription += "Immediate";
-                    break;
-                case "A":
-                    addressingModeDescription += "Accumulator";
-                    break;
-                case "Z":
-                    addressingModeDescription += "Zero Page";
-                    break;
-                case "ABS":
-                    addressingModeDescription += "Absolute";
-                    break;
-                case "IND":
-                    addressingModeDescription += "Indirect";
-                    break;
-
-            }
-            addressingModeDescription += getIndexingMode(t);
-        }else{
-            addressingModeDescription += "Implied";
-        }
-        return addressingModeDescription + ")";
-    }
-
-    private String getIndexingMode(String[] t) {
-        String indexingModeDescription = "";
-        if (t.length > I){
-            switch (t[I]){
-                case "IX":
-                    indexingModeDescription += "[X]";
-                    break;
-                case "IY":
-                    indexingModeDescription += "[Y]";
-                    break;
-            }
-        }
-        return indexingModeDescription;
     }
 }

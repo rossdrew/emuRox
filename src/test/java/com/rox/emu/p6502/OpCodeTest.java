@@ -1,5 +1,6 @@
 package com.rox.emu.p6502;
 
+import com.rox.emu.p6502.op.OpCode;
 import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
