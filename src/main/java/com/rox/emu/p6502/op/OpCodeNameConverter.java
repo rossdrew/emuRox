@@ -61,9 +61,6 @@ public class OpCodeNameConverter {
                 case "IND":
                     addressingModeDescription += ADDR_IND;
                     break;
-                default:
-                    addressingModeDescription += ADDR_IMP;
-                    break;
             }
             addressingModeDescription += getIndexingMode(t);
         }else{
