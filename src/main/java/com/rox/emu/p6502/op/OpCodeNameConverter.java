@@ -30,10 +30,15 @@ public class OpCodeNameConverter {
             String tokens[] = internalOpCodeName.split(SEPERATOR);
             if (!tokens[OP_DELIMETER].equalsIgnoreCase("OP"))
                 throw new UnknownOpCodeException("Opcode not properly delimited", internalOpCodeName);
-            return (tokens [OP_CODE] + getAddressingMode(tokens));
+            return (getOpCode(tokens) + getAddressingMode(tokens));
         }else{
             throw new UnknownOpCodeException("Empty Opcode", internalOpCodeName);
         }
+    }
+
+    private static String getOpCode(String[] t){
+        //TODO check that the opcode exists
+        return t[OP_CODE];
     }
 
     private static String getAddressingMode(String[] t) {
@@ -61,6 +66,8 @@ public class OpCodeNameConverter {
                     break;
             }
             addressingModeDescription += getIndexingMode(t);
+        }else{
+            addressingModeDescription += ADDR_IMP;
         }
         return addressingModeDescription + ")";
     }
