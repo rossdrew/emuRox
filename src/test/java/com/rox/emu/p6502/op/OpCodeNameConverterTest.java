@@ -12,7 +12,7 @@ public class OpCodeNameConverterTest {
     public void testCreation(){
         //Class definitions need to be instantiated in tests in order to be counted in code coverage.
         // As this is a static utility class for now, we need to instantiate it to cover that edge case.
-        OpCodeNameConverterTest useless = new OpCodeNameConverterTest();
+        assertNotNull(new OpCodeNameConverter());
     }
 
     @Test
