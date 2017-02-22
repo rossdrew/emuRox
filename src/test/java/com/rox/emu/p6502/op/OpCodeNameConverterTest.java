@@ -5,9 +5,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import static junit.framework.TestCase.fail;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 public class OpCodeNameConverterTest {
     @Test
@@ -15,6 +13,17 @@ public class OpCodeNameConverterTest {
         String description = OpCodeNameConverter.toDescription("OP_SEC");
         assertNotNull(description);
         assertFalse(description.isEmpty());
+    }
+
+    @Test
+    public void testNullOpcode(){
+        try {
+            String description = OpCodeNameConverter.toDescription(null);
+            fail("Invalid OpCode should throw an exception, got " + description);
+        }catch(UnknownOpCodeException e){
+            assertNotNull(e.getMessage());
+            assertNull(e.getOpCode());
+        }
     }
 
     @Test
