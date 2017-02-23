@@ -133,45 +133,31 @@ public class CPU {
         System.out.println("Instruction: " + InstructionSet.getOpCodeName(opCode) + "...");
         switch (opCode){
             case InstructionSet.OP_ASL_A: {
-                int newFakeByte = registers.getRegister(Registers.REG_ACCUMULATOR) << 1;
-                setCarryFlagBasedOn(newFakeByte);
-                registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, newFakeByte);
+                registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, performASL(registers.getRegister(Registers.REG_ACCUMULATOR)));
             }
             break;
 
             case InstructionSet.OP_ASL_Z: {
                 int location = nextProgramByte();
-                int newFakeByte = memory.getByte(location) << 1;
-                setCarryFlagBasedOn(newFakeByte);
-                registers.setFlagsBasedOn(newFakeByte);
-                memory.setByteAt(location, newFakeByte);
+                memory.setByteAt(location, performASL(memory.getByte(location)));
             }
             break;
 
             case InstructionSet.OP_ASL_Z_IX: {
                 int location = nextProgramByte();
-                int newFakeByte = getByteOfMemoryXIndexedAt(location) << 1;
-                setCarryFlagBasedOn(newFakeByte);
-                registers.setFlagsBasedOn(newFakeByte);
-                setByteOfMemoryXIndexedAt(location, newFakeByte);
+                setByteOfMemoryXIndexedAt(location, performASL(getByteOfMemoryXIndexedAt(location)));
             }
             break;
 
             case InstructionSet.OP_ASL_ABS_IX: {
                 int location = nextProgramWord();
-                int newFakeByte = getByteOfMemoryXIndexedAt(location) << 1;
-                setCarryFlagBasedOn(newFakeByte);
-                registers.setFlagsBasedOn(newFakeByte);
-                setByteOfMemoryXIndexedAt(location, newFakeByte);
+                setByteOfMemoryXIndexedAt(location, performASL(getByteOfMemoryXIndexedAt(location)));
             }
             break;
 
             case InstructionSet.OP_ASL_ABS: {
                 int location = nextProgramWord();
-                int newFakeByte = memory.getByte(location) << 1;
-                setCarryFlagBasedOn(newFakeByte);
-                registers.setFlagsBasedOn(newFakeByte);
-                memory.setByteAt(location, newFakeByte);
+                memory.setByteAt(location, performASL(memory.getByte(location)));
             }
             break;
 
@@ -772,6 +758,13 @@ public class CPU {
 
         //Set N, V to bits 7 and 6 of memory data
         registers.setRegister(Registers.REG_STATUS, (memData & 0b11000000) | (registers.getRegister(Registers.REG_STATUS) & 0b00111111));
+    }
+
+    private int performASL(int byteValue){
+        int newValue = byteValue << 1;
+        setCarryFlagBasedOn(newValue);
+        registers.setFlagsBasedOn(newValue);
+        return newValue;
     }
 
     //XXX Need to use 2s compliment addition (subtraction)
