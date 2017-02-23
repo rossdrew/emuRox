@@ -22,9 +22,7 @@ Most simply addressed opcodes now implemented, only a few to go then it's just c
  - [JaCoCo](http://www.eclemma.org/jacoco/) reports. To allow us to strive for high [code coverage](https://en.wikipedia.org/wiki/Code_coverage).  GitHub shield using [CodeCov](https://codecov.io).
  - Static analysis done on IntelliJ IDEA and online (including GitHub shield) by [Codeacy](https://www.codacy.com/). 
  - [Pitest](http://pitest.org/) reports. To allow us to use [mutation testing](https://en.wikipedia.org/wiki/Mutation_testing) to validate and improve our ([Spock](http://spockframework.org/) & [JUnit](http://junit.org/junit4/)) unit tests.
- - Currently investigating property based testing through
-   - [junit-quickcheck](https://www.google.co.uk/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&cad=rja&uact=8&ved=0ahUKEwjq4-PF-aPSAhWHDsAKHV17BCIQFggaMAA&url=https%3A%2F%2Fgithub.com%2Fpholser%2Fjunit-quickcheck&usg=AFQjCNE37M0yEi68OG8Hr7y1MDoJwcLOaQ&sig2=AUpnbmKM5Sk9efhw1r-bKw&bvm=bv.147448319,d.d2s) the better, cleaner solution so far
-   - [NCR-CoDE/QuickTheories](https://www.google.co.uk/url?sa=t&rct=j&q=&esrc=s&source=web&cd=2&cad=rja&uact=8&ved=0ahUKEwjq4-PF-aPSAhWHDsAKHV17BCIQFgggMAE&url=https%3A%2F%2Fgithub.com%2FNCR-CoDE%2FQuickTheories&usg=AFQjCNFgVT6fmPWyQPCLMl_RCehXMUB6AQ&sig2=fpIfxWQyuvP4W7jtDayV_g&bvm=bv.147448319,d.d2s) the only other solution, which is a little messy
+ - Some property-based testing with [junit-quickcheck](https://www.google.co.uk/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&cad=rja&uact=8&ved=0ahUKEwjq4-PF-aPSAhWHDsAKHV17BCIQFggaMAA&url=https%3A%2F%2Fgithub.com%2Fpholser%2Fjunit-quickcheck&usg=AFQjCNE37M0yEi68OG8Hr7y1MDoJwcLOaQ&sig2=AUpnbmKM5Sk9efhw1r-bKw&bvm=bv.147448319,d.d2s)
  
 ####Branches
 
