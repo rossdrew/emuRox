@@ -1,8 +1,5 @@
 package com.rox.emu.p6502.op;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public enum OpCode {
             OP_ASL_A(0x0A),
             OP_ASL_Z(0x06),

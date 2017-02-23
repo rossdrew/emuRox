@@ -3,7 +3,7 @@ package com.rox.emu.p6502.op;
 import com.rox.emu.UnknownOpCodeException;
 
 /**
- * Utility for converting between internal and external OpCode representations.
+ * Utility for converting internal opcode representation names to human readable descriptions
  *
  * e.g.  OP_ADC_I  ->  "ADC (Immediate)"
  */
@@ -37,7 +37,6 @@ public class OpCodeNameConverter {
     }
 
     private static String getOpCode(String[] t){
-        //TODO check that the opcode exists, how?  I'm using this during construction of each opcode
         return t[OP_CODE];
     }
 

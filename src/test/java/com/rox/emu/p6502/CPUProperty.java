@@ -7,7 +7,6 @@ import com.pholser.junit.quickcheck.runner.JUnitQuickcheck;
 import com.rox.emu.Memory;
 import com.rox.emu.SimpleMemory;
 import org.junit.Before;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static com.rox.emu.p6502.InstructionSet.OP_LDA_I;
