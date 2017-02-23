@@ -8,13 +8,14 @@ import com.rox.emu.UnknownOpCodeException;
  * e.g.  OP_ADC_I  ->  "ADC (Immediate)"
  */
 public class OpCodeNameConverter {
+    //Internal representation details
     public static final String SEPERATOR = "_";
-
     public static final int OP_DELIMETER = 0;
     public static final int OP_CODE = 1;
     public static final int OP_ADD = 2;
     public static final int OP_I = 3;
 
+    //Addressing modes
     public static final String ADDR_IMP = "Implied";
     public static final String ADDR_I = "Immediate";
     public static final String ADDR_A = "Accumulator";
@@ -22,6 +23,7 @@ public class OpCodeNameConverter {
     public static final String ADDR_ABS = "Absolute";
     public static final String ADDR_IND = "Indirect";
 
+    //Indexing modes
     public static final String INDEX_X = "[X]";
     public static final String INDEX_Y = "[Y]";
 
