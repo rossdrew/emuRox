@@ -52,25 +52,10 @@ public class OpCodeNameConverterTest {
     }
 
     @Test
-    @Ignore //Need to think of a nice way of validating existing opcodes
-    public void testInvalidImpliedOpCode(){
-        try {
-            String description = OpCodeNameConverter.toDescription("OP_SEX");
-            fail("Invalid OpCode should throw an exception, got " + description);
-        }catch(UnknownOpCodeException e){
-            assertNotNull(e.getMessage());
-            assertNotNull(e.getOpCode());
-            assertEquals("PO_SEC", e.getOpCode());
-        }
-    }
-
-    @Test
     public void testValidImmediateOpCode(){
         String description = OpCodeNameConverter.toDescription("OP_ORA_I");
         assertEquals("ORA (" + OpCodeNameConverter.ADDR_I + ")", description);
     }
-
-    //XXX Add invalidImmediate
 
     @Test
     public void testValidAccumulatorOpCode(){
@@ -78,23 +63,17 @@ public class OpCodeNameConverterTest {
         assertEquals("LSR (" + OpCodeNameConverter.ADDR_A + ")", description);
     }
 
-    //XXX Add invalidAccumulator
-
     @Test
     public void testValidZeroPageOpCode(){
         String description = OpCodeNameConverter.toDescription("OP_LSR_Z");
         assertEquals("LSR (" + OpCodeNameConverter.ADDR_Z + ")", description);
     }
 
-    //XXX Add invalidZeroPage
-
     @Test
     public void testValidAbsoluteOpCode(){
         String description = OpCodeNameConverter.toDescription("OP_LSR_ABS");
         assertEquals("LSR (" + OpCodeNameConverter.ADDR_ABS + ")", description);
     }
-
-    //XXX Add invalidAbsolute
 
     @Test
     public void testValidXIndexedOpCode(){
@@ -107,7 +86,4 @@ public class OpCodeNameConverterTest {
         String description = OpCodeNameConverter.toDescription("OP_LSR_Z_IY");
         assertEquals("LSR (" + OpCodeNameConverter.ADDR_Z + OpCodeNameConverter.INDEX_Y + ")", description);
     }
-
-    //XXX Add invalid indexed
-
 }

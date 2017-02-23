@@ -37,7 +37,7 @@ public class OpCodeNameConverter {
     }
 
     private static String getOpCode(String[] t){
-        //TODO check that the opcode exists
+        //TODO check that the opcode exists, how?  I'm using this during construction of each opcode
         return t[OP_CODE];
     }
 
