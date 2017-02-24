@@ -28,7 +28,6 @@ public class CPUProperty {
         processor.reset();
     }
 
-
     @Property
     public void testValidStartup(@InRange(min = "0", max = "255") int memHi,
                                  @InRange(min = "0", max = "255") int memLo) {

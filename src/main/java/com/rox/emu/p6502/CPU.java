@@ -132,9 +132,8 @@ public class CPU {
         //Execute the opcode
         System.out.println("Instruction: " + InstructionSet.getOpCodeName(opCode) + "...");
         switch (opCode){
-            case InstructionSet.OP_ASL_A: {
-                registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, performASL(registers.getRegister(Registers.REG_ACCUMULATOR)));
-            }
+            case InstructionSet.OP_ASL_A:
+                withRegister(Registers.REG_ACCUMULATOR, this::performROL);
             break;
 
             case InstructionSet.OP_ASL_Z:
@@ -204,7 +203,7 @@ public class CPU {
             break;
 
             case InstructionSet.OP_ROL_A:
-                registers.setRegister(Registers.REG_ACCUMULATOR, performROL(registers.getRegister(Registers.REG_ACCUMULATOR)));
+                withRegister(Registers.REG_ACCUMULATOR, this::performROL);
             break;
 
             case InstructionSet.OP_ROL_Z:
@@ -722,16 +721,6 @@ public class CPU {
         registers.setRegister(Registers.REG_SP, registers.getRegister(Registers.REG_SP) - 1);
     }
 
-    private void withByteAt(int location, ByteOperation byteOperation){
-        int b = getByteOfMemoryAt(location);
-        setByteOfMemoryAt(location, byteOperation.perform(b));
-    }
-
-    private void withByteXIndexedAt(int location, ByteOperation byteOperation){
-        int b = getByteOfMemoryXIndexedAt(location);
-        setByteOfMemoryXIndexedAt(location, byteOperation.perform(b));
-    }
-
     private void setBorrowFlagFor(int newFakeByte) {
         if ((newFakeByte & 0x1) == 0x1)
             registers.setFlag(Registers.STATUS_FLAG_CARRY);
@@ -831,6 +820,21 @@ public class CPU {
             registers.setFlag(Registers.STATUS_FLAG_CARRY);
         else
             registers.clearFlag(Registers.STATUS_FLAG_CARRY);
+    }
+
+    private void withByteAt(int location, ByteOperation byteOperation){
+        int b = getByteOfMemoryAt(location);
+        setByteOfMemoryAt(location, byteOperation.perform(b));
+    }
+
+    private void withByteXIndexedAt(int location, ByteOperation byteOperation){
+        int b = getByteOfMemoryXIndexedAt(location);
+        setByteOfMemoryXIndexedAt(location, byteOperation.perform(b));
+    }
+
+    private void withRegister(int registerId, ByteOperation byteOperation){
+        int b = registers.getRegister(registerId);
+        registers.setRegister(registerId, byteOperation.perform(b));
     }
 
     /**
