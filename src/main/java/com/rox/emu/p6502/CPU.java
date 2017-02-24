@@ -123,13 +123,6 @@ public class CPU {
             step();
     }
 
-    public int performLSR(int byteValue){
-        int shiftedByteValue = byteValue >> 1;
-        setBorrowFlagFor(byteValue);
-        registers.setFlagsBasedOn(shiftedByteValue);
-        return shiftedByteValue;
-    }
-
     public void step() {
         System.out.println("\n*** STEP >>>");
 
@@ -216,33 +209,20 @@ public class CPU {
                 registers.clearFlag(Registers.STATUS_FLAG_OVERFLOW);
                 break;
 
-            case InstructionSet.OP_INC_Z: {
-                int incrementLocation = nextProgramByte();
-                int incrementedValue = (getByteOfMemoryAt(incrementLocation) + 1) & 0xFF;
-                registers.setFlagsBasedOn(incrementedValue);
-                setByteOfMemoryAt(incrementLocation, incrementedValue);
-            }break;
+            case InstructionSet.OP_INC_Z:
+                withByteAt(nextProgramByte(), this::performINC);
+            break;
 
-            case InstructionSet.OP_INC_Z_IX: {
-                int incrementLocation = nextProgramByte();
-                int incrementedValue = (getByteOfMemoryXIndexedAt(incrementLocation) + 1) & 0xFF;
-                registers.setFlagsBasedOn(incrementedValue);
-                setByteOfMemoryXIndexedAt(incrementLocation, incrementedValue);
-            }break;
+            case InstructionSet.OP_INC_Z_IX:
+                withByteXIndexedAt(nextProgramByte(), this::performINC);
+            break;
 
-            case InstructionSet.OP_INC_ABS: {
-                int incrementLocation = nextProgramWord();
-                int incrementedValue = (getByteOfMemoryAt(incrementLocation) + 1) & 0xFF;
-                registers.setFlagsBasedOn(incrementedValue);
-                setByteOfMemoryAt(incrementLocation, incrementedValue);
-            }break;
+            case InstructionSet.OP_INC_ABS:
+                withByteAt(nextProgramWord(), this::performINC);break;
 
-            case InstructionSet.OP_INC_ABS_IX: {
-                int incrementLocation = nextProgramWord();
-                int incrementedValue = (getByteOfMemoryXIndexedAt(incrementLocation) + 1) & 0xFF;
-                registers.setFlagsBasedOn(incrementedValue);
-                setByteOfMemoryXIndexedAt(incrementLocation, incrementedValue);
-            }break;
+            case InstructionSet.OP_INC_ABS_IX:
+                withByteXIndexedAt(nextProgramWord(), this::performINC);
+            break;
 
             case InstructionSet.OP_DEC_Z: {
                 int decrementLocation = nextProgramByte();
@@ -840,5 +820,18 @@ public class CPU {
         setBorrowFlagFor(initialValue);
         registers.setFlagsBasedOn(rotatedValue);
         return rotatedValue & 0xFF;
+    }
+
+    public int performLSR(int byteValue){
+        int shiftedByteValue = byteValue >> 1;
+        setBorrowFlagFor(byteValue);
+        registers.setFlagsBasedOn(shiftedByteValue);
+        return shiftedByteValue;
+    }
+
+    public int performINC(int initialValue){
+        int incrementedValue = (initialValue + 1) & 0xFF;
+        registers.setFlagsBasedOn(incrementedValue);
+        return incrementedValue;
     }
 }
