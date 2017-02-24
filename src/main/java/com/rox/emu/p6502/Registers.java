@@ -70,14 +70,6 @@ public class Registers {
         updateNegativeFlagBasedOn(valueByte);
     }
 
-    public void incrementRegisterWithFlags(int registerID){
-        setRegisterAndFlags(registerID, getRegister(registerID) + 1);
-    }
-
-    public void decrementRegisterWithFlags(int registerID){
-        setRegisterAndFlags(registerID, getRegister(registerID) - 1);
-    }
-
     public void setPC(int wordPC){
         setRegister(REG_PC_HIGH, wordPC >> 8);
         setRegister(REG_PC_LOW, wordPC & 0xFF);
