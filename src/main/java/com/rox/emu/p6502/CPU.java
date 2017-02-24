@@ -123,6 +123,13 @@ public class CPU {
             step();
     }
 
+    public int performLSR(int byteValue){
+        int shiftedByteValue = byteValue >> 1;
+        setBorrowFlagFor(byteValue);
+        registers.setFlagsBasedOn(shiftedByteValue);
+        return shiftedByteValue;
+    }
+
     public void step() {
         System.out.println("\n*** STEP >>>");
 
@@ -152,54 +159,24 @@ public class CPU {
                 withByteAt(nextProgramWord(), this::performASL);
             break;
 
-            case InstructionSet.OP_LSR_A: {
-                int newFakeByte = registers.getRegister(Registers.REG_ACCUMULATOR);
-                setBorrowFlagFor(newFakeByte);
-                registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, newFakeByte >> 1);
-            }
+            case InstructionSet.OP_LSR_A:
+                withRegister(Registers.REG_ACCUMULATOR, this::performLSR);
             break;
 
-            case InstructionSet.OP_LSR_Z: {
-                int location = nextProgramByte();
-                int newFakeByte = memory.getByte(location);
-
-                setBorrowFlagFor(newFakeByte);
-                newFakeByte = newFakeByte >> 1;
-                registers.setFlagsBasedOn(newFakeByte);
-                memory.setByteAt(location, newFakeByte);
-            }
+            case InstructionSet.OP_LSR_Z:
+                withByteAt(nextProgramByte(), this::performLSR);
             break;
 
-            case InstructionSet.OP_LSR_Z_IX: {
-                int location = nextProgramByte();
-                int newFakeByte = getByteOfMemoryXIndexedAt(location);
-                setBorrowFlagFor(newFakeByte);
-                newFakeByte = newFakeByte >> 1;
-                registers.setFlagsBasedOn(newFakeByte);
-                setByteOfMemoryXIndexedAt(location, newFakeByte);
-            }
+            case InstructionSet.OP_LSR_Z_IX:
+                withByteXIndexedAt(nextProgramByte(), this::performLSR);
             break;
 
-            case InstructionSet.OP_LSR_ABS: {
-                int location = nextProgramWord();
-                int newFakeByte = memory.getByte(location);
-
-                setBorrowFlagFor(newFakeByte);
-                newFakeByte = newFakeByte >> 1;
-                registers.setFlagsBasedOn(newFakeByte);
-                memory.setByteAt(location, newFakeByte);
-            }
+            case InstructionSet.OP_LSR_ABS:
+                withByteAt(nextProgramWord(), this::performLSR);
             break;
 
-            case InstructionSet.OP_LSR_ABS_IX: {
-                int location = nextProgramWord();
-                int newFakeByte = getByteOfMemoryXIndexedAt(location);
-
-                setBorrowFlagFor(newFakeByte);
-                newFakeByte = newFakeByte >> 1;
-                registers.setFlagsBasedOn(newFakeByte);
-                setByteOfMemoryXIndexedAt(location, newFakeByte);
-            }
+            case InstructionSet.OP_LSR_ABS_IX:
+                withByteXIndexedAt(nextProgramWord(), this::performLSR);
             break;
 
             case InstructionSet.OP_ROL_A:
