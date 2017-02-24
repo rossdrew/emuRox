@@ -194,7 +194,7 @@ public class CPU {
 
             /* Not implemented and/or not published on older 6502s */
             case InstructionSet.OP_ROR_A:
-                registers.setRegister(Registers.REG_ACCUMULATOR, performROR(registers.getRegister(Registers.REG_ACCUMULATOR)));
+                withRegister(Registers.REG_ACCUMULATOR, this::performROR);
                 break;
 
             case InstructionSet.OP_SEC:
@@ -236,24 +236,24 @@ public class CPU {
                 withByteAt(nextProgramWord(), this::performDEC);
             break;
 
-            case InstructionSet.OP_DEC_ABS_IX: 
+            case InstructionSet.OP_DEC_ABS_IX:
                 withByteXIndexedAt(nextProgramWord(), this::performDEC);
             break;
 
             case InstructionSet.OP_INX:
-                registers.incrementRegisterWithFlags(Registers.REG_X_INDEX);
+                withRegister(Registers.REG_X_INDEX, this::performINC);
                 break;
 
             case InstructionSet.OP_DEX:
-                registers.decrementRegisterWithFlags(Registers.REG_X_INDEX);
+                withRegister(Registers.REG_X_INDEX, this::performDEC);
                 break;
 
             case InstructionSet.OP_INY:
-                registers.incrementRegisterWithFlags(Registers.REG_Y_INDEX);
+                withRegister(Registers.REG_Y_INDEX, this::performINC);
                 break;
 
             case InstructionSet.OP_DEY:
-                registers.decrementRegisterWithFlags(Registers.REG_Y_INDEX);
+                withRegister(Registers.REG_Y_INDEX, this::performDEC);
                 break;
 
             case InstructionSet.OP_LDX_I:
