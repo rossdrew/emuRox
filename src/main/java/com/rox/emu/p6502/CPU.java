@@ -219,7 +219,7 @@ public class CPU {
                 withByteAt(nextProgramWord(), this::performROL);
                 break;
 
-            case InstructionSet.OP_ROL_ABS_IX: 
+            case InstructionSet.OP_ROL_ABS_IX:
                 withByteXIndexedAt(nextProgramWord(), this::performROL);
              break;
 
@@ -795,6 +795,44 @@ public class CPU {
         return (result & 0xFF);
     }
 
+    private void performAND(int byteTerm){
+        registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, byteTerm & registers.getRegister(Registers.REG_ACCUMULATOR));
+    }
+
+    private int performADC(int byteTerm){
+        int carry = (registers.getFlag(Registers.STATUS_FLAG_CARRY) ? 1 : 0);
+        return addToAccumulator(byteTerm + carry);
+    }
+
+    //(1) compliment of carry flag added (so subtracted) as well
+    //(2) set carry if no borrow required (A >= M[v])
+    private int performSBC(int byteTerm){
+        registers.setFlag(Registers.STATUS_FLAG_NEGATIVE);
+        int borrow = (registers.getFlag(Registers.STATUS_FLAG_CARRY) ? 0 : 1);
+        return addToAccumulator(twosComplimentOf(byteTerm + borrow));
+    }
+
+    private void performBIT(int memData) {
+        if ((memData & registers.getRegister(Registers.REG_ACCUMULATOR)) == memData)
+            registers.setFlag(Registers.STATUS_FLAG_ZERO);
+        else
+            registers.clearFlag(Registers.STATUS_FLAG_ZERO);
+
+        //Set N, V to bits 7 and 6 of memory data
+        registers.setRegister(Registers.REG_STATUS, (memData & 0b11000000) | (registers.getRegister(Registers.REG_STATUS) & 0b00111111));
+    }
+
+    //XXX Need to use 2s compliment addition (subtraction)
+    private void performCMP(int value, int toRegister){
+        int result = registers.getRegister(toRegister) - value;
+        registers.setFlagsBasedOn(result & 0xFF);
+
+        if (result >=0)
+            registers.setFlag(Registers.STATUS_FLAG_CARRY);
+        else
+            registers.clearFlag(Registers.STATUS_FLAG_CARRY);
+    }
+
     /**
      * Functional interface for any operation on a byte
      */
@@ -821,43 +859,5 @@ public class CPU {
         setBorrowFlagFor(initialValue);
         registers.setFlagsBasedOn(rotatedValue);
         return rotatedValue & 0xFF;
-    }
-
-    private void performBIT(int memData) {
-        if ((memData & registers.getRegister(Registers.REG_ACCUMULATOR)) == memData)
-            registers.setFlag(Registers.STATUS_FLAG_ZERO);
-        else
-            registers.clearFlag(Registers.STATUS_FLAG_ZERO);
-
-        //Set N, V to bits 7 and 6 of memory data
-        registers.setRegister(Registers.REG_STATUS, (memData & 0b11000000) | (registers.getRegister(Registers.REG_STATUS) & 0b00111111));
-    }
-
-    //XXX Need to use 2s compliment addition (subtraction)
-    private void performCMP(int value, int toRegister){
-        int result = registers.getRegister(toRegister) - value;
-        registers.setFlagsBasedOn(result & 0xFF);
-
-        if (result >=0)
-            registers.setFlag(Registers.STATUS_FLAG_CARRY);
-        else
-            registers.clearFlag(Registers.STATUS_FLAG_CARRY);
-    }
-
-    private void performAND(int byteTerm){
-        registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, byteTerm & registers.getRegister(Registers.REG_ACCUMULATOR));
-    }
-
-    private int performADC(int byteTerm){
-        int carry = (registers.getFlag(Registers.STATUS_FLAG_CARRY) ? 1 : 0);
-        return addToAccumulator(byteTerm + carry);
-    }
-
-    //(1) compliment of carry flag added (so subtracted) as well
-    //(2) set carry if no borrow required (A >= M[v])
-    private int performSBC(int byteTerm){
-        registers.setFlag(Registers.STATUS_FLAG_NEGATIVE);
-        int borrow = (registers.getFlag(Registers.STATUS_FLAG_CARRY) ? 0 : 1);
-        return addToAccumulator(twosComplimentOf(byteTerm + borrow));
     }
 }
