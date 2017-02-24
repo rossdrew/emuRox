@@ -137,28 +137,20 @@ public class CPU {
             }
             break;
 
-            case InstructionSet.OP_ASL_Z: {
-                int location = nextProgramByte();
-                memory.setByteAt(location, performASL(memory.getByte(location)));
-            }
+            case InstructionSet.OP_ASL_Z:
+                withByteAt(nextProgramByte(), this::performASL);
             break;
 
-            case InstructionSet.OP_ASL_Z_IX: {
-                int location = nextProgramByte();
-                setByteOfMemoryXIndexedAt(location, performASL(getByteOfMemoryXIndexedAt(location)));
-            }
+            case InstructionSet.OP_ASL_Z_IX:
+                withByteXIndexedAt(nextProgramByte(), this::performASL);
             break;
 
-            case InstructionSet.OP_ASL_ABS_IX: {
-                int location = nextProgramWord();
-                setByteOfMemoryXIndexedAt(location, performASL(getByteOfMemoryXIndexedAt(location)));
-            }
+            case InstructionSet.OP_ASL_ABS_IX:
+                withByteXIndexedAt(nextProgramWord(), this::performASL);
             break;
 
-            case InstructionSet.OP_ASL_ABS: {
-                int location = nextProgramWord();
-                memory.setByteAt(location, performASL(memory.getByte(location)));
-            }
+            case InstructionSet.OP_ASL_ABS:
+                withByteAt(nextProgramWord(), this::performASL);
             break;
 
             case InstructionSet.OP_LSR_A: {
@@ -758,6 +750,20 @@ public class CPU {
 
         //Set N, V to bits 7 and 6 of memory data
         registers.setRegister(Registers.REG_STATUS, (memData & 0b11000000) | (registers.getRegister(Registers.REG_STATUS) & 0b00111111));
+    }
+
+    private void withByteAt(int location, MemoryOperation memoryOperation){
+        int b = getByteOfMemoryAt(location);
+        setByteOfMemoryAt(location, memoryOperation.perform(b));
+    }
+
+    private void withByteXIndexedAt(int location, MemoryOperation memoryOperation){
+        int b = getByteOfMemoryXIndexedAt(location);
+        setByteOfMemoryXIndexedAt(location, memoryOperation.perform(b));
+    }
+
+    public interface MemoryOperation {
+        int perform(int byteValue);
     }
 
     private int performASL(int byteValue){
