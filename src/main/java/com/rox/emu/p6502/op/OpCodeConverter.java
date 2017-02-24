@@ -7,7 +7,7 @@ import com.rox.emu.UnknownOpCodeException;
  *
  * e.g.  OP_ADC_I  ->  "ADC (Immediate)"
  */
-public class OpCodeNameConverter {
+public class OpCodeConverter {
     //Internal representation details
     public static final String SEPERATOR = "_";
     public static final int OP_DELIMETER = 0;
@@ -84,4 +84,5 @@ public class OpCodeNameConverter {
         }
         return indexingModeDescription;
     }
+
 }

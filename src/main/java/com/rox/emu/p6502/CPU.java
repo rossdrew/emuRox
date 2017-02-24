@@ -349,13 +349,13 @@ public class CPU {
                 performAND(getByteOfMemoryYIndexedAt(nextProgramWord()));
                 break;
 
-            case InstructionSet.OP_BIT_Z: {
+            case InstructionSet.OP_BIT_Z:
                 performBIT(memory.getByte(nextProgramByte()));
-            }break;
+            break;
 
-            case InstructionSet.OP_BIT_ABS: {
+            case InstructionSet.OP_BIT_ABS:
                 performBIT(memory.getByte(nextProgramWord()));
-            }break;
+            break;
 
             case InstructionSet.OP_ORA_I:
                 registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, nextProgramByte() | accumulatorBeforeOperation);

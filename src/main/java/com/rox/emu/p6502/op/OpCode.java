@@ -162,7 +162,7 @@ public enum OpCode {
 
     OpCode(int byteValue){
         this.byteValue = byteValue;
-        description = OpCodeNameConverter.toDescription(this.name());
+        description = OpCodeConverter.toDescription(this.name());
     }
 
     public int getByteValue(){
