@@ -728,60 +728,14 @@ public class CPU {
         registers.setRegister(Registers.REG_SP, registers.getRegister(Registers.REG_SP) - 1);
     }
 
-    private int performROL(int initialValue){
-        int rotatedValue = (initialValue << 1) | (registers.getFlag(Registers.STATUS_FLAG_CARRY) ? 1 : 0);
-        registers.setFlagsBasedOn(rotatedValue);
-        setCarryFlagBasedOn(rotatedValue);
-        return rotatedValue & 0xFF;
-    }
-
-    private int performROR(int initialValue){
-        int rotatedValue = (initialValue >> 1) | (registers.getFlag(Registers.STATUS_FLAG_CARRY) ? 0b10000000 : 0);
-        setBorrowFlagFor(initialValue);
-        registers.setFlagsBasedOn(rotatedValue);
-        return rotatedValue & 0xFF;
-    }
-
-    private void performBIT(int memData) {
-        if ((memData & registers.getRegister(Registers.REG_ACCUMULATOR)) == memData)
-            registers.setFlag(Registers.STATUS_FLAG_ZERO);
-        else
-            registers.clearFlag(Registers.STATUS_FLAG_ZERO);
-
-        //Set N, V to bits 7 and 6 of memory data
-        registers.setRegister(Registers.REG_STATUS, (memData & 0b11000000) | (registers.getRegister(Registers.REG_STATUS) & 0b00111111));
-    }
-
-    private void withByteAt(int location, MemoryOperation memoryOperation){
+    private void withByteAt(int location, ByteOperation byteOperation){
         int b = getByteOfMemoryAt(location);
-        setByteOfMemoryAt(location, memoryOperation.perform(b));
+        setByteOfMemoryAt(location, byteOperation.perform(b));
     }
 
-    private void withByteXIndexedAt(int location, MemoryOperation memoryOperation){
+    private void withByteXIndexedAt(int location, ByteOperation byteOperation){
         int b = getByteOfMemoryXIndexedAt(location);
-        setByteOfMemoryXIndexedAt(location, memoryOperation.perform(b));
-    }
-
-    public interface MemoryOperation {
-        int perform(int byteValue);
-    }
-
-    private int performASL(int byteValue){
-        int newValue = byteValue << 1;
-        setCarryFlagBasedOn(newValue);
-        registers.setFlagsBasedOn(newValue);
-        return newValue;
-    }
-
-    //XXX Need to use 2s compliment addition (subtraction)
-    private void performCMP(int value, int toRegister){
-        int result = registers.getRegister(toRegister) - value;
-        registers.setFlagsBasedOn(result & 0xFF);
-
-        if (result >=0)
-            registers.setFlag(Registers.STATUS_FLAG_CARRY);
-        else
-            registers.clearFlag(Registers.STATUS_FLAG_CARRY);
+        setByteOfMemoryXIndexedAt(location, byteOperation.perform(b));
     }
 
     private void setBorrowFlagFor(int newFakeByte) {
@@ -817,23 +771,6 @@ public class CPU {
             registers.setRegister(Registers.REG_PC_LOW, registers.getRegister(Registers.REG_PC_LOW) + displacementByte);
     }
 
-    private void performAND(int byteTerm){
-        registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, byteTerm & registers.getRegister(Registers.REG_ACCUMULATOR));
-    }
-
-    private int performADC(int byteTerm){
-        int carry = (registers.getFlag(Registers.STATUS_FLAG_CARRY) ? 1 : 0);
-        return addToAccumulator(byteTerm + carry);
-    }
-
-    //(1) compliment of carry flag added (so subtracted) as well
-    //(2) set carry if no borrow required (A >= M[v])
-    private int performSBC(int byteTerm){
-        registers.setFlag(Registers.STATUS_FLAG_NEGATIVE);
-        int borrow = (registers.getFlag(Registers.STATUS_FLAG_CARRY) ? 0 : 1);
-        return addToAccumulator(twosComplimentOf(byteTerm + borrow));
-    }
-
     private int twosComplimentOf(int byteValue){
         return ((~byteValue) + 1) & 0xFF;
     }
@@ -862,5 +799,71 @@ public class CPU {
             registers.setFlag(Registers.STATUS_FLAG_OVERFLOW);
 
         return (result & 0xFF);
+    }
+
+    /**
+     * Functional interface for any operation on a byte
+     */
+    public interface ByteOperation {
+        int perform(int byteValue);
+    }
+
+    private int performASL(int byteValue){
+        int newValue = byteValue << 1;
+        setCarryFlagBasedOn(newValue);
+        registers.setFlagsBasedOn(newValue);
+        return newValue;
+    }
+
+    private int performROL(int initialValue){
+        int rotatedValue = (initialValue << 1) | (registers.getFlag(Registers.STATUS_FLAG_CARRY) ? 1 : 0);
+        registers.setFlagsBasedOn(rotatedValue);
+        setCarryFlagBasedOn(rotatedValue);
+        return rotatedValue & 0xFF;
+    }
+
+    private int performROR(int initialValue){
+        int rotatedValue = (initialValue >> 1) | (registers.getFlag(Registers.STATUS_FLAG_CARRY) ? 0b10000000 : 0);
+        setBorrowFlagFor(initialValue);
+        registers.setFlagsBasedOn(rotatedValue);
+        return rotatedValue & 0xFF;
+    }
+
+    private void performBIT(int memData) {
+        if ((memData & registers.getRegister(Registers.REG_ACCUMULATOR)) == memData)
+            registers.setFlag(Registers.STATUS_FLAG_ZERO);
+        else
+            registers.clearFlag(Registers.STATUS_FLAG_ZERO);
+
+        //Set N, V to bits 7 and 6 of memory data
+        registers.setRegister(Registers.REG_STATUS, (memData & 0b11000000) | (registers.getRegister(Registers.REG_STATUS) & 0b00111111));
+    }
+
+    //XXX Need to use 2s compliment addition (subtraction)
+    private void performCMP(int value, int toRegister){
+        int result = registers.getRegister(toRegister) - value;
+        registers.setFlagsBasedOn(result & 0xFF);
+
+        if (result >=0)
+            registers.setFlag(Registers.STATUS_FLAG_CARRY);
+        else
+            registers.clearFlag(Registers.STATUS_FLAG_CARRY);
+    }
+
+    private void performAND(int byteTerm){
+        registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, byteTerm & registers.getRegister(Registers.REG_ACCUMULATOR));
+    }
+
+    private int performADC(int byteTerm){
+        int carry = (registers.getFlag(Registers.STATUS_FLAG_CARRY) ? 1 : 0);
+        return addToAccumulator(byteTerm + carry);
+    }
+
+    //(1) compliment of carry flag added (so subtracted) as well
+    //(2) set carry if no borrow required (A >= M[v])
+    private int performSBC(int byteTerm){
+        registers.setFlag(Registers.STATUS_FLAG_NEGATIVE);
+        int borrow = (registers.getFlag(Registers.STATUS_FLAG_CARRY) ? 0 : 1);
+        return addToAccumulator(twosComplimentOf(byteTerm + borrow));
     }
 }
