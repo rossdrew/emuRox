@@ -224,34 +224,21 @@ public class CPU {
                 withByteXIndexedAt(nextProgramWord(), this::performINC);
             break;
 
-            case InstructionSet.OP_DEC_Z: {
-                int decrementLocation = nextProgramByte();
-                int decrementedValue = (getByteOfMemoryAt(decrementLocation) - 1) & 0xFF;
-                registers.setFlagsBasedOn(decrementedValue);
-                setByteOfMemoryAt(decrementLocation, decrementedValue);
-            }break;
+            case InstructionSet.OP_DEC_Z:
+                withByteAt(nextProgramByte(), this::performDEC);
+            break;
 
-            case InstructionSet.OP_DEC_Z_IX: {
-                int decrementLocation = nextProgramByte();
-                int value = getByteOfMemoryXIndexedAt(decrementLocation);
-                int decrementedValue = (value - 1) & 0xFF;
-                registers.setFlagsBasedOn(decrementedValue);
-                setByteOfMemoryXIndexedAt(decrementLocation, decrementedValue);
-            }break;
+            case InstructionSet.OP_DEC_Z_IX:
+                withByteXIndexedAt(nextProgramByte(), this::performDEC);
+            break;
 
-            case InstructionSet.OP_DEC_ABS: {
-                int decrementLocation = nextProgramWord();
-                int decrementedValue = (getByteOfMemoryAt(decrementLocation) - 1) & 0xFF;
-                registers.setFlagsBasedOn(decrementedValue);
-                setByteOfMemoryAt(decrementLocation, decrementedValue);
-            }break;
+            case InstructionSet.OP_DEC_ABS:
+                withByteAt(nextProgramWord(), this::performDEC);
+            break;
 
-            case InstructionSet.OP_DEC_ABS_IX: {
-                int decrementLocation = nextProgramWord();
-                int decrementedValue = (getByteOfMemoryXIndexedAt(decrementLocation) - 1) & 0xFF;
-                registers.setFlagsBasedOn(decrementedValue);
-                setByteOfMemoryXIndexedAt(decrementLocation, decrementedValue);
-            }break;
+            case InstructionSet.OP_DEC_ABS_IX: 
+                withByteXIndexedAt(nextProgramWord(), this::performDEC);
+            break;
 
             case InstructionSet.OP_INX:
                 registers.incrementRegisterWithFlags(Registers.REG_X_INDEX);
@@ -831,6 +818,12 @@ public class CPU {
 
     public int performINC(int initialValue){
         int incrementedValue = (initialValue + 1) & 0xFF;
+        registers.setFlagsBasedOn(incrementedValue);
+        return incrementedValue;
+    }
+
+    public int performDEC(int initialValue){
+        int incrementedValue = (initialValue - 1) & 0xFF;
         registers.setFlagsBasedOn(incrementedValue);
         return incrementedValue;
     }
