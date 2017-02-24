@@ -87,6 +87,18 @@ public class OpCodeConverterTest {
     }
 
     @Test
+    public void testUnknownAddressingMode(){
+        try {
+            String description = OpCodeConverter.toDescription("OP_LSR_XXX");
+            fail("Invalid OpCode should throw an exception, got " + description);
+        }catch(UnknownOpCodeException e){
+            assertNotNull(e.getMessage());
+            assertNotNull(e.getOpCode());
+            assertEquals("[OP, LSR, XXX]", e.getOpCode());
+        }
+    }
+
+    @Test
     public void testValidXIndexedOpCode(){
         String description = OpCodeConverter.toDescription("OP_LSR_Z_IX");
         assertEquals("LSR (" + OpCodeConverter.ADDR_Z + OpCodeConverter.INDEX_X + ")", description);
@@ -96,5 +108,17 @@ public class OpCodeConverterTest {
     public void testValidYIndexedOpCode(){
         String description = OpCodeConverter.toDescription("OP_LSR_Z_IY");
         assertEquals("LSR (" + OpCodeConverter.ADDR_Z + OpCodeConverter.INDEX_Y + ")", description);
+    }
+
+    @Test
+    public void testUnknownIndexingMode(){
+        try {
+            String description = OpCodeConverter.toDescription("OP_LSR_Z_IZ");
+            fail("Invalid OpCode should throw an exception, got " + description);
+        }catch(UnknownOpCodeException e){
+            assertNotNull(e.getMessage());
+            assertNotNull(e.getOpCode());
+            assertEquals("[OP, LSR, Z, IZ]", e.getOpCode());
+        }
     }
 }

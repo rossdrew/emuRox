@@ -2,6 +2,8 @@ package com.rox.emu.p6502.op;
 
 import com.rox.emu.UnknownOpCodeException;
 
+import java.util.Arrays;
+
 /**
  * Utility for converting internal opcode representation names to human readable descriptions
  *
@@ -62,6 +64,8 @@ public class OpCodeConverter {
                 case "IND":
                     addressingModeDescription += ADDR_IND;
                     break;
+                default:
+                    throw new UnknownOpCodeException("Unrecognised addressing mode " + t[OP_ADD], Arrays.toString(t));
             }
             addressingModeDescription += getIndexingMode(t);
         }else{
@@ -80,6 +84,8 @@ public class OpCodeConverter {
                 case "IY":
                     indexingModeDescription += INDEX_Y;
                     break;
+                default:
+                    throw new UnknownOpCodeException("Unrecognised indexing mode " + t[OP_ADD], Arrays.toString(t));
             }
         }
         return indexingModeDescription;
