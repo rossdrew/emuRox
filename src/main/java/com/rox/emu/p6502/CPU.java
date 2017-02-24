@@ -207,27 +207,21 @@ public class CPU {
                 registers.setRegister(Registers.REG_ACCUMULATOR, performROL(registers.getRegister(Registers.REG_ACCUMULATOR)));
             break;
 
-            case InstructionSet.OP_ROL_Z: {
-                int location = nextProgramByte();
-                memory.setByteAt(location, performROL(memory.getByte(location)));
-            }break;
+            case InstructionSet.OP_ROL_Z:
+                withByteAt(nextProgramByte(), this::performROL);
+            break;
 
-            case InstructionSet.OP_ROL_Z_IX: {
-                int location = nextProgramByte();
-                int result = performROL(getByteOfMemoryXIndexedAt(location));
-                setByteOfMemoryXIndexedAt(location, result);
-            }break;
+            case InstructionSet.OP_ROL_Z_IX:
+                withByteXIndexedAt(nextProgramByte(), this::performROL);
+             break;
 
-            case InstructionSet.OP_ROL_ABS: {
-                int location = nextProgramWord();
-                memory.setByteAt(location, performROL(memory.getByte(location)));
-            }break;
+            case InstructionSet.OP_ROL_ABS:
+                withByteAt(nextProgramWord(), this::performROL);
+                break;
 
-            case InstructionSet.OP_ROL_ABS_IX: {
-                int location = nextProgramWord();
-                int result = performROL(getByteOfMemoryXIndexedAt(location));
-                setByteOfMemoryXIndexedAt(location, result);
-            }break;
+            case InstructionSet.OP_ROL_ABS_IX: 
+                withByteXIndexedAt(nextProgramWord(), this::performROL);
+             break;
 
             /* Not implemented and/or not published on older 6502s */
             case InstructionSet.OP_ROR_A:
