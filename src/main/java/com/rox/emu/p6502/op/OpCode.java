@@ -42,6 +42,7 @@ public enum OpCode {
             OP_ORA_Z_IX(0x15),
             OP_ORA_ABS(0x0D),
             OP_ORA_ABS_IX(0x1D),
+            OP_ORA_ABS_IY(0x19),
 
             OP_EOR_I(0x49),
             OP_EOR_Z(0x45),

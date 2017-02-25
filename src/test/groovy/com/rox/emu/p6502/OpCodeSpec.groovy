@@ -1036,6 +1036,38 @@ class OpCodeSpec extends Specification {
         0b00000001 | 4     | 0b10000010  | 0b10000011          | false  | true  | "Negative result"
     }
 
+    @Unroll("ORA (Absolute[Y]) #Expected:  #firstValue | #secondValue = #expectedAccumulator in Accumulator.")
+    def testOR_ABS_IY(){
+        when:
+        Memory memory = new SimpleMemory(65534);
+        int[] program = [OP_LDY_I, index,
+                         OP_LDA_I, firstValue,
+                         OP_STA_ABS_IY, 0x20, 0x05,
+                         OP_LDA_I, secondValue,
+                         OP_ORA_ABS_IY, 0x20, 0x05]
+        memory.setMemory(0, program);
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        processor.step(5)
+        Registers registers = processor.getRegisters()
+
+        then:
+        registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
+        registers.getPC() == program.length
+        Z == registers.statusFlags[Registers.Z]
+        N == registers.statusFlags[Registers.N]
+
+        where:
+        firstValue | index | secondValue | expectedAccumulator | Z      | N     | Expected
+        0b00000001 | 0     | 0b00000001  | 0b00000001          | false  | false | "Duplicate bits"
+        0b00000000 | 1     | 0b00000001  | 0b00000001          | false  | false | "One bit in Accumulator"
+        0b00000001 | 2     | 0b00000000  | 0b00000001          | false  | false | "One bit from passed value"
+        0b00000001 | 3     | 0b00000010  | 0b00000011          | false  | false | "One bit fro Accumulator, one from new value"
+        0b00000001 | 4     | 0b10000010  | 0b10000011          | false  | true  | "Negative result"
+    }
+
     @Unroll("EOR (Immediate) #Expected:  #firstValue ^ #secondValue = #expectedAccumulator in Accumulator.")
     def testEOR(){
         when:
