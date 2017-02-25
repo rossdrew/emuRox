@@ -882,7 +882,7 @@ class OpCodeSpec extends Specification {
         0x4        | 0x40       | 0b00101010 | 3     | 0b00011010  | 0b00001010  | false  | false | "Multiple matched/unmatched bits"
     }
 
-    @Unroll("AND (Indirect, X) #Expected: #firstValue & #secondValue = #expectedAcc")
+    @Unroll("AND (Indirect, X) #Expected: #firstValue (@[#locationHi|#locationLo]) & #secondValue = #expectedAcc")
     def testAND_IND_IX() {
         when:
         Memory memory = new SimpleMemory(65534);
@@ -2815,6 +2815,34 @@ class OpCodeSpec extends Specification {
         0x20     | 1     | 0x0E  | "Store at index 1"
         0x20     | 2     | 0x0D  | "Store at index 2"
         0x20     | 3     | 0x0C  | "Store at index 3"
+    }
+
+    @Unroll("STA (Absolute) #expected: Store #value at [#locationHi|#locationLo@#index]")
+    def testOP_STA_ABS(){
+        when:
+        Memory memory = new SimpleMemory(65534);
+        int[] program = [OP_LDA_I, value,
+                         OP_STA_ABS, locationHi, locationLo];
+        memory.setMemory(0, program);
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        Registers registers = processor.getRegisters()
+
+        and:
+        processor.step(2)
+
+        then:
+        registers.getPC() == program.length
+        memory.getByte((locationHi << 8 | locationLo)) == value
+
+        where:
+        locationHi | locationLo | value | expected
+        0x20       |  0         | 0x0F  | "Store with 0 index"
+        0x20       |  30        | 0x0E  | "Store at index 1"
+        0x20       |  9         | 0x0D  | "Store at index 2"
+        0x20       |  1         | 0x0C  | "Store at index 3"
     }
 
     @Unroll("STA (Absolute[X]) #expected: Store #value at [#locationHi|#locationLo@#index]")

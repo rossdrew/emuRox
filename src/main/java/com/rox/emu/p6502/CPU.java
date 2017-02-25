@@ -349,6 +349,11 @@ public class CPU {
                 performAND(getByteOfMemoryYIndexedAt(nextProgramWord()));
                 break;
 
+            case InstructionSet.OP_AND_IND_IX: {
+                int pointerLocation = getWordOfMemoryXIndexedAt(nextProgramByte());
+                performAND(getByteOfMemoryAt(pointerLocation));
+            }break;
+
             case InstructionSet.OP_BIT_Z:
                 performBIT(memory.getByte(nextProgramByte()));
             break;
@@ -517,9 +522,9 @@ public class CPU {
                 memory.setByteAt(nextProgramByte(), registers.getRegister(Registers.REG_ACCUMULATOR));
                 break;
 
-            case InstructionSet.OP_STA_ABS:
-                memory.setByteAt(nextProgramWord(), registers.getRegister(Registers.REG_ACCUMULATOR));
-                break;
+//            case InstructionSet.OP_STA_ABS:
+//                memory.setByteAt(nextProgramWord(), registers.getRegister(Registers.REG_ACCUMULATOR));
+//                break;
 
             case InstructionSet.OP_STA_Z_IX:
                 setByteOfMemoryXIndexedAt(nextProgramByte(), registers.getRegister(Registers.REG_ACCUMULATOR));
