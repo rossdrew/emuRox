@@ -188,7 +188,7 @@ class OpCodeSpec extends Specification {
         2     | 0xFF                | false | true  | "With negative result"
     }
 
-    @Unroll("LDA (Indirect, X). #Expected: 0x30[#index] -> #indAddress = #expectedAccumulator")
+    @Unroll("LDA (Indirect, X). #Expected: 0x30[#index] -> [#indAddressHi|#indAddressLo] = #expectedAccumulator")
     def testLDA_IND_IX() {
         when:
         Memory memory = new SimpleMemory(65534);
@@ -247,7 +247,7 @@ class OpCodeSpec extends Specification {
         0b11111111 | 0b11111111 | false  | true  | "Load negative value"
     }
 
-    @Unroll("LDX (Absolute): Load [#addressHi | #addressLo] with #firstValue")
+    @Unroll("LDX (Absolute): Load #firstValue from [#addressHi | #addressLo]")
     def testLDX_ABS(){
         when:
         Memory memory = new SimpleMemory(65534);
@@ -276,7 +276,7 @@ class OpCodeSpec extends Specification {
         3         | 0x20       | 0b11111111 | 0b11111111 | false  | true  | "Load negative value"
     }
 
-    @Unroll("LDX (Absolute[Y]): Load [#addressHi | #addressLo] with #firstValue")
+    @Unroll("LDX (Absolute[Y]): Load #firstValue from [#addressHi | #addressLo]")
     def testLDX_ABS_IX(){
         when:
         Memory memory = new SimpleMemory(65534);
@@ -305,11 +305,13 @@ class OpCodeSpec extends Specification {
         2     | 3         | 0x20       | 0b11111111 | 0b11111111 | false  | true  | "Load negative value"
     }
 
-    @Unroll("LDX (Zero Page): Load [#addressHi | #addressLo] with #firstValue")
+    @Unroll("LDX (Zero Page): Load #firstValue from [#address]")
     def testLX_Z(){
         when:
         Memory memory = new SimpleMemory(65534);
-        int[] program = [OP_LDA_I, firstValue, OP_STA_Z, address, OP_LDX_Z, address]
+        int[] program = [OP_LDA_I, firstValue,
+                         OP_STA_Z, address,
+                         OP_LDX_Z, address]
         memory.setMemory(0, program)
 
         and:
@@ -331,11 +333,14 @@ class OpCodeSpec extends Specification {
         3       | 0b11111111 | 0b11111111 | false  | true  | "Load negative value"
     }
 
-    @Unroll("LDX (Zero Page[Y]): Load [#addressHi | #addressLo] with #firstValue")
+    @Unroll("LDX (Zero Page[Y]): Load #firstValue from [#address[#index]")
     def testLX_Z_IY(){
         when:
         Memory memory = new SimpleMemory(65534);
-        int[] program = [OP_LDY_I, index, OP_LDA_I, firstValue, OP_STA_Z, address, OP_LDX_Z_IY, address]
+        int[] program = [OP_LDY_I, index,
+                         OP_LDA_I, firstValue,
+                         OP_STA_Z, address,
+                         OP_LDX_Z_IY, address]
         memory.setMemory(0, program)
 
         and:
@@ -383,11 +388,13 @@ class OpCodeSpec extends Specification {
         0b11111111 | 0b11111111 | false  | true  | "Load negative value"
     }
 
-    @Unroll("LDY (Zero Page): Load [#addressHi | #addressLo] with #firstValue")
+    @Unroll("LDY (Zero Page): Load #firstValue from [#address]")
     def testLDY_Z(){
         when:
         Memory memory = new SimpleMemory(65534);
-        int[] program = [OP_LDA_I, firstValue, OP_STA_Z, address, OP_LDY_Z, address]
+        int[] program = [OP_LDA_I, firstValue,
+                         OP_STA_Z, address,
+                         OP_LDY_Z, address]
         memory.setMemory(0, program)
 
         and:
