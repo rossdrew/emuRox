@@ -2818,7 +2818,7 @@ class OpCodeSpec extends Specification {
         0x20     | 3     | 0x0C  | "Store at index 3"
     }
 
-    @Unroll("STA (Absolute) #expected: Store #value at [#locationHi|#locationLo@#index]")
+    @Unroll("STA (Absolute) #expected: Store #value at [#locationHi|#locationLo]")
     def testOP_STA_ABS(){
         when:
         Memory memory = new SimpleMemory(65534);
@@ -2840,10 +2840,8 @@ class OpCodeSpec extends Specification {
 
         where:
         locationHi | locationLo | value | expected
-        0x20       |  0         | 0x0F  | "Store with 0 index"
-        0x20       |  30        | 0x0E  | "Store at index 1"
-        0x20       |  9         | 0x0D  | "Store at index 2"
-        0x20       |  1         | 0x0C  | "Store at index 3"
+        0x20       |  0         | 0x0F  | "Store with 0 low byte"
+        0x40       |  30        | 0x0E  | "Store at non zero low byte"
     }
 
     @Unroll("STA (Absolute[X]) #expected: Store #value at [#locationHi|#locationLo@#index]")
