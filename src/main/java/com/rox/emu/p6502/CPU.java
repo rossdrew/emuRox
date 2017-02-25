@@ -519,12 +519,12 @@ public class CPU {
                 break;
 
             case InstructionSet.OP_STA_Z:
-                memory.setByteAt(nextProgramByte(), registers.getRegister(Registers.REG_ACCUMULATOR));
+                setByteOfMemoryAt(nextProgramByte(), registers.getRegister(Registers.REG_ACCUMULATOR));
                 break;
 
-//            case InstructionSet.OP_STA_ABS:
-//                memory.setByteAt(nextProgramWord(), registers.getRegister(Registers.REG_ACCUMULATOR));
-//                break;
+            case InstructionSet.OP_STA_ABS:
+                setByteOfMemoryAt(nextProgramWord(), registers.getRegister(Registers.REG_ACCUMULATOR));
+                break;
 
             case InstructionSet.OP_STA_Z_IX:
                 setByteOfMemoryXIndexedAt(nextProgramByte(), registers.getRegister(Registers.REG_ACCUMULATOR));
@@ -741,10 +741,6 @@ public class CPU {
         return (result & 0xFF);
     }
 
-    private void performAND(int byteTerm){
-        registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, byteTerm & registers.getRegister(Registers.REG_ACCUMULATOR));
-    }
-
     private int performADC(int byteTerm){
         int carry = (registers.getFlag(Registers.STATUS_FLAG_CARRY) ? 1 : 0);
         return addToAccumulator(byteTerm + carry);
@@ -777,6 +773,10 @@ public class CPU {
             registers.setFlag(Registers.STATUS_FLAG_CARRY);
         else
             registers.clearFlag(Registers.STATUS_FLAG_CARRY);
+    }
+
+    private void performAND(int byteTerm){
+        registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, byteTerm & registers.getRegister(Registers.REG_ACCUMULATOR));
     }
 
     private void withByteAt(int location, ByteOperation byteOperation){

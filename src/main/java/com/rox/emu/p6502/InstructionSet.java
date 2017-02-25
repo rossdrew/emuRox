@@ -198,7 +198,7 @@ public class InstructionSet {
             case OP_AND_ABS_IX: return "AND (Absolute[X])";
             case OP_AND_ABS_IY: return "AND (Absolute[Y])";
             case OP_AND_ABS:    return "AND (Absolute)";
-            case OP_AND_IND_IX: return "AND (Indirect, X";
+            case OP_AND_IND_IX: return "AND (Indirect, X)";
             case OP_BIT_Z:      return "BIT (Zero Page)";
             case OP_BIT_ABS:    return "BIT (Absolute)";
             case OP_CMP_I:      return "CMP (Immediate)";

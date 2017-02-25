@@ -893,13 +893,14 @@ class OpCodeSpec extends Specification {
                          OP_STA_Z_IX, 0x30,
                          OP_LDA_I, locationLo,
                          OP_STA_Z_IX, 0x31,
+                         OP_LDA_I, secondValue,
                          OP_AND_IND_IX, 0x30]
         memory.setMemory(0, program);
 
         and:
         CPU processor = new CPU(memory)
         processor.reset()
-        processor.step(8)
+        processor.step(9)
         Registers registers = processor.getRegisters()
 
         then:
