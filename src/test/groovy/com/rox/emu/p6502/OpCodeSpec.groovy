@@ -1212,6 +1212,36 @@ class OpCodeSpec extends Specification {
         2     | 0b00000001 | 0b00000001  | 0b00000000          | true   | false | "Not both"
     }
 
+    @Unroll("EOR (Absolute[Y]) #Expected:  #firstValue ^ #secondValue = #expectedAccumulator in Accumulator.")
+    def testEOR_ABS_IY(){
+        when:
+        Memory memory = new SimpleMemory(65534);
+        int[] program = [OP_LDY_I, index,
+                         OP_LDA_I, secondValue,
+                         OP_STA_ABS_IY, 0x20, 0x04,
+                         OP_LDA_I, firstValue,
+                         OP_EOR_ABS_IY, 0x20, 0x04]
+        memory.setMemory(0, program);
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        processor.step(5)
+        Registers registers = processor.getRegisters()
+
+        then:
+        registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
+        registers.getPC() == program.length
+        Z == registers.statusFlags[Registers.Z]
+        N == registers.statusFlags[Registers.N]
+
+        where:
+        index | firstValue | secondValue | expectedAccumulator | Z      | N     | Expected
+        0     | 0b00000001 | 0b00000000  | 0b00000001          | false  | false | "One"
+        1     | 0b00000000 | 0b00000001  | 0b00000001          | false  | false | "The other"
+        2     | 0b00000001 | 0b00000001  | 0b00000000          | true   | false | "Not both"
+    }
+
     @Unroll("SBC (Immediate) #Expected:  #firstValue - #secondValue = #expectedAccumulator in Accumulator.")
     def testSBC(){
         when:
