@@ -326,27 +326,27 @@ public class CPU {
             }break;
 
             case InstructionSet.OP_AND_Z:
-                performAND(getByteOfMemoryAt(nextProgramByte()));
+                withRegisterAndByteAt(Registers.REG_ACCUMULATOR, nextProgramByte(), true, this::performAND2);
                 break;
 
             case InstructionSet.OP_AND_ABS:
-                performAND(getByteOfMemoryAt(nextProgramWord()));
+                withRegisterAndByteAt(Registers.REG_ACCUMULATOR, nextProgramWord(), true, this::performAND2);
                 break;
 
             case InstructionSet.OP_AND_I:
-                performAND(nextProgramByte());
+                withRegisterAndByte(Registers.REG_ACCUMULATOR, nextProgramByte(), true, this::performAND2);
                 break;
 
             case InstructionSet.OP_AND_Z_IX:
-                performAND(getByteOfMemoryXIndexedAt(nextProgramByte()));
+                withRegisterAndByteXIndexedAt(Registers.REG_ACCUMULATOR, nextProgramByte(), true, this::performAND2);
                 break;
 
             case InstructionSet.OP_AND_ABS_IX:
-                performAND(getByteOfMemoryXIndexedAt(nextProgramWord()));
+                withRegisterAndByteXIndexedAt(Registers.REG_ACCUMULATOR, nextProgramWord(), true, this::performAND2);
                 break;
 
             case InstructionSet.OP_AND_ABS_IY:
-                performAND(getByteOfMemoryYIndexedAt(nextProgramWord()));
+                withRegisterAndByteYIndexedAt(Registers.REG_ACCUMULATOR, nextProgramWord(), true, this::performAND2);
                 break;
 
             case InstructionSet.OP_AND_IND_IX: {
@@ -797,7 +797,7 @@ public class CPU {
     /**
      * Functional interface for any operation on a byte
      */
-    public interface ByteOperation {
+    private interface ByteOperation {
         int perform(int byteValue);
     }
 
@@ -822,22 +822,54 @@ public class CPU {
         return rotatedValue & 0xFF;
     }
 
-    public int performLSR(int byteValue){
+    private int performLSR(int byteValue){
         int shiftedByteValue = byteValue >> 1;
         setBorrowFlagFor(byteValue);
         registers.setFlagsBasedOn(shiftedByteValue);
         return shiftedByteValue;
     }
 
-    public int performINC(int initialValue){
+    private int performINC(int initialValue){
         int incrementedValue = (initialValue + 1) & 0xFF;
         registers.setFlagsBasedOn(incrementedValue);
         return incrementedValue;
     }
 
-    public int performDEC(int initialValue){
+    private int performDEC(int initialValue){
         int incrementedValue = (initialValue - 1) & 0xFF;
         registers.setFlagsBasedOn(incrementedValue);
         return incrementedValue;
+    }
+
+    private void withRegisterAndByteAt(int registerId, int memoryLocation, boolean setFlags, TwoByteOperation twoByteOperation){
+        withRegisterAndByte(registerId, getByteOfMemoryAt(memoryLocation), setFlags, twoByteOperation);
+    }
+
+    private void withRegisterAndByteXIndexedAt(int registerId, int memoryLocation, boolean setFlags, TwoByteOperation twoByteOperation){
+        withRegisterAndByte(registerId, getByteOfMemoryXIndexedAt(memoryLocation), setFlags, twoByteOperation);
+    }
+
+    private void withRegisterAndByteYIndexedAt(int registerId, int memoryLocation, boolean setFlags, TwoByteOperation twoByteOperation){
+        withRegisterAndByte(registerId, getByteOfMemoryYIndexedAt(memoryLocation), setFlags, twoByteOperation);
+    }
+
+    private void withRegisterAndByte(int registerId, int byteValue, boolean setFlags, TwoByteOperation twoByteOperation){
+        int registerByte = registers.getRegister(registerId);
+
+        if (setFlags)
+            registers.setRegisterAndFlags(registerId, twoByteOperation.perform(registerByte, byteValue));
+        else
+            registers.setRegister(registerId, twoByteOperation.perform(registerByte, byteValue));
+    }
+
+    /**
+     * Functional interface for any operation on a Register with a byte value
+     */
+    private interface TwoByteOperation {
+        int perform(int byteValueOne, int byteValueTwo);
+    }
+
+    private int performAND2(int byteValueA, int byteValueB){
+        return byteValueA & byteValueB;
     }
 }
