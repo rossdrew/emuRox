@@ -410,6 +410,11 @@ public class CPU {
                 registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, getByteOfMemoryYIndexedAt(nextProgramWord()) ^ accumulatorBeforeOperation);
                 break;
 
+            case InstructionSet.OP_EOR_IND_IX: {
+                int pointerLocation = getWordOfMemoryXIndexedAt(nextProgramByte());
+                withRegisterAndByteAt(Registers.REG_ACCUMULATOR, pointerLocation, true, this::performEOR2);
+            }break;
+
             case InstructionSet.OP_ADC_Z:
                 registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, performADC(getByteOfMemoryAt(nextProgramByte())));
                 break;
@@ -867,5 +872,9 @@ public class CPU {
 
     private int performAND(int byteValueA, int byteValueB){
         return byteValueA & byteValueB;
+    }
+
+    private int performEOR2(int byteValueA, int byteValueB){
+        return byteValueA ^ byteValueB;
     }
 }
