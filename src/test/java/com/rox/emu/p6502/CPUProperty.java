@@ -28,7 +28,7 @@ public class CPUProperty {
         processor.reset();
     }
 
-    @Property
+    @Property (trials = 100)
     public void testValidStartup(@InRange(min = "0", max = "255") int memHi,
                                  @InRange(min = "0", max = "255") int memLo) {
         memory = new SimpleMemory(65534);
@@ -50,7 +50,7 @@ public class CPUProperty {
         assertEquals(0, registers.getRegister(Registers.REG_Y_INDEX));
     }
 
-    @Property
+    @Property (trials = 100)
     public void testValidImmediateADC(@InRange(min = "0", max = "255") int value){
         int[] program = {OP_LDA_I, value};
         memory.setMemory(0, program);
@@ -62,7 +62,7 @@ public class CPUProperty {
         assertEquals(program.length, registers.getPC());
     }
 
-    @Property
+    @Property (trials = 100)
     public void testInvalidImmediateADC(@When(satisfies = "#_ < 0 || #_ > 255") int value){
         int[] program = {OP_LDA_I, value};
         memory.setMemory(0, program);

@@ -1284,6 +1284,40 @@ class OpCodeSpec extends Specification {
         2     | 0b00000001 | 0b00000001  | 0b00000000          | true   | false | "Not both"
     }
 
+    @Unroll("EOR (Indirect, X) #Expected: #firstValue (@[#locationHi|#locationLo]) EOR #secondValue = #expectedAcc")
+    def testEOR_IND_IX() {
+        when:
+        Memory memory = new SimpleMemory(65534);
+        int[] program = [OP_LDA_I, firstValue,      //Value at indirect address
+                         OP_STA_ABS, locationHi, locationLo,
+                         OP_LDX_I, index,
+                         OP_LDA_I, locationHi,      //Indirect address in memory
+                         OP_STA_Z_IX, 0x30,
+                         OP_LDA_I, locationLo,
+                         OP_STA_Z_IX, 0x31,
+                         OP_LDA_I, secondValue,
+                         OP_EOR_IND_IX, 0x30]
+        memory.setMemory(0, program);
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        processor.step(9)
+        Registers registers = processor.getRegisters()
+
+        then:
+        registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAcc
+        registers.getPC() == program.length
+        Z == registers.statusFlags[Registers.Z]
+        N == registers.statusFlags[Registers.N]
+
+        where:
+        locationHi | locationLo | index | firstValue | secondValue | expectedAcc | Z      | N     | Expected
+        0x1        | 0x10       | 0     | 0b00000001 | 0b00000000  | 0b00000001  | false  | false | "One"
+        0x2        | 0x20       | 1     | 0b00000000 | 0b00000001  | 0b00000001  | false  | false | "The other"
+        0x3        | 0x34       | 2     | 0b00000001 | 0b00000001  | 0b00000000  | true   | false | "Not both"
+    }
+
     @Unroll("SBC (Immediate) #Expected:  #firstValue - #secondValue = #expectedAccumulator in Accumulator.")
     def testSBC(){
         when:

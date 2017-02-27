@@ -54,6 +54,7 @@ public class InstructionSet {
     public static final int OP_EOR_ABS = 0x4D;
     public static final int OP_EOR_ABS_IX = 0x5D;
     public static final int OP_EOR_ABS_IY = 0x59;
+    public static final int OP_EOR_IND_IX = 0x41;
     public static final int OP_SBC_I = 0xE9;
     public static final int OP_SBC_Z = 0xE5;
     public static final int OP_SBC_Z_IX = 0xF5;
