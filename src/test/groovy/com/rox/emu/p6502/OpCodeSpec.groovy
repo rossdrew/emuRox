@@ -558,7 +558,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("ADC (Zero Page) #Expected:  #firstValue + #secondValue = #expectedAccumulator in Accumulator.")
-    def testADCFromZeroPage(){
+    def testADC_Z(){
         when:
         Memory memory = new SimpleMemory(65534);
         int[] program = [OP_LDA_I, firstValue, OP_ADC_Z, 0x30]
@@ -587,7 +587,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("ADC (Absolute) #Expected:  #firstValue + #secondValue = #expectedAccumulator in Accumulator.")
-    def testADCAbsolute(){
+    def testADC_ABS(){
         when:
         Memory memory = new SimpleMemory(65534);
         int[] program = [OP_LDA_I, firstValue, OP_ADC_ABS, 0x1, 0x2C]
@@ -647,9 +647,11 @@ class OpCodeSpec extends Specification {
     @Unroll("ADC (Absolute[Y]) #Expected:  #firstValue + #secondValue = #expectedAccumulator in Accumulator.")
     def testADC_ABS_IY(){
         when:
-        Memory memory = new SimpleMemory(65534);
-        int[] program = [OP_LDY_I, index, OP_LDA_I, firstValue, OP_ADC_ABS_IY, 0x1, 0x2C]
-        memory.setMemory(0, program);
+        Memory memory = new SimpleMemory(65534)
+        int[] program = [OP_LDY_I, index,
+                         OP_LDA_I, firstValue,
+                         OP_ADC_ABS_IY, 0x1, 0x2C]
+        memory.setMemory(0, program)
         memory.setByteAt(300 + index, secondValue)
 
         and:
@@ -671,6 +673,40 @@ class OpCodeSpec extends Specification {
         0x0        | 0x0         | 0     | 0x0                 | true   | false | false | false | "With zero result"
         0x50       | 0xD0        | 1     | 0x20                | false  | false | true  | false | "With positive, carried result"
         0x50       | 0x50        | 2     | 0xA0                | false  | true  | false | true  | "With negative overflow"
+    }
+
+    @Unroll("ADC (Indirect, X) #Expected: #firstValue (@[#locationHi|#locationLo]) & #secondValue = #expectedAcc")
+    def testADC_IND_IX() {
+        when:
+        Memory memory = new SimpleMemory(65534);
+        int[] program = [OP_LDA_I, firstValue,    //Value at indirect address
+                         OP_STA_ABS, locationHi, locationLo,
+                         OP_LDX_I, index,
+                         OP_LDA_I, locationHi,  //Indirect address in memory
+                         OP_STA_Z_IX, 0x30,
+                         OP_LDA_I, locationLo,
+                         OP_STA_Z_IX, 0x31,
+                         OP_LDA_I, secondValue,
+                         OP_ADC_IND_IX, 0x30]
+        memory.setMemory(0, program)
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        processor.step(9)
+        Registers registers = processor.getRegisters()
+
+        then:
+        registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAcc
+        registers.getPC() == program.length
+        Z == registers.statusFlags[Registers.Z]
+        N == registers.statusFlags[Registers.N]
+
+        where:
+        locationHi | locationLo | firstValue | secondValue | index | expectedAcc | Z      | N     | C     | O     | Expected
+        0x1        | 0x10       | 0x0        | 0x0         | 0     | 0x0         | true   | false | false | false | "With zero result"
+        0x1        | 0x10       | 0x50       | 0xD0        | 1     | 0x20        | false  | false | true  | false | "With positive, carried result"
+        0x1        | 0x10       | 0x50       | 0x50        | 2     | 0xA0        | false  | true  | false | true  | "With negative overflow"
     }
 
     @Unroll("ADC 16bit [#lowFirstByte|#highFirstByte] + [#lowSecondByte|#highSecondByte] = #Expected")
