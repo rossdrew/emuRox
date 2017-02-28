@@ -439,6 +439,11 @@ public class CPU {
                 registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, performADC(getByteOfMemoryXIndexedAt(nextProgramByte())));
                 break;
 
+            case InstructionSet.OP_ADC_IND_IX: {
+                int pointerLocation = getWordOfMemoryXIndexedAt(nextProgramByte());
+                withRegisterAndByteAt(Registers.REG_ACCUMULATOR, pointerLocation, true, this::performADC2);
+            }break;
+
             case InstructionSet.OP_CMP_I:
                 performCMP(nextProgramByte(), Registers.REG_ACCUMULATOR);
                 break;
@@ -876,5 +881,23 @@ public class CPU {
 
     private int performEOR2(int byteValueA, int byteValueB){
         return byteValueA ^ byteValueB;
+    }
+
+    private int performADC2(int byteValueA, int byteValueB){
+        int carry = (registers.getFlag(Registers.STATUS_FLAG_CARRY) ? 1 : 0);
+        int result = (byteValueA + byteValueB) + carry;
+
+        //Set Carry, if bit 8 is set on new accumulator value, ignoring in 2s compliment addition (subtraction)
+        if (!registers.getFlag(Registers.STATUS_FLAG_NEGATIVE)){
+            setCarryFlagBasedOn(result);
+        }else {
+            registers.clearFlag(Registers.STATUS_FLAG_CARRY);
+        }
+
+        //Set Overflow if the sign of both inputs is different from the sign of the result
+        if (((registers.getRegister(Registers.REG_ACCUMULATOR) ^ result) & (byteValueB ^ result) & 0x80) != 0)
+            registers.setFlag(Registers.STATUS_FLAG_OVERFLOW);
+
+        return (result & 0xFF);
     }
 }
