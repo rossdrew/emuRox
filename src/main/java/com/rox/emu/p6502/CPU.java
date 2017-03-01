@@ -388,7 +388,7 @@ public class CPU {
 
             case InstructionSet.OP_ORA_IND_IX: {
                 int pointerLocation = getWordOfMemoryXIndexedAt(nextProgramByte());
-                withRegisterAndByteAt(Registers.REG_ACCUMULATOR, pointerLocation, true, this::performORA2);
+                withRegisterAndByteAt(Registers.REG_ACCUMULATOR, pointerLocation, true, this::performORA);
             }break;
 
             case InstructionSet.OP_EOR_I:
@@ -888,7 +888,7 @@ public class CPU {
         return byteValueA ^ byteValueB;
     }
 
-    private int performORA2(int byteValueA, int byteValueB){
+    private int performORA(int byteValueA, int byteValueB){
         return byteValueA | byteValueB;
     }
 
