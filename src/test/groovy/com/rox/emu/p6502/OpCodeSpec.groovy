@@ -1123,7 +1123,7 @@ class OpCodeSpec extends Specification {
                          OP_STA_ABS_IY, 0x20, 0x05,
                          OP_LDA_I, secondValue,
                          OP_ORA_ABS_IY, 0x20, 0x05]
-        memory.setMemory(0, program);
+        memory.setMemory(0, program)
 
         and:
         CPU processor = new CPU(memory)
@@ -1158,7 +1158,7 @@ class OpCodeSpec extends Specification {
                          OP_LDA_I, locationLo,
                          OP_STA_Z_IX, 0x31,
                          OP_LDA_I, secondValue,
-                         OP_OR_IND_IX, 0x30]
+                         OP_ORA_IND_IX, 0x30]
         memory.setMemory(0, program)
 
         and:

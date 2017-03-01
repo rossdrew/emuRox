@@ -386,6 +386,11 @@ public class CPU {
                 registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, getByteOfMemoryYIndexedAt(nextProgramWord()) | accumulatorBeforeOperation);
                 break;
 
+            case InstructionSet.OP_ORA_IND_IX: {
+                int pointerLocation = getWordOfMemoryXIndexedAt(nextProgramByte());
+                withRegisterAndByteAt(Registers.REG_ACCUMULATOR, pointerLocation, true, this::performORA2);
+            }break;
+
             case InstructionSet.OP_EOR_I:
                 registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, nextProgramByte() ^ accumulatorBeforeOperation);
                 break;
@@ -881,6 +886,10 @@ public class CPU {
 
     private int performEOR2(int byteValueA, int byteValueB){
         return byteValueA ^ byteValueB;
+    }
+
+    private int performORA2(int byteValueA, int byteValueB){
+        return byteValueA | byteValueB;
     }
 
     private int performADC2(int byteValueA, int byteValueB){
