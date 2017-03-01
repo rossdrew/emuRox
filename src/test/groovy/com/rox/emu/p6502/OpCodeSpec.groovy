@@ -1146,6 +1146,42 @@ class OpCodeSpec extends Specification {
         0b00000001 | 4     | 0b10000010  | 0b10000011          | false  | true  | "Negative result"
     }
 
+    @Unroll("ORA (Indirect, X) #Expected: #firstValue (@[#locationHi|#locationLo]) | #secondValue = #expectedAcc")
+    def testOR_IND_IX() {
+        when:
+        Memory memory = new SimpleMemory(65534)
+        int[] program = [OP_LDA_I, firstValue,    //Value at indirect address
+                         OP_STA_ABS, locationHi, locationLo,
+                         OP_LDX_I, index,
+                         OP_LDA_I, locationHi,  //Indirect address in memory
+                         OP_STA_Z_IX, 0x30,
+                         OP_LDA_I, locationLo,
+                         OP_STA_Z_IX, 0x31,
+                         OP_LDA_I, secondValue,
+                         OP_OR_IND_IX, 0x30]
+        memory.setMemory(0, program)
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        processor.step(9)
+        Registers registers = processor.getRegisters()
+
+        then:
+        registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAcc
+        registers.getPC() == program.length
+        Z == registers.statusFlags[Registers.Z]
+        N == registers.statusFlags[Registers.N]
+
+        where:
+        locationHi | locationLo | firstValue | index | secondValue | expectedAcc | Z      | N     | Expected
+        0x1        | 0x10       | 0b00000001 | 0     | 0b00000001  | 0b00000001  | false  | false | "Duplicate bits"
+        0x2        | 0x20       | 0b00000000 | 1     | 0b00000001  | 0b00000001  | false  | false | "One bit in Accumulator"
+        0x3        | 0x30       | 0b00000001 | 2     | 0b00000000  | 0b00000001  | false  | false | "One bit from passed value"
+        0x4        | 0x40       | 0b00000001 | 3     | 0b00000010  | 0b00000011  | false  | false | "One bit fro Accumulator, one from new value"
+        0x5        | 0x50       | 0b00000001 | 4     | 0b10000010  | 0b10000011  | false  | true  | "Negative result"
+    }
+
     @Unroll("EOR (Immediate) #Expected:  #firstValue ^ #secondValue = #expectedAccumulator in Accumulator.")
     def testEOR(){
         when:
