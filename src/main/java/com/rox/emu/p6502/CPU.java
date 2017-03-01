@@ -417,7 +417,7 @@ public class CPU {
 
             case InstructionSet.OP_EOR_IND_IX: {
                 int pointerLocation = getWordOfMemoryXIndexedAt(nextProgramByte());
-                withRegisterAndByteAt(Registers.REG_ACCUMULATOR, pointerLocation, true, this::performEOR2);
+                withRegisterAndByteAt(Registers.REG_ACCUMULATOR, pointerLocation, true, this::performEOR);
             }break;
 
             case InstructionSet.OP_ADC_Z:
@@ -884,7 +884,7 @@ public class CPU {
         return byteValueA & byteValueB;
     }
 
-    private int performEOR2(int byteValueA, int byteValueB){
+    private int performEOR(int byteValueA, int byteValueB){
         return byteValueA ^ byteValueB;
     }
 
