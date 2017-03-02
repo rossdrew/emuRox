@@ -904,7 +904,7 @@ public class CPU {
         }
 
         //Set Overflow if the sign of both inputs is different from the sign of the result
-        if (((registers.getRegister(Registers.REG_ACCUMULATOR) ^ result) & (byteValueB ^ result) & 0x80) != 0)
+        if (((byteValueA ^ result) & (byteValueB ^ result) & 0x80) != 0)
             registers.setFlag(Registers.STATUS_FLAG_OVERFLOW);
 
         return (result & 0xFF);

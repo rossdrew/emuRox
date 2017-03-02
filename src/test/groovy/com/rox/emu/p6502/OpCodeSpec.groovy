@@ -2,6 +2,7 @@ package com.rox.emu.p6502
 
 import com.rox.emu.Memory
 import com.rox.emu.SimpleMemory
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.rules.ExpectedException
 import org.junit.rules.Timeout
@@ -1582,6 +1583,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("SBC (Indirect, X) #Expected: #firstValue (@[#locationHi|#locationLo]) | #secondValue = #expectedAcc")
+    @spock.lang.Ignore
     def testSBC_IND_IX() {
         when:
         Memory memory = new SimpleMemory(65534)
