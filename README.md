@@ -9,7 +9,7 @@ At the moment, it's invisioned as an emulator for the 6502 processor in order to
 
 ##Progress
 
-Most simply addressed opcodes now implemented, only a few to go then it's just churning out each in all of the addressing modes.
+Most opcodes now implemented.  BRK, RTI and RTS left (ignoring ROR till later).  Still working on Indirect, Y addressing and a couple Indirect, X addressed instructions and we're ready for serious testing of the 6502 and moving onn to other hardware elements of the NES such as the PPU.
  
 ###Development & Testing
 
