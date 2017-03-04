@@ -421,32 +421,32 @@ public class CPU {
             }break;
 
             case InstructionSet.OP_ADC_Z:
-                withRegisterAndByteAt(Registers.REG_ACCUMULATOR, nextProgramByte(), true, this::performADC2);
+                withRegisterAndByteAt(Registers.REG_ACCUMULATOR, nextProgramByte(), true, this::performADC);
                 break;
 
             case InstructionSet.OP_ADC_I:
-                withRegisterAndByte(Registers.REG_ACCUMULATOR, nextProgramByte(), true, this::performADC2);
+                withRegisterAndByte(Registers.REG_ACCUMULATOR, nextProgramByte(), true, this::performADC);
                 break;
 
             case InstructionSet.OP_ADC_ABS:
-                withRegisterAndByteAt(Registers.REG_ACCUMULATOR, nextProgramWord(), true, this::performADC2);
+                withRegisterAndByteAt(Registers.REG_ACCUMULATOR, nextProgramWord(), true, this::performADC);
                 break;
 
             case InstructionSet.OP_ADC_ABS_IX:
-                withRegisterAndByteXIndexedAt(Registers.REG_ACCUMULATOR, nextProgramWord(), true, this::performADC2);
+                withRegisterAndByteXIndexedAt(Registers.REG_ACCUMULATOR, nextProgramWord(), true, this::performADC);
                 break;
 
             case InstructionSet.OP_ADC_ABS_IY:
-                withRegisterAndByteYIndexedAt(Registers.REG_ACCUMULATOR, nextProgramWord(), true, this::performADC2);
+                withRegisterAndByteYIndexedAt(Registers.REG_ACCUMULATOR, nextProgramWord(), true, this::performADC);
                 break;
 
             case InstructionSet.OP_ADC_Z_IX:
-                withRegisterAndByteXIndexedAt(Registers.REG_ACCUMULATOR, nextProgramByte(), true, this::performADC2);
+                withRegisterAndByteXIndexedAt(Registers.REG_ACCUMULATOR, nextProgramByte(), true, this::performADC);
                 break;
 
             case InstructionSet.OP_ADC_IND_IX: {
                 int pointerLocation = getWordOfMemoryXIndexedAt(nextProgramByte());
-                withRegisterAndByteAt(Registers.REG_ACCUMULATOR, pointerLocation, true, this::performADC2);
+                withRegisterAndByteAt(Registers.REG_ACCUMULATOR, pointerLocation, true, this::performADC);
             }break;
 
             case InstructionSet.OP_CMP_I:
@@ -882,7 +882,7 @@ public class CPU {
         return byteValueA | byteValueB;
     }
 
-    private int performADC2(int byteValueA, int byteValueB){
+    private int performADC(int byteValueA, int byteValueB){
         int carry = (registers.getFlag(Registers.STATUS_FLAG_CARRY) ? 1 : 0);
         return (ADC(byteValueA, byteValueB + carry) & 0xFF);
     }
