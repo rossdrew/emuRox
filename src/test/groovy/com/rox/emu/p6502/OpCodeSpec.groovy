@@ -1583,7 +1583,6 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("SBC (Indirect, X) #Expected: #firstValue (@[#locationHi|#locationLo]) | #secondValue = #expectedAcc")
-    @spock.lang.Ignore
     def testSBC_IND_IX() {
         when:
         Memory memory = new SimpleMemory(65534)

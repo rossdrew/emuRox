@@ -521,6 +521,12 @@ public class CPU {
                 registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, performSBC(getByteOfMemoryYIndexedAt(nextProgramWord())));
                 break;
 
+            //TODO
+            case InstructionSet.OP_SBC_IND_IX: {
+                int pointerLocation = getWordOfMemoryXIndexedAt(nextProgramByte());
+                withRegisterAndByte(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(pointerLocation), true, this::performSBC2);
+            }break;
+
             case InstructionSet.OP_STY_Z:
                 memory.setByteAt(nextProgramByte(), registers.getRegister(Registers.REG_Y_INDEX));
                 break;
@@ -908,5 +914,28 @@ public class CPU {
             registers.setFlag(Registers.STATUS_FLAG_OVERFLOW);
 
         return (result & 0xFF);
+    }
+
+    private int performSBC2(int byteTermA, int byteTermB){
+        registers.setFlag(Registers.STATUS_FLAG_NEGATIVE);
+        int borrow = (registers.getFlag(Registers.STATUS_FLAG_CARRY) ? 0 : 1);
+        int termB = twosComplimentOf(byteTermB + borrow);
+
+        int result = byteTermA + termB;
+        System.out.println(" " + Integer.toBinaryString(byteTermA) + "\n+" + Integer.toBinaryString(termB) +"\n--------\n"+Integer.toBinaryString(result) );
+
+        //Set Carry, if bit 8 is set on new accumulator value, ignoring in 2s compliment addition (subtraction)
+        if (!registers.getFlag(Registers.STATUS_FLAG_NEGATIVE)){
+            setCarryFlagBasedOn(result);
+        }else {
+            registers.clearFlag(Registers.STATUS_FLAG_CARRY);
+        }
+
+        //Set Overflow if the sign of both inputs is different from the sign of the result
+        if (((byteTermA ^ result) & (termB ^ result) & 0x80) != 0)
+            registers.setFlag(Registers.STATUS_FLAG_OVERFLOW);
+
+        //Why do I need to convert back from twos compliment in this version? Something is fishy.
+        return fromTwosComplimented(result & 0xFF);
     }
 }
