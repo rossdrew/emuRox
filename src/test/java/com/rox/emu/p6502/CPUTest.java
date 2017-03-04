@@ -889,7 +889,7 @@ public class CPUTest {
         assertEquals(0x03, memory.getByte(0x1FE));
     }
 
-    @Test
+    @Test(timeout = 2000)
     public void testLoop(){
         int[] program = {OP_LDX_I, 10,        //Loop counter
                          OP_LDA_I, 0,         //Sum
