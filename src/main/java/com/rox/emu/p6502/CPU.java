@@ -421,27 +421,27 @@ public class CPU {
             }break;
 
             case InstructionSet.OP_ADC_Z:
-                registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, performADC(getByteOfMemoryAt(nextProgramByte())));
+                withRegisterAndByteAt(Registers.REG_ACCUMULATOR, nextProgramByte(), true, this::performADC2);
                 break;
 
             case InstructionSet.OP_ADC_I:
-                registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, performADC(nextProgramByte()));
+                withRegisterAndByte(Registers.REG_ACCUMULATOR, nextProgramByte(), true, this::performADC2);
                 break;
 
             case InstructionSet.OP_ADC_ABS:
-                registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, performADC(getByteOfMemoryAt(nextProgramWord())));
+                withRegisterAndByteAt(Registers.REG_ACCUMULATOR, nextProgramWord(), true, this::performADC2);
                 break;
 
             case InstructionSet.OP_ADC_ABS_IX:
-                registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, performADC(getByteOfMemoryXIndexedAt(nextProgramWord())));
+                withRegisterAndByteXIndexedAt(Registers.REG_ACCUMULATOR, nextProgramWord(), true, this::performADC2);
                 break;
 
             case InstructionSet.OP_ADC_ABS_IY:
-                registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, performADC(getByteOfMemoryYIndexedAt(nextProgramWord())));
+                withRegisterAndByteYIndexedAt(Registers.REG_ACCUMULATOR, nextProgramWord(), true, this::performADC2);
                 break;
 
             case InstructionSet.OP_ADC_Z_IX:
-                registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, performADC(getByteOfMemoryXIndexedAt(nextProgramByte())));
+                withRegisterAndByteXIndexedAt(Registers.REG_ACCUMULATOR, nextProgramByte(), true, this::performADC2);
                 break;
 
             case InstructionSet.OP_ADC_IND_IX: {
@@ -746,25 +746,9 @@ public class CPU {
      * @param term term to add to the accumulator
      */
     private int addToAccumulator(int term){
-        int result = registers.getRegister(Registers.REG_ACCUMULATOR) + term;
-
-        //Set Carry, if bit 8 is set on new accumulator value, ignoring in 2s compliment addition (subtraction)
-        if (!registers.getFlag(Registers.STATUS_FLAG_NEGATIVE)){
-            setCarryFlagBasedOn(result);
-        }else {
-            registers.clearFlag(Registers.STATUS_FLAG_CARRY);
-        }
-
-        //Set Overflow if the sign of both inputs is different from the sign of the result
-        if (((registers.getRegister(Registers.REG_ACCUMULATOR) ^ result) & (term ^ result) & 0x80) != 0)
-            registers.setFlag(Registers.STATUS_FLAG_OVERFLOW);
+        int result = ADC(registers.getRegister(Registers.REG_ACCUMULATOR), term);
 
         return (result & 0xFF);
-    }
-
-    private int performADC(int byteTerm){
-        int carry = (registers.getFlag(Registers.STATUS_FLAG_CARRY) ? 1 : 0);
-        return addToAccumulator(byteTerm + carry);
     }
 
     //(1) compliment of carry flag added (so subtracted) as well
@@ -900,7 +884,27 @@ public class CPU {
 
     private int performADC2(int byteValueA, int byteValueB){
         int carry = (registers.getFlag(Registers.STATUS_FLAG_CARRY) ? 1 : 0);
-        int result = (byteValueA + byteValueB) + carry;
+        return (ADC(byteValueA, byteValueB + carry) & 0xFF);
+    }
+
+    private int performSBC2(int byteValueA, int byteValueB){
+        registers.setFlag(Registers.STATUS_FLAG_NEGATIVE);
+        int borrow = (registers.getFlag(Registers.STATUS_FLAG_CARRY) ? 0 : 1);
+        int byteValueBAndBorrow = twosComplimentOf(byteValueB + borrow);
+
+        //Why do I need to convert back from twos compliment in this version? Something is fishy.
+        return fromTwosComplimented(ADC(byteValueA, byteValueBAndBorrow) & 0xFF);
+    }
+
+    /**
+     * Perform a binary addition, setting Carry and Overflow flags as required.
+     *
+     * @param byteValueA addition term 1
+     * @param byteValueB addition term 2
+     * @return the result of (byteValueA + byteValueB)
+     */
+    private int ADC(int byteValueA, int byteValueB) {
+        int result = byteValueA + byteValueB;
 
         //Set Carry, if bit 8 is set on new accumulator value, ignoring in 2s compliment addition (subtraction)
         if (!registers.getFlag(Registers.STATUS_FLAG_NEGATIVE)){
@@ -912,30 +916,6 @@ public class CPU {
         //Set Overflow if the sign of both inputs is different from the sign of the result
         if (((byteValueA ^ result) & (byteValueB ^ result) & 0x80) != 0)
             registers.setFlag(Registers.STATUS_FLAG_OVERFLOW);
-
-        return (result & 0xFF);
-    }
-
-    private int performSBC2(int byteTermA, int byteTermB){
-        registers.setFlag(Registers.STATUS_FLAG_NEGATIVE);
-        int borrow = (registers.getFlag(Registers.STATUS_FLAG_CARRY) ? 0 : 1);
-        int termB = twosComplimentOf(byteTermB + borrow);
-
-        int result = byteTermA + termB;
-        System.out.println(" " + Integer.toBinaryString(byteTermA) + "\n+" + Integer.toBinaryString(termB) +"\n--------\n"+Integer.toBinaryString(result) );
-
-        //Set Carry, if bit 8 is set on new accumulator value, ignoring in 2s compliment addition (subtraction)
-        if (!registers.getFlag(Registers.STATUS_FLAG_NEGATIVE)){
-            setCarryFlagBasedOn(result);
-        }else {
-            registers.clearFlag(Registers.STATUS_FLAG_CARRY);
-        }
-
-        //Set Overflow if the sign of both inputs is different from the sign of the result
-        if (((byteTermA ^ result) & (termB ^ result) & 0x80) != 0)
-            registers.setFlag(Registers.STATUS_FLAG_OVERFLOW);
-
-        //Why do I need to convert back from twos compliment in this version? Something is fishy.
-        return fromTwosComplimented(result & 0xFF);
+        return result;
     }
 }
