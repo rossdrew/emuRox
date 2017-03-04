@@ -363,27 +363,27 @@ public class CPU {
             break;
 
             case InstructionSet.OP_ORA_I:
-                registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, nextProgramByte() | accumulatorBeforeOperation);
+                withRegisterAndByte(Registers.REG_ACCUMULATOR, nextProgramByte(), true, this::performORA);
                 break;
 
             case InstructionSet.OP_ORA_Z:
-                registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(nextProgramByte()) | accumulatorBeforeOperation);
+                withRegisterAndByteAt(Registers.REG_ACCUMULATOR, nextProgramByte(), true, this::performORA);
                 break;
 
             case InstructionSet.OP_ORA_Z_IX:
-                registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, getByteOfMemoryXIndexedAt(nextProgramByte()) | accumulatorBeforeOperation);
+                withRegisterAndByteXIndexedAt(Registers.REG_ACCUMULATOR, nextProgramByte(), true, this::performORA);
                 break;
 
             case InstructionSet.OP_ORA_ABS:
-                registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(nextProgramWord()) | accumulatorBeforeOperation);
+                withRegisterAndByteAt(Registers.REG_ACCUMULATOR, nextProgramWord(), true, this::performORA);
                 break;
 
             case InstructionSet.OP_ORA_ABS_IX:
-                registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, getByteOfMemoryXIndexedAt(nextProgramWord()) | accumulatorBeforeOperation);
+                withRegisterAndByteXIndexedAt(Registers.REG_ACCUMULATOR, nextProgramWord(), true, this::performORA);
                 break;
 
             case InstructionSet.OP_ORA_ABS_IY:
-                registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, getByteOfMemoryYIndexedAt(nextProgramWord()) | accumulatorBeforeOperation);
+                withRegisterAndByteYIndexedAt(Registers.REG_ACCUMULATOR, nextProgramWord(), true, this::performORA);
                 break;
 
             case InstructionSet.OP_ORA_IND_IX: {
@@ -759,16 +759,6 @@ public class CPU {
         return addToAccumulator(twosComplimentOf(byteTerm + borrow));
     }
 
-    private void performBIT(int memData) {
-        if ((memData & registers.getRegister(Registers.REG_ACCUMULATOR)) == memData)
-            registers.setFlag(Registers.STATUS_FLAG_ZERO);
-        else
-            registers.clearFlag(Registers.STATUS_FLAG_ZERO);
-
-        //Set N, V to bits 7 and 6 of memory data
-        registers.setRegister(Registers.REG_STATUS, (memData & 0b11000000) | (registers.getRegister(Registers.REG_STATUS) & 0b00111111));
-    }
-
     //XXX Need to use 2s compliment addition (subtraction)
     private void performCMP(int value, int toRegister){
         int result = registers.getRegister(toRegister) - value;
@@ -840,6 +830,16 @@ public class CPU {
         int incrementedValue = (initialValue - 1) & 0xFF;
         registers.setFlagsBasedOn(incrementedValue);
         return incrementedValue;
+    }
+
+    private void performBIT(int memData) {
+        if ((memData & registers.getRegister(Registers.REG_ACCUMULATOR)) == memData)
+            registers.setFlag(Registers.STATUS_FLAG_ZERO);
+        else
+            registers.clearFlag(Registers.STATUS_FLAG_ZERO);
+
+        //Set N, V to bits 7 and 6 of memory data
+        registers.setRegister(Registers.REG_STATUS, (memData & 0b11000000) | (registers.getRegister(Registers.REG_STATUS) & 0b00111111));
     }
 
     private void withRegisterAndByteAt(int registerId, int memoryLocation, boolean setFlags, TwoByteOperation twoByteOperation){
