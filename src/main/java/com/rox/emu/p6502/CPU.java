@@ -126,7 +126,6 @@ public class CPU {
     public void step() {
         System.out.println("\n*** STEP >>>");
 
-        int accumulatorBeforeOperation = registers.getRegister(Registers.REG_ACCUMULATOR);
         int opCode = nextProgramByte();
 
         //Execute the opcode
@@ -521,7 +520,6 @@ public class CPU {
                 registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, performSBC(getByteOfMemoryYIndexedAt(nextProgramWord())));
                 break;
 
-            //TODO
             case InstructionSet.OP_SBC_IND_IX: {
                 int pointerLocation = getWordOfMemoryXIndexedAt(nextProgramByte());
                 withRegisterAndByte(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(pointerLocation), true, this::performSBC2);
@@ -583,7 +581,7 @@ public class CPU {
                 push(registers.getRegister(Registers.REG_STATUS));
                 break;
 
-            case InstructionSet.OP_PLP://XXX
+            case InstructionSet.OP_PLP:
                 registers.setRegister(Registers.REG_STATUS, pop());
                 break;
 
