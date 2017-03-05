@@ -237,7 +237,9 @@ public class CPUTest {
 
     @Test
     public void testSBCWithCarry() {
-        int[] program = {OP_CLC, OP_LDA_I, 0xA, OP_SBC_I, 0x5};
+        int[] program = {OP_CLC,
+                         OP_LDA_I, 0xA,
+                         OP_SBC_I, 0x5};
         memory.setMemory(0, program);
         processor.step(3);
 

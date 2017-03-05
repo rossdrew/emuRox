@@ -392,27 +392,27 @@ public class CPU {
             }break;
 
             case InstructionSet.OP_EOR_I:
-                registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, nextProgramByte() ^ accumulatorBeforeOperation);
+                withRegisterAndByte(Registers.REG_ACCUMULATOR, nextProgramByte(), true, this::performEOR);
                 break;
 
             case InstructionSet.OP_EOR_Z:
-                registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(nextProgramByte()) ^ accumulatorBeforeOperation);
+                withRegisterAndByteAt(Registers.REG_ACCUMULATOR, nextProgramByte(), true, this::performEOR);
                 break;
 
             case InstructionSet.OP_EOR_Z_IX:
-                registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, getByteOfMemoryXIndexedAt(nextProgramByte()) ^ accumulatorBeforeOperation);
+                withRegisterAndByteXIndexedAt(Registers.REG_ACCUMULATOR, nextProgramByte(), true, this::performEOR);
                 break;
 
             case InstructionSet.OP_EOR_ABS:
-                registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(nextProgramWord()) ^ accumulatorBeforeOperation);
+                withRegisterAndByteAt(Registers.REG_ACCUMULATOR, nextProgramWord(), true, this::performEOR);
                 break;
 
             case InstructionSet.OP_EOR_ABS_IX:
-                registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, getByteOfMemoryXIndexedAt(nextProgramWord()) ^ accumulatorBeforeOperation);
+                withRegisterAndByteXIndexedAt(Registers.REG_ACCUMULATOR, nextProgramWord(), true, this::performEOR);
                 break;
 
             case InstructionSet.OP_EOR_ABS_IY:
-                registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, getByteOfMemoryYIndexedAt(nextProgramWord()) ^ accumulatorBeforeOperation);
+                withRegisterAndByteYIndexedAt(Registers.REG_ACCUMULATOR, nextProgramWord(), true, this::performEOR);
                 break;
 
             case InstructionSet.OP_EOR_IND_IX: {
