@@ -3492,6 +3492,34 @@ class OpCodeSpec extends Specification {
         0x20     | 50    | 0xAA       | "Store at higher index"
     }
 
+    @Unroll("RTS #expected")
+    def testRTS(){
+        when:
+        Memory memory = new SimpleMemory(65534);
+        int[] program = [OP_LDA_I, memHi,
+                         OP_PHA,
+                         OP_LDA_I, memLo,
+                         OP_PHA,
+                         OP_RTS];
+        memory.setMemory(0, program);
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        Registers registers = processor.getRegisters()
+
+        and:
+        processor.step(5)
+
+        then:
+        registers.getPC() == expectedPC
+        registers.getRegister(Registers.REG_SP) == expectedSP
+
+        where:
+        memHi | memLo | expectedPC | expectedSP | expected
+        0x1   | 0x0   | 0x100      | 0xFF       | "Simple return from subroutine"
+    }
+
 //    @Ignore
 //    def exampleTest(){
 //        when:
