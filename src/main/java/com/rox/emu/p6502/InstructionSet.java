@@ -150,6 +150,8 @@ public class InstructionSet {
     public static final int OP_SED = 0xF8;
     public static final int OP_CLD = 0xD8;
 
+    public static final int OP_RTS = 0x60;
+
     public static final int[] instructionSet = {OP_ASL_A, OP_ASL_Z, OP_ASL_ABS, OP_ASL_Z_IX, OP_ASL_ABS_IX, OP_LSR_A, OP_LSR_Z, OP_LSR_Z_IX, OP_LSR_ABS, OP_LSR_ABS_IX,OP_ROL_A, OP_ROL_Z, OP_ROL_Z_IX, OP_ROL_ABS, OP_ROL_ABS_IX, OP_ROR_A,
                                                 OP_ADC_Z, OP_ADC_I, OP_ADC_ABS, OP_ADC_ABS_IX, OP_ADC_ABS_IY, OP_ADC_Z_IX, OP_ADC_IND_IX,
                                                 OP_SBC_I, OP_SBC_Z, OP_SBC_Z_IX, OP_SBC_ABS, OP_SBC_ABS_IX, OP_SBC_ABS_IY, OP_SBC_IND_IX,
@@ -162,7 +164,7 @@ public class InstructionSet {
                                                 OP_NOP, OP_JMP_ABS, OP_BCC, OP_BCS, OP_BNE, OP_BEQ, OP_BMI, OP_JSR, OP_BPL, OP_BVS, OP_BVC,
                                                 OP_TAX, OP_TAY, OP_TYA, OP_TXA, OP_TXS, OP_TSX,
                                                 OP_CMP_I, OP_CMP_Z, OP_CMP_Z_IX, OP_CMP_ABS, OP_CMP_ABS_IX, OP_CMP_ABS_IY, OP_CPX_I, OP_CPX_Z, OP_CPX_ABS, OP_CPY_I, OP_CPY_Z, OP_CPY_ABS, OP_PHP, OP_PLP,
-                                                OP_CLI, OP_SEI, OP_SED, OP_CLD};
+                                                OP_CLI, OP_SEI, OP_SED, OP_CLD, OP_RTS};
 
     public static String getOpCodeName(int opCode){
         switch (opCode){
@@ -299,6 +301,8 @@ public class InstructionSet {
             case OP_SEI:        return "SEI";
             case OP_SED:        return "SED";
             case OP_CLD:        return "CLD";
+
+            case OP_RTS:        return "RTS";
             default:
                 return "<Unknown Opcode: " + opCode + ">";
         }

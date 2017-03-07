@@ -158,7 +158,9 @@ public enum OpCode {
             OP_CLI(0x58),
             OP_SEI(0x78),
             OP_SED(0xF8),
-            OP_CLD(0xD8);
+            OP_CLD(0xD8),
+
+            OP_RTS(0x60);
 
     private int byteValue;
     private String description;
