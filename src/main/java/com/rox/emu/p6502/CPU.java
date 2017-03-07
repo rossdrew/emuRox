@@ -678,6 +678,11 @@ public class CPU {
                 registers.clearFlag(Registers.STATUS_FLAG_DEC);
                 break;
 
+            case InstructionSet.OP_RTS:
+                registers.setRegister(Registers.REG_PC_LOW, pop());
+                registers.setRegister(Registers.REG_PC_HIGH, pop());
+                break;
+
             default:
                 throw new UnknownOpCodeException("Unknown 6502 OpCode:" + opCode + " encountered.", opCode);
         }
