@@ -3492,13 +3492,13 @@ class OpCodeSpec extends Specification {
     @Unroll("RTS #expected")
     def testRTS(){
         when:
-        Memory memory = new SimpleMemory(65534);
+        Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDA_I, memHi,
                          OP_PHA,
                          OP_LDA_I, memLo,
                          OP_PHA,
-                         OP_RTS];
-        memory.setMemory(0, program);
+                         OP_RTS]
+        memory.setMemory(0, program)
 
         and:
         CPU processor = new CPU(memory)
