@@ -9,7 +9,11 @@ At the moment, it's invisioned as an emulator for the 6502 processor in order to
 
 ##Progress
 
-Most opcodes now implemented.  BRK and RTI left (ignoring ROR till later).  Still working on Indirect, Y addressing and a couple Indirect, X addressed instructions and we're ready for serious testing of the 6502 and moving onn to other hardware elements of the NES such as the PPU.
+#### 6502
+
+Most opcodes now implemented.  `BRK` and `RTI` left (ignoring ROR till later). In order to finish those, I'll need to implement proper interrupts so that they can be returned from.
+Still working on __Indirect, Y__ addressing and a couple __Indirect, X__ addressed instructions.
+Timing and clock ticks will be looked at later, as necessary.
  
 ###Development & Testing
 
@@ -18,11 +22,11 @@ Most opcodes now implemented.  BRK and RTI left (ignoring ROR till later).  Stil
  
  - [Trello](https://trello.com) for work breakdown, starting with all tasks to get a functioning 6502 with some added work for a [compiler](https://github.com/rossdrew/emuRox/commits/assembler) and [Debugger](https://github.com/rossdrew/emuRox/tree/master/src/main/java/com/rox/emu/P6502/dbg).
  - [Java](https://www.java.com/)/[JUnit](http://junit.org/junit4/) for basic functionality tests.  
- - [Groovy](http://www.groovy-lang.org/)/[Spock](http://spockframework.org/) for [data-driven tests](https://en.wikipedia.org/wiki/Data-driven_testing) .  For covering various variations of class creation and method use in a clear, concise way.  GitHub shield using [TravisCI](https://travis-ci.org/).
  - [junit-quickcheck](https://www.google.co.uk/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&cad=rja&uact=8&ved=0ahUKEwjq4-PF-aPSAhWHDsAKHV17BCIQFggaMAA&url=https%3A%2F%2Fgithub.com%2Fpholser%2Fjunit-quickcheck&usg=AFQjCNE37M0yEi68OG8Hr7y1MDoJwcLOaQ&sig2=AUpnbmKM5Sk9efhw1r-bKw&bvm=bv.147448319,d.d2s) for property-based testing.
- - [JaCoCo](http://www.eclemma.org/jacoco/) reports. To allow us to strive for high [code coverage](https://en.wikipedia.org/wiki/Code_coverage).  GitHub shield using [CodeCov](https://codecov.io).
- - Static analysis done on IntelliJ IDEA and online (including GitHub shield) by [Codeacy](https://www.codacy.com/). 
+ - [Groovy](http://www.groovy-lang.org/)/[Spock](http://spockframework.org/) for [data-driven tests](https://en.wikipedia.org/wiki/Data-driven_testing) .  For covering various variations of class creation and method use in a clear, concise way.  GitHub shield using [TravisCI](https://travis-ci.org/).
  - [Pitest](http://pitest.org/) reports. To allow us to use [mutation testing](https://en.wikipedia.org/wiki/Mutation_testing) to validate and improve our ([Spock](http://spockframework.org/) & [JUnit](http://junit.org/junit4/)) unit tests.
+ - [JaCoCo](http://www.eclemma.org/jacoco/) reports. To allow us to strive for high [code coverage](https://en.wikipedia.org/wiki/Code_coverage).  Mainly for the GitHub shield using [CodeCov](https://codecov.io). 
+ - Static analysis done in my development environment on [IntelliJ IDEA](https://www.jetbrains.com/idea/) and online (including GitHub shield) by [Codeacy](https://www.codacy.com/). 
 
  
 ####Branches
@@ -32,6 +36,7 @@ Most opcodes now implemented.  BRK and RTI left (ignoring ROR till later).  Stil
  - A [Concourse](https://concourse.ci/) CI [branch](https://github.com/rossdrew/emuRox/commits/concourse-ci), to get that working and learn a little something along the way
 
 -----
+
 
 ###Problems
 

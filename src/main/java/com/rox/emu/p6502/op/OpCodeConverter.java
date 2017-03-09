@@ -26,8 +26,8 @@ public class OpCodeConverter {
     public static final String ADDR_IND = "Indirect";
 
     //Indexing modes
-    public static final String INDEX_X = "[X]";
-    public static final String INDEX_Y = "[Y]";
+    public static final String INDEX_X = " [X]";
+    public static final String INDEX_Y = " [Y]";
 
     public static String toDescription(String internalOpCodeName){
         if (internalOpCodeName != null && !internalOpCodeName.isEmpty()){
