@@ -804,8 +804,8 @@ public class CPU {
 
     private int performROL(int initialValue){
         int rotatedValue = (initialValue << 1) | (registers.getFlag(Registers.STATUS_FLAG_CARRY) ? 1 : 0);
-        registers.setFlagsBasedOn(rotatedValue);
         setCarryFlagBasedOn(rotatedValue);
+        registers.setFlagsBasedOn(rotatedValue);
         return rotatedValue & 0xFF;
     }
 

@@ -24,7 +24,9 @@ class OpCodeConverterSpec extends Specification{
         'OP_LSR_Z'      | "LSR ($OpCodeConverter.ADDR_Z)"   | "Zero Page Addressed"
         'OP_LSR_ABS'    | "LSR ($OpCodeConverter.ADDR_ABS)" | "Absolutely Addressed"
         'OP_AND_IND_IX' | "AND ($OpCodeConverter.ADDR_IND" +
-                          "$OpCodeConverter.INDEX_X)"       | "Indirectly Addressed"
+                          "$OpCodeConverter.INDEX_X)"       | "Indirectly Addressed with X"
+        'OP_AND_IND_IY' | "AND ($OpCodeConverter.ADDR_IND" +
+                          "$OpCodeConverter.INDEX_Y)"       | "Indirectly Addressed with Y"
     }
 
     @Unroll("Invalid op-code name: #expected")
@@ -84,7 +86,7 @@ class OpCodeConverterSpec extends Specification{
         '\0OP_LSR_A'      | "Accumulator addressed"
         '\0OP_LSR_Z'      | "Zero Page addressed"
         '\0OP_LSR_ABS'    | "Absolutely addressed"
-        '\0OP_AND_IND_IX' | "Indirectly addressed"
-
+        '\0OP_AND_IND_IX' | "Indirectly addressed with X"
+        '\0OP_AND_IND_IY' | "Indirectly addressed with Y"
     }
 }
