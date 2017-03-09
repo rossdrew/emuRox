@@ -27,7 +27,7 @@ class OpCodeConverterSpec extends Specification{
                           "$OpCodeConverter.INDEX_X)"       | "Indirectly Addressed"
     }
 
-    @Unroll("Invalid op-code: #expected")
+    @Unroll("Invalid op-code name: #expected")
     testInvalidOpcodes(){
         given:
         String description = "UNKNOWN"
@@ -41,6 +41,10 @@ class OpCodeConverterSpec extends Specification{
 
         where:
         opCodeName    | expected
+        ''            | "Empty"
+        null          | "null"
+        'PO_SEC'      | "Unknown prefix"
+    //  'OP_XXX'      | "Unknown instruction"
         'OP_LSR_XXX'  | "Unknown addressing mode"
         'OP_LSR_Z_IZ' | "Unknown indexing mode"
     }
