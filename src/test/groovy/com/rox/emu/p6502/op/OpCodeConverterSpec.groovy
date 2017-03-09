@@ -81,12 +81,16 @@ class OpCodeConverterSpec extends Specification{
 
         where:
         opCodeName        | expected
-        '\0OP_SEC'        | "Implied addressed"
-        '\0OP_ORA_I'      | "Immediately addressed"
-        '\0OP_LSR_A'      | "Accumulator addressed"
-        '\0OP_LSR_Z'      | "Zero Page addressed"
-        '\0OP_LSR_ABS'    | "Absolutely addressed"
-        '\0OP_AND_IND_IX' | "Indirectly addressed with X"
-        '\0OP_AND_IND_IY' | "Indirectly addressed with Y"
+        '\0OP_SEC'        | "Implied op code"
+
+        'OP_ORA_\0I'      | "Immediately addressed"
+        'OP_LSR_\0A'      | "Accumulator addressed"
+        'OP_LSR_\0Z'      | "Zero Page addressed"
+        'OP_LSR_\0ABS'    | "Absolutely addressed"
+        'OP_AND_\0IND_IX' | "Indirectly addressed with X"
+        'OP_AND_\0IND_IY' | "Indirectly addressed with Y"
+
+        'OP_AND_IND_\0IX' | "X Indexed"
+        'OP_AND_IND_\0IY' | "Y Indexed"
     }
 }
