@@ -10,7 +10,7 @@ import static com.rox.emu.p6502.InstructionSet.*
 
 class OpCodeSpec extends Specification {
     @Unroll("LDA (Immediate) #Expected: Load #loadValue == #expectedAccumulator")
-    def testImmediateLDA() {
+    testImmediateLDA() {
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDA_I, loadValue]
@@ -39,7 +39,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("LDA (Zero Page) #Expected: Expecting #loadValue @ [30]")
-    def testLDAFromZeroPage() {
+    testLDAFromZeroPage() {
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDA_Z, 30]
@@ -69,7 +69,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("LDA (Zero Page[X]) #Expected: Load [0x30 + X(#index)] -> #expectedAccumulator")
-    def testLDAFromZeroPageIndexedByX() {
+    testLDAFromZeroPageIndexedByX() {
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDX_I, index,
@@ -98,7 +98,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("LDA (Absolute) #Expected: Expecting #loadValue @ [300]")
-    def testAbsoluteLDA() {
+    testAbsoluteLDA() {
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDA_ABS, 0x1, 0x2C]
@@ -128,7 +128,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("LDA (Absolute[X]). #Expected: 300[#index] = #expectedAccumulator")
-    def testLDAIndexedByX() {
+    testLDAIndexedByX() {
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDX_I, index,
@@ -158,7 +158,7 @@ class OpCodeSpec extends Specification {
 
 
     @Unroll("LDA (Absolute[Y]). #Expected: 300[#index] = #expectedAccumulator")
-    def testLDAIndexedByY() {
+    testLDAIndexedByY() {
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDY_I, index,
@@ -187,7 +187,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("LDA (Indirect, X). #Expected: 0x30[#index] -> [#indAddressHi|#indAddressLo] = #expectedAccumulator")
-    def testLDA_IND_IX() {
+    testLDA_IND_IX() {
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDA_I, firstValue,    //Value at indirect address
@@ -220,7 +220,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("LDX (Immediate): Load #firstValue")
-    def testLDX(){
+    testLDX(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDX_I, firstValue]
@@ -246,7 +246,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("LDX (Absolute): Load #firstValue from [#addressHi | #addressLo]")
-    def testLDX_ABS(){
+    testLDX_ABS(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDX_ABS, addressHi, addressLo]
@@ -275,7 +275,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("LDX (Absolute[Y]): Load #firstValue from [#addressHi | #addressLo]")
-    def testLDX_ABS_IX(){
+    testLDX_ABS_IX(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDY_I, index,
@@ -304,7 +304,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("LDX (Zero Page): Load #firstValue from [#address]")
-    def testLX_Z(){
+    testLX_Z(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDA_I, firstValue,
@@ -332,7 +332,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("LDX (Zero Page[Y]): Load #firstValue from [#address[#index]")
-    def testLX_Z_IY(){
+    testLX_Z_IY(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDY_I, index,
@@ -361,7 +361,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("LDY (Immediate): Load #firstValue")
-    def testLDY(){
+    testLDY(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDY_I, firstValue]
@@ -387,7 +387,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("LDY (Zero Page): Load #firstValue from [#address]")
-    def testLDY_Z(){
+    testLDY_Z(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDA_I, firstValue,
@@ -415,7 +415,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("LDY (Zero Page[X]): Load Y with #firstValue from #address[#index#]")
-    def testLDY_Z_IX(){
+    testLDY_Z_IX(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDX_I, index, OP_LDA_I, firstValue, OP_STA_Z_IX, address, OP_LDY_Z_IX, address]
@@ -441,7 +441,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("LDY (Absolute): Load Y with #firstValue at [#addressHi | #addressLo]")
-    def testLDY_ABS(){
+    testLDY_ABS(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDY_ABS, addressHi, addressLo]
@@ -470,7 +470,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("LDY (Absolute[X]): Load Y with #firstValue at [#addressHi | #addressLo][#index]")
-    def testLDY_ABS_IX(){
+    testLDY_ABS_IX(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDX_I, index, OP_LDY_ABS_IX, addressHi, addressLo]
@@ -499,7 +499,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("ADC (Immediate) #Expected:  #firstValue + #secondValue = #expectedAccumulator in Accumulator.")
-    def testADC(){
+    testADC(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDA_I, firstValue, OP_ADC_I, secondValue]
@@ -527,7 +527,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("ADC (Zero Page[X]) #Expected: #firstValue + #secondValue = #expectedAccumulator in Accumulator.")
-    def testADC_Z_IX(){
+    testADC_Z_IX(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDA_I, firstValue, OP_LDX_I, index, OP_ADC_Z_IX, indexPoint]
@@ -556,7 +556,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("ADC (Zero Page) #Expected:  #firstValue + #secondValue = #expectedAccumulator in Accumulator.")
-    def testADC_Z(){
+    testADC_Z(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDA_I, firstValue, OP_ADC_Z, 0x30]
@@ -585,7 +585,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("ADC (Absolute) #Expected:  #firstValue + #secondValue = #expectedAccumulator in Accumulator.")
-    def testADC_ABS(){
+    testADC_ABS(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDA_I, firstValue, OP_ADC_ABS, 0x1, 0x2C]
@@ -614,7 +614,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("ADC (Absolute[X]) #Expected:  #firstValue + #secondValue = #expectedAccumulator in Accumulator.")
-    def testADC_ABS_IX(){
+    testADC_ABS_IX(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDX_I, index, OP_LDA_I, firstValue, OP_ADC_ABS_IX, 0x1, 0x2C]
@@ -643,7 +643,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("ADC (Absolute[Y]) #Expected:  #firstValue + #secondValue = #expectedAccumulator in Accumulator.")
-    def testADC_ABS_IY(){
+    testADC_ABS_IY(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDY_I, index,
@@ -674,7 +674,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("ADC (Indirect, X) #Expected: #firstValue (@[#locationHi|#locationLo]) & #secondValue = #expectedAcc")
-    def testADC_IND_IX() {
+    testADC_IND_IX() {
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDA_I, firstValue,    //Value at indirect address
@@ -708,7 +708,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("ADC 16bit [#lowFirstByte|#highFirstByte] + [#lowSecondByte|#highSecondByte] = #Expected")
-    def testMultiByteADC(){
+    testMultiByteADC(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_CLC,
@@ -744,7 +744,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("AND (Immediate) #Expected:  #firstValue & #secondValue = #expectedAccumulator in Accumulator.")
-    def testAND(){
+    testAND(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDA_I, firstValue, OP_AND_I, secondValue]
@@ -771,7 +771,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("AND (Zero Page) #Expected: #firstValue & #secondValue = #expectedAccumulator in Accumulator.")
-    def testAND_Z(){
+    testAND_Z(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDA_I, firstValue,
@@ -801,7 +801,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("AND (Zero Page[X]) #Expected: #firstValue & #secondValue = #expectedAcc")
-    def testAND_Z_IX(){
+    testAND_Z_IX(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDX_I, index,
@@ -832,7 +832,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("AND (Absolute) #Expected:  #firstValue & #secondValue = #expectedAccumulator in Accumulator.")
-    def testAND_A(){
+    testAND_A(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDA_I, firstValue,
@@ -862,7 +862,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("AND (Absolute[X]) #Expected: #firstValue & #secondValue = #expectedAcc")
-    def testAND_ABS_IX(){
+    testAND_ABS_IX(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDX_I, index,
@@ -893,7 +893,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("AND (Absolute[Y]) #Expected: #firstValue & #secondValue = #expectedAcc")
-    def testAND_ABS_IY(){
+    testAND_ABS_IY(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDY_I, index,
@@ -924,7 +924,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("AND (Indirect, X) #Expected: #firstValue (@[#locationHi|#locationLo]) & #secondValue = #expectedAcc")
-    def testAND_IND_IX() {
+    testAND_IND_IX() {
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDA_I, firstValue,    //Value at indirect address
@@ -959,7 +959,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("ORA (Immediate) #Expected:  #firstValue | #secondValue = #expectedAccumulator in Accumulator.")
-    def testOR(){
+    testOR(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDA_I, firstValue, OP_ORA_I, secondValue]
@@ -987,7 +987,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("ORA (Zero Page) #Expected:  #firstValue | #secondValue = #expectedAccumulator in Accumulator.")
-    def testOR_Z(){
+    testOR_Z(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDA_I, firstValue,
@@ -1018,7 +1018,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("ORA (Zero Page[X]) #Expected:  #firstValue | #secondValue = #expectedAccumulator in Accumulator.")
-    def testOR_Z_IX(){
+    testOR_Z_IX(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDX_I, index,
@@ -1050,7 +1050,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("ORA (Absolute) #Expected:  #firstValue | #secondValue = #expectedAccumulator in Accumulator.")
-    def testOR_ABS(){
+    testOR_ABS(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDA_I, firstValue,
@@ -1081,7 +1081,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("ORA (Absolute[X]) #Expected:  #firstValue | #secondValue = #expectedAccumulator in Accumulator.")
-    def testOR_ABS_IX(){
+    testOR_ABS_IX(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDX_I, index,
@@ -1113,7 +1113,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("ORA (Absolute[Y]) #Expected:  #firstValue | #secondValue = #expectedAccumulator in Accumulator.")
-    def testOR_ABS_IY(){
+    testOR_ABS_IY(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDY_I, index,
@@ -1145,7 +1145,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("ORA (Indirect, X) #Expected: #firstValue (@[#locationHi|#locationLo]) | #secondValue = #expectedAcc")
-    def testOR_IND_IX() {
+    testOR_IND_IX() {
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDA_I, firstValue,    //Value at indirect address
@@ -1181,7 +1181,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("EOR (Immediate) #Expected:  #firstValue ^ #secondValue = #expectedAccumulator in Accumulator.")
-    def testEOR(){
+    testEOR(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDA_I, firstValue, OP_EOR_I, secondValue]
@@ -1207,7 +1207,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("EOR (Zero Page) #Expected:  #firstValue ^ #secondValue = #expectedAccumulator in Accumulator.")
-    def testEOR_Z(){
+    testEOR_Z(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDA_I, secondValue,
@@ -1236,7 +1236,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("EOR (Zero Page[X]) #Expected:  #firstValue ^ #secondValue = #expectedAccumulator in Accumulator.")
-    def testEOR_Z_IX(){
+    testEOR_Z_IX(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDX_I, index,
@@ -1266,7 +1266,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("EOR (Absolute) #Expected:  #firstValue ^ #secondValue = #expectedAccumulator in Accumulator.")
-    def testEOR_ABS(){
+    testEOR_ABS(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDA_I, secondValue,
@@ -1295,7 +1295,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("EOR (Absolute[X]) #Expected:  #firstValue ^ #secondValue = #expectedAccumulator in Accumulator.")
-    def testEOR_ABS_IX(){
+    testEOR_ABS_IX(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDX_I, index,
@@ -1325,7 +1325,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("EOR (Absolute[Y]) #Expected:  #firstValue ^ #secondValue = #expectedAccumulator in Accumulator.")
-    def testEOR_ABS_IY(){
+    testEOR_ABS_IY(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDY_I, index,
@@ -1355,7 +1355,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("EOR (Indirect, X) #Expected: #firstValue (@[#locationHi|#locationLo]) EOR #secondValue = #expectedAcc")
-    def testEOR_IND_IX() {
+    testEOR_IND_IX() {
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDA_I, firstValue,      //Value at indirect address
@@ -1389,7 +1389,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("SBC (Immediate) #Expected:  #firstValue - #secondValue = #expectedAccumulator in Accumulator.")
-    def testSBC(){
+    testSBC(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_SEC, OP_LDA_I, firstValue, OP_SBC_I, secondValue]
@@ -1417,7 +1417,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("SBC (Zero Page) #Expected:  #firstValue - #secondValue = #expectedAccumulator in Accumulator.")
-    def testSBC_Z(){
+    testSBC_Z(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDA_I, secondValue,
@@ -1449,7 +1449,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("SBC (Zero Page[X]) #Expected:  #firstValue - #secondValue = #expectedAccumulator in Accumulator.")
-    def testSBC_Z_IX(){
+    testSBC_Z_IX(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDX_I, index,
@@ -1482,7 +1482,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("SBC (Absolute) #Expected:  #firstValue - #secondValue = #expectedAccumulator in Accumulator.")
-    def testSBC_ABS(){
+    testSBC_ABS(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDA_I, secondValue,
@@ -1514,7 +1514,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("SBC (Absolute[X]) #Expected:  #firstValue - #secondValue = #expectedAccumulator in Accumulator.")
-    def testSBC_ABS_IX(){
+    testSBC_ABS_IX(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDX_I, index,
@@ -1547,7 +1547,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("SBC (Absolute[Y]) #Expected:  #firstValue - #secondValue = #expectedAccumulator in Accumulator.")
-    def testSBC_ABS_IY(){
+    testSBC_ABS_IY(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDY_I, index,
@@ -1580,7 +1580,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("SBC (Indirect, X) #Expected: #firstValue (@[#locationHi|#locationLo]) | #secondValue = #expectedAcc")
-    def testSBC_IND_IX() {
+    testSBC_IND_IX() {
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDA_I, firstValue,    //Value at indirect address
@@ -1614,7 +1614,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("INX #Expected: on #firstValue = #expectedX")
-    def testINX(){
+    testINX(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDX_I, firstValue, OP_INX]
@@ -1640,7 +1640,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("INC (Zero Page) #Expected: on #firstValue = #expectedMem")
-    def testINC_Z(){
+    testINC_Z(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDA_I, firstValue, OP_STA_Z, 0x20, OP_INC_Z, 0x20]
@@ -1666,7 +1666,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("INC (Zero Page[X]) #Expected: on #firstValue = #expectedMem")
-    def testINC_Z_IX(){
+    testINC_Z_IX(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDX_I, index, OP_LDA_I, firstValue, OP_STA_Z_IX, 0x20, OP_INC_Z_IX, 0x20]
@@ -1692,7 +1692,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("INC (Absolute) #Expected: on #firstValue = #expectedMem")
-    def testINC_ABS(){
+    testINC_ABS(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDA_I, firstValue, OP_STA_ABS, 0x01, 0x20, OP_INC_ABS, 0x01, 0x20]
@@ -1718,7 +1718,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("INC (Absolute, X) #Expected: at 0x120[#index] on #firstValue = #expectedMem")
-    def testINC_ABS_IX(){
+    testINC_ABS_IX(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDX_I, index, OP_LDA_I, firstValue, OP_STA_ABS_IX, 0x01, 0x20, OP_INC_ABS_IX, 0x01, 0x20]
@@ -1744,7 +1744,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("DEC (Zero Page) #Expected: on #firstValue = #expectedMem")
-    def testDEC_Z(){
+    testDEC_Z(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDA_I, firstValue, OP_STA_Z, 0x20, OP_DEC_Z, 0x20]
@@ -1770,7 +1770,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("DEC (Zero Page[X]) #Expected: on #firstValue at #loc[#index] = #expectedMem")
-    def testDEC_Z_IX(){
+    testDEC_Z_IX(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDX_I, index, OP_LDA_I, firstValue, OP_STA_Z_IX, loc, OP_DEC_Z_IX, loc]
@@ -1796,7 +1796,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("DEC (Absolute) #Expected: on #firstValue = #expectedMem")
-    def testDEC_ABS(){
+    testDEC_ABS(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDA_I, firstValue,
@@ -1824,7 +1824,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("DEC (Absolute[X]) #Expected: on #firstValue = #expectedMem")
-    def testDEC_ABS_IX(){
+    testDEC_ABS_IX(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDX_I, index,
@@ -1853,7 +1853,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("DEX #Expected: on #firstValue = #expectedX")
-    def testDEX(){
+    testDEX(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDX_I, firstValue, OP_DEX]
@@ -1879,7 +1879,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("INY #Expected: on #firstValue = #expectedX")
-    def testINY(){
+    testINY(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDY_I, firstValue, OP_INY]
@@ -1905,7 +1905,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("DEY #Expected: on #firstValue = #expectedY")
-    def testDEY(){
+    testDEY(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDY_I, firstValue, OP_DEY]
@@ -1931,7 +1931,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("PLA #Expected: #firstValue from stack at (#expectedSP - 1)")
-    def testPLA(){
+    testPLA(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDA_I, firstValue, OP_PHA, OP_LDA_I, 0x11, OP_PLA]
@@ -1961,7 +1961,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("ASL (Accumulator) #Expected: #firstValue becomes #expectedAccumulator")
-    def testASL(){
+    testASL(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDA_I, firstValue, OP_ASL_A]
@@ -1993,7 +1993,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("ASL (ZeroPage) #Expected: #firstValue becomes #expectedMem")
-    def testASL_Z(){
+    testASL_Z(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDA_I, firstValue,
@@ -2027,7 +2027,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("ASL (Absolute) #Expected: #firstValue becomes #expectedMem")
-    def testASL_A(){
+    testASL_A(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDA_I, firstValue,
@@ -2061,7 +2061,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("ASL (Zero Page at X) #Expected: #firstValue (@ 0x20[#index]) becomes #expectedMem")
-    def testASL_Z_IX(){
+    testASL_Z_IX(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDA_I, firstValue,
@@ -2096,7 +2096,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("ASL (Absolute[X]) #Expected: #firstValue (@ 0x20[#index]) becomes #expectedMem")
-    def testASL_ABS_IX(){
+    testASL_ABS_IX(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDA_I, firstValue,
@@ -2131,7 +2131,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("LSR (Accumulator) #Expected: #firstValue becomes #expectedAccumulator")
-    def testLSR(){
+    testLSR(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDA_I, firstValue,
@@ -2162,7 +2162,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("LSR (Zero Page) #Expected: #firstValue becomes #expectedMem")
-    def testLSR_Z(){
+    testLSR_Z(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDA_I, firstValue,
@@ -2194,7 +2194,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("LSR (Zero Page[X]) #Expected: #firstValue becomes #expectedMem")
-    def testLSR_Z_IX(){
+    testLSR_Z_IX(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDX_I, index,
@@ -2227,7 +2227,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("LSR (Absolute) #Expected: #firstValue becomes #expectedMem")
-    def testLSR_ABS(){
+    testLSR_ABS(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDA_I, firstValue,
@@ -2259,7 +2259,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("LSR (Absolute[X]) #Expected: #firstValue becomes #expectedMem")
-    def testLSR_ABS_IX(){
+    testLSR_ABS_IX(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDX_I, index,
@@ -2292,7 +2292,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("JMP #expected: [#jmpLocationHi | #jmpLocationLow] -> #expectedPC")
-    def testJMP(){
+    testJMP(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_NOP, OP_NOP, OP_NOP, OP_JMP_ABS, jmpLocationHi, jmpLocationLow, OP_NOP, OP_NOP, OP_NOP]
@@ -2320,7 +2320,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("BCC #expected: ending up at mem[#expectedPC] after #instructions steps")
-    def testBCC(){
+    testBCC(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_NOP, OP_NOP, OP_NOP, preInstr, OP_BCC, jmpSteps, OP_NOP, OP_NOP, OP_NOP, OP_NOP]
@@ -2347,7 +2347,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("BCS #expected: ending up at mem[#expectedPC] after #instructions steps")
-    def testBCS(){
+    testBCS(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_NOP, OP_NOP, OP_NOP, preInstr, OP_BCS, jmpSteps, OP_NOP, OP_NOP, OP_NOP, OP_NOP]
@@ -2374,7 +2374,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("ROL (Accumulator) #expected: #firstValue -> #expectedAccumulator")
-    def testROL_A(){
+    testROL_A(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [preInstr, OP_LDA_I, firstValue, OP_ROL_A]
@@ -2407,7 +2407,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("ROL (Zero Page) #Expected: #firstValue -> #expectedMem")
-    def testROL_Z(){
+    testROL_Z(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [firstInstr, OP_LDA_I, firstValue, OP_STA_Z, 0x20, OP_ROL_Z, 0x20]
@@ -2438,7 +2438,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("ROL (Zero Page[X]) #Expected: #firstValue -> #expectedMem")
-    def testROL_Z_IX(){
+    testROL_Z_IX(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDX_I, index,
@@ -2473,7 +2473,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("ROL (Absolute) #Expected: #firstValue -> #expectedMem")
-    def testROL_ABS(){
+    testROL_ABS(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [firstInstr,
@@ -2507,7 +2507,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("ROL (Absolute[X]) #Expected: #firstValue -> #expectedMem")
-    def testROL_ABS_IX(){
+    testROL_ABS_IX(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDX_I, index,
@@ -2542,7 +2542,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("ROR (Accumulator) #expected: #firstValue -> #expectedAccumulator")
-    def testROR_A(){
+    testROR_A(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [preInstr, OP_LDA_I, firstValue, OP_ROR_A]
@@ -2575,7 +2575,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("BNE #expected: With accumulator set to #accumulatorValue, we end up at mem[#expectedPC] after #instructions steps")
-    def testBNE(){
+    testBNE(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_NOP, OP_NOP, OP_NOP, OP_LDA_I, accumulatorValue, OP_BNE, jumpSteps, OP_NOP, OP_NOP, OP_NOP]
@@ -2600,7 +2600,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("BEQ #expected: With accumulator set to #accumulatorValue, we end up at mem[#expectedPC] after #instructions steps")
-    def testBEQ(){
+    testBEQ(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_NOP, OP_NOP, OP_NOP,
@@ -2628,7 +2628,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("BMI #expected: With accumulator set to #accumulatorValue, we end up at mem[#expectedPC] after #instructions steps")
-    def testBMI(){
+    testBMI(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_NOP, OP_NOP, OP_NOP, OP_LDA_I, accumulatorValue, OP_BMI, jumpSteps, OP_NOP, OP_NOP, OP_NOP]
@@ -2653,7 +2653,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("BPL #expected: With accumulator set to #accumulatorValue, we end up at mem[#expectedPC] after #instructions steps")
-    def testBPL(){
+    testBPL(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_NOP, OP_NOP, OP_NOP, OP_LDA_I, accumulatorValue, OP_BPL, jumpSteps, OP_NOP, OP_NOP, OP_NOP]
@@ -2678,7 +2678,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("BVC #expected: #accumulatorValue + #addedValue, checking overflow we end up at mem[#expectedPC] after #instructions steps")
-    def testBVC(){
+    testBVC(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_NOP, OP_NOP, OP_NOP, OP_LDA_I, accumulatorValue, OP_ADC_I, addedValue, OP_BVC, jumpSteps, OP_NOP, OP_NOP, OP_NOP]
@@ -2703,7 +2703,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("BVC #expected: #accumulatorValue + #addedValue, checking overflow we end up at mem[#expectedPC] after #instructions steps")
-    def testBVS(){
+    testBVS(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_NOP, OP_NOP, OP_NOP, OP_LDA_I, accumulatorValue, OP_ADC_I, addedValue, OP_BVS, jumpSteps, OP_NOP, OP_NOP, OP_NOP]
@@ -2728,7 +2728,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("TAX #expected: #loadedValue to X")
-    def testTAX(){
+    testTAX(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDA_I, loadedValue, OP_TAX]
@@ -2757,7 +2757,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("TAY #expected: #loadedValue to Y")
-    def testTAY(){
+    testTAY(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDA_I, loadedValue, OP_TAY]
@@ -2786,7 +2786,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("TYA #expected: #loadedValue to Accumulator")
-    def testTYA(){
+    testTYA(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDY_I, loadedValue, OP_TYA]
@@ -2815,7 +2815,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("TXA #expected: #loadedValue to Accumulator")
-    def testTXA(){
+    testTXA(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDX_I, loadedValue, OP_TXA]
@@ -2844,7 +2844,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("TSX #expected: load #SPValue in SP into X")
-    def testTSX(){
+    testTSX(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_TSX]
@@ -2874,7 +2874,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("BIT (Zero Page) #expected: #firstValue and #secondValue")
-    def testBIT(){
+    testBIT(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDA_I, firstValue, OP_STA_Z, memLoc, OP_LDA_I, secondValue, OP_BIT_Z, memLoc]
@@ -2904,7 +2904,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("BIT (Absolute) #expected: #firstValue and #secondValue")
-    def testBIT_ABS(){
+    testBIT_ABS(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDA_I, firstValue,
@@ -2937,7 +2937,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("STA (Zero Page[X]) #expected: Store #value at #location[#index]")
-    def testOP_STA_Z_IX(){
+    testOP_STA_Z_IX(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDA_I, value, OP_LDX_I, index, OP_STA_Z_IX, location]
@@ -2964,7 +2964,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("STA (Absolute) #expected: Store #value at [#locationHi|#locationLo]")
-    def testOP_STA_ABS(){
+    testOP_STA_ABS(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDA_I, value,
@@ -2990,7 +2990,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("STA (Absolute[X]) #expected: Store #value at [#locationHi|#locationLo@#index]")
-    def testOP_STA_ABS_IX(){
+    testOP_STA_ABS_IX(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDA_I, value,
@@ -3019,7 +3019,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("STA (Absolute[Y]) #expected: Store #value at [#locationHi|#locationLo@#index]")
-    def testOP_STA_ABS_IY(){
+    testOP_STA_ABS_IY(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDA_I, value,
@@ -3048,7 +3048,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("STY (Zero Page[X] #expected: Store #firstValue at #memLocation[#index]")
-    def testOP_STY_Z_IX(){
+    testOP_STY_Z_IX(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDX_I, index, OP_LDY_I, firstValue, OP_STY_Z_IX, memLocation]
@@ -3074,7 +3074,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("CMP (Immediate) #Expected: #firstValue == #secondValue")
-    def testOP_CMP_I(){
+    testOP_CMP_I(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDA_I, firstValue,
@@ -3105,7 +3105,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("CMP (Zero Page) #Expected: #firstValue == #secondValue")
-    def testOP_CMP_Z(){
+    testOP_CMP_Z(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDA_I, secondValue,
@@ -3138,7 +3138,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("CMP (Zero Page[X]) #Expected: #firstValue == #secondValue")
-    def testOP_CMP_Z_IX(){
+    testOP_CMP_Z_IX(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDX_I, index,
@@ -3172,7 +3172,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("CMP (Absolute) #Expected: #firstValue == #secondValue")
-    def testOP_CMP_ABS(){
+    testOP_CMP_ABS(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDA_I, secondValue,
@@ -3205,7 +3205,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("CMP (Absolute[X]) #Expected: #firstValue == #secondValue")
-    def testOP_CMP_ABS_IX(){
+    testOP_CMP_ABS_IX(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDX_I, index,
@@ -3239,7 +3239,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("CMP (Absolute[Y]) #Expected: #firstValue == #secondValue")
-    def testOP_CMP_ABS_IY(){
+    testOP_CMP_ABS_IY(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDY_I, index,
@@ -3273,7 +3273,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("CPY (Immediate) #Expected: #firstValue == #secondValue")
-    def testOP_CPY_I(){
+    testOP_CPY_I(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDY_I, firstValue,
@@ -3303,7 +3303,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("CPY (Zero Page) #Expected: #firstValue == #secondValue")
-    def testOP_CPY_Z(){
+    testOP_CPY_Z(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDA_I, secondValue,
@@ -3335,7 +3335,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("CPY (Absolute) #Expected: #firstValue == #secondValue")
-    def testOP_CPY_ABS(){
+    testOP_CPY_ABS(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDA_I, secondValue,
@@ -3367,7 +3367,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("CPX (Zero Page) #Expected: #firstValue == #secondValue")
-    def testOP_CPX_Z(){
+    testOP_CPX_Z(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDA_I, secondValue,
@@ -3399,7 +3399,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("CPX (Absolute) #Expected: #firstValue == #secondValue")
-    def testOP_CPX_ABS(){
+    testOP_CPX_ABS(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDA_I, secondValue,
@@ -3431,7 +3431,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("CPX (Immediate) #Expected: #firstValue == #secondValue")
-    def testOP_CPX_I(){
+    testOP_CPX_I(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDX_I, firstValue,
@@ -3461,7 +3461,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("STX (Zero Page[X] #expected: #firstValue -> #location[#index]")
-    def OP_STX_Z_IY(){
+    OP_STX_Z_IY(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDY_I, index,
@@ -3490,7 +3490,7 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("RTS #expected")
-    def testRTS(){
+    testRTS(){
         when:
         Memory memory = new SimpleMemory(65534)
         int[] program = [OP_LDA_I, memHi,
