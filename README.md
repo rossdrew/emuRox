@@ -5,7 +5,7 @@
  
 #EmuRox
 
-At the moment, it's invisioned as an emulator for the 6502 processor in order to fit into a NES emulator which this is the first stage of development for.
+An emulator for the 6502 processor.  The plan is to evolve this into a working NES emulator so I'm developing the 6502 without BCD mode for now.  If/When I get that working, I'll expand the 6502 and move onto another 6502 system (Atari 2600, Commodore 64...) then perhaps add processors and more emulated hardware, in theory, creating a pluggable multi-emulator.
 
 ##Progress
 
@@ -13,7 +13,7 @@ At the moment, it's invisioned as an emulator for the 6502 processor in order to
 
 Most opcodes now implemented.  `BRK` and `RTI` left (ignoring ROR till later). In order to finish those, I'll need to implement proper interrupts so that they can be returned from.
 Still working on __Indirect, Y__ addressing and a couple __Indirect, X__ addressed instructions.
-Timing and clock ticks will be looked at later, as necessary.
+Timing and clock ticks will be looked at later, as necessary.  BCD wont be needed for now for the NES (Ricoh) version and I'll need to look at the memory mapped registers.
  
 ###Development & Testing
 
