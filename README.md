@@ -15,7 +15,7 @@ Most opcodes now implemented.  `BRK` and `RTI` left (ignoring ROR till later). I
 Still working on __Indirect, Y__ addressing and a couple __Indirect, X__ addressed instructions.
 Timing and clock ticks will be looked at later, as necessary.  BCD wont be needed for now for the NES (Ricoh) version and I'll need to look at the memory mapped registers.
  
-###Development & Testing
+##Development & Testing
 
  The plan was to develop this, a larger personal project, in a TDD (Test Driven Development) centric way.  This means writing failing tests that describe functionality then writing that functionality to make the tests pass and iteratively writing a complete application.
  This larger personal project that you are now looking at I am using to test out other technologies and resources.  Here is a list of those that I am using or have used along the way:-
