@@ -25,14 +25,22 @@ public class CPU {
      */
     public void reset(){
         System.out.println("*** RESETTING >>>");
-        registers.setRegister(Registers.REG_ACCUMULATOR, 0x0);
-        registers.setRegister(Registers.REG_X_INDEX, 0x0);
-        registers.setRegister(Registers.REG_Y_INDEX, 0x0);
-        registers.setRegister(Registers.REG_STATUS, 0x34);
-        registers.setRegister(Registers.REG_PC_HIGH, getByteOfMemoryAt(0xFFFC));
-        registers.setRegister(Registers.REG_PC_LOW, getByteOfMemoryAt(0xFFFD));
-        registers.setRegister(Registers.REG_SP, 0xFF);
+        setRegisterValue(Registers.REG_ACCUMULATOR, 0x0);
+        setRegisterValue(Registers.REG_X_INDEX, 0x0);
+        setRegisterValue(Registers.REG_Y_INDEX, 0x0);
+        setRegisterValue(Registers.REG_STATUS, 0x34);
+        setRegisterValue(Registers.REG_PC_HIGH, getByteOfMemoryAt(0xFFFC));
+        setRegisterValue(Registers.REG_PC_LOW, getByteOfMemoryAt(0xFFFD));
+        setRegisterValue(Registers.REG_SP, 0xFF);
         System.out.println("...READY!");
+    }
+
+    private int getRegisterValue(int registerID){
+        return registers.getRegister(registerID);
+    }
+
+    private void setRegisterValue(int registerID, int value){
+        registers.setRegister(registerID, value);
     }
 
     /**
@@ -62,24 +70,24 @@ public class CPU {
     }
 
     private int getByteOfMemoryXIndexedAt(int location){
-        return getByteOfMemoryAt(location, registers.getRegister(Registers.REG_X_INDEX));
+        return getByteOfMemoryAt(location, getRegisterValue(Registers.REG_X_INDEX));
     }
 
     private int getWordOfMemoryXIndexedAt(int location){
-        int indexedLocation = location + registers.getRegister(Registers.REG_X_INDEX);
+        int indexedLocation = location + getRegisterValue(Registers.REG_X_INDEX);
         return (getByteOfMemoryAt(indexedLocation) << 8 | getByteOfMemoryAt(indexedLocation + 1));
     }
 
     private int setByteOfMemoryXIndexedAt(int location, int newByte){
-        return setByteOfMemoryAt(location, registers.getRegister(Registers.REG_X_INDEX), newByte);
+        return setByteOfMemoryAt(location, getRegisterValue(Registers.REG_X_INDEX), newByte);
     }
 
     private int getByteOfMemoryYIndexedAt(int location){
-        return getByteOfMemoryAt(location, registers.getRegister(Registers.REG_Y_INDEX));
+        return getByteOfMemoryAt(location, getRegisterValue(Registers.REG_Y_INDEX));
     }
 
     private int setByteOfMemoryYIndexedAt(int location, int newByte){
-        return setByteOfMemoryAt(location, registers.getRegister(Registers.REG_Y_INDEX), newByte);
+        return setByteOfMemoryAt(location, getRegisterValue(Registers.REG_Y_INDEX), newByte);
     }
 
     private int getByteOfMemoryAt(int location){
@@ -526,51 +534,51 @@ public class CPU {
             }break;
 
             case InstructionSet.OP_STY_Z:
-                setByteOfMemoryAt(nextProgramByte(), registers.getRegister(Registers.REG_Y_INDEX));
+                setByteOfMemoryAt(nextProgramByte(), getRegisterValue(Registers.REG_Y_INDEX));
                 break;
 
             case InstructionSet.OP_STY_ABS:
-                setByteOfMemoryAt(nextProgramWord(), registers.getRegister(Registers.REG_Y_INDEX));
+                setByteOfMemoryAt(nextProgramWord(), getRegisterValue(Registers.REG_Y_INDEX));
                 break;
 
             case InstructionSet.OP_STY_Z_IX:
-                setByteOfMemoryXIndexedAt(nextProgramByte(), registers.getRegister(Registers.REG_Y_INDEX));
+                setByteOfMemoryXIndexedAt(nextProgramByte(), getRegisterValue(Registers.REG_Y_INDEX));
                 break;
 
             case InstructionSet.OP_STA_Z:
-                setByteOfMemoryAt(nextProgramByte(), registers.getRegister(Registers.REG_ACCUMULATOR));
+                setByteOfMemoryAt(nextProgramByte(), getRegisterValue(Registers.REG_ACCUMULATOR));
                 break;
 
             case InstructionSet.OP_STA_ABS:
-                setByteOfMemoryAt(nextProgramWord(), registers.getRegister(Registers.REG_ACCUMULATOR));
+                setByteOfMemoryAt(nextProgramWord(), getRegisterValue(Registers.REG_ACCUMULATOR));
                 break;
 
             case InstructionSet.OP_STA_Z_IX:
-                setByteOfMemoryXIndexedAt(nextProgramByte(), registers.getRegister(Registers.REG_ACCUMULATOR));
+                setByteOfMemoryXIndexedAt(nextProgramByte(), getRegisterValue(Registers.REG_ACCUMULATOR));
                 break;
 
             case InstructionSet.OP_STA_ABS_IX:
-                setByteOfMemoryXIndexedAt(nextProgramWord(), registers.getRegister(Registers.REG_ACCUMULATOR));
+                setByteOfMemoryXIndexedAt(nextProgramWord(), getRegisterValue(Registers.REG_ACCUMULATOR));
                 break;
 
             case InstructionSet.OP_STA_ABS_IY:
-                setByteOfMemoryYIndexedAt(nextProgramWord(), registers.getRegister(Registers.REG_ACCUMULATOR));
+                setByteOfMemoryYIndexedAt(nextProgramWord(), getRegisterValue(Registers.REG_ACCUMULATOR));
                 break;
 
             case InstructionSet.OP_STX_Z:
-                setByteOfMemoryAt(nextProgramByte(), registers.getRegister(Registers.REG_X_INDEX));
+                setByteOfMemoryAt(nextProgramByte(), getRegisterValue(Registers.REG_X_INDEX));
                 break;
 
             case InstructionSet.OP_STX_Z_IY:
-                setByteOfMemoryYIndexedAt(nextProgramByte(), registers.getRegister(Registers.REG_X_INDEX));
+                setByteOfMemoryYIndexedAt(nextProgramByte(), getRegisterValue(Registers.REG_X_INDEX));
                 break;
 
             case InstructionSet.OP_STX_ABS:
-                setByteOfMemoryAt(nextProgramWord(), registers.getRegister(Registers.REG_X_INDEX));
+                setByteOfMemoryAt(nextProgramWord(), getRegisterValue(Registers.REG_X_INDEX));
                 break;
 
             case InstructionSet.OP_PHA:
-                push(registers.getRegister(Registers.REG_ACCUMULATOR));
+                push(getRegisterValue(Registers.REG_ACCUMULATOR));
                 break;
 
             case InstructionSet.OP_PLA:
@@ -578,7 +586,7 @@ public class CPU {
                 break;
 
             case InstructionSet.OP_PHP:
-                push(registers.getRegister(Registers.REG_STATUS));
+                push(getRegisterValue(Registers.REG_STATUS));
                 break;
 
             case InstructionSet.OP_PLP:
@@ -589,7 +597,7 @@ public class CPU {
                 int h = nextProgramByte();
                 int l = nextProgramByte();
                 registers.setRegister(Registers.REG_PC_HIGH, h);
-                registers.setRegister(Registers.REG_PC_LOW, l);
+                setRegisterValue(Registers.REG_PC_LOW, l);
                 break;
 
             case InstructionSet.OP_BCS:
@@ -615,10 +623,10 @@ public class CPU {
             case InstructionSet.OP_JSR:
                 int hi = nextProgramByte();
                 int lo = nextProgramByte();
-                push(registers.getRegister(Registers.REG_PC_HIGH));
-                push(registers.getRegister(Registers.REG_PC_LOW));
-                registers.setRegister(Registers.REG_PC_HIGH, hi);
-                registers.setRegister(Registers.REG_PC_LOW, lo);
+                push(getRegisterValue(Registers.REG_PC_HIGH));
+                push(getRegisterValue(Registers.REG_PC_LOW));
+                setRegisterValue(Registers.REG_PC_HIGH, hi);
+                setRegisterValue(Registers.REG_PC_LOW, lo);
                 break;
 
             case InstructionSet.OP_BPL:
@@ -634,28 +642,28 @@ public class CPU {
                 break;
 
             case InstructionSet.OP_TAX:
-                registers.setRegister(Registers.REG_X_INDEX, registers.getRegister(Registers.REG_ACCUMULATOR));
+                setRegisterValue(Registers.REG_X_INDEX, getRegisterValue(Registers.REG_ACCUMULATOR));
                 break;
 
             case InstructionSet.OP_TAY:
-                registers.setRegister(Registers.REG_Y_INDEX, registers.getRegister(Registers.REG_ACCUMULATOR));
+                setRegisterValue(Registers.REG_Y_INDEX, getRegisterValue(Registers.REG_ACCUMULATOR));
                 break;
 
             case InstructionSet.OP_TYA:
-                registers.setRegister(Registers.REG_ACCUMULATOR, registers.getRegister(Registers.REG_Y_INDEX));
+                setRegisterValue(Registers.REG_ACCUMULATOR, getRegisterValue(Registers.REG_Y_INDEX));
                 break;
 
             case InstructionSet.OP_TXA:
-                registers.setRegister(Registers.REG_ACCUMULATOR, registers.getRegister(Registers.REG_X_INDEX));
+                setRegisterValue(Registers.REG_ACCUMULATOR, getRegisterValue(Registers.REG_X_INDEX));
                 break;
 
             case InstructionSet.OP_TXS:
-                registers.setRegister(Registers.REG_SP, registers.getRegister(Registers.REG_X_INDEX));
+                setRegisterValue(Registers.REG_SP, getRegisterValue(Registers.REG_X_INDEX));
                 break;
 
             case InstructionSet.OP_TSX:
-                registers.setRegister(Registers.REG_X_INDEX, registers.getRegister(Registers.REG_SP));
-                registers.setFlagsBasedOn(registers.getRegister(Registers.REG_X_INDEX));
+                setRegisterValue(Registers.REG_X_INDEX, getRegisterValue(Registers.REG_SP));
+                registers.setFlagsBasedOn(getRegisterValue(Registers.REG_X_INDEX));
                 break;
 
             case InstructionSet.OP_NOP:
@@ -679,8 +687,8 @@ public class CPU {
                 break;
 
             case InstructionSet.OP_RTS:
-                registers.setRegister(Registers.REG_PC_LOW, pop());
-                registers.setRegister(Registers.REG_PC_HIGH, pop());
+                setRegisterValue(Registers.REG_PC_LOW, pop());
+                setRegisterValue(Registers.REG_PC_HIGH, pop());
                 break;
 
             default:
@@ -689,17 +697,17 @@ public class CPU {
     }
 
     private int pop(){
-        registers.setRegister(Registers.REG_SP, registers.getRegister(Registers.REG_SP) + 1);
-        int address = 0x0100 | registers.getRegister(Registers.REG_SP);
+        setRegisterValue(Registers.REG_SP, getRegisterValue(Registers.REG_SP) + 1);
+        int address = 0x0100 | getRegisterValue(Registers.REG_SP);
         int value = getByteOfMemoryAt(address);
         System.out.println("POP " + value + "(" + Integer.toBinaryString(value) + ") from mem[" + address + "]");
         return value;
     }
 
     private void push(int value){
-        System.out.println("PUSH " + value + "(" + Integer.toBinaryString(value) + ") to mem[" + registers.getRegister(Registers.REG_SP) + "]");
-        setByteOfMemoryAt(0x0100 | registers.getRegister(Registers.REG_SP), value);
-        registers.setRegister(Registers.REG_SP, registers.getRegister(Registers.REG_SP) - 1);
+        System.out.println("PUSH " + value + "(" + Integer.toBinaryString(value) + ") to mem[" + getRegisterValue(Registers.REG_SP) + "]");
+        setByteOfMemoryAt(0x0100 | getRegisterValue(Registers.REG_SP), value);
+        setRegisterValue(Registers.REG_SP, getRegisterValue(Registers.REG_SP) - 1);
     }
 
     private void setBorrowFlagFor(int newFakeByte) {
@@ -730,9 +738,9 @@ public class CPU {
     private void branchTo(int displacement) {
         int displacementByte = displacement & 0xFF;
         if ((displacementByte & NEGATIVE_INDICATOR_BIT) == NEGATIVE_INDICATOR_BIT)
-            registers.setRegister(Registers.REG_PC_LOW, registers.getRegister(Registers.REG_PC_LOW) - fromTwosComplimented(displacementByte));
+            setRegisterValue(Registers.REG_PC_LOW, getRegisterValue(Registers.REG_PC_LOW) - fromTwosComplimented(displacementByte));
         else
-            registers.setRegister(Registers.REG_PC_LOW, registers.getRegister(Registers.REG_PC_LOW) + displacementByte);
+            setRegisterValue(Registers.REG_PC_LOW, getRegisterValue(Registers.REG_PC_LOW) + displacementByte);
     }
 
     private int twosComplimentOf(int byteValue){
@@ -749,7 +757,7 @@ public class CPU {
      * @param term term to add to the accumulator
      */
     private int addToAccumulator(int term){
-        int result = ADC(registers.getRegister(Registers.REG_ACCUMULATOR), term);
+        int result = ADC(getRegisterValue(Registers.REG_ACCUMULATOR), term);
 
         return (result & 0xFF);
     }
@@ -764,7 +772,7 @@ public class CPU {
 
     //XXX Need to use 2s compliment addition (subtraction)
     private void performCMP(int value, int toRegister){
-        int result = registers.getRegister(toRegister) - value;
+        int result = getRegisterValue(toRegister) - value;
         registers.setFlagsBasedOn(result & 0xFF);
 
         if (result >=0)
@@ -784,8 +792,8 @@ public class CPU {
     }
 
     private void withRegister(int registerId, ByteOperation byteOperation){
-        int b = registers.getRegister(registerId);
-        registers.setRegister(registerId, byteOperation.perform(b));
+        int b = getRegisterValue(registerId);
+        setRegisterValue(registerId, byteOperation.perform(b));
     }
 
     /**
@@ -836,13 +844,13 @@ public class CPU {
     }
 
     private void performBIT(int memData) {
-        if ((memData & registers.getRegister(Registers.REG_ACCUMULATOR)) == memData)
+        if ((memData & getRegisterValue(Registers.REG_ACCUMULATOR)) == memData)
             registers.setFlag(Registers.STATUS_FLAG_ZERO);
         else
             registers.clearFlag(Registers.STATUS_FLAG_ZERO);
 
         //Set N, V to bits 7 and 6 of memory data
-        registers.setRegister(Registers.REG_STATUS, (memData & 0b11000000) | (registers.getRegister(Registers.REG_STATUS) & 0b00111111));
+        setRegisterValue(Registers.REG_STATUS, (memData & 0b11000000) | (getRegisterValue(Registers.REG_STATUS) & 0b00111111));
     }
 
     private void withRegisterAndByteAt(int registerId, int memoryLocation, boolean setFlags, TwoByteOperation twoByteOperation){
@@ -858,12 +866,12 @@ public class CPU {
     }
 
     private void withRegisterAndByte(int registerId, int byteValue, boolean setFlags, TwoByteOperation twoByteOperation){
-        int registerByte = registers.getRegister(registerId);
+        int registerByte = getRegisterValue(registerId);
 
         if (setFlags)
             registers.setRegisterAndFlags(registerId, twoByteOperation.perform(registerByte, byteValue));
         else
-            registers.setRegister(registerId, twoByteOperation.perform(registerByte, byteValue));
+            setRegisterValue(registerId, twoByteOperation.perform(registerByte, byteValue));
     }
 
     /**
