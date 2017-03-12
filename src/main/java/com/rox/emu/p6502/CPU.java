@@ -29,8 +29,8 @@ public class CPU {
         registers.setRegister(Registers.REG_X_INDEX, 0x0);
         registers.setRegister(Registers.REG_Y_INDEX, 0x0);
         registers.setRegister(Registers.REG_STATUS, 0x34);
-        registers.setRegister(Registers.REG_PC_HIGH, memory.getByte(0xFFFC));
-        registers.setRegister(Registers.REG_PC_LOW, memory.getByte(0xFFFD));
+        registers.setRegister(Registers.REG_PC_HIGH, getByteOfMemoryAt(0xFFFC));
+        registers.setRegister(Registers.REG_PC_LOW, getByteOfMemoryAt(0xFFFD));
         registers.setRegister(Registers.REG_SP, 0xFF);
         System.out.println("...READY!");
     }
@@ -354,11 +354,11 @@ public class CPU {
             }break;
 
             case InstructionSet.OP_BIT_Z:
-                performBIT(memory.getByte(nextProgramByte()));
+                performBIT(getByteOfMemoryAt(nextProgramByte()));
             break;
 
             case InstructionSet.OP_BIT_ABS:
-                performBIT(memory.getByte(nextProgramWord()));
+                performBIT(getByteOfMemoryAt(nextProgramWord()));
             break;
 
             case InstructionSet.OP_ORA_I:
