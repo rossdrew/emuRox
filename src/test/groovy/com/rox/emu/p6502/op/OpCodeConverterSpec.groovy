@@ -54,7 +54,7 @@ class OpCodeConverterSpec extends Specification{
     /*
      * JaCoCo doesn't cover String switch statements properly, so we
      * need a case where two Strings have the same hashcode but
-     * different .equals()
+     * different .equals() in order to get 100% coverage
      *
      * This is because String switch statements compile to a hashcode
      * check then an equals() check so the negative case on the
