@@ -47,7 +47,7 @@ public class CPU {
 
     private int getByteOfMemoryAt(int location, int index){
         final int memoryByte = memory.getByte(location + index);
-        System.out.println("FETCH mem[" + location + (index != 0 ? "[" + index + "]" : "") +"] --> " + memoryByte);
+        System.out.println("Got " + Integer.toHexString(memoryByte) + " from mem[" + location + (index != 0 ? "[" + index + "]" : "") +"]");
         return memoryByte;
     }
 
@@ -57,7 +57,7 @@ public class CPU {
 
     private int setByteOfMemoryAt(int location, int index, int newByte){
         memory.setByteAt(location + index, newByte);
-        System.out.println("STORE " + newByte + " --> mem[" + location + (index != 0 ? "[" + index + "]" : "") +"]");
+        System.out.println("Stored " + Integer.toHexString(newByte) + " at mem[" + location + (index != 0 ? "[" + index + "]" : "") +"]");
         return (location + index);
     }
 
