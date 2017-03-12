@@ -11,8 +11,8 @@ import java.util.Arrays;
  */
 public class OpCodeConverter {
     //Internal representation details
-    public static final String SEPERATOR = "_";
-    public static final int OP_DELIMETER = 0;
+    public static final String SEPARATOR = "_";
+    public static final int OP_DELIMITER = 0;
     public static final int OP_CODE = 1;
     public static final int OP_ADD = 2;
     public static final int OP_I = 3;
@@ -31,8 +31,8 @@ public class OpCodeConverter {
 
     public static String toDescription(String internalOpCodeName){
         if (internalOpCodeName != null && !internalOpCodeName.isEmpty()){
-            String tokens[] = internalOpCodeName.split(SEPERATOR);
-            if (!tokens[OP_DELIMETER].equalsIgnoreCase("OP"))
+            String tokens[] = internalOpCodeName.split(SEPARATOR);
+            if (!tokens[OP_DELIMITER].equalsIgnoreCase("OP"))
                 throw new UnknownOpCodeException("Opcode not properly delimited", internalOpCodeName);
             return (getOpCode(tokens) + getAddressingMode(tokens));
         }else{

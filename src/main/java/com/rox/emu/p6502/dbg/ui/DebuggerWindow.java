@@ -20,16 +20,16 @@ public class DebuggerWindow extends JFrame{
     private CPU processor;
     private Memory memory;
 
-    private RegistersPanel registersPanel = new RegistersPanel();
+    private final RegistersPanel registersPanel = new RegistersPanel();
 
     private String instructionName = "...";
-    private JLabel instruction = new JLabel(instructionName);
+    private final JLabel instruction = new JLabel(instructionName);
 
-    private DefaultListModel listModel;
+    private final DefaultListModel listModel;
 
     public DebuggerWindow() {
         super("6502 Debugger");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setSize(1000, 500);
 
         listModel= new DefaultListModel();
@@ -149,11 +149,11 @@ public class DebuggerWindow extends JFrame{
     private class RegistersPanel extends JPanel {
         private Registers registers;
 
-        private int bitSize = 40;
-        private int byteSize = (bitSize*8);
-        private int padding = 10;
-        private int bitFontSize = 40;
-        private int valueFontSize = 10;
+        private final int bitSize = 40;
+        private final int byteSize = (bitSize*8);
+        private final int padding = 10;
+        private final int bitFontSize = 40;
+        private final int valueFontSize = 10;
 
         @Override
         public void paint(Graphics g) {

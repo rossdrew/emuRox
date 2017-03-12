@@ -3,6 +3,8 @@ package com.rox.emu.p6502;
 import com.rox.emu.Memory;
 import com.rox.emu.UnknownOpCodeException;
 
+import static com.rox.emu.p6502.Registers.*;
+
 /**
  * A emulated representation of MOS 6502, 8 bit
  * microprocessor functionality.
@@ -25,13 +27,13 @@ public class CPU {
      */
     public void reset(){
         System.out.println("*** RESETTING >>>");
-        setRegisterValue(Registers.REG_ACCUMULATOR, 0x0);
-        setRegisterValue(Registers.REG_X_INDEX, 0x0);
-        setRegisterValue(Registers.REG_Y_INDEX, 0x0);
-        setRegisterValue(Registers.REG_STATUS, 0x34);
-        setRegisterValue(Registers.REG_PC_HIGH, getByteOfMemoryAt(0xFFFC));
-        setRegisterValue(Registers.REG_PC_LOW, getByteOfMemoryAt(0xFFFD));
-        setRegisterValue(Registers.REG_SP, 0xFF);
+        setRegisterValue(REG_ACCUMULATOR, 0x0);
+        setRegisterValue(REG_X_INDEX, 0x0);
+        setRegisterValue(REG_Y_INDEX, 0x0);
+        setRegisterValue(REG_STATUS, 0x34);
+        setRegisterValue(REG_PC_HIGH, getByteOfMemoryAt(0xFFFC));
+        setRegisterValue(REG_PC_LOW, getByteOfMemoryAt(0xFFFD));
+        setRegisterValue(REG_SP, 0xFF);
         System.out.println("...READY!");
     }
 
@@ -70,24 +72,24 @@ public class CPU {
     }
 
     private int getByteOfMemoryXIndexedAt(int location){
-        return getByteOfMemoryAt(location, getRegisterValue(Registers.REG_X_INDEX));
+        return getByteOfMemoryAt(location, getRegisterValue(REG_X_INDEX));
     }
 
     private int getWordOfMemoryXIndexedAt(int location){
-        int indexedLocation = location + getRegisterValue(Registers.REG_X_INDEX);
+        int indexedLocation = location + getRegisterValue(REG_X_INDEX);
         return (getByteOfMemoryAt(indexedLocation) << 8 | getByteOfMemoryAt(indexedLocation + 1));
     }
 
     private int setByteOfMemoryXIndexedAt(int location, int newByte){
-        return setByteOfMemoryAt(location, getRegisterValue(Registers.REG_X_INDEX), newByte);
+        return setByteOfMemoryAt(location, getRegisterValue(REG_X_INDEX), newByte);
     }
 
     private int getByteOfMemoryYIndexedAt(int location){
-        return getByteOfMemoryAt(location, getRegisterValue(Registers.REG_Y_INDEX));
+        return getByteOfMemoryAt(location, getRegisterValue(REG_Y_INDEX));
     }
 
     private int setByteOfMemoryYIndexedAt(int location, int newByte){
-        return setByteOfMemoryAt(location, getRegisterValue(Registers.REG_Y_INDEX), newByte);
+        return setByteOfMemoryAt(location, getRegisterValue(REG_Y_INDEX), newByte);
     }
 
     private int getByteOfMemoryAt(int location){
@@ -100,10 +102,11 @@ public class CPU {
 
     /**
      * Return the next byte from program memory, as defined
-     * by the Program Counter.
+     * by the Program Counter.<br/>
+     * <br/>
      * <em>Increments the Program Counter by 1</em>
      *
-     * @return byte from PC[0]
+     * @return byte {@code from mem[ PC[0] ]}
      */
     private int nextProgramByte(){
         int memoryLocation = getAndStepPC();
@@ -116,7 +119,7 @@ public class CPU {
      *
      * PC[0] = high order byte
      * PC[1] = low order byte
-     *
+     *<br/><br/>
      * <em>Increments the Program Counter by 1</em>
      *
      * @return word made up of both bytes
@@ -140,7 +143,7 @@ public class CPU {
         System.out.println("Instruction: " + InstructionSet.getOpCodeName(opCode) + "...");
         switch (opCode){
             case InstructionSet.OP_ASL_A:
-                withRegister(Registers.REG_ACCUMULATOR, this::performROL);
+                withRegister(REG_ACCUMULATOR, this::performROL);
             break;
 
             case InstructionSet.OP_ASL_Z:
@@ -160,7 +163,7 @@ public class CPU {
             break;
 
             case InstructionSet.OP_LSR_A:
-                withRegister(Registers.REG_ACCUMULATOR, this::performLSR);
+                withRegister(REG_ACCUMULATOR, this::performLSR);
             break;
 
             case InstructionSet.OP_LSR_Z:
@@ -180,7 +183,7 @@ public class CPU {
             break;
 
             case InstructionSet.OP_ROL_A:
-                withRegister(Registers.REG_ACCUMULATOR, this::performROL);
+                withRegister(REG_ACCUMULATOR, this::performROL);
             break;
 
             case InstructionSet.OP_ROL_Z:
@@ -201,19 +204,19 @@ public class CPU {
 
             /* Not implemented and/or not published on older 6502s */
             case InstructionSet.OP_ROR_A:
-                withRegister(Registers.REG_ACCUMULATOR, this::performROR);
+                withRegister(REG_ACCUMULATOR, this::performROR);
                 break;
 
             case InstructionSet.OP_SEC:
-                registers.setFlag(Registers.STATUS_FLAG_CARRY);
+                registers.setFlag(STATUS_FLAG_CARRY);
                 break;
 
             case InstructionSet.OP_CLC:
-                registers.clearFlag(Registers.STATUS_FLAG_CARRY);
+                registers.clearFlag(STATUS_FLAG_CARRY);
                 break;
 
             case InstructionSet.OP_CLV:
-                registers.clearFlag(Registers.STATUS_FLAG_OVERFLOW);
+                registers.clearFlag(STATUS_FLAG_OVERFLOW);
                 break;
 
             case InstructionSet.OP_INC_Z:
@@ -248,117 +251,117 @@ public class CPU {
             break;
 
             case InstructionSet.OP_INX:
-                withRegister(Registers.REG_X_INDEX, this::performINC);
+                withRegister(REG_X_INDEX, this::performINC);
                 break;
 
             case InstructionSet.OP_DEX:
-                withRegister(Registers.REG_X_INDEX, this::performDEC);
+                withRegister(REG_X_INDEX, this::performDEC);
                 break;
 
             case InstructionSet.OP_INY:
-                withRegister(Registers.REG_Y_INDEX, this::performINC);
+                withRegister(REG_Y_INDEX, this::performINC);
                 break;
 
             case InstructionSet.OP_DEY:
-                withRegister(Registers.REG_Y_INDEX, this::performDEC);
+                withRegister(REG_Y_INDEX, this::performDEC);
                 break;
 
             case InstructionSet.OP_LDX_I:
-                registers.setRegisterAndFlags(Registers.REG_X_INDEX, nextProgramByte());
+                registers.setRegisterAndFlags(REG_X_INDEX, nextProgramByte());
                 break;
 
             case InstructionSet.OP_LDX_Z:
-                registers.setRegisterAndFlags(Registers.REG_X_INDEX, getByteOfMemoryAt(nextProgramByte()));
+                registers.setRegisterAndFlags(REG_X_INDEX, getByteOfMemoryAt(nextProgramByte()));
                 break;
 
             case InstructionSet.OP_LDX_Z_IY:
-                registers.setRegisterAndFlags(Registers.REG_X_INDEX, getByteOfMemoryYIndexedAt(nextProgramByte()));
+                registers.setRegisterAndFlags(REG_X_INDEX, getByteOfMemoryYIndexedAt(nextProgramByte()));
                 break;
 
             case InstructionSet.OP_LDX_ABS:
-                registers.setRegisterAndFlags(Registers.REG_X_INDEX, getByteOfMemoryAt(nextProgramWord()));
+                registers.setRegisterAndFlags(REG_X_INDEX, getByteOfMemoryAt(nextProgramWord()));
                 break;
 
             case InstructionSet.OP_LDX_ABS_IY:
-                registers.setRegisterAndFlags(Registers.REG_X_INDEX, getByteOfMemoryYIndexedAt(nextProgramWord()));
+                registers.setRegisterAndFlags(REG_X_INDEX, getByteOfMemoryYIndexedAt(nextProgramWord()));
                 break;
 
             case InstructionSet.OP_LDY_I:
-                registers.setRegisterAndFlags(Registers.REG_Y_INDEX, nextProgramByte());
+                registers.setRegisterAndFlags(REG_Y_INDEX, nextProgramByte());
                 break;
 
             case InstructionSet.OP_LDY_Z:
-                registers.setRegisterAndFlags(Registers.REG_Y_INDEX, getByteOfMemoryAt(nextProgramByte()));
+                registers.setRegisterAndFlags(REG_Y_INDEX, getByteOfMemoryAt(nextProgramByte()));
                 break;
 
             case InstructionSet.OP_LDY_Z_IX:
-                registers.setRegisterAndFlags(Registers.REG_Y_INDEX, getByteOfMemoryXIndexedAt(nextProgramByte()));
+                registers.setRegisterAndFlags(REG_Y_INDEX, getByteOfMemoryXIndexedAt(nextProgramByte()));
                 break;
 
             case InstructionSet.OP_LDY_ABS:
-                registers.setRegisterAndFlags(Registers.REG_Y_INDEX, getByteOfMemoryAt(nextProgramWord()));
+                registers.setRegisterAndFlags(REG_Y_INDEX, getByteOfMemoryAt(nextProgramWord()));
                 break;
 
             case InstructionSet.OP_LDY_ABS_IX:
-                registers.setRegisterAndFlags(Registers.REG_Y_INDEX, getByteOfMemoryXIndexedAt(nextProgramWord()));
+                registers.setRegisterAndFlags(REG_Y_INDEX, getByteOfMemoryXIndexedAt(nextProgramWord()));
                 break;
 
             case InstructionSet.OP_LDA_I:
-                registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, nextProgramByte());
+                registers.setRegisterAndFlags(REG_ACCUMULATOR, nextProgramByte());
                 break;
 
             case InstructionSet.OP_LDA_Z:
-                registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(nextProgramByte()));
+                registers.setRegisterAndFlags(REG_ACCUMULATOR, getByteOfMemoryAt(nextProgramByte()));
                 break;
 
             case InstructionSet.OP_LDA_Z_IX:
-                registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, getByteOfMemoryXIndexedAt(nextProgramByte()));
+                registers.setRegisterAndFlags(REG_ACCUMULATOR, getByteOfMemoryXIndexedAt(nextProgramByte()));
                 break;
 
             case InstructionSet.OP_LDA_ABS:
-                registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(nextProgramWord()));
+                registers.setRegisterAndFlags(REG_ACCUMULATOR, getByteOfMemoryAt(nextProgramWord()));
                 break;
 
             case InstructionSet.OP_LDA_ABS_IY:
-                registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, getByteOfMemoryYIndexedAt(nextProgramWord()));
+                registers.setRegisterAndFlags(REG_ACCUMULATOR, getByteOfMemoryYIndexedAt(nextProgramWord()));
                 break;
 
             case InstructionSet.OP_LDA_ABS_IX:
-                registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, getByteOfMemoryXIndexedAt(nextProgramWord()));
+                registers.setRegisterAndFlags(REG_ACCUMULATOR, getByteOfMemoryXIndexedAt(nextProgramWord()));
                 break;
 
             case InstructionSet.OP_LDA_IND_IX: {
                 int pointerLocation = getWordOfMemoryXIndexedAt(nextProgramByte());
-                registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(pointerLocation));
+                registers.setRegisterAndFlags(REG_ACCUMULATOR, getByteOfMemoryAt(pointerLocation));
             }break;
 
             case InstructionSet.OP_AND_Z:
-                withRegisterAndByteAt(Registers.REG_ACCUMULATOR, nextProgramByte(), true, this::performAND);
+                withRegisterAndByteAt(REG_ACCUMULATOR, nextProgramByte(), true, this::performAND);
                 break;
 
             case InstructionSet.OP_AND_ABS:
-                withRegisterAndByteAt(Registers.REG_ACCUMULATOR, nextProgramWord(), true, this::performAND);
+                withRegisterAndByteAt(REG_ACCUMULATOR, nextProgramWord(), true, this::performAND);
                 break;
 
             case InstructionSet.OP_AND_I:
-                withRegisterAndByte(Registers.REG_ACCUMULATOR, nextProgramByte(), true, this::performAND);
+                withRegisterAndByte(REG_ACCUMULATOR, nextProgramByte(), true, this::performAND);
                 break;
 
             case InstructionSet.OP_AND_Z_IX:
-                withRegisterAndByteXIndexedAt(Registers.REG_ACCUMULATOR, nextProgramByte(), true, this::performAND);
+                withRegisterAndByteXIndexedAt(REG_ACCUMULATOR, nextProgramByte(), true, this::performAND);
                 break;
 
             case InstructionSet.OP_AND_ABS_IX:
-                withRegisterAndByteXIndexedAt(Registers.REG_ACCUMULATOR, nextProgramWord(), true, this::performAND);
+                withRegisterAndByteXIndexedAt(REG_ACCUMULATOR, nextProgramWord(), true, this::performAND);
                 break;
 
             case InstructionSet.OP_AND_ABS_IY:
-                withRegisterAndByteYIndexedAt(Registers.REG_ACCUMULATOR, nextProgramWord(), true, this::performAND);
+                withRegisterAndByteYIndexedAt(REG_ACCUMULATOR, nextProgramWord(), true, this::performAND);
                 break;
 
             case InstructionSet.OP_AND_IND_IX: {
                 int pointerLocation = getWordOfMemoryXIndexedAt(nextProgramByte());
-                withRegisterAndByteAt(Registers.REG_ACCUMULATOR, pointerLocation, true, this::performAND);
+                withRegisterAndByteAt(REG_ACCUMULATOR, pointerLocation, true, this::performAND);
             }break;
 
             case InstructionSet.OP_BIT_Z:
@@ -370,300 +373,300 @@ public class CPU {
             break;
 
             case InstructionSet.OP_ORA_I:
-                withRegisterAndByte(Registers.REG_ACCUMULATOR, nextProgramByte(), true, this::performORA);
+                withRegisterAndByte(REG_ACCUMULATOR, nextProgramByte(), true, this::performORA);
                 break;
 
             case InstructionSet.OP_ORA_Z:
-                withRegisterAndByteAt(Registers.REG_ACCUMULATOR, nextProgramByte(), true, this::performORA);
+                withRegisterAndByteAt(REG_ACCUMULATOR, nextProgramByte(), true, this::performORA);
                 break;
 
             case InstructionSet.OP_ORA_Z_IX:
-                withRegisterAndByteXIndexedAt(Registers.REG_ACCUMULATOR, nextProgramByte(), true, this::performORA);
+                withRegisterAndByteXIndexedAt(REG_ACCUMULATOR, nextProgramByte(), true, this::performORA);
                 break;
 
             case InstructionSet.OP_ORA_ABS:
-                withRegisterAndByteAt(Registers.REG_ACCUMULATOR, nextProgramWord(), true, this::performORA);
+                withRegisterAndByteAt(REG_ACCUMULATOR, nextProgramWord(), true, this::performORA);
                 break;
 
             case InstructionSet.OP_ORA_ABS_IX:
-                withRegisterAndByteXIndexedAt(Registers.REG_ACCUMULATOR, nextProgramWord(), true, this::performORA);
+                withRegisterAndByteXIndexedAt(REG_ACCUMULATOR, nextProgramWord(), true, this::performORA);
                 break;
 
             case InstructionSet.OP_ORA_ABS_IY:
-                withRegisterAndByteYIndexedAt(Registers.REG_ACCUMULATOR, nextProgramWord(), true, this::performORA);
+                withRegisterAndByteYIndexedAt(REG_ACCUMULATOR, nextProgramWord(), true, this::performORA);
                 break;
 
             case InstructionSet.OP_ORA_IND_IX: {
                 int pointerLocation = getWordOfMemoryXIndexedAt(nextProgramByte());
-                withRegisterAndByteAt(Registers.REG_ACCUMULATOR, pointerLocation, true, this::performORA);
+                withRegisterAndByteAt(REG_ACCUMULATOR, pointerLocation, true, this::performORA);
             }break;
 
             case InstructionSet.OP_EOR_I:
-                withRegisterAndByte(Registers.REG_ACCUMULATOR, nextProgramByte(), true, this::performEOR);
+                withRegisterAndByte(REG_ACCUMULATOR, nextProgramByte(), true, this::performEOR);
                 break;
 
             case InstructionSet.OP_EOR_Z:
-                withRegisterAndByteAt(Registers.REG_ACCUMULATOR, nextProgramByte(), true, this::performEOR);
+                withRegisterAndByteAt(REG_ACCUMULATOR, nextProgramByte(), true, this::performEOR);
                 break;
 
             case InstructionSet.OP_EOR_Z_IX:
-                withRegisterAndByteXIndexedAt(Registers.REG_ACCUMULATOR, nextProgramByte(), true, this::performEOR);
+                withRegisterAndByteXIndexedAt(REG_ACCUMULATOR, nextProgramByte(), true, this::performEOR);
                 break;
 
             case InstructionSet.OP_EOR_ABS:
-                withRegisterAndByteAt(Registers.REG_ACCUMULATOR, nextProgramWord(), true, this::performEOR);
+                withRegisterAndByteAt(REG_ACCUMULATOR, nextProgramWord(), true, this::performEOR);
                 break;
 
             case InstructionSet.OP_EOR_ABS_IX:
-                withRegisterAndByteXIndexedAt(Registers.REG_ACCUMULATOR, nextProgramWord(), true, this::performEOR);
+                withRegisterAndByteXIndexedAt(REG_ACCUMULATOR, nextProgramWord(), true, this::performEOR);
                 break;
 
             case InstructionSet.OP_EOR_ABS_IY:
-                withRegisterAndByteYIndexedAt(Registers.REG_ACCUMULATOR, nextProgramWord(), true, this::performEOR);
+                withRegisterAndByteYIndexedAt(REG_ACCUMULATOR, nextProgramWord(), true, this::performEOR);
                 break;
 
             case InstructionSet.OP_EOR_IND_IX: {
                 int pointerLocation = getWordOfMemoryXIndexedAt(nextProgramByte());
-                withRegisterAndByteAt(Registers.REG_ACCUMULATOR, pointerLocation, true, this::performEOR);
+                withRegisterAndByteAt(REG_ACCUMULATOR, pointerLocation, true, this::performEOR);
             }break;
 
             case InstructionSet.OP_ADC_Z:
-                withRegisterAndByteAt(Registers.REG_ACCUMULATOR, nextProgramByte(), true, this::performADC);
+                withRegisterAndByteAt(REG_ACCUMULATOR, nextProgramByte(), true, this::performADC);
                 break;
 
             case InstructionSet.OP_ADC_I:
-                withRegisterAndByte(Registers.REG_ACCUMULATOR, nextProgramByte(), true, this::performADC);
+                withRegisterAndByte(REG_ACCUMULATOR, nextProgramByte(), true, this::performADC);
                 break;
 
             case InstructionSet.OP_ADC_ABS:
-                withRegisterAndByteAt(Registers.REG_ACCUMULATOR, nextProgramWord(), true, this::performADC);
+                withRegisterAndByteAt(REG_ACCUMULATOR, nextProgramWord(), true, this::performADC);
                 break;
 
             case InstructionSet.OP_ADC_ABS_IX:
-                withRegisterAndByteXIndexedAt(Registers.REG_ACCUMULATOR, nextProgramWord(), true, this::performADC);
+                withRegisterAndByteXIndexedAt(REG_ACCUMULATOR, nextProgramWord(), true, this::performADC);
                 break;
 
             case InstructionSet.OP_ADC_ABS_IY:
-                withRegisterAndByteYIndexedAt(Registers.REG_ACCUMULATOR, nextProgramWord(), true, this::performADC);
+                withRegisterAndByteYIndexedAt(REG_ACCUMULATOR, nextProgramWord(), true, this::performADC);
                 break;
 
             case InstructionSet.OP_ADC_Z_IX:
-                withRegisterAndByteXIndexedAt(Registers.REG_ACCUMULATOR, nextProgramByte(), true, this::performADC);
+                withRegisterAndByteXIndexedAt(REG_ACCUMULATOR, nextProgramByte(), true, this::performADC);
                 break;
 
             case InstructionSet.OP_ADC_IND_IX: {
                 int pointerLocation = getWordOfMemoryXIndexedAt(nextProgramByte());
-                withRegisterAndByteAt(Registers.REG_ACCUMULATOR, pointerLocation, true, this::performADC);
+                withRegisterAndByteAt(REG_ACCUMULATOR, pointerLocation, true, this::performADC);
             }break;
 
             case InstructionSet.OP_CMP_I:
-                performCMP(nextProgramByte(), Registers.REG_ACCUMULATOR);
+                performCMP(nextProgramByte(), REG_ACCUMULATOR);
                 break;
 
             case InstructionSet.OP_CMP_Z:
-                performCMP(getByteOfMemoryAt(nextProgramByte()), Registers.REG_ACCUMULATOR);
+                performCMP(getByteOfMemoryAt(nextProgramByte()), REG_ACCUMULATOR);
                 break;
 
             case InstructionSet.OP_CMP_Z_IX:
-                performCMP(getByteOfMemoryXIndexedAt(nextProgramByte()), Registers.REG_ACCUMULATOR);
+                performCMP(getByteOfMemoryXIndexedAt(nextProgramByte()), REG_ACCUMULATOR);
                 break;
 
             case InstructionSet.OP_CMP_ABS:
-                performCMP(getByteOfMemoryAt(nextProgramWord()), Registers.REG_ACCUMULATOR);
+                performCMP(getByteOfMemoryAt(nextProgramWord()), REG_ACCUMULATOR);
                 break;
 
             case InstructionSet.OP_CMP_ABS_IX:
-                performCMP(getByteOfMemoryXIndexedAt(nextProgramWord()), Registers.REG_ACCUMULATOR);
+                performCMP(getByteOfMemoryXIndexedAt(nextProgramWord()), REG_ACCUMULATOR);
                 break;
 
             case InstructionSet.OP_CMP_ABS_IY:
-                performCMP(getByteOfMemoryYIndexedAt(nextProgramWord()), Registers.REG_ACCUMULATOR);
+                performCMP(getByteOfMemoryYIndexedAt(nextProgramWord()), REG_ACCUMULATOR);
                 break;
 
             case InstructionSet.OP_CPX_I:
-                performCMP(nextProgramByte(), Registers.REG_X_INDEX);
+                performCMP(nextProgramByte(), REG_X_INDEX);
                 break;
 
             case InstructionSet.OP_CPX_Z:
-                performCMP(getByteOfMemoryAt(nextProgramByte()), Registers.REG_X_INDEX);
+                performCMP(getByteOfMemoryAt(nextProgramByte()), REG_X_INDEX);
                 break;
 
             case InstructionSet.OP_CPX_ABS:
-                performCMP(getByteOfMemoryAt(nextProgramWord()), Registers.REG_X_INDEX);
+                performCMP(getByteOfMemoryAt(nextProgramWord()), REG_X_INDEX);
                 break;
 
             case InstructionSet.OP_CPY_I:
-                performCMP(nextProgramByte(), Registers.REG_Y_INDEX);
+                performCMP(nextProgramByte(), REG_Y_INDEX);
                 break;
 
             case InstructionSet.OP_CPY_Z:
-                performCMP(getByteOfMemoryAt(nextProgramByte()), Registers.REG_Y_INDEX);
+                performCMP(getByteOfMemoryAt(nextProgramByte()), REG_Y_INDEX);
                 break;
 
             case InstructionSet.OP_CPY_ABS:
-                performCMP(getByteOfMemoryAt(nextProgramWord()), Registers.REG_Y_INDEX);
+                performCMP(getByteOfMemoryAt(nextProgramWord()), REG_Y_INDEX);
                 break;
 
             case InstructionSet.OP_SBC_I:
-                registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, performSBC(nextProgramByte()));
+                registers.setRegisterAndFlags(REG_ACCUMULATOR, performSBC(nextProgramByte()));
                 break;
 
             case InstructionSet.OP_SBC_Z:
-                registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, performSBC(getByteOfMemoryAt(nextProgramByte())));
+                registers.setRegisterAndFlags(REG_ACCUMULATOR, performSBC(getByteOfMemoryAt(nextProgramByte())));
                 break;
 
             case InstructionSet.OP_SBC_Z_IX:
-                registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, performSBC(getByteOfMemoryXIndexedAt(nextProgramByte())));
+                registers.setRegisterAndFlags(REG_ACCUMULATOR, performSBC(getByteOfMemoryXIndexedAt(nextProgramByte())));
                 break;
 
             case InstructionSet.OP_SBC_ABS:
-                registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, performSBC(getByteOfMemoryAt(nextProgramWord())));
+                registers.setRegisterAndFlags(REG_ACCUMULATOR, performSBC(getByteOfMemoryAt(nextProgramWord())));
                 break;
 
             case InstructionSet.OP_SBC_ABS_IX:
-                registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, performSBC(getByteOfMemoryXIndexedAt(nextProgramWord())));
+                registers.setRegisterAndFlags(REG_ACCUMULATOR, performSBC(getByteOfMemoryXIndexedAt(nextProgramWord())));
                 break;
 
             case InstructionSet.OP_SBC_ABS_IY:
-                registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, performSBC(getByteOfMemoryYIndexedAt(nextProgramWord())));
+                registers.setRegisterAndFlags(REG_ACCUMULATOR, performSBC(getByteOfMemoryYIndexedAt(nextProgramWord())));
                 break;
 
             case InstructionSet.OP_SBC_IND_IX: {
                 int pointerLocation = getWordOfMemoryXIndexedAt(nextProgramByte());
-                withRegisterAndByte(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(pointerLocation), true, this::performSBC2);
+                withRegisterAndByte(REG_ACCUMULATOR, getByteOfMemoryAt(pointerLocation), true, this::performSBC2);
             }break;
 
             case InstructionSet.OP_STY_Z:
-                setByteOfMemoryAt(nextProgramByte(), getRegisterValue(Registers.REG_Y_INDEX));
+                setByteOfMemoryAt(nextProgramByte(), getRegisterValue(REG_Y_INDEX));
                 break;
 
             case InstructionSet.OP_STY_ABS:
-                setByteOfMemoryAt(nextProgramWord(), getRegisterValue(Registers.REG_Y_INDEX));
+                setByteOfMemoryAt(nextProgramWord(), getRegisterValue(REG_Y_INDEX));
                 break;
 
             case InstructionSet.OP_STY_Z_IX:
-                setByteOfMemoryXIndexedAt(nextProgramByte(), getRegisterValue(Registers.REG_Y_INDEX));
+                setByteOfMemoryXIndexedAt(nextProgramByte(), getRegisterValue(REG_Y_INDEX));
                 break;
 
             case InstructionSet.OP_STA_Z:
-                setByteOfMemoryAt(nextProgramByte(), getRegisterValue(Registers.REG_ACCUMULATOR));
+                setByteOfMemoryAt(nextProgramByte(), getRegisterValue(REG_ACCUMULATOR));
                 break;
 
             case InstructionSet.OP_STA_ABS:
-                setByteOfMemoryAt(nextProgramWord(), getRegisterValue(Registers.REG_ACCUMULATOR));
+                setByteOfMemoryAt(nextProgramWord(), getRegisterValue(REG_ACCUMULATOR));
                 break;
 
             case InstructionSet.OP_STA_Z_IX:
-                setByteOfMemoryXIndexedAt(nextProgramByte(), getRegisterValue(Registers.REG_ACCUMULATOR));
+                setByteOfMemoryXIndexedAt(nextProgramByte(), getRegisterValue(REG_ACCUMULATOR));
                 break;
 
             case InstructionSet.OP_STA_ABS_IX:
-                setByteOfMemoryXIndexedAt(nextProgramWord(), getRegisterValue(Registers.REG_ACCUMULATOR));
+                setByteOfMemoryXIndexedAt(nextProgramWord(), getRegisterValue(REG_ACCUMULATOR));
                 break;
 
             case InstructionSet.OP_STA_ABS_IY:
-                setByteOfMemoryYIndexedAt(nextProgramWord(), getRegisterValue(Registers.REG_ACCUMULATOR));
+                setByteOfMemoryYIndexedAt(nextProgramWord(), getRegisterValue(REG_ACCUMULATOR));
                 break;
 
             case InstructionSet.OP_STX_Z:
-                setByteOfMemoryAt(nextProgramByte(), getRegisterValue(Registers.REG_X_INDEX));
+                setByteOfMemoryAt(nextProgramByte(), getRegisterValue(REG_X_INDEX));
                 break;
 
             case InstructionSet.OP_STX_Z_IY:
-                setByteOfMemoryYIndexedAt(nextProgramByte(), getRegisterValue(Registers.REG_X_INDEX));
+                setByteOfMemoryYIndexedAt(nextProgramByte(), getRegisterValue(REG_X_INDEX));
                 break;
 
             case InstructionSet.OP_STX_ABS:
-                setByteOfMemoryAt(nextProgramWord(), getRegisterValue(Registers.REG_X_INDEX));
+                setByteOfMemoryAt(nextProgramWord(), getRegisterValue(REG_X_INDEX));
                 break;
 
             case InstructionSet.OP_PHA:
-                push(getRegisterValue(Registers.REG_ACCUMULATOR));
+                push(getRegisterValue(REG_ACCUMULATOR));
                 break;
 
             case InstructionSet.OP_PLA:
-                registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, pop());
+                registers.setRegisterAndFlags(REG_ACCUMULATOR, pop());
                 break;
 
             case InstructionSet.OP_PHP:
-                push(getRegisterValue(Registers.REG_STATUS));
+                push(getRegisterValue(REG_STATUS));
                 break;
 
             case InstructionSet.OP_PLP:
-                registers.setRegister(Registers.REG_STATUS, pop());
+                registers.setRegister(REG_STATUS, pop());
                 break;
 
             case InstructionSet.OP_JMP_ABS:
                 int h = nextProgramByte();
                 int l = nextProgramByte();
-                registers.setRegister(Registers.REG_PC_HIGH, h);
-                setRegisterValue(Registers.REG_PC_LOW, l);
+                registers.setRegister(REG_PC_HIGH, h);
+                setRegisterValue(REG_PC_LOW, l);
                 break;
 
             case InstructionSet.OP_BCS:
-                branchIf(registers.getFlag(Registers.STATUS_FLAG_CARRY));
+                branchIf(registers.getFlag(STATUS_FLAG_CARRY));
                 break;
 
             case InstructionSet.OP_BCC:
-                branchIf(!registers.getFlag(Registers.STATUS_FLAG_CARRY));
+                branchIf(!registers.getFlag(STATUS_FLAG_CARRY));
                 break;
 
             case InstructionSet.OP_BEQ:
-                branchIf(registers.getFlag(Registers.STATUS_FLAG_ZERO));
+                branchIf(registers.getFlag(STATUS_FLAG_ZERO));
                 break;
 
             case InstructionSet.OP_BNE:
-                branchIf(!registers.getFlag(Registers.STATUS_FLAG_ZERO));
+                branchIf(!registers.getFlag(STATUS_FLAG_ZERO));
                 break;
 
             case InstructionSet.OP_BMI:
-                branchIf(registers.getFlag(Registers.STATUS_FLAG_NEGATIVE));
+                branchIf(registers.getFlag(STATUS_FLAG_NEGATIVE));
                 break;
 
             case InstructionSet.OP_JSR:
                 int hi = nextProgramByte();
                 int lo = nextProgramByte();
-                push(getRegisterValue(Registers.REG_PC_HIGH));
-                push(getRegisterValue(Registers.REG_PC_LOW));
-                setRegisterValue(Registers.REG_PC_HIGH, hi);
-                setRegisterValue(Registers.REG_PC_LOW, lo);
+                push(getRegisterValue(REG_PC_HIGH));
+                push(getRegisterValue(REG_PC_LOW));
+                setRegisterValue(REG_PC_HIGH, hi);
+                setRegisterValue(REG_PC_LOW, lo);
                 break;
 
             case InstructionSet.OP_BPL:
-                branchIf(!registers.getFlag(Registers.STATUS_FLAG_NEGATIVE));
+                branchIf(!registers.getFlag(STATUS_FLAG_NEGATIVE));
                 break;
 
             case InstructionSet.OP_BVS:
-                branchIf(registers.getFlag(Registers.STATUS_FLAG_OVERFLOW));
+                branchIf(registers.getFlag(STATUS_FLAG_OVERFLOW));
                 break;
 
             case InstructionSet.OP_BVC:
-                branchIf(!registers.getFlag(Registers.STATUS_FLAG_OVERFLOW));
+                branchIf(!registers.getFlag(STATUS_FLAG_OVERFLOW));
                 break;
 
             case InstructionSet.OP_TAX:
-                setRegisterValue(Registers.REG_X_INDEX, getRegisterValue(Registers.REG_ACCUMULATOR));
+                setRegisterValue(REG_X_INDEX, getRegisterValue(REG_ACCUMULATOR));
                 break;
 
             case InstructionSet.OP_TAY:
-                setRegisterValue(Registers.REG_Y_INDEX, getRegisterValue(Registers.REG_ACCUMULATOR));
+                setRegisterValue(REG_Y_INDEX, getRegisterValue(REG_ACCUMULATOR));
                 break;
 
             case InstructionSet.OP_TYA:
-                setRegisterValue(Registers.REG_ACCUMULATOR, getRegisterValue(Registers.REG_Y_INDEX));
+                setRegisterValue(REG_ACCUMULATOR, getRegisterValue(REG_Y_INDEX));
                 break;
 
             case InstructionSet.OP_TXA:
-                setRegisterValue(Registers.REG_ACCUMULATOR, getRegisterValue(Registers.REG_X_INDEX));
+                setRegisterValue(REG_ACCUMULATOR, getRegisterValue(REG_X_INDEX));
                 break;
 
             case InstructionSet.OP_TXS:
-                setRegisterValue(Registers.REG_SP, getRegisterValue(Registers.REG_X_INDEX));
+                setRegisterValue(REG_SP, getRegisterValue(REG_X_INDEX));
                 break;
 
             case InstructionSet.OP_TSX:
-                setRegisterValue(Registers.REG_X_INDEX, getRegisterValue(Registers.REG_SP));
-                registers.setFlagsBasedOn(getRegisterValue(Registers.REG_X_INDEX));
+                setRegisterValue(REG_X_INDEX, getRegisterValue(REG_SP));
+                registers.setFlagsBasedOn(getRegisterValue(REG_X_INDEX));
                 break;
 
             case InstructionSet.OP_NOP:
@@ -671,24 +674,24 @@ public class CPU {
                 break;
 
             case InstructionSet.OP_SEI:
-                registers.setFlag(Registers.STATUS_FLAG_IRQ_DISABLE);
+                registers.setFlag(STATUS_FLAG_IRQ_DISABLE);
                 break;
 
             case InstructionSet.OP_CLI:
-                registers.clearFlag(Registers.STATUS_FLAG_IRQ_DISABLE);
+                registers.clearFlag(STATUS_FLAG_IRQ_DISABLE);
                 break;
 
             case InstructionSet.OP_SED:
-                registers.setFlag(Registers.STATUS_FLAG_DEC);
+                registers.setFlag(STATUS_FLAG_DEC);
                 break;
 
             case InstructionSet.OP_CLD:
-                registers.clearFlag(Registers.STATUS_FLAG_DEC);
+                registers.clearFlag(STATUS_FLAG_DEC);
                 break;
 
             case InstructionSet.OP_RTS:
-                setRegisterValue(Registers.REG_PC_LOW, pop());
-                setRegisterValue(Registers.REG_PC_HIGH, pop());
+                setRegisterValue(REG_PC_LOW, pop());
+                setRegisterValue(REG_PC_HIGH, pop());
                 break;
 
             default:
@@ -697,31 +700,31 @@ public class CPU {
     }
 
     private int pop(){
-        setRegisterValue(Registers.REG_SP, getRegisterValue(Registers.REG_SP) + 1);
-        int address = 0x0100 | getRegisterValue(Registers.REG_SP);
+        setRegisterValue(REG_SP, getRegisterValue(REG_SP) + 1);
+        int address = 0x0100 | getRegisterValue(REG_SP);
         int value = getByteOfMemoryAt(address);
         System.out.println("POP " + value + "(" + Integer.toBinaryString(value) + ") from mem[" + address + "]");
         return value;
     }
 
     private void push(int value){
-        System.out.println("PUSH " + value + "(" + Integer.toBinaryString(value) + ") to mem[" + getRegisterValue(Registers.REG_SP) + "]");
-        setByteOfMemoryAt(0x0100 | getRegisterValue(Registers.REG_SP), value);
-        setRegisterValue(Registers.REG_SP, getRegisterValue(Registers.REG_SP) - 1);
+        System.out.println("PUSH " + value + "(" + Integer.toBinaryString(value) + ") to mem[" + getRegisterValue(REG_SP) + "]");
+        setByteOfMemoryAt(0x0100 | getRegisterValue(REG_SP), value);
+        setRegisterValue(REG_SP, getRegisterValue(REG_SP) - 1);
     }
 
     private void setBorrowFlagFor(int newFakeByte) {
         if ((newFakeByte & 0x1) == 0x1)
-            registers.setFlag(Registers.STATUS_FLAG_CARRY);
+            registers.setFlag(STATUS_FLAG_CARRY);
         else
-            registers.clearFlag(Registers.STATUS_FLAG_CARRY);
+            registers.clearFlag(STATUS_FLAG_CARRY);
     }
 
     private void setCarryFlagBasedOn(int newFakeByte) {
         if ((newFakeByte & CARRY_INDICATOR_BIT) == CARRY_INDICATOR_BIT)
-            registers.setFlag(Registers.STATUS_FLAG_CARRY);
+            registers.setFlag(STATUS_FLAG_CARRY);
         else
-            registers.clearFlag(Registers.STATUS_FLAG_CARRY);
+            registers.clearFlag(STATUS_FLAG_CARRY);
     }
 
     private void branchIf(boolean condition){
@@ -738,9 +741,9 @@ public class CPU {
     private void branchTo(int displacement) {
         int displacementByte = displacement & 0xFF;
         if ((displacementByte & NEGATIVE_INDICATOR_BIT) == NEGATIVE_INDICATOR_BIT)
-            setRegisterValue(Registers.REG_PC_LOW, getRegisterValue(Registers.REG_PC_LOW) - fromTwosComplimented(displacementByte));
+            setRegisterValue(REG_PC_LOW, getRegisterValue(REG_PC_LOW) - fromTwosComplimented(displacementByte));
         else
-            setRegisterValue(Registers.REG_PC_LOW, getRegisterValue(Registers.REG_PC_LOW) + displacementByte);
+            setRegisterValue(REG_PC_LOW, getRegisterValue(REG_PC_LOW) + displacementByte);
     }
 
     private int twosComplimentOf(int byteValue){
@@ -757,7 +760,7 @@ public class CPU {
      * @param term term to add to the accumulator
      */
     private int addToAccumulator(int term){
-        int result = ADC(getRegisterValue(Registers.REG_ACCUMULATOR), term);
+        int result = ADC(getRegisterValue(REG_ACCUMULATOR), term);
 
         return (result & 0xFF);
     }
@@ -765,8 +768,8 @@ public class CPU {
     //(1) compliment of carry flag added (so subtracted) as well
     //(2) set carry if no borrow required (A >= M[v])
     private int performSBC(int byteTerm){
-        registers.setFlag(Registers.STATUS_FLAG_NEGATIVE);
-        int borrow = (registers.getFlag(Registers.STATUS_FLAG_CARRY) ? 0 : 1);
+        registers.setFlag(STATUS_FLAG_NEGATIVE);
+        int borrow = (registers.getFlag(STATUS_FLAG_CARRY) ? 0 : 1);
         return addToAccumulator(twosComplimentOf(byteTerm + borrow));
     }
 
@@ -776,9 +779,9 @@ public class CPU {
         registers.setFlagsBasedOn(result & 0xFF);
 
         if (result >=0)
-            registers.setFlag(Registers.STATUS_FLAG_CARRY);
+            registers.setFlag(STATUS_FLAG_CARRY);
         else
-            registers.clearFlag(Registers.STATUS_FLAG_CARRY);
+            registers.clearFlag(STATUS_FLAG_CARRY);
     }
 
     private void withByteAt(int location, ByteOperation byteOperation){
@@ -811,14 +814,14 @@ public class CPU {
     }
 
     private int performROL(int initialValue){
-        int rotatedValue = (initialValue << 1) | (registers.getFlag(Registers.STATUS_FLAG_CARRY) ? 1 : 0);
+        int rotatedValue = (initialValue << 1) | (registers.getFlag(STATUS_FLAG_CARRY) ? 1 : 0);
         setCarryFlagBasedOn(rotatedValue);
         registers.setFlagsBasedOn(rotatedValue);
         return rotatedValue & 0xFF;
     }
 
     private int performROR(int initialValue){
-        int rotatedValue = (initialValue >> 1) | (registers.getFlag(Registers.STATUS_FLAG_CARRY) ? 0b10000000 : 0);
+        int rotatedValue = (initialValue >> 1) | (registers.getFlag(STATUS_FLAG_CARRY) ? 0b10000000 : 0);
         setBorrowFlagFor(initialValue);
         registers.setFlagsBasedOn(rotatedValue);
         return rotatedValue & 0xFF;
@@ -844,13 +847,13 @@ public class CPU {
     }
 
     private void performBIT(int memData) {
-        if ((memData & getRegisterValue(Registers.REG_ACCUMULATOR)) == memData)
-            registers.setFlag(Registers.STATUS_FLAG_ZERO);
+        if ((memData & getRegisterValue(REG_ACCUMULATOR)) == memData)
+            registers.setFlag(STATUS_FLAG_ZERO);
         else
-            registers.clearFlag(Registers.STATUS_FLAG_ZERO);
+            registers.clearFlag(STATUS_FLAG_ZERO);
 
         //Set N, V to bits 7 and 6 of memory data
-        setRegisterValue(Registers.REG_STATUS, (memData & 0b11000000) | (getRegisterValue(Registers.REG_STATUS) & 0b00111111));
+        setRegisterValue(REG_STATUS, (memData & 0b11000000) | (getRegisterValue(REG_STATUS) & 0b00111111));
     }
 
     private void withRegisterAndByteAt(int registerId, int memoryLocation, boolean setFlags, TwoByteOperation twoByteOperation){
@@ -894,13 +897,13 @@ public class CPU {
     }
 
     private int performADC(int byteValueA, int byteValueB){
-        int carry = (registers.getFlag(Registers.STATUS_FLAG_CARRY) ? 1 : 0);
+        int carry = (registers.getFlag(STATUS_FLAG_CARRY) ? 1 : 0);
         return (ADC(byteValueA, byteValueB + carry) & 0xFF);
     }
 
     private int performSBC2(int byteValueA, int byteValueB){
-        registers.setFlag(Registers.STATUS_FLAG_NEGATIVE);
-        int borrow = (registers.getFlag(Registers.STATUS_FLAG_CARRY) ? 0 : 1);
+        registers.setFlag(STATUS_FLAG_NEGATIVE);
+        int borrow = (registers.getFlag(STATUS_FLAG_CARRY) ? 0 : 1);
         int byteValueBAndBorrow = twosComplimentOf(byteValueB + borrow);
 
         //Why do I need to convert back from twos compliment in this version? Something is fishy.
@@ -918,15 +921,15 @@ public class CPU {
         int result = byteValueA + byteValueB;
 
         //Set Carry, if bit 8 is set on new accumulator value, ignoring in 2s compliment addition (subtraction)
-        if (!registers.getFlag(Registers.STATUS_FLAG_NEGATIVE)){
+        if (!registers.getFlag(STATUS_FLAG_NEGATIVE)){
             setCarryFlagBasedOn(result);
         }else {
-            registers.clearFlag(Registers.STATUS_FLAG_CARRY);
+            registers.clearFlag(STATUS_FLAG_CARRY);
         }
 
         //Set Overflow if the sign of both inputs is different from the sign of the result
         if (((byteValueA ^ result) & (byteValueB ^ result) & 0x80) != 0)
-            registers.setFlag(Registers.STATUS_FLAG_OVERFLOW);
+            registers.setFlag(STATUS_FLAG_OVERFLOW);
         return result;
     }
 }

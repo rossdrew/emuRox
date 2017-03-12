@@ -1,7 +1,7 @@
 package com.rox.emu.p6502;
 
 /**
- * A representation of the 6502 CPU registers
+ * A representation of the MOS 6502 CPU registers
  *
  * @author Ross Drew
  */
