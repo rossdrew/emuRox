@@ -526,11 +526,11 @@ public class CPU {
             }break;
 
             case InstructionSet.OP_STY_Z:
-                memory.setByteAt(nextProgramByte(), registers.getRegister(Registers.REG_Y_INDEX));
+                setByteOfMemoryAt(nextProgramByte(), registers.getRegister(Registers.REG_Y_INDEX));
                 break;
 
             case InstructionSet.OP_STY_ABS:
-                memory.setByteAt(nextProgramWord(), registers.getRegister(Registers.REG_Y_INDEX));
+                setByteOfMemoryAt(nextProgramWord(), registers.getRegister(Registers.REG_Y_INDEX));
                 break;
 
             case InstructionSet.OP_STY_Z_IX:
@@ -698,7 +698,7 @@ public class CPU {
 
     private void push(int value){
         System.out.println("PUSH " + value + "(" + Integer.toBinaryString(value) + ") to mem[" + registers.getRegister(Registers.REG_SP) + "]");
-        memory.setByteAt(0x0100 | registers.getRegister(Registers.REG_SP), value);
+        setByteOfMemoryAt(0x0100 | registers.getRegister(Registers.REG_SP), value);
         registers.setRegister(Registers.REG_SP, registers.getRegister(Registers.REG_SP) - 1);
     }
 
