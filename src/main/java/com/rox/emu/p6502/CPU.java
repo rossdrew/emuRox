@@ -352,7 +352,7 @@ public class CPU {
                 break;
 
             case InstructionSet.OP_AND_I:
-                withRegisterAndByte(REG_ACCUMULATOR, nextProgramByte(), true, this::performAND);
+                withRegisterAndByte(REG_ACCUMULATOR, nextProgramByte(), this::performAND);
                 break;
 
             case InstructionSet.OP_AND_Z_IX:
@@ -381,7 +381,7 @@ public class CPU {
             break;
 
             case InstructionSet.OP_ORA_I:
-                withRegisterAndByte(REG_ACCUMULATOR, nextProgramByte(), true, this::performORA);
+                withRegisterAndByte(REG_ACCUMULATOR, nextProgramByte(), this::performORA);
                 break;
 
             case InstructionSet.OP_ORA_Z:
@@ -410,7 +410,7 @@ public class CPU {
             }break;
 
             case InstructionSet.OP_EOR_I:
-                withRegisterAndByte(REG_ACCUMULATOR, nextProgramByte(), true, this::performEOR);
+                withRegisterAndByte(REG_ACCUMULATOR, nextProgramByte(), this::performEOR);
                 break;
 
             case InstructionSet.OP_EOR_Z:
@@ -443,7 +443,7 @@ public class CPU {
                 break;
 
             case InstructionSet.OP_ADC_I:
-                withRegisterAndByte(REG_ACCUMULATOR, nextProgramByte(), true, this::performADC);
+                withRegisterAndByte(REG_ACCUMULATOR, nextProgramByte(), this::performADC);
                 break;
 
             case InstructionSet.OP_ADC_ABS:
@@ -541,7 +541,7 @@ public class CPU {
 
             case InstructionSet.OP_SBC_IND_IX: {
                 int pointerLocation = getWordOfMemoryXIndexedAt(nextProgramByte());
-                withRegisterAndByte(REG_ACCUMULATOR, getByteOfMemoryAt(pointerLocation), true, this::performSBC2);
+                withRegisterAndByte(REG_ACCUMULATOR, getByteOfMemoryAt(pointerLocation), this::performSBC2);
             }break;
 
             case InstructionSet.OP_STY_Z:
@@ -865,24 +865,23 @@ public class CPU {
     }
 
     private void withRegisterAndByteAt(int registerId, int memoryLocation, boolean setFlags, TwoByteOperation twoByteOperation){
-        withRegisterAndByte(registerId, getByteOfMemoryAt(memoryLocation), setFlags, twoByteOperation);
+        withRegisterAndByte(registerId, getByteOfMemoryAt(memoryLocation), twoByteOperation);
     }
 
     private void withRegisterAndByteXIndexedAt(int registerId, int memoryLocation, boolean setFlags, TwoByteOperation twoByteOperation){
-        withRegisterAndByte(registerId, getByteOfMemoryXIndexedAt(memoryLocation), setFlags, twoByteOperation);
+        withRegisterAndByte(registerId, getByteOfMemoryXIndexedAt(memoryLocation), twoByteOperation);
     }
 
     private void withRegisterAndByteYIndexedAt(int registerId, int memoryLocation, boolean setFlags, TwoByteOperation twoByteOperation){
-        withRegisterAndByte(registerId, getByteOfMemoryYIndexedAt(memoryLocation), setFlags, twoByteOperation);
+        withRegisterAndByte(registerId, getByteOfMemoryYIndexedAt(memoryLocation), twoByteOperation);
     }
 
-    private void withRegisterAndByte(int registerId, int byteValue, boolean setFlags, TwoByteOperation twoByteOperation){
+    private void withRegisterAndByte(int registerId, int byteValue, TwoByteOperation twoByteOperation){
         int registerByte = getRegisterValue(registerId);
 
-        if (setFlags)
-            registers.setRegisterAndFlags(registerId, twoByteOperation.perform(registerByte, byteValue));
-        else
-            setRegisterValue(registerId, twoByteOperation.perform(registerByte, byteValue));
+        registers.setRegisterAndFlags(registerId, twoByteOperation.perform(registerByte, byteValue));
+//        else
+//            setRegisterValue(registerId, twoByteOperation.perform(registerByte, byteValue));
     }
 
     /**
