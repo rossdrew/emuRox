@@ -11,6 +11,8 @@ package com.rox.emu.p6502;
  * @author Ross Drew
  */
 public class InstructionSet {
+    public static final int OP_BRK = 0x00;
+
     public static final int OP_ASL_A = 0x0A;
     public static final int OP_ASL_Z = 0x06;
     public static final int OP_ASL_ABS = 0x0E;
@@ -152,7 +154,8 @@ public class InstructionSet {
 
     public static final int OP_RTS = 0x60;
 
-    public static final int[] instructionSet = {OP_ASL_A, OP_ASL_Z, OP_ASL_ABS, OP_ASL_Z_IX, OP_ASL_ABS_IX, OP_LSR_A, OP_LSR_Z, OP_LSR_Z_IX, OP_LSR_ABS, OP_LSR_ABS_IX,OP_ROL_A, OP_ROL_Z, OP_ROL_Z_IX, OP_ROL_ABS, OP_ROL_ABS_IX, OP_ROR_A,
+    public static final int[] instructionSet = {OP_BRK,
+                                                OP_ASL_A, OP_ASL_Z, OP_ASL_ABS, OP_ASL_Z_IX, OP_ASL_ABS_IX, OP_LSR_A, OP_LSR_Z, OP_LSR_Z_IX, OP_LSR_ABS, OP_LSR_ABS_IX,OP_ROL_A, OP_ROL_Z, OP_ROL_Z_IX, OP_ROL_ABS, OP_ROL_ABS_IX, OP_ROR_A,
                                                 OP_ADC_Z, OP_ADC_I, OP_ADC_ABS, OP_ADC_ABS_IX, OP_ADC_ABS_IY, OP_ADC_Z_IX, OP_ADC_IND_IX,
                                                 OP_SBC_I, OP_SBC_Z, OP_SBC_Z_IX, OP_SBC_ABS, OP_SBC_ABS_IX, OP_SBC_ABS_IY, OP_SBC_IND_IX,
                                                 OP_LDA_Z, OP_LDA_I, OP_LDA_ABS, OP_LDA_Z_IX, OP_LDA_ABS_IY, OP_LDA_IND_IX, OP_LDA_ABS_IX,
@@ -168,6 +171,8 @@ public class InstructionSet {
 
     public static String getOpCodeName(int opCode){
         switch (opCode){
+            case OP_BRK:        return "BRK";
+
             case OP_ASL_A:      return "ASL (Accumulator)";
             case OP_ASL_Z:      return "ASL (Zero Page)";
             case OP_ASL_ABS:    return "ASL (Absolute)";

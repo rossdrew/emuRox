@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import static com.rox.emu.p6502.InstructionSet.OP_BRK;
 import static junit.framework.TestCase.assertEquals;
 import static com.rox.emu.p6502.InstructionSet.*;
 import static org.spockframework.util.Assert.fail;
@@ -908,6 +909,29 @@ public class CPUTest {
 
         assertEquals(10, registers.getRegister(Registers.REG_ACCUMULATOR));
         assertEquals(0, registers.getRegister(Registers.REG_X_INDEX));
+    }
+
+    @Test
+    @Ignore
+    public void testBRK(){
+        int[] program = {OP_BRK};
+        memory.setMemory(0, program);
+
+        Registers registers = processor.getRegisters();
+        registers.setRegister(Registers.REG_PC_HIGH, 0x01);
+        registers.setRegister(Registers.REG_PC_LOW, 0x01);
+        registers.setRegister(Registers.REG_STATUS, 0b00000000);
+
+        memory.setByteAt(0xFFFE, 0);
+        memory.setByteAt(0xFFFF, 0);
+
+        processor.step(1);
+
+        assertEquals(0x01, memory.getByte(0xFF));           //PC (on Stack)
+        assertEquals(0x01, memory.getByte(0xFE));
+        assertEquals(0b00100000, memory.getByte(0xFD));     //Status (on stack) with B set
+        assertEquals(Registers.REG_PC_HIGH, memory.getByte(0xFFFE)); //PC is set to value of [FFFE:FFFF]
+        assertEquals(Registers.REG_PC_LOW, memory.getByte(0xFFFF));
     }
 
     @Test
