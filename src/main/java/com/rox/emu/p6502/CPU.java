@@ -142,6 +142,14 @@ public class CPU {
         //Execute the opcode
         System.out.println("Instruction: " + InstructionSet.getOpCodeName(opCode) + "...");
         switch (opCode){
+            case InstructionSet.OP_BRK:
+                push(registers.getRegister(REG_PC_LOW));  //TODO +2 (or instruction size)
+                push(registers.getRegister(REG_PC_HIGH));
+                push(registers.getRegister(REG_STATUS) | 0b00100000);
+                registers.setRegister(REG_PC_HIGH, getByteOfMemoryAt(0xFFFE));
+                registers.setRegister(REG_PC_LOW, getByteOfMemoryAt(0xFFFF));
+                break;
+
             case InstructionSet.OP_ASL_A:
                 withRegister(REG_ACCUMULATOR, this::performROL);
             break;
@@ -703,12 +711,12 @@ public class CPU {
         setRegisterValue(REG_SP, getRegisterValue(REG_SP) + 1);
         int address = 0x0100 | getRegisterValue(REG_SP);
         int value = getByteOfMemoryAt(address);
-        System.out.println("POP " + value + "(" + Integer.toBinaryString(value) + ") from mem[" + address + "]");
+        System.out.println("POP " + value + "(" + Integer.toBinaryString(value) + ") from mem[0x" + Integer.toHexString(address).toUpperCase() + "]");
         return value;
     }
 
     private void push(int value){
-        System.out.println("PUSH " + value + "(" + Integer.toBinaryString(value) + ") to mem[" + getRegisterValue(REG_SP) + "]");
+        System.out.println("PUSH " + value + "(" + Integer.toBinaryString(value) + ") to mem[0x" + Integer.toHexString(getRegisterValue(REG_SP)).toUpperCase() + "]");
         setByteOfMemoryAt(0x0100 | getRegisterValue(REG_SP), value);
         setRegisterValue(REG_SP, getRegisterValue(REG_SP) - 1);
     }
