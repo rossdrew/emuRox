@@ -916,7 +916,7 @@ public class CPUTest {
     public void testBRK(){
         int[] program = {OP_BRK};
         memory.setMemory(0, program);
-        memory.setByteAt(0xFFFE, 0); //New PC
+        memory.setByteAt(0xFFFE, 0);                                     //New PC
         memory.setByteAt(0xFFFF, 0);
 
         Registers registers = processor.getRegisters();
@@ -925,10 +925,10 @@ public class CPUTest {
         processor.step(1);
 
         assertEquals(0xFC, registers.getRegister(Registers.REG_SP));
-        assertEquals(0x01, memory.getByte(0xFF));           //PC (on Stack)
-        assertEquals(0x00, memory.getByte(0xFE));
-        assertEquals(0b00100000, memory.getByte(0xFD));     //Status (on stack) with B set
-        assertEquals(Registers.REG_PC_HIGH, memory.getByte(0xFFFE)); //PC is set to value of [FFFE:FFFF]
+        assertEquals(0x01, memory.getByte(0x1FF));                       //PC (on Stack)
+        assertEquals(0x00, memory.getByte(0x1FE));
+        assertEquals(0b00100000, memory.getByte(0x1FD));                 //Status (on stack) with B set
+        assertEquals(Registers.REG_PC_HIGH, memory.getByte(0xFFFE));    //PC is set to value of [FFFE:FFFF]
         assertEquals(Registers.REG_PC_LOW, memory.getByte(0xFFFF));
     }
 
