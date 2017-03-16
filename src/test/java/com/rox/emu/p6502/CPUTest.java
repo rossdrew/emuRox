@@ -925,9 +925,9 @@ public class CPUTest {
 
         assertEquals(0xFC, registers.getRegister(Registers.REG_SP));
 
-        //PC (on Stack) TODO this should be PC+2
-        assertEquals(0x01, memory.getByte(0x1FF));
-        assertEquals(0x00, memory.getByte(0x1FE));
+        //PC (on Stack)
+        assertEquals(0x03, memory.getByte(0x1FE));
+        assertEquals(0x00, memory.getByte(0x1FF));
 
         //Status (on stack) with B set
         assertEquals(0b00100000, memory.getByte(0x1FD));
