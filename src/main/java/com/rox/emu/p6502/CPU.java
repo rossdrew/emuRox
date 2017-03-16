@@ -711,12 +711,12 @@ public class CPU {
         setRegisterValue(REG_SP, getRegisterValue(REG_SP) + 1);
         int address = 0x0100 | getRegisterValue(REG_SP);
         int value = getByteOfMemoryAt(address);
-        System.out.println("POP " + value + "(" + Integer.toBinaryString(value) + ") from mem[0x" + Integer.toHexString(address).toUpperCase() + "]");
+        System.out.println("POP " + value + "(0b" + Integer.toBinaryString(value) + ") from mem[0x" + Integer.toHexString(address).toUpperCase() + "]");
         return value;
     }
 
     private void push(int value){
-        System.out.println("PUSH " + value + "(" + Integer.toBinaryString(value) + ") to mem[0x" + Integer.toHexString(getRegisterValue(REG_SP)).toUpperCase() + "]");
+        System.out.println("PUSH " + value + "(0b" + Integer.toBinaryString(value) + ") to mem[0x" + Integer.toHexString(getRegisterValue(REG_SP)).toUpperCase() + "]");
         setByteOfMemoryAt(0x0100 | getRegisterValue(REG_SP), value);
         setRegisterValue(REG_SP, getRegisterValue(REG_SP) - 1);
     }
