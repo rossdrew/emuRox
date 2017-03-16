@@ -146,6 +146,7 @@ public class CPU {
                 push(registers.getRegister(REG_PC_LOW));  //TODO +2 (or instruction size)
                 push(registers.getRegister(REG_PC_HIGH));
                 push(registers.getRegister(REG_STATUS) | 0b00100000);
+
                 registers.setRegister(REG_PC_HIGH, getByteOfMemoryAt(0xFFFE));
                 registers.setRegister(REG_PC_LOW, getByteOfMemoryAt(0xFFFF));
                 break;

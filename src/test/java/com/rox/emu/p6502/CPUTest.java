@@ -912,7 +912,6 @@ public class CPUTest {
     }
 
     @Test
-    @Ignore
     public void testBRK(){
         int[] program = {OP_BRK};
         memory.setMemory(0, program);
@@ -925,11 +924,17 @@ public class CPUTest {
         processor.step(1);
 
         assertEquals(0xFC, registers.getRegister(Registers.REG_SP));
-        assertEquals(0x01, memory.getByte(0x1FF));                       //PC (on Stack)
+
+        //PC (on Stack) TODO this should be PC+2
+        assertEquals(0x01, memory.getByte(0x1FF));
         assertEquals(0x00, memory.getByte(0x1FE));
-        assertEquals(0b00100000, memory.getByte(0x1FD));                 //Status (on stack) with B set
-        assertEquals(Registers.REG_PC_HIGH, memory.getByte(0xFFFE));    //PC is set to value of [FFFE:FFFF]
-        assertEquals(Registers.REG_PC_LOW, memory.getByte(0xFFFF));
+
+        //Status (on stack) with B set
+        assertEquals(0b00100000, memory.getByte(0x1FD));
+
+        //PC is set to value of [FFFE:FFFF]
+        assertEquals(memory.getByte(0xFFFE), registers.getRegister(Registers.REG_PC_HIGH));
+        assertEquals(memory.getByte(0xFFFF), registers.getRegister(Registers.REG_PC_LOW));
     }
 
     @Test
