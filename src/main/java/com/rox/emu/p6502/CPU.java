@@ -143,8 +143,9 @@ public class CPU {
         System.out.println("Instruction: " + InstructionSet.getOpCodeName(opCode) + "...");
         switch (opCode){
             case InstructionSet.OP_BRK:
+                registers.setPC(registers.getPC() + 2);
                 push(registers.getRegister(REG_PC_HIGH));
-                push(registers.getRegister(REG_PC_LOW)+2);  //TODO deal with overflow
+                push(registers.getRegister(REG_PC_LOW));
                 push(registers.getRegister(REG_STATUS) | 0b00100000);
 
                 registers.setRegister(REG_PC_HIGH, getByteOfMemoryAt(0xFFFE));
