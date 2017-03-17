@@ -3,6 +3,7 @@ package com.rox.emu.p6502;
 import com.rox.emu.p6502.op.OpCode;
 import org.junit.Test;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class OpCodeTest {
@@ -17,7 +18,7 @@ public class OpCodeTest {
     public void testOpcodeDescriptions(){
         //XXX Make it match "XXX _ ( .* [x|y] )"
         for (OpCode o : OpCode.values()){
-            assertTrue(!o.toString().isEmpty());
+            assertFalse(o.toString().isEmpty());
         }
     }
 }
