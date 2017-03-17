@@ -926,7 +926,7 @@ public class CPU {
      * @param byteValueB addition term 2
      * @return the result of (byteValueA + byteValueB)
      */
-    private int ADC(int byteValueA, int byteValueB) {
+    private int adc(int byteValueA, int byteValueB) {
         int result = byteValueA + byteValueB;
 
         //Set Carry, if bit 8 is set on new accumulator value, ignoring in 2s compliment addition (subtraction)
