@@ -770,7 +770,7 @@ public class CPU {
      * @param term term to add to the accumulator
      */
     private int addToAccumulator(int term){
-        int result = ADC(getRegisterValue(REG_ACCUMULATOR), term);
+        int result = adc(getRegisterValue(REG_ACCUMULATOR), term);
 
         return (result & 0xFF);
     }
@@ -907,7 +907,7 @@ public class CPU {
 
     private int performADC(int byteValueA, int byteValueB){
         int carry = (registers.getFlag(STATUS_FLAG_CARRY) ? 1 : 0);
-        return (ADC(byteValueA, byteValueB + carry) & 0xFF);
+        return (adc(byteValueA, byteValueB + carry) & 0xFF);
     }
 
     private int performSBC2(int byteValueA, int byteValueB){
@@ -916,7 +916,7 @@ public class CPU {
         int byteValueBAndBorrow = twosComplimentOf(byteValueB + borrow);
 
         //Why do I need to convert back from twos compliment in this version? Something is fishy.
-        return fromTwosComplimented(ADC(byteValueA, byteValueBAndBorrow) & 0xFF);
+        return fromTwosComplimented(adc(byteValueA, byteValueBAndBorrow) & 0xFF);
     }
 
     /**

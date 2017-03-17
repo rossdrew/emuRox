@@ -130,7 +130,7 @@ public class CPUTest {
     }
 
     @Test
-    public void testSTX_ABS() {
+    public void testSTXAbsolute() {
         int[] program = {OP_LDX_I, 0xAA, OP_STX_ABS, 0x02, 0x20};
         memory.setMemory(0, program);
 
@@ -154,7 +154,7 @@ public class CPUTest {
     }
 
     @Test
-    public void testSTY_ABS() {
+    public void testSTYAbsolute() {
         int[] program = {OP_LDY_I, 0xAA, OP_STY_ABS, 0x02, 0x20};
         memory.setMemory(0, program);
 
