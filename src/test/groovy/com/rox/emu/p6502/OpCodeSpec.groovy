@@ -7,6 +7,12 @@ import spock.lang.Specification
 import spock.lang.Unroll
 
 import static com.rox.emu.p6502.InstructionSet.*
+import static junit.framework.TestCase.assertEquals
+import static junit.framework.TestCase.assertEquals
+import static junit.framework.TestCase.assertEquals
+import static junit.framework.TestCase.assertEquals
+import static junit.framework.TestCase.assertEquals
+import static junit.framework.TestCase.assertEquals
 
 class OpCodeSpec extends Specification {
     @Unroll("LDA (Immediate) #Expected: Load #loadValue == #expectedAccumulator")
@@ -3515,6 +3521,42 @@ class OpCodeSpec extends Specification {
         where:
         memHi | memLo | expectedPC | expectedSP | expected
         0x1   | 0x0   | 0x100      | 0xFF       | "Simple return from subroutine"
+    }
+
+    @Unroll("BRK #expected")
+    testBRK(){
+        when:
+        Memory memory = new SimpleMemory(0x10000)
+        int[] program = [OP_BRK]
+        memory.setByteAt(0xFFFE, newPCHi)
+        memory.setByteAt(0xFFFF, newPCLo)
+        memory.setMemory(0, program)
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        Registers registers = processor.getRegisters()
+
+        and: 'The status register is set to a value that will be pushed to stack'
+        registers.setRegister(Registers.REG_STATUS, statusReg)
+
+        and:
+        processor.step(1)
+
+        then:
+        registers.getRegister(Registers.REG_PC_HIGH) == newPCHi
+        registers.getRegister(Registers.REG_PC_LOW) == newPCLo
+        registers.getRegister(Registers.REG_SP) == 0xFC
+        memory.getByte(0x1FE) == 0x03
+        memory.getByte(0x1FF) == 0x00
+
+        //XXX Refactor to test when PC overflows to high byte before loading to stack
+
+        where:
+        newPCHi | newPCLo | statusReg  | pushedStatus | expected
+        0x0     | 0x0     | 0b00000000 | 0b00100000   | "With empty status register and B not set"
+        0x0     | 0x0     | 0b00100000 | 0b00100000   | "With empty status register and B already set"
+        0x1     | 0x1     | 0b10000101 | 0b10100101   | "With loaded status register"
     }
 
 //    @Ignore
