@@ -3,11 +3,11 @@
 [![Codecov](https://codecov.io/gh/rossdrew/emuRox/branch/master/graph/badge.svg)](https://codecov.io/gh/rossdrew/emuRox)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/519fed1cf9c64216a0c9992eed25a36f)](https://www.codacy.com/app/rossdrew/emuRox?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=rossdrew/emuRox&amp;utm_campaign=Badge_Grade)
  
-#EmuRox
+# EmuRox
 
 An emulator for the 6502 processor.  The plan is to evolve this into a working NES emulator so I'm developing the 6502 without BCD mode for now.  If/When I get that working, I'll expand the 6502 and move onto another 6502 system (Atari 2600, Commodore 64...) then perhaps add processors and more emulated hardware, in theory, creating a pluggable multi-emulator.
 
-##Progress
+## Progress
 
 #### 6502
 
@@ -15,7 +15,7 @@ Most opcodes now implemented.  Just `RTI` left (ignoring ROR till later). In ord
 Still working on __Indirect, Y__ addressing and a couple __Indirect, X__ addressed instructions.
 Timing and clock ticks will be looked at later, as necessary.  BCD wont be needed for now for the NES (Ricoh) version and I'll need to look at the memory mapped registers.
  
-##Development & Testing
+## Development & Testing
 
  The plan was to develop this, a larger personal project, in a TDD (Test Driven Development) centric way.  This means writing failing tests that describe functionality then writing that functionality to make the tests pass and iteratively writing a complete application.
  This larger personal project that you are now looking at I am using to test out other technologies and resources.  Here is a list of those that I am using or have used along the way:-
@@ -29,7 +29,7 @@ Timing and clock ticks will be looked at later, as necessary.  BCD wont be neede
  - Static analysis done in my development environment on [IntelliJ IDEA](https://www.jetbrains.com/idea/) and online (including GitHub shield) by [Codeacy](https://www.codacy.com/). 
 
  
-####Branches
+#### Branches
 
  - [Main](https://github.com/rossdrew/emuRox/commits/master) branch, pushing towards a fully working 6502
  - A [6502 compiler](https://github.com/rossdrew/emuRox/commits/assembler) branch so that more complicated pieces of code can be written, understood, edited and annotated easier.
@@ -38,15 +38,15 @@ Timing and clock ticks will be looked at later, as necessary.  BCD wont be neede
 -----
 
 
-###Problems
+### Problems
 
-######6502
+###### 6502
 
-######Javas unsigned byte problem. 
+###### Javas unsigned byte problem. 
  - Java bytes are signed, meaning it's a pain to deal with them, instead we have to use ints to represent bytes.
  - `System.out` is confusing Pitest, need to invest some time in moving to a loggin framework
  
-###Sources
+### Sources
  - [JaCoCo](http://www.eclemma.org/jacoco/), [Was missing Spock tests](http://stackoverflow.com/questions/41652981/why-does-jacoco-ignore-myspock-tests-yet-sees-my-junit-tests), thanks [Godin](http://stackoverflow.com/users/244993/godin) of Stack Overflow
  - [JaCoCo](http://www.eclemma.org/jacoco/), has a problem with code coverage of `String` based `switch` statements. In that it reports missing coverage where there is none. Thanks again thanks [Godin](http://stackoverflow.com/users/244993/godin) of Stack Overflow for your [explanation](http://stackoverflow.com/questions/42642840/why-is-jacoco-not-covering-my-switch-statements)
  - The [6502 Programming](https://www.facebook.com/groups/6502CPU/) Facebook group has been invaluable in resolving small questions 
