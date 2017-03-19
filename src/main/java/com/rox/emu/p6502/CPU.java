@@ -146,7 +146,7 @@ public class CPU {
                 registers.setPC(registers.getPC() + 2);
                 push(registers.getRegister(REG_PC_HIGH));
                 push(registers.getRegister(REG_PC_LOW));
-                push(registers.getRegister(REG_STATUS) | 0b00100000);
+                push(registers.getRegister(REG_STATUS) | Registers.STATUS_FLAG_BREAK);
 
                 registers.setRegister(REG_PC_HIGH, getByteOfMemoryAt(0xFFFE));
                 registers.setRegister(REG_PC_LOW, getByteOfMemoryAt(0xFFFF));

@@ -3547,16 +3547,18 @@ class OpCodeSpec extends Specification {
         registers.getRegister(Registers.REG_PC_HIGH) == newPCHi
         registers.getRegister(Registers.REG_PC_LOW) == newPCLo
         registers.getRegister(Registers.REG_SP) == 0xFC
+
+        memory.getByte(0x1FD) == (statusReg | Registers.STATUS_FLAG_BREAK)
         memory.getByte(0x1FE) == 0x03
         memory.getByte(0x1FF) == 0x00
 
         //XXX Refactor to test when PC overflows to high byte before loading to stack
 
         where:
-        newPCHi | newPCLo | statusReg  | pushedStatus | expected
-        0x0     | 0x0     | 0b00000000 | 0b00100000   | "With empty status register and B not set"
-        0x0     | 0x0     | 0b00100000 | 0b00100000   | "With empty status register and B already set"
-        0x1     | 0x1     | 0b10000101 | 0b10100101   | "With loaded status register"
+        newPCHi | newPCLo | statusReg  | expected
+        0x0     | 0x0     | 0b00000000 | "With empty status register and B not set"
+        0x0     | 0x0     | 0b00100000 | "With empty status register and B already set"
+        0x1     | 0x1     | 0b10000101 | "With loaded status register"
     }
 
 //    @Ignore

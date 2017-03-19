@@ -930,7 +930,34 @@ public class CPUTest {
         assertEquals(0x00, memory.getByte(0x1FF));
 
         //Status (on stack) with B set
-        assertEquals(0b00100000, memory.getByte(0x1FD));
+        assertEquals(Registers.STATUS_FLAG_BREAK, memory.getByte(0x1FD));
+
+        //PC is set to value of [FFFE:FFFF]
+        assertEquals(memory.getByte(0xFFFE), registers.getRegister(Registers.REG_PC_HIGH));
+        assertEquals(memory.getByte(0xFFFF), registers.getRegister(Registers.REG_PC_LOW));
+    }
+
+    @Test
+    @Ignore
+    public void testIRQ(){
+        int[] program = {};
+        memory.setMemory(0, program);
+        memory.setByteAt(0xFFFE, 0);                                     //New PC
+        memory.setByteAt(0xFFFF, 0);
+
+        Registers registers = processor.getRegisters();
+        registers.setRegister(Registers.REG_STATUS, 0b00000000);         //Sample register values
+
+        processor.step(1);
+
+        assertEquals(0xFC, registers.getRegister(Registers.REG_SP));
+
+        //PC (on Stack)
+        assertEquals(0x03, memory.getByte(0x1FE));
+        assertEquals(0x00, memory.getByte(0x1FF));
+
+        //Status (on stack) with B set
+        assertEquals(Registers.STATUS_FLAG_IRQ_DISABLE, memory.getByte(0x1FD));
 
         //PC is set to value of [FFFE:FFFF]
         assertEquals(memory.getByte(0xFFFE), registers.getRegister(Registers.REG_PC_HIGH));
