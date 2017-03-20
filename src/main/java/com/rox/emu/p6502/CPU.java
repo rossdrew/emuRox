@@ -518,32 +518,32 @@ public class CPU {
                 break;
 
             case InstructionSet.OP_SBC_I:
-                registers.setRegisterAndFlags(REG_ACCUMULATOR, performSBC(nextProgramByte()));
+                withRegisterAndByte(REG_ACCUMULATOR, nextProgramByte(), this::performSBC2);
                 break;
 
             case InstructionSet.OP_SBC_Z:
-                registers.setRegisterAndFlags(REG_ACCUMULATOR, performSBC(getByteOfMemoryAt(nextProgramByte())));
+                withRegisterAndByteAt(REG_ACCUMULATOR, nextProgramByte(), this::performSBC2);
                 break;
 
             case InstructionSet.OP_SBC_Z_IX:
-                registers.setRegisterAndFlags(REG_ACCUMULATOR, performSBC(getByteOfMemoryXIndexedAt(nextProgramByte())));
+                withRegisterAndByteXIndexedAt(REG_ACCUMULATOR, nextProgramByte(), this::performSBC2);
                 break;
 
             case InstructionSet.OP_SBC_ABS:
-                registers.setRegisterAndFlags(REG_ACCUMULATOR, performSBC(getByteOfMemoryAt(nextProgramWord())));
+                withRegisterAndByteAt(REG_ACCUMULATOR, nextProgramWord(), this::performSBC2);
                 break;
 
             case InstructionSet.OP_SBC_ABS_IX:
-                registers.setRegisterAndFlags(REG_ACCUMULATOR, performSBC(getByteOfMemoryXIndexedAt(nextProgramWord())));
+                withRegisterAndByteXIndexedAt(REG_ACCUMULATOR, nextProgramWord(), this::performSBC2);
                 break;
 
             case InstructionSet.OP_SBC_ABS_IY:
-                registers.setRegisterAndFlags(REG_ACCUMULATOR, performSBC(getByteOfMemoryYIndexedAt(nextProgramWord())));
+                withRegisterAndByteYIndexedAt(REG_ACCUMULATOR, nextProgramWord(), this::performSBC2);
                 break;
 
             case InstructionSet.OP_SBC_IND_IX: {
                 int pointerLocation = getWordOfMemoryXIndexedAt(nextProgramByte());
-                withRegisterAndByte(REG_ACCUMULATOR, getByteOfMemoryAt(pointerLocation), this::performSBC2);
+                withRegisterAndByte(REG_ACCUMULATOR, getByteOfMemoryAt(pointerLocation), this::performSBC);
             }break;
 
             case InstructionSet.OP_STY_Z:
@@ -764,25 +764,6 @@ public class CPU {
         return ((~byteValue)) & 0xFF;
     }
 
-    /**
-     * Perform a binary addition, setting Carry and Overflow flags as required.
-     *
-     * @param term term to add to the accumulator
-     */
-    private int addToAccumulator(int term){
-        int result = adc(getRegisterValue(REG_ACCUMULATOR), term);
-
-        return (result & 0xFF);
-    }
-
-    //(1) compliment of carry flag added (so subtracted) as well
-    //(2) set carry if no borrow required (A >= M[v])
-    private int performSBC(int byteTerm){
-        registers.setFlag(STATUS_FLAG_NEGATIVE);
-        int borrow = (registers.getFlag(STATUS_FLAG_CARRY) ? 0 : 1);
-        return addToAccumulator(twosComplimentOf(byteTerm + borrow));
-    }
-
     //XXX Need to use 2s compliment addition (subtraction)
     private void performCMP(int value, int toRegister){
         int result = getRegisterValue(toRegister) - value;
@@ -910,13 +891,22 @@ public class CPU {
         return (adc(byteValueA, byteValueB + carry) & 0xFF);
     }
 
+    private int performSBC(int byteValueA, int byteValueB){
+        registers.setFlag(STATUS_FLAG_NEGATIVE);
+        int borrow = (registers.getFlag(STATUS_FLAG_CARRY) ? 0 : 1);
+        int byteValueBAndBorrow = twosComplimentOf(byteValueB + borrow);
+
+        //(1/2) Why do I need to convert back from twos compliment in this version? Something is fishy.
+        return fromTwosComplimented(adc(byteValueA, byteValueBAndBorrow) & 0xFF);
+    }
+
     private int performSBC2(int byteValueA, int byteValueB){
         registers.setFlag(STATUS_FLAG_NEGATIVE);
         int borrow = (registers.getFlag(STATUS_FLAG_CARRY) ? 0 : 1);
         int byteValueBAndBorrow = twosComplimentOf(byteValueB + borrow);
 
-        //Why do I need to convert back from twos compliment in this version? Something is fishy.
-        return fromTwosComplimented(adc(byteValueA, byteValueBAndBorrow) & 0xFF);
+        //(2/2) Why do I need to convert back from twos compliment in this version? Something is fishy.
+        return adc(byteValueA, byteValueBAndBorrow) & 0xFF;
     }
 
     /**
