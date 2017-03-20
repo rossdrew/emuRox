@@ -543,7 +543,7 @@ public class CPU {
 
             case InstructionSet.OP_SBC_IND_IX: {
                 int pointerLocation = getWordOfMemoryXIndexedAt(nextProgramByte());
-                withRegisterAndByte(REG_ACCUMULATOR, getByteOfMemoryAt(pointerLocation), this::performSBC);
+                withRegisterAndByteAt(REG_ACCUMULATOR, pointerLocation, this::performSBC);
             }break;
 
             case InstructionSet.OP_STY_Z:
