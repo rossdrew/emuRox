@@ -891,13 +891,9 @@ public class CPU {
         return (adc(byteValueA, byteValueB + carry) & 0xFF);
     }
 
+    //Why do I need to have 1 returning twos compliment and one not?!!?
     private int performSBC(int byteValueA, int byteValueB){
-        registers.setFlag(STATUS_FLAG_NEGATIVE);
-        int borrow = (registers.getFlag(STATUS_FLAG_CARRY) ? 0 : 1);
-        int byteValueBAndBorrow = twosComplimentOf(byteValueB + borrow);
-
-        //(1/2) Why do I need to convert back from twos compliment in this version? Something is fishy.
-        return fromTwosComplimented(adc(byteValueA, byteValueBAndBorrow) & 0xFF);
+        return fromTwosComplimented(performSBC2(byteValueA, byteValueB));
     }
 
     private int performSBC2(int byteValueA, int byteValueB){
@@ -905,7 +901,6 @@ public class CPU {
         int borrow = (registers.getFlag(STATUS_FLAG_CARRY) ? 0 : 1);
         int byteValueBAndBorrow = twosComplimentOf(byteValueB + borrow);
 
-        //(2/2) Why do I need to convert back from twos compliment in this version? Something is fishy.
         return adc(byteValueA, byteValueBAndBorrow) & 0xFF;
     }
 
