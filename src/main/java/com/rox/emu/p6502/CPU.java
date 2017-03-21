@@ -767,12 +767,23 @@ public class CPU {
     //XXX Need to use 2s compliment addition (subtraction)
     private void performCMP(int value, int toRegister){
         int result = getRegisterValue(toRegister) - value;
+        int twosComplimentResult = performSilentSBC(getRegisterValue(toRegister), value);
         registers.setFlagsBasedOn(result & 0xFF);
 
         if (result >=0)
             registers.setFlag(STATUS_FLAG_CARRY);
         else
             registers.clearFlag(STATUS_FLAG_CARRY);
+    }
+
+    private int performSilentSBC(int a, int b){
+        int statusState = registers.getRegister(REG_STATUS);
+        registers.setFlag(STATUS_FLAG_CARRY);
+
+        int result = performSBC(a,b);
+
+        registers.setRegister(REG_STATUS, statusState);
+        return result;
     }
 
     private void withByteAt(int location, ByteOperation byteOperation){
