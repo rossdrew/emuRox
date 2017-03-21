@@ -1612,6 +1612,7 @@ class OpCodeSpec extends Specification {
         Z == registers.statusFlags[Registers.Z]
         N == registers.statusFlags[Registers.N]
 
+        //XXX these values are off by 1
         where:
         locationHi | locationLo | index | firstValue | secondValue | expectedAcc | Z      | N     | O     | C     | Expected
         0x1        | 0x10       | 0     | 0x5        | 0x3         | 0x2         | false  | false | false | false | "Basic subtraction"

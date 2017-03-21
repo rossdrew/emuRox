@@ -518,34 +518,32 @@ public class CPU {
                 break;
 
             case InstructionSet.OP_SBC_I:
-                withRegisterAndByte(REG_ACCUMULATOR, nextProgramByte(), this::performSBC2);
+                withRegisterAndByte(REG_ACCUMULATOR, nextProgramByte(), this::performSBC);
                 break;
 
             case InstructionSet.OP_SBC_Z:
-                withRegisterAndByteAt(REG_ACCUMULATOR, nextProgramByte(), this::performSBC2);
+                withRegisterAndByteAt(REG_ACCUMULATOR, nextProgramByte(), this::performSBC);
                 break;
 
             case InstructionSet.OP_SBC_Z_IX:
-                withRegisterAndByteXIndexedAt(REG_ACCUMULATOR, nextProgramByte(), this::performSBC2);
+                withRegisterAndByteXIndexedAt(REG_ACCUMULATOR, nextProgramByte(), this::performSBC);
                 break;
 
             case InstructionSet.OP_SBC_ABS:
-                withRegisterAndByteAt(REG_ACCUMULATOR, nextProgramWord(), this::performSBC2);
+                withRegisterAndByteAt(REG_ACCUMULATOR, nextProgramWord(), this::performSBC);
                 break;
 
             case InstructionSet.OP_SBC_ABS_IX:
-                withRegisterAndByteXIndexedAt(REG_ACCUMULATOR, nextProgramWord(), this::performSBC2);
+                withRegisterAndByteXIndexedAt(REG_ACCUMULATOR, nextProgramWord(), this::performSBC);
                 break;
 
             case InstructionSet.OP_SBC_ABS_IY:
-                withRegisterAndByteYIndexedAt(REG_ACCUMULATOR, nextProgramWord(), this::performSBC2);
+                withRegisterAndByteYIndexedAt(REG_ACCUMULATOR, nextProgramWord(), this::performSBC);
                 break;
 
             case InstructionSet.OP_SBC_IND_IX: {
                 int pointerLocation = getWordOfMemoryXIndexedAt(nextProgramByte());
-                //TODO this version of performSBC is needed only for test SBC_IND_IX
-                //     where it needs the result converted from twos compliment
-                withRegisterAndByteAt(REG_ACCUMULATOR, pointerLocation, this::performSBC2);
+                withRegisterAndByteAt(REG_ACCUMULATOR, pointerLocation, this::performSBC);
             }break;
 
             case InstructionSet.OP_STY_Z:
@@ -893,12 +891,7 @@ public class CPU {
         return (adc(byteValueA, byteValueB + carry) & 0xFF);
     }
 
-    //Why do I need to have 1 returning twos compliment and one not?!!?
     private int performSBC(int byteValueA, int byteValueB){
-        return fromTwosComplimented(performSBC2(byteValueA, byteValueB));
-    }
-
-    private int performSBC2(int byteValueA, int byteValueB){
         registers.setFlag(STATUS_FLAG_NEGATIVE);
         int borrow = (registers.getFlag(STATUS_FLAG_CARRY) ? 0 : 1);
         int byteValueBAndBorrow = twosComplimentOf(byteValueB + borrow);
