@@ -57,7 +57,7 @@ public class CPU {
 
     private int getByteOfMemoryAt(int location, int index){
         final int memoryByte = memory.getByte(location + index);
-        System.out.println("Got " + Integer.toHexString(memoryByte) + " from mem[" + location + (index != 0 ? "[" + index + "]" : "") +"]");
+        System.out.println("Got 0x" + Integer.toHexString(memoryByte) + " from mem[" + location + (index != 0 ? "[" + index + "]" : "") +"]");
         return memoryByte;
     }
 
@@ -67,7 +67,7 @@ public class CPU {
 
     private int setByteOfMemoryAt(int location, int index, int newByte){
         memory.setByteAt(location + index, newByte);
-        System.out.println("Stored " + Integer.toHexString(newByte) + " at mem[" + location + (index != 0 ? "[" + index + "]" : "") +"]");
+        System.out.println("Stored 0x" + Integer.toHexString(newByte) + " at mem[" + location + (index != 0 ? "[" + index + "]" : "") +"]");
         return (location + index);
     }
 
@@ -543,7 +543,9 @@ public class CPU {
 
             case InstructionSet.OP_SBC_IND_IX: {
                 int pointerLocation = getWordOfMemoryXIndexedAt(nextProgramByte());
-                withRegisterAndByteAt(REG_ACCUMULATOR, pointerLocation, this::performSBC); //TODO this is needed only for testSBC_IND_IX
+                //TODO this version of performSBC is needed only for test SBC_IND_IX
+                //     where it needs the result converted from twos compliment
+                withRegisterAndByteAt(REG_ACCUMULATOR, pointerLocation, this::performSBC2);
             }break;
 
             case InstructionSet.OP_STY_Z:

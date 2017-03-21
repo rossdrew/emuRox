@@ -1585,18 +1585,18 @@ class OpCodeSpec extends Specification {
         2     | 0x5        | 0x6         | 0xFF                | false  | true  | false | false | "with negative result"
     }
 
-    @Unroll("SBC (Indirect, X) #Expected: #firstValue (@[#locationHi|#locationLo]) | #secondValue = #expectedAcc")
+    @Unroll("SBC (Indirect, X) #Expected: #firstValue (@[#locationHi|#locationLo]) - #secondValue = #expectedAcc")
     testSBC_IND_IX() {
         when:
         Memory memory = new SimpleMemory(65534)
-        int[] program = [OP_LDA_I, firstValue,    //Value at indirect address
+        int[] program = [OP_LDA_I, secondValue,    //Value at indirect address
                          OP_STA_ABS, locationHi, locationLo,
                          OP_LDX_I, index,
-                         OP_LDA_I, locationHi,    //Indirect address in memory
+                         OP_LDA_I, locationHi,     //Indirect address in memory
                          OP_STA_Z_IX, 0x30,
                          OP_LDA_I, locationLo,
                          OP_STA_Z_IX, 0x31,
-                         OP_LDA_I, secondValue,
+                         OP_LDA_I, firstValue,
                          OP_SBC_IND_IX, 0x30]
         memory.setMemory(0, program)
 
