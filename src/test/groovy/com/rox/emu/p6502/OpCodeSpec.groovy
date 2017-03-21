@@ -1597,13 +1597,14 @@ class OpCodeSpec extends Specification {
                          OP_LDA_I, locationLo,
                          OP_STA_Z_IX, 0x31,
                          OP_LDA_I, firstValue,
+                         OP_SEC,
                          OP_SBC_IND_IX, 0x30]
         memory.setMemory(0, program)
 
         and:
         CPU processor = new CPU(memory)
         processor.reset()
-        processor.step(9)
+        processor.step(10)
         Registers registers = processor.getRegisters()
 
         then:
@@ -1612,7 +1613,7 @@ class OpCodeSpec extends Specification {
         Z == registers.statusFlags[Registers.Z]
         N == registers.statusFlags[Registers.N]
 
-        //XXX these values are off by 1
+        //TODO these values are off by 1
         where:
         locationHi | locationLo | index | firstValue | secondValue | expectedAcc | Z      | N     | O     | C     | Expected
         0x1        | 0x10       | 0     | 0x5        | 0x3         | 0x2         | false  | false | false | false | "Basic subtraction"
