@@ -801,9 +801,7 @@ public class CPU {
         setRegisterValue(registerId, byteOperation.perform(b));
     }
 
-    /**
-     * Functional interface for any operation on a byte
-     */
+    @FunctionalInterface
     private interface ByteOperation {
         int perform(int byteValue);
     }
@@ -877,10 +875,8 @@ public class CPU {
 //        else
 //            setRegisterValue(registerId, twoByteOperation.perform(registerByte, byteValue));
     }
-
-    /**
-     * Functional interface for any operation on a Register with a byte value
-     */
+    
+    @FunctionalInterface
     private interface TwoByteOperation {
         int perform(int byteValueOne, int byteValueTwo);
     }
