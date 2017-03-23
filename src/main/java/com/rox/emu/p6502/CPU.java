@@ -37,6 +37,13 @@ public class CPU {
         System.out.println("...READY!");
     }
 
+    /**
+     * @return the {@link Registers} being used
+     */
+    public Registers getRegisters(){
+        return registers;
+    }
+
     private int getRegisterValue(int registerID){
         return registers.getRegister(registerID);
     }
@@ -55,85 +62,19 @@ public class CPU {
         return originalPC;
     }
 
-    private int getByteOfMemoryAt(int location, int index){
-        final int memoryByte = memory.getByte(location + index);
-        System.out.println("Got 0x" + Integer.toHexString(memoryByte) + " from mem[" + location + (index != 0 ? "[" + index + "]" : "") +"]");
-        return memoryByte;
-    }
-
-    private int setByteOfMemoryAt(int location, int newByte){
-        return setByteOfMemoryAt(location, 0, newByte);
-    }
-
-    private int setByteOfMemoryAt(int location, int index, int newByte){
-        memory.setByteAt(location + index, newByte);
-        System.out.println("Stored 0x" + Integer.toHexString(newByte) + " at mem[" + location + (index != 0 ? "[" + index + "]" : "") +"]");
-        return (location + index);
-    }
-
-    private int getByteOfMemoryXIndexedAt(int location){
-        return getByteOfMemoryAt(location, getRegisterValue(REG_X_INDEX));
-    }
-
-    private int getWordOfMemoryXIndexedAt(int location){
-        int indexedLocation = location + getRegisterValue(REG_X_INDEX);
-        return (getByteOfMemoryAt(indexedLocation) << 8 | getByteOfMemoryAt(indexedLocation + 1));
-    }
-
-    private int setByteOfMemoryXIndexedAt(int location, int newByte){
-        return setByteOfMemoryAt(location, getRegisterValue(REG_X_INDEX), newByte);
-    }
-
-    private int getByteOfMemoryYIndexedAt(int location){
-        return getByteOfMemoryAt(location, getRegisterValue(REG_Y_INDEX));
-    }
-
-    private int setByteOfMemoryYIndexedAt(int location, int newByte){
-        return setByteOfMemoryAt(location, getRegisterValue(REG_Y_INDEX), newByte);
-    }
-
-    private int getByteOfMemoryAt(int location){
-        return getByteOfMemoryAt(location, 0);
-    }
-
-    public Registers getRegisters(){
-        return registers;
-    }
-
     /**
-     * Return the next byte from program memory, as defined
-     * by the Program Counter.<br/>
-     * <br/>
-     * <em>Increments the Program Counter by 1</em>
+     * Execute the next program instruction as per {@link Registers#getNextProgramCounter()}
      *
-     * @return byte {@code from mem[ PC[0] ]}
+     * @param steps number of instructions to execute
      */
-    private int nextProgramByte(){
-        int memoryLocation = getAndStepPC();
-        return getByteOfMemoryAt(memoryLocation);
-    }
-
-    /**
-     * Combine the next two bytes in program memory, as defined by
-     * the Program Counter into a word so that:-
-     *
-     * PC[0] = high order byte
-     * PC[1] = low order byte
-     *<br/><br/>
-     * <em>Increments the Program Counter by 1</em>
-     *
-     * @return word made up of both bytes
-     */
-    private int nextProgramWord(){
-        int byte1 = nextProgramByte();
-        return (byte1 << 8) | nextProgramByte() ;
-    }
-
     public void step(int steps){
         for (int i=0; i<steps; i++)
             step();
     }
 
+    /**
+     * Execute the next program instruction as per {@link Registers#getNextProgramCounter()}
+     */
     public void step() {
         System.out.println("\n*** STEP >>>");
 
@@ -709,6 +650,40 @@ public class CPU {
         }
     }
 
+    /**
+     * Return the next byte from program memory, as defined
+     * by the Program Counter.<br/>
+     * <br/>
+     * <em>Increments the Program Counter by 1</em>
+     *
+     * @return byte {@code from mem[ PC[0] ]}
+     */
+    private int nextProgramByte(){
+        int memoryLocation = getAndStepPC();
+        return getByteOfMemoryAt(memoryLocation);
+    }
+
+    /**
+     * Combine the next two bytes in program memory, as defined by
+     * the Program Counter into a word so that:-
+     *
+     * PC[0] = high order byte
+     * PC[1] = low order byte
+     *<br/><br/>
+     * <em>Increments the Program Counter by 1</em>
+     *
+     * @return word made up of both bytes
+     */
+    private int nextProgramWord(){
+        int byte1 = nextProgramByte();
+        return (byte1 << 8) | nextProgramByte() ;
+    }
+
+    /**
+     * Pop value from stack
+     *
+     * @return popped value
+     */
     private int pop(){
         setRegisterValue(REG_SP, getRegisterValue(REG_SP) + 1);
         int address = 0x0100 | getRegisterValue(REG_SP);
@@ -717,10 +692,56 @@ public class CPU {
         return value;
     }
 
+    /**
+     * Push to stack
+     *
+     * @param value value to push
+     */
     private void push(int value){
         System.out.println("PUSH " + value + "(0b" + Integer.toBinaryString(value) + ") to mem[0x" + Integer.toHexString(getRegisterValue(REG_SP)).toUpperCase() + "]");
         setByteOfMemoryAt(0x0100 | getRegisterValue(REG_SP), value);
         setRegisterValue(REG_SP, getRegisterValue(REG_SP) - 1);
+    }
+
+    private int getByteOfMemoryAt(int location, int index){
+        final int memoryByte = memory.getByte(location + index);
+        System.out.println("Got 0x" + Integer.toHexString(memoryByte) + " from mem[" + location + (index != 0 ? "[" + index + "]" : "") +"]");
+        return memoryByte;
+    }
+
+    private int setByteOfMemoryAt(int location, int newByte){
+        return setByteOfMemoryAt(location, 0, newByte);
+    }
+
+    private int setByteOfMemoryAt(int location, int index, int newByte){
+        memory.setByteAt(location + index, newByte);
+        System.out.println("Stored 0x" + Integer.toHexString(newByte) + " at mem[" + location + (index != 0 ? "[" + index + "]" : "") +"]");
+        return (location + index);
+    }
+
+    private int getByteOfMemoryXIndexedAt(int location){
+        return getByteOfMemoryAt(location, getRegisterValue(REG_X_INDEX));
+    }
+
+    private int getWordOfMemoryXIndexedAt(int location){
+        int indexedLocation = location + getRegisterValue(REG_X_INDEX);
+        return (getByteOfMemoryAt(indexedLocation) << 8 | getByteOfMemoryAt(indexedLocation + 1));
+    }
+
+    private int setByteOfMemoryXIndexedAt(int location, int newByte){
+        return setByteOfMemoryAt(location, getRegisterValue(REG_X_INDEX), newByte);
+    }
+
+    private int getByteOfMemoryYIndexedAt(int location){
+        return getByteOfMemoryAt(location, getRegisterValue(REG_Y_INDEX));
+    }
+
+    private int setByteOfMemoryYIndexedAt(int location, int newByte){
+        return setByteOfMemoryAt(location, getRegisterValue(REG_Y_INDEX), newByte);
+    }
+
+    private int getByteOfMemoryAt(int location){
+        return getByteOfMemoryAt(location, 0);
     }
 
     private void setBorrowFlagFor(int newFakeByte) {
@@ -737,6 +758,11 @@ public class CPU {
             registers.clearFlag(STATUS_FLAG_CARRY);
     }
 
+    /**
+     * Call {@link CPU#branchTo(int)} with next program byte
+     *
+     * @param condition if {@code true} then branch is followed
+     */
     private void branchIf(boolean condition){
         int location = nextProgramByte();
         System.out.println("{Branch:0x" + Integer.toHexString(registers.getPC()) + " by " + Integer.toBinaryString(location) + "} " + (condition ? "YES->" : "NO..."));
@@ -786,24 +812,24 @@ public class CPU {
         return result;
     }
 
-    private void withByteAt(int location, ByteOperation byteOperation){
-        int b = getByteOfMemoryAt(location);
-        setByteOfMemoryAt(location, byteOperation.perform(b));
-    }
-
-    private void withByteXIndexedAt(int location, ByteOperation byteOperation){
-        int b = getByteOfMemoryXIndexedAt(location);
-        setByteOfMemoryXIndexedAt(location, byteOperation.perform(b));
-    }
-
-    private void withRegister(int registerId, ByteOperation byteOperation){
-        int b = getRegisterValue(registerId);
-        setRegisterValue(registerId, byteOperation.perform(b));
-    }
-
     @FunctionalInterface
-    private interface ByteOperation {
+    private interface SingleByteOperation {
         int perform(int byteValue);
+    }
+
+    private void withByteAt(int location, SingleByteOperation singleByteOperation){
+        int b = getByteOfMemoryAt(location);
+        setByteOfMemoryAt(location, singleByteOperation.perform(b));
+    }
+
+    private void withByteXIndexedAt(int location, SingleByteOperation singleByteOperation){
+        int b = getByteOfMemoryXIndexedAt(location);
+        setByteOfMemoryXIndexedAt(location, singleByteOperation.perform(b));
+    }
+
+    private void withRegister(int registerId, SingleByteOperation singleByteOperation){
+        int b = getRegisterValue(registerId);
+        setRegisterValue(registerId, singleByteOperation.perform(b));
     }
 
     private int performASL(int byteValue){
@@ -856,6 +882,11 @@ public class CPU {
         setRegisterValue(REG_STATUS, (memData & 0b11000000) | (getRegisterValue(REG_STATUS) & 0b00111111));
     }
 
+    @FunctionalInterface
+    private interface TwoByteOperation {
+        int perform(int byteValueOne, int byteValueTwo);
+    }
+
     private void withRegisterAndByteAt(int registerId, int memoryLocation, TwoByteOperation twoByteOperation){
         withRegisterAndByte(registerId, getByteOfMemoryAt(memoryLocation), twoByteOperation);
     }
@@ -874,11 +905,6 @@ public class CPU {
         registers.setRegisterAndFlags(registerId, twoByteOperation.perform(registerByte, byteValue));
 //        else
 //            setRegisterValue(registerId, twoByteOperation.perform(registerByte, byteValue));
-    }
-    
-    @FunctionalInterface
-    private interface TwoByteOperation {
-        int perform(int byteValueOne, int byteValueTwo);
     }
 
     private int performAND(int byteValueA, int byteValueB){
