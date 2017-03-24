@@ -434,6 +434,12 @@ public class CPU {
                 performCMP(getByteOfMemoryYIndexedAt(nextProgramWord()), REG_ACCUMULATOR);
                 break;
 
+            case InstructionSet.OP_CMP_IND_IX: {
+                //TODO
+                int pointerLocation = getWordOfMemoryXIndexedAt(nextProgramByte());
+                performCMP(getByteOfMemoryAt(pointerLocation), REG_ACCUMULATOR);
+            }break;
+
             case InstructionSet.OP_CPX_I:
                 performCMP(nextProgramByte(), REG_X_INDEX);
                 break;

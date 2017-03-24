@@ -3283,34 +3283,35 @@ class OpCodeSpec extends Specification {
     testCMP_IND_IX() {
         when:
         Memory memory = new SimpleMemory(65534)
-        int[] program = [OP_LDA_I, firstValue,    //Value at indirect address
+        int[] program = [OP_LDA_I, secondValue,    //Value at indirect address
                          OP_STA_ABS, indAddressHi, indAddressLo,
                          OP_LDX_I, index,
                          OP_LDA_I, indAddressHi,  //Indirect address in memory
                          OP_STA_Z_IX, 0x30,
                          OP_LDA_I, indAddressLo,
                          OP_STA_Z_IX, 0x31,
+                         OP_LDA_I, firstValue,
                          OP_CMP_IND_IX, 0x30]
         memory.setMemory(0, program)
 
         and:
         CPU processor = new CPU(memory)
         processor.reset()
-        processor.step(8)
+        processor.step(9)
         Registers registers = processor.getRegisters()
 
         then:
-        registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
+        registers.getRegister(Registers.REG_ACCUMULATOR) == firstValue
         registers.getPC() == program.length
         Z == registers.statusFlags[Registers.Z]
         N == registers.statusFlags[Registers.N]
 
         where:
-        indAddressHi | indAddressLo | firstValue | secondValue | index | expectedAccumulator | Z     | N     | C     | Expected
-        0x02         | 0x20         | 0x10       | 0x10        | 0     | 0x10                | true  | false | true  | "Basic compare"
-        0x02         | 0x22         | 0x11       | 0x10        | 1     | 0x11                | false | false | true  | "Carry flag set"
-        0x03         | 0x35         | 0x10       | 0x11        | 2     | 0x10                | false | true  | false | "Smaller value - larger"
-        0x04         | 0x41         | 0xFF       | 0x01        | 3     | 0xFF                | false | true  | true  | "Negative result"
+        indAddressHi | indAddressLo | firstValue | secondValue | index | Z     | N     | C     | Expected
+        0x02         | 0x20         | 0x10       | 0x10        | 0     | true  | false | true  | "Basic compare"
+        0x02         | 0x22         | 0x11       | 0x10        | 1     | false | false | true  | "Carry flag set"
+        0x03         | 0x35         | 0x10       | 0x11        | 2     | false | true  | false | "Smaller value - larger"
+        0x04         | 0x41         | 0xFF       | 0x01        | 3     | false | true  | true  | "Negative result"
     }
 
     @Unroll("CPY (Immediate) #Expected: #firstValue == #secondValue")
