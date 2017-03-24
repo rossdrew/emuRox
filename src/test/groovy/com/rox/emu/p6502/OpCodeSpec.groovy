@@ -3098,17 +3098,17 @@ class OpCodeSpec extends Specification {
 
         then:
         registers.getPC() == program.length
-        registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
+        registers.getRegister(Registers.REG_ACCUMULATOR) == firstValue
         Z == registers.statusFlags[Registers.Z]
         N == registers.statusFlags[Registers.N]
         C == registers.statusFlags[Registers.C]
 
         where:
-        firstValue | secondValue | expectedAccumulator | Z     | N     | C     | Expected
-        0x10       | 0x10        | 0x10                | true  | false | true  | "Basic compare"
-        0x11       | 0x10        | 0x11                | false | false | true  | "Carry flag set"
-        0x10       | 0x11        | 0x10                | false | true  | false | "Smaller value - larger"
-        0xFF       | 0x01        | 0xFF                | false | true  | true  | "Negative result"
+        firstValue | secondValue | Z     | N     | C     | Expected
+        0x10       | 0x10        | true  | false | true  | "Basic compare"
+        0x11       | 0x10        | false | false | true  | "Carry flag set"
+        0x10       | 0x11        | false | true  | false | "Smaller value - larger"
+        0xFF       | 0x01        | false | true  | true  | "Negative result"
     }
 
     @Unroll("CMP (Zero Page) #Expected: #firstValue == #secondValue")
@@ -3131,17 +3131,17 @@ class OpCodeSpec extends Specification {
 
         then:
         registers.getPC() == program.length
-        registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
+        registers.getRegister(Registers.REG_ACCUMULATOR) == firstValue
         Z == registers.statusFlags[Registers.Z]
         N == registers.statusFlags[Registers.N]
         C == registers.statusFlags[Registers.C]
 
         where:
-        firstValue | secondValue | expectedAccumulator | Z     | N     | C     | Expected
-        0x10       | 0x10        | 0x10                | true  | false | true  | "Basic compare"
-        0x11       | 0x10        | 0x11                | false | false | true  | "Carry flag set"
-        0x10       | 0x11        | 0x10                | false | true  | false | "Smaller value - larger"
-        0xFF       | 0x01        | 0xFF                | false | true  | true  | "Negative result"
+        firstValue | secondValue | Z     | N     | C     | Expected
+        0x10       | 0x10        | true  | false | true  | "Basic compare"
+        0x11       | 0x10        | false | false | true  | "Carry flag set"
+        0x10       | 0x11        | false | true  | false | "Smaller value - larger"
+        0xFF       | 0x01        | false | true  | true  | "Negative result"
     }
 
     @Unroll("CMP (Zero Page[X]) #Expected: #firstValue == #secondValue")
@@ -3165,17 +3165,17 @@ class OpCodeSpec extends Specification {
 
         then:
         registers.getPC() == program.length
-        registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
+        registers.getRegister(Registers.REG_ACCUMULATOR) == firstValue
         Z == registers.statusFlags[Registers.Z]
         N == registers.statusFlags[Registers.N]
         C == registers.statusFlags[Registers.C]
 
         where:
-        firstValue | secondValue | index | expectedAccumulator | Z     | N     | C     | Expected
-        0x10       | 0x10        | 0     | 0x10                | true  | false | true  | "Basic compare"
-        0x11       | 0x10        | 1     | 0x11                | false | false | true  | "Carry flag set"
-        0x10       | 0x11        | 2     | 0x10                | false | true  | false | "Smaller value - larger"
-        0xFF       | 0x01        | 3     | 0xFF                | false | true  | true  | "Negative result"
+        firstValue | secondValue | index | Z     | N     | C     | Expected
+        0x10       | 0x10        | 0     | true  | false | true  | "Basic compare"
+        0x11       | 0x10        | 1     | false | false | true  | "Carry flag set"
+        0x10       | 0x11        | 2     | false | true  | false | "Smaller value - larger"
+        0xFF       | 0x01        | 3     | false | true  | true  | "Negative result"
     }
 
     @Unroll("CMP (Absolute) #Expected: #firstValue == #secondValue")
@@ -3198,17 +3198,17 @@ class OpCodeSpec extends Specification {
 
         then:
         registers.getPC() == program.length
-        registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
+        registers.getRegister(Registers.REG_ACCUMULATOR) == firstValue
         Z == registers.statusFlags[Registers.Z]
         N == registers.statusFlags[Registers.N]
         C == registers.statusFlags[Registers.C]
 
         where:
-        firstValue | secondValue | expectedAccumulator | Z     | N     | C     | Expected
-        0x10       | 0x10        | 0x10                | true  | false | true  | "Basic compare"
-        0x11       | 0x10        | 0x11                | false | false | true  | "Carry flag set"
-        0x10       | 0x11        | 0x10                | false | true  | false | "Smaller value - larger"
-        0xFF       | 0x01        | 0xFF                | false | true  | true  | "Negative result"
+        firstValue | secondValue | Z     | N     | C     | Expected
+        0x10       | 0x10        | true  | false | true  | "Basic compare"
+        0x11       | 0x10        | false | false | true  | "Carry flag set"
+        0x10       | 0x11        | false | true  | false | "Smaller value - larger"
+        0xFF       | 0x01        | false | true  | true  | "Negative result"
     }
 
     @Unroll("CMP (Absolute[X]) #Expected: #firstValue == #secondValue")
@@ -3232,17 +3232,17 @@ class OpCodeSpec extends Specification {
 
         then:
         registers.getPC() == program.length
-        registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
+        registers.getRegister(Registers.REG_ACCUMULATOR) == firstValue
         Z == registers.statusFlags[Registers.Z]
         N == registers.statusFlags[Registers.N]
         C == registers.statusFlags[Registers.C]
 
         where:
-        firstValue | secondValue | index | expectedAccumulator | Z     | N     | C     | Expected
-        0x10       | 0x10        | 0     | 0x10                | true  | false | true  | "Basic compare"
-        0x11       | 0x10        | 1     | 0x11                | false | false | true  | "Carry flag set"
-        0x10       | 0x11        | 2     | 0x10                | false | true  | false | "Smaller value - larger"
-        0xFF       | 0x01        | 3     | 0xFF                | false | true  | true  | "Negative result"
+        firstValue | secondValue | index | Z     | N     | C     | Expected
+        0x10       | 0x10        | 0     | true  | false | true  | "Basic compare"
+        0x11       | 0x10        | 1     | false | false | true  | "Carry flag set"
+        0x10       | 0x11        | 2     | false | true  | false | "Smaller value - larger"
+        0xFF       | 0x01        | 3     | false | true  | true  | "Negative result"
     }
 
     @Unroll("CMP (Absolute[Y]) #Expected: #firstValue == #secondValue")
@@ -3266,17 +3266,17 @@ class OpCodeSpec extends Specification {
 
         then:
         registers.getPC() == program.length
-        registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
+        registers.getRegister(Registers.REG_ACCUMULATOR) == firstValue
         Z == registers.statusFlags[Registers.Z]
         N == registers.statusFlags[Registers.N]
         C == registers.statusFlags[Registers.C]
 
         where:
-        firstValue | secondValue | index | expectedAccumulator | Z     | N     | C     | Expected
-        0x10       | 0x10        | 0     | 0x10                | true  | false | true  | "Basic compare"
-        0x11       | 0x10        | 1     | 0x11                | false | false | true  | "Carry flag set"
-        0x10       | 0x11        | 2     | 0x10                | false | true  | false | "Smaller value - larger"
-        0xFF       | 0x01        | 3     | 0xFF                | false | true  | true  | "Negative result"
+        firstValue | secondValue | index | Z     | N     | C     | Expected
+        0x10       | 0x10        | 0     | true  | false | true  | "Basic compare"
+        0x11       | 0x10        | 1     | false | false | true  | "Carry flag set"
+        0x10       | 0x11        | 2     | false | true  | false | "Smaller value - larger"
+        0xFF       | 0x01        | 3     | false | true  | true  | "Negative result"
     }
 
     @Unroll("CMP (Indirect, X). #Expected: #firstValue == #secondValue")
