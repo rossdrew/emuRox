@@ -1403,7 +1403,7 @@ class OpCodeSpec extends Specification {
                          OP_STA_Z_IX, 0x30,
                          OP_LDA_I, locationLo,
                          OP_STA_Z_IX, 0x31,
-                         OP_LDA_I, value,
+                         OP_LDA_I, value,           //Value to store
                          OP_STA_IND_IX, 0x30]
         memory.setMemory(0, program)
 
@@ -1412,14 +1412,16 @@ class OpCodeSpec extends Specification {
         processor.reset()
         processor.step(7)
 
-        then:
+        then: 'The value has been stored at the expected address'
         memory.getByte( (locationHi << 8) | locationLo ) == value
 
         where:
         locationHi | locationLo | value | index | Expected
         0x01       | 0x10       | 1     | 0     | "Standard store accumulator"
-        //TODO More
-
+        0x01       | 0x10       | 1     | 1     | "Store using index 1"
+        0x01       | 0x10       | 30    | 2     | "Store random value"
+        0x01       | 0x11       | 45    | 3     | "Store at different low order location"
+        0x04       | 0x11       | 12    | 4     | "Store at different high order location"
     }
 
     @Unroll("SBC (Immediate) #Expected:  #firstValue - #secondValue = #expectedAccumulator in Accumulator.")
