@@ -25,6 +25,16 @@ public class SimpleMemoryTest {
     }
 
     @Test
+    public void testGetWord(){
+        memory.setByteAt(0, 0x01);
+        memory.setByteAt(1, 0x01);
+
+        assertEquals(257, memory.getWord(0));
+        assertEquals(256, memory.getWord(1));
+        assertEquals(0, memory.getWord(2));
+    }
+
+    @Test
     public void testSetMemory(){
         int[] values = new int[] {1,22,33,44,55};
         memory.setMemory(0, values);
