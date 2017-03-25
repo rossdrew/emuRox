@@ -29,4 +29,11 @@ public class SimpleMemory implements Memory{
         System.out.println("FETCH mem[" + location +"] --> " + memoryArray[location]);
         return memoryArray[location];
     }
+
+    @Override
+    public int getWord(int location) {
+        int word = (memoryArray[location] << 8 | memoryArray[location+1]);
+        System.out.println("FETCH mem[" + location +"] --> " + word);
+        return word;
+    }
 }

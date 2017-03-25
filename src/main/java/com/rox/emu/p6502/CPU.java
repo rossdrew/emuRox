@@ -725,6 +725,12 @@ public class CPU {
         return memoryByte;
     }
 
+    private int getWordOfMemoryAt(int location) {
+        int memoryWord = memory.getWord(location);
+        System.out.println("Got 0x" + Integer.toHexString(memoryWord) + " from mem[" + location +"]");
+        return memoryWord;
+    }
+
     private int setByteOfMemoryAt(int location, int newByte){
         return setByteOfMemoryAt(location, 0, newByte);
     }
@@ -754,10 +760,6 @@ public class CPU {
 
     private int setByteOfMemoryYIndexedAt(int location, int newByte){
         return setByteOfMemoryAt(location, getRegisterValue(REG_Y_INDEX), newByte);
-    }
-
-    private int getWordOfMemoryAt(int location) {
-        return (getByteOfMemoryAt(location) << 8 | getByteOfMemoryAt(location + 1));
     }
 
     private int getByteOfMemoryAt(int location){

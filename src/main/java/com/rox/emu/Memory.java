@@ -10,4 +10,5 @@ public interface Memory {
     void setByteAt(int location, int byteValue);
     void setMemory(int startLocation, int[] byteValues);
     int getByte(int location);
+    int getWord(int location);
 }
