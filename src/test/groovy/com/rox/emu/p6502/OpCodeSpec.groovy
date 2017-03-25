@@ -1426,7 +1426,6 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("STA (Indirect, Y) #Expected: #value stored at [#locationHi|#locationLo]")
-    @Ignore
     testSTA_IND_IY() {
         when:
         Memory memory = new SimpleMemory(65534)
@@ -1448,7 +1447,7 @@ class OpCodeSpec extends Specification {
         then: 'The value has been stored at the expected address'
         int address = (locationHi << 8) | locationLo
         int yIndex = registers.getRegister(Registers.REG_Y_INDEX)
-        (memory.getByte( address ) + yIndex)  == value
+        memory.getByte( address + yIndex )  == value
 
         where:
         locationHi | locationLo | value | index | Expected

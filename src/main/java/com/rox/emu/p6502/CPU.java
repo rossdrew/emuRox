@@ -531,8 +531,7 @@ public class CPU {
             }break;
 
             case InstructionSet.OP_STA_IND_IY: {
-                //TODO
-                int pointerLocation = getWordOfMemoryXIndexedAt(nextProgramByte());
+                int pointerLocation = getWordOfMemoryAt(nextProgramByte()) + getRegisterValue(REG_Y_INDEX);
                 setByteOfMemoryAt(pointerLocation, getRegisterValue(REG_ACCUMULATOR));
             }break;
 
