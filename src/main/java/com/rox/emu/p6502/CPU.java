@@ -525,6 +525,11 @@ public class CPU {
                 setByteOfMemoryYIndexedAt(nextProgramWord(), getRegisterValue(REG_ACCUMULATOR));
                 break;
 
+            case InstructionSet.OP_STA_IND_IX: {
+                int pointerLocation = getWordOfMemoryXIndexedAt(nextProgramByte());
+                setByteOfMemoryAt(pointerLocation, getRegisterValue(REG_ACCUMULATOR));
+            }break;
+
             case InstructionSet.OP_STX_Z:
                 setByteOfMemoryAt(nextProgramByte(), getRegisterValue(REG_X_INDEX));
                 break;

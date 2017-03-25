@@ -83,7 +83,8 @@ public class CPUTest {
 
     @Test
     public void testSTA() {
-        int[] program = {OP_LDA_I, 0xAA, OP_STA_Z, 100};
+        int[] program = {OP_LDA_I,
+                0xAA, OP_STA_Z, 100};
         memory.setMemory(0, program);
 
         processor.step(2);

@@ -1394,6 +1394,34 @@ class OpCodeSpec extends Specification {
         0x3        | 0x34       | 2     | 0b00000001 | 0b00000001  | 0b00000000  | true   | false | "Not both"
     }
 
+    @Unroll("STA (Indirect, X) #Expected: #value stored at [#locationHi|#locationLo]")
+    testSTA_IND_IX() {
+        when:
+        Memory memory = new SimpleMemory(65534)
+        int[] program = [OP_LDX_I, index,
+                         OP_LDA_I, locationHi,      //Indirect address in memory
+                         OP_STA_Z_IX, 0x30,
+                         OP_LDA_I, locationLo,
+                         OP_STA_Z_IX, 0x31,
+                         OP_LDA_I, value,
+                         OP_STA_IND_IX, 0x30]
+        memory.setMemory(0, program)
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        processor.step(7)
+
+        then:
+        memory.getByte( (locationHi << 8) | locationLo ) == value
+
+        where:
+        locationHi | locationLo | value | index | Expected
+        0x01       | 0x10       | 1     | 0     | "Standard store accumulator"
+        //TODO More
+
+    }
+
     @Unroll("SBC (Immediate) #Expected:  #firstValue - #secondValue = #expectedAccumulator in Accumulator.")
     testSBC(){
         when:
