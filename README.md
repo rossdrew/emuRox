@@ -11,9 +11,9 @@ An emulator for the 6502 processor.  The plan is to evolve this into a working N
 
 #### 6502
 
-Most opcodes now implemented.  Just `RTI` left (ignoring ROR till later). In order to finish those, I'll need to implement proper interrupts so that they can be returned from.
-Still working on __Indirect, Y__ addressing and a couple __Indirect, X__ addressed instructions.
-Timing and clock ticks will be looked at later, as necessary.  BCD wont be needed for now for the NES (Ricoh) version and I'll need to look at the memory mapped registers.
+Most opcodes now implemented.  Just `RTI` left.  In order to finish those, I'll need to implement proper interrupts (hardware `IRQ` and `NMI`) so that they can be returned from.
+Just started on the last of the addressing mode instructions,__Indirect, Y__.
+Timing will be looked at later, as necessary.  BCD wont be needed for now for the NES (Ricoh) version and I'll need to look at the memory mapped registers.
  
 ## Development & Testing
 
