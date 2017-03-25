@@ -87,6 +87,7 @@ public class InstructionSet {
     public static final int OP_STA_ABS_IX = 0x9D;
     public static final int OP_STA_ABS_IY = 0x99;
     public static final int OP_STA_IND_IX = 0x81;
+    public static final int OP_STA_IND_IY = 0x91;
     public static final int OP_STX_Z = 0x86;
     public static final int OP_STX_Z_IY = 0x96;
     public static final int OP_STX_ABS = 0x8E;
@@ -161,7 +162,7 @@ public class InstructionSet {
                                                 OP_ADC_Z, OP_ADC_I, OP_ADC_ABS, OP_ADC_ABS_IX, OP_ADC_ABS_IY, OP_ADC_Z_IX, OP_ADC_IND_IX,
                                                 OP_SBC_I, OP_SBC_Z, OP_SBC_Z_IX, OP_SBC_ABS, OP_SBC_ABS_IX, OP_SBC_ABS_IY, OP_SBC_IND_IX,
                                                 OP_LDA_Z, OP_LDA_I, OP_LDA_ABS, OP_LDA_Z_IX, OP_LDA_ABS_IY, OP_LDA_IND_IX, OP_LDA_ABS_IX,
-                                                OP_STA_Z, OP_STA_ABS, OP_STA_Z_IX, OP_STA_ABS_IX, OP_STA_ABS_IY, OP_STA_IND_IX, OP_STX_Z, OP_STX_Z_IY, OP_STX_ABS, OP_STY_Z, OP_STY_ABS, OP_STY_Z_IX,
+                                                OP_STA_Z, OP_STA_ABS, OP_STA_Z_IX, OP_STA_ABS_IX, OP_STA_ABS_IY, OP_STA_IND_IX, OP_STA_IND_IY, OP_STX_Z, OP_STX_Z_IY, OP_STX_ABS, OP_STY_Z, OP_STY_ABS, OP_STY_Z_IX,
                                                 OP_AND_I, OP_AND_IND_IX, OP_AND_Z, OP_AND_Z_IX, OP_AND_ABS_IX, OP_AND_ABS_IY, OP_AND_ABS, OP_ORA_I, OP_ORA_Z, OP_ORA_Z_IX, OP_ORA_ABS, OP_ORA_ABS_IX, OP_ORA_ABS_IY, OP_ORA_IND_IX, OP_EOR_I, OP_EOR_Z, OP_EOR_Z_IX, OP_EOR_ABS, OP_EOR_ABS_IX, OP_EOR_ABS_IY, OP_BIT_Z, OP_BIT_ABS,
                                                 OP_SEC, OP_CLC, OP_CLV, OP_PHA, OP_PLA,
                                                 OP_LDY_I, OP_LDY_Z, OP_LDY_Z_IX, OP_LDY_ABS, OP_LDY_ABS_IX,OP_INY, OP_INC_Z, OP_INC_Z_IX, OP_INC_ABS, OP_INC_ABS_IX, OP_DEC_Z, OP_DEC_Z_IX, OP_DEC_ABS, OP_DEC_ABS_IX, OP_DEY,
@@ -271,6 +272,7 @@ public class InstructionSet {
             case OP_STA_ABS_IX: return "STA (Absolute[X])";
             case OP_STA_ABS_IY: return "STA (Absolute[Y])";
             case OP_STA_IND_IX: return "STA (Indirect, X)";
+            case OP_STA_IND_IY: return "STA (Indirect, Y)";
             case OP_STX_Z:      return "STX (Zero Page)";
             case OP_STX_Z_IY:   return "STX (Zero Page[Y])";
             case OP_STX_ABS:    return "STX (Absolute)";

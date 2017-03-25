@@ -3,6 +3,7 @@ package com.rox.emu.p6502
 import com.rox.emu.Memory
 
 import com.rox.emu.SimpleMemory
+import spock.lang.Ignore
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -1414,6 +1415,40 @@ class OpCodeSpec extends Specification {
 
         then: 'The value has been stored at the expected address'
         memory.getByte( (locationHi << 8) | locationLo ) == value
+
+        where:
+        locationHi | locationLo | value | index | Expected
+        0x01       | 0x10       | 1     | 0     | "Standard store accumulator"
+        0x01       | 0x10       | 1     | 1     | "Store using index 1"
+        0x01       | 0x10       | 30    | 2     | "Store random value"
+        0x01       | 0x11       | 45    | 3     | "Store at different low order location"
+        0x04       | 0x11       | 12    | 4     | "Store at different high order location"
+    }
+
+    @Unroll("STA (Indirect, Y) #Expected: #value stored at [#locationHi|#locationLo]")
+    @Ignore
+    testSTA_IND_IY() {
+        when:
+        Memory memory = new SimpleMemory(65534)
+        int[] program = [OP_LDA_I, locationHi,      //Indirect address in memory
+                         OP_STA_Z, 0x30,
+                         OP_LDA_I, locationLo,
+                         OP_STA_Z, 0x31,
+                         OP_LDA_I, value,           //Value to store
+                         OP_LDY_I, index,
+                         OP_STA_IND_IY, 0x30]       // (Z[0x30] = two byte address) + Y -> pointer
+        memory.setMemory(0, program)
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        processor.step(7)
+        Registers registers = processor.getRegisters()
+
+        then: 'The value has been stored at the expected address'
+        int address = (locationHi << 8) | locationLo
+        int yIndex = registers.getRegister(Registers.REG_Y_INDEX)
+        (memory.getByte( address ) + yIndex)  == value
 
         where:
         locationHi | locationLo | value | index | Expected
