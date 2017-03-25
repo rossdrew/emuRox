@@ -530,6 +530,12 @@ public class CPU {
                 setByteOfMemoryAt(pointerLocation, getRegisterValue(REG_ACCUMULATOR));
             }break;
 
+            case InstructionSet.OP_STA_IND_IY: {
+                //TODO
+                int pointerLocation = getWordOfMemoryXIndexedAt(nextProgramByte());
+                setByteOfMemoryAt(pointerLocation, getRegisterValue(REG_ACCUMULATOR));
+            }break;
+
             case InstructionSet.OP_STX_Z:
                 setByteOfMemoryAt(nextProgramByte(), getRegisterValue(REG_X_INDEX));
                 break;
@@ -736,7 +742,7 @@ public class CPU {
 
     private int getWordOfMemoryXIndexedAt(int location){
         int indexedLocation = location + getRegisterValue(REG_X_INDEX);
-        return (getByteOfMemoryAt(indexedLocation) << 8 | getByteOfMemoryAt(indexedLocation + 1));
+        return getWordOfMemoryAt(indexedLocation);
     }
 
     private int setByteOfMemoryXIndexedAt(int location, int newByte){
@@ -749,6 +755,10 @@ public class CPU {
 
     private int setByteOfMemoryYIndexedAt(int location, int newByte){
         return setByteOfMemoryAt(location, getRegisterValue(REG_Y_INDEX), newByte);
+    }
+
+    private int getWordOfMemoryAt(int location) {
+        return (getByteOfMemoryAt(location) << 8 | getByteOfMemoryAt(location + 1));
     }
 
     private int getByteOfMemoryAt(int location){
