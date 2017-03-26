@@ -225,16 +225,16 @@ class OpCodeSpec extends Specification {
     testLDA_IND_IY() {
         when:
         Memory memory = new SimpleMemory(65534)
-        int[] program = [OP_LDX_I, index,       //Index to use
-                         OP_LDA_I, valueHi,     //Value at pointer
+        int[] program = [OP_LDX_I, index,           //Index to use
+                         OP_LDA_I, valueHi,         //Value at pointer
                          OP_STA_ABS_IX, pointerHi,
                          OP_LDA_I, valueLo,
                          OP_STA_ABS_IX, pointerLo,
-                         OP_LDA_I, pointerHi,         //Pointer address in Zero Page
+                         OP_LDA_I, pointerHi,       //Pointer address in Zero Page
                          OP_STA_Z, memLo,
                          OP_LDA_I, pointerLo,
                          OP_STA_Z, memHi,
-                         OP_LDA_I, 0x0,         //Reset accumulator
+                         OP_LDA_I, 0x0,             //Reset accumulator
                          OP_LDA_IND_IY, memLo]
         memory.setMemory(0, program)
 

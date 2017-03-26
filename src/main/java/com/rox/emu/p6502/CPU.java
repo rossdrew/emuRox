@@ -298,6 +298,11 @@ public class CPU {
                 registers.setRegisterAndFlags(REG_ACCUMULATOR, getByteOfMemoryAt(pointerLocation));
             }break;
 
+            case InstructionSet.OP_LDA_IND_IY: {
+                int pointerLocation = getWordOfMemoryXIndexedAt(nextProgramByte()) + getRegisterValue(REG_Y_INDEX);
+                registers.setRegisterAndFlags(REG_ACCUMULATOR, getByteOfMemoryAt(pointerLocation));
+            }break;
+
             case InstructionSet.OP_AND_Z:
                 withRegisterAndByteAt(REG_ACCUMULATOR, nextProgramByte(), this::performAND);
                 break;
