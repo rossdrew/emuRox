@@ -3,17 +3,10 @@ package com.rox.emu.p6502
 import com.rox.emu.Memory
 
 import com.rox.emu.SimpleMemory
-import spock.lang.Ignore
 import spock.lang.Specification
 import spock.lang.Unroll
 
 import static com.rox.emu.p6502.InstructionSet.*
-import static junit.framework.TestCase.assertEquals
-import static junit.framework.TestCase.assertEquals
-import static junit.framework.TestCase.assertEquals
-import static junit.framework.TestCase.assertEquals
-import static junit.framework.TestCase.assertEquals
-import static junit.framework.TestCase.assertEquals
 
 class OpCodeSpec extends Specification {
     @Unroll("LDA (Immediate) #Expected: Load #loadValue == #expectedAccumulator")
@@ -1462,7 +1455,8 @@ class OpCodeSpec extends Specification {
     testSBC(){
         when:
         Memory memory = new SimpleMemory(65534)
-        int[] program = [OP_SEC, OP_LDA_I, firstValue, OP_SBC_I, secondValue]
+        int[] program = [OP_SEC, OP_LDA_I, firstValue,
+                         OP_SBC_I, secondValue]
         memory.setMemory(0, program)
 
         and:
@@ -1714,7 +1708,9 @@ class OpCodeSpec extends Specification {
     testINC_Z(){
         when:
         Memory memory = new SimpleMemory(65534)
-        int[] program = [OP_LDA_I, firstValue, OP_STA_Z, 0x20, OP_INC_Z, 0x20]
+        int[] program = [OP_LDA_I, firstValue,
+                         OP_STA_Z, 0x20,
+                         OP_INC_Z, 0x20]
         memory.setMemory(0, program)
 
         and:
@@ -1740,7 +1736,10 @@ class OpCodeSpec extends Specification {
     testINC_Z_IX(){
         when:
         Memory memory = new SimpleMemory(65534)
-        int[] program = [OP_LDX_I, index, OP_LDA_I, firstValue, OP_STA_Z_IX, 0x20, OP_INC_Z_IX, 0x20]
+        int[] program = [OP_LDX_I, index,
+                         OP_LDA_I, firstValue,
+                         OP_STA_Z_IX, 0x20,
+                         OP_INC_Z_IX, 0x20]
         memory.setMemory(0, program)
 
         and:
@@ -1766,7 +1765,9 @@ class OpCodeSpec extends Specification {
     testINC_ABS(){
         when:
         Memory memory = new SimpleMemory(65534)
-        int[] program = [OP_LDA_I, firstValue, OP_STA_ABS, 0x01, 0x20, OP_INC_ABS, 0x01, 0x20]
+        int[] program = [OP_LDA_I, firstValue,
+                         OP_STA_ABS, 0x01, 0x20,
+                         OP_INC_ABS, 0x01, 0x20]
         memory.setMemory(0, program)
 
         and:
@@ -1792,7 +1793,10 @@ class OpCodeSpec extends Specification {
     testINC_ABS_IX(){
         when:
         Memory memory = new SimpleMemory(65534)
-        int[] program = [OP_LDX_I, index, OP_LDA_I, firstValue, OP_STA_ABS_IX, 0x01, 0x20, OP_INC_ABS_IX, 0x01, 0x20]
+        int[] program = [OP_LDX_I, index,
+                         OP_LDA_I, firstValue,
+                         OP_STA_ABS_IX, 0x01, 0x20,
+                         OP_INC_ABS_IX, 0x01, 0x20]
         memory.setMemory(0, program)
 
         and:
@@ -1818,7 +1822,9 @@ class OpCodeSpec extends Specification {
     testDEC_Z(){
         when:
         Memory memory = new SimpleMemory(65534)
-        int[] program = [OP_LDA_I, firstValue, OP_STA_Z, 0x20, OP_DEC_Z, 0x20]
+        int[] program = [OP_LDA_I, firstValue,
+                         OP_STA_Z, 0x20,
+                         OP_DEC_Z, 0x20]
         memory.setMemory(0, program)
 
         and:
@@ -1844,7 +1850,10 @@ class OpCodeSpec extends Specification {
     testDEC_Z_IX(){
         when:
         Memory memory = new SimpleMemory(65534)
-        int[] program = [OP_LDX_I, index, OP_LDA_I, firstValue, OP_STA_Z_IX, loc, OP_DEC_Z_IX, loc]
+        int[] program = [OP_LDX_I, index,
+                         OP_LDA_I, firstValue,
+                         OP_STA_Z_IX, loc,
+                         OP_DEC_Z_IX, loc]
         memory.setMemory(0, program)
 
         and:
@@ -2005,7 +2014,10 @@ class OpCodeSpec extends Specification {
     testPLA(){
         when:
         Memory memory = new SimpleMemory(65534)
-        int[] program = [OP_LDA_I, firstValue, OP_PHA, OP_LDA_I, 0x11, OP_PLA]
+        int[] program = [OP_LDA_I, firstValue,
+                         OP_PHA,
+                         OP_LDA_I, 0x11,
+                         OP_PLA]
         memory.setMemory(0, program)
 
         and:
@@ -2035,7 +2047,8 @@ class OpCodeSpec extends Specification {
     testASL(){
         when:
         Memory memory = new SimpleMemory(65534)
-        int[] program = [OP_LDA_I, firstValue, OP_ASL_A]
+        int[] program = [OP_LDA_I, firstValue,
+                         OP_ASL_A]
         memory.setMemory(0, program)
 
         and:
@@ -2448,7 +2461,8 @@ class OpCodeSpec extends Specification {
     testROL_A(){
         when:
         Memory memory = new SimpleMemory(65534)
-        int[] program = [preInstr, OP_LDA_I, firstValue, OP_ROL_A]
+        int[] program = [preInstr, OP_LDA_I,
+                         firstValue, OP_ROL_A]
         memory.setMemory(0, program)
 
         and:
@@ -2481,7 +2495,10 @@ class OpCodeSpec extends Specification {
     testROL_Z(){
         when:
         Memory memory = new SimpleMemory(65534)
-        int[] program = [firstInstr, OP_LDA_I, firstValue, OP_STA_Z, 0x20, OP_ROL_Z, 0x20]
+        int[] program = [firstInstr,
+                         OP_LDA_I, firstValue,
+                         OP_STA_Z, 0x20,
+                         OP_ROL_Z, 0x20]
         memory.setMemory(0, program)
 
         and:
@@ -2616,7 +2633,9 @@ class OpCodeSpec extends Specification {
     testROR_A(){
         when:
         Memory memory = new SimpleMemory(65534)
-        int[] program = [preInstr, OP_LDA_I, firstValue, OP_ROR_A]
+        int[] program = [preInstr,
+                         OP_LDA_I, firstValue,
+                         OP_ROR_A]
         memory.setMemory(0, program)
 
         and:
@@ -2649,7 +2668,14 @@ class OpCodeSpec extends Specification {
     testBNE(){
         when:
         Memory memory = new SimpleMemory(65534)
-        int[] program = [OP_NOP, OP_NOP, OP_NOP, OP_LDA_I, accumulatorValue, OP_BNE, jumpSteps, OP_NOP, OP_NOP, OP_NOP]
+        int[] program = [OP_NOP,
+                         OP_NOP,
+                         OP_NOP,
+                         OP_LDA_I, accumulatorValue,
+                         OP_BNE, jumpSteps,
+                         OP_NOP,
+                         OP_NOP,
+                         OP_NOP]
         memory.setMemory(0, program)
 
         and:
@@ -2702,7 +2728,14 @@ class OpCodeSpec extends Specification {
     testBMI(){
         when:
         Memory memory = new SimpleMemory(65534)
-        int[] program = [OP_NOP, OP_NOP, OP_NOP, OP_LDA_I, accumulatorValue, OP_BMI, jumpSteps, OP_NOP, OP_NOP, OP_NOP]
+        int[] program = [OP_NOP,
+                         OP_NOP,
+                         OP_NOP,
+                         OP_LDA_I, accumulatorValue,
+                         OP_BMI, jumpSteps,
+                         OP_NOP,
+                         OP_NOP,
+                         OP_NOP]
         memory.setMemory(0, program)
 
         and:
@@ -2727,7 +2760,14 @@ class OpCodeSpec extends Specification {
     testBPL(){
         when:
         Memory memory = new SimpleMemory(65534)
-        int[] program = [OP_NOP, OP_NOP, OP_NOP, OP_LDA_I, accumulatorValue, OP_BPL, jumpSteps, OP_NOP, OP_NOP, OP_NOP]
+        int[] program = [OP_NOP,
+                         OP_NOP,
+                         OP_NOP,
+                         OP_LDA_I, accumulatorValue,
+                         OP_BPL, jumpSteps,
+                         OP_NOP,
+                         OP_NOP,
+                         OP_NOP]
         memory.setMemory(0, program)
 
         and:
@@ -2752,7 +2792,15 @@ class OpCodeSpec extends Specification {
     testBVC(){
         when:
         Memory memory = new SimpleMemory(65534)
-        int[] program = [OP_NOP, OP_NOP, OP_NOP, OP_LDA_I, accumulatorValue, OP_ADC_I, addedValue, OP_BVC, jumpSteps, OP_NOP, OP_NOP, OP_NOP]
+        int[] program = [OP_NOP,
+                         OP_NOP,
+                         OP_NOP,
+                         OP_LDA_I, accumulatorValue,
+                         OP_ADC_I, addedValue,
+                         OP_BVC, jumpSteps,
+                         OP_NOP,
+                         OP_NOP,
+                         OP_NOP]
         memory.setMemory(0, program)
 
         and:
@@ -2777,7 +2825,15 @@ class OpCodeSpec extends Specification {
     testBVS(){
         when:
         Memory memory = new SimpleMemory(65534)
-        int[] program = [OP_NOP, OP_NOP, OP_NOP, OP_LDA_I, accumulatorValue, OP_ADC_I, addedValue, OP_BVS, jumpSteps, OP_NOP, OP_NOP, OP_NOP]
+        int[] program = [OP_NOP,
+                         OP_NOP,
+                         OP_NOP,
+                         OP_LDA_I, accumulatorValue,
+                         OP_ADC_I, addedValue,
+                         OP_BVS, jumpSteps,
+                         OP_NOP,
+                         OP_NOP,
+                         OP_NOP]
         memory.setMemory(0, program)
 
         and:
@@ -2802,7 +2858,8 @@ class OpCodeSpec extends Specification {
     testTAX(){
         when:
         Memory memory = new SimpleMemory(65534)
-        int[] program = [OP_LDA_I, loadedValue, OP_TAX]
+        int[] program = [OP_LDA_I, loadedValue,
+                         OP_TAX]
         memory.setMemory(0, program)
 
         and:
@@ -2831,7 +2888,8 @@ class OpCodeSpec extends Specification {
     testTAY(){
         when:
         Memory memory = new SimpleMemory(65534)
-        int[] program = [OP_LDA_I, loadedValue, OP_TAY]
+        int[] program = [OP_LDA_I, loadedValue,
+                         OP_TAY]
         memory.setMemory(0, program)
 
         and:
@@ -2948,7 +3006,10 @@ class OpCodeSpec extends Specification {
     testBIT(){
         when:
         Memory memory = new SimpleMemory(65534)
-        int[] program = [OP_LDA_I, firstValue, OP_STA_Z, memLoc, OP_LDA_I, secondValue, OP_BIT_Z, memLoc]
+        int[] program = [OP_LDA_I, firstValue,
+                         OP_STA_Z, memLoc,
+                         OP_LDA_I, secondValue,
+                         OP_BIT_Z, memLoc]
         memory.setMemory(0, program)
 
         and:
@@ -3011,7 +3072,9 @@ class OpCodeSpec extends Specification {
     testOP_STA_Z_IX(){
         when:
         Memory memory = new SimpleMemory(65534)
-        int[] program = [OP_LDA_I, value, OP_LDX_I, index, OP_STA_Z_IX, location]
+        int[] program = [OP_LDA_I, value,
+                         OP_LDX_I, index,
+                         OP_STA_Z_IX, location]
         memory.setMemory(0, program)
 
         and:
