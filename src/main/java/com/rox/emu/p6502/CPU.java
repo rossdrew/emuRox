@@ -37,6 +37,18 @@ public class CPU {
         System.out.println("...READY!");
     }
 
+    public void irq() {
+        registers.setFlag(STATUS_FLAG_IRQ_DISABLE);
+
+        push(getRegisterValue(REG_PC_HIGH));
+        push(getRegisterValue(REG_PC_LOW));
+        push(getRegisterValue(REG_STATUS));
+
+        setRegisterValue(REG_PC_HIGH, getByteOfMemoryAt(0xFFFe));
+        setRegisterValue(REG_PC_LOW, getByteOfMemoryAt(0xFFFF));
+        //TODO Working on...
+    }
+
     /**
      * @return the {@link Registers} being used
      */

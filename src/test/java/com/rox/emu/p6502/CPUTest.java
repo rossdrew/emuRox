@@ -939,22 +939,24 @@ public class CPUTest {
     }
 
     @Test
-    @Ignore
     public void testIRQ(){
-        int[] program = {};
+        int[] program = {OP_LDA_I, 1,
+                         OP_LDA_I, 2,
+                         OP_LDA_I, 3};
         memory.setMemory(0, program);
-        memory.setByteAt(0xFFFE, 0);                                     //New PC
-        memory.setByteAt(0xFFFF, 0);
+        memory.setByteAt(0xFFFE, 0x01); //->PCH
+        memory.setByteAt(0xFFFF, 0x10); //->PCL
 
         Registers registers = processor.getRegisters();
         registers.setRegister(Registers.REG_STATUS, 0b00000000);         //Sample register values
 
         processor.step(1);
+        processor.irq();
 
         assertEquals(0xFC, registers.getRegister(Registers.REG_SP));
 
         //PC (on Stack)
-        assertEquals(0x03, memory.getByte(0x1FE));
+        assertEquals(0x02, memory.getByte(0x1FE));
         assertEquals(0x00, memory.getByte(0x1FF));
 
         //Status (on stack) with B set
