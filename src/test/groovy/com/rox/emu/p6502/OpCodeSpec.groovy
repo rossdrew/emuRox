@@ -3,6 +3,7 @@ package com.rox.emu.p6502
 import com.rox.emu.Memory
 
 import com.rox.emu.SimpleMemory
+import spock.lang.Ignore
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -217,6 +218,38 @@ class OpCodeSpec extends Specification {
         0x02         | 0x20         | 0     | 0          | 0                   | true  | false | "With zero result"
         0x03         | 0x40         | 1     | 11         | 11                  | false | false | "With normal result"
         0x04         | 0x24         | 2     | 0xFF       | 0xFF                | false | true  | "With negative result"
+    }
+
+    @Unroll("LDA (Indirect, Y). #Expected: 0x30 -> [#indAddressHi|#indAddressLo][#index] = #expectedAccumulator")
+    @Ignore
+    testLDA_IND_IY() {
+        when:
+        Memory memory = new SimpleMemory(65534)
+        int[] program = [OP_LDX_I, index,       //Index to use
+                         OP_LDA_I, valueHi,     //Value at pointer
+                         OP_STA_ABS_IX, pointerHi,
+                         OP_LDA_I, valueLo,
+                         OP_STA_ABS_IX, pointerLo,
+                         OP_LDA_I, pointerHi,         //Pointer address in Zero Page
+                         OP_STA_Z, memLo,
+                         OP_LDA_I, pointerLo,
+                         OP_STA_Z, memHi,
+                         OP_LDA_I, 0x0,         //Reset accumulator
+                         OP_LDA_IND_IY, memLo]
+        memory.setMemory(0, program)
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        processor.step(11)
+        Registers registers = processor.getRegisters()
+
+        then:
+        registers.getRegister(Registers.REG_ACCUMULATOR) == (valueHi << 8 | valueLo)
+
+        where:
+        memLo | memHi | pointerHi | pointerLo | index | valueHi | valueLo | expected
+        0x25  | 0x26  | 0x02      | 0x10      | 0     | 0x00    | 0x01    | "Simple, small value"
     }
 
     @Unroll("LDX (Immediate): Load #firstValue")
