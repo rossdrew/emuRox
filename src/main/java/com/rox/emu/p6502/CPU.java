@@ -452,7 +452,6 @@ public class CPU {
                 break;
 
             case InstructionSet.OP_CMP_IND_IX: {
-                //TODO
                 int pointerLocation = getWordOfMemoryXIndexedAt(nextProgramByte());
                 performCMP(getByteOfMemoryAt(pointerLocation), REG_ACCUMULATOR);
             }break;
@@ -736,39 +735,8 @@ public class CPU {
         setRegisterValue(REG_SP, getRegisterValue(REG_SP) - 1);
     }
 
-    private int getByteOfMemoryAt(int location, int index){
-        final int memoryByte = memory.getByte(location + index);
-        System.out.println("Got 0x" + Integer.toHexString(memoryByte) + " from mem[" + location + (index != 0 ? "[" + index + "]" : "") +"]");
-        return memoryByte;
-    }
-
-    private int getWordOfMemoryAt(int location) {
-        int memoryWord = memory.getWord(location);
-        System.out.println("Got 0x" + Integer.toHexString(memoryWord) + " from mem[" + location +"]");
-        return memoryWord;
-    }
-
-    private int setByteOfMemoryAt(int location, int newByte){
-        return setByteOfMemoryAt(location, 0, newByte);
-    }
-
-    private int setByteOfMemoryAt(int location, int index, int newByte){
-        memory.setByteAt(location + index, newByte);
-        System.out.println("Stored 0x" + Integer.toHexString(newByte) + " at mem[" + location + (index != 0 ? "[" + index + "]" : "") +"]");
-        return (location + index);
-    }
-
     private int getByteOfMemoryXIndexedAt(int location){
         return getByteOfMemoryAt(location, getRegisterValue(REG_X_INDEX));
-    }
-
-    private int getWordOfMemoryXIndexedAt(int location){
-        int indexedLocation = location + getRegisterValue(REG_X_INDEX);
-        return getWordOfMemoryAt(indexedLocation);
-    }
-
-    private int setByteOfMemoryXIndexedAt(int location, int newByte){
-        return setByteOfMemoryAt(location, getRegisterValue(REG_X_INDEX), newByte);
     }
 
     private int getByteOfMemoryYIndexedAt(int location){
@@ -781,6 +749,37 @@ public class CPU {
 
     private int getByteOfMemoryAt(int location){
         return getByteOfMemoryAt(location, 0);
+    }
+
+    private int getByteOfMemoryAt(int location, int index){
+        final int memoryByte = memory.getByte(location + index);
+        System.out.println("Got 0x" + Integer.toHexString(memoryByte) + " from mem[" + location + (index != 0 ? "[" + index + "]" : "") +"]");
+        return memoryByte;
+    }
+
+    private int setByteOfMemoryXIndexedAt(int location, int newByte){
+        return setByteOfMemoryAt(location, getRegisterValue(REG_X_INDEX), newByte);
+    }
+
+    private int setByteOfMemoryAt(int location, int newByte){
+        return setByteOfMemoryAt(location, 0, newByte);
+    }
+
+    private int setByteOfMemoryAt(int location, int index, int newByte){
+        memory.setByteAt(location + index, newByte);
+        System.out.println("Stored 0x" + Integer.toHexString(newByte) + " at mem[" + location + (index != 0 ? "[" + index + "]" : "") +"]");
+        return (location + index);
+    }
+
+    private int getWordOfMemoryXIndexedAt(int location){
+        int indexedLocation = location + getRegisterValue(REG_X_INDEX);
+        return getWordOfMemoryAt(indexedLocation);
+    }
+
+    private int getWordOfMemoryAt(int location) {
+        int memoryWord = memory.getWord(location);
+        System.out.println("Got 0x" + Integer.toHexString(memoryWord) + " from mem[" + location +"]");
+        return memoryWord;
     }
 
     private void setBorrowFlagFor(int newFakeByte) {
