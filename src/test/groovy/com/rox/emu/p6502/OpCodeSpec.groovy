@@ -221,23 +221,16 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("LDA (Indirect, Y). #expected: 0x60 -> [#pointerHi|#pointerLo][#index] = #expectedAccumulator")
-    @Ignore
     testLDA_IND_IY() {
         when:
         Memory memory = new SimpleMemory(65534)
-        int[] program = [OP_LDX_I, index,           //Index to use
-                         OP_LDA_I, valueHi,         //High order byte at pointer
-                         OP_STA_ABS_IX, pointerHi, pointerLo,
+        int[] program = [OP_LDY_I, index,           //Index to use
+                         OP_LDA_I, value,           //High order byte at pointer
+                         OP_STA_ABS_IY, pointerHi, pointerLo,
                          OP_LDA_I, pointerHi,       //Pointer location
-                         OP_STA_Z_IX, 0x60,
-
-                         OP_INX,
-                         OP_LDA_I, valueLo,         //Low order byte at pointer
-                         OP_STA_ABS_IX, pointerHi, pointerLo,
+                         OP_STA_Z, 0x60,
                          OP_LDA_I, pointerLo,       //Pointer location
-                         OP_STA_Z_IX, 0x60,
-                         OP_DEX,
-
+                         OP_STA_Z, 0x61,
                          OP_LDA_I, 0x0,             //Reset accumulator
                          OP_LDA_IND_IY, 0x60]
         memory.setMemory(0, program)
@@ -245,17 +238,20 @@ class OpCodeSpec extends Specification {
         and:
         CPU processor = new CPU(memory)
         processor.reset()
-        processor.step(13)
+        processor.step(9)
         Registers registers = processor.getRegisters()
 
         then:
-        registers.getRegister(Registers.REG_ACCUMULATOR) == (valueHi << 8 | valueLo)
+        registers.getRegister(Registers.REG_ACCUMULATOR) == value
 
-        //TODO There's nothing at [pointerHi|pointerLo]
-        //     WAIT, Accumulator is only one byte, so I can't have a two byte value...doh!
         where:
-        pointerHi | pointerLo | index | valueHi | valueLo | expected
-        0x02      | 0x10      | 0     | 0x00    | 0x01    | "Simple, small value"
+        pointerHi | pointerLo | index | value | expected
+        0x02      | 0x10      | 0     | 0x01  | "Simple, small value"
+        0x03      | 0x10      | 0     | 0x01  | "Alternate high byte of pointer"
+        0x04      | 0x11      | 0     | 0x01  | "Alternate low byte of pointer"
+        0x05      | 0x12      | 1     | 0x01  | "Using index"
+        0x06      | 0x13      | 2     | 0x0F  | "A different value"
+
     }
 
     @Unroll("LDX (Immediate): Load #firstValue")
