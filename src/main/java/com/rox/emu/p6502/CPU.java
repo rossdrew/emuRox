@@ -46,7 +46,6 @@ public class CPU {
 
         setRegisterValue(REG_PC_HIGH, getByteOfMemoryAt(0xFFFe));
         setRegisterValue(REG_PC_LOW, getByteOfMemoryAt(0xFFFF));
-        //TODO Working on...
     }
 
     /**
