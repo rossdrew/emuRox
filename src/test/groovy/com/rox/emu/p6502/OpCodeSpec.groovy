@@ -2444,6 +2444,45 @@ class OpCodeSpec extends Specification {
         0b00000001    | 0b00000001     | 4            | 257        | "Double byte jump"
     }
 
+    @Unroll("JMP (Indirect) #expected: [#jmpLocationHi | #jmpLocationLow] -> #expectedPC")
+    @Ignore
+    testIndirectJMP(){
+        when:
+        Memory memory = new SimpleMemory(65534)
+        int[] program = [OP_LDA_I, jmpLocationHi,
+                         OP_STA_ABS, 0x01, 0x40,
+                         OP_LDA_I, jmpLocationLow,
+                         OP_STA_ABS, 0x01, 0x41,
+                         OP_NOP,
+                         OP_NOP,
+                         OP_NOP,
+                         OP_JMP_IND, 0x01, 0x41,
+                         OP_NOP,
+                         OP_NOP,
+                         OP_NOP]
+        memory.setMemory(0, program)
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        Registers registers = processor.getRegisters()
+
+        and:
+        processor.step(4 + instructions)
+
+        then:
+        registers.getPC() == expectedPC
+
+        where:
+        jmpLocationHi | jmpLocationLow | instructions | expectedPC | expected
+        0b00000000    | 0b00000001     | 4            | 1          | "Standard jump back"
+        0b00000000    | 0b00000000     | 5            | 1          | "Standard jump back then step"
+        0b00000000    | 0b00000111     | 4            | 7          | "Standard jump forward"
+        0b00000000    | 0b00000111     | 5            | 8          | "Standard jump forward then step"
+        0b00000001    | 0b00000000     | 4            | 256        | "High byte jump"
+        0b00000001    | 0b00000001     | 4            | 257        | "Double byte jump"
+    }
+
     @Unroll("BCC #expected: ending up at mem[#expectedPC] after #instructions steps")
     testBCC(){
         when:
