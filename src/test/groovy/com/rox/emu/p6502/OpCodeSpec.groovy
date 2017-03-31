@@ -2414,7 +2414,13 @@ class OpCodeSpec extends Specification {
     testJMP(){
         when:
         Memory memory = new SimpleMemory(65534)
-        int[] program = [OP_NOP, OP_NOP, OP_NOP, OP_JMP_ABS, jmpLocationHi, jmpLocationLow, OP_NOP, OP_NOP, OP_NOP]
+        int[] program = [OP_NOP,
+                         OP_NOP,
+                         OP_NOP,
+                         OP_JMP_ABS, jmpLocationHi, jmpLocationLow,
+                         OP_NOP,
+                         OP_NOP,
+                         OP_NOP]
         memory.setMemory(0, program)
 
         and:
