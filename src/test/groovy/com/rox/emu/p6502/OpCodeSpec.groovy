@@ -3,11 +3,16 @@ package com.rox.emu.p6502
 import com.rox.emu.Memory
 
 import com.rox.emu.SimpleMemory
-import spock.lang.Ignore
 import spock.lang.Specification
 import spock.lang.Unroll
 
 import static com.rox.emu.p6502.InstructionSet.*
+import static junit.framework.TestCase.assertEquals
+import static junit.framework.TestCase.assertEquals
+import static junit.framework.TestCase.assertEquals
+import static junit.framework.TestCase.assertEquals
+import static junit.framework.TestCase.assertEquals
+import static junit.framework.TestCase.assertEquals
 
 class OpCodeSpec extends Specification {
     @Unroll("LDA (Immediate) #Expected: Load #loadValue == #expectedAccumulator")
@@ -3801,6 +3806,48 @@ class OpCodeSpec extends Specification {
         0x0     | 0x0     | 0b00000000 | "With empty status register and B not set"
         0x0     | 0x0     | 0b00100000 | "With empty status register and B already set"
         0x1     | 0x1     | 0b10000101 | "With loaded status register"
+    }
+
+    @Unroll("IRQ #expected #statusValue->#pushedStatus")
+    testIRQ(){
+        when:
+        Memory memory = new SimpleMemory(0x10000)
+        int[] program = [OP_LDA_I, 1,
+                         OP_LDA_I, 2,
+                         OP_LDA_I, 3,
+                         OP_LDA_I, 4,
+                         OP_LDA_I, 5]
+        memory.setMemory(0, program)
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        Registers registers = processor.getRegisters()
+
+        and:
+        processor.step(steps)
+        registers.setRegister(Registers.REG_STATUS, statusValue)
+        processor.irq()
+
+        then: 'Three items have been added to stack'
+        registers.getRegister(Registers.REG_SP) == 0xFC
+
+        and: 'The PC on the stack is as expected'
+        memory.getByte(0x1FE) == pushedPCLo
+        memory.getByte(0x1FF) == pushedPCHi
+
+        and: 'Status register is moved to stack with B set'
+        memory.getByte(0x1FD) == pushedStatus
+
+        and: 'The PC is set to 0xFFFE:0xFFFF'
+        registers.getRegister(Registers.REG_PC_HIGH) == memory.getByte(0xFFFE)
+        registers.getRegister(Registers.REG_PC_LOW)  == memory.getByte(0xFFFF)
+
+        where:
+        statusValue | steps | pushedStatus | pushedPCHi | pushedPCLo | expected
+        0b00000000  | 1     | 0b00000100   | 0x00       | 0x02       | "Empty status register"
+        0b11111111  | 1     | 0b11111111   | 0x00       | 0x02       | "Full status register"
+        0b10101010  | 1     | 0b10101110   | 0x00       | 0x02       | "Random status register"
     }
 
 //    @Ignore
