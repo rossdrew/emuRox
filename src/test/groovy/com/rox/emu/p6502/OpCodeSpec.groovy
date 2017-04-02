@@ -3848,7 +3848,10 @@ class OpCodeSpec extends Specification {
         0b00000000  | 1     | 0b00000100   | 0x00       | 0x02       | "Empty status register"
         0b11111111  | 1     | 0b11111111   | 0x00       | 0x02       | "Full status register"
         0b10101010  | 1     | 0b10101110   | 0x00       | 0x02       | "Random status register"
+        0b00000000  | 2     | 0b00000100   | 0x00       | 0x04       | "Two steps"
+        0b00000000  | 3     | 0b00000100   | 0x00       | 0x06       | "Three steps"
     }
+
 
 //    @Ignore
 //    def exampleTest(){
