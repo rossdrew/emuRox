@@ -578,12 +578,20 @@ public class CPU {
                 registers.setRegister(REG_STATUS, pop());
                 break;
 
-            case InstructionSet.OP_JMP_ABS:
+            case InstructionSet.OP_JMP_ABS: {
                 int h = nextProgramByte();
                 int l = nextProgramByte();
                 registers.setRegister(REG_PC_HIGH, h);
                 setRegisterValue(REG_PC_LOW, l);
-                break;
+            }break;
+
+            case InstructionSet.OP_JMP_IND: {
+                int h = nextProgramByte();
+                int l = nextProgramByte();
+                int pointer = (h << 8 | l);
+                System.out.println(">>>>>>>>>>> " + pointer + "=" + getWordOfMemoryAt(pointer));
+                registers.setPC(getWordOfMemoryAt(pointer));
+            }break;
 
             case InstructionSet.OP_BCS:
                 branchIf(registers.getFlag(STATUS_FLAG_CARRY));

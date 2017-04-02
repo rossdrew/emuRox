@@ -2445,7 +2445,6 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("JMP (Indirect) #expected: [#jmpLocationHi | #jmpLocationLow] -> #expectedPC")
-    @Ignore
     testIndirectJMP(){
         when:
         Memory memory = new SimpleMemory(65534)
@@ -2456,7 +2455,7 @@ class OpCodeSpec extends Specification {
                          OP_NOP,
                          OP_NOP,
                          OP_NOP,
-                         OP_JMP_IND, 0x01, 0x41,
+                         OP_JMP_IND, 0x01, 0x40,
                          OP_NOP,
                          OP_NOP,
                          OP_NOP]
@@ -2468,19 +2467,19 @@ class OpCodeSpec extends Specification {
         Registers registers = processor.getRegisters()
 
         and:
-        processor.step(4 + instructions)
+        processor.step(instructions)
 
         then:
         registers.getPC() == expectedPC
 
         where:
         jmpLocationHi | jmpLocationLow | instructions | expectedPC | expected
-        0b00000000    | 0b00000001     | 4            | 1          | "Standard jump back"
-        0b00000000    | 0b00000000     | 5            | 1          | "Standard jump back then step"
-        0b00000000    | 0b00000111     | 4            | 7          | "Standard jump forward"
-        0b00000000    | 0b00000111     | 5            | 8          | "Standard jump forward then step"
-        0b00000001    | 0b00000000     | 4            | 256        | "High byte jump"
-        0b00000001    | 0b00000001     | 4            | 257        | "Double byte jump"
+        0b00000000    | 0b00000001     | 8            | 1          | "Standard jump back"
+        0b00000000    | 0b00000000     | 9            | 2          | "Standard jump back then step"
+        0b00000000    | 0b00000111     | 8            | 7          | "Standard jump forward"
+        0b00000000    | 0b00000111     | 9            | 10         | "Standard jump forward then step"
+        0b00000001    | 0b00000000     | 8            | 256        | "High byte jump"
+        0b00000001    | 0b00000001     | 8            | 257        | "Double byte jump"
     }
 
     @Unroll("BCC #expected: ending up at mem[#expectedPC] after #instructions steps")
