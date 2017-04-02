@@ -9,7 +9,7 @@ public class SimpleMemory implements Memory{
     private final int[] memoryArray;
 
     public SimpleMemory(){
-        memoryArray = new int[65534];
+        memoryArray = new int[0x10000];
     }
 
     @Override

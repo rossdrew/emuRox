@@ -18,16 +18,16 @@ class OpCodeConverter {
     private static final int OP_I = 3;
 
     //Addressing modes
-    private static final String ADDR_IMP = "Implied";
-    private static final String ADDR_I = "Immediate";
-    private static final String ADDR_A = "Accumulator";
-    private static final String ADDR_Z = "Zero Page";
-    private static final String ADDR_ABS = "Absolute";
-    private static final String ADDR_IND = "Indirect";
+    public static final String ADDR_IMP = "Implied";
+    public static final String ADDR_I = "Immediate";
+    public static final String ADDR_A = "Accumulator";
+    public static final String ADDR_Z = "Zero Page";
+    public static final String ADDR_ABS = "Absolute";
+    public static final String ADDR_IND = "Indirect";
 
     //Indexing modes
-    private static final String INDEX_X = " [X]";
-    private static final String INDEX_Y = " [Y]";
+    public static final String INDEX_X = " [X]";
+    public static final String INDEX_Y = " [Y]";
 
     public static String toDescription(String internalOpCodeName){
         if (internalOpCodeName != null && !internalOpCodeName.isEmpty()){
