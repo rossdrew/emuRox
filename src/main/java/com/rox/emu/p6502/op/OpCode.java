@@ -160,7 +160,8 @@ public enum OpCode {
             OP_SED(0xF8),
             OP_CLD(0xD8),
 
-            OP_RTS(0x60);
+            OP_RTS(0x60),
+            OP_RTI(0x40);
 
     private int byteValue;
     private String description;

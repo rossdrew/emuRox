@@ -684,6 +684,12 @@ public class CPU {
                 setRegisterValue(REG_PC_HIGH, pop());
                 break;
 
+            case InstructionSet.OP_RTI:
+                setRegisterValue(REG_STATUS, pop());
+                setRegisterValue(REG_PC_LOW, pop());
+                setRegisterValue(REG_PC_HIGH, pop());
+                break;
+
             default:
                 throw new UnknownOpCodeException("Unknown 6502 OpCode:" + opCode + " encountered.", opCode);
         }

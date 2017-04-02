@@ -3,6 +3,7 @@ package com.rox.emu.p6502
 import com.rox.emu.Memory
 
 import com.rox.emu.SimpleMemory
+import spock.lang.Ignore
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -3852,6 +3853,58 @@ class OpCodeSpec extends Specification {
         0b00000000  | 3     | 0b00000100   | 0x00       | 0x06       | "Three steps"
     }
 
+    @Unroll("RTI #expected ")
+    @Ignore
+    testRTI(){
+        when: 'We have a program which will be interrupted'
+        Memory memory = new SimpleMemory(0x10000)
+        int[] program = [OP_LDA_I, 1,
+                         OP_LDA_I, 2, //--> IRQ Here
+                         OP_LDA_I, 4, //<-- Return here
+                         OP_LDA_I, 5,
+                         OP_LDA_I, 6]
+        memory.setMemory(0, program)
+
+        and: 'An interrupt routine'
+        int[] irqRoutine = [OP_LDA_I, 3,
+                            OP_RTI]
+        memory.setMemory(0x100, irqRoutine)
+        memory.setByteAt(0xFFFE, 0x00)
+        memory.setByteAt(0xFFFF, 0x01)
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        Registers registers = processor.getRegisters()
+
+        and:
+        processor.step(2)
+        registers.setRegister(Registers.REG_STATUS, statusValue)
+        processor.irq()
+        processor.step(3)
+
+        then: 'Stack is empty again'
+        registers.getRegister(Registers.REG_SP) == 0xFF
+
+        and: 'The PC on the stack is as expected'
+        registers.getRegister(Registers.REG_PC_HIGH) == restoredPCHi
+        registers.getRegister(Registers.REG_PC_HIGH) == restoredPCLo
+
+        and: 'Status register is moved to stack with B set'
+        registers.getRegister(Registers.REG_STATUS) == restoredStatus
+
+        and: 'The PC is set to where it was before IRQ'
+        registers.getRegister(Registers.REG_PC_HIGH) == 0x00
+        registers.getRegister(Registers.REG_PC_LOW)  == 0x04
+
+        where:
+        statusValue | restoredStatus | restoredPCHi | restoredPCLo | expected
+        0b00000000  | 0b00000100     | 0x00         | 0x02         | "Empty status register"
+        0b11111111  | 0b11111111     | 0x00         | 0x02         | "Full status register"
+        0b10101010  | 0b10101110     | 0x00         | 0x02         | "Random status register"
+        0b00000000  | 0b00000100     | 0x00         | 0x04         | "Two steps"
+        0b00000000  | 0b00000100     | 0x00         | 0x06         | "Three steps"
+    }
 
 //    @Ignore
 //    def exampleTest(){
