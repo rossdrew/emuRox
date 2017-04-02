@@ -163,8 +163,8 @@ public enum OpCode {
             OP_RTS(0x60),
             OP_RTI(0x40);
 
-    private int byteValue;
-    private String description;
+    private final int byteValue;
+    private final String description;
 
     OpCode(int byteValue){
         this.byteValue = byteValue;

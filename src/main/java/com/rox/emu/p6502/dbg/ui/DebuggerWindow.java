@@ -25,14 +25,14 @@ public class DebuggerWindow extends JFrame{
     private String instructionName = "...";
     private final JLabel instruction = new JLabel(instructionName);
 
-    private final DefaultListModel listModel;
+    private final DefaultListModel<String> listModel;
 
     public DebuggerWindow() {
         super("6502 Debugger");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setSize(1000, 500);
 
-        listModel= new DefaultListModel();
+        listModel= new DefaultListModel<String>();
 
         setLayout(new BorderLayout());
 
@@ -42,7 +42,7 @@ public class DebuggerWindow extends JFrame{
         add(registersPanel, BorderLayout.CENTER);
         add(getControlPanel(), BorderLayout.SOUTH);
 
-        JList instructionList = new JList<>(listModel);
+        JList<String> instructionList = new JList<>(listModel);
         JScrollPane instructionScroller = new JScrollPane(instructionList);
         add(instructionScroller, BorderLayout.EAST);
 
@@ -112,7 +112,7 @@ public class DebuggerWindow extends JFrame{
     }
 
     public void loadProgram(int[] program){
-        memory = new SimpleMemory(65534);
+        memory = new SimpleMemory();
         memory.setMemory(0, program);
         processor = new CPU(memory);
         registersPanel.setRegisters(processor.getRegisters());

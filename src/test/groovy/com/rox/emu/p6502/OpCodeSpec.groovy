@@ -8,18 +8,12 @@ import spock.lang.Specification
 import spock.lang.Unroll
 
 import static com.rox.emu.p6502.InstructionSet.*
-import static junit.framework.TestCase.assertEquals
-import static junit.framework.TestCase.assertEquals
-import static junit.framework.TestCase.assertEquals
-import static junit.framework.TestCase.assertEquals
-import static junit.framework.TestCase.assertEquals
-import static junit.framework.TestCase.assertEquals
 
 class OpCodeSpec extends Specification {
     @Unroll("LDA (Immediate) #Expected: Load #loadValue == #expectedAccumulator")
     testImmediateLDA() {
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDA_I, loadValue]
         memory.setMemory(0, program)
 
@@ -48,7 +42,7 @@ class OpCodeSpec extends Specification {
     @Unroll("LDA (Zero Page) #Expected: Expecting #loadValue @ [30]")
     testLDAFromZeroPage() {
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDA_Z, 30]
         memory.setByteAt(30, loadValue)
         memory.setMemory(0, program)
@@ -78,7 +72,7 @@ class OpCodeSpec extends Specification {
     @Unroll("LDA (Zero Page[X]) #Expected: Load [0x30 + X(#index)] -> #expectedAccumulator")
     testLDAFromZeroPageIndexedByX() {
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDX_I, index,
                          OP_LDA_Z_IX, 0x30]
         int[] values = [0, 11, 0b11111111]
@@ -107,7 +101,7 @@ class OpCodeSpec extends Specification {
     @Unroll("LDA (Absolute) #Expected: Expecting #loadValue @ [300]")
     testAbsoluteLDA() {
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDA_ABS, 0x1, 0x2C]
         memory.setByteAt(300, loadValue)
         memory.setMemory(0, program)
@@ -137,7 +131,7 @@ class OpCodeSpec extends Specification {
     @Unroll("LDA (Absolute[X]). #Expected: 300[#index] = #expectedAccumulator")
     testLDAIndexedByX() {
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDX_I, index,
                          OP_LDA_ABS_IX, 1, 0x2C]
         int[] values = [0, 11, 0b11111111]
@@ -167,7 +161,7 @@ class OpCodeSpec extends Specification {
     @Unroll("LDA (Absolute[Y]). #Expected: 300[#index] = #expectedAccumulator")
     testLDAIndexedByY() {
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDY_I, index,
                          OP_LDA_ABS_IY, 1, 0x2C]
         int[] values = [0, 11, 0b11111111]
@@ -196,7 +190,7 @@ class OpCodeSpec extends Specification {
     @Unroll("LDA (Indirect, X). #Expected: 0x30[#index] -> [#indAddressHi|#indAddressLo] = #expectedAccumulator")
     testLDA_IND_IX() {
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDA_I, firstValue,    //Value at indirect address
                          OP_STA_ABS, indAddressHi, indAddressLo,
                          OP_LDX_I, index,
@@ -229,7 +223,7 @@ class OpCodeSpec extends Specification {
     @Unroll("LDA (Indirect, Y). #expected: 0x60 -> [#pointerHi|#pointerLo][#index] = #expectedAccumulator")
     testLDA_IND_IY() {
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDY_I, index,           //Index to use
                          OP_LDA_I, value,           //High order byte at pointer
                          OP_STA_ABS_IY, pointerHi, pointerLo,
@@ -263,7 +257,7 @@ class OpCodeSpec extends Specification {
     @Unroll("LDX (Immediate): Load #firstValue")
     testLDX(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDX_I, firstValue]
         memory.setMemory(0, program)
 
@@ -289,7 +283,7 @@ class OpCodeSpec extends Specification {
     @Unroll("LDX (Absolute): Load #firstValue from [#addressHi | #addressLo]")
     testLDX_ABS(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDX_ABS, addressHi, addressLo]
         memory.setMemory(0, program)
 
@@ -318,7 +312,7 @@ class OpCodeSpec extends Specification {
     @Unroll("LDX (Absolute[Y]): Load #firstValue from [#addressHi | #addressLo]")
     testLDX_ABS_IX(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDY_I, index,
                          OP_LDA_I, firstValue,
                          OP_STA_ABS_IY, addressHi, addressLo,
@@ -347,7 +341,7 @@ class OpCodeSpec extends Specification {
     @Unroll("LDX (Zero Page): Load #firstValue from [#address]")
     testLX_Z(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDA_I, firstValue,
                          OP_STA_Z, address,
                          OP_LDX_Z, address]
@@ -375,7 +369,7 @@ class OpCodeSpec extends Specification {
     @Unroll("LDX (Zero Page[Y]): Load #firstValue from [#address[#index]")
     testLX_Z_IY(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDY_I, index,
                          OP_LDA_I, firstValue,
                          OP_STA_Z, address,
@@ -404,7 +398,7 @@ class OpCodeSpec extends Specification {
     @Unroll("LDY (Immediate): Load #firstValue")
     testLDY(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDY_I, firstValue]
         memory.setMemory(0, program)
 
@@ -430,7 +424,7 @@ class OpCodeSpec extends Specification {
     @Unroll("LDY (Zero Page): Load #firstValue from [#address]")
     testLDY_Z(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDA_I, firstValue,
                          OP_STA_Z, address,
                          OP_LDY_Z, address]
@@ -458,7 +452,7 @@ class OpCodeSpec extends Specification {
     @Unroll("LDY (Zero Page[X]): Load Y with #firstValue from #address[#index#]")
     testLDY_Z_IX(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDX_I, index, OP_LDA_I, firstValue, OP_STA_Z_IX, address, OP_LDY_Z_IX, address]
         memory.setMemory(0, program)
 
@@ -484,7 +478,7 @@ class OpCodeSpec extends Specification {
     @Unroll("LDY (Absolute): Load Y with #firstValue at [#addressHi | #addressLo]")
     testLDY_ABS(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDY_ABS, addressHi, addressLo]
         memory.setMemory(0, program)
 
@@ -513,7 +507,7 @@ class OpCodeSpec extends Specification {
     @Unroll("LDY (Absolute[X]): Load Y with #firstValue at [#addressHi | #addressLo][#index]")
     testLDY_ABS_IX(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDX_I, index, OP_LDY_ABS_IX, addressHi, addressLo]
         memory.setMemory(0, program)
 
@@ -542,7 +536,7 @@ class OpCodeSpec extends Specification {
     @Unroll("ADC (Immediate) #Expected:  #firstValue + #secondValue = #expectedAccumulator in Accumulator.")
     testADC(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDA_I, firstValue, OP_ADC_I, secondValue]
         memory.setMemory(0, program)
 
@@ -570,7 +564,7 @@ class OpCodeSpec extends Specification {
     @Unroll("ADC (Zero Page[X]) #Expected: #firstValue + #secondValue = #expectedAccumulator in Accumulator.")
     testADC_Z_IX(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDA_I, firstValue, OP_LDX_I, index, OP_ADC_Z_IX, indexPoint]
         memory.setByteAt(memLoc, secondValue)
         memory.setMemory(0, program)
@@ -599,7 +593,7 @@ class OpCodeSpec extends Specification {
     @Unroll("ADC (Zero Page) #Expected:  #firstValue + #secondValue = #expectedAccumulator in Accumulator.")
     testADC_Z(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDA_I, firstValue, OP_ADC_Z, 0x30]
         memory.setMemory(0, program)
         memory.setByteAt(0x30, secondValue)
@@ -628,7 +622,7 @@ class OpCodeSpec extends Specification {
     @Unroll("ADC (Absolute) #Expected:  #firstValue + #secondValue = #expectedAccumulator in Accumulator.")
     testADC_ABS(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDA_I, firstValue, OP_ADC_ABS, 0x1, 0x2C]
         memory.setMemory(0, program)
         memory.setByteAt(300, secondValue)
@@ -657,7 +651,7 @@ class OpCodeSpec extends Specification {
     @Unroll("ADC (Absolute[X]) #Expected:  #firstValue + #secondValue = #expectedAccumulator in Accumulator.")
     testADC_ABS_IX(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDX_I, index, OP_LDA_I, firstValue, OP_ADC_ABS_IX, 0x1, 0x2C]
         memory.setMemory(0, program)
         memory.setByteAt(300 + index, secondValue)
@@ -686,7 +680,7 @@ class OpCodeSpec extends Specification {
     @Unroll("ADC (Absolute[Y]) #Expected:  #firstValue + #secondValue = #expectedAccumulator in Accumulator.")
     testADC_ABS_IY(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDY_I, index,
                          OP_LDA_I, firstValue,
                          OP_ADC_ABS_IY, 0x1, 0x2C]
@@ -717,7 +711,7 @@ class OpCodeSpec extends Specification {
     @Unroll("ADC (Indirect, X) #Expected: #firstValue (@[#locationHi|#locationLo]) & #secondValue = #expectedAcc")
     testADC_IND_IX() {
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDA_I, firstValue,    //Value at indirect address
                          OP_STA_ABS, locationHi, locationLo,
                          OP_LDX_I, index,
@@ -751,7 +745,7 @@ class OpCodeSpec extends Specification {
     @Unroll("ADC 16bit [#lowFirstByte|#highFirstByte] + [#lowSecondByte|#highSecondByte] = #Expected")
     testMultiByteADC(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_CLC,
                          OP_LDA_I, lowFirstByte,
                          OP_ADC_I, lowSecondByte,
@@ -787,7 +781,7 @@ class OpCodeSpec extends Specification {
     @Unroll("AND (Immediate) #Expected:  #firstValue & #secondValue = #expectedAccumulator in Accumulator.")
     testAND(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDA_I, firstValue, OP_AND_I, secondValue]
         memory.setMemory(0, program)
 
@@ -814,7 +808,7 @@ class OpCodeSpec extends Specification {
     @Unroll("AND (Zero Page) #Expected: #firstValue & #secondValue = #expectedAccumulator in Accumulator.")
     testAND_Z(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDA_I, firstValue,
                          OP_STA_Z, 0x20,
                          OP_LDA_I, secondValue,
@@ -844,7 +838,7 @@ class OpCodeSpec extends Specification {
     @Unroll("AND (Zero Page[X]) #Expected: #firstValue & #secondValue = #expectedAcc")
     testAND_Z_IX(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDX_I, index,
                          OP_LDA_I, firstValue,
                          OP_STA_Z_IX, 0x20,
@@ -875,7 +869,7 @@ class OpCodeSpec extends Specification {
     @Unroll("AND (Absolute) #Expected:  #firstValue & #secondValue = #expectedAccumulator in Accumulator.")
     testAND_A(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDA_I, firstValue,
                          OP_STA_ABS, 0x20, 0x01,
                          OP_LDA_I, secondValue,
@@ -905,7 +899,7 @@ class OpCodeSpec extends Specification {
     @Unroll("AND (Absolute[X]) #Expected: #firstValue & #secondValue = #expectedAcc")
     testAND_ABS_IX(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDX_I, index,
                          OP_LDA_I, firstValue,
                          OP_STA_ABS_IX, locationHi, locationLo,
@@ -936,7 +930,7 @@ class OpCodeSpec extends Specification {
     @Unroll("AND (Absolute[Y]) #Expected: #firstValue & #secondValue = #expectedAcc")
     testAND_ABS_IY(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDY_I, index,
                          OP_LDA_I, firstValue,
                          OP_STA_ABS_IY, locationHi, locationLo,
@@ -967,7 +961,7 @@ class OpCodeSpec extends Specification {
     @Unroll("AND (Indirect, X) #Expected: #firstValue (@[#locationHi|#locationLo]) & #secondValue = #expectedAcc")
     testAND_IND_IX() {
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDA_I, firstValue,    //Value at indirect address
                          OP_STA_ABS, locationHi, locationLo,
                          OP_LDX_I, index,
@@ -1002,7 +996,7 @@ class OpCodeSpec extends Specification {
     @Unroll("ORA (Immediate) #Expected:  #firstValue | #secondValue = #expectedAccumulator in Accumulator.")
     testOR(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDA_I, firstValue, OP_ORA_I, secondValue]
         memory.setMemory(0, program)
 
@@ -1030,7 +1024,7 @@ class OpCodeSpec extends Specification {
     @Unroll("ORA (Zero Page) #Expected:  #firstValue | #secondValue = #expectedAccumulator in Accumulator.")
     testOR_Z(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDA_I, firstValue,
                          OP_STA_Z, 0x20,
                          OP_LDA_I, secondValue,
@@ -1061,7 +1055,7 @@ class OpCodeSpec extends Specification {
     @Unroll("ORA (Zero Page[X]) #Expected:  #firstValue | #secondValue = #expectedAccumulator in Accumulator.")
     testOR_Z_IX(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDX_I, index,
                          OP_LDA_I, firstValue,
                          OP_STA_Z_IX, 0x20,
@@ -1093,7 +1087,7 @@ class OpCodeSpec extends Specification {
     @Unroll("ORA (Absolute) #Expected:  #firstValue | #secondValue = #expectedAccumulator in Accumulator.")
     testOR_ABS(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDA_I, firstValue,
                          OP_STA_ABS, 0x20, 0x05,
                          OP_LDA_I, secondValue,
@@ -1124,7 +1118,7 @@ class OpCodeSpec extends Specification {
     @Unroll("ORA (Absolute[X]) #Expected:  #firstValue | #secondValue = #expectedAccumulator in Accumulator.")
     testOR_ABS_IX(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDX_I, index,
                          OP_LDA_I, firstValue,
                          OP_STA_ABS_IX, 0x20, 0x05,
@@ -1156,7 +1150,7 @@ class OpCodeSpec extends Specification {
     @Unroll("ORA (Absolute[Y]) #Expected:  #firstValue | #secondValue = #expectedAccumulator in Accumulator.")
     testOR_ABS_IY(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDY_I, index,
                          OP_LDA_I, firstValue,
                          OP_STA_ABS_IY, 0x20, 0x05,
@@ -1188,7 +1182,7 @@ class OpCodeSpec extends Specification {
     @Unroll("ORA (Indirect, X) #Expected: #firstValue (@[#locationHi|#locationLo]) | #secondValue = #expectedAcc")
     testOR_IND_IX() {
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDA_I, firstValue,    //Value at indirect address
                          OP_STA_ABS, locationHi, locationLo,
                          OP_LDX_I, index,
@@ -1224,7 +1218,7 @@ class OpCodeSpec extends Specification {
     @Unroll("EOR (Immediate) #Expected:  #firstValue ^ #secondValue = #expectedAccumulator in Accumulator.")
     testEOR(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDA_I, firstValue, OP_EOR_I, secondValue]
         memory.setMemory(0, program)
 
@@ -1250,7 +1244,7 @@ class OpCodeSpec extends Specification {
     @Unroll("EOR (Zero Page) #Expected:  #firstValue ^ #secondValue = #expectedAccumulator in Accumulator.")
     testEOR_Z(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDA_I, secondValue,
                          OP_STA_Z, 0x20,
                          OP_LDA_I, firstValue,
@@ -1279,7 +1273,7 @@ class OpCodeSpec extends Specification {
     @Unroll("EOR (Zero Page[X]) #Expected:  #firstValue ^ #secondValue = #expectedAccumulator in Accumulator.")
     testEOR_Z_IX(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDX_I, index,
                          OP_LDA_I, secondValue,
                          OP_STA_Z_IX, 0x20,
@@ -1309,7 +1303,7 @@ class OpCodeSpec extends Specification {
     @Unroll("EOR (Absolute) #Expected:  #firstValue ^ #secondValue = #expectedAccumulator in Accumulator.")
     testEOR_ABS(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDA_I, secondValue,
                          OP_STA_ABS, 0x20, 0x04,
                          OP_LDA_I, firstValue,
@@ -1338,7 +1332,7 @@ class OpCodeSpec extends Specification {
     @Unroll("EOR (Absolute[X]) #Expected:  #firstValue ^ #secondValue = #expectedAccumulator in Accumulator.")
     testEOR_ABS_IX(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDX_I, index,
                          OP_LDA_I, secondValue,
                          OP_STA_ABS_IX, 0x20, 0x04,
@@ -1368,7 +1362,7 @@ class OpCodeSpec extends Specification {
     @Unroll("EOR (Absolute[Y]) #Expected:  #firstValue ^ #secondValue = #expectedAccumulator in Accumulator.")
     testEOR_ABS_IY(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDY_I, index,
                          OP_LDA_I, secondValue,
                          OP_STA_ABS_IY, 0x20, 0x04,
@@ -1398,7 +1392,7 @@ class OpCodeSpec extends Specification {
     @Unroll("EOR (Indirect, X) #Expected: #firstValue (@[#locationHi|#locationLo]) EOR #secondValue = #expectedAcc")
     testEOR_IND_IX() {
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDA_I, firstValue,      //Value at indirect address
                          OP_STA_ABS, locationHi, locationLo,
                          OP_LDX_I, index,
@@ -1432,7 +1426,7 @@ class OpCodeSpec extends Specification {
     @Unroll("STA (Indirect, X) #Expected: #value stored at [#locationHi|#locationLo]")
     testSTA_IND_IX() {
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDX_I, index,
                          OP_LDA_I, locationHi,      //Indirect address in memory
                          OP_STA_Z_IX, 0x30,
@@ -1462,7 +1456,7 @@ class OpCodeSpec extends Specification {
     @Unroll("STA (Indirect, Y) #Expected: #value stored at [#locationHi|#locationLo]")
     testSTA_IND_IY() {
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDA_I, locationHi,      //Indirect address in memory
                          OP_STA_Z, 0x30,
                          OP_LDA_I, locationLo,
@@ -1495,7 +1489,7 @@ class OpCodeSpec extends Specification {
     @Unroll("SBC (Immediate) #Expected:  #firstValue - #secondValue = #expectedAccumulator in Accumulator.")
     testSBC(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_SEC, OP_LDA_I, firstValue,
                          OP_SBC_I, secondValue]
         memory.setMemory(0, program)
@@ -1524,7 +1518,7 @@ class OpCodeSpec extends Specification {
     @Unroll("SBC (Zero Page) #Expected:  #firstValue - #secondValue = #expectedAccumulator in Accumulator.")
     testSBC_Z(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDA_I, secondValue,
                          OP_STA_Z, 0x20,
                          OP_LDA_I, firstValue,
@@ -1556,7 +1550,7 @@ class OpCodeSpec extends Specification {
     @Unroll("SBC (Zero Page[X]) #Expected:  #firstValue - #secondValue = #expectedAccumulator in Accumulator.")
     testSBC_Z_IX(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDX_I, index,
                          OP_LDA_I, secondValue,
                          OP_STA_Z_IX, 0x20,
@@ -1589,7 +1583,7 @@ class OpCodeSpec extends Specification {
     @Unroll("SBC (Absolute) #Expected:  #firstValue - #secondValue = #expectedAccumulator in Accumulator.")
     testSBC_ABS(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDA_I, secondValue,
                          OP_STA_ABS, 0x02, 0x20,
                          OP_LDA_I, firstValue,
@@ -1621,7 +1615,7 @@ class OpCodeSpec extends Specification {
     @Unroll("SBC (Absolute[X]) #Expected:  #firstValue - #secondValue = #expectedAccumulator in Accumulator.")
     testSBC_ABS_IX(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDX_I, index,
                          OP_LDA_I, secondValue,
                          OP_STA_ABS_IX, 0x02, 0x20,
@@ -1654,7 +1648,7 @@ class OpCodeSpec extends Specification {
     @Unroll("SBC (Absolute[Y]) #Expected:  #firstValue - #secondValue = #expectedAccumulator in Accumulator.")
     testSBC_ABS_IY(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDY_I, index,
                          OP_LDA_I, secondValue,
                          OP_STA_ABS_IY, 0x02, 0x20,
@@ -1687,7 +1681,7 @@ class OpCodeSpec extends Specification {
     @Unroll("SBC (Indirect, X) #Expected: #firstValue (@[#locationHi|#locationLo]) - #secondValue = #expectedAcc")
     testSBC_IND_IX() {
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDA_I, secondValue,    //Value at indirect address
                          OP_STA_ABS, locationHi, locationLo,
                          OP_LDX_I, index,
@@ -1722,7 +1716,7 @@ class OpCodeSpec extends Specification {
     @Unroll("INX #Expected: on #firstValue = #expectedX")
     testINX(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDX_I, firstValue, OP_INX]
         memory.setMemory(0, program)
 
@@ -1748,7 +1742,7 @@ class OpCodeSpec extends Specification {
     @Unroll("INC (Zero Page) #Expected: on #firstValue = #expectedMem")
     testINC_Z(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDA_I, firstValue,
                          OP_STA_Z, 0x20,
                          OP_INC_Z, 0x20]
@@ -1776,7 +1770,7 @@ class OpCodeSpec extends Specification {
     @Unroll("INC (Zero Page[X]) #Expected: on #firstValue = #expectedMem")
     testINC_Z_IX(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDX_I, index,
                          OP_LDA_I, firstValue,
                          OP_STA_Z_IX, 0x20,
@@ -1805,7 +1799,7 @@ class OpCodeSpec extends Specification {
     @Unroll("INC (Absolute) #Expected: on #firstValue = #expectedMem")
     testINC_ABS(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDA_I, firstValue,
                          OP_STA_ABS, 0x01, 0x20,
                          OP_INC_ABS, 0x01, 0x20]
@@ -1833,7 +1827,7 @@ class OpCodeSpec extends Specification {
     @Unroll("INC (Absolute, X) #Expected: at 0x120[#index] on #firstValue = #expectedMem")
     testINC_ABS_IX(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDX_I, index,
                          OP_LDA_I, firstValue,
                          OP_STA_ABS_IX, 0x01, 0x20,
@@ -1862,7 +1856,7 @@ class OpCodeSpec extends Specification {
     @Unroll("DEC (Zero Page) #Expected: on #firstValue = #expectedMem")
     testDEC_Z(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDA_I, firstValue,
                          OP_STA_Z, 0x20,
                          OP_DEC_Z, 0x20]
@@ -1890,7 +1884,7 @@ class OpCodeSpec extends Specification {
     @Unroll("DEC (Zero Page[X]) #Expected: on #firstValue at #loc[#index] = #expectedMem")
     testDEC_Z_IX(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDX_I, index,
                          OP_LDA_I, firstValue,
                          OP_STA_Z_IX, loc,
@@ -1919,7 +1913,7 @@ class OpCodeSpec extends Specification {
     @Unroll("DEC (Absolute) #Expected: on #firstValue = #expectedMem")
     testDEC_ABS(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDA_I, firstValue,
                          OP_STA_ABS, 0x01, 0x20,
                          OP_DEC_ABS, 0x01, 0x20]
@@ -1947,7 +1941,7 @@ class OpCodeSpec extends Specification {
     @Unroll("DEC (Absolute[X]) #Expected: on #firstValue = #expectedMem")
     testDEC_ABS_IX(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDX_I, index,
                          OP_LDA_I, firstValue,
                          OP_STA_ABS_IX, 0x01, 0x20,
@@ -1976,7 +1970,7 @@ class OpCodeSpec extends Specification {
     @Unroll("DEX #Expected: on #firstValue = #expectedX")
     testDEX(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDX_I, firstValue, OP_DEX]
         memory.setMemory(0, program)
 
@@ -2002,7 +1996,7 @@ class OpCodeSpec extends Specification {
     @Unroll("INY #Expected: on #firstValue = #expectedX")
     testINY(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDY_I, firstValue, OP_INY]
         memory.setMemory(0, program)
 
@@ -2028,7 +2022,7 @@ class OpCodeSpec extends Specification {
     @Unroll("DEY #Expected: on #firstValue = #expectedY")
     testDEY(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDY_I, firstValue, OP_DEY]
         memory.setMemory(0, program)
 
@@ -2054,7 +2048,7 @@ class OpCodeSpec extends Specification {
     @Unroll("PLA #Expected: #firstValue from stack at (#expectedSP - 1)")
     testPLA(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDA_I, firstValue,
                          OP_PHA,
                          OP_LDA_I, 0x11,
@@ -2087,7 +2081,7 @@ class OpCodeSpec extends Specification {
     @Unroll("ASL (Accumulator) #Expected: #firstValue becomes #expectedAccumulator")
     testASL(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDA_I, firstValue,
                          OP_ASL_A]
         memory.setMemory(0, program)
@@ -2120,7 +2114,7 @@ class OpCodeSpec extends Specification {
     @Unroll("ASL (ZeroPage) #Expected: #firstValue becomes #expectedMem")
     testASL_Z(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDA_I, firstValue,
                          OP_STA_Z, 0x20,
                          OP_ASL_Z, 0x20]
@@ -2154,7 +2148,7 @@ class OpCodeSpec extends Specification {
     @Unroll("ASL (Absolute) #Expected: #firstValue becomes #expectedMem")
     testASL_A(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDA_I, firstValue,
                          OP_STA_ABS, 0x01, 0x20,
                          OP_ASL_ABS, 0x01, 0x20]
@@ -2188,7 +2182,7 @@ class OpCodeSpec extends Specification {
     @Unroll("ASL (Zero Page at X) #Expected: #firstValue (@ 0x20[#index]) becomes #expectedMem")
     testASL_Z_IX(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDA_I, firstValue,
                          OP_LDX_I, index,
                          OP_STA_Z_IX, 0x20,
@@ -2223,7 +2217,7 @@ class OpCodeSpec extends Specification {
     @Unroll("ASL (Absolute[X]) #Expected: #firstValue (@ 0x20[#index]) becomes #expectedMem")
     testASL_ABS_IX(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDA_I, firstValue,
                          OP_LDX_I, index,
                          OP_STA_ABS_IX, 0x01, 0x20,
@@ -2258,7 +2252,7 @@ class OpCodeSpec extends Specification {
     @Unroll("LSR (Accumulator) #Expected: #firstValue becomes #expectedAccumulator")
     testLSR(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDA_I, firstValue,
                          OP_LSR_A]
         memory.setMemory(0, program)
@@ -2289,7 +2283,7 @@ class OpCodeSpec extends Specification {
     @Unroll("LSR (Zero Page) #Expected: #firstValue becomes #expectedMem")
     testLSR_Z(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDA_I, firstValue,
                          OP_STA_Z, 0x20,
                          OP_LSR_Z, 0x20]
@@ -2321,7 +2315,7 @@ class OpCodeSpec extends Specification {
     @Unroll("LSR (Zero Page[X]) #Expected: #firstValue becomes #expectedMem")
     testLSR_Z_IX(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDX_I, index,
                          OP_LDA_I, firstValue,
                          OP_STA_Z_IX, 0x20,
@@ -2354,7 +2348,7 @@ class OpCodeSpec extends Specification {
     @Unroll("LSR (Absolute) #Expected: #firstValue becomes #expectedMem")
     testLSR_ABS(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDA_I, firstValue,
                          OP_STA_ABS, 0x02, 0x20,
                          OP_LSR_ABS, 0x02, 0x20]
@@ -2386,7 +2380,7 @@ class OpCodeSpec extends Specification {
     @Unroll("LSR (Absolute[X]) #Expected: #firstValue becomes #expectedMem")
     testLSR_ABS_IX(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDX_I, index,
                          OP_LDA_I, firstValue,
                          OP_STA_ABS_IX, 0x02, 0x20,
@@ -2419,7 +2413,7 @@ class OpCodeSpec extends Specification {
     @Unroll("JMP #expected: [#jmpLocationHi | #jmpLocationLow] -> #expectedPC")
     testJMP(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_NOP,
                          OP_NOP,
                          OP_NOP,
@@ -2453,7 +2447,7 @@ class OpCodeSpec extends Specification {
     @Unroll("JMP (Indirect) #expected: [#jmpLocationHi | #jmpLocationLow] -> #expectedPC")
     testIndirectJMP(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDA_I, jmpLocationHi,
                          OP_STA_ABS, 0x01, 0x40,
                          OP_LDA_I, jmpLocationLow,
@@ -2491,7 +2485,7 @@ class OpCodeSpec extends Specification {
     @Unroll("BCC #expected: ending up at mem[#expectedPC] after #instructions steps")
     testBCC(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_NOP, OP_NOP, OP_NOP, preInstr, OP_BCC, jmpSteps, OP_NOP, OP_NOP, OP_NOP, OP_NOP]
         memory.setMemory(0, program)
 
@@ -2518,7 +2512,7 @@ class OpCodeSpec extends Specification {
     @Unroll("BCS #expected: ending up at mem[#expectedPC] after #instructions steps")
     testBCS(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_NOP, OP_NOP, OP_NOP, preInstr, OP_BCS, jmpSteps, OP_NOP, OP_NOP, OP_NOP, OP_NOP]
         memory.setMemory(0, program)
 
@@ -2545,7 +2539,7 @@ class OpCodeSpec extends Specification {
     @Unroll("ROL (Accumulator) #expected: #firstValue -> #expectedAccumulator")
     testROL_A(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [preInstr, OP_LDA_I,
                          firstValue, OP_ROL_A]
         memory.setMemory(0, program)
@@ -2579,7 +2573,7 @@ class OpCodeSpec extends Specification {
     @Unroll("ROL (Zero Page) #Expected: #firstValue -> #expectedMem")
     testROL_Z(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [firstInstr,
                          OP_LDA_I, firstValue,
                          OP_STA_Z, 0x20,
@@ -2613,7 +2607,7 @@ class OpCodeSpec extends Specification {
     @Unroll("ROL (Zero Page[X]) #Expected: #firstValue -> #expectedMem")
     testROL_Z_IX(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDX_I, index,
                          firstInstr,
                          OP_LDA_I, firstValue,
@@ -2648,7 +2642,7 @@ class OpCodeSpec extends Specification {
     @Unroll("ROL (Absolute) #Expected: #firstValue -> #expectedMem")
     testROL_ABS(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [firstInstr,
                          OP_LDA_I, firstValue,
                          OP_STA_ABS, 0x20, 0x07,
@@ -2682,7 +2676,7 @@ class OpCodeSpec extends Specification {
     @Unroll("ROL (Absolute[X]) #Expected: #firstValue -> #expectedMem")
     testROL_ABS_IX(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDX_I, index,
                          firstInstr,
                          OP_LDA_I, firstValue,
@@ -2717,7 +2711,7 @@ class OpCodeSpec extends Specification {
     @Unroll("ROR (Accumulator) #expected: #firstValue -> #expectedAccumulator")
     testROR_A(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [preInstr,
                          OP_LDA_I, firstValue,
                          OP_ROR_A]
@@ -2752,7 +2746,7 @@ class OpCodeSpec extends Specification {
     @Unroll("BNE #expected: With accumulator set to #accumulatorValue, we end up at mem[#expectedPC] after #instructions steps")
     testBNE(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_NOP,
                          OP_NOP,
                          OP_NOP,
@@ -2784,7 +2778,7 @@ class OpCodeSpec extends Specification {
     @Unroll("BEQ #expected: With accumulator set to #accumulatorValue, we end up at mem[#expectedPC] after #instructions steps")
     testBEQ(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_NOP, OP_NOP, OP_NOP,
                          OP_LDA_I, accumulatorValue,
                          OP_BEQ, jumpSteps,
@@ -2812,7 +2806,7 @@ class OpCodeSpec extends Specification {
     @Unroll("BMI #expected: With accumulator set to #accumulatorValue, we end up at mem[#expectedPC] after #instructions steps")
     testBMI(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_NOP,
                          OP_NOP,
                          OP_NOP,
@@ -2844,7 +2838,7 @@ class OpCodeSpec extends Specification {
     @Unroll("BPL #expected: With accumulator set to #accumulatorValue, we end up at mem[#expectedPC] after #instructions steps")
     testBPL(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_NOP,
                          OP_NOP,
                          OP_NOP,
@@ -2876,7 +2870,7 @@ class OpCodeSpec extends Specification {
     @Unroll("BVC #expected: #accumulatorValue + #addedValue, checking overflow we end up at mem[#expectedPC] after #instructions steps")
     testBVC(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_NOP,
                          OP_NOP,
                          OP_NOP,
@@ -2909,7 +2903,7 @@ class OpCodeSpec extends Specification {
     @Unroll("BVC #expected: #accumulatorValue + #addedValue, checking overflow we end up at mem[#expectedPC] after #instructions steps")
     testBVS(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_NOP,
                          OP_NOP,
                          OP_NOP,
@@ -2942,7 +2936,7 @@ class OpCodeSpec extends Specification {
     @Unroll("TAX #expected: #loadedValue to X")
     testTAX(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDA_I, loadedValue,
                          OP_TAX]
         memory.setMemory(0, program)
@@ -2972,7 +2966,7 @@ class OpCodeSpec extends Specification {
     @Unroll("TAY #expected: #loadedValue to Y")
     testTAY(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDA_I, loadedValue,
                          OP_TAY]
         memory.setMemory(0, program)
@@ -3002,7 +2996,7 @@ class OpCodeSpec extends Specification {
     @Unroll("TYA #expected: #loadedValue to Accumulator")
     testTYA(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDY_I, loadedValue, OP_TYA]
         memory.setMemory(0, program)
 
@@ -3031,7 +3025,7 @@ class OpCodeSpec extends Specification {
     @Unroll("TXA #expected: #loadedValue to Accumulator")
     testTXA(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDX_I, loadedValue, OP_TXA]
         memory.setMemory(0, program)
 
@@ -3060,7 +3054,7 @@ class OpCodeSpec extends Specification {
     @Unroll("TSX #expected: load #SPValue in SP into X")
     testTSX(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_TSX]
         memory.setMemory(0, program)
 
@@ -3090,7 +3084,7 @@ class OpCodeSpec extends Specification {
     @Unroll("BIT (Zero Page) #expected: #firstValue and #secondValue")
     testBIT(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDA_I, firstValue,
                          OP_STA_Z, memLoc,
                          OP_LDA_I, secondValue,
@@ -3123,7 +3117,7 @@ class OpCodeSpec extends Specification {
     @Unroll("BIT (Absolute) #expected: #firstValue and #secondValue")
     testBIT_ABS(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDA_I, firstValue,
                          OP_STA_ABS, memLocHi, memLocLo,
                          OP_LDA_I, secondValue,
@@ -3156,7 +3150,7 @@ class OpCodeSpec extends Specification {
     @Unroll("STA (Zero Page[X]) #expected: Store #value at #location[#index]")
     testOP_STA_Z_IX(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDA_I, value,
                          OP_LDX_I, index,
                          OP_STA_Z_IX, location]
@@ -3185,7 +3179,7 @@ class OpCodeSpec extends Specification {
     @Unroll("STA (Absolute) #expected: Store #value at [#locationHi|#locationLo]")
     testOP_STA_ABS(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDA_I, value,
                          OP_STA_ABS, locationHi, locationLo]
         memory.setMemory(0, program)
@@ -3211,7 +3205,7 @@ class OpCodeSpec extends Specification {
     @Unroll("STA (Absolute[X]) #expected: Store #value at [#locationHi|#locationLo@#index]")
     testOP_STA_ABS_IX(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDA_I, value,
                          OP_LDX_I, index,
                          OP_STA_ABS_IX, locationHi, locationLo]
@@ -3240,7 +3234,7 @@ class OpCodeSpec extends Specification {
     @Unroll("STA (Absolute[Y]) #expected: Store #value at [#locationHi|#locationLo@#index]")
     testOP_STA_ABS_IY(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDA_I, value,
                          OP_LDY_I, index,
                          OP_STA_ABS_IY, locationHi, locationLo]
@@ -3269,7 +3263,7 @@ class OpCodeSpec extends Specification {
     @Unroll("STY (Zero Page[X] #expected: Store #firstValue at #memLocation[#index]")
     testOP_STY_Z_IX(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDX_I, index, OP_LDY_I, firstValue, OP_STY_Z_IX, memLocation]
         memory.setMemory(0, program)
 
@@ -3295,7 +3289,7 @@ class OpCodeSpec extends Specification {
     @Unroll("CMP (Immediate) #Expected: #firstValue == #secondValue")
     testOP_CMP_I(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDA_I, firstValue,
                          OP_CMP_I, secondValue]
         memory.setMemory(0, program)
@@ -3326,7 +3320,7 @@ class OpCodeSpec extends Specification {
     @Unroll("CMP (Zero Page) #Expected: #firstValue == #secondValue")
     testOP_CMP_Z(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDA_I, secondValue,
                          OP_STA_Z, 0x20,
                          OP_LDA_I, firstValue,
@@ -3359,7 +3353,7 @@ class OpCodeSpec extends Specification {
     @Unroll("CMP (Zero Page[X]) #Expected: #firstValue == #secondValue")
     testOP_CMP_Z_IX(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDX_I, index,
                          OP_LDA_I, secondValue,
                          OP_STA_Z_IX, 0x20,
@@ -3393,7 +3387,7 @@ class OpCodeSpec extends Specification {
     @Unroll("CMP (Absolute) #Expected: #firstValue == #secondValue")
     testOP_CMP_ABS(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDA_I, secondValue,
                          OP_STA_ABS, 0x01, 0x20,
                          OP_LDA_I, firstValue,
@@ -3426,7 +3420,7 @@ class OpCodeSpec extends Specification {
     @Unroll("CMP (Absolute[X]) #Expected: #firstValue == #secondValue")
     testOP_CMP_ABS_IX(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDX_I, index,
                          OP_LDA_I, secondValue,
                          OP_STA_ABS_IX, 0x01, 0x20,
@@ -3460,7 +3454,7 @@ class OpCodeSpec extends Specification {
     @Unroll("CMP (Absolute[Y]) #Expected: #firstValue == #secondValue")
     testOP_CMP_ABS_IY(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDY_I, index,
                          OP_LDA_I, secondValue,
                          OP_STA_ABS_IY, 0x01, 0x20,
@@ -3494,7 +3488,7 @@ class OpCodeSpec extends Specification {
     @Unroll("CMP (Indirect, X). #Expected: #firstValue == #secondValue")
     testCMP_IND_IX() {
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDA_I, secondValue,    //Value at indirect address
                          OP_STA_ABS, indAddressHi, indAddressLo,
                          OP_LDX_I, index,
@@ -3529,7 +3523,7 @@ class OpCodeSpec extends Specification {
     @Unroll("CPY (Immediate) #Expected: #firstValue == #secondValue")
     testOP_CPY_I(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDY_I, firstValue,
                          OP_CPY_I, secondValue]
         memory.setMemory(0, program)
@@ -3559,7 +3553,7 @@ class OpCodeSpec extends Specification {
     @Unroll("CPY (Zero Page) #Expected: #firstValue == #secondValue")
     testOP_CPY_Z(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDA_I, secondValue,
                          OP_STA_Z, 0x20,
                          OP_LDY_I, firstValue,
@@ -3591,7 +3585,7 @@ class OpCodeSpec extends Specification {
     @Unroll("CPY (Absolute) #Expected: #firstValue == #secondValue")
     testOP_CPY_ABS(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDA_I, secondValue,
                          OP_STA_ABS, 0x01, 0x20,
                          OP_LDY_I, firstValue,
@@ -3623,7 +3617,7 @@ class OpCodeSpec extends Specification {
     @Unroll("CPX (Zero Page) #Expected: #firstValue == #secondValue")
     testOP_CPX_Z(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDA_I, secondValue,
                          OP_STA_Z, 0x20,
                          OP_LDX_I, firstValue,
@@ -3655,7 +3649,7 @@ class OpCodeSpec extends Specification {
     @Unroll("CPX (Absolute) #Expected: #firstValue == #secondValue")
     testOP_CPX_ABS(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDA_I, secondValue,
                          OP_STA_ABS, 0x01, 0x20,
                          OP_LDX_I, firstValue,
@@ -3687,7 +3681,7 @@ class OpCodeSpec extends Specification {
     @Unroll("CPX (Immediate) #Expected: #firstValue == #secondValue")
     testOP_CPX_I(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDX_I, firstValue,
                          OP_CPX_I, secondValue]
         memory.setMemory(0, program)
@@ -3717,7 +3711,7 @@ class OpCodeSpec extends Specification {
     @Unroll("STX (Zero Page[X] #expected: #firstValue -> #location[#index]")
     OP_STX_Z_IY(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDY_I, index,
                          OP_LDX_I, firstValue,
                          OP_STX_Z_IY, location]
@@ -3746,7 +3740,7 @@ class OpCodeSpec extends Specification {
     @Unroll("RTS #expected")
     testRTS(){
         when:
-        Memory memory = new SimpleMemory(65534)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDA_I, memHi,
                          OP_PHA,
                          OP_LDA_I, memLo,
@@ -3774,7 +3768,7 @@ class OpCodeSpec extends Specification {
     @Unroll("BRK #expected")
     testBRK(){
         when:
-        Memory memory = new SimpleMemory(0x10000)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_BRK]
         memory.setByteAt(0xFFFE, newPCHi)
         memory.setByteAt(0xFFFF, newPCLo)
@@ -3812,7 +3806,7 @@ class OpCodeSpec extends Specification {
     @Unroll("IRQ #expected #statusValue->#pushedStatus")
     testIRQ(){
         when:
-        Memory memory = new SimpleMemory(0x10000)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDA_I, 1,
                          OP_LDA_I, 2,
                          OP_LDA_I, 3,
@@ -3857,7 +3851,7 @@ class OpCodeSpec extends Specification {
     @Ignore
     testRTI(){
         when: 'We have a program which will be interrupted'
-        Memory memory = new SimpleMemory(0x10000)
+        Memory memory = new SimpleMemory()
         int[] program = [OP_LDA_I, 1,
                          OP_LDA_I, 2, //--> IRQ Here
                          OP_LDA_I, 4, //<-- Return here

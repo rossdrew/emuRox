@@ -19,7 +19,7 @@ public class CPUTest {
 
     @Before
     public void setUp() {
-        memory = new SimpleMemory(0x10000);
+        memory = new SimpleMemory();
         memory.setByteAt(0x0, 0xFFFC);
         memory.setByteAt(0x0, 0xFFFD);
 
@@ -29,7 +29,7 @@ public class CPUTest {
 
     @Test
     public void testStartup() {
-        memory = new SimpleMemory(65534);
+        memory = new SimpleMemory();
         memory.setByteAt(0xFFFC, 0x1);
         memory.setByteAt(0xFFFD, 0x1);
 

@@ -20,7 +20,7 @@ public class CPUProperty {
 
     @Before
     public void setUp() {
-        memory = new SimpleMemory(65534);
+        memory = new SimpleMemory();
         memory.setByteAt(0x0, 0xFFFC);
         memory.setByteAt(0x0, 0xFFFD);
 
@@ -31,7 +31,7 @@ public class CPUProperty {
     @Property (trials = 100)
     public void testValidStartup(@InRange(min = "0", max = "255") int memHi,
                                  @InRange(min = "0", max = "255") int memLo) {
-        memory = new SimpleMemory(65534);
+        memory = new SimpleMemory();
         memory.setByteAt(0xFFFC, memHi);
         memory.setByteAt(0xFFFD, memLo);
 

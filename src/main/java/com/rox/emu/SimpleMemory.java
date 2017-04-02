@@ -8,8 +8,8 @@ package com.rox.emu;
 public class SimpleMemory implements Memory{
     private final int[] memoryArray;
 
-    public SimpleMemory(int size){
-        memoryArray = new int[size];
+    public SimpleMemory(){
+        memoryArray = new int[65534];
     }
 
     @Override

@@ -10,7 +10,7 @@ public class SimpleMemoryTest {
 
     @Before
     public void setUp(){
-        memory = new SimpleMemory(65534);
+        memory = new SimpleMemory();
     }
 
     @Test

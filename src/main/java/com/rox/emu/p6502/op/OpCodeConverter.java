@@ -9,25 +9,25 @@ import java.util.Arrays;
  *
  * e.g.  OP_ADC_I  ->  "ADC (Immediate)"
  */
-public class OpCodeConverter {
+class OpCodeConverter {
     //Internal representation details
-    public static final String SEPARATOR = "_";
-    public static final int OP_DELIMITER = 0;
-    public static final int OP_CODE = 1;
-    public static final int OP_ADD = 2;
-    public static final int OP_I = 3;
+    private static final String SEPARATOR = "_";
+    private static final int OP_DELIMITER = 0;
+    private static final int OP_CODE = 1;
+    private static final int OP_ADD = 2;
+    private static final int OP_I = 3;
 
     //Addressing modes
-    public static final String ADDR_IMP = "Implied";
-    public static final String ADDR_I = "Immediate";
-    public static final String ADDR_A = "Accumulator";
-    public static final String ADDR_Z = "Zero Page";
-    public static final String ADDR_ABS = "Absolute";
-    public static final String ADDR_IND = "Indirect";
+    private static final String ADDR_IMP = "Implied";
+    private static final String ADDR_I = "Immediate";
+    private static final String ADDR_A = "Accumulator";
+    private static final String ADDR_Z = "Zero Page";
+    private static final String ADDR_ABS = "Absolute";
+    private static final String ADDR_IND = "Indirect";
 
     //Indexing modes
-    public static final String INDEX_X = " [X]";
-    public static final String INDEX_Y = " [Y]";
+    private static final String INDEX_X = " [X]";
+    private static final String INDEX_Y = " [Y]";
 
     public static String toDescription(String internalOpCodeName){
         if (internalOpCodeName != null && !internalOpCodeName.isEmpty()){
