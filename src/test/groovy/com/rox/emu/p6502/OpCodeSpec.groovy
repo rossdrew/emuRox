@@ -992,8 +992,7 @@ class OpCodeSpec extends Specification {
         0x4        | 0x40       | 0b00101010 | 3     | 0b00011010  | 0b00001010  | false  | false | "Multiple matched/unmatched bits"
     }
 
-    @Unroll("AND (Indirect, Y) #Expected")
-    @Ignore
+    @Unroll("AND (Indirect, Y) #Expected: #firstValue & #secondValue -> #expectedAcc")
     testAND_IND_IY() {
         when:
         Memory memory = new SimpleMemory()

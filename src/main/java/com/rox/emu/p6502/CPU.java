@@ -332,6 +332,11 @@ public class CPU {
                 withRegisterAndByteAt(REG_ACCUMULATOR, pointerLocation, this::performAND);
             }break;
 
+            case InstructionSet.OP_AND_IND_IY: {
+                int pointerLocation = getWordOfMemoryAt(nextProgramByte()) + getRegisterValue(REG_Y_INDEX);
+                withRegisterAndByteAt(REG_ACCUMULATOR, pointerLocation, this::performAND);
+            }break;
+
             case InstructionSet.OP_BIT_Z:
                 performBIT(getByteOfMemoryAt(nextProgramByte()));
             break;
