@@ -251,7 +251,6 @@ class OpCodeSpec extends Specification {
         0x04      | 0x11      | 0     | 0x01  | "Alternate low byte of pointer"
         0x05      | 0x12      | 1     | 0x01  | "Using index"
         0x06      | 0x13      | 2     | 0x0F  | "A different value"
-
     }
 
     @Unroll("LDX (Immediate): Load #firstValue")
@@ -991,6 +990,40 @@ class OpCodeSpec extends Specification {
         0x2        | 0x20       | 0b00000001 | 1     | 0b00000010  | 0b00000000  | true   | false | "No matching bits"
         0x3        | 0x30       | 0b00000011 | 2     | 0b00000010  | 0b00000010  | false  | false | "1 matched bit, 1 unmatched"
         0x4        | 0x40       | 0b00101010 | 3     | 0b00011010  | 0b00001010  | false  | false | "Multiple matched/unmatched bits"
+    }
+
+    @Unroll("AND (Indirect, Y) #Expected")
+    @Ignore
+    testAND_IND_IY() {
+        when:
+        Memory memory = new SimpleMemory()
+        int[] program = [OP_LDY_I, index,           //Index to use
+                         OP_LDA_I, firstValue,      //High order byte at pointer
+                         OP_STA_ABS_IY, pointerHi, pointerLo,
+                         OP_LDA_I, pointerHi,       //Pointer location
+                         OP_STA_Z, 0x60,
+                         OP_LDA_I, pointerLo,       //Pointer location
+                         OP_STA_Z, 0x61,
+                         OP_LDA_I, secondValue,
+                         OP_AND_IND_IY, 0x60]
+        memory.setMemory(0, program)
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        processor.step(9)
+        Registers registers = processor.getRegisters()
+
+        then:
+        registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAcc
+
+        where:
+
+        pointerHi | pointerLo | firstValue | index | secondValue | expectedAcc | Z      | N     | Expected
+        0x1       | 0x10      | 0b00000001 | 0     | 0b00000001  | 0b00000001  | false  | false | "Unchanged accumulator"
+        0x2       | 0x20      | 0b00000001 | 1     | 0b00000010  | 0b00000000  | true   | false | "No matching bits"
+        0x3       | 0x30      | 0b00000011 | 2     | 0b00000010  | 0b00000010  | false  | false | "1 matched bit, 1 unmatched"
+        0x4       | 0x40      | 0b00101010 | 3     | 0b00011010  | 0b00001010  | false  | false | "Multiple matched/unmatched bits"
     }
 
     @Unroll("ORA (Immediate) #Expected:  #firstValue | #secondValue = #expectedAccumulator in Accumulator.")
