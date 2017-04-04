@@ -52,7 +52,7 @@ I'd really like to compress my data driven tests a litte.  There's a lot of comm
  - [JaCoCo](http://www.eclemma.org/jacoco/), [Was missing Spock tests](http://stackoverflow.com/questions/41652981/why-does-jacoco-ignore-myspock-tests-yet-sees-my-junit-tests), thanks [Godin](http://stackoverflow.com/users/244993/godin) of Stack Overflow
  - [JaCoCo](http://www.eclemma.org/jacoco/), has a problem with code coverage of `String` based `switch` statements. In that it reports missing coverage where there is none. Thanks again thanks [Godin](http://stackoverflow.com/users/244993/godin) of Stack Overflow for your [explanation](http://stackoverflow.com/questions/42642840/why-is-jacoco-not-covering-my-switch-statements)
  - The [6502 Programming](https://www.facebook.com/groups/6502CPU/) Facebook group has been invaluable in resolving small questions 
- - I'm planning on reaching out to communities for code reviews, another pair of eyes is always helpful:-
+ - I'm planning on reaching out to communities for code reviews, another pair of eyes is always helpful, although so far these have proven to be unfruitful:-
     - [Reddit](https://www.reddit.com/r/reviewmycode/comments/5oorz1/java_6502_emulator/)
     - [Stack Exchange](http://codereview.stackexchange.com/questions/154600/op-code-decoding-in-an-emulator) 
  
