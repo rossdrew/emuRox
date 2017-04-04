@@ -3848,7 +3848,6 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("RTI #expected ")
-    @Ignore
     testRTI(){
         when: 'We have a program which will be interrupted'
         Memory memory = new SimpleMemory()
@@ -3863,8 +3862,8 @@ class OpCodeSpec extends Specification {
         int[] irqRoutine = [OP_LDA_I, 3,
                             OP_RTI]
         memory.setMemory(0x100, irqRoutine)
-        memory.setByteAt(0xFFFE, 0x00)
-        memory.setByteAt(0xFFFF, 0x01)
+        memory.setByteAt(0xFFFE, 0x01)
+        memory.setByteAt(0xFFFF, 0x00)
 
         and:
         CPU processor = new CPU(memory)
@@ -3875,14 +3874,14 @@ class OpCodeSpec extends Specification {
         processor.step(2)
         registers.setRegister(Registers.REG_STATUS, statusValue)
         processor.irq()
-        processor.step(3)
+        processor.step(2)
 
         then: 'Stack is empty again'
         registers.getRegister(Registers.REG_SP) == 0xFF
 
         and: 'The PC on the stack is as expected'
         registers.getRegister(Registers.REG_PC_HIGH) == restoredPCHi
-        registers.getRegister(Registers.REG_PC_HIGH) == restoredPCLo
+        registers.getRegister(Registers.REG_PC_LOW) == restoredPCLo
 
         and: 'Status register is moved to stack with B set'
         registers.getRegister(Registers.REG_STATUS) == restoredStatus
@@ -3893,11 +3892,9 @@ class OpCodeSpec extends Specification {
 
         where:
         statusValue | restoredStatus | restoredPCHi | restoredPCLo | expected
-        0b00000000  | 0b00000100     | 0x00         | 0x02         | "Empty status register"
-        0b11111111  | 0b11111111     | 0x00         | 0x02         | "Full status register"
-        0b10101010  | 0b10101110     | 0x00         | 0x02         | "Random status register"
-        0b00000000  | 0b00000100     | 0x00         | 0x04         | "Two steps"
-        0b00000000  | 0b00000100     | 0x00         | 0x06         | "Three steps"
+        0b00000000  | 0b00000100     | 0x00         | 0x04         | "Empty status register"
+        0b11111111  | 0b11111111     | 0x00         | 0x04         | "Full status register"
+        0b10101010  | 0b10101110     | 0x00         | 0x04         | "Random status register"
     }
 
 //    @Ignore
