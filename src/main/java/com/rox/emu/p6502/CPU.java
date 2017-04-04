@@ -38,6 +38,7 @@ public class CPU {
     }
 
     public void irq() {
+        System.out.println("*** IRQ >>>");
         registers.setFlag(STATUS_FLAG_IRQ_DISABLE);
 
         push(getRegisterValue(REG_PC_HIGH));
