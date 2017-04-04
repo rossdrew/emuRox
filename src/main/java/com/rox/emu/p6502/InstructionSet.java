@@ -1,5 +1,7 @@
 package com.rox.emu.p6502;
 
+import com.rox.emu.p6502.op.OpCode;
+
 /**
  * A representation of the 6502 instruction set.
  *
@@ -7,6 +9,8 @@ package com.rox.emu.p6502;
  * bad coding but it makes life so much easier to have this in
  * a separate file which essentially mimics a struct-type data
  * structure
+ *
+ * XXX I've created {@link OpCode} so that I can migrate to it.
  *
  * @author Ross Drew
  */
