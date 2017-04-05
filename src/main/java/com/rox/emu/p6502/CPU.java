@@ -374,6 +374,11 @@ public class CPU {
                 withRegisterAndByteAt(REG_ACCUMULATOR, pointerLocation, this::performORA);
             }break;
 
+            case InstructionSet.OP_ORA_IND_IY: {
+                int pointerLocation = getWordOfMemoryAt(nextProgramByte()) + getRegisterValue(REG_Y_INDEX);
+                withRegisterAndByteAt(REG_ACCUMULATOR, pointerLocation, this::performORA);
+            }break;
+
             case InstructionSet.OP_EOR_I:
                 withRegisterAndByte(REG_ACCUMULATOR, nextProgramByte(), this::performEOR);
                 break;
