@@ -1247,6 +1247,39 @@ class OpCodeSpec extends Specification {
         0x5        | 0x50       | 0b00000001 | 4     | 0b10000010  | 0b10000011  | false  | true  | "Negative result"
     }
 
+    @Unroll("ORA (Indirect, Y) #Expected: #firstValue | #secondValue -> #expectedAcc")
+    testORA_IND_IY() {
+        when:
+        Memory memory = new SimpleMemory()
+        int[] program = [OP_LDY_I, index,           //Index to use
+                         OP_LDA_I, firstValue,      //High order byte at pointer
+                         OP_STA_ABS_IY, pointerHi, pointerLo,
+                         OP_LDA_I, pointerHi,       //Pointer location
+                         OP_STA_Z, 0x60,
+                         OP_LDA_I, pointerLo,       //Pointer location
+                         OP_STA_Z, 0x61,
+                         OP_LDA_I, secondValue,
+                         OP_ORA_IND_IY, 0x60]
+        memory.setMemory(0, program)
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        processor.step(9)
+        Registers registers = processor.getRegisters()
+
+        then:
+        registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAcc
+
+        where:
+        pointerHi | pointerLo | firstValue | index | secondValue | expectedAcc | Z      | N     | Expected
+        0x1       | 0x10      | 0b00000001 | 0     | 0b00000001  | 0b00000001  | false  | false | "Duplicate bits"
+        0x2       | 0x20      | 0b00000000 | 1     | 0b00000001  | 0b00000001  | false  | false | "One bit in Accumulator"
+        0x3       | 0x30      | 0b00000001 | 2     | 0b00000000  | 0b00000001  | false  | false | "One bit from passed value"
+        0x4       | 0x40      | 0b00000001 | 3     | 0b00000010  | 0b00000011  | false  | false | "One bit fro Accumulator, one from new value"
+        0x5       | 0x50      | 0b00000001 | 4     | 0b10000010  | 0b10000011  | false  | true  | "Negative result"
+    }
+
     @Unroll("EOR (Immediate) #Expected:  #firstValue ^ #secondValue = #expectedAccumulator in Accumulator.")
     testEOR(){
         when:
