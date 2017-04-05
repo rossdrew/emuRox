@@ -57,6 +57,7 @@ public enum OpCode {
     OP_EOR_ABS_IX(0x5D),
     OP_EOR_ABS_IY(0x59),
     OP_EOR_IND_IX(0x41),
+    OP_EOR_IND_IY(0x51),
 
     OP_SBC_I(0xE9),
     OP_SBC_Z(0xE5),

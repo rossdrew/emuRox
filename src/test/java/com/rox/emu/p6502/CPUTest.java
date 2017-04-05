@@ -50,7 +50,9 @@ public class CPUTest {
 
     @Test
     public void testReset() {
-        int[] program = {OP_LDA_I, 0xAA, OP_LDX_I, 0xBB, OP_LDX_I, 0xCC};
+        int[] program = {OP_LDA_I, 0xAA,
+                         OP_LDX_I, 0xBB,
+                         OP_LDX_I, 0xCC};
         memory.setMemory(0, program);
         memory.setByteAt(0xFFFC, 0x0);
         memory.setByteAt(0xFFFD, 0x0);

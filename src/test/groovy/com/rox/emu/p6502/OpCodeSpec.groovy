@@ -1455,6 +1455,37 @@ class OpCodeSpec extends Specification {
         0x3        | 0x34       | 2     | 0b00000001 | 0b00000001  | 0b00000000  | true   | false | "Not both"
     }
 
+    @Unroll("EOR (Indirect, Y) #Expected: #firstValue ^ #secondValue -> #expectedAcc")
+    testEOR_IND_IY() {
+        when:
+        Memory memory = new SimpleMemory()
+        int[] program = [OP_LDY_I, index,           //Index to use
+                         OP_LDA_I, firstValue,      //High order byte at pointer
+                         OP_STA_ABS_IY, pointerHi, pointerLo,
+                         OP_LDA_I, pointerHi,       //Pointer location
+                         OP_STA_Z, 0x60,
+                         OP_LDA_I, pointerLo,       //Pointer location
+                         OP_STA_Z, 0x61,
+                         OP_LDA_I, secondValue,
+                         OP_EOR_IND_IY, 0x60]
+        memory.setMemory(0, program)
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        processor.step(9)
+        Registers registers = processor.getRegisters()
+
+        then:
+        registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAcc
+
+        where:
+        pointerHi | pointerLo | index | firstValue | secondValue | expectedAcc | Z      | N     | Expected
+        0x1       | 0x10      | 0     | 0b00000001 | 0b00000000  | 0b00000001  | false  | false | "One"
+        0x2       | 0x20      | 1     | 0b00000000 | 0b00000001  | 0b00000001  | false  | false | "The other"
+        0x3       | 0x34      | 2     | 0b00000001 | 0b00000001  | 0b00000000  | true   | false | "Not both"
+    }
+
     @Unroll("STA (Indirect, X) #Expected: #value stored at [#locationHi|#locationLo]")
     testSTA_IND_IX() {
         when:
