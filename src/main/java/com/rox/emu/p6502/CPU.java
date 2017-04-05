@@ -403,6 +403,11 @@ public class CPU {
                 withRegisterAndByteAt(REG_ACCUMULATOR, pointerLocation, this::performEOR);
             }break;
 
+            case InstructionSet.OP_EOR_IND_IY: {
+                int pointerLocation = getWordOfMemoryAt(nextProgramByte()) + getRegisterValue(REG_Y_INDEX);
+                withRegisterAndByteAt(REG_ACCUMULATOR, pointerLocation, this::performEOR);
+            }break;
+
             case InstructionSet.OP_ADC_Z:
                 withRegisterAndByteAt(REG_ACCUMULATOR, nextProgramByte(), this::performADC);
                 break;
