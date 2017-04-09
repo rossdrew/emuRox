@@ -884,6 +884,10 @@ public class CPU {
         return result;
     }
 
+    private int rightShift(int value, boolean carryIn){
+        return (value >> 1) | (carryIn ? 0b10000000 : 0);
+    }
+
     @FunctionalInterface
     private interface SingleByteOperation {
         int perform(int byteValue);
@@ -919,17 +923,17 @@ public class CPU {
     }
 
     private int performROR(int initialValue){
-        int rotatedValue = (initialValue >> 1) | (registers.getFlag(STATUS_FLAG_CARRY) ? 0b10000000 : 0);
+        int rotatedValue = rightShift(initialValue, (registers.getFlag(STATUS_FLAG_CARRY)));
         setBorrowFlagFor(initialValue);
         registers.setFlagsBasedOn(rotatedValue);
         return rotatedValue & 0xFF;
     }
 
-    private int performLSR(int byteValue){
-        int shiftedByteValue = byteValue >> 1;
-        setBorrowFlagFor(byteValue);
-        registers.setFlagsBasedOn(shiftedByteValue);
-        return shiftedByteValue;
+    private int performLSR(int initialValue){
+        int rotatedValue = rightShift(initialValue, false);
+        setBorrowFlagFor(initialValue);
+        registers.setFlagsBasedOn(rotatedValue);
+        return rotatedValue;
     }
 
     private int performINC(int initialValue){
