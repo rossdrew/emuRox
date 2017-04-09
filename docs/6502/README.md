@@ -1,4 +1,6 @@
-#6502 Documentation
+#NES Documentation
+
+##6502
 
  Resources:
    - [Online 6502 Emulator](https://skilldrick.github.io/easy6502/)

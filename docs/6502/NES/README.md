@@ -2,6 +2,8 @@
 
 This was the original intention of this project, to become a NES emulator.  As such I've added this directory as a source for storing information I may need later when I get beyong the CPU.
 
+##6502
+
 ####Unoficial OpCodes
 
 There are [missing opCodes](http://wiki.nesdev.com/w/index.php/CPU_unofficial_opcodes), some of them crash the CPU, some have [strange effects](http://wiki.nesdev.com/w/index.php/Programming_with_unofficial_opcodes) and in order to get every game working, here are some examples
@@ -18,3 +20,13 @@ There are [missing opCodes](http://wiki.nesdev.com/w/index.php/CPU_unofficial_op
     - The MUSE music engine, used in Driar and STREEMERZ: Super Strength Emergency Squad Zeta, uses the unofficial opcodes $8F (SAX), $B3 (LAX), and $CB (AXS) [2]
     - Attribute Zone uses $0B (ANC), $2F (RLA), $4B (ALR), $A7 (LAX), $B3 (LAX), $CB (AXS), $D3 (DCP), $DB (DCP).
     - The port of Zork to the Famicom uses a few unofficial opcodes.
+    
+##PPU
+
+ - Single scrollable playfield, 
+ - 64 objects/sprites. 
+    - 1 or 2 tiles to be displayed on a randomly-accessable xy coordinate
+ - The screen resolution is 256*240
+    - Made up of 32x30, 8x8 tiles
+ - 2*4 color palettes each with 3 indexable colors
+    - Playfield and objects have their own dedicated palettes
