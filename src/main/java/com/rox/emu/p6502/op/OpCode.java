@@ -21,6 +21,7 @@ public enum OpCode {
     OP_ADC_ABS_IY(0x79),
     OP_ADC_Z_IX(0x75),
     OP_ADC_IND_IX(0x61),
+    OP_ADC_IND_IY(0x71),
 
     OP_LDA_Z(0xA5),
     OP_LDA_I(0xA9),

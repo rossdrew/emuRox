@@ -3,7 +3,6 @@ package com.rox.emu.p6502
 import com.rox.emu.Memory
 
 import com.rox.emu.SimpleMemory
-import spock.lang.Ignore
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -731,7 +730,9 @@ class OpCodeSpec extends Specification {
         then:
         registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAcc
         registers.getPC() == program.length
+        C == registers.statusFlags[Registers.C]
         Z == registers.statusFlags[Registers.Z]
+        O == registers.statusFlags[Registers.V]
         N == registers.statusFlags[Registers.N]
 
         where:
@@ -739,6 +740,42 @@ class OpCodeSpec extends Specification {
         0x1        | 0x10       | 0x0        | 0x0         | 0     | 0x0         | true   | false | false | false | "With zero result"
         0x1        | 0x10       | 0x50       | 0xD0        | 1     | 0x20        | false  | false | true  | false | "With positive, carried result"
         0x1        | 0x10       | 0x50       | 0x50        | 2     | 0xA0        | false  | true  | false | true  | "With negative overflow"
+    }
+
+    @Unroll("ADC (Indirect, Y) #Expected: #firstValue + #secondValue -> #expectedAcc")
+    testADC_IND_IY() {
+        when:
+        Memory memory = new SimpleMemory()
+        int[] program = [OP_LDY_I, index,           //Index to use
+                         OP_LDA_I, firstValue,      //High order byte at pointer
+                         OP_STA_ABS_IY, pointerHi, pointerLo,
+                         OP_LDA_I, pointerHi,       //Pointer location
+                         OP_STA_Z, 0x60,
+                         OP_LDA_I, pointerLo,       //Pointer location
+                         OP_STA_Z, 0x61,
+                         OP_LDA_I, secondValue,
+                         OP_ADC_IND_IY, 0x60]
+        memory.setMemory(0, program)
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        processor.step(9)
+        Registers registers = processor.getRegisters()
+
+        then:
+        registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAcc
+        registers.getPC() == program.length
+        C == registers.statusFlags[Registers.C]
+        Z == registers.statusFlags[Registers.Z]
+        O == registers.statusFlags[Registers.V]
+        N == registers.statusFlags[Registers.N]
+
+        where:
+        pointerHi | pointerLo | firstValue | secondValue | index | expectedAcc | Z      | N     | C     | O     | Expected
+        0x1       | 0x10      | 0x0        | 0x0         | 0     | 0x0         | true   | false | false | false | "With zero result"
+        0x1       | 0x10      | 0x50       | 0xD0        | 1     | 0x20        | false  | false | true  | false | "With positive, carried result"
+        0x1       | 0x10      | 0x50       | 0x50        | 2     | 0xA0        | false  | true  | false | true  | "With negative overflow"
     }
 
     @Unroll("ADC 16bit [#lowFirstByte|#highFirstByte] + [#lowSecondByte|#highSecondByte] = #Expected")
@@ -964,7 +1001,7 @@ class OpCodeSpec extends Specification {
         int[] program = [OP_LDA_I, firstValue,    //Value at indirect address
                          OP_STA_ABS, locationHi, locationLo,
                          OP_LDX_I, index,
-                         OP_LDA_I, locationHi,  //Indirect address in memory
+                         OP_LDA_I, locationHi,   //Indirect address in memory
                          OP_STA_Z_IX, 0x30,
                          OP_LDA_I, locationLo,
                          OP_STA_Z_IX, 0x31,
