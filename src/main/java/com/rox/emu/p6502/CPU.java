@@ -476,6 +476,11 @@ public class CPU {
                 performCMP(getByteOfMemoryAt(pointerLocation), REG_ACCUMULATOR);
             }break;
 
+            case InstructionSet.OP_CMP_IND_IY: {
+                int pointerLocation = getWordOfMemoryAt(nextProgramByte()) + getRegisterValue(REG_Y_INDEX);
+                performCMP(getByteOfMemoryAt(pointerLocation), REG_ACCUMULATOR);
+            }break;
+
             case InstructionSet.OP_CPX_I:
                 performCMP(nextProgramByte(), REG_X_INDEX);
                 break;
