@@ -11,11 +11,10 @@ An emulator for the 6502 processor.  The plan is to evolve this into a working N
 
 #### 6502
 
-All op-codes now implemented.  `IRQ` interrupt done, still `NMI` TODO.
-Working on the last of the addressing mode instructions, __Indirect, Y__.
+All op-codes now implemented. Some changing of arithmetic (usually in `+`/`-` cases) to twos compliment arithmetic.  Some other bugs needing worked out.
 Timing will be looked at later, as necessary.  BCD wont be needed for now for the NES (Ricoh) version and I'll need to look at the memory mapped registers.
 
-I'd really like to compress my data driven tests a litte.  There's a lot of common code in there and therefor a lot of changes if small architectural changes are made, such as the up and coming op-code migration.
+I'd really like to compress my data driven tests a little.  There's a lot of common code in there and therefor a lot of changes if small architectural changes are made, such as the up and coming op-code migration.
  
 ## Development & Testing
 
