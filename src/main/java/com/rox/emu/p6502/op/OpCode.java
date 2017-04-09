@@ -141,6 +141,7 @@ public enum OpCode {
     OP_CMP_ABS_IX(0xDD),
     OP_CMP_ABS_IY(0xD9),
     OP_CMP_IND_IX(0xC1),
+    OP_CMP_IND_IY(0xD1),
 
     OP_CPX_I(0xE0),
     OP_CPX_Z(0xE4),

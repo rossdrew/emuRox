@@ -3644,6 +3644,7 @@ class OpCodeSpec extends Specification {
         registers.getPC() == program.length
         Z == registers.statusFlags[Registers.Z]
         N == registers.statusFlags[Registers.N]
+        C == registers.statusFlags[Registers.C]
 
         where:
         indAddressHi | indAddressLo | firstValue | secondValue | index | Z     | N     | C     | Expected
@@ -3651,6 +3652,41 @@ class OpCodeSpec extends Specification {
         0x02         | 0x22         | 0x11       | 0x10        | 1     | false | false | true  | "Carry flag set"
         0x03         | 0x35         | 0x10       | 0x11        | 2     | false | true  | false | "Smaller value - larger"
         0x04         | 0x41         | 0xFF       | 0x01        | 3     | false | true  | true  | "Negative result"
+    }
+
+    @Unroll("CMP (Indirect, Y) #Expected: #firstValue == #secondValue -> #expectedAcc")
+    testCMP_IND_IY() {
+        when:
+        Memory memory = new SimpleMemory()
+        int[] program = [OP_LDY_I, index,           //Index to use
+                         OP_LDA_I, firstValue,      //High order byte at pointer
+                         OP_STA_ABS_IY, pointerHi, pointerLo,
+                         OP_LDA_I, pointerHi,       //Pointer location
+                         OP_STA_Z, 0x60,
+                         OP_LDA_I, pointerLo,       //Pointer location
+                         OP_STA_Z, 0x61,
+                         OP_LDA_I, secondValue,
+                         OP_CMP_IND_IY, 0x60]
+        memory.setMemory(0, program)
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        processor.step(9)
+        Registers registers = processor.getRegisters()
+
+        then:
+        registers.getPC() == program.length
+        Z == registers.statusFlags[Registers.Z]
+        N == registers.statusFlags[Registers.N]
+        C == registers.statusFlags[Registers.C]
+
+        where:
+        pointerHi | pointerLo | firstValue | secondValue | index | Z     | N     | C     | Expected
+        0x02      | 0x20      | 0x10       | 0x10        | 0     | true  | false | true  | "Basic compare"
+        0x02      | 0x22      | 0x11       | 0x10        | 1     | false | false | true  | "Carry flag set"
+        0x03      | 0x35      | 0x10       | 0x11        | 2     | false | true  | false | "Smaller value - larger"
+        0x04      | 0x41      | 0xFF       | 0x01        | 3     | false | true  | true  | "Negative result"
     }
 
     @Unroll("CPY (Immediate) #Expected: #firstValue == #secondValue")
