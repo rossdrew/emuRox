@@ -3984,6 +3984,10 @@ class OpCodeSpec extends Specification {
         memory.setMemory(0, program)
 
         and:
+        memory.setMemory(0xFFFA, 1)
+        memory.setMemory(0xFFFB, 2)
+
+        and:
         CPU processor = new CPU(memory)
         processor.reset()
         Registers registers = processor.getRegisters()
@@ -4006,6 +4010,54 @@ class OpCodeSpec extends Specification {
         and: 'The PC is set to 0xFFFE:0xFFFF'
         registers.getRegister(Registers.REG_PC_HIGH) == memory.getByte(0xFFFE)
         registers.getRegister(Registers.REG_PC_LOW)  == memory.getByte(0xFFFF)
+
+        where:
+        statusValue | steps | pushedStatus | pushedPCHi | pushedPCLo | expected
+        0b00000000  | 1     | 0b00000100   | 0x00       | 0x02       | "Empty status register"
+        0b11111111  | 1     | 0b11111111   | 0x00       | 0x02       | "Full status register"
+        0b10101010  | 1     | 0b10101110   | 0x00       | 0x02       | "Random status register"
+        0b00000000  | 2     | 0b00000100   | 0x00       | 0x04       | "Two steps"
+        0b00000000  | 3     | 0b00000100   | 0x00       | 0x06       | "Three steps"
+    }
+
+    @Unroll("NMI #expected #statusValue->#pushedStatus")
+    testNMI(){
+        when:
+        Memory memory = new SimpleMemory()
+        int[] program = [OP_LDA_I, 1,
+                         OP_LDA_I, 2,
+                         OP_LDA_I, 3,
+                         OP_LDA_I, 4,
+                         OP_LDA_I, 5]
+        memory.setMemory(0, program)
+
+        and:
+        memory.setMemory(0xFFFA, 1)
+        memory.setMemory(0xFFFB, 2)
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        Registers registers = processor.getRegisters()
+
+        and:
+        processor.step(steps)
+        registers.setRegister(Registers.REG_STATUS, statusValue)
+        processor.nmi()
+
+        then: 'Three items have been added to stack'
+        registers.getRegister(Registers.REG_SP) == 0xFC
+
+        and: 'The PC on the stack is as expected'
+        memory.getByte(0x1FE) == pushedPCLo
+        memory.getByte(0x1FF) == pushedPCHi
+
+        and: 'Status register is moved to stack with B set'
+        memory.getByte(0x1FD) == pushedStatus
+
+        and: 'The PC is set to 0xFFFE:0xFFFF'
+        registers.getRegister(Registers.REG_PC_HIGH) == memory.getByte(0xFFFA)
+        registers.getRegister(Registers.REG_PC_LOW)  == memory.getByte(0xFFFB)
 
         where:
         statusValue | steps | pushedStatus | pushedPCHi | pushedPCLo | expected

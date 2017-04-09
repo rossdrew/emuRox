@@ -49,6 +49,18 @@ public class CPU {
         setRegisterValue(REG_PC_LOW, getByteOfMemoryAt(0xFFFF));
     }
 
+    public void nmi() {
+        System.out.println("*** NMI >>>");
+        registers.setFlag(STATUS_FLAG_IRQ_DISABLE);
+
+        push(getRegisterValue(REG_PC_HIGH));
+        push(getRegisterValue(REG_PC_LOW));
+        push(getRegisterValue(REG_STATUS));
+
+        setRegisterValue(REG_PC_HIGH, getByteOfMemoryAt(0xFFFA));
+        setRegisterValue(REG_PC_LOW, getByteOfMemoryAt(0xFFFB));
+    }
+
     /**
      * @return the {@link Registers} being used
      */
