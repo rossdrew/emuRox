@@ -1838,12 +1838,48 @@ class OpCodeSpec extends Specification {
         registers.getPC() == program.length
         Z == registers.statusFlags[Registers.Z]
         N == registers.statusFlags[Registers.N]
+        //TODO O/C
 
         where:
         locationHi | locationLo | index | firstValue | secondValue | expectedAcc | Z      | N     | O     | C     | Expected
         0x1        | 0x10       | 0     | 0x5        | 0x3         | 0x2         | false  | false | false | false | "Basic subtraction"
         0x2        | 0x13       | 1     | 0x5        | 0x5         | 0x0         | true   | false | false | false | "With zero result"
         0x3        | 0x26       | 2     | 0x5        | 0x6         | 0xFF        | false  | true  | false | false | "with negative result"
+    }
+
+    @Unroll("SBC (Indirect, Y) #Expected: #firstValue (@[#locationHi|#locationLo]) - #secondValue = #expectedAcc")
+    testSBC_IND_IY() {
+        when:
+        Memory memory = new SimpleMemory()
+        int[] program = [OP_LDY_I, index,           //Index to use
+                         OP_LDA_I, secondValue,      //High order byte at pointer
+                         OP_STA_ABS_IY, pointerHi, pointerLo,
+                         OP_LDA_I, pointerHi,       //Pointer location
+                         OP_STA_Z, 0x60,
+                         OP_LDA_I, pointerLo,       //Pointer location
+                         OP_STA_Z, 0x61,
+                         OP_LDA_I, firstValue,
+                         OP_SEC,
+                         OP_SBC_IND_IY, 0x60]
+        memory.setMemory(0, program)
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        processor.step(10)
+        Registers registers = processor.getRegisters()
+
+        then:
+        registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAcc
+        Z == registers.statusFlags[Registers.Z]
+        N == registers.statusFlags[Registers.N]
+        //TODO O/C
+
+        where:
+        pointerHi | pointerLo | index | firstValue | secondValue | expectedAcc | Z      | N     | O     | C     | Expected
+        0x1       | 0x10      | 0     | 0x5        | 0x3         | 0x2         | false  | false | false | false | "Basic subtraction"
+        0x2       | 0x13      | 1     | 0x5        | 0x5         | 0x0         | true   | false | false | false | "With zero result"
+        0x3       | 0x26      | 2     | 0x5        | 0x6         | 0xFF        | false  | true  | false | false | "with negative result"
     }
 
     @Unroll("INX #Expected: on #firstValue = #expectedX")
