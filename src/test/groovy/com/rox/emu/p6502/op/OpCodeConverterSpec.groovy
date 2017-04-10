@@ -5,6 +5,30 @@ import spock.lang.Specification
 import spock.lang.Unroll
 
 class OpCodeConverterSpec extends Specification{
+    @Unroll("Addressing Modes: #opCodeName -> #expectedAddressingMode")
+    test() {
+        when:
+        AddressingMode addressingMode = OpCodeConverter.getAddressingMode(opCodeName)
+
+        then:
+        addressingMode == expectedAddressingMode
+
+        where:
+        opCodeName      | expectedAddressingMode
+        "OP_BRK"        | AddressingMode.IMPLIED
+        "OP_ADC_I"      | AddressingMode.IMMEDIATE
+        "OP_ROL_A"      | AddressingMode.ACCUMULATOR
+        "OP_ADC_Z"      | AddressingMode.ZERO_PAGE
+        "OP_ADC_Z_IX"   | AddressingMode.ZERO_PAGE_X
+        "OP_ADC_Z_IY"   | AddressingMode.ZERO_PAGE_Y
+        "OP_ADC_ABS"    | AddressingMode.ABSOLUTE
+        "OP_ADC_ABS_IX" | AddressingMode.ABSOLUTE_X
+        "OP_ADC_ABS_IY" | AddressingMode.ABSOLUTE_Y
+        "OP_ADC_IND"    | AddressingMode.INDIRECT
+        "OP_ADC_IND_IX" | AddressingMode.INDIRECT_X
+        "OP_ADC_IND_IY" | AddressingMode.INDIRECT_Y
+    }
+
     @Unroll("Valid (#expected) op-code name")
     testValidAddressingModeOpcodeNames() {
         given:

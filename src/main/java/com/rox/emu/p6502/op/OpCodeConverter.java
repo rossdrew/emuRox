@@ -29,12 +29,50 @@ class OpCodeConverter {
     public static final String INDEX_X = " [X]";
     public static final String INDEX_Y = " [Y]";
 
+    public static String getOpCode(String internalOpCodeName){
+        final String tokens[] = internalOpCodeName.split(SEPARATOR);
+        return tokens[OP_CODE];
+    }
+
+    public static AddressingMode getAddressingMode(String internalOpCodeName){
+        final String tokens[] = internalOpCodeName.split(SEPARATOR);
+        if (tokens.length < 3)
+            return AddressingMode.IMPLIED;
+
+        final String addressingModeDescriptor = tokens[OP_ADD];
+
+        switch (addressingModeDescriptor){
+            case "I": return AddressingMode.IMMEDIATE;
+            case "A": return AddressingMode.ACCUMULATOR;
+            case "Z":
+                switch ((tokens.length <= OP_I) ? "" : tokens[OP_I]){
+                    case "IX": return AddressingMode.ZERO_PAGE_X;
+                    case "IY": return AddressingMode.ZERO_PAGE_Y;
+                    default: return AddressingMode.ZERO_PAGE;
+                }
+            case "ABS":
+                switch ((tokens.length <= OP_I) ? "" : tokens[OP_I]){
+                    case "IX": return AddressingMode.ABSOLUTE_X;
+                    case "IY": return AddressingMode.ABSOLUTE_Y;
+                    default: return AddressingMode.ABSOLUTE;
+                }
+            case "IND":
+                switch ((tokens.length <= OP_I) ? "" : tokens[OP_I]){
+                    case "IX": return AddressingMode.INDIRECT_X;
+                    case "IY": return AddressingMode.INDIRECT_Y;
+                    default: return AddressingMode.INDIRECT;
+                }
+            default:
+                throw new UnknownOpCodeException("Unrecognised addressing mode " + addressingModeDescriptor, internalOpCodeName);
+        }
+    }
+
     public static String toDescription(String internalOpCodeName){
         if (internalOpCodeName != null && !internalOpCodeName.isEmpty()){
             String tokens[] = internalOpCodeName.split(SEPARATOR);
             if (!tokens[OP_DELIMITER].equalsIgnoreCase("OP"))
                 throw new UnknownOpCodeException("Opcode not properly delimited", internalOpCodeName);
-            return (getOpCode(tokens) + getAddressingMode(tokens));
+            return (getOpCode(tokens) + getAddressingMode(tokens)); //XXX Change to use the new style
         }else{
             throw new UnknownOpCodeException("Empty Opcode", internalOpCodeName);
         }

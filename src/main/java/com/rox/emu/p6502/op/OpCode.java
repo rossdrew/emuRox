@@ -178,17 +178,20 @@ public enum OpCode {
 
     private int byteValue;
     private String description;
+    private AddressingMode addressingMode;
 
     OpCode(int byteValue){
         this.byteValue = byteValue;
+        this.addressingMode = OpCodeConverter.getAddressingMode(this.name());
         description = OpCodeConverter.toDescription(this.name());
-        //TODO instead of generating description, generate addressing mode and indexing mode
-        //     this way we can tell how many arguments each takes without having to hard code it
-        //TODO then switch to this opcode method
     }
 
     public int getByteValue(){
         return byteValue;
+    }
+
+    public AddressingMode getAddressingMode(){
+        return this.addressingMode;
     }
 
     @Override
