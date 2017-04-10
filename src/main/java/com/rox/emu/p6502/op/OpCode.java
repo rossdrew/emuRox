@@ -176,9 +176,9 @@ public enum OpCode {
 
     OP_RTS(0x60);
 
-    private int byteValue;
-    private String description;
-    private AddressingMode addressingMode;
+    private final int byteValue;
+    private final String description;
+    private final AddressingMode addressingMode;
 
     OpCode(int byteValue){
         this.byteValue = byteValue;
