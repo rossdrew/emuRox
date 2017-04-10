@@ -25,4 +25,8 @@ public enum AddressingMode {
     public String getDescription(){
         return description;
     }
+
+    public int getInstructionBytes(){
+        return this.instructionBytes;
+    }
 }
