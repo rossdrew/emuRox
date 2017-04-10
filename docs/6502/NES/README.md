@@ -23,6 +23,12 @@ There are [missing opCodes](http://wiki.nesdev.com/w/index.php/CPU_unofficial_op
     
 ##PPU
 
+ - [How NES Graphics work - The Basics](http://web.textfiles.com/games/nesgfx.txt)
+ - [Emulating the Nintendo Entertainment System (NES) -  Rupert Shuttleworth](http://www.optimuscopri.me/nes/report.pdf)
+ - [PPU Rendering](https://wiki.nesdev.com/w/index.php/PPU_rendering)
+
+######Notes
+
  - Single scrollable playfield, 
  - 64 objects/sprites. 
     - 1 or 2 tiles to be displayed on a randomly-accessable xy coordinate
