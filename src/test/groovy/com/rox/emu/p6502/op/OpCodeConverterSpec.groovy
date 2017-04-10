@@ -6,7 +6,7 @@ import spock.lang.Unroll
 
 class OpCodeConverterSpec extends Specification{
     @Unroll("Addressing Modes: #opCodeName -> #expectedAddressingMode")
-    test() {
+    testAddressingModeExtraction() {
         when:
         AddressingMode addressingMode = OpCodeConverter.getAddressingMode(opCodeName)
 
