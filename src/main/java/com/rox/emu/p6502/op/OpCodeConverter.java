@@ -17,7 +17,7 @@ class OpCodeConverter {
     private static final int OP_ADD = 2;
     private static final int OP_I = 3;
 
-    //Addressing modes
+    //Addressing modes XXX These can be removed once toDescription() is switched over
     public static final String ADDR_IMP = "Implied";
     public static final String ADDR_I = "Immediate";
     public static final String ADDR_A = "Accumulator";
