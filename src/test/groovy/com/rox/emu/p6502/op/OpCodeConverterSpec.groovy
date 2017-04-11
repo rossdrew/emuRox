@@ -51,7 +51,7 @@ class OpCodeConverterSpec extends Specification{
         String description = "UNKNOWN"
 
         when:
-        description = OpCodeConverter.toDescription(opCodeName)
+        description = OpCodeConverter.getAddressingMode(opCodeName)
 
         then:
         thrown UnknownOpCodeException
