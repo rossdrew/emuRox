@@ -45,6 +45,24 @@ class OpCodeConverterSpec extends Specification{
         "OP_ADC_IND_IY" | AddressingMode.INDIRECT_Y
     }
 
+    @Unroll("Get addressing mode (INVALID): #expected")
+    testInvalidAddressingMode(){
+        given:
+        String description = "UNKNOWN"
+
+        when:
+        description = OpCodeConverter.toDescription(opCodeName)
+
+        then:
+        thrown UnknownOpCodeException
+        description == "UNKNOWN"
+
+        where:
+        opCodeName    | expected
+        'OP_ADC_TRX'  | "TRX Not a valid addressing mode"
+        'OP_ADC_1'    | "1 Not a valid addressing mode"
+    }
+
     @Unroll("Valid (#expected) op-code name")
     testValidAddressingModeOpcodeNames() {
         given:
