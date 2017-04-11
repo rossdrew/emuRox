@@ -5,7 +5,23 @@ import spock.lang.Specification
 import spock.lang.Unroll
 
 class OpCodeConverterSpec extends Specification{
-    @Unroll("Addressing Modes: #opCodeName -> #expectedAddressingMode")
+    @Unroll("Get opCode: #opCodeName -> #expectedOpCodeName")
+    testGetOpcode(){
+        when:
+        String opCode = OpCodeConverter.getOpCode(opCodeName)
+
+        then:
+        opCode == expectedOpCodeName
+
+        where:
+        opCodeName      | expectedOpCodeName
+        "OP_BRK"        | "BRK"
+        "OP_ADC_Z_IX"   | "ADC"
+        "OP_SEC"        | "SEC"
+        "OP_AND_IND_IY" | "AND"
+    }
+
+    @Unroll("Get addressing mode: #opCodeName -> #expectedAddressingMode")
     testAddressingModeExtraction() {
         when:
         AddressingMode addressingMode = OpCodeConverter.getAddressingMode(opCodeName)
