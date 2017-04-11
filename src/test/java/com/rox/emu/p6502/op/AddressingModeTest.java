@@ -3,6 +3,7 @@ package com.rox.emu.p6502.op;
 import org.junit.Test;
 
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class AddressingModeTest {
     @Test
@@ -12,7 +13,7 @@ public class AddressingModeTest {
             final int bytes = addressingMode.getInstructionBytes();
 
             assertFalse(description==null || description.isEmpty());
-            assertFalse(bytes > 0);
+            assertTrue(bytes > 0);
         }
     }
 }
