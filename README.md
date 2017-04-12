@@ -9,6 +9,8 @@ An emulator for the 6502 processor.  The plan is to evolve this into a working N
 
 ## Progress
 
+Currently I'm looking in to the NES PPU.  Trying to garner enough information to start emulating this piece of hardware while looking at code I've wrote over the last few months and looking at where it might be improved.  For example, a refactor of how Op-Codes are dealt with, stored and decoded.
+
 #### 6502
 
 All op-codes now implemented. Some changing of arithmetic (usually in `+`/`-` cases) to twos compliment arithmetic.  Some other bugs needing worked out.
