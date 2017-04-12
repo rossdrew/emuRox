@@ -3,12 +3,42 @@ package com.rox.emu.p6502
 import com.rox.emu.Memory
 
 import com.rox.emu.SimpleMemory
+import com.rox.emu.p6502.op.OpCode
 import spock.lang.Specification
 import spock.lang.Unroll
 
 import static com.rox.emu.p6502.InstructionSet.*
 
 class OpCodeSpec extends Specification {
+
+    def testNewOpCode(){
+        when:
+        Memory memory = new SimpleMemory()
+        int[] program = [OpCode.OP_LDA_I.getByteValue(), loadValue] //Nicer way to do this?
+        memory.setMemory(0, program)
+
+        and:
+        CPU processor = new CPU(memory)
+        processor.reset()
+        processor.step()
+        Registers registers = processor.getRegisters()
+
+        then:
+        registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
+        registers.getPC() == program.length
+        Z == registers.statusFlags[Registers.Z]
+        N == registers.statusFlags[Registers.N]
+
+        where:
+        loadValue | expectedAccumulator | Z     | N     | Expected
+        0x0       | 0x0                 | true  | false | "With zero result"
+        0x1       | 0x1                 | false | false | "Generic test 1"
+        0x7F      | 0x7F                | false | false | "Generic test 2"
+        0x80      | 0x80                | false | true  | "With negative result"
+        0x81      | 0x81                | false | true  | "With (boundary test) negative result "
+        0xFF      | 0xFF                | false | true  | "With max negative result"
+    }
+
     @Unroll("LDA (Immediate) #Expected: Load #loadValue == #expectedAccumulator")
     testImmediateLDA() {
         when:
