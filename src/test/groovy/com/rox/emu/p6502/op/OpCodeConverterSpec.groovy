@@ -31,7 +31,7 @@ class OpCodeConverterSpec extends Specification{
 
         where:
         opCodeName      | expectedAddressingMode
-        "OP_BRK"        | AddressingMode.IMPLIED
+        "OP_BRK"        | AddressingMode.IMPLIED            //VALID
         "OP_ADC_I"      | AddressingMode.IMMEDIATE
         "OP_ROL_A"      | AddressingMode.ACCUMULATOR
         "OP_ADC_Z"      | AddressingMode.ZERO_PAGE
@@ -43,10 +43,26 @@ class OpCodeConverterSpec extends Specification{
         "OP_ADC_IND"    | AddressingMode.INDIRECT
         "OP_ADC_IND_IX" | AddressingMode.INDIRECT_X
         "OP_ADC_IND_IY" | AddressingMode.INDIRECT_Y
+
+        "OP_BRK"          | AddressingMode.IMPLIED          //INVALID
+        "OP_ADC_\0I"      | AddressingMode.IMPLIED
+        "OP_ROL_\0A"      | AddressingMode.IMPLIED
+        "OP_ADC_\0Z"      | AddressingMode.IMPLIED
+        "OP_ADC_\0Z_IX"   | AddressingMode.IMPLIED
+        "OP_ADC_Z_\0IX"   | AddressingMode.ZERO_PAGE
+        "OP_ADC_Z_\0IY"   | AddressingMode.ZERO_PAGE
+        "OP_ADC_\0ABS"    | AddressingMode.IMPLIED
+        "OP_ADC_\0ABS_IX" | AddressingMode.IMPLIED
+        "OP_ADC_ABS_\0IX" | AddressingMode.ABSOLUTE
+        "OP_ADC_ABS_\0IY" | AddressingMode.ABSOLUTE
+        "OP_ADC_\0IND"    | AddressingMode.IMPLIED
+        "OP_ADC_\0IND_IX" | AddressingMode.IMPLIED
+        "OP_ADC_IND_\0IX" | AddressingMode.INDIRECT
+        "OP_ADC_IND_\0IY" | AddressingMode.INDIRECT
     }
 
     @Unroll("Get addressing mode (INVALID): #expected")
-    testInvalidAddressingMode(){
+    testGetAddressingModeWithInvalidOpCode(){
         given:
         String description = "UNKNOWN"
 
@@ -58,9 +74,9 @@ class OpCodeConverterSpec extends Specification{
         description == "UNKNOWN"
 
         where:
-        opCodeName    | expected
-        'OP_ADC_TRX'  | "TRX Not a valid addressing mode"
-        'OP_ADC_1'    | "1 Not a valid addressing mode"
+        opCodeName        | expected
+        'OP_ADC_TRX'      | "TRX Not a valid addressing mode"
+        'OP_ADC_1'        | "1 Not a valid addressing mode"
     }
 
     @Unroll("Valid (#expected) op-code name")
