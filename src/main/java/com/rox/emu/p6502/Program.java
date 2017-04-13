@@ -3,6 +3,9 @@ package com.rox.emu.p6502;
 
 import com.rox.emu.p6502.op.OpCode;
 
+/**
+ * An immutable 6502 Program which is essentially a byte array which can be added to from different types neatly
+ */
 public class Program {
     private int[] programBytes = new int[] {};
 
