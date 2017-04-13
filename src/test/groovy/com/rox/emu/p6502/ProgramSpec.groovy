@@ -3,7 +3,7 @@ package com.rox.emu.p6502
 import com.rox.emu.p6502.op.OpCode
 import spock.lang.Specification
 
-class ProgramBuilderSpec extends Specification {
+class ProgramSpec extends Specification {
     def testCreation(){
         given:
         Program program
