@@ -30,22 +30,21 @@ class OpCodeConverterSpec extends Specification{
         addressingMode == expectedAddressingMode
 
         where:
-        opCodeName      | expectedAddressingMode
-        "OP_BRK"        | AddressingMode.IMPLIED            //VALID
-        "OP_ADC_I"      | AddressingMode.IMMEDIATE
-        "OP_ROL_A"      | AddressingMode.ACCUMULATOR
-        "OP_ADC_Z"      | AddressingMode.ZERO_PAGE
-        "OP_ADC_Z_IX"   | AddressingMode.ZERO_PAGE_X
-        "OP_ADC_Z_IY"   | AddressingMode.ZERO_PAGE_Y
-        "OP_ADC_ABS"    | AddressingMode.ABSOLUTE
-        "OP_ADC_ABS_IX" | AddressingMode.ABSOLUTE_X
-        "OP_ADC_ABS_IY" | AddressingMode.ABSOLUTE_Y
-        "OP_ADC_IND"    | AddressingMode.INDIRECT
-        "OP_ADC_IND_IX" | AddressingMode.INDIRECT_X
-        "OP_ADC_IND_IY" | AddressingMode.INDIRECT_Y
+        opCodeName        | expectedAddressingMode
+        "OP_BRK"          | AddressingMode.IMPLIED            //VALID
+        "OP_ADC_I"        | AddressingMode.IMMEDIATE
+        "OP_ROL_A"        | AddressingMode.ACCUMULATOR
+        "OP_ADC_Z"        | AddressingMode.ZERO_PAGE
+        "OP_ADC_Z_IX"     | AddressingMode.ZERO_PAGE_X
+        "OP_ADC_Z_IY"     | AddressingMode.ZERO_PAGE_Y
+        "OP_ADC_ABS"      | AddressingMode.ABSOLUTE
+        "OP_ADC_ABS_IX"   | AddressingMode.ABSOLUTE_X
+        "OP_ADC_ABS_IY"   | AddressingMode.ABSOLUTE_Y
+        "OP_ADC_IND"      | AddressingMode.INDIRECT
+        "OP_ADC_IND_IX"   | AddressingMode.INDIRECT_X
+        "OP_ADC_IND_IY"   | AddressingMode.INDIRECT_Y
 
-        "OP_BRK"          | AddressingMode.IMPLIED          //INVALID
-        "OP_ADC_\0I"      | AddressingMode.IMPLIED
+        "OP_ADC_\0I"      | AddressingMode.IMPLIED          //INVALID
         "OP_ROL_\0A"      | AddressingMode.IMPLIED
         "OP_ADC_\0Z"      | AddressingMode.IMPLIED
         "OP_ADC_\0Z_IX"   | AddressingMode.IMPLIED
