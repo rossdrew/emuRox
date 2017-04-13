@@ -29,10 +29,7 @@ public class Program {
         if (value instanceof OpCode)
             return this.with((OpCode) value);
 
-        if (value instanceof Integer)
-            return this.with((int)value);
-
-        return this;
+        return this.with((int)value);
     }
 
     public Program with(Object ... values){
