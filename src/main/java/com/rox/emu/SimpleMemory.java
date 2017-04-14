@@ -36,4 +36,11 @@ public class SimpleMemory implements Memory{
         System.out.println("FETCH mem[" + location +"] --> " + word);
         return word;
     }
+
+    @Override
+    public int[] getBlock(int from, int to) {
+        int[] extractedData = new int[to-from];
+        System.arraycopy(memoryArray, from, extractedData, 0, extractedData.length);
+        return extractedData;
+    }
 }

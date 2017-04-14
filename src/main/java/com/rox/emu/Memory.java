@@ -11,4 +11,5 @@ public interface Memory {
     void setMemory(int startLocation, int[] byteValues);
     int getByte(int location);
     int getWord(int location);
+    int[] getBlock(int from, int to);
 }
