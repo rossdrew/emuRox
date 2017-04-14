@@ -21,6 +21,7 @@ public class DebuggerWindow extends JFrame{
     private Memory memory;
 
     private final RegistersPanel registersPanel = new RegistersPanel();
+    private final MemoryPanel memoryPanel = new MemoryPanel();
 
     private String instructionName = "...";
     private final JLabel instruction = new JLabel(instructionName);
@@ -32,22 +33,26 @@ public class DebuggerWindow extends JFrame{
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setSize(1000, 500);
 
-        listModel= new DefaultListModel<String>();
+        listModel = new DefaultListModel<>();
 
         setLayout(new BorderLayout());
 
         instruction.setHorizontalAlignment(JLabel.CENTER);
 
         add(instruction, BorderLayout.NORTH);
-        add(registersPanel, BorderLayout.CENTER);
+        add(getInstructionScroller(), BorderLayout.EAST);
         add(getControlPanel(), BorderLayout.SOUTH);
-
-        JList<String> instructionList = new JList<>(listModel);
-        JScrollPane instructionScroller = new JScrollPane(instructionList);
-        add(instructionScroller, BorderLayout.EAST);
+        add(memoryPanel, BorderLayout.WEST);
+        add(registersPanel, BorderLayout.CENTER);
 
         loadProgram(getProgram());
         setVisible(true);
+    }
+
+    private JScrollPane getInstructionScroller(){
+        JList<String> instructionList = new JList<>(listModel);
+        JScrollPane instructionScroller = new JScrollPane(instructionList);
+        return instructionScroller;
     }
 
     private JPanel getControlPanel() {
@@ -93,8 +98,10 @@ public class DebuggerWindow extends JFrame{
                                     OP_STA_Z, RESAD_0,   //...
                                     OP_STA_Z, RESAD_1,   //...
                                     OP_LDX_I, 8,         //X counts each bit
-                                    OP_LSR_Z, MPR,       //:MULT(18) LSR(MPR)
+                            //:MULT(18)
+                                    OP_LSR_Z, MPR,       //LSR(MPR)
                                     OP_BCC, 13,          //Test carry and jump (forward 13) to NOADD
+
                                     OP_LDA_Z, RESAD_0,   //RESAD -> A
                                     OP_CLC,              //Prepare to add
                                     OP_ADC_Z, MPD,       //+MPD
@@ -102,13 +109,14 @@ public class DebuggerWindow extends JFrame{
                                     OP_LDA_Z, RESAD_1,   //RESAD+1 -> A
                                     OP_ADC_Z, TMP,       //+TMP
                                     OP_STA_Z, RESAD_1,   //RESAD+1 <- A
-                                    OP_ASL_Z, MPD,       //:NOADD(35) ASL(MPD)
+                            //:NOADD(35)
+                                    OP_ASL_Z, MPD,       //ASL(MPD)
                                     OP_ROL_Z, TMP,       //Save bit from MPD
                                     OP_DEX,              //--X
                                     OP_BNE, 0b11100111   //Test equal and jump (back 24) to MULT});
         };
 
-        return countToTenProgram;
+        return program;
     }
 
     public void loadProgram(int[] program){
@@ -116,6 +124,7 @@ public class DebuggerWindow extends JFrame{
         memory.setMemory(0, program);
         processor = new CPU(memory);
         registersPanel.setRegisters(processor.getRegisters());
+        memoryPanel.setMemory(memory);
         reset();
     }
 
@@ -144,6 +153,29 @@ public class DebuggerWindow extends JFrame{
 
     public static void main(String[] args){
         new DebuggerWindow();
+    }
+
+    private class MemoryPanel extends JPanel {
+        private Memory memory;
+
+        private void setMemory(Memory memory){
+            this.memory = memory;
+        }
+
+        @Override
+        public void paint(Graphics g) {
+            super.paint(g);
+
+            //Draw memory
+            g.setColor(Color.BLACK);
+            g.drawRect(20, 20, 40, 40);
+            int[] zeroPage = memory.getBlock(0, 256);
+            for (int i=0; i<zeroPage.length; i++){
+                String value = Integer.toHexString(zeroPage[i]);
+                g.drawChars(value.toCharArray(), 0, 1, 10, 10 + (i*10));
+            }
+        }
+
     }
 
     private class RegistersPanel extends JPanel {
