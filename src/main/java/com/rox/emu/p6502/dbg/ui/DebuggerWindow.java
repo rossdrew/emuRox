@@ -42,14 +42,17 @@ public class DebuggerWindow extends JFrame{
         add(instruction, BorderLayout.NORTH);
         add(getInstructionScroller(), BorderLayout.EAST);
         add(getControlPanel(), BorderLayout.SOUTH);
-        JScrollPane p = new JScrollPane(memoryPanel);
-        p.setViewportView(memoryPanel);
-
-        add(p, BorderLayout.WEST);
+        add(getMemoryPanel(), BorderLayout.WEST);
         add(registersPanel, BorderLayout.CENTER);
 
         loadProgram(getProgram());
         setVisible(true);
+    }
+
+    private JScrollPane getMemoryPanel(){
+        JScrollPane p = new JScrollPane(memoryPanel);
+        p.setViewportView(memoryPanel);
+        return p;
     }
 
     private JScrollPane getInstructionScroller(){
@@ -176,14 +179,18 @@ public class DebuggerWindow extends JFrame{
 
             setPreferredSize(new Dimension(200,3000));
             setMinimumSize(new Dimension(200,3000));
-            setBorder(BorderFactory.createEtchedBorder());
 
-            //Draw memory
+            drawMemory(g, "Zero Page", 0, 256);
+
+            g.setFont(previousFont);
+            g.setColor(previousColor);
+        }
+
+        private void drawMemory(Graphics g, String memoryBlockTitle, int from, int to) {
             g.setColor(Color.GRAY);
             g.setFont(new Font("Monospaced", Font.PLAIN, fontSize));
-            String zeroPageTitle = "Zero Page";
-            g.drawChars(zeroPageTitle.toCharArray(), 0,zeroPageTitle.length(), 10, 10);
-            int[] zeroPage = memory.getBlock(0, 256);
+            g.drawChars(memoryBlockTitle.toCharArray(), 0,memoryBlockTitle.length(), 10, 10);
+            int[] zeroPage = memory.getBlock(from, to);
             int blockSize = 2;
             for (int i=0; i < zeroPage.length; i+=blockSize){
                 String location = asHex(i);
@@ -196,9 +203,6 @@ public class DebuggerWindow extends JFrame{
 
                 g.drawChars(memoryAddress.toCharArray(), 0, memoryAddress.length(), 10, 20 + (i*10));
             }
-
-            g.setFont(previousFont);
-            g.setColor(previousColor);
         }
 
         private String asHex(Integer val){
