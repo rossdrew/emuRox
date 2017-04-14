@@ -44,20 +44,20 @@ class OpCodeConverterSpec extends Specification{
         "OP_ADC_IND_IX"   | AddressingMode.INDIRECT_X
         "OP_ADC_IND_IY"   | AddressingMode.INDIRECT_Y
 
-        "OP_ADC_\0I"      | AddressingMode.IMPLIED          //INVALID
-        "OP_ROL_\0A"      | AddressingMode.IMPLIED
-        "OP_ADC_\0Z"      | AddressingMode.IMPLIED
-        "OP_ADC_\0Z_IX"   | AddressingMode.IMPLIED
-        "OP_ADC_Z_\0IX"   | AddressingMode.ZERO_PAGE
-        "OP_ADC_Z_\0IY"   | AddressingMode.ZERO_PAGE
-        "OP_ADC_\0ABS"    | AddressingMode.IMPLIED
-        "OP_ADC_\0ABS_IX" | AddressingMode.IMPLIED
-        "OP_ADC_ABS_\0IX" | AddressingMode.ABSOLUTE
-        "OP_ADC_ABS_\0IY" | AddressingMode.ABSOLUTE
-        "OP_ADC_\0IND"    | AddressingMode.IMPLIED
-        "OP_ADC_\0IND_IX" | AddressingMode.IMPLIED
-        "OP_ADC_IND_\0IX" | AddressingMode.INDIRECT
-        "OP_ADC_IND_\0IY" | AddressingMode.INDIRECT
+//        "OP_ADC_\0I"      | AddressingMode.IMPLIED          //INVALID
+//        "OP_ROL_\0A"      | AddressingMode.IMPLIED
+//        "OP_ADC_\0Z"      | AddressingMode.IMPLIED
+//        "OP_ADC_\0Z_IX"   | AddressingMode.IMPLIED
+//        "OP_ADC_Z_\0IX"   | AddressingMode.ZERO_PAGE
+//        "OP_ADC_Z_\0IY"   | AddressingMode.ZERO_PAGE
+//        "OP_ADC_\0ABS"    | AddressingMode.IMPLIED
+//        "OP_ADC_\0ABS_IX" | AddressingMode.IMPLIED
+//        "OP_ADC_ABS_\0IX" | AddressingMode.ABSOLUTE
+//        "OP_ADC_ABS_\0IY" | AddressingMode.ABSOLUTE
+//        "OP_ADC_\0IND"    | AddressingMode.IMPLIED
+//        "OP_ADC_\0IND_IX" | AddressingMode.IMPLIED
+//        "OP_ADC_IND_\0IX" | AddressingMode.INDIRECT
+//        "OP_ADC_IND_\0IY" | AddressingMode.INDIRECT
     }
 
     @Unroll("Get addressing mode (INVALID): #expected")
