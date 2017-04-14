@@ -42,7 +42,10 @@ public class DebuggerWindow extends JFrame{
         add(instruction, BorderLayout.NORTH);
         add(getInstructionScroller(), BorderLayout.EAST);
         add(getControlPanel(), BorderLayout.SOUTH);
-        add(memoryPanel, BorderLayout.WEST);
+        JScrollPane p = new JScrollPane(memoryPanel);
+        p.setViewportView(memoryPanel);
+
+        add(p, BorderLayout.WEST);
         add(registersPanel, BorderLayout.CENTER);
 
         loadProgram(getProgram());
@@ -158,6 +161,8 @@ public class DebuggerWindow extends JFrame{
     private class MemoryPanel extends JPanel {
         private Memory memory;
 
+        private int fontSize = 13;
+
         private void setMemory(Memory memory){
             this.memory = memory;
         }
@@ -166,14 +171,34 @@ public class DebuggerWindow extends JFrame{
         public void paint(Graphics g) {
             super.paint(g);
 
+            Font previousFont = g.getFont();
+            Color previousColor = g.getColor();
+
+            setPreferredSize(new Dimension(200,3000));
+            setMinimumSize(new Dimension(200,3000));
+            setBorder(BorderFactory.createEtchedBorder());
+
             //Draw memory
             g.setColor(Color.BLACK);
-            g.drawRect(20, 20, 40, 40);
+            g.setFont(new Font("Monospaced", Font.PLAIN, fontSize));
+            g.drawChars("Zero Page".toCharArray(), 0,9, 10, 10 + 0);
             int[] zeroPage = memory.getBlock(0, 256);
             for (int i=0; i<zeroPage.length; i++){
-                String value = Integer.toHexString(zeroPage[i]);
-                g.drawChars(value.toCharArray(), 0, 1, 10, 10 + (i*10));
+                String location = asHex(i);
+                String value = asHex(zeroPage[i]);
+
+                String memoryAddress = location + " " + value;
+                g.drawChars(memoryAddress.toCharArray(), 0, memoryAddress.length(), 10, 20 + (i*10));
             }
+
+            g.setFont(previousFont);
+            g.setColor(previousColor);
+        }
+
+        private String asHex(Integer val){
+            String hex = Integer.toHexString(val).toUpperCase();
+            hex = "0x" + (hex.length() % 2 == 1 ? "0" : "") + hex;
+            return hex;
         }
 
     }
