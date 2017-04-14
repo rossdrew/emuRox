@@ -48,7 +48,7 @@ jacocoTestReport {
     }
 }
 
-task runDebugUI(type: JavaExec, group: 'run') {
+task runDebugUI(type: JavaExec, group: 'application') {
     println "Running Debugger UI for ${project.name}"
     classpath sourceSets.main.runtimeClasspath
     main = mainClassName = 'com.rox.emu.p6502.dbg.ui.DebuggerWindow'
