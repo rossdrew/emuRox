@@ -161,7 +161,7 @@ public class DebuggerWindow extends JFrame{
     private class MemoryPanel extends JPanel {
         private Memory memory;
 
-        private int fontSize = 13;
+        private int fontSize = 11;
 
         private void setMemory(Memory memory){
             this.memory = memory;
@@ -179,15 +179,21 @@ public class DebuggerWindow extends JFrame{
             setBorder(BorderFactory.createEtchedBorder());
 
             //Draw memory
-            g.setColor(Color.BLACK);
+            g.setColor(Color.GRAY);
             g.setFont(new Font("Monospaced", Font.PLAIN, fontSize));
-            g.drawChars("Zero Page".toCharArray(), 0,9, 10, 10 + 0);
+            String zeroPageTitle = "Zero Page";
+            g.drawChars(zeroPageTitle.toCharArray(), 0,zeroPageTitle.length(), 10, 10);
             int[] zeroPage = memory.getBlock(0, 256);
-            for (int i=0; i<zeroPage.length; i++){
+            int blockSize = 2;
+            for (int i=0; i < zeroPage.length; i+=blockSize){
                 String location = asHex(i);
-                String value = asHex(zeroPage[i]);
+                String memoryAddress = "[" + location + "]";
 
-                String memoryAddress = location + " " + value;
+                for (int j=0; j<blockSize; j++){
+                    String value = asHex(zeroPage[i+j]);
+                    memoryAddress += " " + value;
+                }
+
                 g.drawChars(memoryAddress.toCharArray(), 0, memoryAddress.length(), 10, 20 + (i*10));
             }
 
