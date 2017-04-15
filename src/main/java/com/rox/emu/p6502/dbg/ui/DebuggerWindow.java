@@ -57,8 +57,7 @@ public class DebuggerWindow extends JFrame{
 
     private JScrollPane getInstructionScroller(){
         JList<String> instructionList = new JList<>(listModel);
-        JScrollPane instructionScroller = new JScrollPane(instructionList);
-        return instructionScroller;
+        return new JScrollPane(instructionList);
     }
 
     private JPanel getControlPanel() {
@@ -177,32 +176,51 @@ public class DebuggerWindow extends JFrame{
             Font previousFont = g.getFont();
             Color previousColor = g.getColor();
 
-            setPreferredSize(new Dimension(200,3000));
-            setMinimumSize(new Dimension(200,3000));
+            setPreferredSize(new Dimension(210,3000));
+            setMinimumSize(new Dimension(210,3000));
 
-            drawMemory(g, "Zero Page", 0, 256);
+            drawMemory(g, 0, 256);
 
             g.setFont(previousFont);
             g.setColor(previousColor);
         }
 
-        private void drawMemory(Graphics g, String memoryBlockTitle, int from, int to) {
+        private void drawMemory(Graphics g, int from, int to) {
             g.setColor(Color.GRAY);
             g.setFont(new Font("Monospaced", Font.PLAIN, fontSize));
-            g.drawChars(memoryBlockTitle.toCharArray(), 0,memoryBlockTitle.length(), 10, 10);
-            int[] zeroPage = memory.getBlock(from, to);
-            int blockSize = 2;
-            for (int i=0; i < zeroPage.length; i+=blockSize){
-                String location = asHex(i);
-                String memoryAddress = "[" + location + "]";
 
-                for (int j=0; j<blockSize; j++){
-                    String value = asHex(zeroPage[i+j]);
-                    memoryAddress += " " + value;
+            final int[] memoryBlock = memory.getBlock(from, to);
+            final int columns = 4;
+            final int rowSize = 10;         //XXX Should be based on font size
+            final int columnSize = 40;      //XXX Should be based on font size
+            for (int i=0; i<memoryBlock.length; i++){
+                final int column = (i+1) % columns;
+                final int row = i / columns;
+                final int rowLoc = (row * rowSize);
+                final int colLoc = (column + 1) * columnSize;
+
+                if (column == 0){
+                    final String memAddressDisplay = "[" + asHex(i) + "]";
+                    drawValue(g, rowLoc, 0, memAddressDisplay);
                 }
 
-                g.drawChars(memoryAddress.toCharArray(), 0, memoryAddress.length(), 10, 20 + (i*10));
+                final String memValueDisplay = asHex(memoryBlock[i]);
+                if (memoryBlock[i] != 0x0){
+                    g.setColor(Color.BLACK);
+                    g.setFont(new Font("Monospaced", Font.BOLD, fontSize));
+                    drawValue(g, rowLoc, colLoc, memValueDisplay);
+                    g.setColor(Color.GRAY);
+                    g.setFont(new Font("Monospaced", Font.PLAIN, fontSize));
+                }else {
+                    drawValue(g, rowLoc, colLoc, memValueDisplay);
+                }
+
+
             }
+        }
+
+        private void drawValue(Graphics g, int y, int x, String memValueDisplay) {
+            g.drawChars(memValueDisplay.toCharArray(), 0, memValueDisplay.length(), x, y);
         }
 
         private String asHex(Integer val){
@@ -225,6 +243,10 @@ public class DebuggerWindow extends JFrame{
         @Override
         public void paint(Graphics g) {
             super.paint(g);
+
+            setPreferredSize(new Dimension(1000,0));
+            setMinimumSize(new Dimension(1000,0));
+
             if (registers != null)
                 drawRegisters(g, 20, 20);
         }
