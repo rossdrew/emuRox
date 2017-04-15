@@ -33,7 +33,7 @@ public class DebuggerWindow extends JFrame{
     public DebuggerWindow() {
         super("6502 Debugger");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setSize(1000, 500);
+        setSize(1200, 500);
 
         listModel = new DefaultListModel<>();
 
@@ -58,7 +58,7 @@ public class DebuggerWindow extends JFrame{
     }
 
     private JScrollPane getInstructionScroller(){
-        JList<String> instructionList = new JList<>(listModel);
+        final JList<String> instructionList = new JList<>(listModel);
         return new JScrollPane(instructionList);
     }
 
@@ -73,6 +73,7 @@ public class DebuggerWindow extends JFrame{
         controls.setLayout(new FlowLayout());
         controls.add(resetButton);
         controls.add(stepButton);
+
         return controls;
     }
 
