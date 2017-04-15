@@ -7,6 +7,8 @@ import com.rox.emu.SimpleMemory;
 import javax.swing.*;
 import java.awt.*;
 
+import com.rox.emu.p6502.dbg.ui.component.*;
+
 import static com.rox.emu.p6502.InstructionSet.*;
 import static com.rox.emu.p6502.InstructionSet.OP_BNE;
 import static com.rox.emu.p6502.InstructionSet.OP_CPX_I;
@@ -20,7 +22,7 @@ public class DebuggerWindow extends JFrame{
     private CPU processor;
     private Memory memory;
 
-    private final RegistersPanel registersPanel = new RegistersPanel();
+    private final RegisterPanel registersPanel = new RegisterPanel();
     private final MemoryPanel memoryPanel = new MemoryPanel();
 
     private String instructionName = "...";
@@ -160,181 +162,4 @@ public class DebuggerWindow extends JFrame{
         new DebuggerWindow();
     }
 
-    private class MemoryPanel extends JPanel {
-        private Memory memory;
-
-        private int fontSize = 11;
-
-        private void setMemory(Memory memory){
-            this.memory = memory;
-        }
-
-        @Override
-        public void paint(Graphics g) {
-            super.paint(g);
-
-            Font previousFont = g.getFont();
-            Color previousColor = g.getColor();
-
-            setPreferredSize(new Dimension(210,3000));
-            setMinimumSize(new Dimension(210,3000));
-
-            drawMemory(g, 0, 256);
-
-            g.setFont(previousFont);
-            g.setColor(previousColor);
-        }
-
-        private void drawMemory(Graphics g, int from, int to) {
-            g.setColor(Color.GRAY);
-            g.setFont(new Font("Monospaced", Font.PLAIN, fontSize));
-
-            final int[] memoryBlock = memory.getBlock(from, to);
-            final int columns = 4;
-            final int rowSize = 10;         //XXX Should be based on font size
-            final int columnSize = 40;      //XXX Should be based on font size
-            for (int i=0; i<memoryBlock.length; i++){
-                final int column = (i+1) % columns;
-                final int row = i / columns;
-                final int rowLoc = (row * rowSize);
-                final int colLoc = (column + 1) * columnSize;
-
-                if (column == 0){
-                    final String memAddressDisplay = "[" + asHex(i) + "]";
-                    drawValue(g, rowLoc, 0, memAddressDisplay);
-                }
-
-                final String memValueDisplay = asHex(memoryBlock[i]);
-                if (memoryBlock[i] != 0x0){
-                    g.setColor(Color.BLACK);
-                    g.setFont(new Font("Monospaced", Font.BOLD, fontSize));
-                    drawValue(g, rowLoc, colLoc, memValueDisplay);
-                    g.setColor(Color.GRAY);
-                    g.setFont(new Font("Monospaced", Font.PLAIN, fontSize));
-                }else {
-                    drawValue(g, rowLoc, colLoc, memValueDisplay);
-                }
-
-
-            }
-        }
-
-        private void drawValue(Graphics g, int y, int x, String memValueDisplay) {
-            g.drawChars(memValueDisplay.toCharArray(), 0, memValueDisplay.length(), x, y);
-        }
-
-        private String asHex(Integer val){
-            String hex = Integer.toHexString(val).toUpperCase();
-            hex = "0x" + (hex.length() % 2 == 1 ? "0" : "") + hex;
-            return hex;
-        }
-
-    }
-
-    private class RegistersPanel extends JPanel {
-        private Registers registers;
-
-        private final int bitSize = 40;
-        private final int byteSize = (bitSize*8);
-        private final int padding = 10;
-        private final int bitFontSize = 40;
-        private final int valueFontSize = 10;
-
-        @Override
-        public void paint(Graphics g) {
-            super.paint(g);
-
-            setPreferredSize(new Dimension(1000,0));
-            setMinimumSize(new Dimension(1000,0));
-
-            if (registers != null)
-                drawRegisters(g, 20, 20);
-        }
-
-        private void drawRegisters(Graphics g, int x, int y) {
-            int yLocation = y;
-            int xLocation = x;
-            int rowSize = padding + bitSize;
-            int secondByteColumn = byteSize + xLocation + padding;
-
-            drawByte(g, secondByteColumn, yLocation, registers.getRegister(Registers.REG_ACCUMULATOR), Registers.getRegisterName(Registers.REG_ACCUMULATOR));
-
-            yLocation += rowSize;
-            drawByte(g, secondByteColumn, yLocation, registers.getRegister(Registers.REG_Y_INDEX), Registers.getRegisterName(Registers.REG_Y_INDEX));
-
-            yLocation += rowSize;
-            drawByte(g, secondByteColumn, yLocation, registers.getRegister(Registers.REG_X_INDEX), Registers.getRegisterName(Registers.REG_X_INDEX));
-
-            //TODO this needs a combined value display
-            yLocation += rowSize;
-            drawByte(g, xLocation, yLocation, registers.getRegister(Registers.REG_PC_HIGH), Registers.getRegisterName(Registers.REG_PC_HIGH));
-            drawByte(g, secondByteColumn, yLocation, registers.getRegister(Registers.REG_PC_LOW), Registers.getRegisterName(Registers.REG_PC_LOW));
-
-            yLocation += rowSize;
-            g.setColor(Color.lightGray);
-            g.fillRect(secondByteColumn + (2 * bitSize), yLocation, bitSize, bitSize);
-            drawFlags(g, secondByteColumn, yLocation, registers.getRegister(Registers.REG_STATUS), "NV BDIZC".toCharArray());
-        }
-
-        private void drawFlags(Graphics g, int startX, int startY, int byteValue, char[] values){
-            char[] bitValues = to8BitString(byteValue).toCharArray();
-
-            g.setColor(Color.lightGray);
-            for (int i=0; i<8; i++){
-                g.setColor((bitValues[i] == '1') ? Color.black : Color.lightGray);
-                drawBit(g, startX + (i*bitSize), startY, values[i]);
-            }
-            g.setColor(Color.BLACK);
-            g.drawRect(startX, startY, byteSize, bitSize);
-        }
-
-        private void drawByte(Graphics g, int startX, int startY, int byteValue, String name){
-            char[] bitValues = to8BitString(byteValue).toCharArray();
-
-            g.setColor(Color.lightGray);
-            for (int i=0; i<8; i++){
-                drawBit(g, startX + (i*bitSize), startY, bitValues[i]);
-            }
-            g.setColor(Color.BLACK);
-            g.drawRect(startX, startY, byteSize, bitSize);
-
-            g.setColor(Color.RED);
-
-            g.setFont(new Font("Courier New", Font.PLAIN, valueFontSize));
-            String values = "(" + fromSignedByte(byteValue) + ", 0x" + Integer.toHexString(byteValue) + ")";
-            g.drawChars(values.toCharArray(), 0, values.length(), (startX+byteSize-bitSize), startY-1);
-
-            g.setColor(Color.blue);
-            g.drawChars(name.toCharArray(), 0, name.length(), startX, startY);
-        }
-
-        private void drawBit(Graphics g, int startX, int startY, char val){
-            g.setFont(new Font("Courier New", Font.PLAIN, bitFontSize));
-            g.drawRect(startX, startY, bitSize, bitSize);
-            //XXX Don't like these numbers, they're not relative to anything
-            g.drawChars(new char[] {val}, 0, 1, startX+5, startY+35);
-        }
-
-        public void setRegisters(Registers registers) {
-            this.registers = registers;
-        }
-
-        private int fromSignedByte(int signedByte){
-            int signedByteByte = signedByte & 0xFF;
-            if ((signedByteByte & 128) == 128)
-                return -( ( (~signedByteByte) +1) & 0xFF); //Twos compliment compensation
-            else
-                return signedByteByte & 0b01111111;
-        }
-
-        private String to8BitString(int fakeByte){
-            String formattedByteString = Integer.toBinaryString(fakeByte);
-            if (formattedByteString.length() < 8){
-                for (int i=formattedByteString.length(); i<8; i++){
-                    formattedByteString = "0" + formattedByteString;
-                }
-            }
-            return formattedByteString;
-        }
-    }
 }
