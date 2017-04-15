@@ -6,7 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * A UI panel inteded to display a block of memory
+ * A UI panel intended to display a block of memory
  */
 public class MemoryPanel extends JPanel {
     private Memory memory;
@@ -38,19 +38,20 @@ public class MemoryPanel extends JPanel {
         g.setFont(new Font("Monospaced", Font.PLAIN, fontSize));
 
         final int[] memoryBlock = memory.getBlock(from, to);
-        final int columns = 4;
-        final int rowSize = 10;         //XXX Should be based on font size
-        final int columnSize = 40;      //XXX Should be based on font size
 
-        drawIndexedBlock(g, memoryBlock, columns, rowSize, columnSize);
+        drawIndexedBlock(g, memoryBlock, 4);
     }
 
-    private void drawIndexedBlock(Graphics g, int[] memoryBlock, int columns, int rowSize, int columnSize) {
+    private void drawIndexedBlock(Graphics g, int[] memoryBlock, int columns) {
+        final int rowSize = 10;         //XXX Should be based on font size
+        final int columnSize = 40;      //XXX Should be based on font size
+        final int verticalPadding = 10;
+
         for (int i=0; i<memoryBlock.length; i++){
-            final int column = (i+1) % columns;
+            final int column = i % columns;
             final int row = i / columns;
-            final int rowLoc = (row * rowSize);
-            final int colLoc = (column + 1) * columnSize;
+            final int rowLoc = verticalPadding + (row * rowSize);
+            final int colLoc = ((column + 1) * columnSize);
 
             if (column == 0){
                 drawIndex(g, i, rowLoc);
@@ -59,25 +60,25 @@ public class MemoryPanel extends JPanel {
             if (memoryBlock[i] != 0x0){
                 drawEmphasisedValue(g, rowLoc, colLoc, asHex(memoryBlock[i]));
             }else {
-                drawValue(g, rowLoc, colLoc, asHex(memoryBlock[i]));
+                drawValue(g, colLoc, rowLoc, asHex(memoryBlock[i]));
             }
         }
     }
 
     private void drawIndex(Graphics g, int i, int rowLoc) {
         final String memAddressDisplay = "[" + asHex(i) + "]";
-        drawValue(g, rowLoc, 0, memAddressDisplay);
+        drawValue(g, 0, rowLoc, memAddressDisplay);
     }
 
     private void drawEmphasisedValue(Graphics g, int rowLoc, int colLoc, String memValueDisplay) {
         g.setColor(Color.BLACK);
         g.setFont(new Font("Monospaced", Font.BOLD, fontSize));
-        drawValue(g, rowLoc, colLoc, memValueDisplay);
+        drawValue(g, colLoc, rowLoc, memValueDisplay);
         g.setColor(Color.GRAY);
         g.setFont(new Font("Monospaced", Font.PLAIN, fontSize));
     }
 
-    private void drawValue(Graphics g, int y, int x, String memValueDisplay) {
+    private void drawValue(Graphics g, int x, int y, String memValueDisplay) {
         g.drawChars(memValueDisplay.toCharArray(), 0, memValueDisplay.length(), x, y);
     }
 
