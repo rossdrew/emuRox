@@ -5,6 +5,9 @@ import com.rox.emu.p6502.Registers;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * A UI component inteded to display 6502 registers and their state
+ */
 public class RegisterPanel extends JPanel {
     private Registers registers;
 
