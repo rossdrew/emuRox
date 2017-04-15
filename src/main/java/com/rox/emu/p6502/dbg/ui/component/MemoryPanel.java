@@ -67,7 +67,12 @@ public class MemoryPanel extends JPanel {
 
     private void drawIndex(Graphics g, int i, int rowLoc) {
         final String memAddressDisplay = "[" + asHex(i) + "]";
+
+        g.setColor(Color.RED);
+        g.setFont(new Font("Monospaced", Font.PLAIN, fontSize));
         drawValue(g, 0, rowLoc, memAddressDisplay);
+        g.setColor(Color.GRAY);
+        g.setFont(new Font("Monospaced", Font.PLAIN, fontSize));
     }
 
     private void drawEmphasisedValue(Graphics g, int rowLoc, int colLoc, String memValueDisplay) {
