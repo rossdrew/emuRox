@@ -6,7 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * A UI component inteded to display 6502 registers and their state
+ * A UI component intended to display 6502 registers and their state
  */
 public class RegisterPanel extends JPanel {
     private Registers registers;
@@ -15,14 +15,14 @@ public class RegisterPanel extends JPanel {
     private final int byteSize = (bitSize*8);
     private final int padding = 10;
     private final int bitFontSize = 40;
-    private final int valueFontSize = 10;
+    private final int valueFontSize = 11;
 
     @Override
     public void paint(Graphics g) {
         super.paint(g);
 
-        setPreferredSize(new Dimension(1000,0));
-        setMinimumSize(new Dimension(1000,0));
+        setPreferredSize(new Dimension(1200,0));
+        setMinimumSize(new Dimension(1200,0));
 
         if (registers != null)
             drawRegisters(g, 20, 20);

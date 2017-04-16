@@ -12,8 +12,7 @@ An emulator for the 6502 processor.  The plan is to evolve this into a working N
 Currently I'm looking in to the NES PPU.  Trying to garner enough information to start emulating this piece of hardware while looking at code I've wrote over the last few months and looking at where it might be improved.  For example:-
  
   - a refactor of how Op-Codes are dealt with, stored and decoded.
-  - a cleaner debug interface to better debug larger programs I'll be dealing with from now on'
-
+  - a cleaner debug interface to better debug larger programs I'll be dealing with from now on
 
 #### 6502
 

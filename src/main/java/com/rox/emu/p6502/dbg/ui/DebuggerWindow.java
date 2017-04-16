@@ -158,7 +158,8 @@ public class DebuggerWindow extends JFrame {
 
         instructionName = getOpCodeName(instr);
         final String instructionLocation = MemoryPanel.asHex(pointer);
-        final String completeInstructionInfo = "[" + instructionLocation + "] " + instructionName;
+        final String instructionCode = MemoryPanel.asHex(instr);
+        final String completeInstructionInfo = "[" + instructionLocation + "] " + instructionName + " (" + instructionCode + ")";
 
         instruction.setText(completeInstructionInfo);
         listModel.add(0, completeInstructionInfo);
