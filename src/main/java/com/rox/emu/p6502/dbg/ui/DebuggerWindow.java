@@ -18,7 +18,7 @@ import static com.rox.emu.p6502.InstructionSet.OP_CPX_I;
  *
  * @author Ross Drew
  */
-public class DebuggerWindow extends JFrame{
+public class DebuggerWindow extends JFrame {
     private CPU processor;
     private Memory memory;
 
@@ -54,12 +54,16 @@ public class DebuggerWindow extends JFrame{
     private JScrollPane getMemoryPanel(){
         JScrollPane p = new JScrollPane(memoryPanel);
         p.setViewportView(memoryPanel);
+        p.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         return p;
     }
 
-    private JScrollPane getInstructionScroller(){
+    private JComponent getInstructionScroller(){
+        JPanel instructionScrollerPanel = new JPanel();
+
         final JList<String> instructionList = new JList<>(listModel);
-        return new JScrollPane(instructionList);
+        JScrollPane scrollPane = new JScrollPane(instructionList);
+        return scrollPane;
     }
 
     private JPanel getControlPanel() {
@@ -133,6 +137,7 @@ public class DebuggerWindow extends JFrame{
         processor = new CPU(memory);
         registersPanel.setRegisters(processor.getRegisters());
         memoryPanel.setMemory(memory);
+        memoryPanel.linkTo(processor.getRegisters());
         reset();
     }
 
@@ -140,6 +145,7 @@ public class DebuggerWindow extends JFrame{
         processor.reset();
         listModel.clear();
         invalidate();
+        revalidate();
         repaint();
     }
 
@@ -151,8 +157,11 @@ public class DebuggerWindow extends JFrame{
         //TODO get arguments
 
         instructionName = getOpCodeName(instr);
-        instruction.setText(instructionName);
-        listModel.add(0, instructionName);
+        final String instructionLocation = MemoryPanel.asHex(pointer);
+        final String completeInstructionInfo = "[" + instructionLocation + "] " + instructionName;
+
+        instruction.setText(completeInstructionInfo);
+        listModel.add(0, completeInstructionInfo);
 
         processor.step();
         invalidate();
