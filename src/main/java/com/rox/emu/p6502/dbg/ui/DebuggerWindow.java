@@ -8,6 +8,8 @@ import javax.swing.*;
 import java.awt.*;
 
 import com.rox.emu.p6502.dbg.ui.component.*;
+import com.rox.emu.p6502.op.AddressingMode;
+import com.rox.emu.p6502.op.OpCode;
 
 import static com.rox.emu.p6502.InstructionSet.*;
 import static com.rox.emu.p6502.InstructionSet.OP_BNE;
@@ -151,15 +153,21 @@ public class DebuggerWindow extends JFrame {
 
     public void step(){
         //Get the next instruction
-        Registers registers = processor.getRegisters();
-        int pointer = registers.getRegister(Registers.REG_PC_LOW) | (registers.getRegister(Registers.REG_PC_HIGH) << 8);
-        int instr = memory.getByte(pointer);
-        //TODO get arguments
+        final Registers registers = processor.getRegisters();
+        final int pointer = registers.getRegister(Registers.REG_PC_LOW) | (registers.getRegister(Registers.REG_PC_HIGH) << 8);
+        final int instr = memory.getByte(pointer);
+        final int args = getArgumentCount(instr);
+
+        String arguments = "";
+        if (args == 1)
+            arguments += " " + MemoryPanel.asHex(memory.getByte(pointer + 1));
+        if (args == 2)
+            arguments += " " + MemoryPanel.asHex(memory.getByte(pointer + 2));
 
         instructionName = getOpCodeName(instr);
         final String instructionLocation = MemoryPanel.asHex(pointer);
         final String instructionCode = MemoryPanel.asHex(instr);
-        final String completeInstructionInfo = "[" + instructionLocation + "] " + instructionName + " (" + instructionCode + ")";
+        final String completeInstructionInfo = "[" + instructionLocation + "] (" + instructionCode + arguments + ") :" + instructionName;
 
         instruction.setText(completeInstructionInfo);
         listModel.add(0, completeInstructionInfo);
@@ -167,6 +175,12 @@ public class DebuggerWindow extends JFrame {
         processor.step();
         invalidate();
         repaint();
+    }
+
+    private int getArgumentCount(int instr) {
+        final OpCode opCode = OpCode.from(instr);
+        final AddressingMode addressingMode = opCode.getAddressingMode();
+        return addressingMode.getInstructionBytes() - 1;
     }
 
     public static void main(String[] args){

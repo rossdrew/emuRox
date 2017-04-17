@@ -1,5 +1,7 @@
 package com.rox.emu.p6502.op;
 
+import com.rox.emu.UnknownOpCodeException;
+
 public enum OpCode {
     OP_BRK(0x00),
     OP_ASL_A(0x0A),
@@ -184,6 +186,15 @@ public enum OpCode {
         this.byteValue = byteValue;
         this.addressingMode = OpCodeConverter.getAddressingMode(this.name());
         description = OpCodeConverter.toDescription(this.name());
+    }
+
+    public static OpCode from(int byteValue){
+        for (OpCode opcode : OpCode.values()){
+            if (opcode.getByteValue() == byteValue)
+                return opcode;
+        }
+
+        throw new UnknownOpCodeException("Unknown operation code value while creating OpCode object" + Integer.toHexString(byteValue), byteValue);
     }
 
     public int getByteValue(){

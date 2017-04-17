@@ -123,7 +123,7 @@ class OpCodeConverter {
                     indexingModeDescription += INDEX_Y;
                     break;
                 default:
-                    throw new UnknownOpCodeException("Unrecognised indexing mode " + t[OP_ADD], Arrays.toString(t));
+                    throw new UnknownOpCodeException("Unrecognised indexing mode " + t[OP_ADD] + " in " + Arrays.toString(t), Arrays.toString(t));
             }
         }
         return indexingModeDescription;
