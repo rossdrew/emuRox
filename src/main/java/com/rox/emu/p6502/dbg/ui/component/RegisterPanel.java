@@ -24,6 +24,11 @@ public class RegisterPanel extends JPanel {
         setPreferredSize(new Dimension(1200,0));
         setMinimumSize(new Dimension(1200,0));
 
+        if (g instanceof Graphics2D){
+            Graphics2D g2d = (Graphics2D)g;
+            g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        }
+
         if (registers != null)
             drawRegisters(g, 20, 20);
     }
@@ -79,17 +84,17 @@ public class RegisterPanel extends JPanel {
 
         g.setFont(new Font("Courier New", Font.PLAIN, valueFontSize));
         String values = "(" + fromSignedByte(byteValue) + ", 0x" + Integer.toHexString(byteValue) + ")";
-        g.drawChars(values.toCharArray(), 0, values.length(), (startX+byteSize-bitSize), startY-1);
+        g.drawString(values, (startX+byteSize-bitSize), startY-1);
 
         g.setColor(Color.blue);
-        g.drawChars(name.toCharArray(), 0, name.length(), startX, startY);
+        g.drawString(name, startX, startY);
     }
 
     private void drawBit(Graphics g, int startX, int startY, char val){
         g.setFont(new Font("Courier New", Font.PLAIN, bitFontSize));
         g.drawRect(startX, startY, bitSize, bitSize);
         //XXX Don't like these numbers, they're not relative to anything
-        g.drawChars(new char[] {val}, 0, 1, startX+5, startY+35);
+        g.drawString(""+val, startX+5, startY+35);
     }
 
     public void setRegisters(Registers registers) {

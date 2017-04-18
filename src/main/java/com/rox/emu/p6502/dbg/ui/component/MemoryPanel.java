@@ -43,6 +43,11 @@ public class MemoryPanel extends JPanel {
     public void paint(Graphics g) {
         super.paint(g);
 
+        if (g instanceof Graphics2D){
+            Graphics2D g2d = (Graphics2D)g;
+            g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        }
+
         final Font previousFont = g.getFont();
         final Color previousColor = g.getColor();
 
@@ -103,7 +108,7 @@ public class MemoryPanel extends JPanel {
     }
 
     private void drawValue(Graphics g, int x, int y, String memValueDisplay) {
-        g.drawChars(memValueDisplay.toCharArray(), 0, memValueDisplay.length(), x, y);
+        g.drawString(memValueDisplay, x, y);
     }
 
     private void setTextFormatting(Graphics g, Font font, Color color){
