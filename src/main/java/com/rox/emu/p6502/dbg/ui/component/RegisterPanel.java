@@ -31,6 +31,8 @@ public class RegisterPanel extends JPanel {
 
         if (registers != null)
             drawRegisters(g, 20, 20);
+
+        setPreferredSize(new Dimension(padding + (byteSize * 2), padding + (bitSize * 6)));
     }
 
     private void drawRegisters(Graphics g, int x, int y) {

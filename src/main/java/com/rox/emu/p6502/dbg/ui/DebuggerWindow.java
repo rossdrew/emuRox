@@ -47,24 +47,32 @@ public class DebuggerWindow extends JFrame {
         add(getInstructionScroller(), BorderLayout.EAST);
         add(getControlPanel(), BorderLayout.SOUTH);
         add(getMemoryPanel(), BorderLayout.WEST);
-        add(registersPanel, BorderLayout.CENTER);
+        add(getRegisterPanel(), BorderLayout.CENTER);
 
         loadProgram(getProgram());
         setVisible(true);
+        pack();
     }
 
-    private JScrollPane getMemoryPanel(){
+    private JComponent getRegisterPanel(){
+        return registersPanel;
+    }
+
+    private JComponent getMemoryPanel(){
         JScrollPane p = new JScrollPane(memoryPanel);
         p.setViewportView(memoryPanel);
         p.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        return p;
+
+        JTabbedPane memoryTabs = new JTabbedPane();
+        memoryTabs.addTab("Zero Page",memoryPanel);
+
+        return memoryTabs;
     }
 
     private JComponent getInstructionScroller(){
-        JPanel instructionScrollerPanel = new JPanel();
-
         final JList<String> instructionList = new JList<>(listModel);
         JScrollPane scrollPane = new JScrollPane(instructionList);
+        scrollPane.setPreferredSize(new Dimension(300, 200));
         return scrollPane;
     }
 
