@@ -13,6 +13,7 @@ Currently I'm looking in to the NES PPU.  Trying to garner enough information to
  
   - a refactor of how Op-Codes are dealt with, stored and decoded.
   - a cleaner debug interface to better debug larger programs I'll be dealing with from now on
+  - getting rid of java performed arithmetic in favor of ALU performed arithmetic, it's causing problems...as expected
 
 #### 6502
 
