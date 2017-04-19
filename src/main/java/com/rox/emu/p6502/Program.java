@@ -9,6 +9,10 @@ import com.rox.emu.p6502.op.OpCode;
 public class Program {
     private int[] programBytes = new int[] {};
 
+    public Program(){
+        this(new int[]{});
+    }
+
     private Program(int[] programBytes){
         this.programBytes = programBytes;
     }

@@ -4136,7 +4136,7 @@ class OpCodeSpec extends Specification {
 
     @Unroll("RTI #expected ")
     testRTI(){
-        when: 'We have a program which will be interrupted'
+        when: 'We have a programText which will be interrupted'
         Memory memory = new SimpleMemory()
         int[] program = [OP_LDA_I, 1,
                          OP_LDA_I, 2, //--> IRQ Here
@@ -4188,8 +4188,8 @@ class OpCodeSpec extends Specification {
 //    def exampleTest(){
 //        when:
 //        Memory memory = new SimpleMemory(65534)
-//        int[] program = []
-//        memory.setMemory(0, program)
+//        int[] programText = []
+//        memory.setMemory(0, programText)
 //
 //        and:
 //        CPU processor = new CPU(memory)
@@ -4200,7 +4200,7 @@ class OpCodeSpec extends Specification {
 //        processor.step(1)
 //
 //        then:
-//        registers.getPC() == program.length
+//        registers.getPC() == programText.length
 //
 //        where:
 //        A | B

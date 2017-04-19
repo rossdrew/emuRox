@@ -9,7 +9,7 @@ import java.util.Arrays;
  *
  * e.g.  OP_ADC_I  ->  "ADC (Immediate)"
  */
-class OpCodeConverter {
+public class OpCodeConverter {
     //Internal representation details
     private static final String SEPARATOR = "_";
     private static final int OP_DELIMITER = 0;

@@ -179,13 +179,15 @@ public enum OpCode {
     OP_RTS(0x60);
 
     private final int byteValue;
+    private final String opCodeName;
     private final String description;
     private final AddressingMode addressingMode;
 
     OpCode(int byteValue){
         this.byteValue = byteValue;
         this.addressingMode = OpCodeConverter.getAddressingMode(this.name());
-        description = OpCodeConverter.toDescription(this.name());
+        this.opCodeName = OpCodeConverter.getOpCode(this.name());
+        this.description = OpCodeConverter.toDescription(this.name());
     }
 
     public static OpCode from(int byteValue){
@@ -200,6 +202,8 @@ public enum OpCode {
     public int getByteValue(){
         return byteValue;
     }
+
+    public String getOpCodeName() {return opCodeName;}
 
     public AddressingMode getAddressingMode(){
         return this.addressingMode;
