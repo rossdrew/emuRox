@@ -89,7 +89,7 @@ public class RegisterPanel extends JPanel {
         g.drawString(values, (startX + byteSize - bitSize - (values.length() * (valueFontSize/2))), startY-1);
 
         g.setColor(Color.blue);
-        g.drawString(name, startX, startY);
+        g.drawString(name, startX, startY-1);
     }
 
     private void drawBit(Graphics g, int startX, int startY, char val){
