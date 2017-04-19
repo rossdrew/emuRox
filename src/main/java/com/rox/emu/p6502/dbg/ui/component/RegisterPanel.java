@@ -84,7 +84,7 @@ public class RegisterPanel extends JPanel {
 
         g.setFont(new Font("Courier New", Font.PLAIN, valueFontSize));
         String values = "(" + fromSignedByte(byteValue) + ", 0x" + Integer.toHexString(byteValue) + ")";
-        g.drawString(values, (startX+byteSize-bitSize), startY-1);
+        g.drawString(values, (startX + byteSize - bitSize - (values.length() * (valueFontSize/2))), startY-1);
 
         g.setColor(Color.blue);
         g.drawString(name, startX, startY);
