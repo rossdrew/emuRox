@@ -39,25 +39,6 @@ public class MemoryPanel extends JPanel {
         this.registers = registers;
     }
 
-    @Override
-    public void paint(Graphics g) {
-        super.paint(g);
-
-        if (g instanceof Graphics2D){
-            Graphics2D g2d = (Graphics2D)g;
-            g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-        }
-
-        final Font previousFont = g.getFont();
-        final Color previousColor = g.getColor();
-
-        setPreferredSize(new Dimension(componentWidth, componentHeight));
-
-        drawMemory(g, 0, blockSize);
-
-        setTextFormatting(g, previousFont, previousColor);
-    }
-
     private void drawMemory(Graphics g, int from, int to) {
         setTextFormatting(g, standardFont, standardColor);
 
@@ -120,6 +101,28 @@ public class MemoryPanel extends JPanel {
         String hex = Integer.toHexString(val).toUpperCase();
         hex = "0x" + (hex.length() % 2 == 1 ? "0" : "") + hex;
         return hex;
+    }
+
+    @Override
+    public Dimension getPreferredSize() {
+        return new Dimension(componentWidth, componentHeight);
+    }
+
+    @Override
+    public void paint(Graphics g) {
+        super.paint(g);
+
+        if (g instanceof Graphics2D){
+            Graphics2D g2d = (Graphics2D)g;
+            g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        }
+
+        final Font previousFont = g.getFont();
+        final Color previousColor = g.getColor();
+
+        drawMemory(g, 0, blockSize);
+
+        setTextFormatting(g, previousFont, previousColor);
     }
 
 }

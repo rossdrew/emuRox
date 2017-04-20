@@ -17,24 +17,6 @@ public class RegisterPanel extends JPanel {
     private final int bitFontSize = 40;
     private final int valueFontSize = 11;
 
-    @Override
-    public void paint(Graphics g) {
-        super.paint(g);
-
-        setPreferredSize(new Dimension(1200,0));
-        setMinimumSize(new Dimension(1200,0));
-
-        if (g instanceof Graphics2D){
-            Graphics2D g2d = (Graphics2D)g;
-            g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-        }
-
-        if (registers != null)
-            drawRegisters(g, 20, 20);
-
-        setPreferredSize(new Dimension(padding + (byteSize * 2), padding + (bitSize * 6)));
-    }
-
     private void drawRegisters(Graphics g, int x, int y) {
         int yLocation = y;
         int xLocation = x;
@@ -119,5 +101,24 @@ public class RegisterPanel extends JPanel {
             }
         }
         return formattedByteString;
+    }
+
+    @Override
+    public Dimension getPreferredSize() {
+        //TODO this doesn't seem to work
+        return new Dimension(padding + (byteSize * 2), padding + (bitSize * 6));
+    }
+
+    @Override
+    public void paint(Graphics g) {
+        super.paint(g);
+
+        if (g instanceof Graphics2D){
+            Graphics2D g2d = (Graphics2D)g;
+            g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        }
+
+        if (registers != null)
+            drawRegisters(g, 20, 20);
     }
 }

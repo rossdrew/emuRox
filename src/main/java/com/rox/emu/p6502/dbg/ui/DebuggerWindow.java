@@ -5,6 +5,7 @@ import com.rox.emu.p6502.CPU;
 import com.rox.emu.p6502.Registers;
 import com.rox.emu.SimpleMemory;
 import javax.swing.*;
+import javax.swing.plaf.basic.BasicSplitPaneUI;
 import java.awt.*;
 
 import com.rox.emu.p6502.dbg.ui.component.*;
@@ -35,14 +36,11 @@ public class DebuggerWindow extends JFrame {
     public DebuggerWindow() {
         super("6502 Debugger");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setSize(1200, 500);
 
         listModel = new DefaultListModel<>();
-
-        setLayout(new BorderLayout());
-
         instruction.setHorizontalAlignment(JLabel.CENTER);
 
+        setLayout(new BorderLayout());
         add(instruction, BorderLayout.NORTH);
         add(getInstructionScroller(), BorderLayout.EAST);
         add(getControlPanel(), BorderLayout.SOUTH);
@@ -59,7 +57,7 @@ public class DebuggerWindow extends JFrame {
     }
 
     private JComponent getMemoryPanel(){
-        JScrollPane p = new JScrollPane(memoryPanel);
+        JScrollPane p = new JScrollPane();
         p.setViewportView(memoryPanel);
         p.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
@@ -196,4 +194,8 @@ public class DebuggerWindow extends JFrame {
         new DebuggerWindow();
     }
 
+    @Override
+    public Dimension getPreferredSize() {
+        return new Dimension(1200, 500);
+    }
 }
