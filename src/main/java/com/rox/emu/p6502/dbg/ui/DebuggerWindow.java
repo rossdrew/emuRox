@@ -160,14 +160,20 @@ public class DebuggerWindow extends JFrame {
     }
 
     public void step(){
-        //Get the next instruction
+        upDateWithNextInstruction();
+
+        processor.step();
+        invalidate();
+        repaint();
+    }
+
+    private void upDateWithNextInstruction() {
         final Registers registers = processor.getRegisters();
-        final int pointer = registers.getRegister(Registers.REG_PC_LOW) | (registers.getRegister(Registers.REG_PC_HIGH) << 8);
+        final int pointer = registers.getPC();
         final int instr = memory.getByte(pointer);
-        final int args = getArgumentCount(instr);
 
         String arguments = "";
-        for (int i=0; i<args; i++ ){
+        for (int i=0; i<getArgumentCount(instr); i++ ){
             arguments += " " + MemoryPanel.asHex(memory.getByte(pointer + (i+1)));
         }
 
@@ -178,10 +184,6 @@ public class DebuggerWindow extends JFrame {
 
         instruction.setText(completeInstructionInfo);
         listModel.add(0, completeInstructionInfo);
-
-        processor.step();
-        invalidate();
-        repaint();
     }
 
     private int getArgumentCount(int instr) {
