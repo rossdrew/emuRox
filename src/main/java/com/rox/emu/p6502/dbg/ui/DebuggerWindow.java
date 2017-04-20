@@ -167,10 +167,9 @@ public class DebuggerWindow extends JFrame {
         final int args = getArgumentCount(instr);
 
         String arguments = "";
-        if (args == 1)
-            arguments += " " + MemoryPanel.asHex(memory.getByte(pointer + 1));
-        if (args == 2)
-            arguments += " " + MemoryPanel.asHex(memory.getByte(pointer + 2));
+        for (int i=0; i<args; i++ ){
+            arguments += " " + MemoryPanel.asHex(memory.getByte(pointer + (i+1)));
+        }
 
         instructionName = getOpCodeName(instr);
         final String instructionLocation = MemoryPanel.asHex(pointer);
