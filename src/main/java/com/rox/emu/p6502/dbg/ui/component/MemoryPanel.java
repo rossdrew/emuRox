@@ -31,23 +31,26 @@ public class MemoryPanel extends JPanel {
     private final Color currentInstructionColor = new Color(9, 178, 0);
     private final Color addressColor = new Color(201, 0, 12);
 
-    public void setMemory(Memory memory){
+    private int memoryStart;
+
+    public void setMemory(Memory memory, int from){
         this.memory = memory;
+        this.memoryStart = from;
     }
 
     public void linkTo(Registers registers){
         this.registers = registers;
     }
 
-    private void drawMemory(Graphics g, int from, int to) {
+    private void drawMemory(Graphics g, int from) {
         setTextFormatting(g, standardFont, standardColor);
 
-        final int[] memoryBlock = memory.getBlock(from, to);
+        final int[] memoryBlock = memory.getBlock(from, from + blockSize);
 
-        drawIndexedBlock(g, memoryBlock, 4);
+        drawIndexedBlock(g, memoryBlock, from, 4);
     }
 
-    private void drawIndexedBlock(Graphics g, int[] memoryBlock, int columns) {
+    private void drawIndexedBlock(Graphics g, int[] memoryBlock, int memoryOffset, int columns) {
         int pcLoLocation = -1;
         if (registers!=null)
             pcLoLocation = registers.getRegister(Registers.REG_PC_LOW);
@@ -62,7 +65,7 @@ public class MemoryPanel extends JPanel {
                 drawIndex(g, i, rowLoc);
             }
 
-            if (i == pcLoLocation){
+            if ((memoryOffset + i) == pcLoLocation){
                 setTextFormatting(g, emphasisFont, currentInstructionColor);
                 drawValue(g, colLoc, rowLoc, asHex(memoryBlock[i]));
                 setTextFormatting(g, standardFont, standardColor);
@@ -120,7 +123,7 @@ public class MemoryPanel extends JPanel {
         final Font previousFont = g.getFont();
         final Color previousColor = g.getColor();
 
-        drawMemory(g, 0, blockSize);
+        drawMemory(g, memoryStart);
 
         setTextFormatting(g, previousFont, previousColor);
     }
