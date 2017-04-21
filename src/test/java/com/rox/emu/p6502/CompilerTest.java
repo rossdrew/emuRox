@@ -3,10 +3,9 @@ package com.rox.emu.p6502;
 import com.rox.emu.UnknownOpCodeException;
 import org.junit.Test;
 
+import static com.rox.emu.p6502.op.OpCode.OP_ADC_I;
 import static com.rox.emu.p6502.op.OpCode.OP_SEC;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 /**
  * # - Memory
@@ -26,12 +25,21 @@ import static org.junit.Assert.fail;
  */
 public class CompilerTest {
     @Test
-    public void firstTest(){
-        Compiler compiler = new Compiler("SEC");
+    public void testImpliedInstruction(){
+        Compiler compiler = new Compiler(OP_SEC.getOpCodeName());
 
         int[] bytes = compiler.getBytes();
 
         assertEquals(bytes[0], OP_SEC.getByteValue());
+    }
+
+    @Test
+    public void testImmediateInstruction(){
+        Compiler compiler = new Compiler(OP_ADC_I.getOpCodeName() + " " + "#$10");
+
+        int[] bytes = compiler.getBytes();
+
+        assertArrayEquals(new int[] {OP_ADC_I.getByteValue(), 10}, bytes);
     }
 
     @Test
