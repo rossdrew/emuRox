@@ -107,22 +107,4 @@ public class Compiler {
         prefixMatcher.find();
         return prefixMatcher.group(0);
     }
-
-    private int decodeToken(StringTokenizer tokenizer) throws UnknownOpCodeException {
-        String token = tokenizer.nextToken();
-
-        //  OpCodeName [ Param1 | Param1 Param2 ]
-
-        switch(token){
-            case "SEC":
-                return OpCode.OP_SEC.getByteValue();
-            case "ADC":
-                final String value = tokenizer.nextToken().trim();
-                if (value.startsWith("#$")){
-
-                }
-            default:
-                throw new UnknownOpCodeException("Unknown op-code while parsing program", token);
-        }
-    }
 }
