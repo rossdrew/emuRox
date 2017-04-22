@@ -3,6 +3,7 @@ package com.rox.emu.p6502;
 import com.rox.emu.UnknownOpCodeException;
 import com.rox.emu.p6502.op.AddressingMode;
 import com.rox.emu.p6502.op.OpCode;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.stream.Stream;
@@ -43,6 +44,18 @@ public class CompilerTest {
     public void testImmediateInstructions(){
         OpCode.streamOf(AddressingMode.IMMEDIATE).forEach((opcode)->{
             Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + Compiler.IMMEDIATE_PREFIX + "10");
+
+            int[] bytes = compiler.getBytes();
+
+            assertArrayEquals(new int[] {opcode.getByteValue(), 10}, bytes);
+        });
+    }
+
+    @Test
+    @Ignore
+    public void testZeroPageInstructions(){
+        OpCode.streamOf(AddressingMode.ZERO_PAGE).forEach((opcode)->{
+            Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + Compiler.VALUE_PREFIX + "10");
 
             int[] bytes = compiler.getBytes();
 

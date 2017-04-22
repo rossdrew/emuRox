@@ -10,7 +10,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Compiler {
-    public static final String IMMEDIATE_PREFIX = "#$";
+    public static final String VALUE_PREFIX = "$";
+    public static final String IMMEDIATE_PREFIX = "#" + VALUE_PREFIX;
 
     private static final Pattern PREFIX_REGEX = Pattern.compile("^\\D+");
     private static final Pattern VALUE_REGEX = Pattern.compile("\\d+");
