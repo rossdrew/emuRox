@@ -40,14 +40,10 @@ public class Compiler {
                     break;
                 case "ADC":
                     final String valueToken = tokenizer.nextToken().trim();
-                    final Matcher prefixMatcher = PREFIX_REGEX.matcher(valueToken);
-                    prefixMatcher.find();
-                    final Matcher valueMatcher = VALUE_REGEX.matcher(valueToken);
-                    valueMatcher.find();
-                    String group = prefixMatcher.group(0);
-                    String value = valueMatcher.group(0);
+                    final String prefix = extractFirstOccurrence(PREFIX_REGEX, valueToken);
+                    final String value = extractFirstOccurrence(VALUE_REGEX, valueToken);
 
-                    if (group.compareToIgnoreCase("#$") == 0){ //TODO can I convert this to an AddressingMode and can that convert an ADC to an addressed OP_ADC_I
+                    if (prefix.compareToIgnoreCase("#$") == 0){ //TODO can I convert this to an AddressingMode and can that convert an ADC to an addressed OP_ADC_I
                         program[i++] = OpCode.OP_ADC_I.getByteValue();
                         program[i++] = Integer.decode(value);
                     }
@@ -58,6 +54,12 @@ public class Compiler {
         }
 
         return Arrays.copyOf(program, i);
+    }
+
+    private String extractFirstOccurrence(Pattern pattern, String token){
+        final Matcher prefixMatcher = pattern.matcher(token);
+        prefixMatcher.find();
+        return prefixMatcher.group(0);
     }
 
     private int decodeToken(StringTokenizer tokenizer) throws UnknownOpCodeException {
