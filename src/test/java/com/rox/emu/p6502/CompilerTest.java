@@ -27,7 +27,7 @@ import static org.junit.Assert.*;
  */
 public class CompilerTest {
     @Test
-    public void testImpliedInstruction(){
+    public void testImpliedInstructions(){
         for (OpCode opcode : OpCode.values()){
             if (opcode.getAddressingMode() == AddressingMode.IMPLIED){
                 Compiler compiler = new Compiler(opcode.getOpCodeName());
@@ -40,7 +40,7 @@ public class CompilerTest {
     }
 
     @Test
-    public void testImmediateInstruction(){
+    public void testImmediateInstructions(){
         for (OpCode opcode : OpCode.values()){
             if (opcode.getAddressingMode() == AddressingMode.IMMEDIATE){
                 Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + "#$10");
@@ -50,12 +50,6 @@ public class CompilerTest {
                 assertArrayEquals(new int[] {opcode.getByteValue(), 10}, bytes);
             }
         }
-
-//        Compiler compiler = new Compiler(OP_ADC_I.getOpCodeName() + " " + "#$10");
-//
-//        int[] bytes = compiler.getBytes();
-//
-//        assertArrayEquals(new int[] {OP_ADC_I.getByteValue(), 10}, bytes);
     }
 
     @Test
