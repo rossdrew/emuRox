@@ -41,11 +41,21 @@ public class CompilerTest {
 
     @Test
     public void testImmediateInstruction(){
-        Compiler compiler = new Compiler(OP_ADC_I.getOpCodeName() + " " + "#$10");
+        for (OpCode opcode : OpCode.values()){
+            if (opcode.getAddressingMode() == AddressingMode.IMMEDIATE){
+                Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + "#$10");
 
-        int[] bytes = compiler.getBytes();
+                int[] bytes = compiler.getBytes();
 
-        assertArrayEquals(new int[] {OP_ADC_I.getByteValue(), 10}, bytes);
+                assertArrayEquals(new int[] {opcode.getByteValue(), 10}, bytes);
+            }
+        }
+
+//        Compiler compiler = new Compiler(OP_ADC_I.getOpCodeName() + " " + "#$10");
+//
+//        int[] bytes = compiler.getBytes();
+//
+//        assertArrayEquals(new int[] {OP_ADC_I.getByteValue(), 10}, bytes);
     }
 
     @Test

@@ -73,6 +73,16 @@ public class Compiler {
                     program[i++] = OpCode.from(opCodeToken).getByteValue();
                     break;
                 case "ADC":
+                case "LDA":
+                case "AND":
+                case "ORA":
+                case "EOR":
+                case "SBC":
+                case "LDY":
+                case "LDX":
+                case "CMP":
+                case "CPX":
+                case "CPY":
                     final String valueToken = tokenizer.nextToken().trim();
                     final String prefix = extractFirstOccurrence(PREFIX_REGEX, valueToken);
                     final String value = extractFirstOccurrence(VALUE_REGEX, valueToken);
