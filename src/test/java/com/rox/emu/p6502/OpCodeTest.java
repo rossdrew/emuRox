@@ -1,8 +1,10 @@
 package com.rox.emu.p6502;
 
+import com.rox.emu.p6502.op.AddressingMode;
 import com.rox.emu.p6502.op.OpCode;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -20,5 +22,27 @@ public class OpCodeTest {
         for (OpCode o : OpCode.values()){
             assertFalse(o.toString().isEmpty());
         }
+    }
+
+    @Test
+    public void testOpcodeName(){
+        for (OpCode o : OpCode.values()){
+            assertFalse(o.getOpCodeName().isEmpty());
+        }
+    }
+
+    @Test
+    public void testFromOpcodeName(){
+        for (OpCode o : OpCode.values()){
+            if (o.getAddressingMode() == AddressingMode.IMPLIED)
+                assertEquals(o, OpCode.from(o.getOpCodeName()));
+            assertEquals(o, OpCode.from(o.getOpCodeName(), o.getAddressingMode()));
+        }
+    }
+
+    @Test
+    public void testStreamOf(){
+        OpCode.streamOf(AddressingMode.IMPLIED).forEach((opcode)->assertEquals(opcode, OpCode.from(opcode.getOpCodeName())));
+        OpCode.streamOf(AddressingMode.ZERO_PAGE).forEach((opcode)->assertEquals(opcode, OpCode.from(opcode.getOpCodeName(), opcode.getAddressingMode())));
     }
 }
