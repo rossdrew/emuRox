@@ -5,6 +5,8 @@ import com.rox.emu.p6502.op.AddressingMode;
 import com.rox.emu.p6502.op.OpCode;
 import org.junit.Test;
 
+import java.util.stream.Stream;
+
 import static com.rox.emu.p6502.op.OpCode.OP_ADC_I;
 import static com.rox.emu.p6502.op.OpCode.OP_SEC;
 import static org.junit.Assert.*;
@@ -28,28 +30,24 @@ import static org.junit.Assert.*;
 public class CompilerTest {
     @Test
     public void testImpliedInstructions(){
-        for (OpCode opcode : OpCode.values()){
-            if (opcode.getAddressingMode() == AddressingMode.IMPLIED){
-                Compiler compiler = new Compiler(opcode.getOpCodeName());
+        OpCode.streamOf(AddressingMode.IMPLIED).forEach((opcode)->{
+            Compiler compiler = new Compiler(opcode.getOpCodeName());
 
-                int[] bytes = compiler.getBytes();
+            int[] bytes = compiler.getBytes();
 
-                assertEquals("Wrong byte value for " + opcode.getOpCodeName() + "(" + opcode.getByteValue() + ")", opcode.getByteValue(), bytes[0]);
-            }
-        }
+            assertEquals("Wrong byte value for " + opcode.getOpCodeName() + "(" + opcode.getByteValue() + ")", opcode.getByteValue(), bytes[0]);
+        });
     }
 
     @Test
     public void testImmediateInstructions(){
-        for (OpCode opcode : OpCode.values()){
-            if (opcode.getAddressingMode() == AddressingMode.IMMEDIATE){
-                Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + Compiler.IMMEDIATE_PREFIX + "10");
+        OpCode.streamOf(AddressingMode.IMMEDIATE).forEach((opcode)->{
+            Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + Compiler.IMMEDIATE_PREFIX + "10");
 
-                int[] bytes = compiler.getBytes();
+            int[] bytes = compiler.getBytes();
 
-                assertArrayEquals(new int[] {opcode.getByteValue(), 10}, bytes);
-            }
-        }
+            assertArrayEquals(new int[] {opcode.getByteValue(), 10}, bytes);
+        });
     }
 
     @Test

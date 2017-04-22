@@ -2,6 +2,8 @@ package com.rox.emu.p6502.op;
 
 import com.rox.emu.UnknownOpCodeException;
 
+import java.util.stream.Stream;
+
 public enum OpCode {
     OP_BRK(0x00),
     OP_ASL_A(0x0A),
@@ -227,6 +229,11 @@ public enum OpCode {
 
     public AddressingMode getAddressingMode(){
         return this.addressingMode;
+    }
+
+    public static Stream<OpCode> streamOf(AddressingMode addressingMode){
+        return Stream.of(OpCode.values())
+                .filter(o -> o.getAddressingMode() == addressingMode);
     }
 
     @Override
