@@ -87,7 +87,7 @@ public class Compiler {
                     final String prefix = extractFirstOccurrence(PREFIX_REGEX, valueToken);
                     final String value = extractFirstOccurrence(VALUE_REGEX, valueToken);
 
-                    if (prefix.compareToIgnoreCase(IMMEDIATE_PREFIX) == 0){
+                    if (prefix.equalsIgnoreCase(IMMEDIATE_PREFIX)){
                         AddressingMode addressingMode = AddressingMode.IMMEDIATE;
 
                         program[i++] = OpCode.from(opCodeToken, addressingMode).getByteValue();
