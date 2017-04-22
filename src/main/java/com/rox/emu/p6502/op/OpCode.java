@@ -196,7 +196,7 @@ public enum OpCode {
                 return opcode;
         }
 
-        throw new UnknownOpCodeException("Unknown operation code value while creating OpCode object" + Integer.toHexString(byteValue), byteValue);
+        throw new UnknownOpCodeException("Unknown operation code value while creating OpCode object: " + Integer.toHexString(byteValue), byteValue);
     }
 
     public static OpCode from(String opCodeName){
@@ -205,7 +205,18 @@ public enum OpCode {
                 return opcode;
         }
 
-        throw new UnknownOpCodeException("Unknown opcode name while creating OpCode object" + opCodeName, opCodeName);
+        throw new UnknownOpCodeException("Unknown opcode name while creating OpCode object: " + opCodeName, opCodeName);
+    }
+
+    public static OpCode from(String opCodeName, AddressingMode addressingMode){
+        for (OpCode opcode : OpCode.values()){
+            if (opcode.getOpCodeName().equalsIgnoreCase(opCodeName)) {
+                if (opcode.getAddressingMode() == addressingMode)
+                    return opcode;
+            }
+        }
+
+        throw new UnknownOpCodeException("Unknown opcode name while creating OpCode object: " + opCodeName + " in " + addressingMode, opCodeName);
     }
 
     public int getByteValue(){

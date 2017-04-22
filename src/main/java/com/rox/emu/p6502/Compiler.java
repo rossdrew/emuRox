@@ -1,6 +1,7 @@
 package com.rox.emu.p6502;
 
 import com.rox.emu.UnknownOpCodeException;
+import com.rox.emu.p6502.op.AddressingMode;
 import com.rox.emu.p6502.op.OpCode;
 
 import java.util.Arrays;
@@ -30,11 +31,11 @@ public class Compiler {
 
         StringTokenizer tokenizer = new StringTokenizer(programText);
         while (tokenizer.hasMoreTokens()){
-            String token = tokenizer.nextToken();
+            String opCodeToken = tokenizer.nextToken();
 
             //  OpCodeName [ Param1 | Param1 Param2 ]
 
-            switch(token){
+            switch(opCodeToken){
                 case "TAX":
                 case "TAY":
                 case "TYA":
@@ -69,20 +70,22 @@ public class Compiler {
                 case "CLV":
                 case "BRK":
                 case "NOP":
-                    program[i++] = OpCode.from(token).getByteValue();
+                    program[i++] = OpCode.from(opCodeToken).getByteValue();
                     break;
                 case "ADC":
                     final String valueToken = tokenizer.nextToken().trim();
                     final String prefix = extractFirstOccurrence(PREFIX_REGEX, valueToken);
                     final String value = extractFirstOccurrence(VALUE_REGEX, valueToken);
 
-                    if (prefix.compareToIgnoreCase("#$") == 0){ //TODO can I convert this to an AddressingMode and can that convert an ADC to an addressed OP_ADC_I
-                        program[i++] = OpCode.OP_ADC_I.getByteValue();
+                    if (prefix.compareToIgnoreCase("#$") == 0){
+                        AddressingMode addressingMode = AddressingMode.IMMEDIATE;
+
+                        program[i++] = OpCode.from(opCodeToken, addressingMode).getByteValue();
                         program[i++] = Integer.decode(value);
                     }
                     break;
                 default:
-                    throw new UnknownOpCodeException("Unknown op-code (\"" + token + "\") while parsing program", token);
+                    throw new UnknownOpCodeException("Unknown op-code (\"" + opCodeToken + "\") while parsing program", opCodeToken);
             }
         }
 
