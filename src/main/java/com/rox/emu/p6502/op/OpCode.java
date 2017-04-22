@@ -199,6 +199,15 @@ public enum OpCode {
         throw new UnknownOpCodeException("Unknown operation code value while creating OpCode object" + Integer.toHexString(byteValue), byteValue);
     }
 
+    public static OpCode from(String opCodeName){
+        for (OpCode opcode : OpCode.values()){
+            if (opcode.getOpCodeName().equalsIgnoreCase(opCodeName))
+                return opcode;
+        }
+
+        throw new UnknownOpCodeException("Unknown opcode name while creating OpCode object" + opCodeName, opCodeName);
+    }
+
     public int getByteValue(){
         return byteValue;
     }

@@ -1,6 +1,8 @@
 package com.rox.emu.p6502;
 
 import com.rox.emu.UnknownOpCodeException;
+import com.rox.emu.p6502.op.AddressingMode;
+import com.rox.emu.p6502.op.OpCode;
 import org.junit.Test;
 
 import static com.rox.emu.p6502.op.OpCode.OP_ADC_I;
@@ -26,11 +28,15 @@ import static org.junit.Assert.*;
 public class CompilerTest {
     @Test
     public void testImpliedInstruction(){
-        Compiler compiler = new Compiler(OP_SEC.getOpCodeName());
+        for (OpCode opcode : OpCode.values()){
+            if (opcode.getAddressingMode() == AddressingMode.IMPLIED){
+                Compiler compiler = new Compiler(opcode.getOpCodeName());
 
-        int[] bytes = compiler.getBytes();
+                int[] bytes = compiler.getBytes();
 
-        assertEquals(bytes[0], OP_SEC.getByteValue());
+                assertEquals("Wrong byte value for " + opcode.getOpCodeName() + "(" + opcode.getByteValue() + ")", opcode.getByteValue(), bytes[0]);
+            }
+        }
     }
 
     @Test

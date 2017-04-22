@@ -35,8 +35,41 @@ public class Compiler {
             //  OpCodeName [ Param1 | Param1 Param2 ]
 
             switch(token){
+                case "TAX":
+                case "TAY":
+                case "TYA":
+                case "TXA":
+                case "TXS":
+                case "TXY":
+                case "TSX":
+                case "PHA":
+                case "PLA":
+                case "PHP":
+                case "PLP":
+                case "INY":
+                case "DEY":
+                case "INX":
+                case "DEX":
+                case "RTS":
+                case "JSR":
+                case "BPL":
+                case "BMI":
+                case "BVC":
+                case "BVS":
+                case "BCC":
+                case "BCS":
+                case "BNE":
+                case "BEQ":
                 case "SEC":
-                    program[i++] = OpCode.OP_SEC.getByteValue();
+                case "CLC":
+                case "SEI":
+                case "SED":
+                case "CLD":
+                case "CLI":
+                case "CLV":
+                case "BRK":
+                case "NOP":
+                    program[i++] = OpCode.from(token).getByteValue();
                     break;
                 case "ADC":
                     final String valueToken = tokenizer.nextToken().trim();
@@ -49,7 +82,7 @@ public class Compiler {
                     }
                     break;
                 default:
-                    throw new UnknownOpCodeException("Unknown op-code while parsing program", token);
+                    throw new UnknownOpCodeException("Unknown op-code (\"" + token + "\") while parsing program", token);
             }
         }
 
