@@ -85,8 +85,8 @@ public class Compiler {
                 case "CPX":
                 case "CPY":
                     final String valueToken = tokenizer.nextToken().trim();
-                    final String prefix = extractFirstOccurrence(PREFIX_REGEX, valueToken);
-                    final String value = extractFirstOccurrence(VALUE_REGEX, valueToken);
+                    final String prefix = extractFirstOccurrence(PREFIX_REGEX, valueToken, opCodeToken);
+                    final String value = extractFirstOccurrence(VALUE_REGEX, valueToken, opCodeToken);
 
                     if (prefix.equalsIgnoreCase(IMMEDIATE_PREFIX)){
                         AddressingMode addressingMode = AddressingMode.IMMEDIATE;
@@ -103,9 +103,14 @@ public class Compiler {
         return Arrays.copyOf(program, i);
     }
 
-    private String extractFirstOccurrence(Pattern pattern, String token){
+    private String extractFirstOccurrence(Pattern pattern, String token, String opCode){
         final Matcher prefixMatcher = pattern.matcher(token);
         prefixMatcher.find();
-        return prefixMatcher.group(0);
+        try {
+            String result = prefixMatcher.group();
+            return prefixMatcher.group();
+        }catch(IllegalStateException | ArrayIndexOutOfBoundsException e){
+            throw new UnknownOpCodeException("Could not parse argument for " + opCode + " from '" + token + "'", token, e);
+        }
     }
 }

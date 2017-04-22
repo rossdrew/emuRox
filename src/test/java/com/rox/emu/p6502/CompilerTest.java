@@ -3,6 +3,7 @@ package com.rox.emu.p6502;
 import com.rox.emu.UnknownOpCodeException;
 import com.rox.emu.p6502.op.AddressingMode;
 import com.rox.emu.p6502.op.OpCode;
+import com.sun.org.apache.bcel.internal.classfile.Unknown;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -73,5 +74,19 @@ public class CompilerTest {
         }catch(UnknownOpCodeException e){
             assertNotNull(e);
         }
+    }
+
+    @Test
+    public void testInvalidValuePrefix(){
+        try {
+            Compiler compiler = new Compiler("ADC @$ 10");
+            int[] bytes = compiler.getBytes();
+            fail("Invalid argument structure should throw an exception");
+        }catch (UnknownOpCodeException e){
+            assertFalse(e.getMessage().isEmpty());
+            assertFalse(e.getCause() == null);
+            assertFalse(e.getOpCode() == null);
+        }
+
     }
 }
