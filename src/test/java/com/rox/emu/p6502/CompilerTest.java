@@ -7,6 +7,7 @@ import com.sun.org.apache.bcel.internal.classfile.Unknown;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.stream.Stream;
 
 import static com.rox.emu.p6502.op.OpCode.OP_ADC_I;
@@ -79,14 +80,26 @@ public class CompilerTest {
     @Test
     public void testInvalidValuePrefix(){
         try {
-            Compiler compiler = new Compiler("ADC @$ 10");
+            Compiler compiler = new Compiler("ADC @$10");
             int[] bytes = compiler.getBytes();
-            fail("Invalid argument structure should throw an exception");
+            fail("Invalid argument structure should throw an exception but was " + Arrays.toString(bytes));
         }catch (UnknownOpCodeException e){
             assertFalse(e.getMessage().isEmpty());
             assertFalse(e.getCause() == null);
             assertFalse(e.getOpCode() == null);
         }
+    }
 
+    @Test
+    public void testUnimplemented(){
+        try {
+            Compiler compiler = new Compiler("ADC $10");
+            int[] bytes = compiler.getBytes();
+            fail("Invalid argument structure should throw an exception but was " + Arrays.toString(bytes));
+        }catch (UnknownOpCodeException e){
+            assertFalse(e.getMessage().isEmpty());
+            assertFalse(e.getCause() == null);
+            assertFalse(e.getOpCode() == null);
+        }
     }
 }
