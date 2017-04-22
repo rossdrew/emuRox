@@ -43,7 +43,7 @@ public class CompilerTest {
     public void testImmediateInstructions(){
         for (OpCode opcode : OpCode.values()){
             if (opcode.getAddressingMode() == AddressingMode.IMMEDIATE){
-                Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + "#$10");
+                Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + Compiler.IMMEDIATE_PREFIX + "10");
 
                 int[] bytes = compiler.getBytes();
 
