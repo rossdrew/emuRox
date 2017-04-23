@@ -13,7 +13,7 @@ public class Compiler {
     public static final String VALUE_PREFIX = "$";
     public static final String IMMEDIATE_PREFIX = "#" + VALUE_PREFIX;
 
-    private static final Pattern PREFIX_REGEX = Pattern.compile("^[(#$?)|($)?]\\D+"); //XXX This doesn't pick up 'ADC $10'
+    private static final Pattern PREFIX_REGEX = Pattern.compile("^[(#$)?|($)?]\\D+"); //XXX This doesn't pick up 'ADC $10'
     private static final Pattern VALUE_REGEX = Pattern.compile("\\d+");
 
     private final String programText;
@@ -93,8 +93,6 @@ public class Compiler {
 
                         program[i++] = OpCode.from(opCodeToken, addressingMode).getByteValue();
                         program[i++] = Integer.decode(value);
-                    }else{
-                        throw new UnknownOpCodeException("Addressing mode or opcode not implemented", valueToken + " " + prefix + value);
                     }
                     break;
                 default:

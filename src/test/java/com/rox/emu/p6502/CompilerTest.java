@@ -90,16 +90,5 @@ public class CompilerTest {
         }
     }
 
-    @Test
-    public void testUnimplemented(){
-        try {
-            Compiler compiler = new Compiler("ADC $10");
-            int[] bytes = compiler.getBytes();
-            fail("Invalid argument structure should throw an exception but was " + Arrays.toString(bytes));
-        }catch (UnknownOpCodeException e){
-            assertFalse(e.getMessage().isEmpty());
-            assertFalse(e.getCause() == null);
-            assertFalse(e.getOpCode() == null);
-        }
-    }
+
 }
