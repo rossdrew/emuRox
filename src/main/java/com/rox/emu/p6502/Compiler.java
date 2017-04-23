@@ -37,38 +37,18 @@ public class Compiler {
             //  OpCodeName [ Param1 | Param1 Param2 ]
 
             switch(opCodeToken){
-                case "TAX":
-                case "TAY":
-                case "TYA":
-                case "TXA":
-                case "TXS":
-                case "TXY":
-                case "TSX":
-                case "PHA":
-                case "PLA":
-                case "PHP":
-                case "PLP":
-                case "INY":
-                case "DEY":
-                case "INX":
-                case "DEX":
+                case "TAX": case "TAY":
+                case "TYA": case "TXA": case "TXS": case "TXY": case "TSX":
+                case "PHA": case "PLA":
+                case "PHP": case "PLP":
+                case "INY": case "DEY":
+                case "INX": case "DEX":
                 case "RTS":
                 case "JSR":
-                case "BPL":
-                case "BMI":
-                case "BVC":
-                case "BVS":
-                case "BCC":
-                case "BCS":
-                case "BNE":
-                case "BEQ":
-                case "SEC":
-                case "CLC":
-                case "SEI":
-                case "SED":
-                case "CLD":
-                case "CLI":
-                case "CLV":
+                case "BPL": case "BMI": case "BVC": case "BVS": case "BCC": case "BCS": case "BNE": case "BEQ":
+                case "SEC": case "CLC":
+                case "SEI": case "SED":
+                case "CLD": case "CLI": case "CLV":
                 case "BRK":
                 case "NOP":
                     program[i++] = OpCode.from(opCodeToken).getByteValue();
