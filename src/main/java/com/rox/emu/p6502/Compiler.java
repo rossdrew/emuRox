@@ -43,7 +43,7 @@ public class Compiler {
                 case "PHP": case "PLP":
                 case "INY": case "DEY":
                 case "INX": case "DEX":
-                case "RTS":
+                case "RTS": case "RTI":
                 case "JSR":
                 case "BPL": case "BMI": case "BVC": case "BVS": case "BCC": case "BCS": case "BNE": case "BEQ":
                 case "SEC": case "CLC":
@@ -53,17 +53,10 @@ public class Compiler {
                 case "NOP":
                     program[i++] = OpCode.from(opCodeToken).getByteValue();
                     break;
-                case "ADC":
-                case "LDA":
-                case "AND":
-                case "ORA":
-                case "EOR":
-                case "SBC":
-                case "LDY":
-                case "LDX":
-                case "ASL":
-                case "ROL":
-                case "LSR":
+                case "ADC": case "SBC":
+                case "LDA": case "LDY": case "LDX":
+                case "AND": case "ORA": case "EOR":
+                case "ASL": case "ROL": case "LSR":
                 case "STY": case "STX": case "STA":
                 case "CMP": case "CPX": case "CPY":
                 case "INC": case "DEC":
