@@ -68,6 +68,8 @@ public class Compiler {
                 case "CMP": case "CPX": case "CPY":
                 case "INC": case "DEC":
                 case "BIT":
+
+                case "JMP": //Absolute only
                     final String valueToken = tokenizer.nextToken().trim();
                     final String prefix = extractFirstOccurrence(PREFIX_REGEX, valueToken, opCodeToken);
                     final String value = extractFirstOccurrence(VALUE_REGEX, valueToken, opCodeToken);
@@ -89,13 +91,14 @@ public class Compiler {
         if (prefix.equalsIgnoreCase(IMMEDIATE_PREFIX)){
             return AddressingMode.IMMEDIATE;
         }else if (prefix.equalsIgnoreCase(VALUE_PREFIX)){
-            //1 or 2 characters == ZERO PAGE
-            return AddressingMode.ZERO_PAGE;
-
-            //3 or 4 characters == Absolute
-        }else{
-            throw new UnknownOpCodeException("Invalid or unimplemented", prefix+value);
+            if (value.length() <= 3)
+                return AddressingMode.ZERO_PAGE;
+            else if (value.length() <= 4){
+                return AddressingMode.ABSOLUTE;
+            }
         }
+
+        throw new UnknownOpCodeException("Invalid or unimplemented", prefix+value);
     }
 
     private String extractFirstOccurrence(Pattern pattern, String token, String opCode){

@@ -61,6 +61,17 @@ public class CompilerTest {
     }
 
     @Test
+    public void testAbsoluteInstructions(){
+        OpCode.streamOf(AddressingMode.ABSOLUTE).forEach((opcode)->{
+            Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + Compiler.VALUE_PREFIX + "1234");
+
+            int[] bytes = compiler.getBytes();
+
+            assertArrayEquals(new int[] {opcode.getByteValue(), 1234}, bytes);
+        });
+    }
+
+    @Test
     public void firstInvalidOpcode(){
         Compiler compiler = new Compiler("ROX");
 
