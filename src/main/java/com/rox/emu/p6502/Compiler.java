@@ -13,7 +13,7 @@ public class Compiler {
     public static final String VALUE_PREFIX = "$";
     public static final String IMMEDIATE_PREFIX = "#" + VALUE_PREFIX;
 
-    private static final Pattern PREFIX_REGEX = Pattern.compile("^[(#$)?|($)?]\\D+"); //XXX This doesn't pick up 'ADC $10'
+    private static final Pattern PREFIX_REGEX = Pattern.compile("^\\D+"); //XXX This doesn't pick up 'ADC $10' : [(#$)?|($)?]
     private static final Pattern VALUE_REGEX = Pattern.compile("\\d+");
 
     private final String programText;
@@ -34,7 +34,7 @@ public class Compiler {
         while (tokenizer.hasMoreTokens()){
             String opCodeToken = tokenizer.nextToken();
 
-            //  OpCodeName [ Param1 | Param1 Param2 ]
+            //  OpCodeName Param1(1..2 bytes)
 
             switch(opCodeToken){
                 case "TAX": case "TAY":
@@ -61,19 +61,21 @@ public class Compiler {
                 case "SBC":
                 case "LDY":
                 case "LDX":
-                case "CMP":
-                case "CPX":
-                case "CPY":
+                case "ASL":
+                case "ROL":
+                case "LSR":
+                case "STY": case "STX": case "STA":
+                case "CMP": case "CPX": case "CPY":
+                case "INC": case "DEC":
+                case "BIT":
                     final String valueToken = tokenizer.nextToken().trim();
                     final String prefix = extractFirstOccurrence(PREFIX_REGEX, valueToken, opCodeToken);
                     final String value = extractFirstOccurrence(VALUE_REGEX, valueToken, opCodeToken);
 
-                    if (prefix.equalsIgnoreCase(IMMEDIATE_PREFIX)){
-                        AddressingMode addressingMode = AddressingMode.IMMEDIATE;
+                    final AddressingMode addressingMode = getAddressingModeFrom(prefix, value);
 
-                        program[i++] = OpCode.from(opCodeToken, addressingMode).getByteValue();
-                        program[i++] = Integer.decode(value);
-                    }
+                    program[i++] = OpCode.from(opCodeToken, addressingMode).getByteValue();
+                    program[i++] = Integer.decode(value);
                     break;
                 default:
                     throw new UnknownOpCodeException("Unknown op-code (\"" + opCodeToken + "\") while parsing program", opCodeToken);
@@ -83,11 +85,23 @@ public class Compiler {
         return Arrays.copyOf(program, i);
     }
 
+    private AddressingMode getAddressingModeFrom(String prefix, String value){
+        if (prefix.equalsIgnoreCase(IMMEDIATE_PREFIX)){
+            return AddressingMode.IMMEDIATE;
+        }else if (prefix.equalsIgnoreCase(VALUE_PREFIX)){
+            //1 or 2 characters == ZERO PAGE
+            return AddressingMode.ZERO_PAGE;
+
+            //3 or 4 characters == Absolute
+        }else{
+            throw new UnknownOpCodeException("Invalid or unimplemented", prefix+value);
+        }
+    }
+
     private String extractFirstOccurrence(Pattern pattern, String token, String opCode){
         final Matcher prefixMatcher = pattern.matcher(token);
         prefixMatcher.find();
         try {
-            String result = prefixMatcher.group();
             return prefixMatcher.group();
         }catch(IllegalStateException | ArrayIndexOutOfBoundsException e){
             throw new UnknownOpCodeException("Could not parse argument for " + opCode + " from '" + token + "'", token, e);

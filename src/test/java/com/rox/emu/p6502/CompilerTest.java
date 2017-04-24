@@ -3,15 +3,10 @@ package com.rox.emu.p6502;
 import com.rox.emu.UnknownOpCodeException;
 import com.rox.emu.p6502.op.AddressingMode;
 import com.rox.emu.p6502.op.OpCode;
-import com.sun.org.apache.bcel.internal.classfile.Unknown;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Arrays;
-import java.util.stream.Stream;
 
-import static com.rox.emu.p6502.op.OpCode.OP_ADC_I;
-import static com.rox.emu.p6502.op.OpCode.OP_SEC;
 import static org.junit.Assert.*;
 
 /**
@@ -19,6 +14,7 @@ import static org.junit.Assert.*;
  * $ - Value
  *
  *  #$V               - Immediate
+ *  #VV               - Accumulator
  *  $V / $ VV         - Zero Page
  *  $V,X / $VV,X      - Zero Page[X]
  *  $V,Y / $VV,Y      - Zero Page[Y]
@@ -54,7 +50,6 @@ public class CompilerTest {
     }
 
     @Test
-    @Ignore
     public void testZeroPageInstructions(){
         OpCode.streamOf(AddressingMode.ZERO_PAGE).forEach((opcode)->{
             Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + Compiler.VALUE_PREFIX + "10");
@@ -85,7 +80,6 @@ public class CompilerTest {
             fail("Invalid argument structure should throw an exception but was " + Arrays.toString(bytes));
         }catch (UnknownOpCodeException e){
             assertFalse(e.getMessage().isEmpty());
-            assertFalse(e.getCause() == null);
             assertFalse(e.getOpCode() == null);
         }
     }
