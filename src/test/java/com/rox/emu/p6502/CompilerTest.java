@@ -51,6 +51,7 @@ public class CompilerTest {
 
     @Test
     public void testZeroPageInstructions(){
+        //TODO Test single character argument
         OpCode.streamOf(AddressingMode.ZERO_PAGE).forEach((opcode)->{
             Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + Compiler.VALUE_PREFIX + "10");
 
@@ -62,6 +63,7 @@ public class CompilerTest {
 
     @Test
     public void testAbsoluteInstructions(){
+        //TODO test three character argument
         OpCode.streamOf(AddressingMode.ABSOLUTE).forEach((opcode)->{
             Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + Compiler.VALUE_PREFIX + "1234");
 
