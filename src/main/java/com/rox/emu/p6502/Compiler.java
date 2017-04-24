@@ -16,6 +16,7 @@ public class Compiler {
 
     private static final Pattern PREFIX_REGEX = Pattern.compile("^\\D+");
     private static final Pattern VALUE_REGEX = Pattern.compile("\\d+");
+    private static final Pattern POSTFIX_REGEX = Pattern.compile("[^\\d]*$");
 
     private final String programText;
 
@@ -69,8 +70,9 @@ public class Compiler {
                     final String valueToken = tokenizer.nextToken().trim();
                     final String prefix = extractFirstOccurrence(PREFIX_REGEX, valueToken, opCodeToken);
                     final String value = extractFirstOccurrence(VALUE_REGEX, valueToken, opCodeToken);
+                    final String postfix = extractFirstOccurrence(POSTFIX_REGEX, valueToken, opCodeToken);
 
-                    final AddressingMode addressingMode = getAddressingModeFrom(prefix, value);
+                    final AddressingMode addressingMode = getAddressingModeFrom(prefix, value, postfix);
 
                     program[i++] = OpCode.from(opCodeToken, addressingMode).getByteValue();
                     program[i++] = Integer.decode(value);
@@ -83,15 +85,21 @@ public class Compiler {
         return Arrays.copyOf(program, i);
     }
 
-    private AddressingMode getAddressingModeFrom(String prefix, String value){
+    private AddressingMode getAddressingModeFrom(String prefix, String value, String postfix){
         if (prefix.equalsIgnoreCase(IMMEDIATE_VALUE_PREFIX)) {
             return AddressingMode.IMMEDIATE;
         }else if (prefix.equalsIgnoreCase(IMMEDIATE_PREFIX)){
             return AddressingMode.ACCUMULATOR;
         }else if (prefix.equalsIgnoreCase(VALUE_PREFIX)){
-            if (value.length() <= 3)
-                return AddressingMode.ZERO_PAGE;
-            else if (value.length() <= 4){
+            if (value.length() <= 3) {
+                if (postfix.equalsIgnoreCase(",X")) {
+                    return AddressingMode.ZERO_PAGE_X;
+                } else if (postfix.equalsIgnoreCase(",X")){
+                    return AddressingMode.ZERO_PAGE_Y;
+                } else {
+                    return AddressingMode.ZERO_PAGE;
+                }
+            }else if (value.length() <= 4){
                 return AddressingMode.ABSOLUTE;
             }
         }
