@@ -10,8 +10,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Compiler {
+    public static final String IMMEDIATE_PREFIX = "#";
     public static final String VALUE_PREFIX = "$";
-    public static final String IMMEDIATE_PREFIX = "#" + VALUE_PREFIX;
+    public static final String IMMEDIATE_VALUE_PREFIX = IMMEDIATE_PREFIX + VALUE_PREFIX;
 
     private static final Pattern PREFIX_REGEX = Pattern.compile("^\\D+");
     private static final Pattern VALUE_REGEX = Pattern.compile("\\d+");
@@ -63,6 +64,8 @@ public class Compiler {
                 case "BIT":
 
                 case "JMP": //Absolute only
+
+                case "ROR": //Accumulator only
                     final String valueToken = tokenizer.nextToken().trim();
                     final String prefix = extractFirstOccurrence(PREFIX_REGEX, valueToken, opCodeToken);
                     final String value = extractFirstOccurrence(VALUE_REGEX, valueToken, opCodeToken);
@@ -81,8 +84,10 @@ public class Compiler {
     }
 
     private AddressingMode getAddressingModeFrom(String prefix, String value){
-        if (prefix.equalsIgnoreCase(IMMEDIATE_PREFIX)){
+        if (prefix.equalsIgnoreCase(IMMEDIATE_VALUE_PREFIX)) {
             return AddressingMode.IMMEDIATE;
+        }else if (prefix.equalsIgnoreCase(IMMEDIATE_PREFIX)){
+            return AddressingMode.ACCUMULATOR;
         }else if (prefix.equalsIgnoreCase(VALUE_PREFIX)){
             if (value.length() <= 3)
                 return AddressingMode.ZERO_PAGE;

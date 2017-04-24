@@ -41,6 +41,17 @@ public class CompilerTest {
     @Test
     public void testImmediateInstructions(){
         OpCode.streamOf(AddressingMode.IMMEDIATE).forEach((opcode)->{
+            Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + Compiler.IMMEDIATE_VALUE_PREFIX + "10");
+
+            int[] bytes = compiler.getBytes();
+
+            assertArrayEquals(new int[] {opcode.getByteValue(), 10}, bytes);
+        });
+    }
+
+    @Test
+    public void testAccumulatorInstructions(){
+        OpCode.streamOf(AddressingMode.ACCUMULATOR).forEach((opcode)->{
             Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + Compiler.IMMEDIATE_PREFIX + "10");
 
             int[] bytes = compiler.getBytes();
