@@ -40,6 +40,7 @@ public class CompilerTest {
 
     @Test
     public void testImmediateInstructions(){
+        //TODO Single single character argument
         OpCode.streamOf(AddressingMode.IMMEDIATE).forEach((opcode)->{
             Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + Compiler.IMMEDIATE_VALUE_PREFIX + "10");
 
@@ -51,6 +52,7 @@ public class CompilerTest {
 
     @Test
     public void testAccumulatorInstructions(){
+        //TODO Single single character argument
         OpCode.streamOf(AddressingMode.ACCUMULATOR).forEach((opcode)->{
             Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + Compiler.IMMEDIATE_PREFIX + "10");
 
@@ -117,6 +119,18 @@ public class CompilerTest {
             int[] bytes = compiler.getBytes();
 
             assertArrayEquals("Output for '" + opcode.toString() + "' was wrong.", new int[] {opcode.getByteValue(), 1234}, bytes);
+        });
+    }
+
+    @Test
+    public void testIndirectXInstructions(){
+        //TODO test one character argument
+        OpCode.streamOf(AddressingMode.INDIRECT_X).forEach((opcode)->{
+            Compiler compiler = new Compiler(opcode.getOpCodeName() + " (" + Compiler.VALUE_PREFIX + "12" + ",X)");
+
+            int[] bytes = compiler.getBytes();
+
+            assertArrayEquals(new int[] {opcode.getByteValue(), 12}, bytes);
         });
     }
 
