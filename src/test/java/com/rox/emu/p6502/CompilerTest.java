@@ -135,6 +135,18 @@ public class CompilerTest {
     }
 
     @Test
+    public void testIndirectYInstructions(){
+        //TODO test one character argument
+        OpCode.streamOf(AddressingMode.INDIRECT_Y).forEach((opcode)->{
+            Compiler compiler = new Compiler(opcode.getOpCodeName() + " (" + Compiler.VALUE_PREFIX + "12" + "),Y");
+
+            int[] bytes = compiler.getBytes();
+
+            assertArrayEquals(new int[] {opcode.getByteValue(), 12}, bytes);
+        });
+    }
+
+    @Test
     public void firstInvalidOpcode(){
         Compiler compiler = new Compiler("ROX");
 

@@ -17,11 +17,13 @@ public class Compiler {
     public static final String IMMEDIATE_PREFIX = "#";
     public static final String VALUE_PREFIX = "$";
     public static final String IMMEDIATE_VALUE_PREFIX = IMMEDIATE_PREFIX + VALUE_PREFIX;
-    public static final String INDIRECT_X_PREFIX = "(" + VALUE_PREFIX;
+    public static final String INDIRECT_PREFIX = "(" + VALUE_PREFIX;
 
     public static final String X_INDEXED_POSTFIX = ",X";
     public static final String Y_INDEXED_POSTFIX = ",Y";
     public static final String INDIRECT_X_POSTFIX = X_INDEXED_POSTFIX + ")";
+    public static final String INDIRECT_Y_POSTFIX = ")" + Y_INDEXED_POSTFIX;
+
 
     private final String programText;
 
@@ -113,9 +115,11 @@ public class Compiler {
                     return AddressingMode.ABSOLUTE;
                 }
             }
-        }else if (prefix.equalsIgnoreCase(INDIRECT_X_PREFIX)){
+        }else if (prefix.equalsIgnoreCase(INDIRECT_PREFIX)){
             if (postfix.equalsIgnoreCase(INDIRECT_X_POSTFIX)){
                 return AddressingMode.INDIRECT_X;
+            }else if (postfix.equalsIgnoreCase(INDIRECT_Y_POSTFIX)){
+                return AddressingMode.INDIRECT_Y;
             }
         }
 
