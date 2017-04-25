@@ -109,6 +109,18 @@ public class CompilerTest {
     }
 
     @Test
+    public void testAbsoluteXInstructions(){
+        //TODO test three character argument
+        OpCode.streamOf(AddressingMode.ABSOLUTE_X).forEach((opcode)->{
+            Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + Compiler.VALUE_PREFIX + "1234,X");
+
+            int[] bytes = compiler.getBytes();
+
+            assertArrayEquals("Output for '" + opcode.toString() + "' was wrong.", new int[] {opcode.getByteValue(), 1234}, bytes);
+        });
+    }
+
+    @Test
     public void firstInvalidOpcode(){
         Compiler compiler = new Compiler("ROX");
 

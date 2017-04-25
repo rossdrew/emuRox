@@ -100,7 +100,13 @@ public class Compiler {
                     return AddressingMode.ZERO_PAGE;
                 }
             }else if (value.length() <= 4){
-                return AddressingMode.ABSOLUTE;
+                if (postfix.equalsIgnoreCase(",X")) {
+                    return AddressingMode.ABSOLUTE_X;
+                } else if (postfix.equalsIgnoreCase(",Y")){
+                    return AddressingMode.ABSOLUTE_Y;
+                } else {
+                    return AddressingMode.ABSOLUTE;
+                }
             }
         }
 
