@@ -94,7 +94,7 @@ public class Compiler {
             if (value.length() <= 3) {
                 if (postfix.equalsIgnoreCase(",X")) {
                     return AddressingMode.ZERO_PAGE_X;
-                } else if (postfix.equalsIgnoreCase(",X")){
+                } else if (postfix.equalsIgnoreCase(",Y")){
                     return AddressingMode.ZERO_PAGE_Y;
                 } else {
                     return AddressingMode.ZERO_PAGE;

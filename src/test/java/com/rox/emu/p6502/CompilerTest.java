@@ -45,7 +45,7 @@ public class CompilerTest {
 
             int[] bytes = compiler.getBytes();
 
-            assertArrayEquals(new int[] {opcode.getByteValue(), 10}, bytes);
+            assertArrayEquals("Output for '" + opcode.toString() + "' was wrong.", new int[] {opcode.getByteValue(), 10}, bytes);
         });
     }
 
@@ -56,7 +56,7 @@ public class CompilerTest {
 
             int[] bytes = compiler.getBytes();
 
-            assertArrayEquals(new int[] {opcode.getByteValue(), 10}, bytes);
+            assertArrayEquals("Output for '" + opcode.toString() + "' was wrong.", new int[] {opcode.getByteValue(), 10}, bytes);
         });
     }
 
@@ -68,7 +68,7 @@ public class CompilerTest {
 
             int[] bytes = compiler.getBytes();
 
-            assertArrayEquals(new int[] {opcode.getByteValue(), 10}, bytes);
+            assertArrayEquals("Output for '" + opcode.toString() + "' was wrong.", new int[] {opcode.getByteValue(), 10}, bytes);
         });
     }
 
@@ -80,7 +80,19 @@ public class CompilerTest {
 
             int[] bytes = compiler.getBytes();
 
-            assertArrayEquals(new int[] {opcode.getByteValue(), 10}, bytes);
+            assertArrayEquals("Output for '" + opcode.toString() + "' was wrong.", new int[] {opcode.getByteValue(), 10}, bytes);
+        });
+    }
+
+    @Test
+    public void testZeroPageYInstructions(){
+        //TODO Test single character argument
+        OpCode.streamOf(AddressingMode.ZERO_PAGE_Y).forEach((opcode)->{
+            Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + Compiler.VALUE_PREFIX + "10,Y");
+
+            int[] bytes = compiler.getBytes();
+
+            assertArrayEquals("Output for '" + opcode.toString() + "' was wrong.", new int[] {opcode.getByteValue(), 10}, bytes);
         });
     }
 
@@ -92,7 +104,7 @@ public class CompilerTest {
 
             int[] bytes = compiler.getBytes();
 
-            assertArrayEquals(new int[] {opcode.getByteValue(), 1234}, bytes);
+            assertArrayEquals("Output for '" + opcode.toString() + "' was wrong.", new int[] {opcode.getByteValue(), 1234}, bytes);
         });
     }
 
