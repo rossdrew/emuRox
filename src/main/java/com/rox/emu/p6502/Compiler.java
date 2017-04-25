@@ -10,13 +10,16 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Compiler {
+    private static final Pattern PREFIX_REGEX = Pattern.compile("^\\D+");
+    private static final Pattern VALUE_REGEX = Pattern.compile("\\d+");
+    private static final Pattern POSTFIX_REGEX = Pattern.compile("[^\\d]*$");
+
     public static final String IMMEDIATE_PREFIX = "#";
     public static final String VALUE_PREFIX = "$";
     public static final String IMMEDIATE_VALUE_PREFIX = IMMEDIATE_PREFIX + VALUE_PREFIX;
 
-    private static final Pattern PREFIX_REGEX = Pattern.compile("^\\D+");
-    private static final Pattern VALUE_REGEX = Pattern.compile("\\d+");
-    private static final Pattern POSTFIX_REGEX = Pattern.compile("[^\\d]*$");
+    public static final String X_INDEXED_POSTFIX = ",X";
+    public static final String Y_INDEXED_POSTFIX = ",Y";
 
     private final String programText;
 
@@ -92,17 +95,17 @@ public class Compiler {
             return AddressingMode.ACCUMULATOR;
         }else if (prefix.equalsIgnoreCase(VALUE_PREFIX)){
             if (value.length() <= 3) {
-                if (postfix.equalsIgnoreCase(",X")) {
+                if (postfix.equalsIgnoreCase(X_INDEXED_POSTFIX)) {
                     return AddressingMode.ZERO_PAGE_X;
-                } else if (postfix.equalsIgnoreCase(",Y")){
+                } else if (postfix.equalsIgnoreCase(Y_INDEXED_POSTFIX)){
                     return AddressingMode.ZERO_PAGE_Y;
                 } else {
                     return AddressingMode.ZERO_PAGE;
                 }
             }else if (value.length() <= 4){
-                if (postfix.equalsIgnoreCase(",X")) {
+                if (postfix.equalsIgnoreCase(X_INDEXED_POSTFIX)) {
                     return AddressingMode.ABSOLUTE_X;
-                } else if (postfix.equalsIgnoreCase(",Y")){
+                } else if (postfix.equalsIgnoreCase(Y_INDEXED_POSTFIX)){
                     return AddressingMode.ABSOLUTE_Y;
                 } else {
                     return AddressingMode.ABSOLUTE;
