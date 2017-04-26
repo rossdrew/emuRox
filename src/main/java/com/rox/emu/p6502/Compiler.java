@@ -9,6 +9,20 @@ import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ *  #$V               - Immediate
+ *  #VV               - Accumulator
+ *  $V / $ VV         - Zero Page
+ *  $V,X / $VV,X      - Zero Page[X]
+ *  $V,Y / $VV,Y      - Zero Page[Y]
+ *  $VVV / $VVVV      - Absolute
+ *  $VVV,X / $VVVV,X  - Absolute[X]
+ *  $VVV,Y / $VVVV,Y  - Absolute[Y]
+ *  ($V,X) / ($VV,X)  - Indirect, X
+ *  ($V),Y / ($VV),Y  - Indirect, Y
+ *
+ *  | $[ V_Z | V_ABS ] ]
+ */
 public class Compiler {
     public static final Pattern PREFIX_REGEX = Pattern.compile("^[^0-9a-fA-F]{1,4}");
     public static final Pattern VALUE_REGEX = Pattern.compile("[0-9a-fA-F]{1,4}");

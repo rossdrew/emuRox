@@ -13,23 +13,6 @@ import java.util.Arrays;
 
 import static org.junit.Assert.*;
 
-/**
- * # - Memory
- * $ - Value
- *
- *  #$V               - Immediate
- *  #VV               - Accumulator
- *  $V / $ VV         - Zero Page
- *  $V,X / $VV,X      - Zero Page[X]
- *  $V,Y / $VV,Y      - Zero Page[Y]
- *  $VVV / $VVVV      - Absolute
- *  $VVV,X / $VVVV,X  - Absolute[X]
- *  $VVV,Y / $VVVV,Y  - Absolute[Y]
- *  ($V,X) / ($VV,X)  - Indirect, X
- *  ($V),Y / ($VV),Y  - Indirect, Y
- *
- *  | $[ V_Z | V_ABS ] ]
- */
 @RunWith(JUnitQuickcheck.class)
 public class CompilerTest {
     @Test
