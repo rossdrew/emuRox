@@ -13,6 +13,7 @@ Currently I'm looking in to the NES PPU.  Trying to garner enough information to
  
   - a refactor of how Op-Codes are dealt with, stored and decoded.
   - a cleaner debug interface to better debug larger programs I'll be dealing with from now on
+  - a compiler so I can write programs, debug and develop easier
   - getting rid of java performed arithmetic in favor of ALU performed arithmetic, it's causing problems...as expected
 
 #### 6502
@@ -39,7 +40,6 @@ I'd really like to compress my data driven tests a little.  There's a lot of com
 #### Branches
 
  - [Main](https://github.com/rossdrew/emuRox/commits/master) branch, pushing towards a fully working 6502
- - A [6502 compiler](https://github.com/rossdrew/emuRox/commits/assembler) branch so that more complicated pieces of code can be written, understood, edited and annotated easier.
  - A [Concourse](https://concourse.ci/) CI [branch](https://github.com/rossdrew/emuRox/commits/concourse-ci), to get that working and learn a little something along the way
 
 -----
