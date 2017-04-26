@@ -80,7 +80,7 @@ public class Compiler {
                     final AddressingMode addressingMode = getAddressingModeFrom(prefix, value, postfix);
 
                     program[i++] = OpCode.from(opCodeToken, addressingMode).getByteValue();
-                    program[i++] = Integer.decode(value);
+                    program[i++] = Integer.decode("0x" + value);
                     break;
                 default:
                     throw new UnknownOpCodeException("Unknown op-code (\"" + opCodeToken + "\") while parsing program", opCodeToken);
@@ -96,7 +96,7 @@ public class Compiler {
         }else if (prefix.equalsIgnoreCase(IMMEDIATE_PREFIX)){
             return AddressingMode.ACCUMULATOR;
         }else if (prefix.equalsIgnoreCase(VALUE_PREFIX)){
-            if (value.length() <= 3) {
+            if (value.length() <= 2) {
                 if (postfix.equalsIgnoreCase(X_INDEXED_POSTFIX)) {
                     return AddressingMode.ZERO_PAGE_X;
                 } else if (postfix.equalsIgnoreCase(Y_INDEXED_POSTFIX)){

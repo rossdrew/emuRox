@@ -1,9 +1,13 @@
 package com.rox.emu.p6502;
 
+import com.pholser.junit.quickcheck.Property;
+import com.pholser.junit.quickcheck.generator.InRange;
+import com.pholser.junit.quickcheck.runner.JUnitQuickcheck;
 import com.rox.emu.UnknownOpCodeException;
 import com.rox.emu.p6502.op.AddressingMode;
 import com.rox.emu.p6502.op.OpCode;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.Arrays;
 
@@ -26,6 +30,7 @@ import static org.junit.Assert.*;
  *
  *  | $[ V_Z | V_ABS ] ]
  */
+@RunWith(JUnitQuickcheck.class)
 public class CompilerTest {
     @Test
     public void testPrefixExtraction(){
@@ -75,111 +80,120 @@ public class CompilerTest {
         });
     }
 
-    @Test
-    public void testImmediateInstructions(){
-        //TODO Single single character argument
+    @Property
+    public void testImmediateInstructions(@InRange(min = "0", max = "255") int byteValue){
+        final String hexByte = Integer.toHexString(byteValue);
+
         OpCode.streamOf(AddressingMode.IMMEDIATE).forEach((opcode)->{
-            Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + Compiler.IMMEDIATE_VALUE_PREFIX + "10");
+            Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + Compiler.IMMEDIATE_VALUE_PREFIX + hexByte);
 
             int[] bytes = compiler.getBytes();
 
-            assertArrayEquals("Output for '" + opcode.toString() + "' was wrong.", new int[] {opcode.getByteValue(), 10}, bytes);
+            assertArrayEquals("Output for '" + opcode.toString() + "' was wrong.", new int[] {opcode.getByteValue(), byteValue}, bytes);
         });
     }
 
-    @Test
-    public void testAccumulatorInstructions(){
-        //TODO Single single character argument
+    @Property
+    public void testAccumulatorInstructions(@InRange(min = "0", max = "255") int byteValue){
+        final String hexByte = Integer.toHexString(byteValue);
+
         OpCode.streamOf(AddressingMode.ACCUMULATOR).forEach((opcode)->{
-            Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + Compiler.IMMEDIATE_PREFIX + "10");
+            Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + Compiler.IMMEDIATE_PREFIX + hexByte);
 
             int[] bytes = compiler.getBytes();
 
-            assertArrayEquals("Output for '" + opcode.toString() + "' was wrong.", new int[] {opcode.getByteValue(), 10}, bytes);
+            assertArrayEquals("Output for '" + opcode.toString() + "' was wrong.", new int[] {opcode.getByteValue(), byteValue}, bytes);
         });
     }
 
-    @Test
-    public void testZeroPageInstructions(){
-        //TODO Test single character argument
+    @Property
+    public void testZeroPageInstructions(@InRange(min = "0", max = "255") int byteValue){
+        final String hexByte = Integer.toHexString(byteValue);
+
         OpCode.streamOf(AddressingMode.ZERO_PAGE).forEach((opcode)->{
-            Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + Compiler.VALUE_PREFIX + "10");
+            Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + Compiler.VALUE_PREFIX + hexByte);
 
             int[] bytes = compiler.getBytes();
 
-            assertArrayEquals("Output for '" + opcode.toString() + "' was wrong.", new int[] {opcode.getByteValue(), 10}, bytes);
+            assertArrayEquals("Output for '" + opcode.toString() + "' was wrong.", new int[] {opcode.getByteValue(), byteValue}, bytes);
         });
     }
 
-    @Test
-    public void testZeroPageXInstructions(){
-        //TODO Test single character argument
+    @Property
+    public void testZeroPageXInstructions(@InRange(min = "0", max = "255") int byteValue){
+        final String hexByte = Integer.toHexString(byteValue);
+
         OpCode.streamOf(AddressingMode.ZERO_PAGE_X).forEach((opcode)->{
-            Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + Compiler.VALUE_PREFIX + "10,X");
+            Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + Compiler.VALUE_PREFIX + hexByte+ ",X");
 
             int[] bytes = compiler.getBytes();
 
-            assertArrayEquals("Output for '" + opcode.toString() + "' was wrong.", new int[] {opcode.getByteValue(), 10}, bytes);
+            assertArrayEquals("Output for '" + opcode.toString() + "' was wrong.", new int[] {opcode.getByteValue(), byteValue}, bytes);
         });
     }
 
-    @Test
-    public void testZeroPageYInstructions(){
-        //TODO Test single character argument
+    @Property
+    public void testZeroPageYInstructions(@InRange(min = "0", max = "255") int byteValue){
+        final String hexByte = Integer.toHexString(byteValue);
+
         OpCode.streamOf(AddressingMode.ZERO_PAGE_Y).forEach((opcode)->{
-            Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + Compiler.VALUE_PREFIX + "10,Y");
+            Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + Compiler.VALUE_PREFIX + hexByte + ",Y");
 
             int[] bytes = compiler.getBytes();
 
-            assertArrayEquals("Output for '" + opcode.toString() + "' was wrong.", new int[] {opcode.getByteValue(), 10}, bytes);
+            assertArrayEquals("Output for '" + opcode.toString() + "' was wrong.", new int[] {opcode.getByteValue(), byteValue}, bytes);
         });
     }
 
-    @Test
-    public void testAbsoluteInstructions(){
-        //TODO test three character argument
+    @Property
+    public void testAbsoluteInstructions(@InRange(min = "256", max = "65535") int wordValue){
+        final String hexWord = Integer.toHexString(wordValue);
+
         OpCode.streamOf(AddressingMode.ABSOLUTE).forEach((opcode)->{
-            Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + Compiler.VALUE_PREFIX + "1234");
+            Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + Compiler.VALUE_PREFIX + hexWord);
 
             int[] bytes = compiler.getBytes();
 
-            assertArrayEquals("Output for '" + opcode.toString() + "' was wrong.", new int[] {opcode.getByteValue(), 1234}, bytes);
+            assertArrayEquals("Output for '" + opcode.toString() + "' was wrong.", new int[] {opcode.getByteValue(), wordValue}, bytes);
         });
     }
 
-    @Test
-    public void testAbsoluteXInstructions(){
-        //TODO test three character argument
+    @Property
+    public void testAbsoluteXInstructions(@InRange(min = "256", max = "65535") int wordValue){
+        final String hexWord = Integer.toHexString(wordValue);
+
         OpCode.streamOf(AddressingMode.ABSOLUTE_X).forEach((opcode)->{
-            Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + Compiler.VALUE_PREFIX + "1234,X");
+            Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + Compiler.VALUE_PREFIX + hexWord + ",X");
 
             int[] bytes = compiler.getBytes();
 
-            assertArrayEquals("Output for '" + opcode.toString() + "' was wrong.", new int[] {opcode.getByteValue(), 1234}, bytes);
+            assertArrayEquals("Output for '" + opcode.toString() + " 0x" + hexWord + "' was wrong.", new int[] {opcode.getByteValue(), wordValue}, bytes);
         });
     }
 
-    @Test
-    public void testIndirectXInstructions(){
-        //TODO test one character argument
+    @Property
+    public void testIndirectXInstructions(@InRange(min = "0", max = "255") int byteValue){
+        final String hexByte = Integer.toHexString(byteValue);
+
         OpCode.streamOf(AddressingMode.INDIRECT_X).forEach((opcode)->{
-            Compiler compiler = new Compiler(opcode.getOpCodeName() + " (" + Compiler.VALUE_PREFIX + "12" + ",X)");
+            Compiler compiler = new Compiler(opcode.getOpCodeName() + " (" + Compiler.VALUE_PREFIX + hexByte + ",X)");
 
             int[] bytes = compiler.getBytes();
 
-            assertArrayEquals(new int[] {opcode.getByteValue(), 12}, bytes);
+            assertArrayEquals(new int[] {opcode.getByteValue(), byteValue}, bytes);
         });
     }
 
-    @Test
-    public void testIndirectYInstructions(){
-        //TODO test one character argument
+    @Property
+    public void testIndirectYInstructions(@InRange(min = "0", max = "255") int byteValue){
+        final String hexByte = Integer.toHexString(byteValue);
+
         OpCode.streamOf(AddressingMode.INDIRECT_Y).forEach((opcode)->{
-            Compiler compiler = new Compiler(opcode.getOpCodeName() + " (" + Compiler.VALUE_PREFIX + "12" + "),Y");
+            Compiler compiler = new Compiler(opcode.getOpCodeName() + " (" + Compiler.VALUE_PREFIX + hexByte + "),Y");
 
             int[] bytes = compiler.getBytes();
 
-            assertArrayEquals(new int[] {opcode.getByteValue(), 12}, bytes);
+            assertArrayEquals(new int[] {opcode.getByteValue(), byteValue}, bytes);
         });
     }
 
