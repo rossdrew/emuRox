@@ -10,9 +10,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Compiler {
-    private static final Pattern PREFIX_REGEX = Pattern.compile("^\\D+");
-    private static final Pattern VALUE_REGEX = Pattern.compile("\\d+");
-    private static final Pattern POSTFIX_REGEX = Pattern.compile("[^\\d]*$");
+    public static final Pattern PREFIX_REGEX = Pattern.compile("^[^0-9a-fA-F]{1,4}");
+    public static final Pattern VALUE_REGEX = Pattern.compile("[0-9a-fA-F]{1,4}");
+    public static final Pattern POSTFIX_REGEX = Pattern.compile("[,XY)]{1,3}$");
 
     public static final String IMMEDIATE_PREFIX = "#";
     public static final String VALUE_PREFIX = "$";
@@ -42,8 +42,6 @@ public class Compiler {
         StringTokenizer tokenizer = new StringTokenizer(programText);
         while (tokenizer.hasMoreTokens()){
             String opCodeToken = tokenizer.nextToken();
-
-            //  OpCodeName Param1(1..2 bytes)
 
             switch(opCodeToken){
                 case "TAX": case "TAY":
@@ -123,16 +121,17 @@ public class Compiler {
             }
         }
 
-        throw new UnknownOpCodeException("Invalid or unimplemented", prefix+value);
+        throw new UnknownOpCodeException("Invalid or unimplemented argument: '" + prefix + value + postfix + "'", prefix+value);
     }
 
-    private String extractFirstOccurrence(Pattern pattern, String token, String opCode){
+    public static String extractFirstOccurrence(Pattern pattern, String token, String opCode){
         final Matcher prefixMatcher = pattern.matcher(token);
         prefixMatcher.find();
         try {
             return prefixMatcher.group();
         }catch(IllegalStateException | ArrayIndexOutOfBoundsException e){
-            throw new UnknownOpCodeException("Could not parse argument for " + opCode + " from '" + token + "'", token, e);
+//            throw new UnknownOpCodeException("Could not parse argument for " + opCode + " from '" + token + "'", token, e);
+            return "";
         }
     }
 }

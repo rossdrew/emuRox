@@ -28,6 +28,43 @@ import static org.junit.Assert.*;
  */
 public class CompilerTest {
     @Test
+    public void testPrefixExtraction(){
+        try {
+            assertEquals("$", Compiler.extractFirstOccurrence(Compiler.PREFIX_REGEX, "$10", "LDA"));
+            assertEquals("#$", Compiler.extractFirstOccurrence(Compiler.PREFIX_REGEX, "#$10", "ADC"));
+            assertEquals("$", Compiler.extractFirstOccurrence(Compiler.PREFIX_REGEX, "$AA", "LDA"));
+            assertEquals("#$", Compiler.extractFirstOccurrence(Compiler.PREFIX_REGEX, "#$AA", "ADC"));
+            assertEquals("($", Compiler.extractFirstOccurrence(Compiler.PREFIX_REGEX, "($AA,X)", "ADC"));
+        }catch (UnknownOpCodeException e){
+            fail(e.getMessage());
+        }
+    }
+
+    @Test
+    public void testValueExtraction(){
+        try {
+            assertEquals("10", Compiler.extractFirstOccurrence(Compiler.VALUE_REGEX, "$10", "LDA"));
+            assertEquals("10", Compiler.extractFirstOccurrence(Compiler.VALUE_REGEX, "#$10", "LDA"));
+            assertEquals("AA", Compiler.extractFirstOccurrence(Compiler.VALUE_REGEX, "$AA", "LDA"));
+            assertEquals("AA", Compiler.extractFirstOccurrence(Compiler.VALUE_REGEX, "#$AA", "LDA"));
+            assertEquals("AA", Compiler.extractFirstOccurrence(Compiler.VALUE_REGEX, "($AA,X)", "ADC"));
+        }catch (UnknownOpCodeException e){
+            fail(e.getMessage());
+        }
+    }
+
+    @Test
+    public void testPostfixExtraction(){
+        try {
+            assertEquals(",X", Compiler.extractFirstOccurrence(Compiler.POSTFIX_REGEX, "$10,X", "LDA"));
+            assertEquals(",Y", Compiler.extractFirstOccurrence(Compiler.POSTFIX_REGEX, "$AA,Y", "LDA"));
+            assertEquals(",X)", Compiler.extractFirstOccurrence(Compiler.POSTFIX_REGEX, "($AA,X)", "ADC"));
+        }catch (UnknownOpCodeException e){
+            fail(e.getMessage());
+        }
+    }
+
+    @Test
     public void testImpliedInstructions(){
         OpCode.streamOf(AddressingMode.IMPLIED).forEach((opcode)->{
             Compiler compiler = new Compiler(opcode.getOpCodeName());
