@@ -172,6 +172,19 @@ public class CompilerTest {
     }
 
     @Property
+    public void testAbsoluteYInstructions(@InRange(min = "256", max = "65535") int wordValue){
+        final String hexWord = Integer.toHexString(wordValue);
+
+        OpCode.streamOf(AddressingMode.ABSOLUTE_Y).forEach((opcode)->{
+            Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + Compiler.VALUE_PREFIX + hexWord + ",Y");
+
+            int[] bytes = compiler.getBytes();
+
+            assertArrayEquals("Output for '" + opcode.toString() + " 0x" + hexWord + "' was wrong.", new int[] {opcode.getByteValue(), wordValue}, bytes);
+        });
+    }
+
+    @Property
     public void testIndirectXInstructions(@InRange(min = "0", max = "255") int byteValue){
         final String hexByte = Integer.toHexString(byteValue);
 
