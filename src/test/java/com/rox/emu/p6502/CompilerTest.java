@@ -63,6 +63,50 @@ public class CompilerTest {
         });
     }
 
+    @Test
+    public void testSingleDigitArgument(){
+        OpCode.streamOf(AddressingMode.ZERO_PAGE).forEach((opcode)->{
+            Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + Compiler.VALUE_PREFIX + "A");
+
+            int[] bytes = compiler.getBytes();
+
+            assertArrayEquals("Output for '" + opcode.toString() + "' was wrong.", new int[] {opcode.getByteValue(), 0xA}, bytes);
+        });
+    }
+
+    @Test
+    public void testDoubleDigitArgument(){
+        OpCode.streamOf(AddressingMode.ZERO_PAGE).forEach((opcode)->{
+            Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + Compiler.VALUE_PREFIX + "AB");
+
+            int[] bytes = compiler.getBytes();
+
+            assertArrayEquals("Output for '" + opcode.toString() + "' was wrong.", new int[] {opcode.getByteValue(), 0xAB}, bytes);
+        });
+    }
+
+    @Test
+    public void testTripleDigitArgument(){
+        OpCode.streamOf(AddressingMode.ABSOLUTE).forEach((opcode)->{
+            Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + Compiler.VALUE_PREFIX + "ABC");
+
+            int[] bytes = compiler.getBytes();
+
+            assertArrayEquals("Output for '" + opcode.toString() + "' was wrong.", new int[] {opcode.getByteValue(), 0xABC}, bytes);
+        });
+    }
+
+    @Test
+    public void testQuadrupleDigitArgument(){
+        OpCode.streamOf(AddressingMode.ABSOLUTE).forEach((opcode)->{
+            Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + Compiler.VALUE_PREFIX + "ABCD");
+
+            int[] bytes = compiler.getBytes();
+
+            assertArrayEquals("Output for '" + opcode.toString() + "' was wrong.", new int[] {opcode.getByteValue(), 0xABCD}, bytes);
+        });
+    }
+
     @Property
     public void testImmediateInstructions(@InRange(min = "0", max = "255") int byteValue){
         final String hexByte = Integer.toHexString(byteValue);
