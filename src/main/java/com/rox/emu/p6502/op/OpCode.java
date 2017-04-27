@@ -232,9 +232,9 @@ public enum OpCode {
      */
     public static OpCode from(String opCodeName, AddressingMode addressingMode){
         for (OpCode opcode : OpCode.values()){
-            if (opcode.getOpCodeName().equalsIgnoreCase(opCodeName)) {
-                if (opcode.getAddressingMode() == addressingMode)
-                    return opcode;
+            if ((opcode.getOpCodeName().equalsIgnoreCase(opCodeName))
+                    && (opcode.getAddressingMode() == addressingMode)) {
+                return opcode;
             }
         }
 
