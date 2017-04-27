@@ -6,7 +6,6 @@ import com.pholser.junit.quickcheck.runner.JUnitQuickcheck;
 import com.rox.emu.UnknownOpCodeException;
 import com.rox.emu.p6502.op.AddressingMode;
 import com.rox.emu.p6502.op.OpCode;
-import jdk.nashorn.internal.runtime.regexp.joni.constants.OPCode;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -214,10 +213,10 @@ public class CompilerTest {
 
     @Test
     public void testChainedTwoByteInstructions(){
-        Compiler compiler = new Compiler("LDA " + Compiler.IMMEDIATE_VALUE_PREFIX + "47 SEC LDA " + Compiler.IMMEDIATE_VALUE_PREFIX + "10 SEC");
+        Compiler compiler = new Compiler("LDA " + Compiler.IMMEDIATE_VALUE_PREFIX + "47 CLC LDA " + Compiler.IMMEDIATE_VALUE_PREFIX + "10 SEC");
         final int[] bytes = compiler.getBytes();
 
-        int[] expected = new int[] {OpCode.OP_LDA_I.getByteValue(), 0x47, OpCode.OP_LDA_I.getByteValue(), 0x10, OpCode.OP_SEC.getByteValue()};
+        int[] expected = new int[] {OpCode.OP_LDA_I.getByteValue(), 0x47, OpCode.OP_CLC.getByteValue(), OpCode.OP_LDA_I.getByteValue(), 0x10, OpCode.OP_SEC.getByteValue()};
         assertArrayEquals("Expected: " + Arrays.toString(expected) + ", Got: " + Arrays.toString(bytes), expected, bytes);
     }
 
