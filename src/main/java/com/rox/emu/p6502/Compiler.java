@@ -26,6 +26,7 @@ import java.util.regex.Pattern;
 public class Compiler {
     public static final Pattern PREFIX_REGEX = Pattern.compile("^[^0-9a-fA-F]{1,4}");
     public static final Pattern VALUE_REGEX = Pattern.compile("[0-9a-fA-F]{1,4}");
+    //XXX This should be a little more advanced as technically ')))', ')XY' or 'X)Y' are legal
     public static final Pattern POSTFIX_REGEX = Pattern.compile("[,XY)]{1,3}$");
 
     public static final String IMMEDIATE_PREFIX = "#";
