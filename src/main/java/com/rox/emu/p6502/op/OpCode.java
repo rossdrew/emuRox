@@ -193,6 +193,12 @@ public enum OpCode {
         this.description = OpCodeConverter.toDescription(this.name());
     }
 
+    /**
+     * Get the OpCode for
+     *
+     * @param byteValue this byte value
+     * @return the OpCode associated with this byte value
+     */
     public static OpCode from(int byteValue){
         for (OpCode opcode : OpCode.values()){
             if (opcode.getByteValue() == byteValue)
@@ -202,6 +208,12 @@ public enum OpCode {
         throw new UnknownOpCodeException("Unknown operation code value while creating OpCode object: " + Integer.toHexString(byteValue), byteValue);
     }
 
+    /**
+     * Get the OpCode for
+     *
+     * @param opCodeName Three character {@link String} representing an {@link AddressingMode#IMPLIED} addressed OpCode
+     * @return The OpCode instance associated with this name in {@link AddressingMode#IMPLIED}
+     */
     public static OpCode from(String opCodeName){
         for (OpCode opcode : OpCode.values()){
             if (opcode.getOpCodeName().equalsIgnoreCase(opCodeName))
@@ -211,6 +223,13 @@ public enum OpCode {
         throw new UnknownOpCodeException("Unknown opcode name while creating OpCode object: " + opCodeName, opCodeName);
     }
 
+    /**
+     * Get the OpCode for
+     *
+     * @param opCodeName Three character {@link String} representing OpCode name
+     * @param addressingMode The {@link AddressingMode} of the OpCode
+     * @return The OpCode instance associated with this name in this {@link AddressingMode}
+     */
     public static OpCode from(String opCodeName, AddressingMode addressingMode){
         for (OpCode opcode : OpCode.values()){
             if (opcode.getOpCodeName().equalsIgnoreCase(opCodeName)) {
