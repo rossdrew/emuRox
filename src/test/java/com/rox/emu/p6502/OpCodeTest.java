@@ -40,6 +40,15 @@ public class OpCodeTest {
         }
     }
 
+
+    @Test
+    public void testFromOpcode(){
+        for (OpCode o : OpCode.values()){
+            OpCode op = OpCode.from(o.getByteValue());
+            assertEquals("0x" + Integer.toHexString(o.getByteValue()) + " == " + o + " != " + op + " (0x" + Integer.toHexString(op.getByteValue()) + ")", o, op);
+        }
+    }
+
     @Test
     public void testStreamOf(){
         OpCode.streamOf(AddressingMode.IMPLIED).forEach((opcode)->assertEquals(opcode, OpCode.from(opcode.getOpCodeName())));

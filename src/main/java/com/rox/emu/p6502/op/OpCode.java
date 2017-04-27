@@ -44,8 +44,8 @@ public enum OpCode {
     OP_AND_ABS_IY(0x39),
     OP_AND_ABS(0x2D),
     OP_AND_I(0x29),
-    OP_AND_IND_IX(21),
-    OP_AND_IND_IY(39),
+    OP_AND_IND_IX(0x21),
+    OP_AND_IND_IY(0x31),
 
     OP_ORA_I(0x09),
     OP_ORA_Z(0x05),
