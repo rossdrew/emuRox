@@ -111,28 +111,40 @@ public class Compiler {
         }else if (prefix.equalsIgnoreCase(IMMEDIATE_PREFIX)){
             return AddressingMode.ACCUMULATOR;
         }else if (prefix.equalsIgnoreCase(VALUE_PREFIX)){
-            if (value.length() <= 2) {
-                if (postfix.equalsIgnoreCase(X_INDEXED_POSTFIX)) {
-                    return AddressingMode.ZERO_PAGE_X;
-                } else if (postfix.equalsIgnoreCase(Y_INDEXED_POSTFIX)){
-                    return AddressingMode.ZERO_PAGE_Y;
-                } else {
-                    return AddressingMode.ZERO_PAGE;
-                }
-            }else if (value.length() <= 4){
-                if (postfix.equalsIgnoreCase(X_INDEXED_POSTFIX)) {
-                    return AddressingMode.ABSOLUTE_X;
-                } else if (postfix.equalsIgnoreCase(Y_INDEXED_POSTFIX)){
-                    return AddressingMode.ABSOLUTE_Y;
-                } else {
-                    return AddressingMode.ABSOLUTE;
-                }
-            }
+            return getIndexedAddressingMode(prefix, value, postfix);
         }else if (prefix.equalsIgnoreCase(INDIRECT_PREFIX)){
-            if (postfix.equalsIgnoreCase(INDIRECT_X_POSTFIX)){
-                return AddressingMode.INDIRECT_X;
-            }else if (postfix.equalsIgnoreCase(INDIRECT_Y_POSTFIX)){
-                return AddressingMode.INDIRECT_Y;
+            return getIndirectIndexMode(prefix, value, postfix);
+        }
+
+        throw new UnknownOpCodeException("Invalid or unimplemented argument: '" + prefix + value + postfix + "'", prefix+value);
+    }
+
+    public AddressingMode getIndirectIndexMode(String prefix, String value, String postfix){
+        if (postfix.equalsIgnoreCase(INDIRECT_X_POSTFIX)){
+            return AddressingMode.INDIRECT_X;
+        }else if (postfix.equalsIgnoreCase(INDIRECT_Y_POSTFIX)){
+            return AddressingMode.INDIRECT_Y;
+        }
+
+        throw new UnknownOpCodeException("Invalid or unimplemented argument: '" + prefix + value + postfix + "'", prefix+value);
+    }
+
+    public AddressingMode getIndexedAddressingMode(String prefix, String value, String postfix){
+        if (value.length() <= 2) {
+            if (postfix.equalsIgnoreCase(X_INDEXED_POSTFIX)) {
+                return AddressingMode.ZERO_PAGE_X;
+            } else if (postfix.equalsIgnoreCase(Y_INDEXED_POSTFIX)){
+                return AddressingMode.ZERO_PAGE_Y;
+            } else {
+                return AddressingMode.ZERO_PAGE;
+            }
+        }else if (value.length() <= 4){
+            if (postfix.equalsIgnoreCase(X_INDEXED_POSTFIX)) {
+                return AddressingMode.ABSOLUTE_X;
+            } else if (postfix.equalsIgnoreCase(Y_INDEXED_POSTFIX)){
+                return AddressingMode.ABSOLUTE_Y;
+            } else {
+                return AddressingMode.ABSOLUTE;
             }
         }
 
