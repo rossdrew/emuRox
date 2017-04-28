@@ -3,6 +3,8 @@ package com.rox.emu.p6502;
 import com.pholser.junit.quickcheck.Property;
 import com.pholser.junit.quickcheck.generator.InRange;
 import com.pholser.junit.quickcheck.runner.JUnitQuickcheck;
+import com.rox.emu.Memory;
+import com.rox.emu.SimpleMemory;
 import com.rox.emu.UnknownOpCodeException;
 import com.rox.emu.p6502.op.AddressingMode;
 import com.rox.emu.p6502.op.OpCode;
@@ -11,6 +13,8 @@ import org.junit.runner.RunWith;
 
 import java.util.Arrays;
 
+import static com.rox.emu.p6502.InstructionSet.OP_LDA_I;
+import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.*;
 
 @RunWith(JUnitQuickcheck.class)
@@ -262,6 +266,35 @@ public class CompilerTest {
 
         int[] expected = new int[] {OpCode.OP_LDA_I.getByteValue(), 0x47, OpCode.OP_CLC.getByteValue(), OpCode.OP_LDA_I.getByteValue(), 0x10, OpCode.OP_SEC.getByteValue()};
         assertArrayEquals("Expected: " + Arrays.toString(expected) + ", Got: " + Arrays.toString(bytes), expected, bytes);
+    }
+
+    @Test
+    public void testProgram(){
+        Compiler compiler = new Compiler("LDA #$14 ADC #$5 STA $20");
+        final int[] bytes = compiler.getBytes();
+
+        int[] expected = new int[] {OpCode.OP_LDA_I.getByteValue(), 0x14,
+                                    OpCode.OP_ADC_I.getByteValue(), 0x5,
+                                    OpCode.OP_STA_Z.getByteValue(), 0x20};
+        assertArrayEquals("Expected: " + Arrays.toString(expected) + ", Got: " + Arrays.toString(bytes), expected, bytes);
+    }
+
+    @Test
+    public void testIntegration(){
+        Compiler compiler = new Compiler("LDA #$14 ADC #$5 STA $20");
+        final int[] program = compiler.getBytes();
+
+        Memory memory = new SimpleMemory();
+        CPU processor = new CPU(memory);
+        processor.reset();
+        memory.setMemory(0, program);
+
+        processor.step(3);
+
+        Registers registers = processor.getRegisters();
+        assertEquals(0x19, registers.getRegister(Registers.REG_ACCUMULATOR));
+        assertEquals(0x19, memory.getByte(0x20));
+        assertEquals(program.length, registers.getPC());
     }
 
     @Test
