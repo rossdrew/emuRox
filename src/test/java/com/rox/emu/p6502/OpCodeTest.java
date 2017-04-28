@@ -1,12 +1,12 @@
 package com.rox.emu.p6502;
 
+import com.rox.emu.UnknownOpCodeException;
 import com.rox.emu.p6502.op.AddressingMode;
 import com.rox.emu.p6502.op.OpCode;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
+import static org.spockframework.util.Assert.fail;
 
 public class OpCodeTest {
     @Test
@@ -37,6 +37,36 @@ public class OpCodeTest {
             if (o.getAddressingMode() == AddressingMode.IMPLIED)
                 assertEquals(o, OpCode.from(o.getOpCodeName()));
             assertEquals(o, OpCode.from(o.getOpCodeName(), o.getAddressingMode()));
+        }
+    }
+
+    @Test
+    public void testInvalidFromOpcodeName(){
+        try{
+            OpCode.from("ROX", AddressingMode.ABSOLUTE);
+            fail("ROX is not a valid OpCode");
+        }catch(UnknownOpCodeException e){
+            assertNotNull(e);
+            assertFalse(e.getMessage().isEmpty());
+        }
+    }
+
+    @Test
+    public void testInvalidFromOpcodeNameAndAddressingMode(){
+        try{
+            OpCode.from("ADC", AddressingMode.IMPLIED);
+            fail("ADC cannot be IMPLIED addressed");
+        }catch(UnknownOpCodeException e){
+            assertNotNull(e);
+            assertFalse(e.getMessage().isEmpty());
+        }
+    }
+
+    @Test
+    public void testFromOpcode(){
+        for (OpCode o : OpCode.values()){
+            OpCode op = OpCode.from(o.getByteValue());
+            assertEquals("0x" + Integer.toHexString(o.getByteValue()) + " == " + o + " != " + op + " (0x" + Integer.toHexString(op.getByteValue()) + ")", o, op);
         }
     }
 
