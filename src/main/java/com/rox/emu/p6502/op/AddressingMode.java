@@ -1,5 +1,7 @@
 package com.rox.emu.p6502.op;
 
+import com.rox.emu.UnknownOpCodeException;
+
 public enum AddressingMode {
     IMPLIED("Implied", 1),
     IMMEDIATE("Immediate", 2),
@@ -28,5 +30,29 @@ public enum AddressingMode {
 
     public int getInstructionBytes(){
         return this.instructionBytes;
+    }
+
+    public AddressingMode xIndexed(){
+        if (this == ZERO_PAGE){
+            return ZERO_PAGE_X;
+        }else if (this == ABSOLUTE) {
+            return ABSOLUTE_X;
+        }else if (this == INDIRECT){
+            return INDIRECT_X;
+        }else{
+            throw new RuntimeException(this + " cannot be X indexed");
+        }
+    }
+
+    public AddressingMode yIndexed(){
+        if (this == ZERO_PAGE){
+            return ZERO_PAGE_Y;
+        }else if (this == ABSOLUTE){
+            return ABSOLUTE_Y;
+        }else if (this == INDIRECT){
+            return INDIRECT_Y;
+        }else{
+            throw new RuntimeException(this + " cannot be Y indexed");
+        }
     }
 }
