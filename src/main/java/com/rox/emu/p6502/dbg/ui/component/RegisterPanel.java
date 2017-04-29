@@ -26,10 +26,14 @@ public class RegisterPanel extends JPanel {
         drawByte(g, secondByteColumn, yLocation, registers.getRegister(Registers.REG_ACCUMULATOR), Registers.getRegisterName(Registers.REG_ACCUMULATOR));
 
         yLocation += rowSize;
+        drawByte(g, secondByteColumn, yLocation, registers.getRegister(Registers.REG_X_INDEX), Registers.getRegisterName(Registers.REG_X_INDEX));
+
+        yLocation += rowSize;
         drawByte(g, secondByteColumn, yLocation, registers.getRegister(Registers.REG_Y_INDEX), Registers.getRegisterName(Registers.REG_Y_INDEX));
 
         yLocation += rowSize;
-        drawByte(g, secondByteColumn, yLocation, registers.getRegister(Registers.REG_X_INDEX), Registers.getRegisterName(Registers.REG_X_INDEX));
+        drawByte(g, xLocation, yLocation, 0b00000001, "");
+        drawByte(g, secondByteColumn, yLocation, registers.getRegister(Registers.REG_SP), Registers.getRegisterName(Registers.REG_SP));
 
         //TODO this needs a combined value display
         yLocation += rowSize;
