@@ -41,7 +41,6 @@ public class ByteBox extends JPanel {
         turnOnClearText(g);
 
         drawByte(g, 0, bitFontSize, byteValue, byteName);
-        setMinimumSize(new Dimension(200, 200));
     }
 
     private void turnOnClearText(Graphics g) {

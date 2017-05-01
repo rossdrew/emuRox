@@ -53,6 +53,7 @@ public class DebuggerWindow extends JFrame {
     }
 
     private JComponent getRegisterPanel(){
+        //return new Registers6502();
         return registersPanel;
     }
 
