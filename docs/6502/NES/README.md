@@ -26,6 +26,7 @@ There are [missing opCodes](http://wiki.nesdev.com/w/index.php/CPU_unofficial_op
  - [How NES Graphics work - The Basics](http://web.textfiles.com/games/nesgfx.txt)
  - [Emulating the Nintendo Entertainment System (NES) -  Rupert Shuttleworth](http://www.optimuscopri.me/nes/report.pdf)
  - [PPU Rendering](https://wiki.nesdev.com/w/index.php/PPU_rendering)
+ - NES Graphics Series[One](http://www.dustmop.io/blog/2015/04/28/nes-graphics-part-1/), [Two](http://www.dustmop.io/blog/2015/06/08/nes-graphics-part-2/) and [Three](http://www.dustmop.io/blog/2015/12/18/nes-graphics-part-3/)
 
 ######Notes
 
