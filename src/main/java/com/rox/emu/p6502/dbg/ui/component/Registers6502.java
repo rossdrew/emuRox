@@ -22,7 +22,7 @@ public class Registers6502 extends JPanel {
     private final ByteBox programCounterHi = new ByteBox("Program Counter (Hi)", 0);
     private final ByteBox programCounterLo = new ByteBox("Program Counter (Lo)", 0);
 
-    private final FlagByteBox statusRegister = new FlagByteBox("Status Register", 0x0, new char[] {'N','V','-','B','D','I','Z','C'});
+    private final FlagByteBox statusRegister = new FlagByteBox("Status Register", 0x0, "NV BDIZC".toCharArray());
 
     @Override
     public void paint(Graphics g) {

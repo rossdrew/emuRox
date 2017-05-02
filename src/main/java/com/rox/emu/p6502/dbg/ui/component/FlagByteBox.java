@@ -27,9 +27,13 @@ public class FlagByteBox extends ByteBox {
         final int padding = 5;
 
         g.setFont(new Font("Courier New", Font.PLAIN, bitFontSize));
-        g.drawString(""+val, startX+padding, startY+(bitSize-padding));
+        g.drawString("" + val, startX + padding, startY + (bitSize - padding));
 
         g.setColor(Color.lightGray);
-        g.drawRect(startX, startY, bitSize, bitSize);
+
+        if (val == ' ')
+            g.fillRect(startX, startY, bitSize, bitSize);
+        else
+            g.drawRect(startX, startY, bitSize, bitSize);
     }
 }
