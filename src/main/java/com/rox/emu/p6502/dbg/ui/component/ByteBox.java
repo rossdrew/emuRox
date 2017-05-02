@@ -8,13 +8,13 @@ import java.awt.*;
  * identification name and Dec/Hex values displayed.
  */
 public class ByteBox extends JPanel {
-    private final int bitSize = 40;
-    private final int byteSize = (bitSize*8);
-    private final int bitFontSize = 40;
-    private final int valueFontSize = 11;
+    protected final int bitSize = 40;
+    protected final int byteSize = (bitSize*8);
+    protected final int bitFontSize = 40;
+    protected final int valueFontSize = 11;
 
-    private int byteValue = 0b00000000;
-    private String byteName = "Unknown";
+    protected int byteValue = 0b00000000;
+    protected String byteName = "Unknown";
 
     public ByteBox(String byteName, int initialValue){
         this.byteValue = initialValue;
@@ -42,7 +42,7 @@ public class ByteBox extends JPanel {
         super.paint(g);
         turnOnClearText(g);
 
-        drawByte(g, 0, bitFontSize, getByteValue(), byteName);
+        paintByte(g, 0, bitFontSize, getByteValue(), byteName);
     }
 
     private void turnOnClearText(Graphics g) {
@@ -52,24 +52,23 @@ public class ByteBox extends JPanel {
         }
     }
 
-    private void drawByte(Graphics g, int startX, int startY, int byteValue, String name){
+    protected void paintByte(Graphics g, int startX, int startY, int byteValue, String name){
         char[] bitValues = to8BitString(byteValue).toCharArray();
 
         paintBits(g, startX, startY, bitValues);
         paintByteBorder(g, startX, startY);
         paintByteName(g, startX, startY, name);
         paintByteValues(g, startX, startY, byteValue);
-
     }
 
-    private void paintBits(Graphics g, int startX, int startY, char[] bitValues) {
+    protected void paintBits(Graphics g, int startX, int startY, char[] bitValues) {
         g.setColor(Color.lightGray);
         for (int i=0; i<8; i++){
             paintBit(g, startX + (i*bitSize), startY, bitValues[i]);
         }
     }
 
-    private void paintBit(Graphics g, int startX, int startY, char val){
+    protected void paintBit(Graphics g, int startX, int startY, char val){
         final int padding = 5;
 
         g.setFont(new Font("Courier New", Font.PLAIN, bitFontSize));

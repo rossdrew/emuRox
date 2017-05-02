@@ -22,6 +22,8 @@ public class Registers6502 extends JPanel {
     private final ByteBox programCounterHi = new ByteBox("Program Counter (Hi)", 0);
     private final ByteBox programCounterLo = new ByteBox("Program Counter (Lo)", 0);
 
+    private final FlagByteBox statusRegister = new FlagByteBox("Status Register", 0x0, new char[] {'N','V','-','B','D','I','Z','C'});
+
     @Override
     public void paint(Graphics g) {
         super.paint(g);
@@ -49,7 +51,7 @@ public class Registers6502 extends JPanel {
         add(programCounterLo);
 
         add(new JLabel(""));
-        add(new JLabel("FLAGS"));
+        add(statusRegister);
 
         refreshValues();
     }
@@ -65,5 +67,7 @@ public class Registers6502 extends JPanel {
         stackPointerLo.setValue(registers.getRegister(Registers.REG_SP));
         programCounterHi.setValue(registers.getRegister(Registers.REG_PC_HIGH));
         programCounterLo.setValue(registers.getRegister(Registers.REG_PC_LOW));
+
+        statusRegister.setValue(registers.getRegister(Registers.REG_STATUS));
     }
 }
