@@ -173,6 +173,7 @@ public class DebuggerWindow extends JFrame {
         processor.reset();
         memory.reset();
         listModel.clear();
+
         invalidate();
         revalidate();
         repaint();

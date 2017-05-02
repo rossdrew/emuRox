@@ -55,7 +55,6 @@ public class Registers6502 extends JPanel {
     }
 
     private void refreshValues() {
-        System.out.println("\t\t\tCALLED -> " + registers);
         if (registers == null)
             return;
 
@@ -63,7 +62,7 @@ public class Registers6502 extends JPanel {
         xIndex.setValue(registers.getRegister(Registers.REG_X_INDEX));
         yIndex.setValue(registers.getRegister(Registers.REG_Y_INDEX));
         stackPointerHi.setValue(0x01);
-        stackPointerHi.setValue(registers.getRegister(Registers.REG_SP));
+        stackPointerLo.setValue(registers.getRegister(Registers.REG_SP));
         programCounterHi.setValue(registers.getRegister(Registers.REG_PC_HIGH));
         programCounterLo.setValue(registers.getRegister(Registers.REG_PC_LOW));
     }
