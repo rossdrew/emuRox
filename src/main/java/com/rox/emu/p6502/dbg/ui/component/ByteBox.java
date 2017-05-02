@@ -10,7 +10,6 @@ import java.awt.*;
 public class ByteBox extends JPanel {
     private final int bitSize = 40;
     private final int byteSize = (bitSize*8);
-    private final int padding = 10;
     private final int bitFontSize = 40;
     private final int valueFontSize = 11;
 
@@ -37,7 +36,6 @@ public class ByteBox extends JPanel {
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-
         turnOnClearText(g);
 
         drawByte(g, 0, bitFontSize, byteValue, byteName);
@@ -48,6 +46,49 @@ public class ByteBox extends JPanel {
             Graphics2D g2d = (Graphics2D)g;
             g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         }
+    }
+
+    private void drawByte(Graphics g, int startX, int startY, int byteValue, String name){
+        char[] bitValues = to8BitString(byteValue).toCharArray();
+
+        paintBits(g, startX, startY, bitValues);
+        paintByteBorder(g, startX, startY);
+        paintByteName(g, startX, startY, name);
+        paintByteValues(g, startX, startY, byteValue);
+
+    }
+
+    private void paintBits(Graphics g, int startX, int startY, char[] bitValues) {
+        g.setColor(Color.lightGray);
+        for (int i=0; i<8; i++){
+            paintBit(g, startX + (i*bitSize), startY, bitValues[i]);
+        }
+    }
+
+    private void paintBit(Graphics g, int startX, int startY, char val){
+        final int padding = 5;
+
+        g.setFont(new Font("Courier New", Font.PLAIN, bitFontSize));
+        g.drawRect(startX, startY, bitSize, bitSize);
+        g.drawString(""+val, startX+padding, startY+(bitSize-padding));
+    }
+
+    private void paintByteBorder(Graphics g, int startX, int startY) {
+        g.setColor(Color.BLACK);
+        g.drawRect(startX, startY, byteSize, bitSize);
+    }
+
+    private void paintByteName(Graphics g, int startX, int startY, String name) {
+        g.setColor(Color.blue);
+        g.setFont(new Font("Courier New", Font.PLAIN, valueFontSize));
+        g.drawString(name, startX, startY-1);
+    }
+
+    private void paintByteValues(Graphics g, int startX, int startY, int byteValue) {
+        g.setColor(Color.RED);
+        g.setFont(new Font("Courier New", Font.PLAIN, valueFontSize));
+        String values = "(" + fromSignedByte(byteValue) + ", 0x" + Integer.toHexString(byteValue) + ")";
+        g.drawString(values, (startX + byteSize - bitSize - (values.length() * (valueFontSize/2))), startY-1);
     }
 
     private String to8BitString(int fakeByte){
@@ -66,33 +107,5 @@ public class ByteBox extends JPanel {
             return -( ( (~signedByteByte) +1) & 0xFF); //Twos compliment compensation
         else
             return signedByteByte & 0b01111111;
-    }
-
-    private void drawByte(Graphics g, int startX, int startY, int byteValue, String name){
-        char[] bitValues = to8BitString(byteValue).toCharArray();
-
-        g.setColor(Color.lightGray);
-        for (int i=0; i<8; i++){
-            drawBit(g, startX + (i*bitSize), startY, bitValues[i]);
-        }
-        g.setColor(Color.BLACK);
-        g.drawRect(startX, startY, byteSize, bitSize);
-
-        g.setColor(Color.RED);
-
-        g.setFont(new Font("Courier New", Font.PLAIN, valueFontSize));
-        String values = "(" + fromSignedByte(byteValue) + ", 0x" + Integer.toHexString(byteValue) + ")";
-        g.drawString(values, (startX + byteSize - bitSize - (values.length() * (valueFontSize/2))), startY-1);
-
-        g.setColor(Color.blue);
-        g.drawString(name, startX, startY-1);
-    }
-
-    private void drawBit(Graphics g, int startX, int startY, char val){
-        final int padding = 5;
-
-        g.setFont(new Font("Courier New", Font.PLAIN, bitFontSize));
-        g.drawRect(startX, startY, bitSize, bitSize);
-        g.drawString(""+val, startX+padding, startY+(bitSize-padding));
     }
 }
