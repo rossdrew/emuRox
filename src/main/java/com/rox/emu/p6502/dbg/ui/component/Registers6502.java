@@ -1,5 +1,7 @@
 package com.rox.emu.p6502.dbg.ui.component;
 
+import com.rox.emu.p6502.Registers;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -7,16 +9,24 @@ import java.awt.*;
  * A UI representation of the MOS 6502 registers
  */
 public class Registers6502 extends JPanel {
-    final ByteBox accumulator = new ByteBox("Accumulator", 0);
+    private Registers registers;
 
-    final ByteBox xIndex = new ByteBox("X Index", 0);
-    final ByteBox yIndex = new ByteBox("Y Index", 0);
+    private final ByteBox accumulator = new ByteBox("Accumulator", 0);
 
-    final ByteBox stackPointerHi = new ByteBox("Stack Pointer (Hi)", 0);
-    final ByteBox stackPointerLo = new ByteBox("Stack Pointer (Lo)", 0);
+    private final ByteBox xIndex = new ByteBox("X Index", 0);
+    private final ByteBox yIndex = new ByteBox("Y Index", 0);
 
-    final ByteBox programCounterHi = new ByteBox("Program Counter (Hi)", 0);
-    final ByteBox programCounterLo = new ByteBox("Program Counter (Lo)", 0);
+    private final ByteBox stackPointerHi = new ByteBox("Stack Pointer (Hi)", 0);
+    private final ByteBox stackPointerLo = new ByteBox("Stack Pointer (Lo)", 0);
+
+    private final ByteBox programCounterHi = new ByteBox("Program Counter (Hi)", 0);
+    private final ByteBox programCounterLo = new ByteBox("Program Counter (Lo)", 0);
+
+    @Override
+    public void paint(Graphics g) {
+        super.paint(g);
+        refreshValues();
+    }
 
     public Registers6502() {
         setLayout(new GridLayout(6,2));
@@ -38,27 +48,26 @@ public class Registers6502 extends JPanel {
 
         add(new JLabel(""));
         add(new JLabel("FLAGS"));
+
+        refreshValues();
     }
 
-    public void setAccumulator(int accumulatorValue){
-        accumulator.setValue(accumulatorValue);
+    public void setRegisters(Registers registers){
+        System.out.println("\t\t\tREGISTERS SET -> " + registers);
+        this.registers = registers;
     }
 
-    public void setXIndex(int xIndexValue){
-        xIndex.setValue(xIndexValue);
-    }
+    private void refreshValues() {
+        System.out.println("\t\t\tCALLED -> " + registers);
+        if (registers == null)
+            return;
 
-    public void setYIndex(int yIndexValue){
-        yIndex.setValue(yIndexValue);
-    }
-
-    public void setStackPointer(int hi, int lo){
-        stackPointerHi.setValue(hi);
-        stackPointerLo.setValue(lo);
-    }
-
-    public void setProgramCounter(int hi, int lo){
-        programCounterHi.setValue(hi);
-        programCounterLo.setValue(lo);
+        accumulator.setValue(registers.getRegister(Registers.REG_ACCUMULATOR));
+        xIndex.setValue(registers.getRegister(Registers.REG_X_INDEX));
+        yIndex.setValue(registers.getRegister(Registers.REG_Y_INDEX));
+        stackPointerHi.setValue(0x01);
+        stackPointerHi.setValue(registers.getRegister(Registers.REG_SP));
+        programCounterHi.setValue(registers.getRegister(Registers.REG_PC_HIGH));
+        programCounterLo.setValue(registers.getRegister(Registers.REG_PC_LOW));
     }
 }

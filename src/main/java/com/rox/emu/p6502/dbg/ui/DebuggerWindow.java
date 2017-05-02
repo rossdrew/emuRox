@@ -24,6 +24,8 @@ public class DebuggerWindow extends JFrame {
     private CPU processor;
     private Memory memory;
 
+    private final Registers6502 newRegisterPanel = new Registers6502(); //XXX
+
     private final RegisterPanel registersPanel = new RegisterPanel();
     private final MemoryPanel zeroPageMemoryPanel = new MemoryPanel();
     private final MemoryPanel stackPageMemoryPanel = new MemoryPanel();
@@ -53,8 +55,8 @@ public class DebuggerWindow extends JFrame {
     }
 
     private JComponent getRegisterPanel(){
-        //return new Registers6502();
-        return registersPanel;
+        return newRegisterPanel;
+        //return registersPanel;
     }
 
     private JComponent getMemoryPanel(){
@@ -150,6 +152,7 @@ public class DebuggerWindow extends JFrame {
         memory.setMemory(0, program);
         processor = new CPU(memory);
         registersPanel.setRegisters(processor.getRegisters());
+        newRegisterPanel.setRegisters(processor.getRegisters()); //XXX
         zeroPageMemoryPanel.setMemory(memory, 0);
         zeroPageMemoryPanel.linkTo(processor.getRegisters());
 
