@@ -3,7 +3,8 @@ package com.rox.emu.p6502.dbg.ui.component;
 import java.awt.*;
 
 /**
- * Created by rossdrew on 02/05/2017.
+ * A {@link ByteBox} that represents a status register with added character
+ * representation of bits and highlights for flagged or non-flagged
  */
 public class FlagByteBox extends ByteBox {
     private final char[] flagIDs;
