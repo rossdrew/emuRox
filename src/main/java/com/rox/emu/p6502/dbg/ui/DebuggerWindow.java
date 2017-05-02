@@ -24,7 +24,7 @@ public class DebuggerWindow extends JFrame {
     private CPU processor;
     private Memory memory;
 
-    private final Registers6502 newRegisterPanel = new Registers6502(); //XXX
+    private Registers6502 newRegisterPanel;
 
     private final RegisterPanel registersPanel = new RegisterPanel();
     private final MemoryPanel zeroPageMemoryPanel = new MemoryPanel();
@@ -38,6 +38,8 @@ public class DebuggerWindow extends JFrame {
     public DebuggerWindow() {
         super("6502 Debugger");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+        init();
 
         listModel = new DefaultListModel<>();
         instruction.setHorizontalAlignment(JLabel.CENTER);
@@ -87,7 +89,7 @@ public class DebuggerWindow extends JFrame {
         stepButton.addActionListener(e -> step());
 
         JButton resetButton = new JButton("Reset!");
-        resetButton.addActionListener(e -> reset());
+        resetButton.addActionListener(e -> loadProgram(getProgram()));
 
         JPanel controls = new JPanel();
         controls.setLayout(new FlowLayout());
@@ -147,22 +149,29 @@ public class DebuggerWindow extends JFrame {
         return program;
     }
 
-    public void loadProgram(int[] program){
+    private void init(){
         memory = new SimpleMemory();
-        memory.setMemory(0, program);
         processor = new CPU(memory);
+
         registersPanel.setRegisters(processor.getRegisters());
-        newRegisterPanel.setRegisters(processor.getRegisters()); //XXX
+
+        newRegisterPanel = new Registers6502(processor.getRegisters());
+
         zeroPageMemoryPanel.setMemory(memory, 0);
         zeroPageMemoryPanel.linkTo(processor.getRegisters());
 
         stackPageMemoryPanel.setMemory(memory, 256);
         stackPageMemoryPanel.linkTo(processor.getRegisters());
+    }
+
+    public void loadProgram(int[] program){
         reset();
+        memory.setMemory(0, program);
     }
 
     public void reset(){
         processor.reset();
+        memory.reset();
         listModel.clear();
         invalidate();
         revalidate();

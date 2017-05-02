@@ -43,4 +43,11 @@ public class SimpleMemory implements Memory{
         System.arraycopy(memoryArray, from, extractedData, 0, extractedData.length);
         return extractedData;
     }
+
+    @Override
+    public void reset() {
+        for (int i : memoryArray) {
+            memoryArray[i] = 0;
+        }
+    }
 }

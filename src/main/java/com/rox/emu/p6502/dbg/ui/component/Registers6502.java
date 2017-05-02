@@ -9,7 +9,7 @@ import java.awt.*;
  * A UI representation of the MOS 6502 registers
  */
 public class Registers6502 extends JPanel {
-    private Registers registers;
+    private final Registers registers;
 
     private final ByteBox accumulator = new ByteBox("Accumulator", 0);
 
@@ -28,7 +28,9 @@ public class Registers6502 extends JPanel {
         refreshValues();
     }
 
-    public Registers6502() {
+    public Registers6502(Registers registers) {
+        this.registers = registers;
+
         setLayout(new GridLayout(6,2));
 
         add(new JLabel(""));
@@ -50,11 +52,6 @@ public class Registers6502 extends JPanel {
         add(new JLabel("FLAGS"));
 
         refreshValues();
-    }
-
-    public void setRegisters(Registers registers){
-        System.out.println("\t\t\tREGISTERS SET -> " + registers);
-        this.registers = registers;
     }
 
     private void refreshValues() {

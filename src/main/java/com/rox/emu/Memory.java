@@ -12,4 +12,5 @@ public interface Memory {
     int getByte(int location);
     int getWord(int location);
     int[] getBlock(int from, int to);
+    void reset();
 }
