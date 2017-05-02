@@ -21,6 +21,10 @@ public class ByteBox extends JPanel {
         this.byteName = byteName;
     }
 
+    public int getByteValue(){
+        return this.byteValue;
+    }
+
     public void setValue(int newValue){
         this.byteValue = newValue;
 
@@ -38,7 +42,7 @@ public class ByteBox extends JPanel {
         super.paint(g);
         turnOnClearText(g);
 
-        drawByte(g, 0, bitFontSize, byteValue, byteName);
+        drawByte(g, 0, bitFontSize, getByteValue(), byteName);
     }
 
     private void turnOnClearText(Graphics g) {
