@@ -35,13 +35,13 @@ public class Registers6502 extends JPanel {
 
         setLayout(new GridLayout(6,2));
 
-        add(new JLabel(""));
+        add(Box.createHorizontalGlue());
         add(accumulator);
 
-        add(new JLabel(""));
+        add(Box.createHorizontalGlue());
         add(xIndex);
 
-        add(new JLabel(""));
+        add(Box.createHorizontalGlue());
         add(yIndex);
 
         add(stackPointerHi);
@@ -50,7 +50,7 @@ public class Registers6502 extends JPanel {
         add(programCounterHi);
         add(programCounterLo);
 
-        add(new JLabel(""));
+        add(Box.createHorizontalGlue());
         add(statusRegister);
 
         refreshValues();

@@ -79,7 +79,7 @@ public class DebuggerWindow extends JFrame {
 
     private JComponent getInstructionScroller(){
         final JList<String> instructionList = new JList<>(listModel);
-        JScrollPane scrollPane = new JScrollPane(instructionList);
+        final JScrollPane scrollPane = new JScrollPane(instructionList);
         scrollPane.setPreferredSize(new Dimension(300, 200));
         return scrollPane;
     }
