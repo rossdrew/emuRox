@@ -6,7 +6,42 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * A UI representation of the MOS 6502 registers
+ * A UI representation of the MOS 6502 registers<br/>
+ *
+ * <table>
+ *     <tr>
+ *         <th colspan="2" align="center">6502 Registers</th>
+ *     </tr>
+ *     <tr>
+ *         <td></td>
+ *         <td>Accumulator</td>
+ *     </tr>
+ *
+ *     <tr>
+ *         <td></td>
+ *         <td>X Index</td>
+ *     </tr>
+ *
+ *     <tr>
+ *         <td></td>
+ *         <td>Y Index</td>
+ *     </tr>
+ *
+ *     <tr>
+ *         <td>Stack Pointer (Hi)</td>
+ *         <td>Stack Pointer (Lo)</td>
+ *     </tr>
+ *
+ *     <tr>
+ *         <td>Program Counter (Hi)</td>
+ *         <td>Program Counter (Lo)</td>
+ *     </tr>
+ *
+ *     <tr>
+ *         <td></td>
+ *         <td>Status Register {N,V,-,B,D,I,Z,C}</td>
+ *     </tr>
+ * </table>
  */
 public class Registers6502 extends JPanel {
     private final Registers registers;
