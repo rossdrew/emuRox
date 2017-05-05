@@ -2,6 +2,7 @@ package com.rox.emu.p6502.dbg.ui;
 
 import com.rox.emu.Memory;
 import com.rox.emu.p6502.CPU;
+import com.rox.emu.p6502.Program;
 import com.rox.emu.p6502.Registers;
 import com.rox.emu.SimpleMemory;
 import javax.swing.*;
@@ -108,43 +109,42 @@ public class DebuggerWindow extends JFrame {
         int valMPD = 7;
         int valMPR = 4;
 
-        int[] countToTenProgram = new int[] {   OP_LDX_I, 10,
-                                                OP_LDA_I, 0,
-                                                OP_CLC,
-                                                OP_ADC_I, 0x01,
-                                                OP_DEX,
-                                                OP_CPX_I, 0,
-                                                OP_BNE, 0b11110111
-                                            };
+        Program countToTenProgram = new Program().with( OP_LDX_I, 10,
+                                                        OP_LDA_I, 0,
+                                                        OP_CLC,
+                                                        OP_ADC_I, 0x01,
+                                                        OP_DEX,
+                                                        OP_CPX_I, 0,
+                                                        OP_BNE, 0b11110111);
 
-        int[] program = new int[]{  OP_LDA_I, valMPD,
-                                    OP_STA_Z, MPD,
-                                    OP_LDA_I, valMPR,
-                                    OP_STA_Z, MPR,
-                                    OP_LDA_I, 0,         //<---- start
-                                    OP_STA_Z, TMP,       //Clear
-                                    OP_STA_Z, RESAD_0,   //...
-                                    OP_STA_Z, RESAD_1,   //...
-                                    OP_LDX_I, 8,         //X counts each bit
-                            //:MULT(18)
-                                    OP_LSR_Z, MPR,       //LSR(MPR)
-                                    OP_BCC, 13,          //Test carry and jump (forward 13) to NOADD
+        Program multiplicationProgram = new Program().with( OP_LDA_I, valMPD,
+                                                            OP_STA_Z, MPD,
+                                                            OP_LDA_I, valMPR,
+                                                            OP_STA_Z, MPR,
+                                                            OP_LDA_I, 0,         //<---- start
+                                                            OP_STA_Z, TMP,       //Clear
+                                                            OP_STA_Z, RESAD_0,   //...
+                                                            OP_STA_Z, RESAD_1,   //...
+                                                            OP_LDX_I, 8,         //X counts each bit
+                                                //:MULT(18)
+                                                            OP_LSR_Z, MPR,       //LSR(MPR)
+                                                            OP_BCC, 13,          //Test carry and jump (forward 13) to NOADD
 
-                                    OP_LDA_Z, RESAD_0,   //RESAD -> A
-                                    OP_CLC,              //Prepare to add
-                                    OP_ADC_Z, MPD,       //+MPD
-                                    OP_STA_Z, RESAD_0,   //Save result
-                                    OP_LDA_Z, RESAD_1,   //RESAD+1 -> A
-                                    OP_ADC_Z, TMP,       //+TMP
-                                    OP_STA_Z, RESAD_1,   //RESAD+1 <- A
-                            //:NOADD(35)
-                                    OP_ASL_Z, MPD,       //ASL(MPD)
-                                    OP_ROL_Z, TMP,       //Save bit from MPD
-                                    OP_DEX,              //--X
-                                    OP_BNE, 0b11100111   //Test equal and jump (back 24) to MULT});
-        };
+                                                            OP_LDA_Z, RESAD_0,   //RESAD -> A
+                                                            OP_CLC,              //Prepare to add
+                                                            OP_ADC_Z, MPD,       //+MPD
+                                                            OP_STA_Z, RESAD_0,   //Save result
+                                                            OP_LDA_Z, RESAD_1,   //RESAD+1 -> A
+                                                            OP_ADC_Z, TMP,       //+TMP
+                                                            OP_STA_Z, RESAD_1,   //RESAD+1 <- A
+                                                //:NOADD(35)
+                                                            OP_ASL_Z, MPD,       //ASL(MPD)
+                                                            OP_ROL_Z, TMP,       //Save bit from MPD
+                                                            OP_DEX,              //--X
+                                                            OP_BNE, 0b11100111   //Test equal and jump (back 24) to MULT
+        );
 
-        return program;
+        return multiplicationProgram.getProgramAsByteArray();
     }
 
     private void init(){
