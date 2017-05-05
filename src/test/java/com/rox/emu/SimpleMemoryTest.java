@@ -1,5 +1,6 @@
 package com.rox.emu;
 
+import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -54,6 +55,15 @@ public class SimpleMemoryTest {
         assertEquals(33, memory.getByte(2));
         assertEquals(44, memory.getByte(3));
         assertEquals(55, memory.getByte(4));
+    }
+
+    @Test
+    public void testClearMemory(){
+        memory.setMemory(0, new int[] {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20});
+        memory.reset();
+        for (int i=0; i<30; i++){
+            assertEquals(0, memory.getByte(i));
+        }
     }
 
 }
