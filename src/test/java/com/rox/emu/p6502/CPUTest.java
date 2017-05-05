@@ -970,7 +970,6 @@ public class CPUTest {
     }
 
     @Test
-    @Ignore
     public void testMultiplicationLoop(){
         try {
             int data_offset = 0x32;
@@ -1012,14 +1011,15 @@ public class CPUTest {
             memory.setMemory(0, program);
             Registers registers = processor.getRegisters();
 
-            while (registers.getRegister(Registers.REG_PC_LOW) < program.length)
-                processor.step();
+            processor.step(27);
 
             System.out.println("RESAD = " + Integer.toBinaryString(memory.getByte(RESAD_0)) + "|" + Integer.toBinaryString(memory.getByte(RESAD_1)));
             System.out.println("MPD = " + memory.getByte(MPD));
             System.out.println("MPR = " + memory.getByte(MPR));
             System.out.println("TMP = " + memory.getByte(TMP));
             System.out.println("[A] = " + registers.getRegister(Registers.REG_ACCUMULATOR));
+
+            assertEquals(0x1C, memory.getByte(RESAD_0));
         }catch (Exception e) {
             TestCase.fail();
         }
