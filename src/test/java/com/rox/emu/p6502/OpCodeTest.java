@@ -82,6 +82,18 @@ public class OpCodeTest {
     }
 
     @Test
+    public void testFromInvalidOpcodeName(){
+        try {
+            OpCode.from("ROX");
+            fail("Invalid op-code name cannot be converted to OpCode");
+        }catch(UnknownOpCodeException e){
+            assertNotNull(e);
+            assertNotNull(e.getMessage());
+        }
+    }
+
+
+    @Test
     public void testStreamOf(){
         OpCode.streamOf(AddressingMode.IMPLIED).forEach((opcode)->assertEquals(opcode, OpCode.from(opcode.getOpCodeName())));
         OpCode.streamOf(AddressingMode.ZERO_PAGE).forEach((opcode)->assertEquals(opcode, OpCode.from(opcode.getOpCodeName(), opcode.getAddressingMode())));
