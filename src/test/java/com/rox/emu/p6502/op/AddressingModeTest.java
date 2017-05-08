@@ -2,9 +2,8 @@ package com.rox.emu.p6502.op;
 
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static junit.framework.TestCase.fail;
+import static org.junit.Assert.*;
 
 public class AddressingModeTest {
     @Test
@@ -26,9 +25,31 @@ public class AddressingModeTest {
     }
 
     @Test
+    public void testInvalidConversionToXIndex(){
+        try {
+            AddressingMode.ACCUMULATOR.xIndexed();
+            fail("Accumulator cannot be X indexed");
+        }catch(RuntimeException e){
+            assertNotNull(e);
+            assertNotNull(e.getMessage());
+        }
+    }
+
+    @Test
     public void testConversionToYIndex(){
         assertEquals(AddressingMode.ZERO_PAGE_Y, AddressingMode.ZERO_PAGE.yIndexed());
         assertEquals(AddressingMode.ABSOLUTE_Y, AddressingMode.ABSOLUTE.yIndexed());
         assertEquals(AddressingMode.INDIRECT_Y, AddressingMode.INDIRECT.yIndexed());
+    }
+
+    @Test
+    public void testInvalidConversionToYIndex(){
+        try {
+            AddressingMode.ACCUMULATOR.yIndexed();
+            fail("Accumulator cannot be Y indexed");
+        }catch(RuntimeException e){
+            assertNotNull(e);
+            assertNotNull(e.getMessage());
+        }
     }
 }
