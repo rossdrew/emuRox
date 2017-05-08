@@ -312,6 +312,18 @@ public class CompilerTest {
     }
 
     @Test
+    public void opCodeJaCoCoCoverage(){
+        Compiler compiler = new Compiler("\0ADC $10");
+
+        try {
+            compiler.getBytes();
+            fail("Exception expected.  This should not pass a String switch statement");
+        }catch(UnknownOpCodeException e){
+            assertNotNull(e);
+        }
+    }
+
+    @Test
     public void testInvalidValuePrefix(){
         try {
             Compiler compiler = new Compiler("ADC @$10");
