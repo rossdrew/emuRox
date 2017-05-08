@@ -13,6 +13,8 @@ import org.junit.runner.RunWith;
 
 import java.util.Arrays;
 
+import static com.rox.emu.p6502.Compiler.INDIRECT_PREFIX;
+import static com.rox.emu.p6502.Compiler.VALUE_PREFIX;
 import static com.rox.emu.p6502.InstructionSet.OP_LDA_I;
 import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.*;
@@ -314,12 +316,34 @@ public class CompilerTest {
         try {
             Compiler compiler = new Compiler("ADC @$10");
             int[] bytes = compiler.getBytes();
-            fail("Invalid argument structure should throw an exception but was " + Arrays.toString(bytes));
+            fail("Invalid value prefix should throw an exception but was " + Arrays.toString(bytes));
         }catch (UnknownOpCodeException e){
             assertFalse(e.getMessage().isEmpty());
             assertFalse(e.getOpCode() == null);
         }
     }
 
+    @Test
+    public void testInvalidIndirectIndexingMode(){
+        try {
+            Compiler compiler = new Compiler("ADC " + INDIRECT_PREFIX + "10(");
+            int[] bytes = compiler.getBytes();
+            fail("Invalid prefix for an indirect value should throw an exception but was " + Arrays.toString(bytes));
+        }catch (UnknownOpCodeException e){
+            assertFalse(e.getMessage().isEmpty());
+            assertFalse(e.getOpCode() == null);
+        }
+    }
 
+    @Test
+    public void testOversizedValue(){
+        try {
+            Compiler compiler = new Compiler("ADC " + VALUE_PREFIX + "12345");
+            int[] bytes = compiler.getBytes();
+            fail("Argument size over " + 0xFFFF + " should throw an exception but was " + Arrays.toString(bytes));
+        }catch (UnknownOpCodeException e){
+            assertFalse(e.getMessage().isEmpty());
+            assertFalse(e.getOpCode() == null);
+        }
+    }
 }
