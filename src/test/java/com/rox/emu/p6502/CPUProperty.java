@@ -9,9 +9,10 @@ import com.rox.emu.SimpleMemory;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 
-import static com.rox.emu.p6502.InstructionSet.OP_LDA_I;
 import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+
+import static com.rox.emu.p6502.op.OpCode.*;
 
 @RunWith(JUnitQuickcheck.class)
 public class CPUProperty {
@@ -52,25 +53,25 @@ public class CPUProperty {
 
     @Property (trials = 100)
     public void testValidImmediateADC(@InRange(min = "0", max = "255") int value){
-        int[] program = {OP_LDA_I, value};
-        memory.setMemory(0, program);
+        Program program = new Program().with(OP_LDA_I, value);
+        memory.setMemory(0, program.getProgramAsByteArray());
 
         processor.step();
 
         Registers registers = processor.getRegisters();
         assertEquals(value, registers.getRegister(Registers.REG_ACCUMULATOR));
-        assertEquals(program.length, registers.getPC());
+        assertEquals(program.getLength(), registers.getPC());
     }
 
     @Property (trials = 100)
     public void testInvalidImmediateADC(@When(satisfies = "#_ < 0 || #_ > 255") int value){
-        int[] program = {OP_LDA_I, value};
-        memory.setMemory(0, program);
+        Program program = new Program().with(OP_LDA_I, value);
+        memory.setMemory(0, program.getProgramAsByteArray());
 
         processor.step();
 
         Registers registers = processor.getRegisters();
         assertNotEquals(value, registers.getRegister(Registers.REG_ACCUMULATOR));
-        assertEquals(program.length, registers.getPC());
+        assertEquals(program.getLength(), registers.getPC());
     }
 }

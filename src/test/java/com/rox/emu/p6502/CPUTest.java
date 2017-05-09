@@ -5,7 +5,6 @@ import com.rox.emu.SimpleMemory;
 import com.rox.emu.UnknownOpCodeException;
 import junit.framework.TestCase;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static com.rox.emu.p6502.InstructionSet.OP_BRK;
