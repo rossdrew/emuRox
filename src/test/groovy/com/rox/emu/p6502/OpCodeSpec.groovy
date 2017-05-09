@@ -14,8 +14,8 @@ class OpCodeSpec extends Specification {
     def testNewOpCode(){
         when:
         Memory memory = new SimpleMemory()
-        int[] program = [OpCode.OP_LDA_I.getByteValue(), loadValue] //Nicer way to do this?
-        memory.setMemory(0, program)
+        Program program = new Program().with(OpCode.OP_LDA_I, loadValue)
+        memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
         CPU processor = new CPU(memory)

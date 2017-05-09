@@ -49,4 +49,8 @@ public class Program {
     public int[] getProgramAsByteArray() {
         return programBytes.clone();
     }
+
+    public int getLength() {
+        return programBytes.length;
+    }
 }
