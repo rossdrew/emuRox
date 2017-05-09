@@ -15,7 +15,6 @@ import java.util.Arrays;
 
 import static com.rox.emu.p6502.Compiler.INDIRECT_PREFIX;
 import static com.rox.emu.p6502.Compiler.VALUE_PREFIX;
-import static com.rox.emu.p6502.InstructionSet.OP_LDA_I;
 import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.*;
 
