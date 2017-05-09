@@ -12,9 +12,7 @@ import com.rox.emu.p6502.dbg.ui.component.*;
 import com.rox.emu.p6502.op.AddressingMode;
 import com.rox.emu.p6502.op.OpCode;
 
-import static com.rox.emu.p6502.InstructionSet.*;
-import static com.rox.emu.p6502.InstructionSet.OP_BNE;
-import static com.rox.emu.p6502.InstructionSet.OP_CPX_I;
+import static com.rox.emu.p6502.op.OpCode.*;
 
 /**
  * A DebuggerWindow for debugging 6502 CPU code
@@ -193,7 +191,7 @@ public class DebuggerWindow extends JFrame {
             arguments += " " + MemoryPanel.asHex(memory.getByte(pointer + (i+1)));
         }
 
-        instructionName = getOpCodeName(instr);
+        instructionName = OpCode.from(instr).toString();
         final String instructionLocation = MemoryPanel.asHex(pointer);
         final String instructionCode = MemoryPanel.asHex(instr);
         final String completeInstructionInfo = "[" + instructionLocation + "] (" + instructionCode + arguments + ") :" + instructionName;
