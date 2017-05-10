@@ -41,6 +41,10 @@ public class CompilerTest {
             assertEquals("AA", Compiler.extractFirstOccurrence(Compiler.VALUE_REGEX, "$AA", "LDA"));
             assertEquals("AA", Compiler.extractFirstOccurrence(Compiler.VALUE_REGEX, "#$AA", "LDA"));
             assertEquals("AA", Compiler.extractFirstOccurrence(Compiler.VALUE_REGEX, "($AA,X)", "ADC"));
+
+            assertEquals("A", Compiler.extractFirstOccurrence(Compiler.VALUE_REGEX, "($A,X)", "ADC"));
+            assertEquals("BBB", Compiler.extractFirstOccurrence(Compiler.VALUE_REGEX, "($BBB,X)", "ADC"));
+            assertEquals("CCCC", Compiler.extractFirstOccurrence(Compiler.VALUE_REGEX, "($CCCC,X)", "ADC"));
         }catch (UnknownOpCodeException e){
             fail(e.getMessage());
         }
