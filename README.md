@@ -9,19 +9,15 @@ An emulator for the 6502 processor.  The plan is to evolve this into a working N
 
 ## Progress
 
-Currently I'm looking in to the NES PPU.  Trying to garner enough information to start emulating this piece of hardware while looking at code I've wrote over the last few months and looking at where it might be improved.  For example:-
+With a first version of the 6502 processor (including a graphical debugger and compiler) written, currently I'm looking in to the NES PPU.  Trying to garner enough information to start emulating this piece of hardware while looking at code I've wrote over the last few months and looking at where it might be improved.  For example:-
  
-  - a refactor of how Op-Codes are dealt with, stored and decoded.
-  - a cleaner debug interface to better debug larger programs I'll be dealing with from now on
-  - a compiler so I can write programs, debug and develop easier
   - getting rid of java performed arithmetic in favor of ALU performed arithmetic, it's causing problems...as expected
+  - compressing the data driven tests;  extracting out common patterns, etc
 
 #### 6502
 
 All op-codes now implemented. Some changing of arithmetic (usually in `+`/`-` cases) to twos compliment arithmetic.  Some other bugs needing worked out.
 Timing will be looked at later, as necessary.  BCD wont be needed for now for the NES (Ricoh) version and I'll need to look at the memory mapped registers.
-
-I'd really like to compress my data driven tests a little.  There's a lot of common code in there and therefor a lot of changes if small architectural changes are made, such as the up and coming op-code migration.
  
 ## Development & Testing
 
@@ -44,7 +40,6 @@ I'd really like to compress my data driven tests a little.  There's a lot of com
 
 -----
 
-
 ### Problems
 
 ###### 6502
@@ -52,12 +47,12 @@ I'd really like to compress my data driven tests a little.  There's a lot of com
 ###### Javas unsigned byte problem. 
  - Java bytes are signed, meaning it's a pain to deal with them, instead we have to use ints to represent bytes.
  - `System.out` is confusing Pitest, need to invest some time in moving to a loggin framework
+ - [JaCoCo](http://www.eclemma.org/jacoco/) doesn't report coverage of `String` based `switch` statements [well](http://stackoverflow.com/questions/42642840/why-is-jacoco-not-covering-my-switch-statements)
  
 ### Sources
- - [JaCoCo](http://www.eclemma.org/jacoco/), [Was missing Spock tests](http://stackoverflow.com/questions/41652981/why-does-jacoco-ignore-myspock-tests-yet-sees-my-junit-tests), thanks [Godin](http://stackoverflow.com/users/244993/godin) of Stack Overflow
- - [JaCoCo](http://www.eclemma.org/jacoco/), has a problem with code coverage of `String` based `switch` statements. In that it reports missing coverage where there is none. Thanks again thanks [Godin](http://stackoverflow.com/users/244993/godin) of Stack Overflow for your [explanation](http://stackoverflow.com/questions/42642840/why-is-jacoco-not-covering-my-switch-statements)
- - The [6502 Programming](https://www.facebook.com/groups/6502CPU/) Facebook group has been invaluable in resolving small questions 
- - I'm planning on reaching out to communities for code reviews, another pair of eyes is always helpful, although so far these have proven to be unfruitful:-
+ - StackOverflow as always has been a huge help, specifically [Godin](http://stackoverflow.com/users/244993/godin), also a developer of [JaCoCo](http://www.eclemma.org/jacoco/) for his help.  eg. [here](http://stackoverflow.com/questions/42642840/why-is-jacoco-not-covering-my-switch-statements) & [here](http://stackoverflow.com/questions/41652981/why-does-jacoco-ignore-myspock-tests-yet-sees-my-junit-tests) 
+ - The [6502 Programming](https://www.facebook.com/groups/6502CPU/) Facebook group has been invaluable in resolving very specific questions 
+ - I'm planning on reaching out to communities for code reviews (your comments are always welcome btw), another pair of eyes is always helpful, although so far these have proven to be unfruitful:-
     - [Reddit](https://www.reddit.com/r/reviewmycode/comments/5oorz1/java_6502_emulator/)
     - [Stack Exchange](http://codereview.stackexchange.com/questions/154600/op-code-decoding-in-an-emulator) 
  
