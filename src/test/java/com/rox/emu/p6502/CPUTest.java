@@ -13,6 +13,7 @@ import static org.spockframework.util.Assert.fail;
 import static com.rox.emu.p6502.op.OpCode.*;
 
 public class CPUTest {
+
     private Memory memory;
     private CPU processor;
 
@@ -56,9 +57,10 @@ public class CPUTest {
         memory.setByteAt(0xFFFC, 0x0);
         memory.setByteAt(0xFFFD, 0x0);
 
+        Registers registers = processor.getRegisters();
+
         processor.step(3);
         processor.reset();
-        Registers registers = processor.getRegisters();
 
         assertEquals(0x34, registers.getRegister(Registers.REG_STATUS));
         assertEquals(0x0, registers.getRegister(Registers.REG_PC_LOW));

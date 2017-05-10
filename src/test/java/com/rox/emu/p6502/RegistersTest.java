@@ -5,9 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static junit.framework.TestCase.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.spockframework.util.Assert.fail;
 
 /**
@@ -110,7 +108,10 @@ public class RegistersTest {
     public void testGetValidRegisterName(){
         for (int i=0; i<8; i++){
             try {
-                assertNotEquals("", Registers.getRegisterName(i));
+                final String name = Registers.getRegisterName(i);
+
+                assertNotNull(name);
+                assertNotEquals("", name);
             }catch(Exception e){
                 TestCase.fail("Register #" + i + " should have a name");
             }

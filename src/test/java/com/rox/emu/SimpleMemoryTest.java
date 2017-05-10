@@ -39,9 +39,10 @@ public class SimpleMemoryTest {
     public void testGetBlock(){
         memory.setMemory(0, new int [] {0,1,2,3,4,5,6,7,8,9});
 
-        int [] retrievedBlock = memory.getBlock(0,9);
-        for (int i=0; i<9; i++){
-            assertEquals(i, retrievedBlock[i]);
+        int offset = 5;
+        int [] retrievedBlock = memory.getBlock(offset,9);
+        for (int i=0; i<retrievedBlock.length; i++){
+            assertEquals(i+offset, retrievedBlock[i]);
         }
     }
 

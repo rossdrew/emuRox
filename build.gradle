@@ -30,7 +30,7 @@ buildscript {
     }
 
     dependencies {
-        classpath "info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.1.4"
+        classpath "info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.1.11"
     }
 }
 

@@ -43,7 +43,7 @@ public class CPU {
     }
 
     public void irq() {
-        LOG.info("IRQ!");
+        LOG.debug("IRQ!");
         registers.setFlag(STATUS_FLAG_IRQ_DISABLE);
 
         push(getRegisterValue(REG_PC_HIGH));
@@ -55,7 +55,7 @@ public class CPU {
     }
 
     public void nmi() {
-        LOG.info("NMI!");
+        LOG.debug("NMI!");
         registers.setFlag(STATUS_FLAG_IRQ_DISABLE);
 
         push(getRegisterValue(REG_PC_HIGH));
