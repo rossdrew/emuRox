@@ -1,11 +1,16 @@
 package com.rox.emu.p6502;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * A representation of the MOS 6502 CPU registers
  *
  * @author Ross Drew
  */
 public class Registers {
+    private final Logger LOG = LoggerFactory.getLogger(this.getClass());
+    
     public static final int REG_ACCUMULATOR = 0;
     public static final int REG_Y_INDEX = 1;
     public static final int REG_X_INDEX = 2;
@@ -50,7 +55,7 @@ public class Registers {
     }
 
     public void setRegister(int registerID, int val){
-        System.out.println("'R:" + getRegisterName(registerID) + "' := " + val);
+        LOG.debug("'R:" + getRegisterName(registerID) + "' := " + val);
         register[registerID] = val;
     }
 
@@ -73,7 +78,7 @@ public class Registers {
     public void setPC(int wordPC){
         setRegister(REG_PC_HIGH, wordPC >> 8);
         setRegister(REG_PC_LOW, wordPC & 0xFF);
-        System.out.println("'R+:Program Counter' := " + wordPC + " [ " + getRegister(REG_PC_HIGH) + " | " + getRegister(REG_PC_LOW) + " ]");
+        LOG.debug("'R+:Program Counter' := " + wordPC + " [ " + getRegister(REG_PC_HIGH) + " | " + getRegister(REG_PC_LOW) + " ]");
     }
 
     public int getPC(){
@@ -111,7 +116,7 @@ public class Registers {
     }
 
     public void setFlag(int flagPlaceValue) {
-        System.out.println("'F:" + getFlagName(flagPlaceValue) +"' -> SET");
+        LOG.debug("'F:" + getFlagName(flagPlaceValue) +"' -> SET");
         register[REG_STATUS] = register[REG_STATUS] | flagPlaceValue;
     }
 
@@ -127,7 +132,7 @@ public class Registers {
      * @param flagPlaceValue int with bits to clear, turned on
      */
     public void clearFlag(int flagPlaceValue){
-        System.out.println("'F:" + getFlagName(flagPlaceValue) + "' -> CLEARED");
+        LOG.debug("'F:" + getFlagName(flagPlaceValue) + "' -> CLEARED");
         register[REG_STATUS] = (~flagPlaceValue) & register[REG_STATUS];
     }
 

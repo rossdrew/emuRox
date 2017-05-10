@@ -3,6 +3,8 @@ package com.rox.emu.p6502;
 import com.rox.emu.Memory;
 import com.rox.emu.UnknownOpCodeException;
 import com.rox.emu.p6502.op.OpCode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static com.rox.emu.p6502.Registers.*;
 
@@ -13,6 +15,8 @@ import static com.rox.emu.p6502.Registers.*;
  * @author Ross Drew
  */
 public class CPU {
+    private final Logger LOG = LoggerFactory.getLogger(this.getClass());
+
     private final Memory memory;
     private final Registers registers = new Registers();
 
@@ -27,7 +31,7 @@ public class CPU {
      * IRL this takes 6 CPU cycles but we'll cross that bridge IF we come to it-
      */
     public void reset(){
-        System.out.println("*** RESETTING >>>");
+        LOG.trace("RESETTING...");
         setRegisterValue(REG_ACCUMULATOR, 0x0);
         setRegisterValue(REG_X_INDEX, 0x0);
         setRegisterValue(REG_Y_INDEX, 0x0);
@@ -35,11 +39,11 @@ public class CPU {
         setRegisterValue(REG_PC_HIGH, getByteOfMemoryAt(0xFFFC));
         setRegisterValue(REG_PC_LOW, getByteOfMemoryAt(0xFFFD));
         setRegisterValue(REG_SP, 0xFF);
-        System.out.println("...READY!");
+        LOG.trace("...READY!");
     }
 
     public void irq() {
-        System.out.println("*** IRQ >>>");
+        LOG.info("IRQ!");
         registers.setFlag(STATUS_FLAG_IRQ_DISABLE);
 
         push(getRegisterValue(REG_PC_HIGH));
@@ -51,7 +55,7 @@ public class CPU {
     }
 
     public void nmi() {
-        System.out.println("*** NMI >>>");
+        LOG.info("NMI!");
         registers.setFlag(STATUS_FLAG_IRQ_DISABLE);
 
         push(getRegisterValue(REG_PC_HIGH));
@@ -101,13 +105,13 @@ public class CPU {
      * Execute the next program instruction as per {@link Registers#getNextProgramCounter()}
      */
     public void step() {
-        System.out.println("\n*** STEP >>>");
+        LOG.trace("STEP >>>");
 
         final int opCodeByte = nextProgramByte();
         final OpCode opCode = OpCode.from(opCodeByte);
 
         //Execute the opcode
-        System.out.println("Instruction: " + opCode.getOpCodeName() + "...");
+        LOG.debug("Instruction: " + opCode.getOpCodeName() + "...");
         switch (opCode){
             case OP_BRK:
                 registers.setPC(registers.getPC() + 2);
@@ -634,7 +638,6 @@ public class CPU {
                 int h = nextProgramByte();
                 int l = nextProgramByte();
                 int pointer = (h << 8 | l);
-                System.out.println(">>>>>>>>>>> " + pointer + "=" + getWordOfMemoryAt(pointer));
                 registers.setPC(getWordOfMemoryAt(pointer));
             }break;
 
@@ -778,7 +781,7 @@ public class CPU {
         setRegisterValue(REG_SP, getRegisterValue(REG_SP) + 1);
         int address = 0x0100 | getRegisterValue(REG_SP);
         int value = getByteOfMemoryAt(address);
-        System.out.println("POP " + value + "(0b" + Integer.toBinaryString(value) + ") from mem[0x" + Integer.toHexString(address).toUpperCase() + "]");
+        LOG.trace("POP " + value + "(0b" + Integer.toBinaryString(value) + ") from mem[0x" + Integer.toHexString(address).toUpperCase() + "]");
         return value;
     }
 
@@ -788,7 +791,7 @@ public class CPU {
      * @param value value to push
      */
     private void push(int value){
-        System.out.println("PUSH " + value + "(0b" + Integer.toBinaryString(value) + ") to mem[0x" + Integer.toHexString(getRegisterValue(REG_SP)).toUpperCase() + "]");
+        LOG.trace("PUSH " + value + "(0b" + Integer.toBinaryString(value) + ") to mem[0x" + Integer.toHexString(getRegisterValue(REG_SP)).toUpperCase() + "]");
         setByteOfMemoryAt(0x0100 | getRegisterValue(REG_SP), value);
         setRegisterValue(REG_SP, getRegisterValue(REG_SP) - 1);
     }
@@ -811,7 +814,7 @@ public class CPU {
 
     private int getByteOfMemoryAt(int location, int index){
         final int memoryByte = memory.getByte(location + index);
-        System.out.println("Got 0x" + Integer.toHexString(memoryByte) + " from mem[" + location + (index != 0 ? "[" + index + "]" : "") +"]");
+        LOG.trace("Got 0x" + Integer.toHexString(memoryByte) + " from mem[" + location + (index != 0 ? "[" + index + "]" : "") +"]");
         return memoryByte;
     }
 
@@ -825,7 +828,7 @@ public class CPU {
 
     private int setByteOfMemoryAt(int location, int index, int newByte){
         memory.setByteAt(location + index, newByte);
-        System.out.println("Stored 0x" + Integer.toHexString(newByte) + " at mem[" + location + (index != 0 ? "[" + index + "]" : "") +"]");
+        LOG.trace("Stored 0x" + Integer.toHexString(newByte) + " at mem[" + location + (index != 0 ? "[" + index + "]" : "") +"]");
         return (location + index);
     }
 
@@ -836,7 +839,7 @@ public class CPU {
 
     private int getWordOfMemoryAt(int location) {
         int memoryWord = memory.getWord(location);
-        System.out.println("Got 0x" + Integer.toHexString(memoryWord) + " from mem[" + location +"]");
+        LOG.trace("Got 0x" + Integer.toHexString(memoryWord) + " from mem[" + location +"]");
         return memoryWord;
     }
 
@@ -861,7 +864,7 @@ public class CPU {
      */
     private void branchIf(boolean condition){
         int location = nextProgramByte();
-        System.out.println("{Branch:0x" + Integer.toHexString(registers.getPC()) + " by " + Integer.toBinaryString(location) + "} " + (condition ? "YES->" : "NO..."));
+        LOG.debug("{Branch:0x" + Integer.toHexString(registers.getPC()) + " by " + Integer.toBinaryString(location) + "} " + (condition ? "YES->" : "NO..."));
         if (condition) branchTo(location);
     }
 
