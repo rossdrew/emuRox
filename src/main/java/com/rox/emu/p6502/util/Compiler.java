@@ -1,4 +1,4 @@
-package com.rox.emu.p6502;
+package com.rox.emu.p6502.util;
 
 import com.rox.emu.UnknownOpCodeException;
 import com.rox.emu.p6502.op.AddressingMode;

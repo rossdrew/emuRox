@@ -4,8 +4,9 @@ import com.pholser.junit.quickcheck.Property;
 import com.pholser.junit.quickcheck.When;
 import com.pholser.junit.quickcheck.generator.InRange;
 import com.pholser.junit.quickcheck.runner.JUnitQuickcheck;
-import com.rox.emu.Memory;
-import com.rox.emu.SimpleMemory;
+import com.rox.emu.mem.Memory;
+import com.rox.emu.mem.SimpleMemory;
+import com.rox.emu.p6502.util.Program;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 

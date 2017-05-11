@@ -1,8 +1,9 @@
 package com.rox.emu.p6502;
 
-import com.rox.emu.Memory;
-import com.rox.emu.SimpleMemory;
+import com.rox.emu.mem.Memory;
+import com.rox.emu.mem.SimpleMemory;
 import com.rox.emu.UnknownOpCodeException;
+import com.rox.emu.p6502.util.Program;
 import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;

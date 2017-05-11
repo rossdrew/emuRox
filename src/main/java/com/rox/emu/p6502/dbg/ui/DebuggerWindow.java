@@ -1,10 +1,10 @@
 package com.rox.emu.p6502.dbg.ui;
 
-import com.rox.emu.Memory;
+import com.rox.emu.mem.Memory;
 import com.rox.emu.p6502.CPU;
-import com.rox.emu.p6502.Program;
+import com.rox.emu.p6502.util.Program;
 import com.rox.emu.p6502.Registers;
-import com.rox.emu.SimpleMemory;
+import com.rox.emu.mem.SimpleMemory;
 import javax.swing.*;
 import java.awt.*;
 

@@ -1,6 +1,7 @@
 package com.rox.emu.p6502
 
 import com.rox.emu.p6502.op.OpCode
+import com.rox.emu.p6502.util.Program
 import spock.lang.Specification
 
 class ProgramSpec extends Specification {

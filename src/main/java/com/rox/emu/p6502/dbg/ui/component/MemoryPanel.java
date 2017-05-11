@@ -1,6 +1,6 @@
 package com.rox.emu.p6502.dbg.ui.component;
 
-import com.rox.emu.Memory;
+import com.rox.emu.mem.Memory;
 import com.rox.emu.p6502.Registers;
 
 import javax.swing.*;

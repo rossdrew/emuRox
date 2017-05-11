@@ -1,4 +1,4 @@
-package com.rox.emu;
+package com.rox.emu.mem;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

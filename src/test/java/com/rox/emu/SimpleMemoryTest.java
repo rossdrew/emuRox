@@ -1,5 +1,7 @@
 package com.rox.emu;
 
+import com.rox.emu.mem.Memory;
+import com.rox.emu.mem.SimpleMemory;
 import org.junit.Before;
 import org.junit.Test;
 

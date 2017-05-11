@@ -1,4 +1,4 @@
-package com.rox.emu;
+package com.rox.emu.mem;
 
 /**
  * An interface to any "memory" store in which data can
