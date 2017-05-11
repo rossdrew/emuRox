@@ -113,6 +113,7 @@ public class CPU {
         //Execute the opcode
         LOG.debug("Instruction: " + opCode.getOpCodeName() + "...");
         switch (opCode){
+            default:
             case OP_BRK:
                 registers.setPC(registers.getPC() + 2);
                 push(registers.getRegister(REG_PC_HIGH));
@@ -737,9 +738,6 @@ public class CPU {
                 setRegisterValue(REG_PC_LOW, pop());
                 setRegisterValue(REG_PC_HIGH, pop());
                 break;
-
-            default:
-                throw new UnknownOpCodeException("Unknown 6502 OpCode:" + opCodeByte + " encountered.", opCodeByte);
         }
     }
 
@@ -804,8 +802,8 @@ public class CPU {
         return getByteOfMemoryAt(location, getRegisterValue(REG_Y_INDEX));
     }
 
-    private int setByteOfMemoryYIndexedAt(int location, int newByte){
-        return setByteOfMemoryAt(location, getRegisterValue(REG_Y_INDEX), newByte);
+    private void setByteOfMemoryYIndexedAt(int location, int newByte){
+        setByteOfMemoryAt(location, getRegisterValue(REG_Y_INDEX), newByte);
     }
 
     private int getByteOfMemoryAt(int location){
@@ -818,18 +816,17 @@ public class CPU {
         return memoryByte;
     }
 
-    private int setByteOfMemoryXIndexedAt(int location, int newByte){
-        return setByteOfMemoryAt(location, getRegisterValue(REG_X_INDEX), newByte);
+    private void setByteOfMemoryXIndexedAt(int location, int newByte){
+        setByteOfMemoryAt(location, getRegisterValue(REG_X_INDEX), newByte);
     }
 
-    private int setByteOfMemoryAt(int location, int newByte){
-        return setByteOfMemoryAt(location, 0, newByte);
+    private void setByteOfMemoryAt(int location, int newByte){
+        setByteOfMemoryAt(location, 0, newByte);
     }
 
-    private int setByteOfMemoryAt(int location, int index, int newByte){
+    private void setByteOfMemoryAt(int location, int index, int newByte){
         memory.setByteAt(location + index, newByte);
         LOG.trace("Stored 0x" + Integer.toHexString(newByte) + " at mem[" + location + (index != 0 ? "[" + index + "]" : "") +"]");
-        return (location + index);
     }
 
     private int getWordOfMemoryXIndexedAt(int location){
