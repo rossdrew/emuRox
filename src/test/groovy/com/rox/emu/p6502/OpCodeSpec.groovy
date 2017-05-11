@@ -3727,9 +3727,9 @@ class OpCodeSpec extends Specification {
                          OP_LDA_I, firstValue,      //High order byte at pointer
                          OP_STA_ABS_IY, pointerHi, pointerLo,
                          OP_LDA_I, pointerHi,       //Pointer location
-                         OP_STA_Z, 0x60,
+                         OP_STA_Z, pointerHiMem,
                          OP_LDA_I, pointerLo,       //Pointer location
-                         OP_STA_Z, 0x61,
+                         OP_STA_Z, pointerLoMem,
                          OP_LDA_I, secondValue,
                          OP_CMP_IND_IY, 0x60)
         memory.setMemory(0, program.getProgramAsByteArray())
@@ -3747,11 +3747,11 @@ class OpCodeSpec extends Specification {
       //  C == registers.statusFlags[Registers.C]
 
         where:
-        pointerHi | pointerLo | firstValue | secondValue | index | Z     | N     | C     | Expected
-        0x02      | 0x20      | 0x10       | 0x10        | 0     | true  | false | true  | "Basic compare"
-        0x02      | 0x22      | 0x11       | 0x10        | 1     | false | false | true  | "Carry flag set"
-        0x03      | 0x35      | 0x10       | 0x11        | 2     | false | true  | false | "Smaller value - larger"
-        0x04      | 0x41      | 0xFF       | 0x01        | 3     | false | true  | true  | "Negative result"
+        pointerHiMem | pointerLoMem | pointerHi | pointerLo | firstValue | secondValue | index | Z     | N     | C     | Expected
+        0x60         | 0x61         | 0x02      | 0x20      | 0x10       | 0x10        | 0     | true  | false | true  | "Basic compare"
+        0x80         | 0x81         | 0x02      | 0x22      | 0x11       | 0x10        | 1     | false | false | true  | "Carry flag set"
+        0x55         | 0x56         | 0x03      | 0x35      | 0x10       | 0x11        | 2     | false | true  | false | "Smaller value - larger"
+        0xF0         | 0xF1         | 0x04      | 0x41      | 0xFF       | 0x01        | 3     | false | true  | true  | "Negative result"
     }
 
     @Unroll("CPY (Immediate) #Expected: #firstValue == #secondValue")
