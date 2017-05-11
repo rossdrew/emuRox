@@ -1,7 +1,5 @@
 package com.rox.emu.p6502.op;
 
-import com.rox.emu.UnknownOpCodeException;
-
 public enum AddressingMode {
     IMPLIED("Implied", 1),
     IMMEDIATE("Immediate", 2),

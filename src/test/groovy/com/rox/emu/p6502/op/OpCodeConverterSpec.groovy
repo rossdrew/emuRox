@@ -1,6 +1,7 @@
 package com.rox.emu.p6502.op
 
 import com.rox.emu.UnknownOpCodeException
+import com.rox.emu.p6502.op.util.OpCodeConverter
 import spock.lang.Specification
 import spock.lang.Unroll
 

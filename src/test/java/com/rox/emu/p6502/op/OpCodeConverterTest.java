@@ -1,6 +1,7 @@
 package com.rox.emu.p6502.op;
 
 import com.rox.emu.UnknownOpCodeException;
+import com.rox.emu.p6502.op.util.OpCodeConverter;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
