@@ -50,6 +50,10 @@ jacocoTestReport {
     }
 }
 
+pitest {
+    excludedClasses = ['com.rox.emu.p6502.dbg.ui.*']
+}
+
 task runDebugUI(type: JavaExec, group: 'application') {
     println "Running Debugger UI for ${project.name}"
     classpath sourceSets.main.runtimeClasspath
