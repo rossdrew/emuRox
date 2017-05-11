@@ -1,6 +1,6 @@
 package com.rox.emu;
 
-import com.rox.emu.processor.mos6502.op.util.OpCode;
+import com.rox.emu.processor.mos6502.op.OpCode;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

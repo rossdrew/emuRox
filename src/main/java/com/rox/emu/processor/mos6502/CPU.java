@@ -1,7 +1,7 @@
 package com.rox.emu.processor.mos6502;
 
 import com.rox.emu.mem.Memory;
-import com.rox.emu.processor.mos6502.op.util.OpCode;
+import com.rox.emu.processor.mos6502.op.OpCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -9,8 +9,8 @@ import com.rox.emu.mem.SimpleMemory;
 import javax.swing.*;
 import java.awt.*;
 
-import com.rox.emu.processor.mos6502.op.util.AddressingMode;
-import com.rox.emu.processor.mos6502.op.util.OpCode;
+import com.rox.emu.processor.mos6502.op.AddressingMode;
+import com.rox.emu.processor.mos6502.op.OpCode;
 import com.rox.emu.processor.mos6502.dbg.ui.component.MemoryPanel;
 
 /**

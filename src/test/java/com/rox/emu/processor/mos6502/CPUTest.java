@@ -11,7 +11,7 @@ import org.junit.Test;
 import static junit.framework.TestCase.assertEquals;
 import static org.spockframework.util.Assert.fail;
 
-import static com.rox.emu.processor.mos6502.op.util.OpCode.*;
+import static com.rox.emu.processor.mos6502.op.OpCode.*;
 
 public class CPUTest {
 

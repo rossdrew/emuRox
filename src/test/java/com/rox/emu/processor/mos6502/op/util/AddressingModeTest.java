@@ -1,5 +1,6 @@
 package com.rox.emu.processor.mos6502.op.util;
 
+import com.rox.emu.processor.mos6502.op.AddressingMode;
 import org.junit.Test;
 
 import static junit.framework.TestCase.fail;

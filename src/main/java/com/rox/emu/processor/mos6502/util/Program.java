@@ -1,7 +1,7 @@
 package com.rox.emu.processor.mos6502.util;
 
 
-import com.rox.emu.processor.mos6502.op.util.OpCode;
+import com.rox.emu.processor.mos6502.op.OpCode;
 
 /**
  * An immutable 6502 Program which is essentially a byte array which can be added to from different types neatly

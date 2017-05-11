@@ -1,4 +1,4 @@
-package com.rox.emu.processor.mos6502.op.util;
+package com.rox.emu.processor.mos6502.op;
 
 public enum AddressingMode {
     IMPLIED("Implied", 1),

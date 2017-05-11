@@ -1,7 +1,7 @@
 package com.rox.emu.processor.mos6502.op.util
 
 import com.rox.emu.UnknownOpCodeException
-import com.rox.emu.processor.mos6502.op.util.util.OpCodeConverter
+import com.rox.emu.processor.mos6502.op.AddressingMode
 import spock.lang.Specification
 import spock.lang.Unroll
 

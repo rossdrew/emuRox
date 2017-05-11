@@ -1,8 +1,8 @@
-package com.rox.emu.processor.mos6502;
+package com.rox.emu.processor.mos6502.op;
 
 import com.rox.emu.UnknownOpCodeException;
-import com.rox.emu.processor.mos6502.op.util.AddressingMode;
-import com.rox.emu.processor.mos6502.op.util.OpCode;
+import com.rox.emu.processor.mos6502.op.AddressingMode;
+import com.rox.emu.processor.mos6502.op.OpCode;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

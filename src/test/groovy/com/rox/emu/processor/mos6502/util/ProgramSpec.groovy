@@ -1,7 +1,6 @@
 package com.rox.emu.processor.mos6502.util
 
-import com.rox.emu.processor.mos6502.op.util.OpCode
-import com.rox.emu.processor.mos6502.util.Program
+import com.rox.emu.processor.mos6502.op.OpCode
 import spock.lang.Specification
 
 class ProgramSpec extends Specification {

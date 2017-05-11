@@ -13,7 +13,7 @@ import org.junit.runner.RunWith;
 import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
-import static com.rox.emu.processor.mos6502.op.util.OpCode.*;
+import static com.rox.emu.processor.mos6502.op.OpCode.*;
 
 @RunWith(JUnitQuickcheck.class)
 public class CPUProperty {

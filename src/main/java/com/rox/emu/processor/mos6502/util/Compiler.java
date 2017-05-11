@@ -1,8 +1,8 @@
 package com.rox.emu.processor.mos6502.util;
 
 import com.rox.emu.UnknownOpCodeException;
-import com.rox.emu.processor.mos6502.op.util.AddressingMode;
-import com.rox.emu.processor.mos6502.op.util.OpCode;
+import com.rox.emu.processor.mos6502.op.AddressingMode;
+import com.rox.emu.processor.mos6502.op.OpCode;
 
 import java.util.Arrays;
 import java.util.StringTokenizer;

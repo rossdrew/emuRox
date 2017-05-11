@@ -1,7 +1,7 @@
-package com.rox.emu.processor.mos6502.op.util;
+package com.rox.emu.processor.mos6502.op;
 
 import com.rox.emu.UnknownOpCodeException;
-import com.rox.emu.processor.mos6502.op.util.util.OpCodeConverter;
+import com.rox.emu.processor.mos6502.op.util.OpCodeConverter;
 
 import java.util.stream.Stream;
 
