@@ -59,6 +59,14 @@ public class CPUTest {
 
         Registers registers = processor.getRegisters();
 
+        registers.setRegister(Registers.REG_STATUS, 0x99);
+        registers.setRegister(Registers.REG_PC_LOW, 0x99);
+        registers.setRegister(Registers.REG_PC_HIGH, 0x99);
+        registers.setRegister(Registers.REG_SP, 0x99);
+        registers.setRegister(Registers.REG_ACCUMULATOR, 0x99);
+        registers.setRegister(Registers.REG_X_INDEX, 0x99);
+        registers.setRegister(Registers.REG_Y_INDEX, 0x99);
+
         processor.step(3);
         processor.reset();
 
