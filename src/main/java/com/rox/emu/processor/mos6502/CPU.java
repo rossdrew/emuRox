@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
  * A emulated representation of MOS 6502, 8 bit
  * microprocessor functionality.
  *
- * XXX: At this point, we are only emulating the NES custome version of the 6502
+ * XXX: At this point, we are only emulating the NES custom version of the 6502
  *
  * @author Ross Drew
  */

@@ -5,6 +5,11 @@ import com.rox.emu.processor.mos6502.op.util.OpCodeConverter;
 
 import java.util.stream.Stream;
 
+/**
+ * Enum representation of {@link com.rox.emu.processor.mos6502.CPU} op-codes.
+ *
+ * @author Ross Drew
+ */
 public enum OpCode {
     OP_BRK(0x00),
     OP_ASL_A(0x0A),

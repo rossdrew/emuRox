@@ -7,6 +7,8 @@ import java.awt.*;
 
 /**
  * A UI component intended to display 6502 registers and their state
+ *
+ * @author Ross Drew
  */
 public class RegisterPanel extends JPanel {
     private Registers registers;

@@ -1,6 +1,7 @@
 package com.rox.emu.processor.mos6502.util;
 
 import com.rox.emu.UnknownOpCodeException;
+import com.rox.emu.processor.mos6502.CPU;
 import com.rox.emu.processor.mos6502.op.AddressingMode;
 import com.rox.emu.processor.mos6502.op.OpCode;
 
@@ -10,18 +11,67 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- *  #$V               - Immediate
- *  #VV               - Accumulator
- *  $V / $ VV         - Zero Page
- *  $V,X / $VV,X      - Zero Page[X]
- *  $V,Y / $VV,Y      - Zero Page[Y]
- *  $VVV / $VVVV      - Absolute
- *  $VVV,X / $VVVV,X  - Absolute[X]
- *  $VVV,Y / $VVVV,Y  - Absolute[Y]
- *  ($V,X) / ($VV,X)  - Indirect, X
- *  ($V),Y / ($VV),Y  - Indirect, Y
+ *  A compiler for a {@link CPU}
  *
- *  | $[ V_Z | V_ABS ] ]
+ *  <table>
+ *    <tr>
+ *        <th>Format</th>
+ *        <th>Addressing Mode</th>
+ *    </tr>
+ *
+ *    <tr>
+ *      <td><code>#$V</code></td>
+ *      <td>Immediate</td>
+ *    </tr>
+ *
+ *    <tr>
+ *      <td><code>#VV</code></td>
+ *      <td>Accumulator</td>
+ *    </tr>
+ *
+ *    <tr>
+ *      <td><code>$V</code> / <code>$VV</code></td>
+ *      <td>Zero Page</td>
+ *    </tr>
+ *
+ *    <tr>
+ *      <td><code>$V,X</code> / <code>$VV,X</code></td>
+ *      <td>Zero Page[X]</td>
+ *    </tr>
+ *
+ *    <tr>
+ *      <td><code>$V,Y</code> / <code>$VV,Y</code></td>
+ *      <td>Zero Page[Y]</td>
+ *    </tr>
+ *
+ *    <tr>
+ *      <td><code>$VVV</code> / <code>$VVVV</code></td>
+ *      <td>Absolute</td>
+ *    </tr>
+ *
+ *    <tr>
+ *      <td><code>$VVV,X</code> / <code>$VVVV,X</code></td>
+ *      <td>Absolute[X]</td>
+ *    </tr>
+ *
+ *    <tr>
+ *      <td><code>$VVV,Y</code> / <code>$VVVV,Y</code></td>
+ *      <td>Absolute[Y]</td>
+ *    </tr>
+ *
+ *    <tr>
+ *      <td><code>($V,X)</code> / <code>($VV,X)</code></td>
+ *      <td>Indirect, X</td>
+ *    </tr>
+ *
+ *    <tr>
+ *      <td><code>($V),X</code> / <code>($VV),X</code></td>
+ *      <td>Indirect, Y</td>
+ *    </tr>
+ *
+ *  </Table>
+ *
+ * @author Ross Drew
  */
 public class Compiler {
     public static final Pattern PREFIX_REGEX = Pattern.compile("^[^0-9a-fA-F]{1,4}");

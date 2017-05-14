@@ -1,5 +1,8 @@
 package com.rox.emu.processor.mos6502.op;
 
+/**
+ * An enum representing possible addressing modes for {@link OpCode}
+ */
 public enum AddressingMode {
     IMPLIED("Implied", 1),
     IMMEDIATE("Immediate", 2),

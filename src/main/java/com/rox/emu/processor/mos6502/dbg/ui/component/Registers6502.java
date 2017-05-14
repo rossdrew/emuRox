@@ -42,6 +42,8 @@ import java.awt.*;
  *         <td>Status Register {N,V,-,B,D,I,Z,C}</td>
  *     </tr>
  * </table>
+ *
+ * @author Ross Drew
  */
 public class Registers6502 extends JPanel {
     private final Registers registers;
