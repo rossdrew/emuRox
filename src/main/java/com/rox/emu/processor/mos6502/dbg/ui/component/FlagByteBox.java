@@ -5,6 +5,8 @@ import java.awt.*;
 /**
  * A {@link ByteBox} that represents a status register with added character
  * representation of bits and highlights for flagged or non-flagged
+ *
+ * @author Ross Drew
  */
 public class FlagByteBox extends ByteBox {
     private final char[] flagIDs;

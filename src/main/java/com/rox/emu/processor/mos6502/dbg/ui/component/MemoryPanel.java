@@ -8,6 +8,8 @@ import java.awt.*;
 
 /**
  * A UI panel intended to display a block of memory
+ *
+ * @author Ross Drew
  */
 public class MemoryPanel extends JPanel {
     private Memory memory;

@@ -4,7 +4,10 @@ package com.rox.emu.processor.mos6502.util;
 import com.rox.emu.processor.mos6502.op.OpCode;
 
 /**
- * An immutable 6502 Program which is essentially a byte array which can be added to from different types neatly
+ * An immutable 6502 Program which is essentially a byte array which can
+ * be added to from different types neatly.
+ *
+ * @author Ross Drew
  */
 public class Program {
     private int[] programBytes = new int[] {};

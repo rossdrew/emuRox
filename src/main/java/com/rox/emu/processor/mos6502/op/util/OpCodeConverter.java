@@ -9,6 +9,8 @@ import java.util.Arrays;
  * Utility for converting internal opcode representation names to human readable descriptions
  *
  * e.g.  OP_ADC_I  ->  "ADC (Immediate)"
+ *
+ * @author Ross Drew
  */
 public class OpCodeConverter {
     //Internal representation details

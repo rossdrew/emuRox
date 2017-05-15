@@ -6,6 +6,8 @@ import java.awt.*;
 /**
  *  A UI component that displays a byte as a series of bits with an
  * identification name and Dec/Hex values displayed.
+ *
+ * @author Ross Drew
  */
 public class ByteBox extends JPanel {
     protected final int bitSize = 40;
