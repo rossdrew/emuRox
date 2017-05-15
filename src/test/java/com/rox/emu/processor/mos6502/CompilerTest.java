@@ -316,8 +316,20 @@ public class CompilerTest {
     }
 
     @Test
-    public void opCodeJaCoCoCoverage(){
+    public void opCode1JaCoCoCoverage(){
         Compiler compiler = new Compiler("\0ADC $10");
+
+        try {
+            compiler.getBytes();
+            fail("Exception expected.  This should not pass a String switch statement");
+        }catch(UnknownOpCodeException e){
+            assertNotNull(e);
+        }
+    }
+
+    @Test
+    public void opCode2JaCoCoCoverage(){
+        Compiler compiler = new Compiler("\0BRK");
 
         try {
             compiler.getBytes();
