@@ -11,7 +11,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- *  A compiler for a {@link CPU}
+ *  A compiler for a {@link CPU} for taking a textual program and converting it into an executable byte stream, e.g.<br/>
+ *  <br/>
+ *  <code>
+ *      LDA #$52 <br/>
+ *      LDX $10<br/>
+ *      STA $F1,X<br/>
+ *  </code> <br/>
+ *  -> <code> [0xA9, 0x52, 0xA2, 0x10, 0x95, 0xF1] </code>
  *
  *  <table>
  *    <tr>
