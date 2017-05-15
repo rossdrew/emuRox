@@ -23,11 +23,11 @@ public class CompilerTest {
     @Test
     public void testPrefixExtraction(){
         try {
-            assertEquals("$", Compiler.extractFirstOccurrence(PREFIX_REGEX, "$10", "LDA"));
-            assertEquals("#$", Compiler.extractFirstOccurrence(PREFIX_REGEX, "#$10", "ADC"));
-            assertEquals("$", Compiler.extractFirstOccurrence(PREFIX_REGEX, "$AA", "LDA"));
-            assertEquals("#$", Compiler.extractFirstOccurrence(PREFIX_REGEX, "#$AA", "ADC"));
-            assertEquals("($", Compiler.extractFirstOccurrence(PREFIX_REGEX, "($AA,X)", "ADC"));
+            assertEquals("$", extractFirstOccurrence(PREFIX_REGEX, "$10", "LDA"));
+            assertEquals("#$", extractFirstOccurrence(PREFIX_REGEX, "#$10", "ADC"));
+            assertEquals("$", extractFirstOccurrence(PREFIX_REGEX, "$AA", "LDA"));
+            assertEquals("#$", extractFirstOccurrence(PREFIX_REGEX, "#$AA", "ADC"));
+            assertEquals("($", extractFirstOccurrence(PREFIX_REGEX, "($AA,X)", "ADC"));
         }catch (UnknownOpCodeException e){
             fail(e.getMessage());
         }
@@ -36,15 +36,15 @@ public class CompilerTest {
     @Test
     public void testValueExtraction(){
         try {
-            assertEquals("10", Compiler.extractFirstOccurrence(VALUE_REGEX, "$10", "LDA"));
-            assertEquals("10", Compiler.extractFirstOccurrence(VALUE_REGEX, "#$10", "LDA"));
-            assertEquals("AA", Compiler.extractFirstOccurrence(VALUE_REGEX, "$AA", "LDA"));
-            assertEquals("AA", Compiler.extractFirstOccurrence(VALUE_REGEX, "#$AA", "LDA"));
-            assertEquals("AA", Compiler.extractFirstOccurrence(VALUE_REGEX, "($AA,X)", "ADC"));
+            assertEquals("10", extractFirstOccurrence(VALUE_REGEX, "$10", "LDA"));
+            assertEquals("10", extractFirstOccurrence(VALUE_REGEX, "#$10", "LDA"));
+            assertEquals("AA", extractFirstOccurrence(VALUE_REGEX, "$AA", "LDA"));
+            assertEquals("AA", extractFirstOccurrence(VALUE_REGEX, "#$AA", "LDA"));
+            assertEquals("AA", extractFirstOccurrence(VALUE_REGEX, "($AA,X)", "ADC"));
 
-            assertEquals("A", Compiler.extractFirstOccurrence(VALUE_REGEX, "($A,X)", "ADC"));
-            assertEquals("BBB", Compiler.extractFirstOccurrence(VALUE_REGEX, "($BBB,X)", "ADC"));
-            assertEquals("CCCC", Compiler.extractFirstOccurrence(VALUE_REGEX, "($CCCC,X)", "ADC"));
+            assertEquals("A", extractFirstOccurrence(VALUE_REGEX, "($A,X)", "ADC"));
+            assertEquals("BBB", extractFirstOccurrence(VALUE_REGEX, "($BBB,X)", "ADC"));
+            assertEquals("CCCC", extractFirstOccurrence(VALUE_REGEX, "($CCCC,X)", "ADC"));
         }catch (UnknownOpCodeException e){
             fail(e.getMessage());
         }
@@ -53,9 +53,9 @@ public class CompilerTest {
     @Test
     public void testPostfixExtraction(){
         try {
-            assertEquals(",X", Compiler.extractFirstOccurrence(POSTFIX_REGEX, "$10,X", "LDA"));
-            assertEquals(",Y", Compiler.extractFirstOccurrence(POSTFIX_REGEX, "$AA,Y", "LDA"));
-            assertEquals(",X)", Compiler.extractFirstOccurrence(POSTFIX_REGEX, "($AA,X)", "ADC"));
+            assertEquals(",X", extractFirstOccurrence(POSTFIX_REGEX, "$10,X", "LDA"));
+            assertEquals(",Y", extractFirstOccurrence(POSTFIX_REGEX, "$AA,Y", "LDA"));
+            assertEquals(",X)", extractFirstOccurrence(POSTFIX_REGEX, "($AA,X)", "ADC"));
         }catch (UnknownOpCodeException e){
             fail(e.getMessage());
         }
@@ -134,7 +134,7 @@ public class CompilerTest {
         final String hexByte = Integer.toHexString(byteValue);
 
         OpCode.streamOf(AddressingMode.ACCUMULATOR).forEach((opcode)->{
-            Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + Compiler.IMMEDIATE_PREFIX + hexByte);
+            Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + IMMEDIATE_PREFIX + hexByte);
 
             int[] bytes = compiler.getBytes();
 
