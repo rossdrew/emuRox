@@ -14,8 +14,7 @@ import org.junit.runner.RunWith;
 
 import java.util.Arrays;
 
-import static com.rox.emu.processor.mos6502.util.Compiler.INDIRECT_PREFIX;
-import static com.rox.emu.processor.mos6502.util.Compiler.VALUE_PREFIX;
+import static com.rox.emu.processor.mos6502.util.Compiler.*;
 import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.*;
 
@@ -24,11 +23,11 @@ public class CompilerTest {
     @Test
     public void testPrefixExtraction(){
         try {
-            assertEquals("$", Compiler.extractFirstOccurrence(Compiler.PREFIX_REGEX, "$10", "LDA"));
-            assertEquals("#$", Compiler.extractFirstOccurrence(Compiler.PREFIX_REGEX, "#$10", "ADC"));
-            assertEquals("$", Compiler.extractFirstOccurrence(Compiler.PREFIX_REGEX, "$AA", "LDA"));
-            assertEquals("#$", Compiler.extractFirstOccurrence(Compiler.PREFIX_REGEX, "#$AA", "ADC"));
-            assertEquals("($", Compiler.extractFirstOccurrence(Compiler.PREFIX_REGEX, "($AA,X)", "ADC"));
+            assertEquals("$", Compiler.extractFirstOccurrence(PREFIX_REGEX, "$10", "LDA"));
+            assertEquals("#$", Compiler.extractFirstOccurrence(PREFIX_REGEX, "#$10", "ADC"));
+            assertEquals("$", Compiler.extractFirstOccurrence(PREFIX_REGEX, "$AA", "LDA"));
+            assertEquals("#$", Compiler.extractFirstOccurrence(PREFIX_REGEX, "#$AA", "ADC"));
+            assertEquals("($", Compiler.extractFirstOccurrence(PREFIX_REGEX, "($AA,X)", "ADC"));
         }catch (UnknownOpCodeException e){
             fail(e.getMessage());
         }
@@ -37,15 +36,15 @@ public class CompilerTest {
     @Test
     public void testValueExtraction(){
         try {
-            assertEquals("10", Compiler.extractFirstOccurrence(Compiler.VALUE_REGEX, "$10", "LDA"));
-            assertEquals("10", Compiler.extractFirstOccurrence(Compiler.VALUE_REGEX, "#$10", "LDA"));
-            assertEquals("AA", Compiler.extractFirstOccurrence(Compiler.VALUE_REGEX, "$AA", "LDA"));
-            assertEquals("AA", Compiler.extractFirstOccurrence(Compiler.VALUE_REGEX, "#$AA", "LDA"));
-            assertEquals("AA", Compiler.extractFirstOccurrence(Compiler.VALUE_REGEX, "($AA,X)", "ADC"));
+            assertEquals("10", Compiler.extractFirstOccurrence(VALUE_REGEX, "$10", "LDA"));
+            assertEquals("10", Compiler.extractFirstOccurrence(VALUE_REGEX, "#$10", "LDA"));
+            assertEquals("AA", Compiler.extractFirstOccurrence(VALUE_REGEX, "$AA", "LDA"));
+            assertEquals("AA", Compiler.extractFirstOccurrence(VALUE_REGEX, "#$AA", "LDA"));
+            assertEquals("AA", Compiler.extractFirstOccurrence(VALUE_REGEX, "($AA,X)", "ADC"));
 
-            assertEquals("A", Compiler.extractFirstOccurrence(Compiler.VALUE_REGEX, "($A,X)", "ADC"));
-            assertEquals("BBB", Compiler.extractFirstOccurrence(Compiler.VALUE_REGEX, "($BBB,X)", "ADC"));
-            assertEquals("CCCC", Compiler.extractFirstOccurrence(Compiler.VALUE_REGEX, "($CCCC,X)", "ADC"));
+            assertEquals("A", Compiler.extractFirstOccurrence(VALUE_REGEX, "($A,X)", "ADC"));
+            assertEquals("BBB", Compiler.extractFirstOccurrence(VALUE_REGEX, "($BBB,X)", "ADC"));
+            assertEquals("CCCC", Compiler.extractFirstOccurrence(VALUE_REGEX, "($CCCC,X)", "ADC"));
         }catch (UnknownOpCodeException e){
             fail(e.getMessage());
         }
@@ -54,9 +53,9 @@ public class CompilerTest {
     @Test
     public void testPostfixExtraction(){
         try {
-            assertEquals(",X", Compiler.extractFirstOccurrence(Compiler.POSTFIX_REGEX, "$10,X", "LDA"));
-            assertEquals(",Y", Compiler.extractFirstOccurrence(Compiler.POSTFIX_REGEX, "$AA,Y", "LDA"));
-            assertEquals(",X)", Compiler.extractFirstOccurrence(Compiler.POSTFIX_REGEX, "($AA,X)", "ADC"));
+            assertEquals(",X", Compiler.extractFirstOccurrence(POSTFIX_REGEX, "$10,X", "LDA"));
+            assertEquals(",Y", Compiler.extractFirstOccurrence(POSTFIX_REGEX, "$AA,Y", "LDA"));
+            assertEquals(",X)", Compiler.extractFirstOccurrence(POSTFIX_REGEX, "($AA,X)", "ADC"));
         }catch (UnknownOpCodeException e){
             fail(e.getMessage());
         }
@@ -76,7 +75,7 @@ public class CompilerTest {
     @Test
     public void testSingleDigitArgument(){
         OpCode.streamOf(AddressingMode.ZERO_PAGE).forEach((opcode)->{
-            Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + Compiler.VALUE_PREFIX + "A");
+            Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + VALUE_PREFIX + "A");
 
             int[] bytes = compiler.getBytes();
 
@@ -87,7 +86,7 @@ public class CompilerTest {
     @Test
     public void testDoubleDigitArgument(){
         OpCode.streamOf(AddressingMode.ZERO_PAGE).forEach((opcode)->{
-            Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + Compiler.VALUE_PREFIX + "AB");
+            Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + VALUE_PREFIX + "AB");
 
             int[] bytes = compiler.getBytes();
 
@@ -98,7 +97,7 @@ public class CompilerTest {
     @Test
     public void testTripleDigitArgument(){
         OpCode.streamOf(AddressingMode.ABSOLUTE).forEach((opcode)->{
-            Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + Compiler.VALUE_PREFIX + "ABC");
+            Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + VALUE_PREFIX + "ABC");
 
             int[] bytes = compiler.getBytes();
 
@@ -109,7 +108,7 @@ public class CompilerTest {
     @Test
     public void testQuadrupleDigitArgument(){
         OpCode.streamOf(AddressingMode.ABSOLUTE).forEach((opcode)->{
-            Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + Compiler.VALUE_PREFIX + "ABCD");
+            Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + VALUE_PREFIX + "ABCD");
 
             int[] bytes = compiler.getBytes();
 
@@ -122,7 +121,7 @@ public class CompilerTest {
         final String hexByte = Integer.toHexString(byteValue);
 
         OpCode.streamOf(AddressingMode.IMMEDIATE).forEach((opcode)->{
-            Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + Compiler.IMMEDIATE_VALUE_PREFIX + hexByte);
+            Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + IMMEDIATE_VALUE_PREFIX + hexByte);
 
             int[] bytes = compiler.getBytes();
 
@@ -148,7 +147,7 @@ public class CompilerTest {
         final String hexByte = Integer.toHexString(byteValue);
 
         OpCode.streamOf(AddressingMode.ZERO_PAGE).forEach((opcode)->{
-            Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + Compiler.VALUE_PREFIX + hexByte);
+            Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + VALUE_PREFIX + hexByte);
 
             int[] bytes = compiler.getBytes();
 
@@ -161,7 +160,7 @@ public class CompilerTest {
         final String hexByte = Integer.toHexString(byteValue);
 
         OpCode.streamOf(AddressingMode.ZERO_PAGE_X).forEach((opcode)->{
-            Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + Compiler.VALUE_PREFIX + hexByte+ ",X");
+            Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + VALUE_PREFIX + hexByte+ ",X");
 
             int[] bytes = compiler.getBytes();
 
@@ -174,7 +173,7 @@ public class CompilerTest {
         final String hexByte = Integer.toHexString(byteValue);
 
         OpCode.streamOf(AddressingMode.ZERO_PAGE_Y).forEach((opcode)->{
-            Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + Compiler.VALUE_PREFIX + hexByte + ",Y");
+            Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + VALUE_PREFIX + hexByte + ",Y");
 
             int[] bytes = compiler.getBytes();
 
@@ -187,7 +186,7 @@ public class CompilerTest {
         final String hexWord = Integer.toHexString(wordValue);
 
         OpCode.streamOf(AddressingMode.ABSOLUTE).forEach((opcode)->{
-            Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + Compiler.VALUE_PREFIX + hexWord);
+            Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + VALUE_PREFIX + hexWord);
 
             int[] bytes = compiler.getBytes();
 
@@ -200,7 +199,7 @@ public class CompilerTest {
         final String hexWord = Integer.toHexString(wordValue);
 
         OpCode.streamOf(AddressingMode.ABSOLUTE_X).forEach((opcode)->{
-            Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + Compiler.VALUE_PREFIX + hexWord + ",X");
+            Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + VALUE_PREFIX + hexWord + ",X");
 
             int[] bytes = compiler.getBytes();
 
@@ -213,7 +212,7 @@ public class CompilerTest {
         final String hexWord = Integer.toHexString(wordValue);
 
         OpCode.streamOf(AddressingMode.ABSOLUTE_Y).forEach((opcode)->{
-            Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + Compiler.VALUE_PREFIX + hexWord + ",Y");
+            Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + VALUE_PREFIX + hexWord + ",Y");
 
             int[] bytes = compiler.getBytes();
 
@@ -226,7 +225,7 @@ public class CompilerTest {
         final String hexByte = Integer.toHexString(byteValue);
 
         OpCode.streamOf(AddressingMode.INDIRECT_X).forEach((opcode)->{
-            Compiler compiler = new Compiler(opcode.getOpCodeName() + " (" + Compiler.VALUE_PREFIX + hexByte + ",X)");
+            Compiler compiler = new Compiler(opcode.getOpCodeName() + " (" + VALUE_PREFIX + hexByte + ",X)");
 
             int[] bytes = compiler.getBytes();
 
@@ -239,7 +238,7 @@ public class CompilerTest {
         final String hexByte = Integer.toHexString(byteValue);
 
         OpCode.streamOf(AddressingMode.INDIRECT_Y).forEach((opcode)->{
-            Compiler compiler = new Compiler(opcode.getOpCodeName() + " (" + Compiler.VALUE_PREFIX + hexByte + "),Y");
+            Compiler compiler = new Compiler(opcode.getOpCodeName() + " (" + VALUE_PREFIX + hexByte + "),Y");
 
             int[] bytes = compiler.getBytes();
 
@@ -249,7 +248,7 @@ public class CompilerTest {
 
     @Test
     public void testChainedInstruction(){
-        Compiler compiler = new Compiler("SEC LDA " + Compiler.IMMEDIATE_VALUE_PREFIX + "47");
+        Compiler compiler = new Compiler("SEC LDA " + IMMEDIATE_VALUE_PREFIX + "47");
         final int[] bytes = compiler.getBytes();
 
         int[] expected = new int[] {OpCode.OP_SEC.getByteValue(), OpCode.OP_LDA_I.getByteValue(), 0x47};
@@ -258,7 +257,7 @@ public class CompilerTest {
 
     @Test
     public void testChainedTwoByteInstruction(){
-        Compiler compiler = new Compiler("LDA " + Compiler.IMMEDIATE_VALUE_PREFIX + "47 SEC");
+        Compiler compiler = new Compiler("LDA " + IMMEDIATE_VALUE_PREFIX + "47 SEC");
         final int[] bytes = compiler.getBytes();
 
         int[] expected = new int[] {OpCode.OP_LDA_I.getByteValue(), 0x47, OpCode.OP_SEC.getByteValue()};
@@ -267,7 +266,7 @@ public class CompilerTest {
 
     @Test
     public void testChainedTwoByteInstructions(){
-        Compiler compiler = new Compiler("LDA " + Compiler.IMMEDIATE_VALUE_PREFIX + "47 CLC LDA " + Compiler.IMMEDIATE_VALUE_PREFIX + "10 SEC");
+        Compiler compiler = new Compiler("LDA " + IMMEDIATE_VALUE_PREFIX + "47 CLC LDA " + IMMEDIATE_VALUE_PREFIX + "10 SEC");
         final int[] bytes = compiler.getBytes();
 
         int[] expected = new int[] {OpCode.OP_LDA_I.getByteValue(), 0x47, OpCode.OP_CLC.getByteValue(), OpCode.OP_LDA_I.getByteValue(), 0x10, OpCode.OP_SEC.getByteValue()};
