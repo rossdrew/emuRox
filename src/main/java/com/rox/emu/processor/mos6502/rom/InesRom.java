@@ -1,5 +1,9 @@
 package com.rox.emu.processor.mos6502.rom;
 
+import com.rox.emu.UnknownRomException;
+
+import java.util.Arrays;
+
 /**
  * As per https://wiki.nesdev.com/w/index.php/NES_2.0...
  *
@@ -25,4 +29,32 @@ package com.rox.emu.processor.mos6502.rom;
  * @author Ross Drew
  */
 public class InesRom {
+    private final String description;
+
+    private InesRom(String description){
+        this.description = description;
+    }
+
+    public static InesRom from(int[] bytes) {
+        String headerDescription = processHeader(bytes);
+
+        return new InesRom(headerDescription);
+    }
+
+    private static String processHeader(int[] bytes){
+        if (bytes.length < 4 ||
+            (bytes[0] != 0x4E) ||
+            (bytes[1] != 0x45) ||
+            (bytes[2] != 0x53) ||
+            (bytes[3] != 0x1A)){
+
+            throw new UnknownRomException("Invalid iNES header");
+        }
+
+        return "NES ROM";
+    }
+
+    public String getDescription() {
+        return description;
+    }
 }
