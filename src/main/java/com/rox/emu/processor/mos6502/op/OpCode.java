@@ -1,12 +1,13 @@
 package com.rox.emu.processor.mos6502.op;
 
 import com.rox.emu.UnknownOpCodeException;
+import com.rox.emu.processor.mos6502.CPU;
 import com.rox.emu.processor.mos6502.op.util.OpCodeConverter;
 
 import java.util.stream.Stream;
 
 /**
- * Enum representation of {@link com.rox.emu.processor.mos6502.CPU} op-codes.
+ * Enum representation of {@link CPU} op-codes.
  *
  * @author Ross Drew
  */
