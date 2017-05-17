@@ -85,6 +85,7 @@ public class Compiler {
     public static final Pattern VALUE_REGEX = Pattern.compile("[0-9a-fA-F]+");
     //XXX This should be a little more advanced as technically ')))', ')XY' or 'X)Y' are legal
     public static final Pattern POSTFIX_REGEX = Pattern.compile("[,XY)]{1,3}$");
+    public static final Pattern LABEL_REGEX = Pattern.compile("\\w+:");
 
     public static final String IMMEDIATE_PREFIX = "#";
     public static final String VALUE_PREFIX = "$";
@@ -145,9 +146,9 @@ public class Compiler {
 
                 case "ROR": //Accumulator only
                     final String valueToken = tokenizer.nextToken().trim();
-                    final String prefix = extractFirstOccurrence(PREFIX_REGEX, valueToken, opCodeToken);
-                    final String value = extractFirstOccurrence(VALUE_REGEX, valueToken, opCodeToken);
-                    final String postfix = extractFirstOccurrence(POSTFIX_REGEX, valueToken, opCodeToken);
+                    final String prefix = extractFirstOccurrence(PREFIX_REGEX, valueToken);
+                    final String value = extractFirstOccurrence(VALUE_REGEX, valueToken);
+                    final String postfix = extractFirstOccurrence(POSTFIX_REGEX, valueToken);
 
                     final AddressingMode addressingMode = getAddressingModeFrom(prefix, value, postfix);
 
@@ -208,13 +209,12 @@ public class Compiler {
         throw new UnknownOpCodeException("Invalid or unimplemented argument: '" + prefix + value + postfix + "'", prefix+value);
     }
 
-    public static String extractFirstOccurrence(Pattern pattern, String token, String opCode){
+    public static String extractFirstOccurrence(Pattern pattern, String token){
         final Matcher prefixMatcher = pattern.matcher(token);
         prefixMatcher.find();
         try {
             return prefixMatcher.group();
         }catch(IllegalStateException | ArrayIndexOutOfBoundsException e){
-//            throw new UnknownOpCodeException("Could not parse argument for " + opCode + " from '" + token + "'", token, e);
             return "";
         }
     }
