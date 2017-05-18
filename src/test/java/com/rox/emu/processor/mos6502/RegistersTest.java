@@ -112,7 +112,7 @@ public class RegistersTest {
 
                 assertNotNull(name);
                 assertNotEquals("", name);
-            }catch(Exception e){
+            }catch(ArrayIndexOutOfBoundsException e){
                 TestCase.fail("Register #" + i + " should have a name");
             }
         }
@@ -124,7 +124,7 @@ public class RegistersTest {
             try {
                 Registers.getRegisterName(i);
                 fail(i + " is an invalid register ID");
-            }catch(Exception e){
+            }catch(ArrayIndexOutOfBoundsException e){
 
             }
         }
