@@ -109,8 +109,7 @@ public class Compiler {
     }
 
     private int[] compileProgram() throws UnknownOpCodeException{
-        int[] program = new int[2000];
-        int i=0;
+        Program workingProgram = new Program();
 
         StringTokenizer tokenizer = new StringTokenizer(programText);
         while (tokenizer.hasMoreTokens()){
@@ -131,7 +130,7 @@ public class Compiler {
                 case "CLD": case "CLI": case "CLV":
                 case "BRK":
                 case "NOP":
-                    program[i++] = OpCode.from(opCodeToken).getByteValue();
+                    workingProgram = workingProgram.with(OpCode.from(opCodeToken).getByteValue());
                     break;
                 case "ADC": case "SBC":
                 case "LDA": case "LDY": case "LDX":
@@ -152,15 +151,16 @@ public class Compiler {
 
                     final AddressingMode addressingMode = getAddressingModeFrom(prefix, value, postfix);
 
-                    program[i++] = OpCode.from(opCodeToken, addressingMode).getByteValue();
-                    program[i++] = Integer.decode("0x" + value);
+
+                    workingProgram = workingProgram.with(OpCode.from(opCodeToken, addressingMode).getByteValue(),
+                                                         Integer.decode("0x" + value));
                     break;
                 default:
                     throw new UnknownOpCodeException("Unknown op-code (\"" + opCodeToken + "\") while parsing program", opCodeToken);
             }
         }
 
-        return Arrays.copyOf(program, i);
+        return workingProgram.getProgramAsByteArray();
     }
 
     private AddressingMode getAddressingModeFrom(String prefix, String value, String postfix){
