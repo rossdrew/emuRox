@@ -981,7 +981,6 @@ public class CPUTest {
 
     @Test
     public void testMultiplicationLoop(){
-        try {
             int data_offset = 0x32;
             int MPD = data_offset + 0x10;
             int MPR = data_offset + 0x11;
@@ -1030,8 +1029,5 @@ public class CPUTest {
             System.out.println("[A] = " + registers.getRegister(Registers.REG_ACCUMULATOR));
 
             assertEquals(0x1C, memory.getByte(RESAD_0));
-        }catch (Exception e) {
-            TestCase.fail();
-        }
     }
 }
