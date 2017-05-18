@@ -5,7 +5,6 @@ import com.rox.emu.processor.mos6502.CPU;
 import com.rox.emu.processor.mos6502.op.AddressingMode;
 import com.rox.emu.processor.mos6502.op.OpCode;
 
-import java.util.Arrays;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
