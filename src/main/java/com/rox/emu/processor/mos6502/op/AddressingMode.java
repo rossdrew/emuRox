@@ -41,7 +41,7 @@ public enum AddressingMode {
         }else if (this == INDIRECT){
             return INDIRECT_X;
         }else{
-            throw new RuntimeException(this + " cannot be X indexed");
+            throw new RuntimeException(this + " cannot be X indexed"); //TODO Make a custom exception for this
         }
     }
 
@@ -53,7 +53,7 @@ public enum AddressingMode {
         }else if (this == INDIRECT){
             return INDIRECT_Y;
         }else{
-            throw new RuntimeException(this + " cannot be Y indexed");
+            throw new RuntimeException(this + " cannot be Y indexed"); //TODO Make a custom exception for this
         }
     }
 }

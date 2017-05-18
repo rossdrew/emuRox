@@ -28,7 +28,7 @@ import java.util.Arrays;
  * 8-15 : byte      These bytes are not used, and should be 00h.
  * @author Ross Drew
  */
-public class InesRom {
+public final class InesRom {
     private final String description;
 
     private InesRom(String description){

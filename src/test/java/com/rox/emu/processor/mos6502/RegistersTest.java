@@ -148,7 +148,7 @@ public class RegistersTest {
             try {
                 Registers.getFlagName(i);
                 fail(i + " is an invalid flag ID");
-            }catch(Exception e){
+            }catch(IllegalArgumentException e){
 
             }
         }
