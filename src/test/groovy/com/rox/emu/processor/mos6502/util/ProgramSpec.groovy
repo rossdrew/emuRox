@@ -2,6 +2,9 @@ package com.rox.emu.processor.mos6502.util
 
 import com.rox.emu.processor.mos6502.op.OpCode
 import spock.lang.Specification
+import spock.lang.Unroll
+
+import java.lang.reflect.Array
 
 class ProgramSpec extends Specification {
     def testCreation(){
@@ -15,36 +18,21 @@ class ProgramSpec extends Specification {
         program != null
     }
 
-    def testAddingByteValueToProgram(){
+    @Unroll("Test valid program: #expected")
+    testValidPrograms(){
         given:
-        Program program = new Program()
+        Program program = new Program().with(programInputBytes as Object[])
 
         when:
-        program = program.with(0x2A)
+        byte[] programBytes = program.getProgramAsByteArray()
 
         then:
-        program.getProgramAsByteArray() == [0x2A]
-    }
+        programBytes == expectedProgramBytes
 
-    def testAddingOpCodeToProgram(){
-        given:
-        Program program = new Program()
-
-        when:
-        program = program.with(OpCode.OP_ADC_ABS)
-
-        then:
-        program.getProgramAsByteArray() == [OpCode.OP_ADC_ABS.byteValue]
-    }
-
-    def testAddingWholeCommand(){
-        given:
-        Program program = new Program()
-
-        when:
-        program = program.with(OpCode.OP_ADC_ABS, 0x10, 0x02)
-
-        then:
-        program.getProgramAsByteArray() == [OpCode.OP_ADC_ABS.byteValue, 0x10, 0x02]
+        where:
+        programInputBytes               | expectedProgramBytes                           | expected
+        [0x2A]                          | [0x2A]                                         | "Byte value added to program"
+        [OpCode.OP_ADC_ABS]             | [OpCode.OP_ADC_ABS.byteValue]                  | "Op-code value added to program"
+        [OpCode.OP_ADC_ABS, 0x10, 0x02] | [OpCode.OP_ADC_ABS.byteValue, 0x10, 0x02]      | "Op-code and arguments added to program"
     }
 }
