@@ -103,11 +103,7 @@ public class Compiler {
         this.programText = programText;
     }
 
-    public int[] getBytes() {
-        return compileProgram();
-    }
-
-    private int[] compileProgram() throws UnknownOpCodeException{
+    public Program compileProgram() throws UnknownOpCodeException{
         Program workingProgram = new Program();
 
         StringTokenizer tokenizer = new StringTokenizer(programText);
@@ -155,11 +151,20 @@ public class Compiler {
                                                          Integer.decode("0x" + value));
                     break;
                 default:
-                    throw new UnknownOpCodeException("Unknown op-code (\"" + opCodeToken + "\") while parsing program", opCodeToken);
+                    workingProgram = workingProgram.with(parseLabel(opCodeToken));
             }
         }
 
-        return workingProgram.getProgramAsByteArray();
+        return workingProgram;
+    }
+
+    private String parseLabel(final String opCodeToken) throws UnknownOpCodeException{
+        final String label = extractFirstOccurrence(LABEL_REGEX, opCodeToken);
+
+        if (label.isEmpty())
+            throw new UnknownOpCodeException("Unknown op-code (\"" + opCodeToken + "\") while parsing program", opCodeToken);
+
+        return label;
     }
 
     private AddressingMode getAddressingModeFrom(String prefix, String value, String postfix){

@@ -17,7 +17,7 @@ class ProgramSpec extends Specification {
     }
 
     @Unroll("Valid labels: #expected")
-     testLabel(){
+    testValidLabel(){
         given:
         final Program program = new Program().with(programInputBytes as Object[])
 
@@ -27,16 +27,27 @@ class ProgramSpec extends Specification {
         then:
         programBytes.length == programSize
         program.getLabels().size() == labelCount
-        program.getLocationOf('A') == labelLoc
+        program.getLocationOf('A:') == labelLoc
 
         where:
         programInputBytes                                   || programSize | labelCount | labelLoc | expected
-        ['A', OpCode.OP_ADC_ABS, 0x10, 0x02, OpCode.OP_CLC] || 4           | 1          | 0        | "Label at the start"
-        [OpCode.OP_ADC_ABS, 0x10, 0x02, 'A', OpCode.OP_CLC] || 4           | 1          | 3        | "Label in the middle"
-        [OpCode.OP_ADC_ABS, 0x10, 0x02, OpCode.OP_CLC, 'A'] || 4           | 1          | 4        | "Label at the end"
-        ["A", OpCode.OP_ADC_ABS, 0x10, 0x02,
-         "B", OpCode.OP_CLC,
-         'C']                                               || 4           | 3          | 0        | "Multiple labels"
+        ['A:', OpCode.OP_ADC_ABS, 0x10, 0x02, OpCode.OP_CLC] || 4           | 1          | 0        | "Label at the start"
+        [OpCode.OP_ADC_ABS, 0x10, 0x02, 'A:', OpCode.OP_CLC] || 4           | 1          | 3        | "Label in the middle"
+        [OpCode.OP_ADC_ABS, 0x10, 0x02, OpCode.OP_CLC, 'A:'] || 4           | 1          | 4        | "Label at the end"
+        ["A:", OpCode.OP_ADC_ABS, 0x10, 0x02,
+         "B:", OpCode.OP_CLC,
+         'C:']                                               || 4           | 3          | 0        | "Multiple labels"
+    }
+
+    def testInvalidLabel(){
+        given:
+        final Program program = new Program()
+
+        when:
+        program.getLocationOf('A:')
+
+        then:
+        thrown NullPointerException
     }
 
     @Unroll("Valid compilation: #expected")
