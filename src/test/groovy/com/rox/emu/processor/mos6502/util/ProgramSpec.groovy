@@ -30,7 +30,7 @@ class ProgramSpec extends Specification {
         program.getLocationOf('A:') == labelLoc
 
         where:
-        programInputBytes                                   || programSize | labelCount | labelLoc | expected
+        programInputBytes                                    || programSize | labelCount | labelLoc | expected
         ['A:', OpCode.OP_ADC_ABS, 0x10, 0x02, OpCode.OP_CLC] || 4           | 1          | 0        | "Label at the start"
         [OpCode.OP_ADC_ABS, 0x10, 0x02, 'A:', OpCode.OP_CLC] || 4           | 1          | 3        | "Label in the middle"
         [OpCode.OP_ADC_ABS, 0x10, 0x02, OpCode.OP_CLC, 'A:'] || 4           | 1          | 4        | "Label at the end"

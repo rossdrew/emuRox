@@ -95,8 +95,7 @@ public class Compiler {
     public static final String Y_INDEXED_POSTFIX = ",Y";
     public static final String INDIRECT_X_POSTFIX = X_INDEXED_POSTFIX + ")";
     public static final String INDIRECT_Y_POSTFIX = ")" + Y_INDEXED_POSTFIX;
-
-
+    
     private final String programText;
 
     public Compiler(String programText){
@@ -193,24 +192,22 @@ public class Compiler {
 
     public AddressingMode getIndexedAddressingMode(String prefix, String value, String postfix){
         if (value.length() <= 2) {
-            if (postfix.equalsIgnoreCase(X_INDEXED_POSTFIX)) {
-                return AddressingMode.ZERO_PAGE_X;
-            } else if (postfix.equalsIgnoreCase(Y_INDEXED_POSTFIX)){
-                return AddressingMode.ZERO_PAGE_Y;
-            } else {
-                return AddressingMode.ZERO_PAGE;
-            }
+            return decorateWithIndexingMode(AddressingMode.ZERO_PAGE, postfix);
         }else if (value.length() <= 4){
-            if (postfix.equalsIgnoreCase(X_INDEXED_POSTFIX)) {
-                return AddressingMode.ABSOLUTE_X;
-            } else if (postfix.equalsIgnoreCase(Y_INDEXED_POSTFIX)){
-                return AddressingMode.ABSOLUTE_Y;
-            } else {
-                return AddressingMode.ABSOLUTE;
-            }
+            return decorateWithIndexingMode(AddressingMode.ABSOLUTE, postfix);
         }
 
         throw new UnknownOpCodeException("Invalid or unimplemented argument: '" + prefix + value + postfix + "'", prefix+value);
+    }
+
+    public AddressingMode decorateWithIndexingMode(AddressingMode addressingMode, String postfix){
+        if (postfix.equalsIgnoreCase(X_INDEXED_POSTFIX)){
+            return addressingMode.xIndexed();
+        }else if (postfix.equalsIgnoreCase(Y_INDEXED_POSTFIX)){
+            return addressingMode.yIndexed();
+        }
+
+        return addressingMode;
     }
 
     public static String extractFirstOccurrence(Pattern pattern, String token){
