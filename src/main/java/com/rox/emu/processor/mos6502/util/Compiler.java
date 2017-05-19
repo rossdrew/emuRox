@@ -71,7 +71,7 @@ import java.util.regex.Pattern;
  *    </tr>
  *
  *    <tr>
- *      <td><code>($V),X</code> / <code>($VV),X</code></td>
+ *      <td><code>($V),Y</code> / <code>($VV),Y</code></td>
  *      <td>Indirect, Y</td>
  *    </tr>
  *
@@ -83,6 +83,8 @@ public class Compiler {
     public static final Pattern PREFIX_REGEX = Pattern.compile("^[^0-9a-fA-F]{1,4}");
     public static final Pattern VALUE_REGEX = Pattern.compile("[0-9a-fA-F]+");
     //XXX This should be a little more advanced as technically ')))', ')XY' or 'X)Y' are legal
+    // i.e.   ',X' | ',Y' | '),Y' | ',X')
+    // So, need this '\d(,X|,Y|,X\)|\),Y){1}$' without including the start digit
     public static final Pattern POSTFIX_REGEX = Pattern.compile("[,XY)]{1,3}$");
     public static final Pattern LABEL_REGEX = Pattern.compile("\\w+:");
 
@@ -105,9 +107,9 @@ public class Compiler {
     public Program compileProgram() throws UnknownOpCodeException{
         Program workingProgram = new Program();
 
-        StringTokenizer tokenizer = new StringTokenizer(programText);
+        final StringTokenizer tokenizer = new StringTokenizer(programText);
         while (tokenizer.hasMoreTokens()){
-            String opCodeToken = tokenizer.nextToken();
+            final String opCodeToken = tokenizer.nextToken();
 
             switch(opCodeToken){
                 case "TAX": case "TAY":
@@ -139,9 +141,9 @@ public class Compiler {
 
                 case "ROR": //Accumulator only
                     final String valueToken = tokenizer.nextToken().trim();
-                    final String prefix = extractFirstOccurrence(PREFIX_REGEX, valueToken);
-                    final String value = extractFirstOccurrence(VALUE_REGEX, valueToken);
-                    final String postfix = extractFirstOccurrence(POSTFIX_REGEX, valueToken);
+                    final String prefix = extractFirstOccurrence(PREFIX_REGEX, valueToken).trim();
+                    final String value = extractFirstOccurrence(VALUE_REGEX, valueToken).trim();
+                    final String postfix = extractFirstOccurrence(POSTFIX_REGEX, valueToken).trim();
 
                     final AddressingMode addressingMode = getAddressingModeFrom(prefix, value, postfix);
 
