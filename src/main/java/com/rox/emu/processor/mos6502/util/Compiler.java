@@ -82,10 +82,7 @@ import java.util.regex.Pattern;
 public class Compiler {
     public static final Pattern PREFIX_REGEX = Pattern.compile("^[^0-9a-fA-F]{1,4}");
     public static final Pattern VALUE_REGEX = Pattern.compile("[0-9a-fA-F]+");
-    //XXX This should be a little more advanced as technically ')))', ')XY' or 'X)Y' are legal
-    // i.e.   ',X' | ',Y' | '),Y' | ',X')
-    // So, need this '\d(,X|,Y|,X\)|\),Y){1}$' without including the start digit
-    public static final Pattern POSTFIX_REGEX = Pattern.compile("[,XY)]{1,3}$");
+    public static final Pattern POSTFIX_REGEX = Pattern.compile("(?<=\\w)(,[XY]|,X\\)|\\),Y)$");
     public static final Pattern LABEL_REGEX = Pattern.compile("\\w+:");
 
     public static final String IMMEDIATE_PREFIX = "#";
@@ -216,7 +213,7 @@ public class Compiler {
         final Matcher prefixMatcher = pattern.matcher(token);
         prefixMatcher.find();
         try {
-            return prefixMatcher.group();
+            return prefixMatcher.group(0);
         }catch(IllegalStateException | ArrayIndexOutOfBoundsException e){
             return "";
         }
