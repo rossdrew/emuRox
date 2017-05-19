@@ -1,17 +1,15 @@
 package com.rox.emu.processor.mos6502;
 
+import com.rox.emu.UnknownOpCodeException;
 import com.rox.emu.mem.Memory;
 import com.rox.emu.mem.SimpleMemory;
-import com.rox.emu.UnknownOpCodeException;
 import com.rox.emu.processor.mos6502.util.Program;
-import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 
+import static com.rox.emu.processor.mos6502.op.OpCode.*;
 import static junit.framework.TestCase.assertEquals;
 import static org.spockframework.util.Assert.fail;
-
-import static com.rox.emu.processor.mos6502.op.OpCode.*;
 
 public class CPUTest {
 

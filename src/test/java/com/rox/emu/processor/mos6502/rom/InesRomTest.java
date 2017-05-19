@@ -20,7 +20,7 @@ public class InesRomTest {
     @Test
     public void testInvalidFromWithBytes(){
         try {
-            final InesRom rom = InesRom.from(new int[]{0x0, 0x0, 0x0, 0x1A});
+            InesRom.from(new int[]{0x0, 0x0, 0x0, 0x1A});
             fail("ROM contains an invalid NES header, should throw an exception");
         }catch(UnknownRomException e){
             assertNotNull(e.getMessage());
@@ -30,7 +30,7 @@ public class InesRomTest {
     @Test
     public void testEmptyFrom(){
         try {
-            final InesRom rom = InesRom.from(new int[]{});
+            InesRom.from(new int[]{});
             fail("ROM contains a missing NES header, should throw an exception");
         }catch(UnknownRomException e){
             assertNotNull(e.getMessage());

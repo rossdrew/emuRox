@@ -888,7 +888,7 @@ public class CPU {
     //XXX Need to use 2s compliment addition (subtraction)
     private void performCMP(int value, int toRegister){
         int result = getRegisterValue(toRegister) - value;
-        int twosComplimentResult = performSilentSBC(getRegisterValue(toRegister), value);
+//        int twosComplimentResult = performSilentSBC(getRegisterValue(toRegister), value);
         registers.setFlagsBasedOn(result & 0xFF);
 
         if (result >=0)

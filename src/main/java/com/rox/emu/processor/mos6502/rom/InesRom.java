@@ -2,8 +2,6 @@ package com.rox.emu.processor.mos6502.rom;
 
 import com.rox.emu.UnknownRomException;
 
-import java.util.Arrays;
-
 /**
  * As per https://wiki.nesdev.com/w/index.php/NES_2.0...
  *

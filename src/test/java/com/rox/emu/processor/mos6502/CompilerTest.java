@@ -10,7 +10,6 @@ import com.rox.emu.processor.mos6502.op.AddressingMode;
 import com.rox.emu.processor.mos6502.op.OpCode;
 import com.rox.emu.processor.mos6502.util.Compiler;
 import com.rox.emu.processor.mos6502.util.Program;
-import junit.framework.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -350,7 +349,7 @@ public class CompilerTest {
         final Compiler compiler = new Compiler("ROX");
 
         try {
-            Program program = compiler.compileProgram();
+            compiler.compileProgram();
             fail("Exception expected, 'ROX' is an invalid OpCode");
         }catch(UnknownOpCodeException e){
             assertNotNull(e);
@@ -362,7 +361,7 @@ public class CompilerTest {
         final Compiler compiler = new Compiler("\0ADC $10");
 
         try {
-            Program program = compiler.compileProgram();
+            compiler.compileProgram();
             fail("Exception expected.  This should not pass a String switch statement");
         }catch(UnknownOpCodeException e){
             assertNotNull(e);
@@ -374,7 +373,7 @@ public class CompilerTest {
         final Compiler compiler = new Compiler("\0BRK");
 
         try {
-            Program program = compiler.compileProgram();
+            compiler.compileProgram();
             fail("Exception expected.  This should not pass a String switch statement");
         }catch(UnknownOpCodeException e){
             assertNotNull(e);
@@ -385,7 +384,8 @@ public class CompilerTest {
     public void testInvalidValuePrefix(){
         try {
             final Compiler compiler = new Compiler("ADC @$10");
-            Program program = compiler.compileProgram(); int[] bytes = program.getProgramAsByteArray();
+            Program program = compiler.compileProgram();
+            int[] bytes = program.getProgramAsByteArray();
             fail("Invalid value prefix should throw an exception but was " + Arrays.toString(bytes));
         }catch (UnknownOpCodeException e){
             assertFalse(e.getMessage().isEmpty());
@@ -397,7 +397,8 @@ public class CompilerTest {
     public void testInvalidIndirectIndexingMode(){
         try {
             final Compiler compiler = new Compiler("ADC " + INDIRECT_PREFIX + "10(");
-            Program program = compiler.compileProgram(); int[] bytes = program.getProgramAsByteArray();
+            Program program = compiler.compileProgram();
+            int[] bytes = program.getProgramAsByteArray();
             fail("Invalid prefix for an indirect value should throw an exception but was " + Arrays.toString(bytes));
         }catch (UnknownOpCodeException e){
             assertFalse(e.getMessage().isEmpty());
@@ -409,7 +410,8 @@ public class CompilerTest {
     public void testOversizedValue(){
         try {
             final Compiler compiler = new Compiler("ADC " + VALUE_PREFIX + "12345");
-            Program program = compiler.compileProgram(); int[] bytes = program.getProgramAsByteArray();
+            Program program = compiler.compileProgram();
+            int[] bytes = program.getProgramAsByteArray();
             fail("Argument size over " + 0xFFFF + " should throw an exception but was " + Arrays.toString(bytes));
         }catch (UnknownOpCodeException e){
             assertFalse(e.getMessage().isEmpty());

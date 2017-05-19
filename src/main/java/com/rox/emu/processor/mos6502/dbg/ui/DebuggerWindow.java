@@ -106,13 +106,13 @@ public class DebuggerWindow extends JFrame {
         int valMPD = 7;
         int valMPR = 4;
 
-        Program countToTenProgram = new Program().with( OpCode.OP_LDX_I, 10,
-                                                        OpCode.OP_LDA_I, 0,
-                                                        OpCode.OP_CLC,
-                                                        OpCode.OP_ADC_I, 0x01,
-                                                        OpCode.OP_DEX,
-                                                        OpCode.OP_CPX_I, 0,
-                                                        OpCode.OP_BNE, 0b11110111);
+//        Program countToTenProgram = new Program().with( OpCode.OP_LDX_I, 10,
+//                                                        OpCode.OP_LDA_I, 0,
+//                                                        OpCode.OP_CLC,
+//                                                        OpCode.OP_ADC_I, 0x01,
+//                                                        OpCode.OP_DEX,
+//                                                        OpCode.OP_CPX_I, 0,
+//                                                        OpCode.OP_BNE, 0b11110111);
 
         Program multiplicationProgram = new Program().with( OpCode.OP_LDA_I, valMPD,
                                                             OpCode.OP_STA_Z, MPD,
