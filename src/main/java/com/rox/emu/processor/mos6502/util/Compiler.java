@@ -150,6 +150,7 @@ public class Compiler {
                     break;
                 default:
                     workingProgram = workingProgram.with(parseLabel(opCodeToken));
+                    break;
             }
         }
 
