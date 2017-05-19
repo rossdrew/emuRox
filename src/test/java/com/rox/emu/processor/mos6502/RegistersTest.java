@@ -125,7 +125,8 @@ public class RegistersTest {
                 Registers.getRegisterName(i);
                 fail(i + " is an invalid register ID");
             }catch(ArrayIndexOutOfBoundsException e){
-
+                assertNotNull(e);
+                assertFalse(e.getMessage().isEmpty());
             }
         }
     }
@@ -149,7 +150,8 @@ public class RegistersTest {
                 Registers.getFlagName(i);
                 fail(i + " is an invalid flag ID");
             }catch(IllegalArgumentException e){
-
+                assertNotNull(e);
+                assertFalse(e.getMessage().isEmpty());
             }
         }
     }
