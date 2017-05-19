@@ -897,15 +897,15 @@ public class CPU {
             registers.clearFlag(Registers.STATUS_FLAG_CARRY);
     }
 
-    private int performSilentSBC(int a, int b){
-        int statusState = registers.getRegister(Registers.REG_STATUS);
-        registers.setFlag(Registers.STATUS_FLAG_CARRY);
-
-        int result = performSBC(a,b);
-
-        registers.setRegister(Registers.REG_STATUS, statusState);
-        return result;
-    }
+//    private int performSilentSBC(int a, int b){
+//        int statusState = registers.getRegister(Registers.REG_STATUS);
+//        registers.setFlag(Registers.STATUS_FLAG_CARRY);
+//
+//        int result = performSBC(a,b);
+//
+//        registers.setRegister(Registers.REG_STATUS, statusState);
+//        return result;
+//    }
 
     private int rightShift(int value, boolean carryIn){
         return (value >> 1) | (carryIn ? 0b10000000 : 0);
