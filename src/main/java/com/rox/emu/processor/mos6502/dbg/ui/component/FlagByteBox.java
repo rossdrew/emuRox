@@ -17,25 +17,25 @@ public class FlagByteBox extends ByteBox {
     }
 
     @Override
-    protected void paintBits(Graphics g, int startX, int startY, char[] bitValues) {
+    protected void paintBits(Graphics g, Point point, char[] bitValues) {
         for (int i=0; i<8; i++){
             g.setColor((bitValues[i] == '1') ? Color.black : Color.lightGray);
-            paintBit(g, startX + (i*bitSize), startY, flagIDs[i]);
+            paintBit(g, new Point(point.x + (i*bitSize), point.y), flagIDs[i]);
         }
     }
 
     @Override
-    protected void paintBit(Graphics g, int startX, int startY, char val){
+    protected void paintBit(Graphics g, Point point, char val){
         final int padding = 5;
 
         g.setFont(new Font("Courier New", Font.PLAIN, bitFontSize));
-        g.drawString("" + val, startX + padding, startY + (bitSize - padding));
+        g.drawString("" + val, point.x + padding, point.y + (bitSize - padding));
 
         g.setColor(Color.lightGray);
 
         if (val == ' ')
-            g.fillRect(startX, startY, bitSize, bitSize);
+            g.fillRect(point.x, point.y, bitSize, bitSize);
         else
-            g.drawRect(startX, startY, bitSize, bitSize);
+            g.drawRect(point.x, point.y, bitSize, bitSize);
     }
 }
