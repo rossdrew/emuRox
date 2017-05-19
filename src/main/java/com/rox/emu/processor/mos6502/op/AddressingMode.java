@@ -1,5 +1,7 @@
 package com.rox.emu.processor.mos6502.op;
 
+import com.rox.emu.UnknownOpCodeException;
+
 /**
  * An enum representing possible addressing modes for {@link OpCode}
  */
@@ -41,7 +43,7 @@ public enum AddressingMode {
         }else if (this == INDIRECT){
             return INDIRECT_X;
         }else{
-            throw new RuntimeException(this + " cannot be X indexed"); //TODO Make a custom exception for this
+            throw new UnknownOpCodeException(this + " cannot be X indexed", this);
         }
     }
 
@@ -53,7 +55,7 @@ public enum AddressingMode {
         }else if (this == INDIRECT){
             return INDIRECT_Y;
         }else{
-            throw new RuntimeException(this + " cannot be Y indexed"); //TODO Make a custom exception for this
+            throw new UnknownOpCodeException(this + " cannot be Y indexed", this);
         }
     }
 }
