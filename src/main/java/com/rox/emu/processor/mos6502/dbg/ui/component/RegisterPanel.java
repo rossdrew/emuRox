@@ -19,65 +19,65 @@ public class RegisterPanel extends JPanel {
     private final int bitFontSize = 40;
     private final int valueFontSize = 11;
 
-    private void drawRegisters(Graphics g, int x, int y) {
-        int yLocation = y;
-        int xLocation = x;
+    private void drawRegisters(Graphics g, Point point) {
+        int yLocation = point.y;
+        int xLocation = point.x;
         int rowSize = padding + bitSize;
         int secondByteColumn = byteSize + xLocation + padding;
 
-        drawByte(g, secondByteColumn, yLocation, registers.getRegister(Registers.REG_ACCUMULATOR), Registers.getRegisterName(Registers.REG_ACCUMULATOR));
+        drawByte(g, new Point(secondByteColumn, yLocation), registers.getRegister(Registers.REG_ACCUMULATOR), Registers.getRegisterName(Registers.REG_ACCUMULATOR));
 
         yLocation += rowSize;
-        drawByte(g, secondByteColumn, yLocation, registers.getRegister(Registers.REG_X_INDEX), Registers.getRegisterName(Registers.REG_X_INDEX));
+        drawByte(g, new Point(secondByteColumn, yLocation), registers.getRegister(Registers.REG_X_INDEX), Registers.getRegisterName(Registers.REG_X_INDEX));
 
         yLocation += rowSize;
-        drawByte(g, secondByteColumn, yLocation, registers.getRegister(Registers.REG_Y_INDEX), Registers.getRegisterName(Registers.REG_Y_INDEX));
+        drawByte(g, new Point(secondByteColumn, yLocation), registers.getRegister(Registers.REG_Y_INDEX), Registers.getRegisterName(Registers.REG_Y_INDEX));
 
         yLocation += rowSize;
-        drawByte(g, xLocation, yLocation, 0b00000001, "");
-        drawByte(g, secondByteColumn, yLocation, registers.getRegister(Registers.REG_SP), Registers.getRegisterName(Registers.REG_SP));
+        drawByte(g, new Point(xLocation, yLocation), 0b00000001, "");
+        drawByte(g, new Point(secondByteColumn, yLocation), registers.getRegister(Registers.REG_SP), Registers.getRegisterName(Registers.REG_SP));
 
         //TODO this needs a combined value display
         yLocation += rowSize;
-        drawByte(g, xLocation, yLocation, registers.getRegister(Registers.REG_PC_HIGH), Registers.getRegisterName(Registers.REG_PC_HIGH));
-        drawByte(g, secondByteColumn, yLocation, registers.getRegister(Registers.REG_PC_LOW), Registers.getRegisterName(Registers.REG_PC_LOW));
+        drawByte(g, new Point(xLocation, yLocation), registers.getRegister(Registers.REG_PC_HIGH), Registers.getRegisterName(Registers.REG_PC_HIGH));
+        drawByte(g, new Point(secondByteColumn, yLocation), registers.getRegister(Registers.REG_PC_LOW), Registers.getRegisterName(Registers.REG_PC_LOW));
 
         yLocation += rowSize;
         g.setColor(Color.lightGray);
         g.fillRect(secondByteColumn + (2 * bitSize), yLocation, bitSize, bitSize);
-        drawFlags(g, secondByteColumn, yLocation, registers.getRegister(Registers.REG_STATUS), "NV BDIZC".toCharArray());
+        drawFlags(g, new Point(secondByteColumn, yLocation), registers.getRegister(Registers.REG_STATUS), "NV BDIZC".toCharArray());
     }
 
-    private void drawFlags(Graphics g, int startX, int startY, int byteValue, char[] values){
+    private void drawFlags(Graphics g, Point point, int byteValue, char[] values){
         char[] bitValues = to8BitString(byteValue).toCharArray();
 
         g.setColor(Color.lightGray);
         for (int i=0; i<8; i++){
             g.setColor((bitValues[i] == '1') ? Color.black : Color.lightGray);
-            drawBit(g, startX + (i*bitSize), startY, values[i]);
+            drawBit(g, point.x + (i*bitSize), point.y, values[i]);
         }
         g.setColor(Color.BLACK);
-        g.drawRect(startX, startY, byteSize, bitSize);
+        g.drawRect(point.x, point.y, byteSize, bitSize);
     }
 
-    private void drawByte(Graphics g, int startX, int startY, int byteValue, String name){
+    private void drawByte(Graphics g, Point point, int byteValue, String name){
         char[] bitValues = to8BitString(byteValue).toCharArray();
 
         g.setColor(Color.lightGray);
         for (int i=0; i<8; i++){
-            drawBit(g, startX + (i*bitSize), startY, bitValues[i]);
+            drawBit(g, point.x + (i*bitSize), point.y, bitValues[i]);
         }
         g.setColor(Color.BLACK);
-        g.drawRect(startX, startY, byteSize, bitSize);
+        g.drawRect(point.x, point.y, byteSize, bitSize);
 
         g.setColor(Color.RED);
 
         g.setFont(new Font("Courier New", Font.PLAIN, valueFontSize));
         String values = "(" + fromSignedByte(byteValue) + ", 0x" + Integer.toHexString(byteValue) + ")";
-        g.drawString(values, (startX + byteSize - bitSize - (values.length() * (valueFontSize/2))), startY-1);
+        g.drawString(values, (point.x + byteSize - bitSize - (values.length() * (valueFontSize/2))), point.y-1);
 
         g.setColor(Color.blue);
-        g.drawString(name, startX, startY-1);
+        g.drawString(name, point.x, point.y-1);
     }
 
     private void drawBit(Graphics g, int startX, int startY, char val){
@@ -125,6 +125,6 @@ public class RegisterPanel extends JPanel {
         }
 
         if (registers != null)
-            drawRegisters(g, 20, 20);
+            drawRegisters(g, new Point(20, 20));
     }
 }
