@@ -1,10 +1,9 @@
-![Roxoft](https://github.com/rossdrew/rossdrew.github.io/blob/master/src/img/roxoft_small.gif)
 [![License](https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000)](https://opensource.org/licenses/MIT) 
 [![Build Status](https://travis-ci.org/rossdrew/emuRox.svg?branch=master)](https://travis-ci.org/rossdrew/emuRox)
 [![Codecov](https://codecov.io/gh/rossdrew/emuRox/branch/master/graph/badge.svg)](https://codecov.io/gh/rossdrew/emuRox)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/519fed1cf9c64216a0c9992eed25a36f)](https://www.codacy.com/app/rossdrew/emuRox?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=rossdrew/emuRox&amp;utm_campaign=Badge_Grade)
 
-# EmuRox 
+# EmuRox ![Roxoft](https://github.com/rossdrew/rossdrew.github.io/blob/master/src/img/roxoft_small.gif)
 
 An emulator for the [6502 processor](https://en.wikipedia.org/wiki/MOS_Technology_6502).  The plan is to evolve this into a working [NES](https://en.wikipedia.org/wiki/Nintendo_Entertainment_System) emulator so I'm developing the 6502 without BCD mode for now.  If/When I get that working, I'll expand the 6502 and move onto another 6502 system (Atari 2600, Commodore 64...) then perhaps add processors and more emulated hardware, in theory, creating a pluggable multi-emulator.
 
