@@ -49,7 +49,7 @@ public class AddressingModeTest {
         try {
             AddressingMode.ACCUMULATOR.yIndexed();
             fail("Accumulator cannot be Y indexed");
-        }catch(RuntimeException e){
+        }catch(UnknownOpCodeException e){
             assertNotNull(e);
             assertNotNull(e.getMessage());
         }

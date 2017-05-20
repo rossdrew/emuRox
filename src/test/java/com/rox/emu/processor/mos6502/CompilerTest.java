@@ -10,7 +10,6 @@ import com.rox.emu.processor.mos6502.op.AddressingMode;
 import com.rox.emu.processor.mos6502.op.OpCode;
 import com.rox.emu.processor.mos6502.util.Compiler;
 import com.rox.emu.processor.mos6502.util.Program;
-import junit.framework.TestCase;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
