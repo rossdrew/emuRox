@@ -16,13 +16,13 @@ public final class InesRom {
         this.header = header;
     }
 
-    public static InesRom from(int[] bytes) {
-        InesRomHeader newHeader = processHeader(bytes);
+    public static InesRom from(final int[] bytes) {
+        final InesRomHeader newHeader = processHeader(bytes);
 
         return new InesRom(newHeader);
     }
 
-    private static InesRomHeader processHeader(int[] bytes){
+    private static InesRomHeader processHeader(final int[] bytes){
         int byteIndex = 0;
 
         if (bytes.length < HEADER_SIZE)

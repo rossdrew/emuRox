@@ -31,7 +31,9 @@ public final class InesRomHeader{
     private final int prgBlocks;
     private final int chrBlocks;
 
-    public InesRomHeader(String description, int prgBlocks, int chrBlocks){
+    public InesRomHeader(final String description,
+                         final int prgBlocks,
+                         final int chrBlocks){
         this.description = description;
         this.prgBlocks = prgBlocks;
         this.chrBlocks = chrBlocks;

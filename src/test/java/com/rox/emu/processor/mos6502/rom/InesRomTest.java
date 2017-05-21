@@ -1,7 +1,6 @@
 package com.rox.emu.processor.mos6502.rom;
 
 import com.rox.emu.UnknownRomException;
-import junit.framework.Assert;
 import org.junit.Test;
 
 import static junit.framework.TestCase.assertFalse;
