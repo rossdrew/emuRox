@@ -14,6 +14,7 @@ public class InesRomTest {
         final InesRom rom = InesRom.from(asPaddedHeader(new int[] {0x4E, 0x45, 0x53, 0x1A, 0x0, 0x0}));
 
         assertNotNull(rom);
+        assertFalse(rom.getDescription().isEmpty());
     }
 
     @Test
