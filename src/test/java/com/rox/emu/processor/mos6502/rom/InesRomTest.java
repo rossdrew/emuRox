@@ -28,6 +28,7 @@ public class InesRomTest {
         assertFalse(header.getDescription().isEmpty());
         assertEquals(prgBlocks, header.getPrgBlocks());
         assertEquals(charBlocks, header.getChrBlocks());
+        assertEquals("NES ROM", header.getDescription());
     }
 
     @Test
