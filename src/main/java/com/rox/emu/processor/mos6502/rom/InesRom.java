@@ -8,8 +8,6 @@ import com.rox.emu.UnknownRomException;
  * @author Ross Drew
  */
 public final class InesRom {
-    private static int HEADER_SIZE = 6; //Working value
-
     private final InesRomHeader header;
 
     private InesRom(final InesRomHeader header){
@@ -25,7 +23,7 @@ public final class InesRom {
     private static InesRomHeader processHeader(final int[] bytes){
         int byteIndex = 0;
 
-        if (bytes.length < HEADER_SIZE)
+        if (bytes.length < InesRomHeader.HEADER_SIZE)
             throw new UnknownRomException("Invalid iNES header: Too short.");
 
         if ((bytes[byteIndex++] != 0x4E) ||
