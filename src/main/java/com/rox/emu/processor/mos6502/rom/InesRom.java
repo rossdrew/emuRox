@@ -26,8 +26,7 @@ public final class InesRom {
 
         final String prefix = "" + (char)bytes[0] + (char)bytes[1] + (char)bytes[2];
 
-        if (!prefix.equals("NES") || (bytes[3] != 0x1A)){
-
+        if (!"NES".equals(prefix) || (bytes[3] != 0x1A)){
             throw new UnknownRomException("Invalid iNES header: iNES prefix missing.");
         }
 
