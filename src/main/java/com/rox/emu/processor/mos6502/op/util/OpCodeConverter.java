@@ -44,29 +44,26 @@ public class OpCodeConverter {
 
         final String addressingModeDescriptor = tokens[OP_ADD];
 
+        final String indexToken = (tokens.length <= OP_I) ? "" : tokens[OP_I];
         switch (addressingModeDescriptor){
             case "I": return AddressingMode.IMMEDIATE;
             case "A": return AddressingMode.ACCUMULATOR;
             case "Z":
-                switch ((tokens.length <= OP_I) ? "" : tokens[OP_I]){
-                    case "IX": return AddressingMode.ZERO_PAGE_X;
-                    case "IY": return AddressingMode.ZERO_PAGE_Y;
-                    default: return AddressingMode.ZERO_PAGE;
-                }
+                return withIndexing(AddressingMode.ZERO_PAGE, indexToken);
             case "ABS":
-                switch ((tokens.length <= OP_I) ? "" : tokens[OP_I]){
-                    case "IX": return AddressingMode.ABSOLUTE_X;
-                    case "IY": return AddressingMode.ABSOLUTE_Y;
-                    default: return AddressingMode.ABSOLUTE;
-                }
+                return withIndexing(AddressingMode.ABSOLUTE, indexToken);
             case "IND":
-                switch ((tokens.length <= OP_I) ? "" : tokens[OP_I]){
-                    case "IX": return AddressingMode.INDIRECT_X;
-                    case "IY": return AddressingMode.INDIRECT_Y;
-                    default: return AddressingMode.INDIRECT;
-                }
+                return withIndexing(AddressingMode.INDIRECT, indexToken);
             default:
                 throw new UnknownOpCodeException("Unrecognised addressing mode " + addressingModeDescriptor, internalOpCodeName);
+        }
+    }
+
+    public static AddressingMode withIndexing(final AddressingMode addressingMode, final String indexToken){
+        switch (indexToken){
+            case "IX": return addressingMode.xIndexed();
+            case "IY": return addressingMode.yIndexed();
+            default: return addressingMode;
         }
     }
 
