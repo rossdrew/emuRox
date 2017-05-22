@@ -15,7 +15,7 @@ public class MemoryPanel extends JPanel {
     private Memory memory;
     private Registers registers;
 
-    private int blockSize = 256;
+    private final int blockSize = 256;
 
     private final int fontSize = 12;
 

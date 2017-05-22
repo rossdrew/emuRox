@@ -26,7 +26,7 @@ package com.rox.emu.processor.mos6502.rom;
  * 8-15 : byte      These bytes are not used, and should be 00h.
  */
 public final class InesRomHeader{
-    public static int HEADER_SIZE = 6; //Working value
+    public static final int HEADER_SIZE = 6; //Working value
 
     private final String description;
 

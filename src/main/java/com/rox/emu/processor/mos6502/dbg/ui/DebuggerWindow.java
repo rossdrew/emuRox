@@ -18,7 +18,7 @@ import com.rox.emu.processor.mos6502.dbg.ui.component.MemoryPanel;
  *
  * @author Ross Drew
  */
-public class DebuggerWindow extends JFrame {
+class DebuggerWindow extends JFrame {
     private CPU processor;
     private Memory memory;
 
@@ -32,7 +32,7 @@ public class DebuggerWindow extends JFrame {
 
     private final DefaultListModel<String> listModel;
 
-    public DebuggerWindow() {
+    private DebuggerWindow() {
         super("6502 Debugger");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 

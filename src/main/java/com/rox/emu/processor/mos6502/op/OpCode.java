@@ -192,14 +192,14 @@ public enum OpCode {
 
     private final int byteValue;
     private final String opCodeName;
-    private final String description;
     private final AddressingMode addressingMode;
+    private String description;
 
     OpCode(int byteValue){
         this.byteValue = byteValue;
         this.addressingMode = OpCodeConverter.getAddressingMode(this.name());
         this.opCodeName = OpCodeConverter.getOpCode(this.name());
-        this.description = OpCodeConverter.toDescription(this.name());
+       // this.description = OpCodeConverter.toDescription(this.name());
     }
 
     /**
@@ -267,6 +267,10 @@ public enum OpCode {
 
     @Override
     public String toString(){
+        if (description == null){
+            description = opCodeName + addressingMode + ")";
+        }
+
         return description;
     }
 }

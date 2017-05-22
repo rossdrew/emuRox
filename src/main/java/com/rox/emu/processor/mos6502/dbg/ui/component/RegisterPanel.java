@@ -10,7 +10,7 @@ import java.awt.*;
  *
  * @author Ross Drew
  */
-public class RegisterPanel extends JPanel {
+class RegisterPanel extends JPanel {
     private Registers registers;
 
     private final int bitSize = 40;

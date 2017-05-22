@@ -9,7 +9,7 @@ import java.awt.*;
  *
  * @author Ross Drew
  */
-public class ByteBox extends JPanel {
+class ByteBox extends JPanel {
     protected final int bitSize = 40;
     protected final int byteSize = (bitSize*8);
     protected final int bitFontSize = 40;
