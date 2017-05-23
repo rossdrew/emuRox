@@ -10,5 +10,5 @@ before_install:
 after_success:
 - ./gradlew check jacocoTestReport
 - bash <(curl -s https://codecov.io/bash)
-- java -cp ~/codacy-coverage-reporter-assembly-latest.jar com.codacy.CodacyCoverageReporter -l Java -r build/reports/jacoco/test/jacocoTestReport.xml
+- java -cp ~/codacy-coverage-reporter-assembly-latest.jar com.codacy.CodacyCoverageReporter -l Java -r jacocoTestReport.xml
 
