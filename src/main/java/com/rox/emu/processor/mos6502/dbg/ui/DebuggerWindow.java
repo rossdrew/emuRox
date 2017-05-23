@@ -18,7 +18,7 @@ import com.rox.emu.processor.mos6502.dbg.ui.component.MemoryPanel;
  *
  * @author Ross Drew
  */
-class DebuggerWindow extends JFrame {
+final class DebuggerWindow extends JFrame {
     private CPU processor;
     private Memory memory;
 
