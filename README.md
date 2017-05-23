@@ -57,7 +57,7 @@ Timing will be looked at later, as necessary.  BCD wont be needed for now for th
     - [Stack Exchange](http://codereview.stackexchange.com/questions/154600/op-code-decoding-in-an-emulator) 
  
 
-## Support on Beerpay
-Like what you see? used it in some way? Buy me a beer :beers: and make all my hard work seem worth it
+## Support on Beerpay 
+Found my project interesting or used it in some way?  Contribute by showing your appreciation with a frosty beverage or make a feature request.
 
 [![Beerpay](https://beerpay.io/rossdrew/emuRox/badge.svg?style=beer-square)](https://beerpay.io/rossdrew/emuRox)  [![Beerpay](https://beerpay.io/rossdrew/emuRox/make-wish.svg?style=flat-square)](https://beerpay.io/rossdrew/emuRox?focus=wish)
