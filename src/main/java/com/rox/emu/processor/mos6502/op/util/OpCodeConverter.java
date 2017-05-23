@@ -49,10 +49,11 @@ public class OpCodeConverter {
     }
 
     private static AddressingMode withIndexing(final AddressingMode addressingMode, final String indexToken){
-        switch (indexToken){
-            case "IX": return addressingMode.xIndexed();
-            case "IY": return addressingMode.yIndexed();
-            default: return addressingMode;
-        }
+        if ("IX".equalsIgnoreCase(indexToken))
+            return addressingMode.xIndexed();
+        else if ("IY".equalsIgnoreCase(indexToken))
+            return addressingMode.yIndexed();
+        else
+            return addressingMode;
     }
 }
