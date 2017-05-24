@@ -17,10 +17,6 @@ public class OpCodeConverter {
     private static final int OP_ADD = 2;
     private static final int OP_I = 3;
 
-    //Indexing modes
-    public static final String INDEX_X = " [X]";
-    public static final String INDEX_Y = " [Y]";
-
     public static String getOpCode(String internalOpCodeName){
         final String tokens[] = internalOpCodeName.split(SEPARATOR);
         return tokens[OP_CODE];
