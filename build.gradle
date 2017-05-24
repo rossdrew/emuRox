@@ -60,4 +60,15 @@ task runDebugUI(type: JavaExec, group: 'application') {
     main = mainClassName = 'com.rox.emu.processor.mos6502.dbg.ui.DebuggerWindow'
 }
 
+jar {
+    //Include third party dependencies
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+
+    manifest {
+        attributes 'Main-Class': 'com.rox.emu.processor.mos6502.dbg.ui.DebuggerWindow'
+    }
+}
+
 
