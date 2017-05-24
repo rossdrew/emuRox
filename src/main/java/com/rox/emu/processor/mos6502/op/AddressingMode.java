@@ -58,4 +58,9 @@ public enum AddressingMode {
             throw new UnknownOpCodeException(this + " cannot be Y indexed", this);
         }
     }
+
+    @Override
+    public String toString() {
+        return description;
+    }
 }

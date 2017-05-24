@@ -268,7 +268,7 @@ public enum OpCode {
     @Override
     public String toString(){
         if (description == null){
-            description = opCodeName + addressingMode + ")";
+            description = opCodeName + " (" + addressingMode + ")";
         }
 
         return description;
