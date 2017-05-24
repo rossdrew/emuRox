@@ -214,7 +214,6 @@ public enum OpCode {
     private final int byteValue;
     private final String opCodeName;
     private final AddressingMode addressingMode;
-    private String description;
 
     OpCode(int byteValue){
         this.byteValue = byteValue;
@@ -287,10 +286,6 @@ public enum OpCode {
 
     @Override
     public String toString(){
-        if (description == null){
-            description = opCodeName + " (" + addressingMode + ")";
-        }
-
-        return description;
+        return opCodeName + " (" + addressingMode + ")";
     }
 }

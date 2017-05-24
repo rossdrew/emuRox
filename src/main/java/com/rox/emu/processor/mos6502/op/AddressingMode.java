@@ -4,6 +4,8 @@ import com.rox.emu.UnknownOpCodeException;
 
 /**
  * An enum representing possible addressing modes for {@link OpCode}
+ *
+ * @author Ross Drew
  */
 public enum AddressingMode {
     IMPLIED("Implied", 1),
@@ -19,16 +21,16 @@ public enum AddressingMode {
     INDIRECT_Y("Indirect, Y", 2),
     ACCUMULATOR("Accumulator", 1);
 
-    private final String description;
+    private final String name;
     private final int instructionBytes;
 
-    AddressingMode(String description, int instructionBytes) {
-        this.description = description;
+    AddressingMode(String name, int instructionBytes) {
+        this.name = name;
         this.instructionBytes = instructionBytes;
     }
 
     public String getDescription(){
-        return description;
+        return name;
     }
 
     public int getInstructionBytes(){
@@ -61,6 +63,6 @@ public enum AddressingMode {
 
     @Override
     public String toString() {
-        return description;
+        return name;
     }
 }
