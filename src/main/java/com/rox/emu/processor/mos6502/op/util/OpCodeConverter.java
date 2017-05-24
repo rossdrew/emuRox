@@ -2,6 +2,8 @@ package com.rox.emu.processor.mos6502.op.util;
 
 import com.rox.emu.UnknownOpCodeException;
 import com.rox.emu.processor.mos6502.op.AddressingMode;
+import com.rox.emu.processor.mos6502.op.OpCode;
+
 
 /**
  * Utility for converting internal opcode representation names to human readable descriptions
@@ -11,25 +13,19 @@ import com.rox.emu.processor.mos6502.op.AddressingMode;
  * @author Ross Drew
  */
 public class OpCodeConverter {
-    //Internal representation details
-    private static final String SEPARATOR = "_";
-    private static final int OP_CODE = 1;
-    private static final int OP_ADD = 2;
-    private static final int OP_I = 3;
-
     public static String getOpCode(String internalOpCodeName){
-        final String tokens[] = internalOpCodeName.split(SEPARATOR);
-        return tokens[OP_CODE];
+        final String tokens[] = internalOpCodeName.split(OpCode.OP_TOKEN_SEPARATOR);
+        return tokens[OpCode.OP_CODE_I];
     }
 
     public static AddressingMode getAddressingMode(String internalOpCodeName){
-        final String tokens[] = internalOpCodeName.split(SEPARATOR);
+        final String tokens[] = internalOpCodeName.split(OpCode.OP_TOKEN_SEPARATOR);
         if (tokens.length < 3)
             return AddressingMode.IMPLIED;
 
-        final String addressingModeDescriptor = tokens[OP_ADD];
+        final String addressingModeDescriptor = tokens[OpCode.OP_ADDR_I];
 
-        final String indexToken = (tokens.length <= OP_I) ? "" : tokens[OP_I];
+        final String indexToken = (tokens.length <= OpCode.OP_INDX_I) ? "" : tokens[OpCode.OP_INDX_I];
         switch (addressingModeDescriptor){
             case "I": return AddressingMode.IMMEDIATE;
             case "A": return AddressingMode.ACCUMULATOR;

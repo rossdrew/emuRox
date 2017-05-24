@@ -7,7 +7,8 @@ import com.rox.emu.processor.mos6502.op.util.OpCodeConverter;
 import java.util.stream.Stream;
 
 /**
- * Enum representation of {@link CPU} op-codes.
+ * Enum representation of {@link CPU} op-codes.  Each represented by an enum name using the convention
+ * 'OP{@value #OP_TOKEN_SEPARATOR}CODE{@value #OP_TOKEN_SEPARATOR}ADDR{@value #OP_TOKEN_SEPARATOR}INDX'.
  *
  * @author Ross Drew
  */
@@ -190,6 +191,26 @@ public enum OpCode {
     OP_RTS(0x60),
     OP_RTI(0x40);
 
+    /**
+     * The separator used to delimit different elements in the {@link String} enum id
+     */
+    public static final String OP_TOKEN_SEPARATOR = "_";
+    /**
+     * The index of the op-code name in the {@link String} enum id,
+     * using the token delimiter '{@value OP_TOKEN_SEPARATOR}'
+     */
+    public static final int OP_CODE_I = 1;
+    /**
+     * The index of the addressing mode token in the {@link String} enum id,
+     * using the token delimiter '{@value OP_TOKEN_SEPARATOR}'
+     */
+    public static final int OP_ADDR_I = 2;
+    /**
+     * The index of the indexing mode token in the {@link String} enum id,
+     * using the token delimiter '{@value OP_TOKEN_SEPARATOR}'
+     */
+    public static final int OP_INDX_I = 3;
+
     private final int byteValue;
     private final String opCodeName;
     private final AddressingMode addressingMode;
@@ -199,7 +220,6 @@ public enum OpCode {
         this.byteValue = byteValue;
         this.addressingMode = OpCodeConverter.getAddressingMode(this.name());
         this.opCodeName = OpCodeConverter.getOpCode(this.name());
-       // this.description = OpCodeConverter.toDescription(this.name());
     }
 
     /**
