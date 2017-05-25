@@ -21,7 +21,7 @@ public class Registers {
     public static final int REG_PC_HIGH = 3;
     /** Register ID of the Program Counter Low Byte */
     public static final int REG_PC_LOW = 4;
-    /** Register ID of the <em>fixed</em> high byte of the Stack Pointer */
+    /** Register ID of the <em>fixed value</em> high byte of the Stack Pointer */
     private static final int REG_SP_X = 5;
     /** Register ID of the low byte of the Stack Pointer */
     public static final int REG_SP = 6;
@@ -114,8 +114,8 @@ public class Registers {
         return incrementedPC;
     }
 
-    public static int getFlagID(int flagValue) throws IllegalArgumentException {
-        switch (flagValue){
+    public static int getFlagID(int flagPlaceValue) throws IllegalArgumentException {
+        switch (flagPlaceValue){
             case STATUS_FLAG_CARRY: return C;
             case STATUS_FLAG_ZERO: return Z;
             case STATUS_FLAG_IRQ_DISABLE: return I;
@@ -125,7 +125,7 @@ public class Registers {
             case STATUS_FLAG_OVERFLOW: return V;
             case STATUS_FLAG_NEGATIVE: return N;
             default:
-                throw new IllegalArgumentException("Unknown 6502 Flag ID:" + flagValue);
+                throw new IllegalArgumentException("Unknown 6502 Flag ID:" + flagPlaceValue);
         }
     }
 
