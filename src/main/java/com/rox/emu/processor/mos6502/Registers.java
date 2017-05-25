@@ -10,34 +10,56 @@ import org.slf4j.LoggerFactory;
  */
 public class Registers {
     private final Logger LOG = LoggerFactory.getLogger(this.getClass());
-    
+
+    /** Register ID of the Accumulator */
     public static final int REG_ACCUMULATOR = 0;
+    /** Register ID of the Y Index register */
     public static final int REG_Y_INDEX = 1;
+    /** Register ID of the X Index register */
     public static final int REG_X_INDEX = 2;
+    /** Register ID of the Program Counter High Byte */
     public static final int REG_PC_HIGH = 3;
+    /** Register ID of the Program Counter Low Byte */
     public static final int REG_PC_LOW = 4;
+    /** Register ID of the <em>fixed</em> high byte of the Stack Pointer */
     private static final int REG_SP_X = 5;
+    /** Register ID of the low byte of the Stack Pointer */
     public static final int REG_SP = 6;
+    /** Register ID of the Status flag byte */
     public static final int REG_STATUS = 7;
 
     private static final String[] registerNames = new String[] {"Accumulator", "Y Index", "X Index", "Program Counter (Hi)", "Program Counter (Low)", "<SP>", "Stack Pointer", "Status Flags"};
 
+    /** Place value of Carry status flag in bit {@value #C} */
     public static final int STATUS_FLAG_CARRY = 0x1;
+    /** Place value of Zero status flag in bit {@value #Z} */
     public static final int STATUS_FLAG_ZERO = 0x2;
+    /** Place value of Interrupt status flag in bit {@value #I} */
     public static final int STATUS_FLAG_IRQ_DISABLE = 0x4;
+    /** Place value of Binary Coded Decimal status flag in bit {@value #D} */
     public static final int STATUS_FLAG_DEC = 0x8;
+    /** Place value of Break status flag in bit {@value #B} */
     public static final int STATUS_FLAG_BREAK = 0x10;
     private static final int STATUS_FLAG_UNUSED = 0x20; //Placeholder only
+    /** Place value of Overflow status flag in bit {@value #V} */
     public static final int STATUS_FLAG_OVERFLOW = 0x40;
+    /** Place value of Negative status flag in bit {@value #N} */
     public static final int STATUS_FLAG_NEGATIVE = 0x80;
 
+    /** Bit place of Negative status flag */
     public static final int N = 7;
+    /** Bit place of Overflow status flag */
     public static final int V = 6;
     private static final int U = 5; //Placeholder only
+    /** Bit place of Break status flag */
     public static final int B = 4;
+    /** Bit place of Binary Coded Decimal status flag */
     public static final int D = 3;
+    /** Bit place of Interrupt status flag */
     public static final int I = 2;
+    /** Bit place of Zero status flag */
     public static final int Z = 1;
+    /** Bit place ofCarry status flag */
     public static final int C = 0;
 
     private static final String[] flagNames = new String[] {"Carry", "Zero", "IRQ Disable", "Decimal Mode", "BRK Command", "<UNUSED>", "Overflow", "Negative"};
