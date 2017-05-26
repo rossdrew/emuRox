@@ -4,6 +4,9 @@ import com.rox.emu.UnknownOpCodeException;
 import com.rox.emu.processor.mos6502.CPU;
 import com.rox.emu.processor.mos6502.op.util.OpCodeConverter;
 
+import java.util.Arrays;
+import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 /**
@@ -228,10 +231,10 @@ public enum OpCode {
      * @return the OpCode associated with this byte value
      */
     public static OpCode from(int byteValue){
-        for (OpCode opcode : OpCode.values()){
-            if (opcode.getByteValue() == byteValue)
-                return opcode;
-        }
+        final Optional<OpCode> result = from(opcode -> opcode.getByteValue() == byteValue);
+
+        if (result.isPresent())
+            return result.get();
 
         throw new UnknownOpCodeException("Unknown operation code value while creating OpCode object: " + Integer.toHexString(byteValue), byteValue);
     }
@@ -243,10 +246,10 @@ public enum OpCode {
      * @return The OpCode instance associated with this name in {@link AddressingMode#IMPLIED}
      */
     public static OpCode from(String opCodeName){
-        for (OpCode opcode : OpCode.values()){
-            if (opcode.getOpCodeName().equalsIgnoreCase(opCodeName))
-                return opcode;
-        }
+        final Optional<OpCode> result = from(opcode -> opcode.getOpCodeName().equalsIgnoreCase(opCodeName));
+
+        if (result.isPresent())
+            return result.get();
 
         throw new UnknownOpCodeException("Unknown opcode name while creating OpCode object: " + opCodeName, opCodeName);
     }
@@ -259,14 +262,17 @@ public enum OpCode {
      * @return The OpCode instance associated with this name in this {@link AddressingMode}
      */
     public static OpCode from(String opCodeName, AddressingMode addressingMode){
-        for (OpCode opcode : OpCode.values()){
-            if ((opcode.getOpCodeName().equalsIgnoreCase(opCodeName))
-                    && (opcode.getAddressingMode() == addressingMode)) {
-                return opcode;
-            }
-        }
+        final Optional<OpCode> result = from(opcode -> opcode.getOpCodeName().equalsIgnoreCase(opCodeName) &&
+                                                       opcode.getAddressingMode() == addressingMode);
+
+        if (result.isPresent())
+            return result.get();
 
         throw new UnknownOpCodeException("Unknown opcode name while creating OpCode object: " + opCodeName + " in " + addressingMode, opCodeName);
+    }
+    
+    private static Optional<OpCode> from(Predicate<? super OpCode> predicate) throws UnknownOpCodeException{
+        return Arrays.stream(OpCode.values()).filter(predicate).findFirst();
     }
 
     public int getByteValue(){
