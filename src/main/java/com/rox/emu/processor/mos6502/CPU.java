@@ -19,15 +19,28 @@ public class CPU {
     private final Memory memory;
     private final Registers registers = new Registers();
 
-    public static final int CARRY_INDICATOR_BIT = 0x100;    //The bit set on a word when a byte has carried up
-    public static final int NEGATIVE_INDICATOR_BIT = 0x80;  //The bit set on a byte when a it is negative
+    /** The bit set on a word when a byte has carried up */
+    public static final int CARRY_INDICATOR_BIT = 0x100;
+    /** The bit set on a byte when a it is negative */
+    public static final int NEGATIVE_INDICATOR_BIT = 0x80;
 
     public CPU(Memory memory) {
         this.memory = memory;
     }
 
     /**
-     * IRL this takes 6 CPU cycles but we'll cross that bridge IF we come to it-
+     * Reset the CPU; akin to firing the Reset pin on a 6502.<br/>
+     * <br/>
+     * This will
+     * <ul>
+     *     <li>Set Accumulator -> 0</li>
+     *     <li>Set Indexes -> 0</li>
+     *     <li>Status register -> 0x34</li>
+     *     <li>Set PC to the values at <code>0xFFFC</code> and <code>0xFFFD</code></li>
+     *     <li>Reset Stack Pointer -> 0xFF</li>
+     * </ul>
+     * <br/>
+     * Note: IRL this takes 6 CPU cycles but we'll cross that bridge IF we come to it-
      */
     public void reset(){
         LOG.trace("RESETTING...");
@@ -41,6 +54,13 @@ public class CPU {
         LOG.trace("...READY!");
     }
 
+    /**
+     * Fire an <b>I</b>nterrupt <b>R</b>e<b>Q</b>uest; akin to setting the IRQ pin on a 6502.<br/>
+     * <br>
+     * This will stash the PC and Status registers and set the Program Counter to the values at
+     * <code>0xFFFE</code> and <code>0xFFFF</code> where the <b>I</b>nterrupt <b>S</b>ervice
+     * <b>R</b>outine is expected to be
+     */
     public void irq() {
         LOG.debug("IRQ!");
         registers.setFlag(Registers.STATUS_FLAG_IRQ_DISABLE);
@@ -53,6 +73,12 @@ public class CPU {
         setRegisterValue(Registers.REG_PC_LOW, getByteOfMemoryAt(0xFFFF));
     }
 
+    /**
+     * Fire a <b>N</b>on <b>M</b>askable <b>I</b>nterrupt; akin to setting the NMI pin on a 6502.<br/>
+     * <br>
+     * This will stash the PC and Status registers and set the Program Counter to the values at <code>0xFFFA</code>
+     * and <code>0xFFFB</code> where the <b>I</b>nterrupt <b>S</b>ervice <b>R</b>outine is expected to be
+     */
     public void nmi() {
         LOG.debug("NMI!");
         registers.setFlag(Registers.STATUS_FLAG_IRQ_DISABLE);
