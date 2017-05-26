@@ -252,7 +252,7 @@ public enum OpCode {
      * @return The OpCode instance associated with this name in this {@link AddressingMode}
      */
     public static OpCode from(String opCodeName, AddressingMode addressingMode){
-        return from(opcode -> opcode.getOpCodeName().equalsIgnoreCase(opCodeName) &&
+        return matching(opcode -> opcode.getOpCodeName().equalsIgnoreCase(opCodeName) &&
                                                        opcode.getAddressingMode() == addressingMode,
                     opCodeName + " in " + addressingMode,
                     opCodeName);
@@ -265,7 +265,7 @@ public enum OpCode {
      * @throws UnknownOpCodeException
      */
     private static OpCode from(Predicate<? super OpCode> predicate, Object predicateTerm) throws UnknownOpCodeException{
-        return from (predicate, ""+predicateTerm, predicateTerm);
+        return matching(predicate, ""+predicateTerm, predicateTerm);
     }
 
     /**
@@ -275,7 +275,7 @@ public enum OpCode {
      * @return The first {@link OpCode} found
      * @throws UnknownOpCodeException if no {@link OpCode} matches the given predicate
      */
-    private static OpCode from(Predicate<? super OpCode> predicate, String predicateDescription, Object predicateTerm) throws UnknownOpCodeException{
+    private static OpCode matching(Predicate<? super OpCode> predicate, String predicateDescription, Object predicateTerm) throws UnknownOpCodeException{
         Optional<OpCode> result = Arrays.stream(OpCode.values()).filter(predicate).findFirst();
 
         if (result.isPresent())
@@ -295,8 +295,11 @@ public enum OpCode {
     }
 
     public static Stream<OpCode> streamOf(AddressingMode addressingMode){
-        return Stream.of(OpCode.values())
-                .filter(o -> o.getAddressingMode() == addressingMode);
+        return streamOf(opcode -> opcode.getAddressingMode() == addressingMode);
+    }
+
+    private static Stream<OpCode> streamOf(Predicate<? super OpCode> predicate){
+        return Stream.of(OpCode.values()).filter(predicate);
     }
 
     @Override

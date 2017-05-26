@@ -238,7 +238,7 @@ public class Registers {
 
         return flags;
     }
-    
+
     private boolean isNegative(int fakeByte){
         return (fakeByte & STATUS_FLAG_NEGATIVE) == STATUS_FLAG_NEGATIVE;
     }

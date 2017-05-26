@@ -180,7 +180,7 @@ public class Compiler {
         throw new UnknownOpCodeException("Invalid or unimplemented argument: '" + prefix + value + postfix + "'", prefix+value);
     }
 
-    public AddressingMode getIndirectIndexMode(String prefix, String value, String postfix){
+    private AddressingMode getIndirectIndexMode(String prefix, String value, String postfix){
         if (postfix.equalsIgnoreCase(INDIRECT_X_POSTFIX)){
             return AddressingMode.INDIRECT_X;
         }else if (postfix.equalsIgnoreCase(INDIRECT_Y_POSTFIX)){
@@ -190,7 +190,7 @@ public class Compiler {
         throw new UnknownOpCodeException("Invalid or unimplemented argument: '" + prefix + value + postfix + "'", prefix+value);
     }
 
-    public AddressingMode getIndexedAddressingMode(String prefix, String value, String postfix){
+    private AddressingMode getIndexedAddressingMode(String prefix, String value, String postfix){
         if (value.length() <= 2) {
             return decorateWithIndexingMode(AddressingMode.ZERO_PAGE, postfix);
         }else if (value.length() <= 4){
@@ -200,7 +200,7 @@ public class Compiler {
         throw new UnknownOpCodeException("Invalid or unimplemented argument: '" + prefix + value + postfix + "'", prefix+value);
     }
 
-    public AddressingMode decorateWithIndexingMode(AddressingMode addressingMode, String postfix){
+    private AddressingMode decorateWithIndexingMode(AddressingMode addressingMode, String postfix){
         if (postfix.equalsIgnoreCase(X_INDEXED_POSTFIX)){
             return addressingMode.xIndexed();
         }else if (postfix.equalsIgnoreCase(Y_INDEXED_POSTFIX)){
