@@ -72,48 +72,83 @@ public class Registers {
         register[REG_STATUS] = 0b00000000;
     }
 
+    /**
+     * @param registerID to return the name for
+     * @return A {@link String} representation of the register for <code>registerID</code>
+     */
     public static String getRegisterName(int registerID){
         return registerNames[registerID];
     }
 
+    /**
+     * @param registerID of the register to set
+     * @param val to set the register to
+     */
     public void setRegister(int registerID, int val){
         LOG.debug("'R:" + getRegisterName(registerID) + "' := " + val);
         register[registerID] = val;
     }
 
+    /**
+     * @param registerID for which to get the value
+     * @return the value of the desired register
+     */
     public int getRegister(int registerID){
         return register[registerID];
     }
 
+    /**
+     * Set the given register to the given value and set the flags register based on that value
+     *
+     * @param registerID of the register to set
+     * @param value to set the register to
+     */
     public void setRegisterAndFlags(int registerID, int value){
         int valueByte = value & 0xFF;
         setRegister(registerID, valueByte);
         setFlagsBasedOn(valueByte);
     }
 
+    /**
+     * @param value to set the register flags based on
+     */
     public void setFlagsBasedOn(int value){
         int valueByte = value & 0xFF;
         updateZeroFlagBasedOn(valueByte);
         updateNegativeFlagBasedOn(valueByte);
     }
 
-    public void setPC(int wordPC){
-        setRegister(REG_PC_HIGH, wordPC >> 8);
-        setRegister(REG_PC_LOW, wordPC & 0xFF);
-        LOG.debug("'R+:Program Counter' := " + wordPC + " [ " + getRegister(REG_PC_HIGH) + " | " + getRegister(REG_PC_LOW) + " ]");
+    /**
+     * @param newPCWord to set the Program Counter to
+     */
+    public void setPC(int newPCWord){
+        setRegister(REG_PC_HIGH, newPCWord >> 8);
+        setRegister(REG_PC_LOW, newPCWord & 0xFF);
+        LOG.debug("'R+:Program Counter' := " + newPCWord + " [ " + getRegister(REG_PC_HIGH) + " | " + getRegister(REG_PC_LOW) + " ]");
     }
 
+    /**
+     * @return the two byte value of the Program Counter
+     */
     public int getPC(){
         return (getRegister(REG_PC_HIGH) << 8) | getRegister(REG_PC_LOW);
     }
 
+    /**
+     * Increment the Program Counter then return it's value
+     *
+     * @return the new value of the Program Counter
+     */
     public int getNextProgramCounter(){
-        final int originalPC = getPC();
-        final int incrementedPC = originalPC + 1;
-        setPC(incrementedPC);
-        return incrementedPC;
+        setPC(getPC()+1);
+        return getPC();
     }
 
+    /**
+     * @param flagPlaceValue the place value of the desired flag
+     * @return the bit place of the given flag value
+     * @throws IllegalArgumentException if the flag specified by <code>flagPlaceValue</code> doesn't exist
+     */
     public static int getFlagID(int flagPlaceValue) throws IllegalArgumentException {
         switch (flagPlaceValue){
             case STATUS_FLAG_CARRY: return C;
@@ -129,14 +164,25 @@ public class Registers {
         }
     }
 
+    /**
+     * @param flagValue for which to get the name
+     * @return the {@lnk String} name of the given flag
+     */
     public static String getFlagName(int flagValue){
         return flagNames[getFlagID(flagValue)];
     }
 
+    /**
+     * @param flagPlaceValue flag to test
+     * @return <code>true</code> if the specified flag is set, <code>false</code> otherwise
+     */
     public boolean getFlag(int flagPlaceValue){
         return ((register[REG_STATUS] & flagPlaceValue) == flagPlaceValue);
     }
 
+    /**
+     * @param flagPlaceValue for which to set to true
+     */
     public void setFlag(int flagPlaceValue) {
         LOG.debug("'F:" + getFlagName(flagPlaceValue) +"' -> SET");
         register[REG_STATUS] = register[REG_STATUS] | flagPlaceValue;
@@ -158,6 +204,9 @@ public class Registers {
         register[REG_STATUS] = (~flagPlaceValue) & register[REG_STATUS];
     }
 
+    /**
+     * Set zero flag if given argument is 0
+     */
     public void updateZeroFlagBasedOn(int value){
         if (value == 0)
             setFlag(STATUS_FLAG_ZERO);
@@ -165,6 +214,9 @@ public class Registers {
             clearFlag(STATUS_FLAG_ZERO);
     }
 
+    /**
+     * Set negative flag if given argument is 0
+     */
     public void updateNegativeFlagBasedOn(int value){
         if ( isNegative(value))
             setFlag(STATUS_FLAG_NEGATIVE);
@@ -172,6 +224,9 @@ public class Registers {
             clearFlag(STATUS_FLAG_NEGATIVE);
     }
 
+    /**
+     * @return an array containing the states of all bits in the flags register
+     */
     public boolean[] getStatusFlags(){
         boolean[] flags = new boolean[8];
 
@@ -183,7 +238,7 @@ public class Registers {
 
         return flags;
     }
-
+    
     private boolean isNegative(int fakeByte){
         return (fakeByte & STATUS_FLAG_NEGATIVE) == STATUS_FLAG_NEGATIVE;
     }
