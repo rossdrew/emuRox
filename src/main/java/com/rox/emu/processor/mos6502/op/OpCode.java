@@ -231,12 +231,7 @@ public enum OpCode {
      * @return the OpCode associated with this byte value
      */
     public static OpCode from(int byteValue){
-        final Optional<OpCode> result = from(opcode -> opcode.getByteValue() == byteValue);
-
-        if (result.isPresent())
-            return result.get();
-
-        throw new UnknownOpCodeException("Unknown operation code value while creating OpCode object: " + Integer.toHexString(byteValue), byteValue);
+        return from(opcode -> opcode.getByteValue() == byteValue, byteValue);
     }
 
     /**
@@ -246,12 +241,7 @@ public enum OpCode {
      * @return The OpCode instance associated with this name in {@link AddressingMode#IMPLIED}
      */
     public static OpCode from(String opCodeName){
-        final Optional<OpCode> result = from(opcode -> opcode.getOpCodeName().equalsIgnoreCase(opCodeName));
-
-        if (result.isPresent())
-            return result.get();
-
-        throw new UnknownOpCodeException("Unknown opcode name while creating OpCode object: " + opCodeName, opCodeName);
+        return from(opcode -> opcode.getOpCodeName().equalsIgnoreCase(opCodeName), opCodeName);
     }
 
     /**
@@ -262,17 +252,36 @@ public enum OpCode {
      * @return The OpCode instance associated with this name in this {@link AddressingMode}
      */
     public static OpCode from(String opCodeName, AddressingMode addressingMode){
-        final Optional<OpCode> result = from(opcode -> opcode.getOpCodeName().equalsIgnoreCase(opCodeName) &&
-                                                       opcode.getAddressingMode() == addressingMode);
+        return from(opcode -> opcode.getOpCodeName().equalsIgnoreCase(opCodeName) &&
+                                                       opcode.getAddressingMode() == addressingMode,
+                    opCodeName + " in " + addressingMode,
+                    opCodeName);
+    }
+
+    /**
+     * @param predicate A predicate used to search {@link OpCode}s
+     * @param predicateTerm The main term of {@link Object} used in the predicate
+     * @return The first {@link OpCode} found
+     * @throws UnknownOpCodeException
+     */
+    private static OpCode from(Predicate<? super OpCode> predicate, Object predicateTerm) throws UnknownOpCodeException{
+        return from (predicate, ""+predicateTerm, predicateTerm);
+    }
+
+    /**
+     * @param predicate A predicate used to search {@link OpCode}s
+     * @param predicateDescription A {@link String} description of the search
+     * @param predicateTerm The main term of {@link Object} used in the predicate
+     * @return The first {@link OpCode} found
+     * @throws UnknownOpCodeException if no {@link OpCode} matches the given predicate
+     */
+    private static OpCode from(Predicate<? super OpCode> predicate, String predicateDescription, Object predicateTerm) throws UnknownOpCodeException{
+        Optional<OpCode> result = Arrays.stream(OpCode.values()).filter(predicate).findFirst();
 
         if (result.isPresent())
             return result.get();
 
-        throw new UnknownOpCodeException("Unknown opcode name while creating OpCode object: " + opCodeName + " in " + addressingMode, opCodeName);
-    }
-    
-    private static Optional<OpCode> from(Predicate<? super OpCode> predicate) throws UnknownOpCodeException{
-        return Arrays.stream(OpCode.values()).filter(predicate).findFirst();
+        throw new UnknownOpCodeException("Unknown opcode name while creating OpCode object: " + predicateDescription, predicateTerm);
     }
 
     public int getByteValue(){
