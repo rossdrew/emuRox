@@ -17,24 +17,36 @@ public class SimpleMemory implements Memory{
         memoryArray = new int[0x10000];
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setByteAt(int location, int byteValue) {
         LOG.trace("STORE mem[" + location + "] --> " + byteValue);
         memoryArray[location] = byteValue & 0xFF;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setMemory(int startLocation, int[] byteValues) {
         LOG.trace("STORE mem[" + startLocation + "] --> " + byteValues.length + " bytes");
         System.arraycopy(byteValues, 0, memoryArray, startLocation, byteValues.length);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int getByte(int location) {
         LOG.trace("FETCH mem[" + location +"] --> " + memoryArray[location]);
         return memoryArray[location];
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int getWord(int location) {
         int word = (memoryArray[location] << 8 | memoryArray[location+1]);
@@ -42,6 +54,9 @@ public class SimpleMemory implements Memory{
         return word;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int[] getBlock(int from, int to) {
         int[] extractedData = new int[to-from];
@@ -49,6 +64,9 @@ public class SimpleMemory implements Memory{
         return extractedData;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void reset() {
         for (int i : memoryArray) {
