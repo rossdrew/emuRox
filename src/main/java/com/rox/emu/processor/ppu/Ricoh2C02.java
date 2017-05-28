@@ -44,7 +44,7 @@ import com.rox.emu.mem.Memory;
  * </table>
  *
  */
-public class PPU {
+public class Ricoh2C02 {
     public enum Register {
         REG_CTRL_1(0x2000),
         REG_CTRL_2(0x2001);
@@ -62,7 +62,7 @@ public class PPU {
 
     private final Memory memory;
 
-    public PPU(Memory memory) {
+    public Ricoh2C02(Memory memory) {
         this.memory = memory;
     }
 
