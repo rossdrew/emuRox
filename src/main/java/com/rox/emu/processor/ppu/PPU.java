@@ -3,7 +3,7 @@ package com.rox.emu.processor.ppu;
 import com.rox.emu.mem.Memory;
 
 /**
- * Emulation of a NES (Nintendo Entertainment System) PPU (Picture Processing Unit) processor.<br/>
+ * Emulation of a NES (Nintendo Entertainment System) PPU (Picture Processing Unit) processor, a Ricoh 2C02.<br/>
  * <br/>
  * <h4>Memory Mapped Registers</h4>
  * <table>
