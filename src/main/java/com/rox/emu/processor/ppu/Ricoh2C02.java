@@ -67,6 +67,6 @@ public class Ricoh2C02 {
     }
 
     public int getRegister(Register registerID){
-        return memory.getByte(registerID.memoryMappedLocation);
+        return memory.getByte(registerID.getMemoryMappedLocation());
     }
 }
