@@ -284,16 +284,29 @@ public enum OpCode {
         throw new UnknownOpCodeException("Unknown opcode name while creating OpCode object: " + predicateDescription, predicateTerm);
     }
 
+    /**
+     * @return the 6502 byte value for this {@link OpCode}
+     */
     public int getByteValue(){
         return byteValue;
     }
 
+    /**
+     * @return the human readable {@link String} representing this {@link OpCode}
+     */
     public String getOpCodeName() {return opCodeName;}
 
+    /**
+     * @return the {@link AddressingMode} that this {@link OpCode} uses
+     */
     public AddressingMode getAddressingMode(){
         return this.addressingMode;
     }
 
+    /**
+     * @param addressingMode from which to get possible {@link OpCode}s
+     * @return a {@link Stream} of all {@link OpCode}s that use the the specified {@link AddressingMode}
+     */
     public static Stream<OpCode> streamOf(AddressingMode addressingMode){
         return streamOf(opcode -> opcode.getAddressingMode() == addressingMode);
     }
@@ -302,6 +315,9 @@ public enum OpCode {
         return Stream.of(OpCode.values()).filter(predicate);
     }
 
+    /**
+     * @return The textual description of this {@link OpCode} including the {@link AddressingMode} it uses
+     */
     @Override
     public String toString(){
         return opCodeName + " (" + addressingMode + ")";
