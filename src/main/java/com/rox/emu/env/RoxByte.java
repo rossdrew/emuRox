@@ -39,6 +39,11 @@ public class RoxByte {
 
     private static int[] PLACE_VALUE = {1,2,4,8,16,32,64,128};
 
+    /**
+     * A {@link RoxByte} representing zero
+     */
+    public static RoxByte ZERO = new RoxByte(0, ByteFormat.SIGNED_TWOS_COMPLIMENT);
+
     private RoxByte(int value, ByteFormat format){
         this.byteValue = value;
         this.format = format;
@@ -50,13 +55,6 @@ public class RoxByte {
 
     private boolean inRange(int bit){
         return ((bit > -1) && (bit < 8));
-    }
-
-    /**
-     * Create a {@link RoxByte} with a SIGNED_TWOS_COMPLIMENT value of 0
-     */
-    public RoxByte(){
-        this(0, ByteFormat.SIGNED_TWOS_COMPLIMENT);
     }
 
     /**

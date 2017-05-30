@@ -18,7 +18,7 @@ import static org.junit.Assert.*;
 public class RoxByteTest extends Specification{
     @Test
     public void testEmptyByteCreation(){
-        final RoxByte myByte = new RoxByte();
+        final RoxByte myByte = RoxByte.ZERO;
         assertNotNull(myByte);
         assertEquals(0, myByte.getAsInt());
     }
@@ -52,7 +52,7 @@ public class RoxByteTest extends Specification{
 
     @Test
     public void testSetBit(){
-        final RoxByte myByte = new RoxByte();
+        final RoxByte myByte = RoxByte.ZERO;
 
         assertEquals(1, myByte.withBit(0).getAsInt());
         assertEquals(2, myByte.withBit(1).getAsInt());
@@ -66,7 +66,7 @@ public class RoxByteTest extends Specification{
 
     @Test
     public void testSetBitInvalidChoice(){
-        final RoxByte myByte = new RoxByte();
+        final RoxByte myByte = RoxByte.ZERO;
 
         try {
             myByte.withBit(8);
@@ -79,7 +79,7 @@ public class RoxByteTest extends Specification{
     @Test
     public void testIsBitSet(){
         final RoxByte loadedByte = RoxByte.signedFrom(-1);
-        final RoxByte emptyByte = new RoxByte();
+        final RoxByte emptyByte = RoxByte.ZERO;
 
         for (int i=0; i<8; i++){
             assertTrue(loadedByte.isBitSet(i));
@@ -89,7 +89,7 @@ public class RoxByteTest extends Specification{
 
     @Test
     public void testIsBitSetInvalidChoice(){
-        final RoxByte myByte = new RoxByte();
+        final RoxByte myByte = RoxByte.ZERO;
 
         try {
             myByte.isBitSet(8);
