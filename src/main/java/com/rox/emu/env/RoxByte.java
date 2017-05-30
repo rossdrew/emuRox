@@ -48,6 +48,10 @@ public class RoxByte {
         return -(((~(byteValue-1))) & 0xFF);
     }
 
+    private boolean inRange(int bit){
+        return ((bit > -1) && (bit < 8));
+    }
+
     /**
      * Create a {@link RoxByte} with a SIGNED_TWOS_COMPLIMENT value of 0
      */
@@ -105,9 +109,5 @@ public class RoxByte {
     public boolean isBitSet(int bitToTest) {
         assert inRange(bitToTest);
         return (byteValue & PLACE_VALUE[bitToTest]) == PLACE_VALUE[bitToTest];
-    }
-
-    private boolean inRange(int bit){
-        return ((bit > -1) && (bit < 8));
     }
 }
