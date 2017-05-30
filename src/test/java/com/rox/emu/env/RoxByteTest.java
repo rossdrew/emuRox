@@ -5,10 +5,12 @@ import com.pholser.junit.quickcheck.When;
 import com.pholser.junit.quickcheck.generator.InRange;
 import com.pholser.junit.quickcheck.runner.JUnitQuickcheck;
 import com.rox.emu.InvalidDataTypeException;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import spock.lang.Specification;
 
+import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNotNull;
 import static org.junit.Assert.*;
 
@@ -63,6 +65,18 @@ public class RoxByteTest extends Specification{
     }
 
     @Test
+    public void testSetBitInvalidChoice(){
+        final RoxByte myByte = new RoxByte();
+
+        try {
+            myByte.withBit(8);
+            fail("There is no bit 8, this should throw an error");
+        }catch(AssertionError e){
+            assertNotNull(e);
+        }
+    }
+
+    @Test
     public void testIsBitSet(){
         final RoxByte loadedByte = RoxByte.signedFrom(-1);
         final RoxByte emptyByte = new RoxByte();
@@ -70,6 +84,18 @@ public class RoxByteTest extends Specification{
         for (int i=0; i<8; i++){
             assertTrue(loadedByte.isBitSet(i));
             assertFalse(emptyByte.isBitSet(i));
+        }
+    }
+
+    @Test
+    public void testIsBitSetInvalidChoice(){
+        final RoxByte myByte = new RoxByte();
+
+        try {
+            myByte.isBitSet(8);
+            fail("There is no bit 8, this should throw an error");
+        }catch(AssertionError e){
+            assertNotNull(e);
         }
     }
 
