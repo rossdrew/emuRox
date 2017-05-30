@@ -75,9 +75,9 @@ public class RoxByte {
         switch (format){
             default:
             case SIGNED_TWOS_COMPLIMENT:
-                if (isBitSet(7)){
+                if (isBitSet(7))
                     return fromTwosComplimented(byteValue);
-                }else
+                else
                     return byteValue;
         }
     }
@@ -94,7 +94,7 @@ public class RoxByte {
      * @return A new {@link RoxByte} which is this one, with the specified bit set
      */
     public RoxByte withBit(int bitToSet) {
-        assert ((bitToSet > -1) && (bitToSet < 8));
+        assert inRange(bitToSet);
         return new RoxByte(PLACE_VALUE[bitToSet], ByteFormat.SIGNED_TWOS_COMPLIMENT);
     }
 
@@ -103,7 +103,11 @@ public class RoxByte {
      * @return weather the specified bit is set in this byte
      */
     public boolean isBitSet(int bitToTest) {
-        assert ((bitToTest > -1) && (bitToTest < 8));
+        assert inRange(bitToTest);
         return (byteValue & PLACE_VALUE[bitToTest]) == PLACE_VALUE[bitToTest];
+    }
+
+    private boolean inRange(int bit){
+        return ((bit > -1) && (bit < 8));
     }
 }
