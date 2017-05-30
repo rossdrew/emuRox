@@ -3,14 +3,14 @@ package com.rox.emu.env;
 import com.rox.emu.InvalidDataTypeException;
 
 /**
- * A representation of a byte that can be in different formats, so far only SIGNED.
+ * A representation of a byte that can be in different formats, so far only SIGNED_TWOS_COMPLIMENT.
  */
 public class RoxByte {
     /**
      * Specifies the format of the information held in a {@link RoxByte} instance, options:-
      *
      * <dl>
-     *     <dt>SIGNED</dt>
+     *     <dt>SIGNED_TWOS_COMPLIMENT</dt>
      *     <dd>will only accept/return values in the range [-128...127] so 0b11111110 will represent -2</dd>
      *
      *     <dt>UNSIGNED</dt>
@@ -31,33 +31,79 @@ public class RoxByte {
          *     <li><code>0b01111110</code> -> &nbsp; <code>126</code></li>
          * </ul>
          */
-        SIGNED
+        SIGNED_TWOS_COMPLIMENT
     }
 
     private final int byteValue;
     private final ByteFormat format;
+
+    private static int[] PLACE_VALUE = {1,2,4,8,16,32,64,128};
 
     private RoxByte(int value, ByteFormat format){
         this.byteValue = value;
         this.format = format;
     }
 
-    public RoxByte(){
-        this(0, ByteFormat.SIGNED);
+    private int fromTwosComplimented(int byteValue){
+        return -(((~(byteValue-1))) & 0xFF);
     }
 
+    /**
+     * Create a {@link RoxByte} with a SIGNED_TWOS_COMPLIMENT value of 0
+     */
+    public RoxByte(){
+        this(0, ByteFormat.SIGNED_TWOS_COMPLIMENT);
+    }
+
+    /**
+     * Create a {@link RoxByte} with a SIGNED_TWOS_COMPLIMENT value
+     * @param value the value required for this byte to have
+     * @return A {@link RoxByte}, SIGNED_TWOS_COMPLIMENT, with the specified value
+     * @throws InvalidDataTypeException if the given value doesn't fit inside a SIGNED_TWOS_COMPLIMENT byte
+     */
     public static RoxByte signedFrom(int value) throws InvalidDataTypeException {
         if (value > 127 || value < -128)
             throw new InvalidDataTypeException("Cannot convert " + value + " to unsigned byte.  Expected range (-128 -> 127)");
 
-        return new RoxByte(value, ByteFormat.SIGNED);
+        return new RoxByte(value, ByteFormat.SIGNED_TWOS_COMPLIMENT);
     }
 
+    /**
+     * @return this SIGNED_TWOS_COMPLIMENT byte as an integer
+     */
     public int getAsInt() {
-        return byteValue;
+        switch (format){
+            default:
+            case SIGNED_TWOS_COMPLIMENT:
+                if (isBitSet(7)){
+                    return fromTwosComplimented(byteValue);
+                }else
+                    return byteValue;
+        }
     }
 
+    /**
+     * @return the format this byte is considered to be, at the moment, only SIGNED_TWOS_COMPLIMENT
+     */
     public ByteFormat getFormat(){
         return format;
+    }
+
+    /**
+     * @param bitToSet bit number (0-7) of the bit to set in the new {@link RoxByte}
+     * @return A new {@link RoxByte} which is this one, with the specified bit set
+     */
+    public RoxByte withBit(int bitToSet) {
+        assert ((bitToSet > -1) && (bitToSet < 8));
+        return new RoxByte(PLACE_VALUE[bitToSet], ByteFormat.SIGNED_TWOS_COMPLIMENT);
+    }
+
+    /**
+     * @param bitToTest bit number (0-7) of the bit to test
+     * @return weather the specified bit is set in this byte
+     */
+    public boolean isBitSet(int bitToTest) {
+        assert ((bitToTest > -1) && (bitToTest < 8));
+        return (byteValue & PLACE_VALUE[bitToTest]) == PLACE_VALUE[bitToTest];
     }
 }
