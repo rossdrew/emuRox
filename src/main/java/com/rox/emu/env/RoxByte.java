@@ -1,5 +1,7 @@
 package com.rox.emu.env;
 
+import com.rox.emu.InvalidDataTypeException;
+
 /**
  * A representation of a byte that can be in different formats, so far only SIGNED.
  */
@@ -44,9 +46,9 @@ public class RoxByte {
         this(0, ByteFormat.SIGNED);
     }
 
-    public static RoxByte signedFrom(int value) throws Exception {
+    public static RoxByte signedFrom(int value) throws InvalidDataTypeException {
         if (value > 127 || value < -128)
-            throw new Exception("Cannot convert " + value + " to unsigned byte.  Expected range (-128 -> 127)");
+            throw new InvalidDataTypeException("Cannot convert " + value + " to unsigned byte.  Expected range (-128 -> 127)");
 
         return new RoxByte(value, ByteFormat.SIGNED);
     }

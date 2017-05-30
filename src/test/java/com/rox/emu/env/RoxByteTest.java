@@ -3,6 +3,7 @@ package com.rox.emu.env;
 import com.pholser.junit.quickcheck.Property;
 import com.pholser.junit.quickcheck.generator.InRange;
 import com.pholser.junit.quickcheck.runner.JUnitQuickcheck;
+import com.rox.emu.InvalidDataTypeException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import spock.lang.Specification;
@@ -20,14 +21,14 @@ public class RoxByteTest extends Specification{
     }
 
     @Test
-    public void testByteFromInteger() throws Exception {
+    public void testByteFromInteger() throws InvalidDataTypeException {
         final RoxByte myByte = RoxByte.signedFrom(1);
         assertNotNull(myByte);
         assertEquals(RoxByte.ByteFormat.SIGNED, myByte.getFormat());
     }
 
     @Property(trials = 10)
-    public void testValidGetAsInt(@InRange(min = "-128", max = "127") int byteValue) throws Exception {
+    public void testValidGetAsInt(@InRange(min = "-128", max = "127") int byteValue) throws InvalidDataTypeException {
         final RoxByte myByte = RoxByte.signedFrom(byteValue);
         assertEquals(byteValue, myByte.getAsInt());
         assertEquals(RoxByte.ByteFormat.SIGNED, myByte.getFormat());
@@ -38,7 +39,7 @@ public class RoxByteTest extends Specification{
         try {
             RoxByte.signedFrom(byteValue);
             fail(byteValue + " was expected to be too low to convert to unsigned byte");
-        }catch(Exception e) { //TODO make more specific
+        }catch(InvalidDataTypeException e) { //TODO make more specific
             assertNotNull(e);
         }
     }
@@ -48,7 +49,7 @@ public class RoxByteTest extends Specification{
         try {
             RoxByte.signedFrom(byteValue);
             fail(byteValue + " was expected to be too high to convert to unsigned byte");
-        }catch(Exception e) { //TODO make more specific
+        }catch(InvalidDataTypeException e) { //TODO make more specific
             assertNotNull(e);
         }
     }
