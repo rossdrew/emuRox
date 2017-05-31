@@ -70,7 +70,7 @@ public class RoxByteTest extends Specification{
         try {
             myByte.withBit(bit);
             fail("There is no bit " + bit + ", this should throw an error");
-        }catch(AssertionError e){
+        }catch(ArrayIndexOutOfBoundsException e){
             assertNotNull(e);
         }
     }
@@ -93,7 +93,7 @@ public class RoxByteTest extends Specification{
         try {
             myByte.isBitSet(bit);
             fail("There is no bit " + bit + ", this should throw an error");
-        }catch(AssertionError e){
+        }catch(ArrayIndexOutOfBoundsException e){
             assertNotNull(e);
         }
     }

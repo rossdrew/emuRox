@@ -54,7 +54,7 @@ public final class RoxByte {
     }
 
     private boolean inRange(int bit){
-        return ((bit > -1) && (bit < 8));
+        return ((bit >= 0) && (bit <= 7));
     }
 
     /**
@@ -96,7 +96,8 @@ public final class RoxByte {
      * @return A new {@link RoxByte} which is this one, with the specified bit set
      */
     public RoxByte withBit(int bitToSet) {
-        assert inRange(bitToSet);
+        if (!inRange(bitToSet))
+            throw new ArrayIndexOutOfBoundsException("Bit #"+ bitToSet +" is out of range, expected (0-7)");
         return new RoxByte(PLACE_VALUE[bitToSet], ByteFormat.SIGNED_TWOS_COMPLIMENT);
     }
 
@@ -105,7 +106,8 @@ public final class RoxByte {
      * @return weather the specified bit is set in this byte
      */
     public boolean isBitSet(int bitToTest) {
-        assert inRange(bitToTest);
+        if (!inRange(bitToTest))
+            throw new ArrayIndexOutOfBoundsException("Bit #"+ bitToTest +" is out of range, expected (0-7)");
         return (byteValue & PLACE_VALUE[bitToTest]) == PLACE_VALUE[bitToTest];
     }
 }
