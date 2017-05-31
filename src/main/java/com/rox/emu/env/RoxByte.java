@@ -5,7 +5,7 @@ import com.rox.emu.InvalidDataTypeException;
 /**
  * A representation of a byte that can be in different formats, so far only SIGNED_TWOS_COMPLIMENT.
  */
-public class RoxByte {
+public final class RoxByte {
     /**
      * Specifies the format of the information held in a {@link RoxByte} instance, options:-
      *
