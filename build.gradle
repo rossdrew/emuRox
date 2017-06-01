@@ -31,6 +31,7 @@ buildscript {
 
     dependencies {
         classpath "info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.1.11"
+        classpath 'net.sf.proguard:proguard-gradle:5.3.3'
     }
 }
 
@@ -71,4 +72,10 @@ jar {
     }
 }
 
+task obfuscatedJar(dependsOn: 'jar', type: proguard.gradle.ProGuardTask) {
+    configuration 'src/main/resources/proguard.config'
+
+    injars "build/libs/${rootProject.name}-${version}.jar"
+    outjars "build/libs/${rootProject.name}-1.0.jar"
+}
 
