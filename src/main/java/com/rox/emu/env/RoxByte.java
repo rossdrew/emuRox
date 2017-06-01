@@ -27,7 +27,7 @@ public final class RoxByte {
          * <ul>
          *     <li><code>0b11111110</code> -> <code>-2</code></li>
          *     <li><code>0b00000001</code> -> &nbsp; <code>1</code></li>
-         *     <li><code>0b10000001</code> -> &nbsp; <code>-127</code></li>
+         *     <li><code>0b10000001</code> -> <code>-127</code></li>
          *     <li><code>0b01111110</code> -> &nbsp; <code>126</code></li>
          * </ul>
          */
@@ -53,7 +53,7 @@ public final class RoxByte {
         return -(((~(byteValue-1))) & 0xFF);
     }
 
-    private boolean inRange(int bit){
+    private boolean bitInRange(int bit){
         return ((bit >= 0) && (bit <= 7));
     }
 
@@ -92,21 +92,21 @@ public final class RoxByte {
     }
 
     /**
-     * @param bitToSet bit number (0-7) of the bit to set in the new {@link RoxByte}
+     * @param bitToSet bit number (<code>0-7</code>) of the bit to set in the new {@link RoxByte}
      * @return A new {@link RoxByte} which is this one, with the specified bit set
      */
     public RoxByte withBit(int bitToSet) {
-        if (!inRange(bitToSet))
+        if (!bitInRange(bitToSet))
             throw new ArrayIndexOutOfBoundsException("Bit #"+ bitToSet +" is out of range, expected (0-7)");
         return new RoxByte(PLACE_VALUE[bitToSet], ByteFormat.SIGNED_TWOS_COMPLIMENT);
     }
 
     /**
-     * @param bitToTest bit number (0-7) of the bit to test
+     * @param bitToTest bit number (<code>0-7</code>) of the bit to test
      * @return weather the specified bit is set in this byte
      */
     public boolean isBitSet(int bitToTest) {
-        if (!inRange(bitToTest))
+        if (!bitInRange(bitToTest))
             throw new ArrayIndexOutOfBoundsException("Bit #"+ bitToTest +" is out of range, expected (0-7)");
         return (byteValue & PLACE_VALUE[bitToTest]) == PLACE_VALUE[bitToTest];
     }
