@@ -218,7 +218,7 @@ public class Registers {
      * Set negative flag if given argument is 0
      */
     public void updateNegativeFlagBasedOn(int value){
-        if ( isNegative(value))
+        if (isNegative(value))
             setFlag(STATUS_FLAG_NEGATIVE);
         else
             clearFlag(STATUS_FLAG_NEGATIVE);

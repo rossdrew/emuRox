@@ -912,6 +912,7 @@ public class CPU {
     }
 
     //XXX Need to use 2s compliment addition (subtraction)
+    //XXX The result is correct but it's un two compliment format
     private void performCMP(int value, int toRegister){
         int result = getRegisterValue(toRegister) - value;
 //        int twosComplimentResult = performSilentSBC(getRegisterValue(toRegister), value);
