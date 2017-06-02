@@ -140,7 +140,7 @@ public class CPU {
         switch (opCode){
             default:
             case OP_BRK:
-                registers.setPC(registers.getPC() + 2);
+                registers.setPC(silentADC(registers.getPC(), 2));
                 push(registers.getRegister(Registers.REG_PC_HIGH));
                 push(registers.getRegister(Registers.REG_PC_LOW));
                 push(registers.getRegister(Registers.REG_STATUS) | Registers.STATUS_FLAG_BREAK);
@@ -1056,6 +1056,15 @@ public class CPU {
         int borrow = (registers.getFlag(Registers.STATUS_FLAG_CARRY) ? 0 : 1);
         int byteValueBAndBorrow = twosComplimentOf(byteValueB + borrow);
         return adc(byteValueA, byteValueBAndBorrow) & 0xFF;
+    }
+
+    private int silentADC(int a, int b){
+        int statusState = registers.getRegister(Registers.REG_STATUS);
+
+        int result = adc(a,b);
+
+        registers.setRegister(Registers.REG_STATUS, statusState);
+        return result;
     }
 
     /**
