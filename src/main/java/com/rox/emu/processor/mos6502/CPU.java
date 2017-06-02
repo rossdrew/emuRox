@@ -908,31 +908,32 @@ public class CPU {
     }
 
     private int fromTwosComplimented(int byteValue){
+        //XXX Shouldn't this do the -1 as well, instead of having to do it in CMP and not in JMP?!
         return ((~byteValue)) & 0xFF;
     }
 
-    //XXX Need to use 2s compliment addition (subtraction)
-    //XXX The result is correct but it's un two compliment format
     private void performCMP(int value, int toRegister){
-        int result = getRegisterValue(toRegister) - value;
-//        int twosComplimentResult = performSilentSBC(getRegisterValue(toRegister), value);
+        int result = performSilentSBC(getRegisterValue(toRegister), value);
         registers.setFlagsBasedOn(result & 0xFF);
 
-        if (result >=0)
+        if (fromTwosComplimented(result)-1 >=0)
             registers.setFlag(Registers.STATUS_FLAG_CARRY);
         else
             registers.clearFlag(Registers.STATUS_FLAG_CARRY);
     }
 
-//    private int performSilentSBC(int a, int b){
-//        int statusState = registers.getRegister(Registers.REG_STATUS);
-//        registers.setFlag(Registers.STATUS_FLAG_CARRY);
-//
-//        int result = performSBC(a,b);
-//
-//        registers.setRegister(Registers.REG_STATUS, statusState);
-//        return result;
-//    }
+    /**
+     * Perform an SBC but without affecting any flags
+     */
+    private int performSilentSBC(int a, int b){
+        int statusState = registers.getRegister(Registers.REG_STATUS);
+        registers.setFlag(Registers.STATUS_FLAG_CARRY);
+
+        int result = performSBC(a,b);
+
+        registers.setRegister(Registers.REG_STATUS, statusState);
+        return result;
+    }
 
     private int rightShift(int value, boolean carryIn){
         return (value >> 1) | (carryIn ? 0b10000000 : 0);
@@ -1054,7 +1055,6 @@ public class CPU {
         registers.setFlag(Registers.STATUS_FLAG_NEGATIVE);
         int borrow = (registers.getFlag(Registers.STATUS_FLAG_CARRY) ? 0 : 1);
         int byteValueBAndBorrow = twosComplimentOf(byteValueB + borrow);
-
         return adc(byteValueA, byteValueBAndBorrow) & 0xFF;
     }
 
