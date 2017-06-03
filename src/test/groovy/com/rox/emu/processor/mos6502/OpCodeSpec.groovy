@@ -249,7 +249,7 @@ class OpCodeSpec extends Specification {
         0x04         | 0x24         | 2     | 0xFF       | 0xFF                | false | true  | "With negative result"
     }
 
-    @Unroll("LDA (Indirect, Y). #expected: 0x60 -> [#pointerHi|#pointerLo][#index] = #expectedAccumulator")
+    @Unroll("LDA (Indirect, Y). #expected: 0x60 -> [#pointerHi|#pointerLo]@[#index] = #value")
     testLDA_IND_IY() {
         when:
         Memory memory = new SimpleMemory()

@@ -343,7 +343,7 @@ public class CPU {
             }break;
 
             case OP_LDA_IND_IY: {
-                int pointerLocation = getWordOfMemoryAt(nextProgramByte()) + getRegisterValue(Registers.REG_Y_INDEX);
+                final int pointerLocation = getWordOfMemoryAt(nextProgramByte()) + getRegisterValue(Registers.REG_Y_INDEX);
                 registers.setRegisterAndFlags(Registers.REG_ACCUMULATOR, getByteOfMemoryAt(pointerLocation));
             }break;
 
