@@ -17,9 +17,9 @@ public class Registers {
     public static final int REG_Y_INDEX = 1;
     /** Register ID of the X Index register */
     public static final int REG_X_INDEX = 2;
-    /** Register ID of the Program Counter High Byte */
+    /** Register ID of the high byte of the Program Counter */
     public static final int REG_PC_HIGH = 3;
-    /** Register ID of the Program Counter Low Byte */
+    /** Register ID of the low byte of the Program Counter */
     public static final int REG_PC_LOW = 4;
     /** Register ID of the <em>fixed value</em> high byte of the Stack Pointer */
     private static final int REG_SP_X = 5;
@@ -50,6 +50,7 @@ public class Registers {
     public static final int N = 7;
     /** Bit place of Overflow status flag */
     public static final int V = 6;
+    /** - <em>UNUSED</em> (Placeholder flag only) **/
     private static final int U = 5; //Placeholder only
     /** Bit place of Break status flag */
     public static final int B = 4;
