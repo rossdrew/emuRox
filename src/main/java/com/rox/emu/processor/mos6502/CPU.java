@@ -65,9 +65,9 @@ public class CPU {
         LOG.debug("IRQ!");
         registers.setFlag(Registers.STATUS_FLAG_IRQ_DISABLE);
 
-        push(getRegisterValue(Registers.REG_PC_HIGH));
-        push(getRegisterValue(Registers.REG_PC_LOW));
-        push(getRegisterValue(Registers.REG_STATUS));
+        pushRegister(Registers.REG_PC_HIGH);
+        pushRegister(Registers.REG_PC_LOW);
+        pushRegister(Registers.REG_STATUS);
 
         setRegisterValue(Registers.REG_PC_HIGH, getByteOfMemoryAt(0xFFFe));
         setRegisterValue(Registers.REG_PC_LOW, getByteOfMemoryAt(0xFFFF));
@@ -83,9 +83,9 @@ public class CPU {
         LOG.debug("NMI!");
         registers.setFlag(Registers.STATUS_FLAG_IRQ_DISABLE);
 
-        push(getRegisterValue(Registers.REG_PC_HIGH));
-        push(getRegisterValue(Registers.REG_PC_LOW));
-        push(getRegisterValue(Registers.REG_STATUS));
+        pushRegister(Registers.REG_PC_HIGH);
+        pushRegister(Registers.REG_PC_LOW);
+        pushRegister(Registers.REG_STATUS);
 
         setRegisterValue(Registers.REG_PC_HIGH, getByteOfMemoryAt(0xFFFA));
         setRegisterValue(Registers.REG_PC_LOW, getByteOfMemoryAt(0xFFFB));
@@ -638,7 +638,7 @@ public class CPU {
                 break;
 
             case OP_PHA:
-                push(getRegisterValue(Registers.REG_ACCUMULATOR));
+                pushRegister(Registers.REG_ACCUMULATOR);
                 break;
 
             case OP_PLA:
@@ -646,7 +646,7 @@ public class CPU {
                 break;
 
             case OP_PHP:
-                push(getRegisterValue(Registers.REG_STATUS));
+                pushRegister(Registers.REG_STATUS);
                 break;
 
             case OP_PLP:
@@ -690,8 +690,8 @@ public class CPU {
             case OP_JSR:
                 int hi = nextProgramByte();
                 int lo = nextProgramByte();
-                push(getRegisterValue(Registers.REG_PC_HIGH));
-                push(getRegisterValue(Registers.REG_PC_LOW));
+                pushRegister(Registers.REG_PC_HIGH);
+                pushRegister(Registers.REG_PC_LOW);
                 setRegisterValue(Registers.REG_PC_HIGH, hi);
                 setRegisterValue(Registers.REG_PC_LOW, lo);
                 break;
@@ -806,6 +806,10 @@ public class CPU {
         int value = getByteOfMemoryAt(address);
         LOG.trace("POP " + value + "(0b" + Integer.toBinaryString(value) + ") from mem[0x" + Integer.toHexString(address).toUpperCase() + "]");
         return value;
+    }
+
+    private void pushRegister(int registerID){
+        push(getRegisterValue(registerID));
     }
 
     /**
