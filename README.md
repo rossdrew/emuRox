@@ -32,7 +32,7 @@ BCD and proper timing is a thing for another day as my first objective for now, 
  
 #### Branches
 
- - [Main](https://github.com/rossdrew/emuRox/commits/master) branch, pushing towards a fully working 6502
+ - [Main](https://github.com/rossdrew/emuRox/commits/master) branch, now pushing towards a working NES PPU, then a working NES
  - A [Concourse](https://concourse.ci/) CI [branch](https://github.com/rossdrew/emuRox/commits/concourse-ci), to get that working and learn a little something along the way
  - A [RoxByte](https://github.com/rossdrew/emuRox/blob/migration-roxbyte/src/main/java/com/rox/emu/env/RoxByte.java) migration [branch](https://github.com/rossdrew/emuRox/tree/migration-roxbyte) for attempting to move towards an abstracted "_byte_" and away from trying to warp Java types to do what we need.
 
