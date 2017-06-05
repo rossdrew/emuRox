@@ -7,18 +7,15 @@
 
 An emulator for the [6502 processor](https://en.wikipedia.org/wiki/MOS_Technology_6502).  The plan is to evolve this into a working [NES](https://en.wikipedia.org/wiki/Nintendo_Entertainment_System) emulator so I'm developing the 6502 without BCD mode for now.  If/When I get that working, I'll expand the 6502 and move onto another 6502 system (Atari 2600, Commodore 64...) then perhaps add processors and more emulated hardware, in theory, creating a pluggable multi-emulator.
 
-## Progress
+## 6502 and progress towards a working NES...
 
 With a first version of the 6502 processor (including a graphical debugger and compiler) written, currently I'm looking in to the NES PPU.  Trying to garner enough information to start emulating this piece of hardware while looking at code I've wrote over the last few months and looking at where it might be improved.  For example:-
  
-  - getting rid of java performed arithmetic in favor of ALU performed arithmetic, it's causing problems...as expected
+  - getting rid of java performed arithmetic (usually in `+`/`-` cases) in favor of ALU performed arithmetic, it's causing problems...as expected
   - compressing the data driven tests;  extracting out common patterns, etc
+  
+BCD and proper timing is a thing for another day as my first objective for now, is the NES emulator.
 
-#### 6502
-
-All op-codes now implemented. Some changing of arithmetic (usually in `+`/`-` cases) to twos compliment arithmetic.  Some other bugs needing worked out.
-Timing will be looked at later, as necessary.  BCD wont be needed for now for the NES (Ricoh) version and I'll need to look at the memory mapped registers.
- 
 ## Development & Testing
 
  The plan was to develop this, a larger personal project, in a TDD (Test Driven Development) centric way.  This means writing failing tests that describe functionality then writing that functionality to make the tests pass and iteratively writing a complete application.
@@ -37,12 +34,11 @@ Timing will be looked at later, as necessary.  BCD wont be needed for now for th
 
  - [Main](https://github.com/rossdrew/emuRox/commits/master) branch, pushing towards a fully working 6502
  - A [Concourse](https://concourse.ci/) CI [branch](https://github.com/rossdrew/emuRox/commits/concourse-ci), to get that working and learn a little something along the way
+ - A [RoxByte](https://github.com/rossdrew/emuRox/blob/migration-roxbyte/src/main/java/com/rox/emu/env/RoxByte.java) migration [branch](https://github.com/rossdrew/emuRox/tree/migration-roxbyte) for attempting to move towards an abstracted "_byte_" and away from trying to warp Java types to do what we need.
 
 -----
 
 ### Problems
-
-###### 6502
 
 ###### Javas unsigned byte problem. 
  - Java bytes are signed, meaning it's a pain to deal with them, instead we have to use ints to represent bytes.
