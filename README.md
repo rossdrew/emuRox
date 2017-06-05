@@ -54,6 +54,7 @@ BCD and proper timing is a thing for another day as my first objective for now, 
  
 
 ## Support on Beerpay 
-Found my project interesting or used it in some way?  Contribute by showing your appreciation with a frosty beverage or make a feature request.
+Found my project interesting or used it in some way?  Contribute by showing your appreciation with a frosty beverage.  In my case this will go towards an [Old Fashioned](https://www.instagram.com/p/BUzyDHOAzkI/?taken-by=ross_drew) but as far as I'm aware this is not Spirit/Bourbon/WhiskeyPay.  
+You can even make a feature suggestion.
 
 [![Beerpay](https://beerpay.io/rossdrew/emuRox/badge.svg?style=beer-square)](https://beerpay.io/rossdrew/emuRox)  [![Beerpay](https://beerpay.io/rossdrew/emuRox/make-wish.svg?style=flat-square)](https://beerpay.io/rossdrew/emuRox?focus=wish)
