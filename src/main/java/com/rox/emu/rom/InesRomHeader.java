@@ -1,4 +1,4 @@
-package com.rox.emu.processor.mos6502.rom;
+package com.rox.emu.rom;
 
 /**
  * A header for an iNES file

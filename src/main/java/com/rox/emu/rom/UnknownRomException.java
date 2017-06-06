@@ -1,4 +1,4 @@
-package com.rox.emu;
+package com.rox.emu.rom;
 
 /**
  * Exception for when ROM format is invalid or unknown

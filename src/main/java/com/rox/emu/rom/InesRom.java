@@ -1,6 +1,4 @@
-package com.rox.emu.processor.mos6502.rom;
-
-import com.rox.emu.UnknownRomException;
+package com.rox.emu.rom;
 
 /**
  * A representation of an iNES ROM file.
