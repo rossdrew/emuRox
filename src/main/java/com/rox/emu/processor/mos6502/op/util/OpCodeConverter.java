@@ -20,7 +20,7 @@ public class OpCodeConverter {
 
     public static AddressingMode getAddressingMode(String internalOpCodeName){
         final String tokens[] = internalOpCodeName.split(OpCode.TOKEN_SEPARATOR);
-        if (tokens.length < 2)
+        if (tokens.length <= OpCode.ADDR_I)
             return AddressingMode.IMPLIED;
 
         final String addressingModeDescriptor = tokens[OpCode.ADDR_I];
