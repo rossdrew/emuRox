@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 
 /**
  * Enum representation of {@link CPU} op-codes.  Each represented by an enum name using the convention
- * 'OP{@value #TOKEN_SEPARATOR}CODE{@value #TOKEN_SEPARATOR}ADDR{@value #TOKEN_SEPARATOR}INDX'.
+ * '{OP-CODE}{@value #TOKEN_SEPARATOR}{ADDRESSING-MODE}{@value #TOKEN_SEPARATOR}{INDEXING-MODE}'.
  *
  * @author Ross Drew
  */
@@ -207,12 +207,12 @@ public enum OpCode {
      * The index of the addressing mode token in the {@link String} enum id,
      * using the token delimiter '{@value TOKEN_SEPARATOR}'
      */
-    public static final int ADDR_I = 1;
+    public static final int ADDR_I = CODE_I + 1;
     /**
      * The index of the indexing mode token in the {@link String} enum id,
      * using the token delimiter '{@value TOKEN_SEPARATOR}'
      */
-    public static final int INDX_I = 2;
+    public static final int INDX_I = ADDR_I + 1;
 
     private final int byteValue;
     private final String opCodeName;
