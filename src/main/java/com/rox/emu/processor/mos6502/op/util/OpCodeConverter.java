@@ -8,24 +8,24 @@ import com.rox.emu.processor.mos6502.op.OpCode;
 /**
  * Utility for converting internal opcode representation names to human readable descriptions
  *
- * e.g.  OP_ADC_I  ->  "ADC (Immediate)"
+ * e.g.  ADC_I  ->  "ADC (Immediate)"
  *
  * @author Ross Drew
  */
 public class OpCodeConverter {
     public static String getOpCode(String internalOpCodeName){
-        final String tokens[] = internalOpCodeName.split(OpCode.OP_TOKEN_SEPARATOR);
-        return tokens[OpCode.OP_CODE_I];
+        final String tokens[] = internalOpCodeName.split(OpCode.TOKEN_SEPARATOR);
+        return tokens[OpCode.CODE_I];
     }
 
     public static AddressingMode getAddressingMode(String internalOpCodeName){
-        final String tokens[] = internalOpCodeName.split(OpCode.OP_TOKEN_SEPARATOR);
-        if (tokens.length < 3)
+        final String tokens[] = internalOpCodeName.split(OpCode.TOKEN_SEPARATOR);
+        if (tokens.length < 2)
             return AddressingMode.IMPLIED;
 
-        final String addressingModeDescriptor = tokens[OpCode.OP_ADDR_I];
+        final String addressingModeDescriptor = tokens[OpCode.ADDR_I];
 
-        final String indexToken = (tokens.length <= OpCode.OP_INDX_I) ? "" : tokens[OpCode.OP_INDX_I];
+        final String indexToken = (tokens.length <= OpCode.INDX_I) ? "" : tokens[OpCode.INDX_I];
         switch (addressingModeDescriptor){
             case "I": return AddressingMode.IMMEDIATE;
             case "A": return AddressingMode.ACCUMULATOR;

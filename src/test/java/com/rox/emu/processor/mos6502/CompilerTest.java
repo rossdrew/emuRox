@@ -286,7 +286,7 @@ public class CompilerTest {
         final Program program = compiler.compileProgram();
         int[] bytes = program.getProgramAsByteArray();
 
-        int[] expected = new int[] {OpCode.OP_SEC.getByteValue(), OpCode.OP_LDA_I.getByteValue(), 0x47};
+        int[] expected = new int[] {OpCode.SEC.getByteValue(), OpCode.LDA_I.getByteValue(), 0x47};
         assertArrayEquals("Expected: " + Arrays.toString(expected) + ", Got: " + Arrays.toString(bytes), expected, bytes);
     }
 
@@ -296,7 +296,7 @@ public class CompilerTest {
         final Program program = compiler.compileProgram();
         int[] bytes = program.getProgramAsByteArray();
 
-        int[] expected = new int[] {OpCode.OP_LDA_I.getByteValue(), 0x47, OpCode.OP_SEC.getByteValue()};
+        int[] expected = new int[] {OpCode.LDA_I.getByteValue(), 0x47, OpCode.SEC.getByteValue()};
         assertArrayEquals("Expected: " + Arrays.toString(expected) + ", Got: " + Arrays.toString(bytes), expected, bytes);
     }
 
@@ -306,7 +306,7 @@ public class CompilerTest {
         final Program program = compiler.compileProgram();
         int[] bytes = program.getProgramAsByteArray();
 
-        int[] expected = new int[] {OpCode.OP_LDA_I.getByteValue(), 0x47, OpCode.OP_CLC.getByteValue(), OpCode.OP_LDA_I.getByteValue(), 0x10, OpCode.OP_SEC.getByteValue()};
+        int[] expected = new int[] {OpCode.LDA_I.getByteValue(), 0x47, OpCode.CLC.getByteValue(), OpCode.LDA_I.getByteValue(), 0x10, OpCode.SEC.getByteValue()};
         assertArrayEquals("Expected: " + Arrays.toString(expected) + ", Got: " + Arrays.toString(bytes), expected, bytes);
     }
 
@@ -316,7 +316,7 @@ public class CompilerTest {
         final Program program = compiler.compileProgram();
         int[] bytes = program.getProgramAsByteArray();
 
-        int[] expected = new int[] {OpCode.OP_LDA_I.getByteValue(), 0x47, OpCode.OP_CLC.getByteValue(), OpCode.OP_LDA_I.getByteValue(), 0x10, OpCode.OP_SEC.getByteValue()};
+        int[] expected = new int[] {OpCode.LDA_I.getByteValue(), 0x47, OpCode.CLC.getByteValue(), OpCode.LDA_I.getByteValue(), 0x10, OpCode.SEC.getByteValue()};
         assertArrayEquals("Expected: " + Arrays.toString(expected) + ", Got: " + Arrays.toString(bytes), expected, bytes);
         assertEquals(1, program.getLabels().size());
         assertEquals(2, program.getLocationOf("LABELA:"));
@@ -328,9 +328,9 @@ public class CompilerTest {
         final Program program = compiler.compileProgram();
         int[] bytes = program.getProgramAsByteArray();
 
-        int[] expected = new int[] {OpCode.OP_LDA_I.getByteValue(), 0x14,
-                                    OpCode.OP_ADC_I.getByteValue(), 0x5,
-                                    OpCode.OP_STA_Z.getByteValue(), 0x20};
+        int[] expected = new int[] {OpCode.LDA_I.getByteValue(), 0x14,
+                                    OpCode.ADC_I.getByteValue(), 0x5,
+                                    OpCode.STA_Z.getByteValue(), 0x20};
         assertArrayEquals("Expected: " + Arrays.toString(expected) + ", Got: " + Arrays.toString(bytes), expected, bytes);
     }
 

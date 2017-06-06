@@ -106,39 +106,39 @@ final class DebuggerWindow extends JFrame {
         int valMPD = 7;
         int valMPR = 4;
 
-//        Program countToTenProgram = new Program().with( OpCode.OP_LDX_I, 10,
-//                                                        OpCode.OP_LDA_I, 0,
-//                                                        OpCode.OP_CLC,
-//                                                        OpCode.OP_ADC_I, 0x01,
-//                                                        OpCode.OP_DEX,
-//                                                        OpCode.OP_CPX_I, 0,
-//                                                        OpCode.OP_BNE, 0b11110111);
+//        Program countToTenProgram = new Program().with( OpCode.LDX_I, 10,
+//                                                        OpCode.LDA_I, 0,
+//                                                        OpCode.CLC,
+//                                                        OpCode.ADC_I, 0x01,
+//                                                        OpCode.DEX,
+//                                                        OpCode.CPX_I, 0,
+//                                                        OpCode.BNE, 0b11110111);
 
-        Program multiplicationProgram = new Program().with( OpCode.OP_LDA_I, valMPD,
-                                                            OpCode.OP_STA_Z, MPD,
-                                                            OpCode.OP_LDA_I, valMPR,
-                                                            OpCode.OP_STA_Z, MPR,
-                                                            OpCode.OP_LDA_I, 0,         //<---- start
-                                                            OpCode.OP_STA_Z, TMP,       //Clear
-                                                            OpCode.OP_STA_Z, RESAD_0,   //...
-                                                            OpCode.OP_STA_Z, RESAD_1,   //...
-                                                            OpCode.OP_LDX_I, 8,         //X counts each bit
+        Program multiplicationProgram = new Program().with( OpCode.LDA_I, valMPD,
+                                                            OpCode.STA_Z, MPD,
+                                                            OpCode.LDA_I, valMPR,
+                                                            OpCode.STA_Z, MPR,
+                                                            OpCode.LDA_I, 0,         //<---- start
+                                                            OpCode.STA_Z, TMP,       //Clear
+                                                            OpCode.STA_Z, RESAD_0,   //...
+                                                            OpCode.STA_Z, RESAD_1,   //...
+                                                            OpCode.LDX_I, 8,         //X counts each bit
                                                 //:MULT(18)
-                                                            OpCode.OP_LSR_Z, MPR,       //LSR(MPR)
-                                                            OpCode.OP_BCC, 13,          //Test carry and jump (forward 13) to NOADD
+                                                            OpCode.LSR_Z, MPR,       //LSR(MPR)
+                                                            OpCode.BCC, 13,          //Test carry and jump (forward 13) to NOADD
 
-                                                            OpCode.OP_LDA_Z, RESAD_0,   //RESAD -> A
-                                                            OpCode.OP_CLC,              //Prepare to add
-                                                            OpCode.OP_ADC_Z, MPD,       //+MPD
-                                                            OpCode.OP_STA_Z, RESAD_0,   //Save result
-                                                            OpCode.OP_LDA_Z, RESAD_1,   //RESAD+1 -> A
-                                                            OpCode.OP_ADC_Z, TMP,       //+TMP
-                                                            OpCode.OP_STA_Z, RESAD_1,   //RESAD+1 <- A
+                                                            OpCode.LDA_Z, RESAD_0,   //RESAD -> A
+                                                            OpCode.CLC,              //Prepare to add
+                                                            OpCode.ADC_Z, MPD,       //+MPD
+                                                            OpCode.STA_Z, RESAD_0,   //Save result
+                                                            OpCode.LDA_Z, RESAD_1,   //RESAD+1 -> A
+                                                            OpCode.ADC_Z, TMP,       //+TMP
+                                                            OpCode.STA_Z, RESAD_1,   //RESAD+1 <- A
                                                 //:NOADD(35)
-                                                            OpCode.OP_ASL_Z, MPD,       //ASL(MPD)
-                                                            OpCode.OP_ROL_Z, TMP,       //Save bit from MPD
-                                                            OpCode.OP_DEX,              //--X
-                                                            OpCode.OP_BNE, 0b11100111   //Test equal and jump (back 24) to MULT
+                                                            OpCode.ASL_Z, MPD,       //ASL(MPD)
+                                                            OpCode.ROL_Z, TMP,       //Save bit from MPD
+                                                            OpCode.DEX,              //--X
+                                                            OpCode.BNE, 0b11100111   //Test equal and jump (back 24) to MULT
         );
 
         return multiplicationProgram.getProgramAsByteArray();

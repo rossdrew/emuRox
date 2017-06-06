@@ -31,11 +31,11 @@ class ProgramSpec extends Specification {
 
         where:
         programInputBytes                                    || programSize | labelCount | labelLoc | expected
-        ['A:', OpCode.OP_ADC_ABS, 0x10, 0x02, OpCode.OP_CLC] || 4           | 1          | 0        | "Label at the start"
-        [OpCode.OP_ADC_ABS, 0x10, 0x02, 'A:', OpCode.OP_CLC] || 4           | 1          | 3        | "Label in the middle"
-        [OpCode.OP_ADC_ABS, 0x10, 0x02, OpCode.OP_CLC, 'A:'] || 4           | 1          | 4        | "Label at the end"
-        ["A:", OpCode.OP_ADC_ABS, 0x10, 0x02,
-         "B:", OpCode.OP_CLC,
+        ['A:', OpCode.ADC_ABS, 0x10, 0x02, OpCode.CLC]       || 4           | 1          | 0        | "Label at the start"
+        [OpCode.ADC_ABS, 0x10, 0x02, 'A:', OpCode.CLC]       || 4           | 1          | 3        | "Label in the middle"
+        [OpCode.ADC_ABS, 0x10, 0x02, OpCode.CLC, 'A:']       || 4           | 1          | 4        | "Label at the end"
+        ["A:", OpCode.ADC_ABS, 0x10, 0x02,
+         "B:", OpCode.CLC,
          'C:']                                               || 4           | 3          | 0        | "Multiple labels"
     }
 
@@ -64,8 +64,8 @@ class ProgramSpec extends Specification {
         where:
         programInputBytes               || expectedProgramBytes                           | expected
         [0x2A]                          || [0x2A]                                         | "Byte value added to program"
-        [OpCode.OP_ADC_ABS]             || [OpCode.OP_ADC_ABS.byteValue]                  | "Op-code value added to program"
-        [OpCode.OP_ADC_ABS, 0x10, 0x02] || [OpCode.OP_ADC_ABS.byteValue, 0x10, 0x02]      | "Op-code and arguments added to program"
+        [OpCode.ADC_ABS]                || [OpCode.ADC_ABS.byteValue]                     | "Op-code value added to program"
+        [OpCode.ADC_ABS, 0x10, 0x02]    || [OpCode.ADC_ABS.byteValue, 0x10, 0x02]         | "Op-code and arguments added to program"
         ["START:"]                      || []                                             | "A program label doesn't change the output"
     }
 }

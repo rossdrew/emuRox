@@ -14,7 +14,7 @@ class OpCodeSpec extends Specification {
     def testNewOpCode(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDA_I, loadValue)
+        Program program = new Program().with(LDA_I, loadValue)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -43,7 +43,7 @@ class OpCodeSpec extends Specification {
     testImmediateLDA() {
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDA_I, loadValue)
+        Program program = new Program().with(LDA_I, loadValue)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -72,7 +72,7 @@ class OpCodeSpec extends Specification {
     testLDAFromZeroPage() {
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDA_Z, 30)
+        Program program = new Program().with(LDA_Z, 30)
         memory.setByteAt(30, loadValue)
         memory.setMemory(0, program.getProgramAsByteArray())
 
@@ -102,8 +102,8 @@ class OpCodeSpec extends Specification {
     testLDAFromZeroPageIndexedByX() {
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDX_I, index,
-                         OP_LDA_Z_IX, 0x30)
+        Program program = new Program().with(LDX_I, index,
+                         LDA_Z_IX, 0x30)
         int[] values = [0, 11, 0b11111111]
         memory.setMemory(0x30, values)
         memory.setMemory(0, program.getProgramAsByteArray())
@@ -131,7 +131,7 @@ class OpCodeSpec extends Specification {
     testAbsoluteLDA() {
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDA_ABS, 0x1, 0x2C)
+        Program program = new Program().with(LDA_ABS, 0x1, 0x2C)
         memory.setByteAt(300, loadValue)
         memory.setMemory(0, program.getProgramAsByteArray())
 
@@ -161,8 +161,8 @@ class OpCodeSpec extends Specification {
     testLDAIndexedByX() {
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDX_I, index,
-                         OP_LDA_ABS_IX, 1, 0x2C)
+        Program program = new Program().with(LDX_I, index,
+                         LDA_ABS_IX, 1, 0x2C)
         int[] values = [0, 11, 0b11111111]
         memory.setMemory(300, values)
         memory.setMemory(0, program.getProgramAsByteArray())
@@ -191,8 +191,8 @@ class OpCodeSpec extends Specification {
     testLDAIndexedByY() {
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDY_I, index,
-                         OP_LDA_ABS_IY, 1, 0x2C)
+        Program program = new Program().with(LDY_I, index,
+                         LDA_ABS_IY, 1, 0x2C)
         int[] values = [0, 11, 0b11111111]
         memory.setMemory(300, values)
         memory.setMemory(0, program.getProgramAsByteArray())
@@ -220,14 +220,14 @@ class OpCodeSpec extends Specification {
     testLDA_IND_IX() {
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDA_I, firstValue,    //Value at indirect address
-                         OP_STA_ABS, indAddressHi, indAddressLo,
-                         OP_LDX_I, index,
-                         OP_LDA_I, indAddressHi,  //Indirect address in memory
-                         OP_STA_Z_IX, 0x30,
-                         OP_LDA_I, indAddressLo,
-                         OP_STA_Z_IX, 0x31,
-                         OP_LDA_IND_IX, 0x30)
+        Program program = new Program().with(LDA_I, firstValue,    //Value at indirect address
+                         STA_ABS, indAddressHi, indAddressLo,
+                         LDX_I, index,
+                         LDA_I, indAddressHi,  //Indirect address in memory
+                         STA_Z_IX, 0x30,
+                         LDA_I, indAddressLo,
+                         STA_Z_IX, 0x31,
+                         LDA_IND_IX, 0x30)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -253,15 +253,15 @@ class OpCodeSpec extends Specification {
     testLDA_IND_IY() {
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDY_I, index,           //Index to use
-                         OP_LDA_I, value,           //High order byte at pointer
-                         OP_STA_ABS_IY, pointerHi, pointerLo,
-                         OP_LDA_I, pointerHi,       //Pointer location
-                         OP_STA_Z, 0x60,
-                         OP_LDA_I, pointerLo,       //Pointer location
-                         OP_STA_Z, 0x61,
-                         OP_LDA_I, 0x0,             //Reset accumulator
-                         OP_LDA_IND_IY, 0x60)
+        Program program = new Program().with(LDY_I, index,           //Index to use
+                         LDA_I, value,           //High order byte at pointer
+                         STA_ABS_IY, pointerHi, pointerLo,
+                         LDA_I, pointerHi,       //Pointer location
+                         STA_Z, 0x60,
+                         LDA_I, pointerLo,       //Pointer location
+                         STA_Z, 0x61,
+                         LDA_I, 0x0,             //Reset accumulator
+                         LDA_IND_IY, 0x60)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -286,7 +286,7 @@ class OpCodeSpec extends Specification {
     testLDX(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDX_I, firstValue)
+        Program program = new Program().with(LDX_I, firstValue)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -312,7 +312,7 @@ class OpCodeSpec extends Specification {
     testLDX_ABS(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDX_ABS, addressHi, addressLo)
+        Program program = new Program().with(LDX_ABS, addressHi, addressLo)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -341,10 +341,10 @@ class OpCodeSpec extends Specification {
     testLDX_ABS_IX(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDY_I, index,
-                         OP_LDA_I, firstValue,
-                         OP_STA_ABS_IY, addressHi, addressLo,
-                         OP_LDX_ABS_IY, addressHi, addressLo)
+        Program program = new Program().with(LDY_I, index,
+                         LDA_I, firstValue,
+                         STA_ABS_IY, addressHi, addressLo,
+                         LDX_ABS_IY, addressHi, addressLo)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -370,9 +370,9 @@ class OpCodeSpec extends Specification {
     testLX_Z(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDA_I, firstValue,
-                         OP_STA_Z, address,
-                         OP_LDX_Z, address)
+        Program program = new Program().with(LDA_I, firstValue,
+                         STA_Z, address,
+                         LDX_Z, address)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -398,10 +398,10 @@ class OpCodeSpec extends Specification {
     testLX_Z_IY(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDY_I, index,
-                         OP_LDA_I, firstValue,
-                         OP_STA_Z, address,
-                         OP_LDX_Z_IY, address)
+        Program program = new Program().with(LDY_I, index,
+                         LDA_I, firstValue,
+                         STA_Z, address,
+                         LDX_Z_IY, address)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -427,7 +427,7 @@ class OpCodeSpec extends Specification {
     testLDY(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDY_I, firstValue)
+        Program program = new Program().with(LDY_I, firstValue)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -453,9 +453,9 @@ class OpCodeSpec extends Specification {
     testLDY_Z(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDA_I, firstValue,
-                         OP_STA_Z, address,
-                         OP_LDY_Z, address)
+        Program program = new Program().with(LDA_I, firstValue,
+                         STA_Z, address,
+                         LDY_Z, address)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -481,7 +481,7 @@ class OpCodeSpec extends Specification {
     testLDY_Z_IX(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDX_I, index, OP_LDA_I, firstValue, OP_STA_Z_IX, address, OP_LDY_Z_IX, address)
+        Program program = new Program().with(LDX_I, index, LDA_I, firstValue, STA_Z_IX, address, LDY_Z_IX, address)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -507,7 +507,7 @@ class OpCodeSpec extends Specification {
     testLDY_ABS(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDY_ABS, addressHi, addressLo)
+        Program program = new Program().with(LDY_ABS, addressHi, addressLo)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -536,7 +536,7 @@ class OpCodeSpec extends Specification {
     testLDY_ABS_IX(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDX_I, index, OP_LDY_ABS_IX, addressHi, addressLo)
+        Program program = new Program().with(LDX_I, index, LDY_ABS_IX, addressHi, addressLo)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -565,7 +565,7 @@ class OpCodeSpec extends Specification {
     testADC(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDA_I, firstValue, OP_ADC_I, secondValue)
+        Program program = new Program().with(LDA_I, firstValue, ADC_I, secondValue)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -593,7 +593,7 @@ class OpCodeSpec extends Specification {
     testADC_Z_IX(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDA_I, firstValue, OP_LDX_I, index, OP_ADC_Z_IX, indexPoint)
+        Program program = new Program().with(LDA_I, firstValue, LDX_I, index, ADC_Z_IX, indexPoint)
         memory.setByteAt(memLoc, secondValue)
         memory.setMemory(0, program.getProgramAsByteArray())
 
@@ -622,7 +622,7 @@ class OpCodeSpec extends Specification {
     testADC_Z(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDA_I, firstValue, OP_ADC_Z, 0x30)
+        Program program = new Program().with(LDA_I, firstValue, ADC_Z, 0x30)
         memory.setMemory(0, program.getProgramAsByteArray())
         memory.setByteAt(0x30, secondValue)
 
@@ -651,7 +651,7 @@ class OpCodeSpec extends Specification {
     testADC_ABS(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDA_I, firstValue, OP_ADC_ABS, 0x1, 0x2C)
+        Program program = new Program().with(LDA_I, firstValue, ADC_ABS, 0x1, 0x2C)
         memory.setMemory(0, program.getProgramAsByteArray())
         memory.setByteAt(300, secondValue)
 
@@ -680,7 +680,7 @@ class OpCodeSpec extends Specification {
     testADC_ABS_IX(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDX_I, index, OP_LDA_I, firstValue, OP_ADC_ABS_IX, 0x1, 0x2C)
+        Program program = new Program().with(LDX_I, index, LDA_I, firstValue, ADC_ABS_IX, 0x1, 0x2C)
         memory.setMemory(0, program.getProgramAsByteArray())
         memory.setByteAt(300 + index, secondValue)
 
@@ -709,9 +709,9 @@ class OpCodeSpec extends Specification {
     testADC_ABS_IY(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDY_I, index,
-                         OP_LDA_I, firstValue,
-                         OP_ADC_ABS_IY, 0x1, 0x2C)
+        Program program = new Program().with(LDY_I, index,
+                         LDA_I, firstValue,
+                         ADC_ABS_IY, 0x1, 0x2C)
         memory.setMemory(0, program.getProgramAsByteArray())
         memory.setByteAt(300 + index, secondValue)
 
@@ -740,15 +740,15 @@ class OpCodeSpec extends Specification {
     testADC_IND_IX() {
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDA_I, firstValue,    //Value at indirect address
-                         OP_STA_ABS, locationHi, locationLo,
-                         OP_LDX_I, index,
-                         OP_LDA_I, locationHi,  //Indirect address in memory
-                         OP_STA_Z_IX, 0x30,
-                         OP_LDA_I, locationLo,
-                         OP_STA_Z_IX, 0x31,
-                         OP_LDA_I, secondValue,
-                         OP_ADC_IND_IX, 0x30)
+        Program program = new Program().with(LDA_I, firstValue,    //Value at indirect address
+                         STA_ABS, locationHi, locationLo,
+                         LDX_I, index,
+                         LDA_I, locationHi,  //Indirect address in memory
+                         STA_Z_IX, 0x30,
+                         LDA_I, locationLo,
+                         STA_Z_IX, 0x31,
+                         LDA_I, secondValue,
+                         ADC_IND_IX, 0x30)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -776,15 +776,15 @@ class OpCodeSpec extends Specification {
     testADC_IND_IY() {
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDY_I, index,           //Index to use
-                         OP_LDA_I, firstValue,      //High order byte at pointer
-                         OP_STA_ABS_IY, pointerHi, pointerLo,
-                         OP_LDA_I, pointerHi,       //Pointer location
-                         OP_STA_Z, 0x60,
-                         OP_LDA_I, pointerLo,       //Pointer location
-                         OP_STA_Z, 0x61,
-                         OP_LDA_I, secondValue,
-                         OP_ADC_IND_IY, 0x60)
+        Program program = new Program().with(LDY_I, index,           //Index to use
+                         LDA_I, firstValue,      //High order byte at pointer
+                         STA_ABS_IY, pointerHi, pointerLo,
+                         LDA_I, pointerHi,       //Pointer location
+                         STA_Z, 0x60,
+                         LDA_I, pointerLo,       //Pointer location
+                         STA_Z, 0x61,
+                         LDA_I, secondValue,
+                         ADC_IND_IY, 0x60)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -812,12 +812,12 @@ class OpCodeSpec extends Specification {
     testMultiByteADC(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_CLC,
-                         OP_LDA_I, lowFirstByte,
-                         OP_ADC_I, lowSecondByte,
-                         OP_STA_Z, 40,
-                         OP_LDA_I, highFirstByte,
-                         OP_ADC_I, highSecondByte)
+        Program program = new Program().with(CLC,
+                         LDA_I, lowFirstByte,
+                         ADC_I, lowSecondByte,
+                         STA_Z, 40,
+                         LDA_I, highFirstByte,
+                         ADC_I, highSecondByte)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -848,7 +848,7 @@ class OpCodeSpec extends Specification {
     testAND(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDA_I, firstValue, OP_AND_I, secondValue)
+        Program program = new Program().with(LDA_I, firstValue, AND_I, secondValue)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -875,10 +875,10 @@ class OpCodeSpec extends Specification {
     testAND_Z(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDA_I, firstValue,
-                         OP_STA_Z, 0x20,
-                         OP_LDA_I, secondValue,
-                         OP_AND_Z, 0x20)
+        Program program = new Program().with(LDA_I, firstValue,
+                         STA_Z, 0x20,
+                         LDA_I, secondValue,
+                         AND_Z, 0x20)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -905,11 +905,11 @@ class OpCodeSpec extends Specification {
     testAND_Z_IX(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDX_I, index,
-                         OP_LDA_I, firstValue,
-                         OP_STA_Z_IX, 0x20,
-                         OP_LDA_I, secondValue,
-                         OP_AND_Z_IX, 0x20)
+        Program program = new Program().with(LDX_I, index,
+                         LDA_I, firstValue,
+                         STA_Z_IX, 0x20,
+                         LDA_I, secondValue,
+                         AND_Z_IX, 0x20)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -936,10 +936,10 @@ class OpCodeSpec extends Specification {
     testAND_A(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDA_I, firstValue,
-                         OP_STA_ABS, 0x20, 0x01,
-                         OP_LDA_I, secondValue,
-                         OP_AND_ABS, 0x20, 0x01)
+        Program program = new Program().with(LDA_I, firstValue,
+                         STA_ABS, 0x20, 0x01,
+                         LDA_I, secondValue,
+                         AND_ABS, 0x20, 0x01)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -966,11 +966,11 @@ class OpCodeSpec extends Specification {
     testAND_ABS_IX(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDX_I, index,
-                         OP_LDA_I, firstValue,
-                         OP_STA_ABS_IX, locationHi, locationLo,
-                         OP_LDA_I, secondValue,
-                         OP_AND_ABS_IX, locationHi, locationLo)
+        Program program = new Program().with(LDX_I, index,
+                         LDA_I, firstValue,
+                         STA_ABS_IX, locationHi, locationLo,
+                         LDA_I, secondValue,
+                         AND_ABS_IX, locationHi, locationLo)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -997,11 +997,11 @@ class OpCodeSpec extends Specification {
     testAND_ABS_IY(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDY_I, index,
-                         OP_LDA_I, firstValue,
-                         OP_STA_ABS_IY, locationHi, locationLo,
-                         OP_LDA_I, secondValue,
-                         OP_AND_ABS_IY, locationHi, locationLo)
+        Program program = new Program().with(LDY_I, index,
+                         LDA_I, firstValue,
+                         STA_ABS_IY, locationHi, locationLo,
+                         LDA_I, secondValue,
+                         AND_ABS_IY, locationHi, locationLo)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -1028,15 +1028,15 @@ class OpCodeSpec extends Specification {
     testAND_IND_IX() {
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDA_I, firstValue,    //Value at indirect address
-                         OP_STA_ABS, locationHi, locationLo,
-                         OP_LDX_I, index,
-                         OP_LDA_I, locationHi,   //Indirect address in memory
-                         OP_STA_Z_IX, 0x30,
-                         OP_LDA_I, locationLo,
-                         OP_STA_Z_IX, 0x31,
-                         OP_LDA_I, secondValue,
-                         OP_AND_IND_IX, 0x30)
+        Program program = new Program().with(LDA_I, firstValue,    //Value at indirect address
+                         STA_ABS, locationHi, locationLo,
+                         LDX_I, index,
+                         LDA_I, locationHi,   //Indirect address in memory
+                         STA_Z_IX, 0x30,
+                         LDA_I, locationLo,
+                         STA_Z_IX, 0x31,
+                         LDA_I, secondValue,
+                         AND_IND_IX, 0x30)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -1063,15 +1063,15 @@ class OpCodeSpec extends Specification {
     testAND_IND_IY() {
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDY_I, index,           //Index to use
-                         OP_LDA_I, firstValue,      //High order byte at pointer
-                         OP_STA_ABS_IY, pointerHi, pointerLo,
-                         OP_LDA_I, pointerHi,       //Pointer location
-                         OP_STA_Z, 0x60,
-                         OP_LDA_I, pointerLo,       //Pointer location
-                         OP_STA_Z, 0x61,
-                         OP_LDA_I, secondValue,
-                         OP_AND_IND_IY, 0x60)
+        Program program = new Program().with(LDY_I, index,           //Index to use
+                         LDA_I, firstValue,      //High order byte at pointer
+                         STA_ABS_IY, pointerHi, pointerLo,
+                         LDA_I, pointerHi,       //Pointer location
+                         STA_Z, 0x60,
+                         LDA_I, pointerLo,       //Pointer location
+                         STA_Z, 0x61,
+                         LDA_I, secondValue,
+                         AND_IND_IY, 0x60)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -1096,7 +1096,7 @@ class OpCodeSpec extends Specification {
     testOR(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDA_I, firstValue, OP_ORA_I, secondValue)
+        Program program = new Program().with(LDA_I, firstValue, ORA_I, secondValue)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -1124,10 +1124,10 @@ class OpCodeSpec extends Specification {
     testOR_Z(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDA_I, firstValue,
-                         OP_STA_Z, 0x20,
-                         OP_LDA_I, secondValue,
-                         OP_ORA_Z, 0x20)
+        Program program = new Program().with(LDA_I, firstValue,
+                         STA_Z, 0x20,
+                         LDA_I, secondValue,
+                         ORA_Z, 0x20)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -1155,11 +1155,11 @@ class OpCodeSpec extends Specification {
     testOR_Z_IX(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDX_I, index,
-                         OP_LDA_I, firstValue,
-                         OP_STA_Z_IX, 0x20,
-                         OP_LDA_I, secondValue,
-                         OP_ORA_Z_IX, 0x20)
+        Program program = new Program().with(LDX_I, index,
+                         LDA_I, firstValue,
+                         STA_Z_IX, 0x20,
+                         LDA_I, secondValue,
+                         ORA_Z_IX, 0x20)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -1187,10 +1187,10 @@ class OpCodeSpec extends Specification {
     testOR_ABS(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDA_I, firstValue,
-                         OP_STA_ABS, 0x20, 0x05,
-                         OP_LDA_I, secondValue,
-                         OP_ORA_ABS, 0x20, 0x05)
+        Program program = new Program().with(LDA_I, firstValue,
+                         STA_ABS, 0x20, 0x05,
+                         LDA_I, secondValue,
+                         ORA_ABS, 0x20, 0x05)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -1218,11 +1218,11 @@ class OpCodeSpec extends Specification {
     testOR_ABS_IX(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDX_I, index,
-                         OP_LDA_I, firstValue,
-                         OP_STA_ABS_IX, 0x20, 0x05,
-                         OP_LDA_I, secondValue,
-                         OP_ORA_ABS_IX, 0x20, 0x05)
+        Program program = new Program().with(LDX_I, index,
+                         LDA_I, firstValue,
+                         STA_ABS_IX, 0x20, 0x05,
+                         LDA_I, secondValue,
+                         ORA_ABS_IX, 0x20, 0x05)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -1250,11 +1250,11 @@ class OpCodeSpec extends Specification {
     testOR_ABS_IY(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDY_I, index,
-                         OP_LDA_I, firstValue,
-                         OP_STA_ABS_IY, 0x20, 0x05,
-                         OP_LDA_I, secondValue,
-                         OP_ORA_ABS_IY, 0x20, 0x05)
+        Program program = new Program().with(LDY_I, index,
+                         LDA_I, firstValue,
+                         STA_ABS_IY, 0x20, 0x05,
+                         LDA_I, secondValue,
+                         ORA_ABS_IY, 0x20, 0x05)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -1282,15 +1282,15 @@ class OpCodeSpec extends Specification {
     testOR_IND_IX() {
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDA_I, firstValue,    //Value at indirect address
-                         OP_STA_ABS, locationHi, locationLo,
-                         OP_LDX_I, index,
-                         OP_LDA_I, locationHi,  //Indirect address in memory
-                         OP_STA_Z_IX, 0x30,
-                         OP_LDA_I, locationLo,
-                         OP_STA_Z_IX, 0x31,
-                         OP_LDA_I, secondValue,
-                         OP_ORA_IND_IX, 0x30)
+        Program program = new Program().with(LDA_I, firstValue,    //Value at indirect address
+                         STA_ABS, locationHi, locationLo,
+                         LDX_I, index,
+                         LDA_I, locationHi,  //Indirect address in memory
+                         STA_Z_IX, 0x30,
+                         LDA_I, locationLo,
+                         STA_Z_IX, 0x31,
+                         LDA_I, secondValue,
+                         ORA_IND_IX, 0x30)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -1318,15 +1318,15 @@ class OpCodeSpec extends Specification {
     testORA_IND_IY() {
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDY_I, index,           //Index to use
-                         OP_LDA_I, firstValue,      //High order byte at pointer
-                         OP_STA_ABS_IY, pointerHi, pointerLo,
-                         OP_LDA_I, pointerHi,       //Pointer location
-                         OP_STA_Z, 0x60,
-                         OP_LDA_I, pointerLo,       //Pointer location
-                         OP_STA_Z, 0x61,
-                         OP_LDA_I, secondValue,
-                         OP_ORA_IND_IY, 0x60)
+        Program program = new Program().with(LDY_I, index,           //Index to use
+                         LDA_I, firstValue,      //High order byte at pointer
+                         STA_ABS_IY, pointerHi, pointerLo,
+                         LDA_I, pointerHi,       //Pointer location
+                         STA_Z, 0x60,
+                         LDA_I, pointerLo,       //Pointer location
+                         STA_Z, 0x61,
+                         LDA_I, secondValue,
+                         ORA_IND_IY, 0x60)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -1351,7 +1351,7 @@ class OpCodeSpec extends Specification {
     testEOR(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDA_I, firstValue, OP_EOR_I, secondValue)
+        Program program = new Program().with(LDA_I, firstValue, EOR_I, secondValue)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -1377,10 +1377,10 @@ class OpCodeSpec extends Specification {
     testEOR_Z(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDA_I, secondValue,
-                         OP_STA_Z, 0x20,
-                         OP_LDA_I, firstValue,
-                         OP_EOR_Z, 0x20)
+        Program program = new Program().with(LDA_I, secondValue,
+                         STA_Z, 0x20,
+                         LDA_I, firstValue,
+                         EOR_Z, 0x20)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -1406,11 +1406,11 @@ class OpCodeSpec extends Specification {
     testEOR_Z_IX(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDX_I, index,
-                         OP_LDA_I, secondValue,
-                         OP_STA_Z_IX, 0x20,
-                         OP_LDA_I, firstValue,
-                         OP_EOR_Z_IX, 0x20)
+        Program program = new Program().with(LDX_I, index,
+                         LDA_I, secondValue,
+                         STA_Z_IX, 0x20,
+                         LDA_I, firstValue,
+                         EOR_Z_IX, 0x20)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -1436,10 +1436,10 @@ class OpCodeSpec extends Specification {
     testEOR_ABS(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDA_I, secondValue,
-                         OP_STA_ABS, 0x20, 0x04,
-                         OP_LDA_I, firstValue,
-                         OP_EOR_ABS, 0x20, 0x04)
+        Program program = new Program().with(LDA_I, secondValue,
+                         STA_ABS, 0x20, 0x04,
+                         LDA_I, firstValue,
+                         EOR_ABS, 0x20, 0x04)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -1465,11 +1465,11 @@ class OpCodeSpec extends Specification {
     testEOR_ABS_IX(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDX_I, index,
-                         OP_LDA_I, secondValue,
-                         OP_STA_ABS_IX, 0x20, 0x04,
-                         OP_LDA_I, firstValue,
-                         OP_EOR_ABS_IX, 0x20, 0x04)
+        Program program = new Program().with(LDX_I, index,
+                         LDA_I, secondValue,
+                         STA_ABS_IX, 0x20, 0x04,
+                         LDA_I, firstValue,
+                         EOR_ABS_IX, 0x20, 0x04)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -1495,11 +1495,11 @@ class OpCodeSpec extends Specification {
     testEOR_ABS_IY(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDY_I, index,
-                         OP_LDA_I, secondValue,
-                         OP_STA_ABS_IY, 0x20, 0x04,
-                         OP_LDA_I, firstValue,
-                         OP_EOR_ABS_IY, 0x20, 0x04)
+        Program program = new Program().with(LDY_I, index,
+                         LDA_I, secondValue,
+                         STA_ABS_IY, 0x20, 0x04,
+                         LDA_I, firstValue,
+                         EOR_ABS_IY, 0x20, 0x04)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -1525,15 +1525,15 @@ class OpCodeSpec extends Specification {
     testEOR_IND_IX() {
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDA_I, firstValue,      //Value at indirect address
-                         OP_STA_ABS, locationHi, locationLo,
-                         OP_LDX_I, index,
-                         OP_LDA_I, locationHi,      //Indirect address in memory
-                         OP_STA_Z_IX, 0x30,
-                         OP_LDA_I, locationLo,
-                         OP_STA_Z_IX, 0x31,
-                         OP_LDA_I, secondValue,
-                         OP_EOR_IND_IX, 0x30)
+        Program program = new Program().with(LDA_I, firstValue,      //Value at indirect address
+                         STA_ABS, locationHi, locationLo,
+                         LDX_I, index,
+                         LDA_I, locationHi,      //Indirect address in memory
+                         STA_Z_IX, 0x30,
+                         LDA_I, locationLo,
+                         STA_Z_IX, 0x31,
+                         LDA_I, secondValue,
+                         EOR_IND_IX, 0x30)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -1559,15 +1559,15 @@ class OpCodeSpec extends Specification {
     testEOR_IND_IY() {
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDY_I, index,           //Index to use
-                         OP_LDA_I, firstValue,      //High order byte at pointer
-                         OP_STA_ABS_IY, pointerHi, pointerLo,
-                         OP_LDA_I, pointerHi,       //Pointer location
-                         OP_STA_Z, 0x60,
-                         OP_LDA_I, pointerLo,       //Pointer location
-                         OP_STA_Z, 0x61,
-                         OP_LDA_I, secondValue,
-                         OP_EOR_IND_IY, 0x60)
+        Program program = new Program().with(LDY_I, index,           //Index to use
+                         LDA_I, firstValue,      //High order byte at pointer
+                         STA_ABS_IY, pointerHi, pointerLo,
+                         LDA_I, pointerHi,       //Pointer location
+                         STA_Z, 0x60,
+                         LDA_I, pointerLo,       //Pointer location
+                         STA_Z, 0x61,
+                         LDA_I, secondValue,
+                         EOR_IND_IY, 0x60)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -1590,13 +1590,13 @@ class OpCodeSpec extends Specification {
     testSTA_IND_IX() {
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDX_I, index,
-                         OP_LDA_I, locationHi,      //Indirect address in memory
-                         OP_STA_Z_IX, 0x30,
-                         OP_LDA_I, locationLo,
-                         OP_STA_Z_IX, 0x31,
-                         OP_LDA_I, value,           //Value to store
-                         OP_STA_IND_IX, 0x30)
+        Program program = new Program().with(LDX_I, index,
+                         LDA_I, locationHi,      //Indirect address in memory
+                         STA_Z_IX, 0x30,
+                         LDA_I, locationLo,
+                         STA_Z_IX, 0x31,
+                         LDA_I, value,           //Value to store
+                         STA_IND_IX, 0x30)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -1620,13 +1620,13 @@ class OpCodeSpec extends Specification {
     testSTA_IND_IY() {
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDA_I, locationHi,      //Indirect address in memory
-                         OP_STA_Z, 0x30,
-                         OP_LDA_I, locationLo,
-                         OP_STA_Z, 0x31,
-                         OP_LDA_I, value,           //Value to store
-                         OP_LDY_I, index,
-                         OP_STA_IND_IY, 0x30)       // (Z[0x30] = two byte address) + Y -> pointer
+        Program program = new Program().with(LDA_I, locationHi,      //Indirect address in memory
+                         STA_Z, 0x30,
+                         LDA_I, locationLo,
+                         STA_Z, 0x31,
+                         LDA_I, value,           //Value to store
+                         LDY_I, index,
+                         STA_IND_IY, 0x30)       // (Z[0x30] = two byte address) + Y -> pointer
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -1653,8 +1653,8 @@ class OpCodeSpec extends Specification {
     testSBC(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_SEC, OP_LDA_I, firstValue,
-                         OP_SBC_I, secondValue)
+        Program program = new Program().with(SEC, LDA_I, firstValue,
+                         SBC_I, secondValue)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -1682,11 +1682,11 @@ class OpCodeSpec extends Specification {
     testSBC_Z(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDA_I, secondValue,
-                         OP_STA_Z, 0x20,
-                         OP_LDA_I, firstValue,
-                         OP_SEC,
-                         OP_SBC_Z, 0x20)
+        Program program = new Program().with(LDA_I, secondValue,
+                         STA_Z, 0x20,
+                         LDA_I, firstValue,
+                         SEC,
+                         SBC_Z, 0x20)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -1714,12 +1714,12 @@ class OpCodeSpec extends Specification {
     testSBC_Z_IX(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDX_I, index,
-                         OP_LDA_I, secondValue,
-                         OP_STA_Z_IX, 0x20,
-                         OP_LDA_I, firstValue,
-                         OP_SEC,
-                         OP_SBC_Z_IX, 0x20)
+        Program program = new Program().with(LDX_I, index,
+                         LDA_I, secondValue,
+                         STA_Z_IX, 0x20,
+                         LDA_I, firstValue,
+                         SEC,
+                         SBC_Z_IX, 0x20)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -1747,11 +1747,11 @@ class OpCodeSpec extends Specification {
     testSBC_ABS(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDA_I, secondValue,
-                         OP_STA_ABS, 0x02, 0x20,
-                         OP_LDA_I, firstValue,
-                         OP_SEC,
-                         OP_SBC_ABS, 0x02, 0x20)
+        Program program = new Program().with(LDA_I, secondValue,
+                         STA_ABS, 0x02, 0x20,
+                         LDA_I, firstValue,
+                         SEC,
+                         SBC_ABS, 0x02, 0x20)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -1779,12 +1779,12 @@ class OpCodeSpec extends Specification {
     testSBC_ABS_IX(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDX_I, index,
-                         OP_LDA_I, secondValue,
-                         OP_STA_ABS_IX, 0x02, 0x20,
-                         OP_LDA_I, firstValue,
-                         OP_SEC,
-                         OP_SBC_ABS_IX, 0x02, 0x20)
+        Program program = new Program().with(LDX_I, index,
+                         LDA_I, secondValue,
+                         STA_ABS_IX, 0x02, 0x20,
+                         LDA_I, firstValue,
+                         SEC,
+                         SBC_ABS_IX, 0x02, 0x20)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -1812,12 +1812,12 @@ class OpCodeSpec extends Specification {
     testSBC_ABS_IY(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDY_I, index,
-                         OP_LDA_I, secondValue,
-                         OP_STA_ABS_IY, 0x02, 0x20,
-                         OP_LDA_I, firstValue,
-                         OP_SEC,
-                         OP_SBC_ABS_IY, 0x02, 0x20)
+        Program program = new Program().with(LDY_I, index,
+                         LDA_I, secondValue,
+                         STA_ABS_IY, 0x02, 0x20,
+                         LDA_I, firstValue,
+                         SEC,
+                         SBC_ABS_IY, 0x02, 0x20)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -1845,16 +1845,16 @@ class OpCodeSpec extends Specification {
     testSBC_IND_IX() {
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDA_I, secondValue,    //Value at indirect address
-                         OP_STA_ABS, locationHi, locationLo,
-                         OP_LDX_I, index,
-                         OP_LDA_I, locationHi,     //Indirect address in memory
-                         OP_STA_Z_IX, 0x30,
-                         OP_LDA_I, locationLo,
-                         OP_STA_Z_IX, 0x31,
-                         OP_LDA_I, firstValue,
-                         OP_SEC,
-                         OP_SBC_IND_IX, 0x30)
+        Program program = new Program().with(LDA_I, secondValue,    //Value at indirect address
+                         STA_ABS, locationHi, locationLo,
+                         LDX_I, index,
+                         LDA_I, locationHi,     //Indirect address in memory
+                         STA_Z_IX, 0x30,
+                         LDA_I, locationLo,
+                         STA_Z_IX, 0x31,
+                         LDA_I, firstValue,
+                         SEC,
+                         SBC_IND_IX, 0x30)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -1881,16 +1881,16 @@ class OpCodeSpec extends Specification {
     testSBC_IND_IY() {
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDY_I, index,           //Index to use
-                         OP_LDA_I, secondValue,      //High order byte at pointer
-                         OP_STA_ABS_IY, pointerHi, pointerLo,
-                         OP_LDA_I, pointerHi,       //Pointer location
-                         OP_STA_Z, 0x60,
-                         OP_LDA_I, pointerLo,       //Pointer location
-                         OP_STA_Z, 0x61,
-                         OP_LDA_I, firstValue,
-                         OP_SEC,
-                         OP_SBC_IND_IY, 0x60)
+        Program program = new Program().with(LDY_I, index,           //Index to use
+                         LDA_I, secondValue,      //High order byte at pointer
+                         STA_ABS_IY, pointerHi, pointerLo,
+                         LDA_I, pointerHi,       //Pointer location
+                         STA_Z, 0x60,
+                         LDA_I, pointerLo,       //Pointer location
+                         STA_Z, 0x61,
+                         LDA_I, firstValue,
+                         SEC,
+                         SBC_IND_IY, 0x60)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -1916,7 +1916,7 @@ class OpCodeSpec extends Specification {
     testINX(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDX_I, firstValue, OP_INX)
+        Program program = new Program().with(LDX_I, firstValue, INX)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -1942,9 +1942,9 @@ class OpCodeSpec extends Specification {
     testINC_Z(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDA_I, firstValue,
-                         OP_STA_Z, 0x20,
-                         OP_INC_Z, 0x20)
+        Program program = new Program().with(LDA_I, firstValue,
+                         STA_Z, 0x20,
+                         INC_Z, 0x20)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -1970,10 +1970,10 @@ class OpCodeSpec extends Specification {
     testINC_Z_IX(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDX_I, index,
-                         OP_LDA_I, firstValue,
-                         OP_STA_Z_IX, 0x20,
-                         OP_INC_Z_IX, 0x20)
+        Program program = new Program().with(LDX_I, index,
+                         LDA_I, firstValue,
+                         STA_Z_IX, 0x20,
+                         INC_Z_IX, 0x20)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -1999,9 +1999,9 @@ class OpCodeSpec extends Specification {
     testINC_ABS(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDA_I, firstValue,
-                         OP_STA_ABS, 0x01, 0x20,
-                         OP_INC_ABS, 0x01, 0x20)
+        Program program = new Program().with(LDA_I, firstValue,
+                         STA_ABS, 0x01, 0x20,
+                         INC_ABS, 0x01, 0x20)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -2027,10 +2027,10 @@ class OpCodeSpec extends Specification {
     testINC_ABS_IX(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDX_I, index,
-                         OP_LDA_I, firstValue,
-                         OP_STA_ABS_IX, 0x01, 0x20,
-                         OP_INC_ABS_IX, 0x01, 0x20)
+        Program program = new Program().with(LDX_I, index,
+                         LDA_I, firstValue,
+                         STA_ABS_IX, 0x01, 0x20,
+                         INC_ABS_IX, 0x01, 0x20)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -2056,9 +2056,9 @@ class OpCodeSpec extends Specification {
     testDEC_Z(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDA_I, firstValue,
-                         OP_STA_Z, 0x20,
-                         OP_DEC_Z, 0x20)
+        Program program = new Program().with(LDA_I, firstValue,
+                         STA_Z, 0x20,
+                         DEC_Z, 0x20)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -2084,10 +2084,10 @@ class OpCodeSpec extends Specification {
     testDEC_Z_IX(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDX_I, index,
-                         OP_LDA_I, firstValue,
-                         OP_STA_Z_IX, loc,
-                         OP_DEC_Z_IX, loc)
+        Program program = new Program().with(LDX_I, index,
+                         LDA_I, firstValue,
+                         STA_Z_IX, loc,
+                         DEC_Z_IX, loc)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -2113,9 +2113,9 @@ class OpCodeSpec extends Specification {
     testDEC_ABS(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDA_I, firstValue,
-                         OP_STA_ABS, 0x01, 0x20,
-                         OP_DEC_ABS, 0x01, 0x20)
+        Program program = new Program().with(LDA_I, firstValue,
+                         STA_ABS, 0x01, 0x20,
+                         DEC_ABS, 0x01, 0x20)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -2141,10 +2141,10 @@ class OpCodeSpec extends Specification {
     testDEC_ABS_IX(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDX_I, index,
-                         OP_LDA_I, firstValue,
-                         OP_STA_ABS_IX, 0x01, 0x20,
-                         OP_DEC_ABS_IX, 0x01, 0x20)
+        Program program = new Program().with(LDX_I, index,
+                         LDA_I, firstValue,
+                         STA_ABS_IX, 0x01, 0x20,
+                         DEC_ABS_IX, 0x01, 0x20)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -2170,7 +2170,7 @@ class OpCodeSpec extends Specification {
     testDEX(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDX_I, firstValue, OP_DEX)
+        Program program = new Program().with(LDX_I, firstValue, DEX)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -2196,7 +2196,7 @@ class OpCodeSpec extends Specification {
     testINY(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDY_I, firstValue, OP_INY)
+        Program program = new Program().with(LDY_I, firstValue, INY)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -2222,7 +2222,7 @@ class OpCodeSpec extends Specification {
     testDEY(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDY_I, firstValue, OP_DEY)
+        Program program = new Program().with(LDY_I, firstValue, DEY)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -2248,10 +2248,10 @@ class OpCodeSpec extends Specification {
     testPLA(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDA_I, firstValue,
-                         OP_PHA,
-                         OP_LDA_I, 0x11,
-                         OP_PLA)
+        Program program = new Program().with(LDA_I, firstValue,
+                         PHA,
+                         LDA_I, 0x11,
+                         PLA)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -2281,8 +2281,8 @@ class OpCodeSpec extends Specification {
     testASL(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDA_I, firstValue,
-                         OP_ASL_A)
+        Program program = new Program().with(LDA_I, firstValue,
+                         ASL_A)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -2314,9 +2314,9 @@ class OpCodeSpec extends Specification {
     testASL_Z(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDA_I, firstValue,
-                         OP_STA_Z, 0x20,
-                         OP_ASL_Z, 0x20)
+        Program program = new Program().with(LDA_I, firstValue,
+                         STA_Z, 0x20,
+                         ASL_Z, 0x20)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -2348,9 +2348,9 @@ class OpCodeSpec extends Specification {
     testASL_A(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDA_I, firstValue,
-                         OP_STA_ABS, 0x01, 0x20,
-                         OP_ASL_ABS, 0x01, 0x20)
+        Program program = new Program().with(LDA_I, firstValue,
+                         STA_ABS, 0x01, 0x20,
+                         ASL_ABS, 0x01, 0x20)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -2382,10 +2382,10 @@ class OpCodeSpec extends Specification {
     testASL_Z_IX(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDA_I, firstValue,
-                         OP_LDX_I, index,
-                         OP_STA_Z_IX, 0x20,
-                         OP_ASL_Z_IX, 0x20)
+        Program program = new Program().with(LDA_I, firstValue,
+                         LDX_I, index,
+                         STA_Z_IX, 0x20,
+                         ASL_Z_IX, 0x20)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -2417,10 +2417,10 @@ class OpCodeSpec extends Specification {
     testASL_ABS_IX(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDA_I, firstValue,
-                         OP_LDX_I, index,
-                         OP_STA_ABS_IX, 0x01, 0x20,
-                         OP_ASL_ABS_IX, 0x01, 0x20)
+        Program program = new Program().with(LDA_I, firstValue,
+                         LDX_I, index,
+                         STA_ABS_IX, 0x01, 0x20,
+                         ASL_ABS_IX, 0x01, 0x20)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -2452,8 +2452,8 @@ class OpCodeSpec extends Specification {
     testLSR(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDA_I, firstValue,
-                         OP_LSR_A)
+        Program program = new Program().with(LDA_I, firstValue,
+                         LSR_A)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -2483,9 +2483,9 @@ class OpCodeSpec extends Specification {
     testLSR_Z(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDA_I, firstValue,
-                         OP_STA_Z, 0x20,
-                         OP_LSR_Z, 0x20)
+        Program program = new Program().with(LDA_I, firstValue,
+                         STA_Z, 0x20,
+                         LSR_Z, 0x20)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -2515,10 +2515,10 @@ class OpCodeSpec extends Specification {
     testLSR_Z_IX(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDX_I, index,
-                         OP_LDA_I, firstValue,
-                         OP_STA_Z_IX, 0x20,
-                         OP_LSR_Z_IX, 0x20)
+        Program program = new Program().with(LDX_I, index,
+                         LDA_I, firstValue,
+                         STA_Z_IX, 0x20,
+                         LSR_Z_IX, 0x20)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -2548,9 +2548,9 @@ class OpCodeSpec extends Specification {
     testLSR_ABS(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDA_I, firstValue,
-                         OP_STA_ABS, 0x02, 0x20,
-                         OP_LSR_ABS, 0x02, 0x20)
+        Program program = new Program().with(LDA_I, firstValue,
+                         STA_ABS, 0x02, 0x20,
+                         LSR_ABS, 0x02, 0x20)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -2580,10 +2580,10 @@ class OpCodeSpec extends Specification {
     testLSR_ABS_IX(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDX_I, index,
-                         OP_LDA_I, firstValue,
-                         OP_STA_ABS_IX, 0x02, 0x20,
-                         OP_LSR_ABS_IX, 0x02, 0x20)
+        Program program = new Program().with(LDX_I, index,
+                         LDA_I, firstValue,
+                         STA_ABS_IX, 0x02, 0x20,
+                         LSR_ABS_IX, 0x02, 0x20)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -2613,13 +2613,13 @@ class OpCodeSpec extends Specification {
     testJMP(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_NOP,
-                         OP_NOP,
-                         OP_NOP,
-                         OP_JMP_ABS, jmpLocationHi, jmpLocationLow,
-                         OP_NOP,
-                         OP_NOP,
-                         OP_NOP)
+        Program program = new Program().with(NOP,
+                         NOP,
+                         NOP,
+                         JMP_ABS, jmpLocationHi, jmpLocationLow,
+                         NOP,
+                         NOP,
+                         NOP)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -2647,17 +2647,17 @@ class OpCodeSpec extends Specification {
     testIndirectJMP(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDA_I, jmpLocationHi,
-                         OP_STA_ABS, 0x01, 0x40,
-                         OP_LDA_I, jmpLocationLow,
-                         OP_STA_ABS, 0x01, 0x41,
-                         OP_NOP,
-                         OP_NOP,
-                         OP_NOP,
-                         OP_JMP_IND, 0x01, 0x40,
-                         OP_NOP,
-                         OP_NOP,
-                         OP_NOP)
+        Program program = new Program().with(LDA_I, jmpLocationHi,
+                         STA_ABS, 0x01, 0x40,
+                         LDA_I, jmpLocationLow,
+                         STA_ABS, 0x01, 0x41,
+                         NOP,
+                         NOP,
+                         NOP,
+                         JMP_IND, 0x01, 0x40,
+                         NOP,
+                         NOP,
+                         NOP)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -2685,7 +2685,7 @@ class OpCodeSpec extends Specification {
     testBCC(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_NOP, OP_NOP, OP_NOP, preInstr, OP_BCC, jmpSteps, OP_NOP, OP_NOP, OP_NOP, OP_NOP)
+        Program program = new Program().with(NOP, NOP, NOP, preInstr, BCC, jmpSteps, NOP, NOP, NOP, NOP)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -2701,18 +2701,18 @@ class OpCodeSpec extends Specification {
 
         where:
         preInstr | jmpSteps   | instructions | expectedPC | expected
-        OP_SEC   | 4          | 5            | 0x6        | "No jump"
-        OP_CLC   | 4          | 5            | 0xA        | "Basic forward jump"
-        OP_CLC   | 1          | 6            | 0x8        | "Basic forward jump and step"
-        OP_CLC   | 0b11111011 | 5            | 0x2        | "Basic backward jump"
-        OP_CLC   | 0b11111011 | 6            | 0x3        | "Basic backward jump and step"
+        SEC   | 4          | 5            | 0x6        | "No jump"
+        CLC   | 4          | 5            | 0xA        | "Basic forward jump"
+        CLC   | 1          | 6            | 0x8        | "Basic forward jump and step"
+        CLC   | 0b11111011 | 5            | 0x2        | "Basic backward jump"
+        CLC   | 0b11111011 | 6            | 0x3        | "Basic backward jump and step"
     }
 
     @Unroll("BCS #expected: ending up at mem[#expectedPC] after #instructions steps")
     testBCS(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_NOP, OP_NOP, OP_NOP, preInstr, OP_BCS, jmpSteps, OP_NOP, OP_NOP, OP_NOP, OP_NOP)
+        Program program = new Program().with(NOP, NOP, NOP, preInstr, BCS, jmpSteps, NOP, NOP, NOP, NOP)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -2728,19 +2728,19 @@ class OpCodeSpec extends Specification {
 
         where:
         preInstr | jmpSteps   | instructions | expectedPC | expected
-        OP_CLC   | 4          | 5            | 0x6        | "No jump"
-        OP_SEC   | 4          | 5            | 0xA        | "Basic forward jump"
-        OP_SEC   | 1          | 6            | 0x8        | "Basic forward jump and step"
-        OP_SEC   | 0b11111011 | 5            | 0x2        | "Basic backward jump"
-        OP_SEC   | 0b11111011 | 6            | 0x3        | "Basic backward jump and step"
+        CLC   | 4          | 5            | 0x6        | "No jump"
+        SEC   | 4          | 5            | 0xA        | "Basic forward jump"
+        SEC   | 1          | 6            | 0x8        | "Basic forward jump and step"
+        SEC   | 0b11111011 | 5            | 0x2        | "Basic backward jump"
+        SEC   | 0b11111011 | 6            | 0x3        | "Basic backward jump and step"
     }
 
     @Unroll("ROL (Accumulator) #expected: #firstValue -> #expectedAccumulator")
     testROL_A(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(preInstr, OP_LDA_I,
-                         firstValue, OP_ROL_A)
+        Program program = new Program().with(preInstr, LDA_I,
+                         firstValue, ROL_A)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -2760,13 +2760,13 @@ class OpCodeSpec extends Specification {
 
         where:
         preInstr | firstValue | expectedAccumulator | Z     | N     | C     | expected
-        OP_CLC   | 0b00000001 | 0b00000010          | false | false | false | "Standard rotate left"
-        OP_CLC   | 0b00000000 | 0b00000000          | true  | false | false | "Rotate to zero"
-        OP_CLC   | 0b01000000 | 0b10000000          | false | true  | false | "Rotate to negative"
-        OP_CLC   | 0b10000001 | 0b00000010          | false | false | true  | "Rotate to carry out"
-        OP_SEC   | 0b00000001 | 0b00000011          | false | false | false | "Rotate with carry in, no carry out"
-        OP_SEC   | 0b10000000 | 0b00000001          | false | false | true  | "Carry in then carry out"
-        OP_SEC   | 0b01000000 | 0b10000001          | false | true  | false | "Carry in to negative"
+        CLC   | 0b00000001 | 0b00000010          | false | false | false | "Standard rotate left"
+        CLC   | 0b00000000 | 0b00000000          | true  | false | false | "Rotate to zero"
+        CLC   | 0b01000000 | 0b10000000          | false | true  | false | "Rotate to negative"
+        CLC   | 0b10000001 | 0b00000010          | false | false | true  | "Rotate to carry out"
+        SEC   | 0b00000001 | 0b00000011          | false | false | false | "Rotate with carry in, no carry out"
+        SEC   | 0b10000000 | 0b00000001          | false | false | true  | "Carry in then carry out"
+        SEC   | 0b01000000 | 0b10000001          | false | true  | false | "Carry in to negative"
     }
 
     @Unroll("ROL (Zero Page) #Expected: #firstValue -> #expectedMem")
@@ -2774,9 +2774,9 @@ class OpCodeSpec extends Specification {
         when:
         Memory memory = new SimpleMemory()
         Program program = new Program().with(firstInstr,
-                         OP_LDA_I, firstValue,
-                         OP_STA_Z, 0x20,
-                         OP_ROL_Z, 0x20)
+                         LDA_I, firstValue,
+                         STA_Z, 0x20,
+                         ROL_Z, 0x20)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -2796,22 +2796,22 @@ class OpCodeSpec extends Specification {
 
         where:
         firstInstr |firstValue  | expectedMem | Z     | N     | C     | Expected
-        OP_CLC     | 0b00000001 | 0b00000010  | false | false | false | "Basic rotate left"
-        OP_CLC     | 0b01000000 | 0b10000000  | false | true  | false | "Rotate to negative"
-        OP_CLC     | 0b00000000 | 0b00000000  | true  | false | false | "Rotate to zero without carry"
-        OP_CLC     | 0b10000000 | 0b00000000  | true  | false | true  | "Rotate to zero with carry"
-        OP_SEC     | 0b00000000 | 0b00000001  | false | false | false | "Rotate from zero to carry in"
+        CLC     | 0b00000001 | 0b00000010  | false | false | false | "Basic rotate left"
+        CLC     | 0b01000000 | 0b10000000  | false | true  | false | "Rotate to negative"
+        CLC     | 0b00000000 | 0b00000000  | true  | false | false | "Rotate to zero without carry"
+        CLC     | 0b10000000 | 0b00000000  | true  | false | true  | "Rotate to zero with carry"
+        SEC     | 0b00000000 | 0b00000001  | false | false | false | "Rotate from zero to carry in"
     }
 
     @Unroll("ROL (Zero Page[X]) #Expected: #firstValue -> #expectedMem")
     testROL_Z_IX(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDX_I, index,
+        Program program = new Program().with(LDX_I, index,
                          firstInstr,
-                         OP_LDA_I, firstValue,
-                         OP_STA_Z_IX, 0x20,
-                         OP_ROL_Z_IX, 0x20)
+                         LDA_I, firstValue,
+                         STA_Z_IX, 0x20,
+                         ROL_Z_IX, 0x20)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -2831,11 +2831,11 @@ class OpCodeSpec extends Specification {
 
         where:
         firstInstr | index | firstValue | expectedMem | Z     | N     | C     | Expected
-        OP_CLC     | 0     | 0b00000001 | 0b00000010  | false | false | false | "Basic rotate left"
-        OP_CLC     | 1     | 0b01000000 | 0b10000000  | false | true  | false | "Rotate to negative"
-        OP_CLC     | 2     | 0b00000000 | 0b00000000  | true  | false | false | "Rotate to zero without carry"
-        OP_CLC     | 3     | 0b10000000 | 0b00000000  | true  | false | true  | "Rotate to zero with carry"
-        OP_SEC     | 4     | 0b00000000 | 0b00000001  | false | false | false | "Rotate from zero to carry in"
+        CLC     | 0     | 0b00000001 | 0b00000010  | false | false | false | "Basic rotate left"
+        CLC     | 1     | 0b01000000 | 0b10000000  | false | true  | false | "Rotate to negative"
+        CLC     | 2     | 0b00000000 | 0b00000000  | true  | false | false | "Rotate to zero without carry"
+        CLC     | 3     | 0b10000000 | 0b00000000  | true  | false | true  | "Rotate to zero with carry"
+        SEC     | 4     | 0b00000000 | 0b00000001  | false | false | false | "Rotate from zero to carry in"
     }
 
     @Unroll("ROL (Absolute) #Expected: #firstValue -> #expectedMem")
@@ -2843,9 +2843,9 @@ class OpCodeSpec extends Specification {
         when:
         Memory memory = new SimpleMemory()
         Program program = new Program().with(firstInstr,
-                         OP_LDA_I, firstValue,
-                         OP_STA_ABS, 0x20, 0x07,
-                         OP_ROL_ABS, 0x20, 0x07)
+                         LDA_I, firstValue,
+                         STA_ABS, 0x20, 0x07,
+                         ROL_ABS, 0x20, 0x07)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -2865,22 +2865,22 @@ class OpCodeSpec extends Specification {
 
         where:
         firstInstr |firstValue  | expectedMem | Z     | N     | C     | Expected
-        OP_CLC     | 0b00000001 | 0b00000010  | false | false | false | "Basic rotate left"
-        OP_CLC     | 0b01000000 | 0b10000000  | false | true  | false | "Rotate to negative"
-        OP_CLC     | 0b00000000 | 0b00000000  | true  | false | false | "Rotate to zero without carry"
-        OP_CLC     | 0b10000000 | 0b00000000  | true  | false | true  | "Rotate to zero with carry"
-        OP_SEC     | 0b00000000 | 0b00000001  | false | false | false | "Rotate from zero to carry in"
+        CLC     | 0b00000001 | 0b00000010  | false | false | false | "Basic rotate left"
+        CLC     | 0b01000000 | 0b10000000  | false | true  | false | "Rotate to negative"
+        CLC     | 0b00000000 | 0b00000000  | true  | false | false | "Rotate to zero without carry"
+        CLC     | 0b10000000 | 0b00000000  | true  | false | true  | "Rotate to zero with carry"
+        SEC     | 0b00000000 | 0b00000001  | false | false | false | "Rotate from zero to carry in"
     }
 
     @Unroll("ROL (Absolute[X]) #Expected: #firstValue -> #expectedMem")
     testROL_ABS_IX(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDX_I, index,
+        Program program = new Program().with(LDX_I, index,
                          firstInstr,
-                         OP_LDA_I, firstValue,
-                         OP_STA_ABS_IX, 0x20, 0x07,
-                         OP_ROL_ABS_IX, 0x20, 0x07)
+                         LDA_I, firstValue,
+                         STA_ABS_IX, 0x20, 0x07,
+                         ROL_ABS_IX, 0x20, 0x07)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -2900,11 +2900,11 @@ class OpCodeSpec extends Specification {
 
         where:
         firstInstr | index | firstValue | expectedMem | Z     | N     | C     | Expected
-        OP_CLC     | 0     | 0b00000001 | 0b00000010  | false | false | false | "Basic rotate left"
-        OP_CLC     | 1     | 0b01000000 | 0b10000000  | false | true  | false | "Rotate to negative"
-        OP_CLC     | 2     | 0b00000000 | 0b00000000  | true  | false | false | "Rotate to zero without carry"
-        OP_CLC     | 3     | 0b10000000 | 0b00000000  | true  | false | true  | "Rotate to zero with carry"
-        OP_SEC     | 4     | 0b00000000 | 0b00000001  | false | false | false | "Rotate from zero to carry in"
+        CLC     | 0     | 0b00000001 | 0b00000010  | false | false | false | "Basic rotate left"
+        CLC     | 1     | 0b01000000 | 0b10000000  | false | true  | false | "Rotate to negative"
+        CLC     | 2     | 0b00000000 | 0b00000000  | true  | false | false | "Rotate to zero without carry"
+        CLC     | 3     | 0b10000000 | 0b00000000  | true  | false | true  | "Rotate to zero with carry"
+        SEC     | 4     | 0b00000000 | 0b00000001  | false | false | false | "Rotate from zero to carry in"
     }
 
     @Unroll("ROR (Accumulator) #expected: #firstValue -> #expectedAccumulator")
@@ -2912,8 +2912,8 @@ class OpCodeSpec extends Specification {
         when:
         Memory memory = new SimpleMemory()
         Program program = new Program().with(preInstr,
-                         OP_LDA_I, firstValue,
-                         OP_ROR_A)
+                         LDA_I, firstValue,
+                         ROR_A)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -2933,27 +2933,27 @@ class OpCodeSpec extends Specification {
 
         where:
         preInstr | firstValue | expectedAccumulator | Z     | N     | C     | expected
-        OP_CLC   | 0b00000010 | 0b00000001          | false | false | false | "Standard rotate right"
-        OP_CLC   | 0b00000001 | 0b00000000          | true  | false | true  | "Rotate to zero"
-        OP_SEC   | 0b00000000 | 0b10000000          | false | true  | false | "Rotate to (carry in) negative"
-        OP_CLC   | 0b00000011 | 0b00000001          | false | false | true  | "Rotate to carry out"
-        OP_SEC   | 0b00000010 | 0b10000001          | false | true  | false | "Rotate with carry in, no carry out"
-        OP_SEC   | 0b00000001 | 0b10000000          | false | true  | true  | "Carry in then carry out"
-        OP_SEC   | 0b01111110 | 0b10111111          | false | true  | false | "Carry in to negative"
+        CLC   | 0b00000010 | 0b00000001          | false | false | false | "Standard rotate right"
+        CLC   | 0b00000001 | 0b00000000          | true  | false | true  | "Rotate to zero"
+        SEC   | 0b00000000 | 0b10000000          | false | true  | false | "Rotate to (carry in) negative"
+        CLC   | 0b00000011 | 0b00000001          | false | false | true  | "Rotate to carry out"
+        SEC   | 0b00000010 | 0b10000001          | false | true  | false | "Rotate with carry in, no carry out"
+        SEC   | 0b00000001 | 0b10000000          | false | true  | true  | "Carry in then carry out"
+        SEC   | 0b01111110 | 0b10111111          | false | true  | false | "Carry in to negative"
     }
 
     @Unroll("BNE #expected: With accumulator set to #accumulatorValue, we end up at mem[#expectedPC] after #instructions steps")
     testBNE(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_NOP,
-                         OP_NOP,
-                         OP_NOP,
-                         OP_LDA_I, accumulatorValue,
-                         OP_BNE, jumpSteps,
-                         OP_NOP,
-                         OP_NOP,
-                         OP_NOP)
+        Program program = new Program().with(NOP,
+                         NOP,
+                         NOP,
+                         LDA_I, accumulatorValue,
+                         BNE, jumpSteps,
+                         NOP,
+                         NOP,
+                         NOP)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -2978,10 +2978,10 @@ class OpCodeSpec extends Specification {
     testBEQ(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_NOP, OP_NOP, OP_NOP,
-                         OP_LDA_I, accumulatorValue,
-                         OP_BEQ, jumpSteps,
-                         OP_NOP, OP_NOP, OP_NOP)
+        Program program = new Program().with(NOP, NOP, NOP,
+                         LDA_I, accumulatorValue,
+                         BEQ, jumpSteps,
+                         NOP, NOP, NOP)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -3006,14 +3006,14 @@ class OpCodeSpec extends Specification {
     testBMI(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_NOP,
-                         OP_NOP,
-                         OP_NOP,
-                         OP_LDA_I, accumulatorValue,
-                         OP_BMI, jumpSteps,
-                         OP_NOP,
-                         OP_NOP,
-                         OP_NOP)
+        Program program = new Program().with(NOP,
+                         NOP,
+                         NOP,
+                         LDA_I, accumulatorValue,
+                         BMI, jumpSteps,
+                         NOP,
+                         NOP,
+                         NOP)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -3038,14 +3038,14 @@ class OpCodeSpec extends Specification {
     testBPL(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_NOP,
-                         OP_NOP,
-                         OP_NOP,
-                         OP_LDA_I, accumulatorValue,
-                         OP_BPL, jumpSteps,
-                         OP_NOP,
-                         OP_NOP,
-                         OP_NOP)
+        Program program = new Program().with(NOP,
+                         NOP,
+                         NOP,
+                         LDA_I, accumulatorValue,
+                         BPL, jumpSteps,
+                         NOP,
+                         NOP,
+                         NOP)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -3070,15 +3070,15 @@ class OpCodeSpec extends Specification {
     testBVC(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_NOP,
-                         OP_NOP,
-                         OP_NOP,
-                         OP_LDA_I, accumulatorValue,
-                         OP_ADC_I, addedValue,
-                         OP_BVC, jumpSteps,
-                         OP_NOP,
-                         OP_NOP,
-                         OP_NOP)
+        Program program = new Program().with(NOP,
+                         NOP,
+                         NOP,
+                         LDA_I, accumulatorValue,
+                         ADC_I, addedValue,
+                         BVC, jumpSteps,
+                         NOP,
+                         NOP,
+                         NOP)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -3103,15 +3103,15 @@ class OpCodeSpec extends Specification {
     testBVS(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_NOP,
-                         OP_NOP,
-                         OP_NOP,
-                         OP_LDA_I, accumulatorValue,
-                         OP_ADC_I, addedValue,
-                         OP_BVS, jumpSteps,
-                         OP_NOP,
-                         OP_NOP,
-                         OP_NOP)
+        Program program = new Program().with(NOP,
+                         NOP,
+                         NOP,
+                         LDA_I, accumulatorValue,
+                         ADC_I, addedValue,
+                         BVS, jumpSteps,
+                         NOP,
+                         NOP,
+                         NOP)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -3136,8 +3136,8 @@ class OpCodeSpec extends Specification {
     testTAX(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDA_I, loadedValue,
-                         OP_TAX)
+        Program program = new Program().with(LDA_I, loadedValue,
+                         TAX)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -3166,8 +3166,8 @@ class OpCodeSpec extends Specification {
     testTAY(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDA_I, loadedValue,
-                         OP_TAY)
+        Program program = new Program().with(LDA_I, loadedValue,
+                         TAY)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -3196,7 +3196,7 @@ class OpCodeSpec extends Specification {
     testTYA(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDY_I, loadedValue, OP_TYA)
+        Program program = new Program().with(LDY_I, loadedValue, TYA)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -3225,7 +3225,7 @@ class OpCodeSpec extends Specification {
     testTXA(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDX_I, loadedValue, OP_TXA)
+        Program program = new Program().with(LDX_I, loadedValue, TXA)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -3254,7 +3254,7 @@ class OpCodeSpec extends Specification {
     testTSX(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_TSX)
+        Program program = new Program().with(TSX)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -3284,10 +3284,10 @@ class OpCodeSpec extends Specification {
     testBIT(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDA_I, firstValue,
-                         OP_STA_Z, memLoc,
-                         OP_LDA_I, secondValue,
-                         OP_BIT_Z, memLoc)
+        Program program = new Program().with(LDA_I, firstValue,
+                         STA_Z, memLoc,
+                         LDA_I, secondValue,
+                         BIT_Z, memLoc)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -3317,10 +3317,10 @@ class OpCodeSpec extends Specification {
     testBIT_ABS(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDA_I, firstValue,
-                         OP_STA_ABS, memLocHi, memLocLo,
-                         OP_LDA_I, secondValue,
-                         OP_BIT_ABS, memLocHi, memLocLo)
+        Program program = new Program().with(LDA_I, firstValue,
+                         STA_ABS, memLocHi, memLocLo,
+                         LDA_I, secondValue,
+                         BIT_ABS, memLocHi, memLocLo)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -3347,12 +3347,12 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("STA (Zero Page[X]) #expected: Store #value at #location[#index]")
-    testOP_STA_Z_IX(){
+    testSTA_Z_IX(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDA_I, value,
-                         OP_LDX_I, index,
-                         OP_STA_Z_IX, location)
+        Program program = new Program().with(LDA_I, value,
+                         LDX_I, index,
+                         STA_Z_IX, location)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -3376,11 +3376,11 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("STA (Absolute) #expected: Store #value at [#locationHi|#locationLo]")
-    testOP_STA_ABS(){
+    testSTA_ABS(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDA_I, value,
-                         OP_STA_ABS, locationHi, locationLo)
+        Program program = new Program().with(LDA_I, value,
+                         STA_ABS, locationHi, locationLo)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -3402,12 +3402,12 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("STA (Absolute[X]) #expected: Store #value at [#locationHi|#locationLo@#index]")
-    testOP_STA_ABS_IX(){
+    testSTA_ABS_IX(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDA_I, value,
-                         OP_LDX_I, index,
-                         OP_STA_ABS_IX, locationHi, locationLo)
+        Program program = new Program().with(LDA_I, value,
+                         LDX_I, index,
+                         STA_ABS_IX, locationHi, locationLo)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -3431,12 +3431,12 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("STA (Absolute[Y]) #expected: Store #value at [#locationHi|#locationLo@#index]")
-    testOP_STA_ABS_IY(){
+    testSTA_ABS_IY(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDA_I, value,
-                         OP_LDY_I, index,
-                         OP_STA_ABS_IY, locationHi, locationLo)
+        Program program = new Program().with(LDA_I, value,
+                         LDY_I, index,
+                         STA_ABS_IY, locationHi, locationLo)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -3460,10 +3460,10 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("STY (Zero Page[X] #expected: Store #firstValue at #memLocation[#index]")
-    testOP_STY_Z_IX(){
+    testSTY_Z_IX(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDX_I, index, OP_LDY_I, firstValue, OP_STY_Z_IX, memLocation)
+        Program program = new Program().with(LDX_I, index, LDY_I, firstValue, STY_Z_IX, memLocation)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -3486,11 +3486,11 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("CMP (Immediate) #Expected: #firstValue == #secondValue")
-    testOP_CMP_I(){
+    testCMP_I(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDA_I, firstValue,
-                         OP_CMP_I, secondValue)
+        Program program = new Program().with(LDA_I, firstValue,
+                         CMP_I, secondValue)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -3517,13 +3517,13 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("CMP (Zero Page) #Expected: #firstValue == #secondValue")
-    testOP_CMP_Z(){
+    testCMP_Z(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDA_I, secondValue,
-                         OP_STA_Z, 0x20,
-                         OP_LDA_I, firstValue,
-                         OP_CMP_Z, 0x20)
+        Program program = new Program().with(LDA_I, secondValue,
+                         STA_Z, 0x20,
+                         LDA_I, firstValue,
+                         CMP_Z, 0x20)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -3550,14 +3550,14 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("CMP (Zero Page[X]) #Expected: #firstValue == #secondValue")
-    testOP_CMP_Z_IX(){
+    testCMP_Z_IX(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDX_I, index,
-                         OP_LDA_I, secondValue,
-                         OP_STA_Z_IX, 0x20,
-                         OP_LDA_I, firstValue,
-                         OP_CMP_Z_IX, 0x20)
+        Program program = new Program().with(LDX_I, index,
+                         LDA_I, secondValue,
+                         STA_Z_IX, 0x20,
+                         LDA_I, firstValue,
+                         CMP_Z_IX, 0x20)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -3584,13 +3584,13 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("CMP (Absolute) #Expected: #firstValue == #secondValue")
-    testOP_CMP_ABS(){
+    testCMP_ABS(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDA_I, secondValue,
-                         OP_STA_ABS, 0x01, 0x20,
-                         OP_LDA_I, firstValue,
-                         OP_CMP_ABS, 0x01, 0x20)
+        Program program = new Program().with(LDA_I, secondValue,
+                         STA_ABS, 0x01, 0x20,
+                         LDA_I, firstValue,
+                         CMP_ABS, 0x01, 0x20)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -3617,14 +3617,14 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("CMP (Absolute[X]) #Expected: #firstValue == #secondValue")
-    testOP_CMP_ABS_IX(){
+    testCMP_ABS_IX(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDX_I, index,
-                         OP_LDA_I, secondValue,
-                         OP_STA_ABS_IX, 0x01, 0x20,
-                         OP_LDA_I, firstValue,
-                         OP_CMP_ABS_IX, 0x01, 0x20)
+        Program program = new Program().with(LDX_I, index,
+                         LDA_I, secondValue,
+                         STA_ABS_IX, 0x01, 0x20,
+                         LDA_I, firstValue,
+                         CMP_ABS_IX, 0x01, 0x20)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -3651,14 +3651,14 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("CMP (Absolute[Y]) #Expected: #firstValue == #secondValue")
-    testOP_CMP_ABS_IY(){
+    testCMP_ABS_IY(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDY_I, index,
-                         OP_LDA_I, secondValue,
-                         OP_STA_ABS_IY, 0x01, 0x20,
-                         OP_LDA_I, firstValue,
-                         OP_CMP_ABS_IY, 0x01, 0x20)
+        Program program = new Program().with(LDY_I, index,
+                         LDA_I, secondValue,
+                         STA_ABS_IY, 0x01, 0x20,
+                         LDA_I, firstValue,
+                         CMP_ABS_IY, 0x01, 0x20)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -3688,15 +3688,15 @@ class OpCodeSpec extends Specification {
     testCMP_IND_IX() {
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDA_I, secondValue,    //Value at indirect address
-                         OP_STA_ABS, pointerHi, pointerLo,
-                         OP_LDX_I, index,
-                         OP_LDA_I, pointerHi,  //Indirect address in memory
-                         OP_STA_Z_IX, 0x30,
-                         OP_LDA_I, pointerLo,
-                         OP_STA_Z_IX, 0x31,
-                         OP_LDA_I, firstValue,
-                         OP_CMP_IND_IX, 0x30)
+        Program program = new Program().with(LDA_I, secondValue,    //Value at indirect address
+                         STA_ABS, pointerHi, pointerLo,
+                         LDX_I, index,
+                         LDA_I, pointerHi,  //Indirect address in memory
+                         STA_Z_IX, 0x30,
+                         LDA_I, pointerLo,
+                         STA_Z_IX, 0x31,
+                         LDA_I, firstValue,
+                         CMP_IND_IX, 0x30)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -3724,15 +3724,15 @@ class OpCodeSpec extends Specification {
     testCMP_IND_IY() {
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDY_I, index,           //Index to use
-                         OP_LDA_I, firstValue,      //High order byte at pointer
-                         OP_STA_ABS_IY, pointerHi, pointerLo,
-                         OP_LDA_I, pointerHi,       //Pointer location
-                         OP_STA_Z, pointerHiMem,
-                         OP_LDA_I, pointerLo,       //Pointer location
-                         OP_STA_Z, pointerLoMem,
-                         OP_LDA_I, secondValue,
-                         OP_CMP_IND_IY, 0x60)
+        Program program = new Program().with(LDY_I, index,           //Index to use
+                         LDA_I, firstValue,      //High order byte at pointer
+                         STA_ABS_IY, pointerHi, pointerLo,
+                         LDA_I, pointerHi,       //Pointer location
+                         STA_Z, pointerHiMem,
+                         LDA_I, pointerLo,       //Pointer location
+                         STA_Z, pointerLoMem,
+                         LDA_I, secondValue,
+                         CMP_IND_IY, 0x60)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -3756,11 +3756,11 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("CPY (Immediate) #Expected: #firstValue == #secondValue")
-    testOP_CPY_I(){
+    testCPY_I(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDY_I, firstValue,
-                         OP_CPY_I, secondValue)
+        Program program = new Program().with(LDY_I, firstValue,
+                         CPY_I, secondValue)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -3786,13 +3786,13 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("CPY (Zero Page) #Expected: #firstValue == #secondValue")
-    testOP_CPY_Z(){
+    testCPY_Z(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDA_I, secondValue,
-                         OP_STA_Z, 0x20,
-                         OP_LDY_I, firstValue,
-                         OP_CPY_Z, 0x20)
+        Program program = new Program().with(LDA_I, secondValue,
+                         STA_Z, 0x20,
+                         LDY_I, firstValue,
+                         CPY_Z, 0x20)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -3818,13 +3818,13 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("CPY (Absolute) #Expected: #firstValue == #secondValue")
-    testOP_CPY_ABS(){
+    testCPY_ABS(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDA_I, secondValue,
-                         OP_STA_ABS, 0x01, 0x20,
-                         OP_LDY_I, firstValue,
-                         OP_CPY_ABS, 0x01, 0x20)
+        Program program = new Program().with(LDA_I, secondValue,
+                         STA_ABS, 0x01, 0x20,
+                         LDY_I, firstValue,
+                         CPY_ABS, 0x01, 0x20)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -3850,13 +3850,13 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("CPX (Zero Page) #Expected: #firstValue == #secondValue")
-    testOP_CPX_Z(){
+    testCPX_Z(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDA_I, secondValue,
-                         OP_STA_Z, 0x20,
-                         OP_LDX_I, firstValue,
-                         OP_CPX_Z, 0x20)
+        Program program = new Program().with(LDA_I, secondValue,
+                         STA_Z, 0x20,
+                         LDX_I, firstValue,
+                         CPX_Z, 0x20)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -3882,13 +3882,13 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("CPX (Absolute) #Expected: #firstValue == #secondValue")
-    testOP_CPX_ABS(){
+    testCPX_ABS(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDA_I, secondValue,
-                         OP_STA_ABS, 0x01, 0x20,
-                         OP_LDX_I, firstValue,
-                         OP_CPX_ABS, 0x01, 0x20)
+        Program program = new Program().with(LDA_I, secondValue,
+                         STA_ABS, 0x01, 0x20,
+                         LDX_I, firstValue,
+                         CPX_ABS, 0x01, 0x20)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -3914,11 +3914,11 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("CPX (Immediate) #Expected: #firstValue == #secondValue")
-    testOP_CPX_I(){
+    testCPX_I(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDX_I, firstValue,
-                         OP_CPX_I, secondValue)
+        Program program = new Program().with(LDX_I, firstValue,
+                         CPX_I, secondValue)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -3944,12 +3944,12 @@ class OpCodeSpec extends Specification {
     }
 
     @Unroll("STX (Zero Page[X] #expected: #firstValue -> #location[#index]")
-    OP_STX_Z_IY(){
+    STX_Z_IY(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDY_I, index,
-                         OP_LDX_I, firstValue,
-                         OP_STX_Z_IY, location)
+        Program program = new Program().with(LDY_I, index,
+                         LDX_I, firstValue,
+                         STX_Z_IY, location)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -3976,11 +3976,11 @@ class OpCodeSpec extends Specification {
     testRTS(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDA_I, memHi,
-                         OP_PHA,
-                         OP_LDA_I, memLo,
-                         OP_PHA,
-                         OP_RTS)
+        Program program = new Program().with(LDA_I, memHi,
+                         PHA,
+                         LDA_I, memLo,
+                         PHA,
+                         RTS)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -4004,7 +4004,7 @@ class OpCodeSpec extends Specification {
     testBRK(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_BRK)
+        Program program = new Program().with(BRK)
         memory.setByteAt(0xFFFE, newPCHi)
         memory.setByteAt(0xFFFF, newPCLo)
         memory.setMemory(0, program.getProgramAsByteArray())
@@ -4042,11 +4042,11 @@ class OpCodeSpec extends Specification {
     testIRQ(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDA_I, 1,
-                         OP_LDA_I, 2,
-                         OP_LDA_I, 3,
-                         OP_LDA_I, 4,
-                         OP_LDA_I, 5)
+        Program program = new Program().with(LDA_I, 1,
+                         LDA_I, 2,
+                         LDA_I, 3,
+                         LDA_I, 4,
+                         LDA_I, 5)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -4090,11 +4090,11 @@ class OpCodeSpec extends Specification {
     testNMI(){
         when:
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDA_I, 1,
-                         OP_LDA_I, 2,
-                         OP_LDA_I, 3,
-                         OP_LDA_I, 4,
-                         OP_LDA_I, 5)
+        Program program = new Program().with(LDA_I, 1,
+                         LDA_I, 2,
+                         LDA_I, 3,
+                         LDA_I, 4,
+                         LDA_I, 5)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and:
@@ -4138,15 +4138,15 @@ class OpCodeSpec extends Specification {
     testRTI(){
         when: 'We have a programText which will be interrupted'
         Memory memory = new SimpleMemory()
-        Program program = new Program().with(OP_LDA_I, 1,
-                         OP_LDA_I, 2, //--> IRQ Here
-                         OP_LDA_I, 4, //<-- Return here
-                         OP_LDA_I, 5,
-                         OP_LDA_I, 6)
+        Program program = new Program().with(LDA_I, 1,
+                         LDA_I, 2, //--> IRQ Here
+                         LDA_I, 4, //<-- Return here
+                         LDA_I, 5,
+                         LDA_I, 6)
         memory.setMemory(0, program.getProgramAsByteArray())
 
         and: 'An interrupt routine'
-        Program irqRoutine = new Program().with(OP_LDA_I, 3, OP_RTI)
+        Program irqRoutine = new Program().with(LDA_I, 3, RTI)
         memory.setMemory(0x100, irqRoutine.getProgramAsByteArray())
         memory.setByteAt(0xFFFE, 0x01)
         memory.setByteAt(0xFFFF, 0x00)

@@ -20,23 +20,23 @@ public class UnknownOpcodeExceptionTest {
 
     @Test
     public void testCreationWithOpCode(){
-        UnknownOpCodeException e = new UnknownOpCodeException("This is my reason", OpCode.OP_ADC_ABS);
+        UnknownOpCodeException e = new UnknownOpCodeException("This is my reason", OpCode.ADC_ABS);
 
         assertNotNull(e.getMessage());
         assertFalse(e.getMessage().isEmpty());
         assertNotNull(e.getOpCode());
-        assertEquals(OpCode.OP_ADC_ABS, e.getOpCode());
+        assertEquals(OpCode.ADC_ABS, e.getOpCode());
     }
 
     @Test
     public void testCausedException(){
         Exception cause = new Exception();
-        UnknownOpCodeException e = new UnknownOpCodeException("This is my reason", OpCode.OP_ADC_ABS, cause);
+        UnknownOpCodeException e = new UnknownOpCodeException("This is my reason", OpCode.ADC_ABS, cause);
 
         assertNotNull(e.getMessage());
         assertFalse(e.getMessage().isEmpty());
         assertNotNull(e.getOpCode());
-        assertEquals(OpCode.OP_ADC_ABS, e.getOpCode());
+        assertEquals(OpCode.ADC_ABS, e.getOpCode());
         assertEquals(cause, e.getCause());
     }
 }

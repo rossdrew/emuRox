@@ -93,7 +93,7 @@ public class OpCodeTest {
 
     @Test
     public void testStreamOf(){
-        OpCode.streamOf(AddressingMode.IMPLIED).forEach((opcode)->assertEquals(opcode, OpCode.from(opcode.getOpCodeName())));
-        OpCode.streamOf(AddressingMode.ZERO_PAGE).forEach((opcode)->assertEquals(opcode, OpCode.from(opcode.getOpCodeName(), opcode.getAddressingMode())));
+        OpCode.streamOf(AddressingMode.IMPLIED).forEach( (opcode)->assertEquals(opcode, OpCode.from(opcode.getOpCodeName())) );
+        OpCode.streamOf(AddressingMode.ZERO_PAGE).forEach( (opcode)->assertEquals(opcode, OpCode.from(opcode.getOpCodeName(), opcode.getAddressingMode())) );
     }
 }

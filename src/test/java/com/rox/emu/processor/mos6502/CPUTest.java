@@ -49,9 +49,9 @@ public class CPUTest {
 
     @Test
     public void testReset() {
-        Program program = new Program().with(OP_LDA_I, 0xAA,
-                                             OP_LDX_I, 0xBB,
-                                             OP_LDX_I, 0xCC);
+        Program program = new Program().with(LDA_I, 0xAA,
+                                             LDX_I, 0xBB,
+                                             LDX_I, 0xCC);
         memory.setMemory(0, program.getProgramAsByteArray());
         memory.setByteAt(0xFFFC, 0x0);
         memory.setByteAt(0xFFFD, 0x0);
@@ -80,7 +80,7 @@ public class CPUTest {
 
     @Test
     public void testLDA() {
-        Program program = new Program().with(OP_LDA_I, 0xAA);
+        Program program = new Program().with(LDA_I, 0xAA);
         memory.setMemory(0, program.getProgramAsByteArray());
 
         processor.step();
@@ -93,8 +93,8 @@ public class CPUTest {
 
     @Test
     public void testSTA() {
-        Program program = new Program().with(OP_LDA_I,
-                0xAA, OP_STA_Z, 100);
+        Program program = new Program().with(LDA_I,
+                0xAA, STA_Z, 100);
         memory.setMemory(0, program.getProgramAsByteArray());
 
         processor.step(2);
@@ -106,7 +106,7 @@ public class CPUTest {
 
     @Test
     public void testAccumulatorSTA() {
-        Program program = new Program().with(OP_LDA_I, 0xAA, OP_STA_ABS, 0xFF, 0x01);
+        Program program = new Program().with(LDA_I, 0xAA, STA_ABS, 0xFF, 0x01);
         memory.setMemory(0, program.getProgramAsByteArray());
 
         processor.step(2);
@@ -118,7 +118,7 @@ public class CPUTest {
 
     @Test
     public void testZAtXIndexSTA() {
-        Program program = new Program().with(OP_LDA_I, 0xAA, OP_LDX_I, 0x1, OP_STA_Z_IX, 0x20);
+        Program program = new Program().with(LDA_I, 0xAA, LDX_I, 0x1, STA_Z_IX, 0x20);
         memory.setMemory(0, program.getProgramAsByteArray());
 
         processor.step(3);
@@ -130,7 +130,7 @@ public class CPUTest {
 
     @Test
     public void testSTX() {
-        Program program = new Program().with(OP_LDX_I, 0xAA, OP_STX_Z, 100);
+        Program program = new Program().with(LDX_I, 0xAA, STX_Z, 100);
         memory.setMemory(0, program.getProgramAsByteArray());
 
         processor.step(2);
@@ -142,7 +142,7 @@ public class CPUTest {
 
     @Test
     public void testSTXAbsolute() {
-        Program program = new Program().with(OP_LDX_I, 0xAA, OP_STX_ABS, 0x02, 0x20);
+        Program program = new Program().with(LDX_I, 0xAA, STX_ABS, 0x02, 0x20);
         memory.setMemory(0, program.getProgramAsByteArray());
 
         processor.step(2);
@@ -154,7 +154,7 @@ public class CPUTest {
 
     @Test
     public void testSTY() {
-        Program program = new Program().with(OP_LDY_I, 0xAA, OP_STY_Z, 100);
+        Program program = new Program().with(LDY_I, 0xAA, STY_Z, 100);
         memory.setMemory(0, program.getProgramAsByteArray());
 
         processor.step(2);
@@ -166,7 +166,7 @@ public class CPUTest {
 
     @Test
     public void testSTYAbsolute() {
-        Program program = new Program().with(OP_LDY_I, 0xAA, OP_STY_ABS, 0x02, 0x20);
+        Program program = new Program().with(LDY_I, 0xAA, STY_ABS, 0x02, 0x20);
         memory.setMemory(0, program.getProgramAsByteArray());
 
         processor.step(2);
@@ -178,7 +178,7 @@ public class CPUTest {
 
     @Test
     public void testLDX() {
-        Program program = new Program().with(OP_LDX_I, 0xAA);
+        Program program = new Program().with(LDX_I, 0xAA);
         memory.setMemory(0, program.getProgramAsByteArray());
 
         processor.step();
@@ -191,7 +191,7 @@ public class CPUTest {
 
     @Test
     public void testLDY() {
-        Program program = new Program().with(OP_LDY_I, 0xAA);
+        Program program = new Program().with(LDY_I, 0xAA);
         memory.setMemory(0, program.getProgramAsByteArray());
 
         processor.step();
@@ -204,10 +204,10 @@ public class CPUTest {
 
     @Test
     public void testADC() {
-        Program program = new Program().with(OP_CLC,
-                OP_LDA_I,
+        Program program = new Program().with(CLC,
+                LDA_I,
                 0x1,
-                OP_ADC_I,
+                ADC_I,
                 0x1);
         memory.setMemory(0, program.getProgramAsByteArray());
 
@@ -221,10 +221,10 @@ public class CPUTest {
 
     @Test
     public void testADCWithCarry() {
-        Program program = new Program().with(OP_SEC,
-                         OP_LDA_I,
+        Program program = new Program().with(SEC,
+                         LDA_I,
                          0x1,
-                         OP_ADC_I,
+                         ADC_I,
                          0x1);
         memory.setMemory(0, program.getProgramAsByteArray());
 
@@ -238,7 +238,7 @@ public class CPUTest {
 
     @Test
     public void testSBC() {
-        Program program = new Program().with(OP_SEC, OP_LDA_I, 0xA, OP_SBC_I, 0x5);
+        Program program = new Program().with(SEC, LDA_I, 0xA, SBC_I, 0x5);
         memory.setMemory(0, program.getProgramAsByteArray());
         processor.step(3);
 
@@ -249,9 +249,9 @@ public class CPUTest {
 
     @Test
     public void testSBCWithCarry() {
-        Program program = new Program().with(OP_CLC,
-                         OP_LDA_I, 0xA,
-                         OP_SBC_I, 0x5);
+        Program program = new Program().with(CLC,
+                         LDA_I, 0xA,
+                         SBC_I, 0x5);
         memory.setMemory(0, program.getProgramAsByteArray());
         processor.step(3);
 
@@ -262,9 +262,9 @@ public class CPUTest {
 
     @Test
     public void testAND() {
-        Program program = new Program().with(OP_LDA_I,
+        Program program = new Program().with(LDA_I,
                 0b00000101,
-                OP_AND_I,
+                AND_I,
                 0b00000101);
         memory.setMemory(0, program.getProgramAsByteArray());
 
@@ -278,9 +278,9 @@ public class CPUTest {
 
     @Test
     public void testOR() {
-        Program program = new Program().with(OP_LDA_I,
+        Program program = new Program().with(LDA_I,
                 0b00010101,
-                OP_ORA_I,
+                ORA_I,
                 0b00000101);
         memory.setMemory(0, program.getProgramAsByteArray());
 
@@ -294,9 +294,9 @@ public class CPUTest {
 
     @Test
     public void testEOR() {
-        Program program = new Program().with(OP_LDA_I,
+        Program program = new Program().with(LDA_I,
                 0b00010101,
-                OP_EOR_I,
+                EOR_I,
                 0b00000101);
         memory.setMemory(0, program.getProgramAsByteArray());
 
@@ -310,7 +310,7 @@ public class CPUTest {
 
     @Test
     public void testSEC() {
-        Program program = new Program().with(OP_SEC);
+        Program program = new Program().with(SEC);
         memory.setMemory(0, program.getProgramAsByteArray());
         Registers registers = processor.getRegisters();
 
@@ -322,7 +322,7 @@ public class CPUTest {
 
     @Test
     public void testCLC() {
-        Program program = new Program().with(OP_SEC, OP_CLC);
+        Program program = new Program().with(SEC, CLC);
         memory.setMemory(0, program.getProgramAsByteArray());
         Registers registers = processor.getRegisters();
 
@@ -336,7 +336,7 @@ public class CPUTest {
 
     @Test
     public void testCLV() {
-        Program program = new Program().with(OP_LDA_I, 0x50, OP_ADC_I, 0x50, OP_CLV);
+        Program program = new Program().with(LDA_I, 0x50, ADC_I, 0x50, CLV);
         memory.setMemory(0, program.getProgramAsByteArray());
         Registers registers = processor.getRegisters();
 
@@ -350,7 +350,7 @@ public class CPUTest {
 
     @Test
     public void testINX() {
-        Program program = new Program().with(OP_LDX_I, 0x01, OP_INX);
+        Program program = new Program().with(LDX_I, 0x01, INX);
         memory.setMemory(0, program.getProgramAsByteArray());
         Registers registers = processor.getRegisters();
 
@@ -364,7 +364,7 @@ public class CPUTest {
 
     @Test
     public void testINY() {
-        Program program = new Program().with(OP_LDY_I, 0x01, OP_INY);
+        Program program = new Program().with(LDY_I, 0x01, INY);
         memory.setMemory(0, program.getProgramAsByteArray());
         Registers registers = processor.getRegisters();
 
@@ -378,7 +378,7 @@ public class CPUTest {
 
     @Test
     public void testINC() {
-        Program program = new Program().with(OP_LDA_I, 1, OP_STA_Z, 0x20, OP_INC_Z, 0x20);
+        Program program = new Program().with(LDA_I, 1, STA_Z, 0x20, INC_Z, 0x20);
         memory.setMemory(0, program.getProgramAsByteArray());
         Registers registers = processor.getRegisters();
 
@@ -390,7 +390,7 @@ public class CPUTest {
 
     @Test
     public void testDEC() {
-        Program program = new Program().with(OP_LDA_I, 9, OP_STA_Z, 0x20, OP_DEC_Z, 0x20);
+        Program program = new Program().with(LDA_I, 9, STA_Z, 0x20, DEC_Z, 0x20);
         memory.setMemory(0, program.getProgramAsByteArray());
         Registers registers = processor.getRegisters();
 
@@ -402,7 +402,7 @@ public class CPUTest {
 
     @Test
     public void testDEY() {
-        Program program = new Program().with(OP_LDY_I, 0x01, OP_DEY);
+        Program program = new Program().with(LDY_I, 0x01, DEY);
         memory.setMemory(0, program.getProgramAsByteArray());
         Registers registers = processor.getRegisters();
 
@@ -416,7 +416,7 @@ public class CPUTest {
 
     @Test
     public void testDEX() {
-        Program program = new Program().with(OP_LDX_I, 0x01, OP_DEX);
+        Program program = new Program().with(LDX_I, 0x01, DEX);
         memory.setMemory(0, program.getProgramAsByteArray());
         Registers registers = processor.getRegisters();
 
@@ -443,7 +443,7 @@ public class CPUTest {
 
     @Test
     public void testPHA() {
-        Program program = new Program().with(OP_LDA_I, 0x99, OP_PHA);
+        Program program = new Program().with(LDA_I, 0x99, PHA);
         memory.setMemory(0, program.getProgramAsByteArray());
         Registers registers = processor.getRegisters();
 
@@ -458,7 +458,7 @@ public class CPUTest {
 
     @Test
     public void testPLA() {
-        Program program = new Program().with(OP_LDA_I, 0x99, OP_PHA, OP_LDA_I, 0x11, OP_PLA);
+        Program program = new Program().with(LDA_I, 0x99, PHA, LDA_I, 0x11, PLA);
         memory.setMemory(0, program.getProgramAsByteArray());
         Registers registers = processor.getRegisters();
 
@@ -475,7 +475,7 @@ public class CPUTest {
 
     @Test
     public void testASL() {
-        Program program = new Program().with(OP_LDA_I, 0b01010101, OP_ASL_A);
+        Program program = new Program().with(LDA_I, 0b01010101, ASL_A);
         memory.setMemory(0, program.getProgramAsByteArray());
         Registers registers = processor.getRegisters();
 
@@ -488,7 +488,7 @@ public class CPUTest {
 
     @Test
     public void testLSR(){
-        Program program = new Program().with(OP_LDA_I, 0b01011010, OP_LSR_A);
+        Program program = new Program().with(LDA_I, 0b01011010, LSR_A);
         memory.setMemory(0, program.getProgramAsByteArray());
         Registers registers = processor.getRegisters();
 
@@ -501,7 +501,7 @@ public class CPUTest {
 
     @Test
     public void testNOP(){
-        Program program = new Program().with(OP_NOP, OP_NOP, OP_NOP);
+        Program program = new Program().with(NOP, NOP, NOP);
         memory.setMemory(0, program.getProgramAsByteArray());
         Registers registers = processor.getRegisters();
 
@@ -513,10 +513,10 @@ public class CPUTest {
 
     @Test
     public void testJMP(){
-        Program program = new Program().with(OP_LDX_I, 0x8,
-                         OP_JMP_ABS, 0x0, 0x7,
-                         OP_LDY_I, 0x9,
-                         OP_LDA_I, 0x10);
+        Program program = new Program().with(LDX_I, 0x8,
+                         JMP_ABS, 0x0, 0x7,
+                         LDY_I, 0x9,
+                         LDA_I, 0x10);
         memory.setMemory(0, program.getProgramAsByteArray());
         Registers registers = processor.getRegisters();
 
@@ -530,7 +530,7 @@ public class CPUTest {
 
     @Test
     public void testBCC(){
-        Program program = new Program().with(OP_CLC, OP_BCC, 0x4, OP_LDA_I, 0x99, OP_LDX_I, 0x98, OP_LDY_I, 0x97);
+        Program program = new Program().with(CLC, BCC, 0x4, LDA_I, 0x99, LDX_I, 0x98, LDY_I, 0x97);
         memory.setMemory(0, program.getProgramAsByteArray());
         Registers registers = processor.getRegisters();
 
@@ -544,7 +544,7 @@ public class CPUTest {
 
     @Test
     public void testBCS(){
-        Program program = new Program().with(OP_SEC, OP_BCS, 0x4, OP_LDA_I, 0x99, OP_LDX_I, 0x98, OP_LDY_I, 0x97);
+        Program program = new Program().with(SEC, BCS, 0x4, LDA_I, 0x99, LDX_I, 0x98, LDY_I, 0x97);
         memory.setMemory(0, program.getProgramAsByteArray());
         Registers registers = processor.getRegisters();
 
@@ -558,7 +558,7 @@ public class CPUTest {
 
     @Test
     public void testBNE(){
-        Program program = new Program().with(OP_LDA_I, 0x1, OP_BNE, 0x4, OP_LDA_I, 0x99, OP_LDX_I, 0x98, OP_LDY_I, 0x97);
+        Program program = new Program().with(LDA_I, 0x1, BNE, 0x4, LDA_I, 0x99, LDX_I, 0x98, LDY_I, 0x97);
         memory.setMemory(0, program.getProgramAsByteArray());
         Registers registers = processor.getRegisters();
 
@@ -572,7 +572,7 @@ public class CPUTest {
 
     @Test
     public void testBEQ(){
-        Program program = new Program().with(OP_LDA_I, 0x0, OP_BEQ, 0x4, OP_LDA_I, 0x99, OP_LDX_I, 0x98, OP_LDY_I, 0x97);
+        Program program = new Program().with(LDA_I, 0x0, BEQ, 0x4, LDA_I, 0x99, LDX_I, 0x98, LDY_I, 0x97);
         memory.setMemory(0, program.getProgramAsByteArray());
         Registers registers = processor.getRegisters();
 
@@ -586,7 +586,7 @@ public class CPUTest {
 
     @Test
     public void testROL(){
-        Program program = new Program().with(OP_SEC, OP_LDA_I, 0b00000001, OP_ROL_A);
+        Program program = new Program().with(SEC, LDA_I, 0b00000001, ROL_A);
         memory.setMemory(0, program.getProgramAsByteArray());
         Registers registers = processor.getRegisters();
 
@@ -598,7 +598,7 @@ public class CPUTest {
 
     @Test
     public void testROR(){
-        Program program = new Program().with(OP_SEC, OP_LDA_I, 0b00000010, OP_ROR_A);
+        Program program = new Program().with(SEC, LDA_I, 0b00000010, ROR_A);
         memory.setMemory(0, program.getProgramAsByteArray());
         Registers registers = processor.getRegisters();
 
@@ -610,7 +610,7 @@ public class CPUTest {
 
     @Test
     public void testBMI(){
-        Program program = new Program().with(OP_LDA_I, 0b11111110, OP_BMI, 0x4, OP_LDA_I, 0x99, OP_LDX_I, 0x98, OP_LDY_I, 0x97);
+        Program program = new Program().with(LDA_I, 0b11111110, BMI, 0x4, LDA_I, 0x99, LDX_I, 0x98, LDY_I, 0x97);
         memory.setMemory(0, program.getProgramAsByteArray());
         Registers registers = processor.getRegisters();
 
@@ -624,7 +624,7 @@ public class CPUTest {
 
     @Test
     public void testBPL(){
-        Program program = new Program().with(OP_LDA_I, 0b00000001, OP_BPL, 0x4, OP_LDA_I, 0x99, OP_LDX_I, 0x98, OP_LDY_I, 0x97);
+        Program program = new Program().with(LDA_I, 0b00000001, BPL, 0x4, LDA_I, 0x99, LDX_I, 0x98, LDY_I, 0x97);
         memory.setMemory(0, program.getProgramAsByteArray());
         Registers registers = processor.getRegisters();
 
@@ -638,7 +638,7 @@ public class CPUTest {
 
     @Test
     public void testBVS(){
-        Program program = new Program().with(OP_LDA_I, 0x50, OP_ADC_I, 0x50, OP_BVS, 0x4, OP_LDA_I, 0x99, OP_LDX_I, 0x98, OP_LDY_I, 0x97);
+        Program program = new Program().with(LDA_I, 0x50, ADC_I, 0x50, BVS, 0x4, LDA_I, 0x99, LDX_I, 0x98, LDY_I, 0x97);
         memory.setMemory(0, program.getProgramAsByteArray());
         Registers registers = processor.getRegisters();
 
@@ -652,7 +652,7 @@ public class CPUTest {
 
     @Test
     public void testBVC(){
-        Program program = new Program().with(OP_LDA_I, 0x0, OP_ADC_I, 0x10, OP_BVC, 0x4, OP_LDA_I, 0x99, OP_LDX_I, 0x98, OP_LDY_I, 0x97);
+        Program program = new Program().with(LDA_I, 0x0, ADC_I, 0x10, BVC, 0x4, LDA_I, 0x99, LDX_I, 0x98, LDY_I, 0x97);
         memory.setMemory(0, program.getProgramAsByteArray());
         Registers registers = processor.getRegisters();
 
@@ -666,7 +666,7 @@ public class CPUTest {
 
     @Test
     public void testTAX(){
-        Program program = new Program().with(OP_LDA_I, 0x0F, OP_TAX);
+        Program program = new Program().with(LDA_I, 0x0F, TAX);
         memory.setMemory(0, program.getProgramAsByteArray());
         Registers registers = processor.getRegisters();
 
@@ -679,7 +679,7 @@ public class CPUTest {
 
     @Test
     public void testTAY(){
-        Program program = new Program().with(OP_LDA_I, 0x0F, OP_TAY);
+        Program program = new Program().with(LDA_I, 0x0F, TAY);
         memory.setMemory(0, program.getProgramAsByteArray());
         Registers registers = processor.getRegisters();
 
@@ -692,7 +692,7 @@ public class CPUTest {
 
     @Test
     public void testTYA(){
-        Program program = new Program().with(OP_LDY_I, 0x0D, OP_TYA);
+        Program program = new Program().with(LDY_I, 0x0D, TYA);
         memory.setMemory(0, program.getProgramAsByteArray());
         Registers registers = processor.getRegisters();
 
@@ -705,7 +705,7 @@ public class CPUTest {
 
     @Test
     public void testTXA(){
-        Program program = new Program().with(OP_LDX_I, 0x0D, OP_TXA);
+        Program program = new Program().with(LDX_I, 0x0D, TXA);
         memory.setMemory(0, program.getProgramAsByteArray());
         Registers registers = processor.getRegisters();
 
@@ -718,7 +718,7 @@ public class CPUTest {
 
     @Test
     public void testTXS(){
-        Program program = new Program().with(OP_LDX_I, 0xAA, OP_TXS);
+        Program program = new Program().with(LDX_I, 0xAA, TXS);
         memory.setMemory(0, program.getProgramAsByteArray());
         Registers registers = processor.getRegisters();
 
@@ -731,7 +731,7 @@ public class CPUTest {
 
     @Test
     public void testTSX(){
-        Program program = new Program().with(OP_TSX);
+        Program program = new Program().with(TSX);
         memory.setMemory(0, program.getProgramAsByteArray());
         Registers registers = processor.getRegisters();
 
@@ -743,7 +743,7 @@ public class CPUTest {
 
     @Test
     public void testBIT(){
-        Program program = new Program().with(OP_LDA_I, 0x01, OP_STA_Z, 0x20, OP_LDA_I, 0x01, OP_BIT_Z, 0x20);
+        Program program = new Program().with(LDA_I, 0x01, STA_Z, 0x20, LDA_I, 0x01, BIT_Z, 0x20);
         memory.setMemory(0, program.getProgramAsByteArray());
         Registers registers = processor.getRegisters();
 
@@ -757,7 +757,7 @@ public class CPUTest {
 
     @Test
     public void testCMP(){
-        Program program = new Program().with(OP_LDA_I, 0x10, OP_CMP_I, 0x10);
+        Program program = new Program().with(LDA_I, 0x10, CMP_I, 0x10);
         memory.setMemory(0, program.getProgramAsByteArray());
         Registers registers = processor.getRegisters();
 
@@ -772,7 +772,7 @@ public class CPUTest {
 
     @Test
     public void testCPX(){
-        Program program = new Program().with(OP_LDX_I, 0x10, OP_CPX_I, 0x10);
+        Program program = new Program().with(LDX_I, 0x10, CPX_I, 0x10);
         memory.setMemory(0, program.getProgramAsByteArray());
         Registers registers = processor.getRegisters();
 
@@ -787,7 +787,7 @@ public class CPUTest {
 
     @Test
     public void testCPY(){
-        Program program = new Program().with(OP_LDY_I, 0x10, OP_CPY_I, 0x10);
+        Program program = new Program().with(LDY_I, 0x10, CPY_I, 0x10);
         memory.setMemory(0, program.getProgramAsByteArray());
         Registers registers = processor.getRegisters();
 
@@ -802,7 +802,7 @@ public class CPUTest {
 
     @Test
     public void testPHP(){
-        Program program = new Program().with(OP_PHP);
+        Program program = new Program().with(PHP);
         memory.setMemory(0, program.getProgramAsByteArray());
         Registers registers = processor.getRegisters();
 
@@ -817,7 +817,7 @@ public class CPUTest {
 
     @Test
     public void testPLP(){
-        Program program = new Program().with(OP_PHP, OP_PLP);
+        Program program = new Program().with(PHP, PLP);
         memory.setMemory(0, program.getProgramAsByteArray());
         Registers registers = processor.getRegisters();
 
@@ -833,7 +833,7 @@ public class CPUTest {
 
     @Test
     public void testCLI(){
-        Program program = new Program().with(OP_CLI);
+        Program program = new Program().with(CLI);
         memory.setMemory(0, program.getProgramAsByteArray());
         Registers registers = processor.getRegisters();
 
@@ -847,7 +847,7 @@ public class CPUTest {
 
     @Test
     public void testSEI(){
-        Program program = new Program().with(OP_SEI);
+        Program program = new Program().with(SEI);
         memory.setMemory(0, program.getProgramAsByteArray());
         Registers registers = processor.getRegisters();
 
@@ -861,7 +861,7 @@ public class CPUTest {
 
     @Test
     public void testSED(){
-        Program program = new Program().with(OP_SED);
+        Program program = new Program().with(SED);
         memory.setMemory(0, program.getProgramAsByteArray());
         Registers registers = processor.getRegisters();
 
@@ -875,7 +875,7 @@ public class CPUTest {
 
     @Test
     public void testCLD(){
-        Program program = new Program().with(OP_CLD);
+        Program program = new Program().with(CLD);
         memory.setMemory(0, program.getProgramAsByteArray());
         Registers registers = processor.getRegisters();
 
@@ -889,7 +889,7 @@ public class CPUTest {
 
     @Test
     public void testJSR(){
-        Program program = new Program().with(OP_JSR, 0x02, 0x0F);
+        Program program = new Program().with(JSR, 0x02, 0x0F);
         memory.setMemory(0, program.getProgramAsByteArray());
         Registers registers = processor.getRegisters();
 
@@ -905,13 +905,13 @@ public class CPUTest {
 
     @Test(timeout = 2000)
     public void testLoop(){
-        Program program = new Program().with(OP_LDX_I, 10,        //Loop counter
-                         OP_LDA_I, 0,         //Sum
-                         OP_CLC,              //LOOP: Clear cary before ADC
-                         OP_ADC_I, 1,         //Add one
-                         OP_DEX,              //advance loop counter
-                         OP_CPX_I, 0,         //is it the end of the loop?
-                         OP_BNE, 0b11110111); //If not, go again
+        Program program = new Program().with(LDX_I, 10,        //Loop counter
+                         LDA_I, 0,         //Sum
+                         CLC,              //LOOP: Clear cary before ADC
+                         ADC_I, 1,         //Add one
+                         DEX,              //advance loop counter
+                         CPX_I, 0,         //is it the end of the loop?
+                         BNE, 0b11110111); //If not, go again
         memory.setMemory(0, program.getProgramAsByteArray());
         Registers registers = processor.getRegisters();
 
@@ -924,7 +924,7 @@ public class CPUTest {
 
     @Test
     public void testBRK(){
-        Program program = new Program().with(OP_BRK);
+        Program program = new Program().with(BRK);
         memory.setMemory(0, program.getProgramAsByteArray());
         memory.setByteAt(0xFFFE, 0);                                     //New PC
         memory.setByteAt(0xFFFF, 0);
@@ -950,9 +950,9 @@ public class CPUTest {
 
     @Test
     public void testIRQ(){
-        Program program = new Program().with(OP_LDA_I, 1,
-                         OP_LDA_I, 2,
-                         OP_LDA_I, 3);
+        Program program = new Program().with(LDA_I, 1,
+                         LDA_I, 2,
+                         LDA_I, 3);
         memory.setMemory(0, program.getProgramAsByteArray());
         memory.setByteAt(0xFFFE, 0x01); //->PCH
         memory.setByteAt(0xFFFF, 0x10); //->PCL
@@ -989,30 +989,30 @@ public class CPUTest {
             int valMPD = 7;
             int valMPR = 4;
 
-            Program program = new Program().with(OP_LDA_I, valMPD,
-                             OP_STA_Z, MPD,
-                             OP_LDA_I, valMPR,
-                             OP_STA_Z, MPR,
-                             OP_LDA_I, 0,         //<---- start
-                             OP_STA_Z, TMP,       //Clear
-                             OP_STA_Z, RESAD_0,   //...
-                             OP_STA_Z, RESAD_1,   //...
-                             OP_LDX_I, 8,         //X counts each bit
+            Program program = new Program().with(LDA_I, valMPD,
+                             STA_Z, MPD,
+                             LDA_I, valMPR,
+                             STA_Z, MPR,
+                             LDA_I, 0,         //<---- start
+                             STA_Z, TMP,       //Clear
+                             STA_Z, RESAD_0,   //...
+                             STA_Z, RESAD_1,   //...
+                             LDX_I, 8,         //X counts each bit
 
-                             OP_LSR_Z, MPR,       //:MULT(18) LSR(MPR)
-                             OP_BCC, 13,          //Test carry and jump (forward 13) to NOADD
+                             LSR_Z, MPR,       //:MULT(18) LSR(MPR)
+                             BCC, 13,          //Test carry and jump (forward 13) to NOADD
 
-                             OP_LDA_Z, RESAD_0,   //RESAD -> A
-                             OP_CLC,              //Prepare to add
-                             OP_ADC_Z, MPD,       //+MPD
-                             OP_STA_Z, RESAD_0,   //Save result
-                             OP_LDA_Z, RESAD_1,   //RESAD+1 -> A
-                             OP_ADC_Z, TMP,       //+TMP
-                             OP_STA_Z, RESAD_1,   //RESAD+1 <- A
-                             OP_ASL_Z, MPD,       //:NOADD(35) ASL(MPD)
-                             OP_ROL_Z, TMP,       //Save bit from MPD
-                             OP_DEX,              //--X
-                             OP_BNE, 0b11100111 //Test equal and jump (back 24) to MULT
+                             LDA_Z, RESAD_0,   //RESAD -> A
+                             CLC,              //Prepare to add
+                             ADC_Z, MPD,       //+MPD
+                             STA_Z, RESAD_0,   //Save result
+                             LDA_Z, RESAD_1,   //RESAD+1 -> A
+                             ADC_Z, TMP,       //+TMP
+                             STA_Z, RESAD_1,   //RESAD+1 <- A
+                             ASL_Z, MPD,       //:NOADD(35) ASL(MPD)
+                             ROL_Z, TMP,       //Save bit from MPD
+                             DEX,              //--X
+                             BNE, 0b11100111 //Test equal and jump (back 24) to MULT
             );
 
             memory.setMemory(0, program.getProgramAsByteArray());
