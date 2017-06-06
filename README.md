@@ -56,7 +56,7 @@ BCD and proper timing is a thing for another day as my first objective for now, 
  
 
 ## Get involved 
-Found my project interesting or used it in some way?  Contribute by showing your appreciation with a [frosty beverage](https://beerpay.io/rossdrew/emuRox).  In my case this will go towards an [Old Fashioned](https://www.instagram.com/p/BUzyDHOAzkI/?taken-by=ross_drew) but as far as I'm aware this is no Spirit/Bourbon/WhiskeyPay.
+Found my project interesting or used it in some way?  Contribute by showing your appreciation with a [frosty beverage](https://beerpay.io/rossdrew/emuRox).  In my case this will go towards an [Old Fashioned](https://www.instagram.com/p/BUzyDHOAzkI/?taken-by=ross_drew) but as far as I'm aware there is no Spirit/Bourbon/WhiskeyPay.
   
 Or even [make a feature suggestion](https://beerpay.io/rossdrew/emuRox?focus=wish) if you are so inclined.
 
