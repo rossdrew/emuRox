@@ -1,4 +1,4 @@
-package com.rox.emu.processor.ricoh2C02;
+package com.rox.emu.processor.ricoh2c02;
 
 import com.pholser.junit.quickcheck.Property;
 import com.pholser.junit.quickcheck.generator.InRange;

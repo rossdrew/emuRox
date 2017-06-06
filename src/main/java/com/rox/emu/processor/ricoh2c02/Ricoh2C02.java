@@ -1,4 +1,4 @@
-package com.rox.emu.processor.ricoh2C02;
+package com.rox.emu.processor.ricoh2c02;
 
 import com.rox.emu.mem.Memory;
 
