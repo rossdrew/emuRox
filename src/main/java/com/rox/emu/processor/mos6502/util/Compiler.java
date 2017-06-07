@@ -80,27 +80,51 @@ import java.util.regex.Pattern;
  * @author Ross Drew
  */
 public class Compiler {
+    /** Regex used to extract an argument prefix */
     public static final Pattern PREFIX_REGEX = Pattern.compile("^[^0-9a-fA-F]{1,4}");
+    /** Regex used to extract an argument value */
     public static final Pattern VALUE_REGEX = Pattern.compile("[0-9a-fA-F]+");
+    /** Regex used to extract an argument postfix */
     public static final Pattern POSTFIX_REGEX = Pattern.compile("(?<=\\w)(,[XY]|,X\\)|\\),Y)$");
+    /** Regex used to extract a program label */
     public static final Pattern LABEL_REGEX = Pattern.compile("\\w+:");
 
-    public static final String IMMEDIATE_PREFIX = "#";
+    /** The prefix expected for an accumulator addressed argument */
+    public static final String ACCUMULATOR_PREFIX = "#";
+    /** The prefix expected for a value argument */
     public static final String VALUE_PREFIX = "$";
-    public static final String IMMEDIATE_VALUE_PREFIX = IMMEDIATE_PREFIX + VALUE_PREFIX;
+    /** The prefix expected for an immediate value argument */
+    public static final String IMMEDIATE_VALUE_PREFIX = ACCUMULATOR_PREFIX + VALUE_PREFIX;
+    /** The prefix expected for an indirect value.  Value must also be postfixed with INDIRECT_X_POSTFIX( "<code>{@value INDIRECT_X_POSTFIX}</code>" ) or INDIRECT_Y_POSTFIX( "<code>{@value INDIRECT_Y_POSTFIX}</code>" ) */
     public static final String INDIRECT_PREFIX = "(" + VALUE_PREFIX;
 
+    /** The postfix expected for an X indexed argument value */
     public static final String X_INDEXED_POSTFIX = ",X";
+    /** The postfix expected for an Y indexed argument value */
     public static final String Y_INDEXED_POSTFIX = ",Y";
+    /** The postfix expected for an indexed indirect addressed argument value */
     public static final String INDIRECT_X_POSTFIX = X_INDEXED_POSTFIX + ")";
+    /** The postfix expected for an indirect indexed addressed argument value */
     public static final String INDIRECT_Y_POSTFIX = ")" + Y_INDEXED_POSTFIX;
     
     private final String programText;
 
+    /**
+     * Create a compiler object around a textual program, ready for compilation
+     *
+     * @param programText The MOS6502 program as {@link String} ready for compilation
+     */
     public Compiler(String programText){
         this.programText = programText;
     }
 
+    /**
+     * Extract a compiled {@link Program} from this compiler.
+     * This will use the program text contained in this object and attempt to compile it
+     *
+     * @return A compiled {@link Program} object
+     * @throws UnknownOpCodeException if during the course of compilation, we encounter an unknown where we expect an op-code to be
+     */
     public Program compileProgram() throws UnknownOpCodeException{
         Program workingProgram = new Program();
 
@@ -157,6 +181,23 @@ public class Compiler {
         return workingProgram;
     }
 
+    /**
+     * Extract the first occurrence of the given pattern from the given token {@link String}
+     *
+     * @param pattern The compiled regex {@link Pattern} for the desired search
+     * @param token The {@link String} to search by applying the <code>pattern</code>
+     * @return The first found occurrence or an empty {@link String}
+     */
+    public static String extractFirstOccurrence(Pattern pattern, String token){
+        final Matcher prefixMatcher = pattern.matcher(token);
+        prefixMatcher.find();
+        try {
+            return prefixMatcher.group(0);
+        }catch(IllegalStateException | ArrayIndexOutOfBoundsException e){
+            return "";
+        }
+    }
+
     private String parseLabel(final String opCodeToken) throws UnknownOpCodeException{
         final String label = extractFirstOccurrence(LABEL_REGEX, opCodeToken);
 
@@ -169,7 +210,7 @@ public class Compiler {
     private AddressingMode getAddressingModeFrom(String prefix, String value, String postfix){
         if (prefix.equalsIgnoreCase(IMMEDIATE_VALUE_PREFIX)) {
             return AddressingMode.IMMEDIATE;
-        }else if (prefix.equalsIgnoreCase(IMMEDIATE_PREFIX)){
+        }else if (prefix.equalsIgnoreCase(ACCUMULATOR_PREFIX)){
             return AddressingMode.ACCUMULATOR;
         }else if (prefix.equalsIgnoreCase(VALUE_PREFIX)){
             return getIndexedAddressingMode(prefix, value, postfix);
@@ -208,15 +249,5 @@ public class Compiler {
         }
 
         return addressingMode;
-    }
-
-    public static String extractFirstOccurrence(Pattern pattern, String token){
-        final Matcher prefixMatcher = pattern.matcher(token);
-        prefixMatcher.find();
-        try {
-            return prefixMatcher.group(0);
-        }catch(IllegalStateException | ArrayIndexOutOfBoundsException e){
-            return "";
-        }
     }
 }

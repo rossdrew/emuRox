@@ -159,7 +159,7 @@ public class CompilerTest {
         final String hexByte = Integer.toHexString(byteValue);
 
         OpCode.streamOf(AddressingMode.ACCUMULATOR).forEach((opcode)->{
-            final Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + IMMEDIATE_PREFIX + hexByte);
+            final Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + ACCUMULATOR_PREFIX + hexByte);
 
             Program program = compiler.compileProgram();
             int[] bytes = program.getProgramAsByteArray();
