@@ -13,9 +13,9 @@ import java.util.regex.Pattern;
  *  A compiler for a {@link CPU} for taking a textual program and converting it into an executable byte stream, e.g.<br/>
  *  <br/>
  *  <code>
- *      LDA #$52 <br/>
- *      LDX $10<br/>
- *      STA $F1,X<br/>
+ *      LDA {@value IMMEDIATE_VALUE_PREFIX}52 <br/>
+ *      LDX {@value IMMEDIATE_VALUE_PREFIX}10<br/>
+ *      STA {@value VALUE_PREFIX}F1{@value X_INDEXED_POSTFIX}<br/>
  *  </code> <br/>
  *  -> <code> [0xA9, 0x52, 0xA2, 0x10, 0x95, 0xF1] </code>
  *
@@ -26,52 +26,52 @@ import java.util.regex.Pattern;
  *    </tr>
  *
  *    <tr>
- *      <td><code>#$V</code></td>
+ *      <td><code>{@value IMMEDIATE_VALUE_PREFIX}V</code></td>
  *      <td>Immediate</td>
  *    </tr>
  *
  *    <tr>
- *      <td><code>#VV</code></td>
+ *      <td><code>{@value ACCUMULATOR_PREFIX}VV</code></td>
  *      <td>Accumulator</td>
  *    </tr>
  *
  *    <tr>
- *      <td><code>$V</code> / <code>$VV</code></td>
+ *      <td><code>{@value VALUE_PREFIX}V</code> / <code>{@value VALUE_PREFIX}VV</code></td>
  *      <td>Zero Page</td>
  *    </tr>
  *
  *    <tr>
- *      <td><code>$V,X</code> / <code>$VV,X</code></td>
+ *      <td><code>{@value VALUE_PREFIX}V{@value X_INDEXED_POSTFIX}</code> / <code>{@value VALUE_PREFIX}VV{@value X_INDEXED_POSTFIX}</code></td>
  *      <td>Zero Page[X]</td>
  *    </tr>
  *
  *    <tr>
- *      <td><code>$V,Y</code> / <code>$VV,Y</code></td>
+ *      <td><code>{@value VALUE_PREFIX}V{@value Y_INDEXED_POSTFIX}</code> / <code>{@value VALUE_PREFIX}VV{@value Y_INDEXED_POSTFIX}</code></td>
  *      <td>Zero Page[Y]</td>
  *    </tr>
  *
  *    <tr>
- *      <td><code>$VVV</code> / <code>$VVVV</code></td>
+ *      <td><code>{@value VALUE_PREFIX}VVV</code> / <code>{@value VALUE_PREFIX}VVVV</code></td>
  *      <td>Absolute</td>
  *    </tr>
  *
  *    <tr>
- *      <td><code>$VVV,X</code> / <code>$VVVV,X</code></td>
+ *      <td><code>{@value VALUE_PREFIX}VVV{@value X_INDEXED_POSTFIX}</code> / <code>{@value VALUE_PREFIX}VVVV{@value X_INDEXED_POSTFIX}</code></td>
  *      <td>Absolute[X]</td>
  *    </tr>
  *
  *    <tr>
- *      <td><code>$VVV,Y</code> / <code>$VVVV,Y</code></td>
+ *      <td><code>{@value VALUE_PREFIX}VVV{@value Y_INDEXED_POSTFIX}</code> / <code>{@value VALUE_PREFIX}VVVV{@value Y_INDEXED_POSTFIX}</code></td>
  *      <td>Absolute[Y]</td>
  *    </tr>
  *
  *    <tr>
- *      <td><code>($V,X)</code> / <code>($VV,X)</code></td>
+ *      <td><code>{@value INDIRECT_PREFIX}V{@value INDIRECT_X_POSTFIX}</code> / <code>{@value INDIRECT_PREFIX}VV{@value INDIRECT_X_POSTFIX}</code></td>
  *      <td>Indirect, X</td>
  *    </tr>
  *
  *    <tr>
- *      <td><code>($V),Y</code> / <code>($VV),Y</code></td>
+ *      <td><code>{@value INDIRECT_PREFIX}V{@value INDIRECT_Y_POSTFIX}</code> / <code>{@value INDIRECT_PREFIX}VV{@value INDIRECT_Y_POSTFIX}</code></td>
  *      <td>Indirect, Y</td>
  *    </tr>
  *
@@ -102,9 +102,9 @@ public class Compiler {
     public static final String X_INDEXED_POSTFIX = ",X";
     /** The postfix expected for an Y indexed argument value */
     public static final String Y_INDEXED_POSTFIX = ",Y";
-    /** The postfix expected for an indexed indirect addressed argument value */
+    /** The postfix expected for an indexed indirect addressed argument value.  Must also be prefixed with INDIRECT_PREFIX ( "<code>{@value INDIRECT_PREFIX}</code>" ) */
     public static final String INDIRECT_X_POSTFIX = X_INDEXED_POSTFIX + ")";
-    /** The postfix expected for an indirect indexed addressed argument value */
+    /** The postfix expected for an indirect indexed addressed argument value.  Must also be prefixed with INDIRECT_PREFIX ( "<code>{@value INDIRECT_PREFIX}</code>" )  */
     public static final String INDIRECT_Y_POSTFIX = ")" + Y_INDEXED_POSTFIX;
     
     private final String programText;
