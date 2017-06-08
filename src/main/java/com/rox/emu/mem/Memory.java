@@ -17,7 +17,7 @@ public interface Memory {
      * @param startLocation to place byte array
      * @param byteValues byte array to place from <code>startLocation</code> to <code>startLocation + byteValues.size</code>
      */
-    void setMemory(int startLocation, int[] byteValues);
+    void setBlock(int startLocation, int[] byteValues);
 
     /**
      * @param location to query

@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Ross Drew
  */
-public class SimpleMemory implements Memory{
+public class SimpleMemory implements Memory {
     private final Logger LOG = LoggerFactory.getLogger(this.getClass());
     
     private final int[] memoryArray;
@@ -30,7 +30,7 @@ public class SimpleMemory implements Memory{
      * {@inheritDoc}
      */
     @Override
-    public void setMemory(int startLocation, int[] byteValues) {
+    public void setBlock(int startLocation, int[] byteValues) {
         LOG.trace("STORE mem[" + startLocation + "] --> " + byteValues.length + " bytes");
         System.arraycopy(byteValues, 0, memoryArray, startLocation, byteValues.length);
     }

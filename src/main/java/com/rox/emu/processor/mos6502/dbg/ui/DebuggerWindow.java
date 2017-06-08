@@ -159,7 +159,7 @@ final class DebuggerWindow extends JFrame {
 
     public void loadProgram(int[] program){
         reset();
-        memory.setMemory(0, program);
+        memory.setBlock(0, program);
     }
 
     public void reset(){

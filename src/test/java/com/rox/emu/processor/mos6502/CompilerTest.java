@@ -343,7 +343,7 @@ public class CompilerTest {
         Memory memory = new SimpleMemory();
         CPU processor = new CPU(memory);
         processor.reset();
-        memory.setMemory(0, programByte);
+        memory.setBlock(0, programByte);
 
         processor.step(3);
 
