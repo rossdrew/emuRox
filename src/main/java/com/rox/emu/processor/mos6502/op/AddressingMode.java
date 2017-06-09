@@ -14,7 +14,8 @@ public enum AddressingMode {
     /** Expects a one byte argument that is a literal value for use in the operation */
     IMMEDIATE("Immediate", 2),
 
-    /** Expects a one byte argument that contains a zero page address to use in the operation */
+    /** Expects a one byte argument that contains a zero page address to use in the operation. Can be indexed
+     *  as {@link #ZERO_PAGE_X} or {@link #ZERO_PAGE_Y} */
     ZERO_PAGE("Zero Page", 2),
 
     /** Expects a one byte argument that contains a zero page address and the X Register to be filled with an
@@ -25,7 +26,8 @@ public enum AddressingMode {
      *  offset value, to use in the operation */
     ZERO_PAGE_Y("Zero Page [Y]", 2),
 
-    /** Expects a 2 byte argument that contains an absolute address for use in the operation*/
+    /** Expects a 2 byte argument that contains an absolute address for use in the operation. Can be indexed
+     *  as {@link #ABSOLUTE_X} or {@link #ABSOLUTE_Y} */
     ABSOLUTE("Absolute", 3),
 
     /** Expects a 2 byte argument that contains an absolute address and the X Register to be filled with an
@@ -37,7 +39,7 @@ public enum AddressingMode {
     ABSOLUTE_Y("Absolute [Y]", 3),
 
     /** Expects a one byte argument that contains a zero page address that contains the two byte address,
-     *  to use in the operation */
+     *  to use in the operation.  Can be indexed as {@link #INDIRECT_X} or {@link #INDIRECT_Y} */
     INDIRECT("Indirect", 2),
 
     /** Expects a one byte argument that contains a zero page address and the X Register to be filled with
