@@ -36,7 +36,7 @@ public class SimpleMemoryTest {
 
     @Test
     public void testGetBlock(){
-        memory.setMemory(0, new int [] {0,1,2,3,4,5,6,7,8,9});
+        memory.setBlock(0, new int [] {0,1,2,3,4,5,6,7,8,9});
 
         int offset = 5;
         int [] retrievedBlock = memory.getBlock(offset,9);
@@ -48,7 +48,7 @@ public class SimpleMemoryTest {
     @Test
     public void testSetMemory(){
         int[] values = new int[] {1,22,33,44,55};
-        memory.setMemory(0, values);
+        memory.setBlock(0, values);
 
         assertEquals(1, memory.getByte(0));
         assertEquals(22, memory.getByte(1));
@@ -59,7 +59,7 @@ public class SimpleMemoryTest {
 
     @Test
     public void testClearMemory(){
-        memory.setMemory(0, new int[] {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20});
+        memory.setBlock(0, new int[] {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20});
         memory.reset();
         for (int i=0; i<30; i++){
             assertEquals(0, memory.getByte(i));

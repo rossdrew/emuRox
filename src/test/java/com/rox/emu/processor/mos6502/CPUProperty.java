@@ -55,7 +55,7 @@ public class CPUProperty {
     @Property (trials = 100)
     public void testValidImmediateADC(@InRange(min = "0", max = "255") int value){
         Program program = new Program().with(LDA_I, value);
-        memory.setMemory(0, program.getProgramAsByteArray());
+        memory.setBlock(0, program.getProgramAsByteArray());
 
         processor.step();
 
@@ -67,7 +67,7 @@ public class CPUProperty {
     @Property (trials = 100)
     public void testInvalidImmediateADC(@When(satisfies = "#_ < 0 || #_ > 255") int value){
         Program program = new Program().with(LDA_I, value);
-        memory.setMemory(0, program.getProgramAsByteArray());
+        memory.setBlock(0, program.getProgramAsByteArray());
 
         processor.step();
 
