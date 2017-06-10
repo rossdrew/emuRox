@@ -44,7 +44,6 @@ BCD and proper timing is a thing for another day as my first objective for now, 
 
 ###### Javas unsigned byte problem. 
  - Java bytes are signed, meaning it's a pain to deal with them, instead we have to use ints to represent bytes.
- - `System.out` is confusing Pitest, need to invest some time in moving to a loggin framework
  - [JaCoCo](http://www.eclemma.org/jacoco/) doesn't report coverage of `String` based `switch` statements [well](http://stackoverflow.com/questions/42642840/why-is-jacoco-not-covering-my-switch-statements)
  
 ### Sources
