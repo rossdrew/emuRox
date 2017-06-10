@@ -33,11 +33,11 @@ public class CPU {
      * <br/>
      * This will
      * <ul>
-     *     <li>Set Accumulator -> 0</li>
-     *     <li>Set Indexes -> 0</li>
-     *     <li>Status register -> 0x34</li>
+     *     <li>Set Accumulator &rarr; <code>0</code></li>
+     *     <li>Set Indexes &rarr; <code>0</code></li>
+     *     <li>Status register &rarr; <code>0x34</code></li>
      *     <li>Set PC to the values at <code>0xFFFC</code> and <code>0xFFFD</code></li>
-     *     <li>Reset Stack Pointer -> 0xFF</li>
+     *     <li>Reset Stack Pointer &rarr; 0xFF</li>
      * </ul>
      * <br/>
      * Note: IRL this takes 6 CPU cycles but we'll cross that bridge IF we come to it-
@@ -897,7 +897,7 @@ public class CPU {
     /**
      * Branch to a relative location as defined by a signed byte
      *
-     * @param displacement relative (-127 -> 128) location from end of branch instruction
+     * @param displacement relative (-127 &rarr; 128) location from end of branch instruction
      */
     private void branchTo(int displacement) {
         int displacementByte = displacement & 0xFF;

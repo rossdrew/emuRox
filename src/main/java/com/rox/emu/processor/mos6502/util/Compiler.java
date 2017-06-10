@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
  *      LDX {@value IMMEDIATE_VALUE_PREFIX}10<br/>
  *      STA {@value VALUE_PREFIX}F1{@value X_INDEXED_POSTFIX}<br/>
  *  </code> <br/>
- *  -> <code> [0xA9, 0x52, 0xA2, 0x10, 0x95, 0xF1] </code>
+ *  &rarr; <code> [0xA9, 0x52, 0xA2, 0x10, 0x95, 0xF1] </code>
  *
  *  <table>
  *    <tr>

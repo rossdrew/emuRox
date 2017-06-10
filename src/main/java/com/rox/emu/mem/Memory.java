@@ -38,7 +38,7 @@ public interface Memory {
      *
      * @param from the required blocks starting memory address
      * @param to the required blocks ending memory address
-     * @return the entire block <code>from</code>-><code>to</code> as an array
+     * @return the entire block [<code>from</code> ... <code>to</code>] as an array
      */
     int[] getBlock(int from, int to);
 

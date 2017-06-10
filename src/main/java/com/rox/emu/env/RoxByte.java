@@ -25,10 +25,10 @@ public final class RoxByte {
          * <br/>
          * This corresponds with bit 7 being treated as a sign in a <em>two's compliment</em> number e.g.
          * <ul>
-         *     <li><code>0b11111110</code> -> <code>-2</code></li>
-         *     <li><code>0b00000001</code> -> &nbsp; <code>1</code></li>
-         *     <li><code>0b10000001</code> -> <code>-127</code></li>
-         *     <li><code>0b01111110</code> -> &nbsp; <code>126</code></li>
+         *     <li><code>0b11111110</code> &rarr; <code>-2</code></li>
+         *     <li><code>0b00000001</code> &rarr; &nbsp; <code>1</code></li>
+         *     <li><code>0b10000001</code> &rarr; <code>-127</code></li>
+         *     <li><code>0b01111110</code> &rarr; &nbsp; <code>126</code></li>
          * </ul>
          */
         SIGNED_TWOS_COMPLIMENT

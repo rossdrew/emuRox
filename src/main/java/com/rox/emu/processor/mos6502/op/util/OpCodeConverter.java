@@ -8,7 +8,7 @@ import com.rox.emu.processor.mos6502.op.OpCode;
 /**
  * Utility for converting internal opcode representation names to human readable descriptions
  *
- * e.g.  ADC_I  ->  "ADC (Immediate)"
+ * e.g.  <code>ADC_I</code>  &rarr;  "<em>ADC (Immediate)</em>"
  *
  * @author Ross Drew
  */
