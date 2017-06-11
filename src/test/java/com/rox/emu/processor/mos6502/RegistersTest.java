@@ -1,9 +1,14 @@
 package com.rox.emu.processor.mos6502;
 
+import com.pholser.junit.quickcheck.Property;
+import com.pholser.junit.quickcheck.When;
+import com.pholser.junit.quickcheck.runner.JUnitQuickcheck;
 import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
+import static junit.framework.Assert.assertNotNull;
 import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.*;
 import static org.spockframework.util.Assert.fail;
@@ -11,6 +16,7 @@ import static org.spockframework.util.Assert.fail;
 /**
  * @author rossdrew
  */
+@RunWith(JUnitQuickcheck.class)
 public class RegistersTest {
     private Registers registers;
 
@@ -62,7 +68,7 @@ public class RegistersTest {
     @Test
     public void testSetFlag(){
         registers.setRegister(Registers.REG_STATUS, 0b00000000);
-        registers.setFlag(Registers.STATUS_FLAG_NEGATIVE);
+        registers.setFlag(Registers.N);
 
         assertEquals("Expected flags " + Integer.toBinaryString(Registers.STATUS_FLAG_NEGATIVE) +
                      " was " + Integer.toBinaryString(registers.getRegister(Registers.REG_STATUS)),
@@ -72,8 +78,8 @@ public class RegistersTest {
     @Test
     public void testClearFlag(){
         registers.setRegister(Registers.REG_STATUS, 0b00000000);
-        registers.setFlag(Registers.STATUS_FLAG_NEGATIVE);
-        registers.clearFlag(Registers.STATUS_FLAG_NEGATIVE);
+        registers.setFlag(Registers.N);
+        registers.clearFlag(Registers.N);
 
 
         assertEquals("Expected flags [" + Integer.toBinaryString(0) +
@@ -101,6 +107,16 @@ public class RegistersTest {
         for (int i=0; i<8; i++){
             int placevalue = 1 << i;
             assertEquals(i, Registers.getFlagID(placevalue));
+        }
+    }
+
+    @Property(trials = 10)
+    public void testInvalidFlagPlaceValueToFlagID(@When(satisfies = "#_ < 0 || #_ > 128") int placeValue){
+        try{
+            Registers.getFlagID(placeValue);
+            fail("Place value " + Integer.toHexString(placeValue) + " should be invalid.");
+        }catch(IllegalArgumentException e){
+            assertNotNull(e);
         }
     }
 
@@ -133,21 +149,23 @@ public class RegistersTest {
 
     @Test
     public void testGetValidFlagName(){
-        assertTrue(Registers.getFlagName(1).contains("Carry"));
-        assertTrue(Registers.getFlagName(2).contains("Zero"));
-        assertTrue(Registers.getFlagName(4).contains("IRQ"));
-        assertTrue(Registers.getFlagName(8).contains("Decimal") || Registers.getFlagName(8).contains("BCD"));
-        assertTrue(Registers.getFlagName(16).contains("BRK"));
-        assertTrue(Registers.getFlagName(32).contains("<"));
-        assertTrue(Registers.getFlagName(64).contains("Overflow"));
-        assertTrue(Registers.getFlagName(128).contains("Negative"));
+        assertTrue("Expected flag 1 to contain the word Carry, was " + Registers.getFlagName(0), Registers.getFlagName(0).contains("Carry"));
+        assertTrue("Expected flag 1 to contain the word Zero, was " + Registers.getFlagName(1), Registers.getFlagName(1).contains("Zero"));
+        assertTrue("Expected flag 1 to contain the word IRQ, was " + Registers.getFlagName(2), Registers.getFlagName(2).contains("IRQ"));
+        assertTrue("Expected flag 1 to contain the word Decimal/BCD, was " + Registers.getFlagName(3), Registers.getFlagName(3).contains("Decimal") || Registers.getFlagName(8).contains("BCD"));
+        assertTrue("Expected flag 1 to contain the word BRK, was " + Registers.getFlagName(4), Registers.getFlagName(4).contains("BRK"));
+        assertTrue("Expected flag 1 to contain the word <, was " + Registers.getFlagName(5), Registers.getFlagName(5).contains("<"));
+        assertTrue("Expected flag 1 to contain the word Overflow, was " + Registers.getFlagName(6), Registers.getFlagName(6).contains("Overflow"));
+        assertTrue("Expected flag 1 to contain the word Negative, was " + Registers.getFlagName(7), Registers.getFlagName(7).contains("Negative"));
     }
 
     @Test
     public void testGetInvalidFlagName(){
-        for (int i=9; i<11; i++){
+        int[] invalidValues = new int[] {-3,-2,-1,8,9,10};
+
+        for (int i = 0; i < invalidValues.length; i++) {
             try {
-                Registers.getFlagName(i);
+                Registers.getFlagName(invalidValues[i]);
                 fail(i + " is an invalid flag ID");
             }catch(IllegalArgumentException e){
                 assertNotNull(e);

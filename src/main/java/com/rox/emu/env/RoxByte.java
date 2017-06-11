@@ -117,7 +117,19 @@ public final class RoxByte {
     public RoxByte withBit(int bitToSet) {
         if (!bitInRange(bitToSet))
             throw new ArrayIndexOutOfBoundsException("Bit #"+ bitToSet +" is out of range, expected (0-7)");
-        return new RoxByte(PLACE_VALUE[bitToSet], ByteFormat.SIGNED_TWOS_COMPLIMENT);
+        return new RoxByte(PLACE_VALUE[bitToSet] | this.byteValue, ByteFormat.SIGNED_TWOS_COMPLIMENT);
+    }
+
+    /**
+     * @param bitToClear bit number (<code>0-7</code>) of the bit to clear in the new {@link RoxByte}
+     * @return A new {@link RoxByte} which is this one, with the specified bit cleared
+     */
+    public RoxByte withoutBit(int bitToClear) {
+        if (!bitInRange(bitToClear))
+            throw new ArrayIndexOutOfBoundsException("Bit #"+ bitToClear +" is out of range, expected (0-7)");
+
+        int withoutBit = (~(PLACE_VALUE[bitToClear])) & byteValue;
+        return new RoxByte(withoutBit, ByteFormat.SIGNED_TWOS_COMPLIMENT);
     }
 
     /**

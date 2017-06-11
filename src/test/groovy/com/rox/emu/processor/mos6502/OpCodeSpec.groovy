@@ -337,14 +337,14 @@ class OpCodeSpec extends Specification {
         3         | 0x20       | 0b11111111 | 0b11111111 | false  | true  | "Load negative value"
     }
 
-    @Unroll("LDX (Absolute[Y]): Load #firstValue from [#addressHi | #addressLo]")
+    @Unroll("LDX (Absolute[Y]): #Expected #firstValue from [#addressHi | #addressLo]")
     testLDX_ABS_IX(){
         when:
         Memory memory = new SimpleMemory()
         Program program = new Program().with(LDY_I, index,
-                         LDA_I, firstValue,
-                         STA_ABS_IY, addressHi, addressLo,
-                         LDX_ABS_IY, addressHi, addressLo)
+                                             LDA_I, firstValue,
+                                             STA_ABS_IY, addressHi, addressLo,
+                                             LDX_ABS_IY, addressHi, addressLo)
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
@@ -356,8 +356,8 @@ class OpCodeSpec extends Specification {
         then:
         registers.getRegister(Registers.REG_X_INDEX) == expectedX
         registers.getPC() == program.length
-        Z == registers.statusFlags[Registers.Z]
-        N == registers.statusFlags[Registers.N]
+        registers.statusFlags[Registers.Z] == Z
+        registers.statusFlags[Registers.N] == N
 
         where:
         index | addressHi | addressLo  | firstValue | expectedX  | Z      | N     | Expected

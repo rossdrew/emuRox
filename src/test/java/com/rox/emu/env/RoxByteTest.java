@@ -80,12 +80,38 @@ public class RoxByteTest extends Specification{
         assertEquals(-128, myByte.withBit(7).getAsInt());
     }
 
+    @Test
+    public void testWithoutBit(){
+        final RoxByte myByte = RoxByte.literalFrom(0b11111111);
+
+        assertEquals(0b11111110, myByte.withoutBit(0).getRawValue());
+        assertEquals(0b11111101, myByte.withoutBit(1).getRawValue());
+        assertEquals(0b11111011, myByte.withoutBit(2).getRawValue());
+        assertEquals(0b11110111, myByte.withoutBit(3).getRawValue());
+        assertEquals(0b11101111, myByte.withoutBit(4).getRawValue());
+        assertEquals(0b11011111, myByte.withoutBit(5).getRawValue());
+        assertEquals(0b10111111, myByte.withoutBit(6).getRawValue());
+        assertEquals(0b01111111, myByte.withoutBit(7).getRawValue());
+    }
+
     @Property(trials = 5)
-    public void testSetBitInvalidChoice(@When(satisfies = "#_ < 0 || #_ > 7") int bit){
+    public void testWithBitInvalidChoice(@When(satisfies = "#_ < 0 || #_ > 7") int bit){
         final RoxByte myByte = RoxByte.ZERO;
 
         try {
             myByte.withBit(bit);
+            fail("There is no bit " + bit + ", this should throw an error");
+        }catch(ArrayIndexOutOfBoundsException e){
+            assertNotNull(e);
+        }
+    }
+
+    @Property(trials = 5)
+    public void testWithoutBitInvalidChoice(@When(satisfies = "#_ < 0 || #_ > 7") int bit){
+        final RoxByte myByte = RoxByte.ZERO;
+
+        try {
+            myByte.withoutBit(bit);
             fail("There is no bit " + bit + ", this should throw an error");
         }catch(ArrayIndexOutOfBoundsException e){
             assertNotNull(e);
