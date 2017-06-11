@@ -23,14 +23,31 @@ public class RoxByteTest extends Specification{
     }
 
     @Test
-    public void testByteFromInteger() throws InvalidDataTypeException {
+    public void testSignedFromInteger() throws InvalidDataTypeException {
         final RoxByte myByte = RoxByte.signedFrom(1);
         assertNotNull(myByte);
         assertEquals(RoxByte.ByteFormat.SIGNED_TWOS_COMPLIMENT, myByte.getFormat());
+        assertEquals(0b00000001, myByte.getRawValue());
+    }
+
+    @Test
+    public void testLiteralFromInteger() throws InvalidDataTypeException {
+        final RoxByte myByte = RoxByte.literalFrom(1);
+        assertNotNull(myByte);
+        assertEquals(RoxByte.ByteFormat.SIGNED_TWOS_COMPLIMENT, myByte.getFormat());
+        assertEquals(0b00000001, myByte.getRawValue());
+    }
+
+    @Test
+    public void testByteFromRaw() throws InvalidDataTypeException {
+        final RoxByte myByte = RoxByte.literalFrom(0b11111111);
+        assertNotNull(myByte);
+        assertEquals(RoxByte.ByteFormat.SIGNED_TWOS_COMPLIMENT, myByte.getFormat());
+        assertEquals(0b11111111, myByte.getRawValue());
     }
 
     @Property(trials = 30)
-    public void testGetAsIntWithInvalid(@When(satisfies = "#_ < -128 || #_ > 127") int byteValue){
+    public void testSignedFromWithInvalid(@When(satisfies = "#_ < -128 || #_ > 127") int byteValue){
         try {
             RoxByte.signedFrom(byteValue);
             fail(byteValue + " was expected to be too low to convert to unsigned byte");
@@ -40,7 +57,7 @@ public class RoxByteTest extends Specification{
     }
 
     @Property(trials = 10)
-    public void testGetAsIntWithTooHigh(@InRange(min = "128", max = "300") int byteValue){
+    public void testSignedFromWithTooHigh(@InRange(min = "128", max = "300") int byteValue){
         try {
             RoxByte.signedFrom(byteValue);
             fail(byteValue + " was expected to be too high to convert to unsigned byte");
@@ -97,6 +114,4 @@ public class RoxByteTest extends Specification{
             assertNotNull(e);
         }
     }
-
-
 }

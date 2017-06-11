@@ -19,8 +19,8 @@ public class CPUTest {
     @Before
     public void setUp() {
         memory = new SimpleMemory();
-        memory.setByteAt(0x0, 0xFFFC);
-        memory.setByteAt(0x0, 0xFFFD);
+        memory.setByteAt(0xFFFC, 0);
+        memory.setByteAt(0xFFFD, 0);
 
         processor = new CPU(memory);
         processor.reset();
@@ -205,10 +205,10 @@ public class CPUTest {
     @Test
     public void testADC() {
         Program program = new Program().with(CLC,
-                LDA_I,
-                0x1,
-                ADC_I,
-                0x1);
+                                             LDA_I,
+                                             0x1,
+                                             ADC_I,
+                                             0x1);
         memory.setBlock(0, program.getProgramAsByteArray());
 
         processor.step(3);
@@ -430,14 +430,14 @@ public class CPUTest {
 
     @Test
     public void testInvalidOpCode() {
-        Program program = new Program().with(999);
+        Program program = new Program().with(231);
         memory.setBlock(0, program.getProgramAsByteArray());
 
         try {
             processor.step();
             fail("Invalid opCode exception expected!");
         } catch (UnknownOpCodeException e) {
-            assertEquals(999, e.getOpCode());
+            assertEquals(231, e.getOpCode());
         }
     }
 

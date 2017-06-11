@@ -1,5 +1,6 @@
 package com.rox.emu.mem;
 
+import com.rox.emu.env.RoxByte;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,11 +11,12 @@ import org.slf4j.LoggerFactory;
  */
 public class SimpleMemory implements Memory {
     private final Logger LOG = LoggerFactory.getLogger(this.getClass());
-    
-    private final int[] memoryArray;
+
+    private final RoxByte[] memoryArray;
 
     public SimpleMemory(){
-        memoryArray = new int[0x10000];
+        memoryArray = new RoxByte[0x10000];
+        reset();
     }
 
     /**
@@ -23,7 +25,7 @@ public class SimpleMemory implements Memory {
     @Override
     public void setByteAt(int location, int byteValue) {
         LOG.trace("STORE mem[" + location + "] --> " + byteValue);
-        memoryArray[location] = byteValue & 0xFF;
+        memoryArray[location] = RoxByte.literalFrom(byteValue & 0xFF);
     }
 
     /**
@@ -32,7 +34,9 @@ public class SimpleMemory implements Memory {
     @Override
     public void setBlock(int startLocation, int[] byteValues) {
         LOG.trace("STORE mem[" + startLocation + "] --> " + byteValues.length + " bytes");
-        System.arraycopy(byteValues, 0, memoryArray, startLocation, byteValues.length);
+        for (int i=0; i<byteValues.length; i++){
+            memoryArray[startLocation + i] = RoxByte.literalFrom(byteValues[i]);
+        }
     }
 
     /**
@@ -41,7 +45,8 @@ public class SimpleMemory implements Memory {
     @Override
     public int getByte(int location) {
         LOG.trace("FETCH mem[" + location +"] --> " + memoryArray[location]);
-        return memoryArray[location];
+
+        return memoryArray[location].getRawValue();
     }
 
     /**
@@ -49,7 +54,7 @@ public class SimpleMemory implements Memory {
      */
     @Override
     public int getWord(int location) {
-        int word = (memoryArray[location] << 8 | memoryArray[location+1]);
+        int word = (memoryArray[location].getRawValue() << 8 | memoryArray[location+1].getRawValue());
         LOG.trace("FETCH mem[" + location +"] --> " + word);
         return word;
     }
@@ -60,7 +65,9 @@ public class SimpleMemory implements Memory {
     @Override
     public int[] getBlock(int from, int to) {
         int[] extractedData = new int[to-from];
-        System.arraycopy(memoryArray, from, extractedData, 0, extractedData.length);
+        for (int i=0; i<extractedData.length; i++){
+            extractedData[i] = memoryArray[from + i].getRawValue();
+        }
         return extractedData;
     }
 
@@ -69,8 +76,7 @@ public class SimpleMemory implements Memory {
      */
     @Override
     public void reset() {
-        for (int i : memoryArray) {
-            memoryArray[i] = 0;
-        }
+        for (int i=0; i<memoryArray.length; i++)
+            memoryArray[i] = RoxByte.ZERO;
     }
 }
