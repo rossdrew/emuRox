@@ -327,7 +327,7 @@ public class CPUTest {
         Registers registers = processor.getRegisters();
 
         processor.step();
-        assert (processor.getRegisters().getFlag(Registers.STATUS_FLAG_CARRY));
+        assert (processor.getRegisters().getFlag(Registers.C));
         processor.step();
 
         assertEquals(program.getLength(), registers.getPC());
@@ -750,9 +750,9 @@ public class CPUTest {
         processor.step(4);
 
         assertEquals(program.getLength(), registers.getPC());
-        assertEquals(true, registers.getFlag(Registers.STATUS_FLAG_ZERO));
-        assertEquals(false, registers.getFlag(Registers.STATUS_FLAG_NEGATIVE));
-        assertEquals(false, registers.getFlag(Registers.STATUS_FLAG_OVERFLOW));
+        assertEquals(true, registers.getFlag(Registers.Z));
+        assertEquals(false, registers.getFlag(Registers.N));
+        assertEquals(false, registers.getFlag(Registers.V));
     }
 
     @Test
@@ -765,9 +765,9 @@ public class CPUTest {
 
         assertEquals(program.getLength(), registers.getPC());
         assertEquals(0x10, registers.getRegister(Registers.REG_ACCUMULATOR));
-        assertEquals(true, registers.getFlag(Registers.STATUS_FLAG_ZERO));
-        assertEquals(false, registers.getFlag(Registers.STATUS_FLAG_NEGATIVE));
-        assertEquals(true, registers.getFlag(Registers.STATUS_FLAG_CARRY));
+        assertEquals(true, registers.getFlag(Registers.Z));
+        assertEquals(false, registers.getFlag(Registers.N));
+        assertEquals(true, registers.getFlag(Registers.C));
     }
 
     @Test
@@ -780,9 +780,9 @@ public class CPUTest {
 
         assertEquals(program.getLength(), registers.getPC());
         assertEquals(0x10, registers.getRegister(Registers.REG_X_INDEX));
-        assertEquals(true, registers.getFlag(Registers.STATUS_FLAG_ZERO));
-        assertEquals(false, registers.getFlag(Registers.STATUS_FLAG_NEGATIVE));
-        assertEquals(true, registers.getFlag(Registers.STATUS_FLAG_CARRY));
+        assertEquals(true, registers.getFlag(Registers.Z));
+        assertEquals(false, registers.getFlag(Registers.N));
+        assertEquals(true, registers.getFlag(Registers.C));
     }
 
     @Test
@@ -795,9 +795,9 @@ public class CPUTest {
 
         assertEquals(program.getLength(), registers.getPC());
         assertEquals(0x10, registers.getRegister(Registers.REG_Y_INDEX));
-        assertEquals(true, registers.getFlag(Registers.STATUS_FLAG_ZERO));
-        assertEquals(false, registers.getFlag(Registers.STATUS_FLAG_NEGATIVE));
-        assertEquals(true, registers.getFlag(Registers.STATUS_FLAG_CARRY));
+        assertEquals(true, registers.getFlag(Registers.Z));
+        assertEquals(false, registers.getFlag(Registers.N));
+        assertEquals(true, registers.getFlag(Registers.C));
     }
 
     @Test

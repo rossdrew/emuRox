@@ -62,7 +62,7 @@ public class RegistersTest {
     @Test
     public void testSetFlag(){
         registers.setRegister(Registers.REG_STATUS, 0b00000000);
-        registers.setFlag(Registers.STATUS_FLAG_NEGATIVE);
+        registers.setFlag(Registers.N);
 
         assertEquals("Expected flags " + Integer.toBinaryString(Registers.STATUS_FLAG_NEGATIVE) +
                      " was " + Integer.toBinaryString(registers.getRegister(Registers.REG_STATUS)),
@@ -72,8 +72,8 @@ public class RegistersTest {
     @Test
     public void testClearFlag(){
         registers.setRegister(Registers.REG_STATUS, 0b00000000);
-        registers.setFlag(Registers.STATUS_FLAG_NEGATIVE);
-        registers.clearFlag(Registers.STATUS_FLAG_NEGATIVE);
+        registers.setFlag(Registers.N);
+        registers.clearFlag(Registers.N);
 
 
         assertEquals("Expected flags [" + Integer.toBinaryString(0) +
@@ -133,14 +133,14 @@ public class RegistersTest {
 
     @Test
     public void testGetValidFlagName(){
-        assertTrue(Registers.getFlagName(1).contains("Carry"));
-        assertTrue(Registers.getFlagName(2).contains("Zero"));
-        assertTrue(Registers.getFlagName(4).contains("IRQ"));
-        assertTrue(Registers.getFlagName(8).contains("Decimal") || Registers.getFlagName(8).contains("BCD"));
-        assertTrue(Registers.getFlagName(16).contains("BRK"));
-        assertTrue(Registers.getFlagName(32).contains("<"));
-        assertTrue(Registers.getFlagName(64).contains("Overflow"));
-        assertTrue(Registers.getFlagName(128).contains("Negative"));
+        assertTrue("Expected flag 1 to contain the word Carry, was " + Registers.getFlagName(0), Registers.getFlagName(0).contains("Carry"));
+        assertTrue("Expected flag 1 to contain the word Zero, was " + Registers.getFlagName(1), Registers.getFlagName(1).contains("Zero"));
+        assertTrue("Expected flag 1 to contain the word IRQ, was " + Registers.getFlagName(2), Registers.getFlagName(2).contains("IRQ"));
+        assertTrue("Expected flag 1 to contain the word Decimal/BCD, was " + Registers.getFlagName(3), Registers.getFlagName(3).contains("Decimal") || Registers.getFlagName(8).contains("BCD"));
+        assertTrue("Expected flag 1 to contain the word BRK, was " + Registers.getFlagName(4), Registers.getFlagName(4).contains("BRK"));
+        assertTrue("Expected flag 1 to contain the word <, was " + Registers.getFlagName(5), Registers.getFlagName(5).contains("<"));
+        assertTrue("Expected flag 1 to contain the word Overflow, was " + Registers.getFlagName(6), Registers.getFlagName(6).contains("Overflow"));
+        assertTrue("Expected flag 1 to contain the word Negative, was " + Registers.getFlagName(7), Registers.getFlagName(7).contains("Negative"));
     }
 
     @Test

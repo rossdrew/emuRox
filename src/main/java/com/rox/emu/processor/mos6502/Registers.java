@@ -1,5 +1,6 @@
 package com.rox.emu.processor.mos6502;
 
+import com.rox.emu.env.RoxByte;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,12 +66,12 @@ public class Registers {
 
     private static final String[] flagNames = new String[] {"Carry", "Zero", "IRQ Disable", "Decimal Mode", "BRK Command", "<UNUSED>", "Overflow", "Negative"};
 
-    private final int[] register;
+    private final RoxByte[] register;
 
     public Registers(){
-        register = new int[8];
-        register[REG_SP_X]   = 0b11111111;
-        register[REG_STATUS] = 0b00000000;
+        register = new RoxByte[8];
+        register[REG_SP_X]   = RoxByte.literalFrom(0b11111111);
+        register[REG_STATUS] = RoxByte.literalFrom(0b00000000);
     }
 
     /**
@@ -87,7 +88,7 @@ public class Registers {
      */
     public void setRegister(int registerID, int val){
         LOG.debug("'R:" + getRegisterName(registerID) + "' := " + val);
-        register[registerID] = val;
+        register[registerID] = RoxByte.literalFrom(val);
     }
 
     /**
@@ -95,7 +96,7 @@ public class Registers {
      * @return the value of the desired register
      */
     public int getRegister(int registerID){
-        return register[registerID];
+        return register[registerID].getRawValue();
     }
 
     /**
@@ -166,27 +167,29 @@ public class Registers {
     }
 
     /**
-     * @param flagValue for which to get the name
+     * @param flagNumber for which to get the name
      * @return the {@lnk String} name of the given flag
      */
-    public static String getFlagName(int flagValue){
-        return flagNames[getFlagID(flagValue)];
+    public static String getFlagName(int flagNumber){
+        if (flagNumber < 0 || flagNumber > 7)
+            throw new IllegalArgumentException("Unknown 6502 Flag ID:" + flagNumber);
+        return flagNames[flagNumber];
     }
 
     /**
-     * @param flagPlaceValue flag to test
+     * @param flagBitNumber flag to test
      * @return <code>true</code> if the specified flag is set, <code>false</code> otherwise
      */
-    public boolean getFlag(int flagPlaceValue){
-        return ((register[REG_STATUS] & flagPlaceValue) == flagPlaceValue);
+    public boolean getFlag(int flagBitNumber) {
+        return register[REG_STATUS].isBitSet(flagBitNumber);
     }
 
     /**
-     * @param flagPlaceValue for which to set to true
+     * @param flagBitNumber for which to set to true
      */
-    public void setFlag(int flagPlaceValue) {
-        LOG.debug("'F:" + getFlagName(flagPlaceValue) +"' -> SET");
-        register[REG_STATUS] = register[REG_STATUS] | flagPlaceValue;
+    public void setFlag(int flagBitNumber) {
+        LOG.debug("'F:" + getFlagName(flagBitNumber) +"' -> SET");
+        register[REG_STATUS] = register[REG_STATUS].withBit(flagBitNumber);
     }
 
     /**
@@ -198,11 +201,11 @@ public class Registers {
      * NOT    > 1111 1101
      * AND(R) > .... ..0.
      *
-     * @param flagPlaceValue int with bits to clear, turned on
+     * @param flagBitNumber int with bits to clear, turned on
      */
-    public void clearFlag(int flagPlaceValue){
-        LOG.debug("'F:" + getFlagName(flagPlaceValue) + "' -> CLEARED");
-        register[REG_STATUS] = (~flagPlaceValue) & register[REG_STATUS];
+    public void clearFlag(int flagBitNumber){
+        LOG.debug("'F:" + getFlagName(flagBitNumber) + "' -> CLEARED");
+        register[REG_STATUS] = register[REG_STATUS].withoutBit(flagBitNumber);
     }
 
     /**
@@ -210,9 +213,9 @@ public class Registers {
      */
     public void updateZeroFlagBasedOn(int value){
         if (value == 0)
-            setFlag(STATUS_FLAG_ZERO);
+            setFlag(Z);
         else
-            clearFlag(STATUS_FLAG_ZERO);
+            clearFlag(Z);
     }
 
     /**
@@ -220,9 +223,9 @@ public class Registers {
      */
     public void updateNegativeFlagBasedOn(int value){
         if (isNegative(value))
-            setFlag(STATUS_FLAG_NEGATIVE);
+            setFlag(N);
         else
-            clearFlag(STATUS_FLAG_NEGATIVE);
+            clearFlag(N);
     }
 
     /**

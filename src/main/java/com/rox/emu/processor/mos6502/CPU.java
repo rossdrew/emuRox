@@ -63,7 +63,7 @@ public class CPU {
      */
     public void irq() {
         LOG.debug("IRQ!");
-        registers.setFlag(Registers.STATUS_FLAG_IRQ_DISABLE);
+        registers.setFlag(Registers.I);
 
         pushRegister(Registers.REG_PC_HIGH);
         pushRegister(Registers.REG_PC_LOW);
@@ -81,7 +81,7 @@ public class CPU {
      */
     public void nmi() {
         LOG.debug("NMI!");
-        registers.setFlag(Registers.STATUS_FLAG_IRQ_DISABLE);
+        registers.setFlag(Registers.I);
 
         pushRegister(Registers.REG_PC_HIGH);
         pushRegister(Registers.REG_PC_LOW);
@@ -215,15 +215,15 @@ public class CPU {
                 break;
 
             case SEC:
-                registers.setFlag(Registers.STATUS_FLAG_CARRY);
+                registers.setFlag(Registers.C);
                 break;
 
             case CLC:
-                registers.clearFlag(Registers.STATUS_FLAG_CARRY);
+                registers.clearFlag(Registers.C);
                 break;
 
             case CLV:
-                registers.clearFlag(Registers.STATUS_FLAG_OVERFLOW);
+                registers.clearFlag(Registers.V);
                 break;
 
             case INC_Z:
@@ -668,23 +668,23 @@ public class CPU {
             }break;
 
             case BCS:
-                branchIf(registers.getFlag(Registers.STATUS_FLAG_CARRY));
+                branchIf(registers.getFlag(Registers.C));
                 break;
 
             case BCC:
-                branchIf(!registers.getFlag(Registers.STATUS_FLAG_CARRY));
+                branchIf(!registers.getFlag(Registers.C));
                 break;
 
             case BEQ:
-                branchIf(registers.getFlag(Registers.STATUS_FLAG_ZERO));
+                branchIf(registers.getFlag(Registers.Z));
                 break;
 
             case BNE:
-                branchIf(!registers.getFlag(Registers.STATUS_FLAG_ZERO));
+                branchIf(!registers.getFlag(Registers.Z));
                 break;
 
             case BMI:
-                branchIf(registers.getFlag(Registers.STATUS_FLAG_NEGATIVE));
+                branchIf(registers.getFlag(Registers.N));
                 break;
 
             case JSR:
@@ -697,15 +697,15 @@ public class CPU {
                 break;
 
             case BPL:
-                branchIf(!registers.getFlag(Registers.STATUS_FLAG_NEGATIVE));
+                branchIf(!registers.getFlag(Registers.N));
                 break;
 
             case BVS:
-                branchIf(registers.getFlag(Registers.STATUS_FLAG_OVERFLOW));
+                branchIf(registers.getFlag(Registers.V));
                 break;
 
             case BVC:
-                branchIf(!registers.getFlag(Registers.STATUS_FLAG_OVERFLOW));
+                branchIf(!registers.getFlag(Registers.V));
                 break;
 
             case TAX:
@@ -738,19 +738,19 @@ public class CPU {
                 break;
 
             case SEI:
-                registers.setFlag(Registers.STATUS_FLAG_IRQ_DISABLE);
+                registers.setFlag(Registers.I);
                 break;
 
             case CLI:
-                registers.clearFlag(Registers.STATUS_FLAG_IRQ_DISABLE);
+                registers.clearFlag(Registers.I);
                 break;
 
             case SED:
-                registers.setFlag(Registers.STATUS_FLAG_DEC);
+                registers.setFlag(Registers.D);
                 break;
 
             case CLD:
-                registers.clearFlag(Registers.STATUS_FLAG_DEC);
+                registers.clearFlag(Registers.D);
                 break;
 
             case RTS:
@@ -871,16 +871,16 @@ public class CPU {
 
     private void setBorrowFlagFor(int newFakeByte) {
         if ((newFakeByte & 0x1) == 0x1)
-            registers.setFlag(Registers.STATUS_FLAG_CARRY);
+            registers.setFlag(Registers.C);
         else
-            registers.clearFlag(Registers.STATUS_FLAG_CARRY);
+            registers.clearFlag(Registers.C);
     }
 
     private void setCarryFlagBasedOn(int newFakeByte) {
         if ((newFakeByte & CARRY_INDICATOR_BIT) == CARRY_INDICATOR_BIT)
-            registers.setFlag(Registers.STATUS_FLAG_CARRY);
+            registers.setFlag(Registers.C);
         else
-            registers.clearFlag(Registers.STATUS_FLAG_CARRY);
+            registers.clearFlag(Registers.C);
     }
 
     /**
@@ -921,9 +921,9 @@ public class CPU {
         registers.setFlagsBasedOn(result & 0xFF);
 
         if (fromTwosComplimented(result)-1 >=0)
-            registers.setFlag(Registers.STATUS_FLAG_CARRY);
+            registers.setFlag(Registers.C);
         else
-            registers.clearFlag(Registers.STATUS_FLAG_CARRY);
+            registers.clearFlag(Registers.C);
     }
 
     /**
@@ -931,7 +931,7 @@ public class CPU {
      */
     private int performSilentSBC(int a, int b){
         int statusState = registers.getRegister(Registers.REG_STATUS);
-        registers.setFlag(Registers.STATUS_FLAG_CARRY);
+        registers.setFlag(Registers.C);
 
         int result = performSBC(a,b);
 
@@ -971,14 +971,14 @@ public class CPU {
     }
 
     private int performROL(int initialValue){
-        int rotatedValue = (initialValue << 1) | (registers.getFlag(Registers.STATUS_FLAG_CARRY) ? 1 : 0);
+        int rotatedValue = (initialValue << 1) | (registers.getFlag(Registers.C) ? 1 : 0);
         setCarryFlagBasedOn(rotatedValue);
         registers.setFlagsBasedOn(rotatedValue);
         return rotatedValue & 0xFF;
     }
 
     private int performROR(int initialValue){
-        int rotatedValue = rightShift(initialValue, (registers.getFlag(Registers.STATUS_FLAG_CARRY)));
+        int rotatedValue = rightShift(initialValue, (registers.getFlag(Registers.C)));
         setBorrowFlagFor(initialValue);
         registers.setFlagsBasedOn(rotatedValue);
         return rotatedValue & 0xFF;
@@ -1005,9 +1005,9 @@ public class CPU {
 
     private void performBIT(int memData) {
         if ((memData & getRegisterValue(Registers.REG_ACCUMULATOR)) == memData)
-            registers.setFlag(Registers.STATUS_FLAG_ZERO);
+            registers.setFlag(Registers.Z);
         else
-            registers.clearFlag(Registers.STATUS_FLAG_ZERO);
+            registers.clearFlag(Registers.Z);
 
         //Set N, V to bits 7 and 6 of memory data
         setRegisterValue(Registers.REG_STATUS, (memData & 0b11000000) | (getRegisterValue(Registers.REG_STATUS) & 0b00111111));
@@ -1051,13 +1051,13 @@ public class CPU {
     }
 
     private int performADC(int byteValueA, int byteValueB){
-        int carry = (registers.getFlag(Registers.STATUS_FLAG_CARRY) ? 1 : 0);
+        int carry = (registers.getFlag(Registers.C) ? 1 : 0);
         return (adc(byteValueA, byteValueB + carry) & 0xFF);
     }
 
     private int performSBC(int byteValueA, int byteValueB){
-        registers.setFlag(Registers.STATUS_FLAG_NEGATIVE);
-        int borrow = (registers.getFlag(Registers.STATUS_FLAG_CARRY) ? 0 : 1);
+        registers.setFlag(Registers.N);
+        int borrow = (registers.getFlag(Registers.C) ? 0 : 1);
         int byteValueBAndBorrow = twosComplimentOf(byteValueB + borrow);
         return adc(byteValueA, byteValueBAndBorrow) & 0xFF;
     }
@@ -1082,15 +1082,15 @@ public class CPU {
         int result = byteValueA + byteValueB;
 
         //Set Carry, if bit 8 is set on new accumulator value, ignoring in 2s compliment addition (subtraction)
-        if (!registers.getFlag(Registers.STATUS_FLAG_NEGATIVE)){
+        if (!registers.getFlag(Registers.N)){
             setCarryFlagBasedOn(result);
         }else {
-            registers.clearFlag(Registers.STATUS_FLAG_CARRY);
+            registers.clearFlag(Registers.C);
         }
 
         //Set Overflow if the sign of both inputs is different from the sign of the result
         if (((byteValueA ^ result) & (byteValueB ^ result) & 0x80) != 0)
-            registers.setFlag(Registers.STATUS_FLAG_OVERFLOW);
+            registers.setFlag(Registers.V);
         return result;
     }
 }
