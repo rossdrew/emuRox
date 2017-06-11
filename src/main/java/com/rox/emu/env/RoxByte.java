@@ -121,12 +121,8 @@ public final class RoxByte {
     }
 
     /**
-     * TODO Tests and Javadoc
-     *
-     * bitwise and with the compliment of the place value to be removed
-     *
-     * @param bitToClear
-     * @return
+     * @param bitToClear bit number (<code>0-7</code>) of the bit to clear in the new {@link RoxByte}
+     * @return A new {@link RoxByte} which is this one, with the specified bit cleared
      */
     public RoxByte withoutBit(int bitToClear) {
         if (!bitInRange(bitToClear))
