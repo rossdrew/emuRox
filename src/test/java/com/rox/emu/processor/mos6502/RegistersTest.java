@@ -110,7 +110,7 @@ public class RegistersTest {
         }
     }
 
-    @Property
+    @Property(trials = 10)
     public void testInvalidFlagPlaceValueToFlagID(@When(satisfies = "#_ < 0 || #_ > 128") int placeValue){
         try{
             Registers.getFlagID(placeValue);
@@ -161,9 +161,11 @@ public class RegistersTest {
 
     @Test
     public void testGetInvalidFlagName(){
-        for (int i=9; i<11; i++){
+        int[] invalidValues = new int[] {-3,-2,-1,8,9,10};
+
+        for (int i = 0; i < invalidValues.length; i++) {
             try {
-                Registers.getFlagName(i);
+                Registers.getFlagName(invalidValues[i]);
                 fail(i + " is an invalid flag ID");
             }catch(IllegalArgumentException e){
                 assertNotNull(e);
