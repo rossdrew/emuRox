@@ -54,7 +54,7 @@ public class SimpleMemory implements Memory {
      */
     @Override
     public int getWord(int location) {
-        int word = (memoryArray[location].getAsInt() << 8 | memoryArray[location+1].getAsInt());
+        int word = (memoryArray[location].getRawValue() << 8 | memoryArray[location+1].getRawValue());
         LOG.trace("FETCH mem[" + location +"] --> " + word);
         return word;
     }
@@ -66,7 +66,7 @@ public class SimpleMemory implements Memory {
     public int[] getBlock(int from, int to) {
         int[] extractedData = new int[to-from];
         for (int i=0; i<extractedData.length; i++){
-            extractedData[i] = memoryArray[from + i].getAsInt();
+            extractedData[i] = memoryArray[from + i].getRawValue();
         }
         return extractedData;
     }
