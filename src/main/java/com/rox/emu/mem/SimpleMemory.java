@@ -25,7 +25,7 @@ public class SimpleMemory implements Memory {
     @Override
     public void setByteAt(int location, int byteValue) {
         LOG.trace("STORE mem[" + location + "] --> " + byteValue);
-        memoryArray[location] = RoxByte.signedFrom(byteValue & 0xFF);
+        memoryArray[location] = RoxByte.literalFrom(byteValue & 0xFF);
     }
 
     /**
@@ -34,9 +34,8 @@ public class SimpleMemory implements Memory {
     @Override
     public void setBlock(int startLocation, int[] byteValues) {
         LOG.trace("STORE mem[" + startLocation + "] --> " + byteValues.length + " bytes");
-//        System.arraycopy(byteValues, 0, memoryArray, startLocation, byteValues.length);
         for (int i=0; i<byteValues.length; i++){
-            memoryArray[startLocation + i] = RoxByte.signedFrom(byteValues[i]);
+            memoryArray[startLocation + i] = RoxByte.literalFrom(byteValues[i]);
         }
     }
 
@@ -46,7 +45,8 @@ public class SimpleMemory implements Memory {
     @Override
     public int getByte(int location) {
         LOG.trace("FETCH mem[" + location +"] --> " + memoryArray[location]);
-        return memoryArray[location].getAsInt();
+
+        return memoryArray[location].getRawValue();
     }
 
     /**
@@ -65,7 +65,6 @@ public class SimpleMemory implements Memory {
     @Override
     public int[] getBlock(int from, int to) {
         int[] extractedData = new int[to-from];
-//        System.arraycopy(memoryArray, from, extractedData, 0, extractedData.length);
         for (int i=0; i<extractedData.length; i++){
             extractedData[i] = memoryArray[from + i].getAsInt();
         }
@@ -79,8 +78,5 @@ public class SimpleMemory implements Memory {
     public void reset() {
         for (int i=0; i<memoryArray.length; i++)
             memoryArray[i] = RoxByte.ZERO;
-//        for (int i : memoryArray) {
-//            memoryArray[i] = 0;
-//        }
     }
 }

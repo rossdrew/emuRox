@@ -71,6 +71,16 @@ public final class RoxByte {
     }
 
     /**
+     * Create an 8 bit byte from the least significant 8 bits in the given {@link int}
+     *
+     * @param value an {@link int} from which to extract the bits to make this byte
+     * @return a {@link RoxByte} made up from the least significant 8 bits of the given value
+     */
+    public static RoxByte literalFrom(int value) {
+        return new RoxByte(value & 0xFF, ByteFormat.SIGNED_TWOS_COMPLIMENT);
+    }
+
+    /**
      * @return this SIGNED_TWOS_COMPLIMENT byte as an integer
      */
     public int getAsInt() {
@@ -82,6 +92,15 @@ public final class RoxByte {
                 else
                     return byteValue;
         }
+    }
+
+    /**
+     * Get the raw, unformatted value of this {@link Byte}
+     *
+     * @return 8 bits of the byte as an {@link int} as they are in memory
+     */
+    public int getRawValue(){
+        return byteValue & 0xFF;
     }
 
     /**
