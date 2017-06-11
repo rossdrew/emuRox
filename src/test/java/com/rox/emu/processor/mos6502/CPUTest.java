@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import static com.rox.emu.processor.mos6502.op.OpCode.*;
 import static junit.framework.TestCase.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.spockframework.util.Assert.fail;
 
 public class CPUTest {
@@ -970,7 +971,7 @@ public class CPUTest {
         assertEquals(0x00, memory.getByte(0x1FF));
 
         //Status (on stack) with B set
-        assertEquals(Registers.STATUS_FLAG_IRQ_DISABLE, memory.getByte(0x1FD));
+        assertTrue((Registers.STATUS_FLAG_IRQ_DISABLE & memory.getByte(0x1FD)) == Registers.STATUS_FLAG_IRQ_DISABLE);
 
         //PC is set to value of [FFFE:FFFF]
         assertEquals(memory.getByte(0xFFFE), registers.getRegister(Registers.REG_PC_HIGH));
