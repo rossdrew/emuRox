@@ -1,9 +1,14 @@
 package com.rox.emu.processor.mos6502;
 
+import com.pholser.junit.quickcheck.Property;
+import com.pholser.junit.quickcheck.When;
+import com.pholser.junit.quickcheck.runner.JUnitQuickcheck;
 import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
+import static junit.framework.Assert.assertNotNull;
 import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.*;
 import static org.spockframework.util.Assert.fail;
@@ -11,6 +16,7 @@ import static org.spockframework.util.Assert.fail;
 /**
  * @author rossdrew
  */
+@RunWith(JUnitQuickcheck.class)
 public class RegistersTest {
     private Registers registers;
 
@@ -101,6 +107,16 @@ public class RegistersTest {
         for (int i=0; i<8; i++){
             int placevalue = 1 << i;
             assertEquals(i, Registers.getFlagID(placevalue));
+        }
+    }
+
+    @Property
+    public void testInvalidFlagPlaceValueToFlagID(@When(satisfies = "#_ < 0 || #_ > 128") int placeValue){
+        try{
+            Registers.getFlagID(placeValue);
+            fail("Place value " + Integer.toHexString(placeValue) + " should be invalid.");
+        }catch(IllegalArgumentException e){
+            assertNotNull(e);
         }
     }
 
