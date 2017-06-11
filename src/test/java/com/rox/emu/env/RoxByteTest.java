@@ -5,7 +5,6 @@ import com.pholser.junit.quickcheck.When;
 import com.pholser.junit.quickcheck.generator.InRange;
 import com.pholser.junit.quickcheck.runner.JUnitQuickcheck;
 import com.rox.emu.InvalidDataTypeException;
-import junit.framework.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import spock.lang.Specification;

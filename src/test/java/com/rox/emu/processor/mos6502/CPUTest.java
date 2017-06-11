@@ -7,8 +7,6 @@ import com.rox.emu.processor.mos6502.util.Program;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Arrays;
-
 import static com.rox.emu.processor.mos6502.op.OpCode.*;
 import static junit.framework.TestCase.assertEquals;
 import static org.spockframework.util.Assert.fail;
