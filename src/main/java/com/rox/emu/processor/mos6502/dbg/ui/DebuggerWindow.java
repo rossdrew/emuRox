@@ -71,10 +71,10 @@ final class DebuggerWindow extends JFrame {
     private Map<String, Component> getMemoryComponents(){
         final Map<String, Component> memoryBlocks = new LinkedHashMap<>();
 
-        memoryBlocks.put("Zero Page", getMemoryComponent(0));
-        memoryBlocks.put("Stack Page", getMemoryComponent(256));
-        memoryBlocks.put("P2", getMemoryComponent(512));
-        memoryBlocks.put("P3", getMemoryComponent(768));
+        final String[] blocks = new String[] {"Zero Page", "Stack Page", "P2", "P3"};
+
+        for (int i=0; i<blocks.length; i++)
+            memoryBlocks.put(blocks[i], getMemoryComponent(i * 256));
 
         return memoryBlocks;
     }
