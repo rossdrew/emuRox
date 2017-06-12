@@ -43,7 +43,7 @@ BCD and proper timing is a thing for another day as my first objective for now, 
 ### Problems
 
 ###### Javas unsigned byte problem. 
- - Java bytes are signed, meaning it's a pain to deal with them, instead we have to use ints to represent bytes.
+ - Java bytes are signed, meaning it's a pain to deal with them.  Sometimes we want to deal with raw bytes such as memory read and writes, sometimes we want to have them signed and later in BCD mode.
  - [JaCoCo](http://www.eclemma.org/jacoco/) doesn't report coverage of `String` based `switch` statements [well](http://stackoverflow.com/questions/42642840/why-is-jacoco-not-covering-my-switch-statements)
  
 ### Sources
