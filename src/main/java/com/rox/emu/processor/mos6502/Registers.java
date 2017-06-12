@@ -70,6 +70,8 @@ public class Registers {
 
     public Registers(){
         register = new RoxByte[8];
+        for (int i=0; i<8; i++)
+            register[i] = RoxByte.ZERO;
         register[REG_SP_X]   = RoxByte.literalFrom(0b11111111);
         register[REG_STATUS] = RoxByte.literalFrom(0b00000000);
     }
