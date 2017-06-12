@@ -8,6 +8,8 @@ import com.rox.emu.processor.mos6502.Registers;
 import com.rox.emu.mem.SimpleMemory;
 import javax.swing.*;
 import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.rox.emu.processor.mos6502.op.AddressingMode;
 import com.rox.emu.processor.mos6502.op.OpCode;
@@ -23,9 +25,6 @@ final class DebuggerWindow extends JFrame {
     private Memory memory;
 
     private Registers6502 newRegisterPanel;
-
-    private final MemoryPanel zeroPageMemoryPanel = new MemoryPanel();
-    private final MemoryPanel stackPageMemoryPanel = new MemoryPanel();
 
     private String instructionName = "...";
     private final JLabel instruction = new JLabel(instructionName);
@@ -58,19 +57,35 @@ final class DebuggerWindow extends JFrame {
     }
 
     private JComponent getMemoryPanel(){
-        JScrollPane p0 = new JScrollPane();
-        p0.setViewportView(zeroPageMemoryPanel);
-        p0.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-
-        JScrollPane p1 = new JScrollPane();
-        p1.setViewportView(stackPageMemoryPanel);
-        p1.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-
         JTabbedPane memoryTabs = new JTabbedPane();
-        memoryTabs.addTab("Zero Page", p0);
-        memoryTabs.addTab("Stack Page", p1);
+
+        final Map<String, Component> memoryComponentBlocks = getMemoryComponents();
+        for (String memoryKey : memoryComponentBlocks.keySet()) {
+            memoryTabs.addTab(memoryKey, memoryComponentBlocks.get(memoryKey));
+        }
 
         return memoryTabs;
+    }
+
+    private Map<String, Component> getMemoryComponents(){
+        final Map<String, Component> memoryBlocks = new HashMap<>();
+
+        memoryBlocks.put("Zero Page", getMemoryComponent(0));
+        memoryBlocks.put("Stack Page", getMemoryComponent(256));
+
+        return memoryBlocks;
+    }
+
+    private Component getMemoryComponent(int fromMemoryAddress){
+        final MemoryPanel memoryPanel = new MemoryPanel();
+
+        JScrollPane scrollPane = new JScrollPane();
+        scrollPane.setViewportView(memoryPanel);
+        memoryPanel.setMemory(memory, fromMemoryAddress);
+        memoryPanel.linkTo(processor.getRegisters());
+        scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+        return memoryPanel;
     }
 
     private JComponent getInstructionScroller(){
@@ -149,12 +164,6 @@ final class DebuggerWindow extends JFrame {
         processor = new CPU(memory);
 
         newRegisterPanel = new Registers6502(processor.getRegisters());
-
-        zeroPageMemoryPanel.setMemory(memory, 0);
-        zeroPageMemoryPanel.linkTo(processor.getRegisters());
-
-        stackPageMemoryPanel.setMemory(memory, 256);
-        stackPageMemoryPanel.linkTo(processor.getRegisters());
     }
 
     public void loadProgram(int[] program){
