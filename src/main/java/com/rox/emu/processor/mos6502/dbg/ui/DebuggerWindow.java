@@ -81,14 +81,15 @@ final class DebuggerWindow extends JFrame {
 
     private Component getMemoryComponent(int fromMemoryAddress){
         final MemoryPanel memoryPanel = new MemoryPanel();
+        final JScrollPane scrollPane = new JScrollPane();
 
-        JScrollPane scrollPane = new JScrollPane();
-        scrollPane.setViewportView(memoryPanel);
         memoryPanel.setMemory(memory, fromMemoryAddress);
         memoryPanel.linkTo(processor.getRegisters());
+
+        scrollPane.setViewportView(memoryPanel);
         scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
-        return memoryPanel;
+        return scrollPane;
     }
 
     private JComponent getInstructionScroller(){
