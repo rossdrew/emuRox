@@ -9,6 +9,7 @@ import com.rox.emu.mem.SimpleMemory;
 import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.rox.emu.processor.mos6502.op.AddressingMode;
@@ -68,10 +69,12 @@ final class DebuggerWindow extends JFrame {
     }
 
     private Map<String, Component> getMemoryComponents(){
-        final Map<String, Component> memoryBlocks = new HashMap<>();
+        final Map<String, Component> memoryBlocks = new LinkedHashMap<>();
 
         memoryBlocks.put("Zero Page", getMemoryComponent(0));
         memoryBlocks.put("Stack Page", getMemoryComponent(256));
+        memoryBlocks.put("P2", getMemoryComponent(512));
+        memoryBlocks.put("P3", getMemoryComponent(768));
 
         return memoryBlocks;
     }
