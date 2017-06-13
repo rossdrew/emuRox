@@ -12,6 +12,7 @@ import com.rox.emu.processor.mos6502.util.Compiler;
 import com.rox.emu.processor.mos6502.util.Program;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import spock.lang.Ignore;
 
 import java.util.Arrays;
 
@@ -351,6 +352,23 @@ public class CompilerTest {
         assertEquals(0x19, registers.getRegister(Registers.REG_ACCUMULATOR));
         assertEquals(0x19, memory.getByte(0x20));
         assertEquals(programByte.length, registers.getPC());
+    }
+
+    @Test
+    @Ignore
+    public void testAbsoluteAddressing(){
+        final Compiler compiler = new Compiler("LDA #$1C STA $100 INC $100");
+        Program program = compiler.compileProgram();
+        final int[] programByte = program.getProgramAsByteArray();
+
+        Memory memory = new SimpleMemory();
+        CPU processor = new CPU(memory);
+        processor.reset();
+        memory.setBlock(0, programByte);
+
+        processor.step(3);
+
+        assertEquals(0x1D, memory.getByte(0x100));
     }
 
     @Test
