@@ -1,5 +1,6 @@
 package com.rox.emu.processor.mos6502.dbg.ui;
 
+import com.rox.emu.UnknownOpCodeException;
 import com.rox.emu.mem.Memory;
 import com.rox.emu.mem.SimpleMemory;
 import com.rox.emu.processor.mos6502.CPU;
@@ -8,6 +9,7 @@ import com.rox.emu.processor.mos6502.dbg.ui.component.MemoryPanel;
 import com.rox.emu.processor.mos6502.dbg.ui.component.Registers6502;
 import com.rox.emu.processor.mos6502.op.AddressingMode;
 import com.rox.emu.processor.mos6502.op.OpCode;
+import com.rox.emu.processor.mos6502.util.Compiler;
 import com.rox.emu.processor.mos6502.util.Program;
 
 import javax.swing.*;
@@ -25,6 +27,7 @@ final class DebuggerWindow extends JFrame {
     private Memory memory;
 
     private Registers6502 newRegisterPanel;
+    private JTextArea codeArea = new JTextArea();
 
     private String instructionName = "...";
     private final JLabel instruction = new JLabel(instructionName);
@@ -45,15 +48,33 @@ final class DebuggerWindow extends JFrame {
         add(getInstructionScroller(), BorderLayout.EAST);
         add(getControlPanel(), BorderLayout.SOUTH);
         add(getMemoryPanel(), BorderLayout.WEST);
-        add(getRegisterPanel(), BorderLayout.CENTER);
+        add(getCenterPanel(), BorderLayout.CENTER);
 
         loadProgram(getProgram());
         setVisible(true);
         pack();
     }
 
-    private JComponent getRegisterPanel(){
-        return newRegisterPanel;
+    private JComponent getCenterPanel(){
+        JTabbedPane centerPane = new JTabbedPane();
+
+        centerPane.add("Registers", newRegisterPanel);
+        centerPane.add("Code", getCodeInput());
+
+        return centerPane;
+    }
+
+    private JComponent getCodeInput(){
+        final JScrollPane codeScroller = new JScrollPane(codeArea);
+        final JButton compilerButton = new JButton("Compile");
+        compilerButton.addActionListener(e -> compile(codeArea.getText()));
+
+        final JPanel codePanel = new JPanel();
+        codePanel.setLayout(new BorderLayout());
+        codePanel.add(codeScroller, BorderLayout.CENTER);
+        codePanel.add(compilerButton, BorderLayout.SOUTH);
+
+        return codePanel;
     }
 
     private JComponent getMemoryPanel(){
@@ -190,6 +211,17 @@ final class DebuggerWindow extends JFrame {
         processor.step();
         invalidate();
         repaint();
+    }
+
+    public void compile(String programText){
+        final Compiler compiler = new Compiler(programText);
+        try {
+            final Program program = compiler.compileProgram();
+            final int[] programAsByteArray = program.getProgramAsByteArray();
+            loadProgram(programAsByteArray);
+        }catch (UnknownOpCodeException e){
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
     }
 
     private void upDateWithNextInstruction() {
