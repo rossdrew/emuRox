@@ -1,20 +1,19 @@
 package com.rox.emu.processor.mos6502.dbg.ui;
 
 import com.rox.emu.mem.Memory;
-import com.rox.emu.processor.mos6502.CPU;
-import com.rox.emu.processor.mos6502.dbg.ui.component.Registers6502;
-import com.rox.emu.processor.mos6502.util.Program;
-import com.rox.emu.processor.mos6502.Registers;
 import com.rox.emu.mem.SimpleMemory;
-import javax.swing.*;
-import java.awt.*;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-
+import com.rox.emu.processor.mos6502.CPU;
+import com.rox.emu.processor.mos6502.Registers;
+import com.rox.emu.processor.mos6502.dbg.ui.component.MemoryPanel;
+import com.rox.emu.processor.mos6502.dbg.ui.component.Registers6502;
 import com.rox.emu.processor.mos6502.op.AddressingMode;
 import com.rox.emu.processor.mos6502.op.OpCode;
-import com.rox.emu.processor.mos6502.dbg.ui.component.MemoryPanel;
+import com.rox.emu.processor.mos6502.util.Program;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * A DebuggerWindow for debugging 6502 CPU code
