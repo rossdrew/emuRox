@@ -125,7 +125,7 @@ public class CompilerTest {
             Program program = compiler.compileProgram();
             int[] bytes = program.getProgramAsByteArray();
 
-;            assertArrayEquals("Output for '" + opcode.toString() + "' was wrong.", new int[] {opcode.getByteValue(), 0xABC}, bytes);
+;            assertArrayEquals("Output for '" + opcode.toString() + "' was wrong.", new int[] {opcode.getByteValue(), 0xA, 0xBC}, bytes);
         });
     }
 
@@ -137,7 +137,7 @@ public class CompilerTest {
             Program program = compiler.compileProgram();
             int[] bytes = program.getProgramAsByteArray();
 
-            assertArrayEquals("Output for '" + opcode.toString() + "' was wrong.", new int[] {opcode.getByteValue(), 0xABCD}, bytes);
+            assertArrayEquals("Output for '" + opcode.toString() + "' was wrong.", new int[] {opcode.getByteValue(), 0xAB, 0xCD}, bytes);
         });
     }
 
@@ -215,13 +215,16 @@ public class CompilerTest {
     public void testAbsoluteInstructions(@InRange(min = "256", max = "65535") int wordValue){
         final String hexWord = Integer.toHexString(wordValue);
 
+        final int highByte = (wordValue >> 8) & 0xFF;
+        final int lowByte = wordValue & 0xFF;
+
         OpCode.streamOf(AddressingMode.ABSOLUTE).forEach((opcode)->{
             final Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + VALUE_PREFIX + hexWord);
 
             Program program = compiler.compileProgram();
             int[] bytes = program.getProgramAsByteArray();
 
-            assertArrayEquals("Output for '" + opcode.toString() + "' was wrong.", new int[] {opcode.getByteValue(), wordValue}, bytes);
+            assertArrayEquals("Output for '" + opcode.toString() + "' was wrong.", new int[] {opcode.getByteValue(), highByte, lowByte}, bytes);
         });
     }
 
@@ -229,13 +232,16 @@ public class CompilerTest {
     public void testAbsoluteXInstructions(@InRange(min = "256", max = "65535") int wordValue){
         final String hexWord = Integer.toHexString(wordValue);
 
+        final int highByte = (wordValue >> 8) & 0xFF;
+        final int lowByte = wordValue & 0xFF;
+
         OpCode.streamOf(AddressingMode.ABSOLUTE_X).forEach((opcode)->{
             final Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + VALUE_PREFIX + hexWord + ",X");
 
             Program program = compiler.compileProgram();
             int[] bytes = program.getProgramAsByteArray();
 
-            assertArrayEquals("Output for '" + opcode.toString() + " 0x" + hexWord + "' was wrong.", new int[] {opcode.getByteValue(), wordValue}, bytes);
+            assertArrayEquals("Output for '" + opcode.toString() + " 0x" + hexWord + "' was wrong.", new int[] {opcode.getByteValue(), highByte, lowByte}, bytes);
         });
     }
 
@@ -243,13 +249,16 @@ public class CompilerTest {
     public void testAbsoluteYInstructions(@InRange(min = "256", max = "65535") int wordValue){
         final String hexWord = Integer.toHexString(wordValue);
 
+        final int highByte = (wordValue >> 8) & 0xFF;
+        final int lowByte = wordValue & 0xFF;
+
         OpCode.streamOf(AddressingMode.ABSOLUTE_Y).forEach((opcode)->{
             final Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + VALUE_PREFIX + hexWord + ",Y");
 
             Program program = compiler.compileProgram();
             int[] bytes = program.getProgramAsByteArray();
 
-            assertArrayEquals("Output for '" + opcode.toString() + " 0x" + hexWord + "' was wrong.", new int[] {opcode.getByteValue(), wordValue}, bytes);
+            assertArrayEquals("Output for '" + opcode.toString() + " 0x" + hexWord + "' was wrong.", new int[] {opcode.getByteValue(), highByte, lowByte}, bytes);
         });
     }
 
@@ -355,7 +364,6 @@ public class CompilerTest {
     }
 
     @Test
-    @Ignore
     public void testAbsoluteAddressing(){
         final Compiler compiler = new Compiler("LDA #$1C STA $100 INC $100");
         Program program = compiler.compileProgram();
