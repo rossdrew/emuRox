@@ -10,7 +10,6 @@ import com.rox.emu.processor.mos6502.op.AddressingMode;
 import com.rox.emu.processor.mos6502.op.OpCode;
 import com.rox.emu.processor.mos6502.util.Compiler;
 import com.rox.emu.processor.mos6502.util.Program;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -125,7 +124,7 @@ public class CompilerTest {
             Program program = compiler.compileProgram();
             int[] bytes = program.getProgramAsByteArray();
 
-;            assertArrayEquals("Output for '" + opcode.toString() + "' was wrong.", new int[] {opcode.getByteValue(), 0xA, 0xBC}, bytes);
+            assertArrayEquals("Output for '" + opcode.toString() + "' was wrong.", new int[] {opcode.getByteValue(), 0xA, 0xBC}, bytes);
         });
     }
 
