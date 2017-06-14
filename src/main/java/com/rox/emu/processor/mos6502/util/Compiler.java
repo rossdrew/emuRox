@@ -168,6 +168,7 @@ public class Compiler {
 
                     final AddressingMode addressingMode = getAddressingModeFrom(prefix, value, postfix);
 
+                    workingProgram = workingProgram.with(OpCode.from(opCodeToken, addressingMode).getByteValue());
                     workingProgram = extractArgumentValue(workingProgram, opCodeToken, value, addressingMode);
 
                     break;
@@ -186,16 +187,16 @@ public class Compiler {
 
         //high byte
         if (value.length() == 4 ) {
-            workingProgram = workingProgram.with(OpCode.from(opCodeToken, addressingMode).getByteValue(), Integer.decode("0x" + value.substring(value.length() - 4)));
+            workingProgram = workingProgram.with(Integer.decode("0x" + value.substring(value.length() - 4)));
         }if (value.length() == 3 ) {
-            workingProgram = workingProgram.with(OpCode.from(opCodeToken, addressingMode).getByteValue(), Integer.decode("0x" + value.substring(value.length() - 3)));
+            workingProgram = workingProgram.with(Integer.decode("0x" + value.substring(value.length() - 3)));
         }
 
         //low byte
-        if (value.length() > 1)
-            workingProgram = workingProgram.with(OpCode.from(opCodeToken, addressingMode).getByteValue(), Integer.decode("0x" + value.substring(value.length()-2)));
-        if (value.length() > 0)
-            workingProgram = workingProgram.with(OpCode.from(opCodeToken, addressingMode).getByteValue(), Integer.decode("0x" + value.substring(value.length()-1)));
+        if (value.length() == 2)
+            workingProgram = workingProgram.with(Integer.decode("0x" + value.substring(value.length()-2)));
+        if (value.length() == 1)
+            workingProgram = workingProgram.with(Integer.decode("0x" + value.substring(value.length()-1)));
 
         return workingProgram;
     }

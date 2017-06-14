@@ -125,7 +125,7 @@ public class CompilerTest {
             Program program = compiler.compileProgram();
             int[] bytes = program.getProgramAsByteArray();
 
-            assertArrayEquals("Output for '" + opcode.toString() + "' was wrong.", new int[] {opcode.getByteValue(), 0xABC}, bytes);
+;            assertArrayEquals("Output for '" + opcode.toString() + "' was wrong.", new int[] {opcode.getByteValue(), 0xABC}, bytes);
         });
     }
 
