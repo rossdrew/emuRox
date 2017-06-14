@@ -168,15 +168,34 @@ public class Compiler {
 
                     final AddressingMode addressingMode = getAddressingModeFrom(prefix, value, postfix);
 
+                    workingProgram = extractArgumentValue(workingProgram, opCodeToken, value, addressingMode);
 
-                    workingProgram = workingProgram.with(OpCode.from(opCodeToken, addressingMode).getByteValue(),
-                                                         Integer.decode("0x" + value));
                     break;
                 default:
                     workingProgram = workingProgram.with(parseLabel(opCodeToken));
                     break;
             }
         }
+
+        return workingProgram;
+    }
+
+    private Program extractArgumentValue(Program workingProgram, String opCodeToken, String value, AddressingMode addressingMode) {
+        if (value.length() > 4)
+            throw new UnknownOpCodeException("OpCode '" + opCodeToken + "' with argument " + value + " is unknown", opCodeToken);
+
+        //high byte
+        if (value.length() == 4 ) {
+            workingProgram = workingProgram.with(OpCode.from(opCodeToken, addressingMode).getByteValue(), Integer.decode("0x" + value.substring(value.length() - 4)));
+        }if (value.length() == 3 ) {
+            workingProgram = workingProgram.with(OpCode.from(opCodeToken, addressingMode).getByteValue(), Integer.decode("0x" + value.substring(value.length() - 3)));
+        }
+
+        //low byte
+        if (value.length() > 1)
+            workingProgram = workingProgram.with(OpCode.from(opCodeToken, addressingMode).getByteValue(), Integer.decode("0x" + value.substring(value.length()-2)));
+        if (value.length() > 0)
+            workingProgram = workingProgram.with(OpCode.from(opCodeToken, addressingMode).getByteValue(), Integer.decode("0x" + value.substring(value.length()-1)));
 
         return workingProgram;
     }
