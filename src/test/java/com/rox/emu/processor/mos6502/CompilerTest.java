@@ -10,9 +10,9 @@ import com.rox.emu.processor.mos6502.op.AddressingMode;
 import com.rox.emu.processor.mos6502.op.OpCode;
 import com.rox.emu.processor.mos6502.util.Compiler;
 import com.rox.emu.processor.mos6502.util.Program;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import spock.lang.Ignore;
 
 import java.util.Arrays;
 
