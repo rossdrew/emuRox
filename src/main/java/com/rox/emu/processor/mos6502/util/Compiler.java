@@ -182,9 +182,6 @@ public class Compiler {
     }
 
     private Program extractArgumentValue(Program workingProgram, String opCodeToken, String value, AddressingMode addressingMode) {
-        if (value.length() > 4)
-            throw new UnknownOpCodeException("OpCode '" + opCodeToken + "' with argument " + value + " is unknown", opCodeToken);
-
         //high byte
         if (value.length() == 4 ) {
             workingProgram = workingProgram.with(Integer.decode("0x" + value.substring(value.length() - 4, 2)));

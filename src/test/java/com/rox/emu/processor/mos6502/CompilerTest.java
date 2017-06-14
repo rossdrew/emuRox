@@ -380,6 +380,18 @@ public class CompilerTest {
     }
 
     @Test
+    public void testInvalidArgument(){
+        try {
+            final Compiler compiler = new Compiler("INC $12345");
+            Program program = compiler.compileProgram();
+            program.getProgramAsByteArray();
+            fail("The argument for INC is too long, should throw an error");
+        }catch(UnknownOpCodeException e){
+            assertNotNull(e);
+        }
+    }
+
+    @Test
     public void firstInvalidOpcode(){
         final Compiler compiler = new Compiler("ROX");
 
