@@ -169,7 +169,7 @@ public class Compiler {
                     final AddressingMode addressingMode = getAddressingModeFrom(prefix, value, postfix);
 
                     workingProgram = workingProgram.with(OpCode.from(opCodeToken, addressingMode).getByteValue());
-                    workingProgram = extractArgumentValue(workingProgram, opCodeToken, value, addressingMode);
+                    workingProgram = extractArgumentValue(workingProgram, value);
 
                     break;
                 default:
@@ -181,7 +181,7 @@ public class Compiler {
         return workingProgram;
     }
 
-    private Program extractArgumentValue(Program workingProgram, String opCodeToken, String value, AddressingMode addressingMode) {
+    private Program extractArgumentValue(Program workingProgram, String value) {
         //high byte
         if (value.length() == 4 ) {
             workingProgram = workingProgram.with(Integer.decode("0x" + value.substring(value.length() - 4, 2)));
