@@ -88,7 +88,7 @@ public class Program {
      * Create a new {@link Program} with new entries appended
      *
      * @param values [{@link int} | {@link OpCode} | {@link String}] to append
-     * @return a new {@link Program} that is a copy of this one with the new entry appended
+     * @return a new {@link Program} that is a copy of this one with the new entries appended
      */
     public Program with(Object ... values){
         Program tmpProgram = this;
