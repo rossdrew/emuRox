@@ -114,15 +114,6 @@ public class Registers {
     }
 
     /**
-     * @param value to set the register flags based on
-     */
-    public void setFlagsBasedOn(int value){
-        int valueByte = value & 0xFF;
-        updateZeroFlagBasedOn(valueByte);
-        updateNegativeFlagBasedOn(valueByte);
-    }
-
-    /**
      * @param newPCWord to set the Program Counter to
      */
     public void setPC(int newPCWord){
@@ -211,9 +202,18 @@ public class Registers {
     }
 
     /**
+     * @param value to set the register flags based on
+     */
+    public void setFlagsBasedOn(int value){
+        int valueByte = value & 0xFF;
+        setZeroFlagFor(valueByte);
+        setNegativeFlagFor(valueByte);
+    }
+
+    /**
      * Set zero flag if given argument is 0
      */
-    public void updateZeroFlagBasedOn(int value){
+    public void setZeroFlagFor(int value){
         if (value == 0)
             setFlag(Z);
         else
@@ -223,7 +223,7 @@ public class Registers {
     /**
      * Set negative flag if given argument is 0
      */
-    public void updateNegativeFlagBasedOn(int value){
+    public void setNegativeFlagFor(int value){
         if (isNegative(value))
             setFlag(N);
         else
