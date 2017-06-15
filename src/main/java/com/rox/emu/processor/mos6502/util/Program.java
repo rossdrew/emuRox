@@ -100,18 +100,31 @@ public class Program {
         return tmpProgram;
     }
 
+    /**
+     * @return This {@link Program} compiled to a "byte" array.
+     */
     public int[] getProgramAsByteArray() {
         return programBytes.clone();
     }
 
+    /**
+     * @return The byte length of this {@link Program}
+     */
     public int getLength() {
         return programBytes.length;
     }
 
+    /**
+     * @return The list of labels held for this {@link Program}
+     */
     public Set<String> getLabels() {
         return programLabels.keySet();
     }
 
+    /**
+     * @param labelName A {@link String} label representing a location in the program
+     * @return the {@link int} location of this label in the {@link Program}
+     */
     public int getLocationOf(String labelName) {
         return programLabels.get(labelName);
     }
