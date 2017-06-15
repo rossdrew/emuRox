@@ -230,21 +230,6 @@ public class Registers {
             clearFlag(N);
     }
 
-    /**
-     * @return an array containing the states of all bits in the flags register
-     */
-    public boolean[] getStatusFlags(){
-        boolean[] flags = new boolean[8];
-
-        int status_flags = getRegister(REG_STATUS);
-        for (int i=0, j=1; i<8; i++){
-            flags[i] = (status_flags & j) == j;
-            j*=2;
-        }
-
-        return flags;
-    }
-
     private boolean isNegative(int fakeByte){
         return (fakeByte & STATUS_FLAG_NEGATIVE) == STATUS_FLAG_NEGATIVE;
     }

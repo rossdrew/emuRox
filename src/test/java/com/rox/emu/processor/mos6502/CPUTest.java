@@ -318,7 +318,7 @@ public class CPUTest {
         processor.step();
 
         assertEquals(program.getLength(), registers.getPC());
-        assertEquals(true, registers.getStatusFlags()[0]);
+        assertEquals(true, registers.getFlag(Registers.C));
     }
 
     @Test
@@ -332,7 +332,7 @@ public class CPUTest {
         processor.step();
 
         assertEquals(program.getLength(), registers.getPC());
-        assertEquals(false, registers.getStatusFlags()[0]);
+        assertEquals(false, registers.getFlag(Registers.C));
     }
 
     @Test
@@ -342,11 +342,11 @@ public class CPUTest {
         Registers registers = processor.getRegisters();
 
         processor.step(2);
-        assert (processor.getRegisters().getStatusFlags()[Registers.V]);
+        assert (registers.getFlag(Registers.V));
         processor.step();
 
         assertEquals(program.getLength(), registers.getPC());
-        assertEquals(false, registers.getStatusFlags()[Registers.V]);
+        assertEquals(false, registers.getFlag(Registers.V));
     }
 
     @Test

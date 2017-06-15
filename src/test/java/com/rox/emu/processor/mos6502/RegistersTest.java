@@ -86,22 +86,7 @@ public class RegistersTest {
                      "] were [" + Integer.toBinaryString(registers.getRegister(Registers.REG_STATUS)) + "]" ,
                      0, registers.getRegister(Registers.REG_STATUS));
     }
-
-    @Test
-    public void testGetStatusFlags(){
-        registers.setRegister(Registers.REG_STATUS, 0b11011001);
-
-        assertTrue(registers.getStatusFlags()[0] &
-                   registers.getStatusFlags()[3] &
-                   registers.getStatusFlags()[4] &
-                   registers.getStatusFlags()[6] &
-                   registers.getStatusFlags()[7]);
-
-        assertFalse(registers.getStatusFlags()[1] &
-                    registers.getStatusFlags()[2] &
-                    registers.getStatusFlags()[5]);
-    }
-
+    
     @Test
     public void testFlagPlaceValueToFlagID(){
         for (int i=0; i<8; i++){
