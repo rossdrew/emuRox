@@ -49,8 +49,11 @@ public final class RoxByte {
         this.format = format;
     }
 
-    private int fromTwosComplimented(int byteValue){
-        return -(((~(byteValue-1))) & 0xFF);
+    private int intFromTwosComplimented(int byteValue){
+        if (isBitSet(7))
+            return -(((~(byteValue-1))) & 0xFF);
+        else
+            return byteValue;
     }
 
     private boolean bitInRange(int bit){
@@ -87,10 +90,7 @@ public final class RoxByte {
         switch (format){
             default:
             case SIGNED_TWOS_COMPLIMENT:
-                if (isBitSet(7))
-                    return fromTwosComplimented(byteValue);
-                else
-                    return byteValue;
+                return intFromTwosComplimented(byteValue);
         }
     }
 
