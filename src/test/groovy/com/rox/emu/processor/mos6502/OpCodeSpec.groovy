@@ -11,9 +11,12 @@ import static com.rox.emu.processor.mos6502.op.OpCode.*
 
 class OpCodeSpec extends Specification {
     private Memory memory
+    private Mos6502 processor
     
     def setup(){
         memory = new SimpleMemory()
+        processor = new Mos6502(memory)
+        processor.reset()
     }
 
     Program loadMemoryWithProgram(Object ... programElements){
@@ -27,7 +30,7 @@ class OpCodeSpec extends Specification {
         Program program = loadMemoryWithProgram(LDA_I, loadValue)
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step()
         Registers registers = processor.getRegisters()
@@ -55,7 +58,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step()
         Registers registers = processor.getRegisters()
@@ -84,7 +87,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step()
         Registers registers = processor.getRegisters()
@@ -115,7 +118,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(2)
         Registers registers = processor.getRegisters()
@@ -141,7 +144,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step()
         Registers registers = processor.getRegisters()
@@ -172,7 +175,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(2)
         Registers registers = processor.getRegisters()
@@ -201,7 +204,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(2)
         Registers registers = processor.getRegisters()
@@ -233,7 +236,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(8)
         Registers registers = processor.getRegisters()
@@ -266,7 +269,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(9)
         Registers registers = processor.getRegisters()
@@ -290,7 +293,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step()
         Registers registers = processor.getRegisters()
@@ -318,7 +321,7 @@ class OpCodeSpec extends Specification {
         memory.setByteAt(addressHi << 8 | addressLo, firstValue)
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step()
         Registers registers = processor.getRegisters()
@@ -346,7 +349,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(4)
         Registers registers = processor.getRegisters()
@@ -373,7 +376,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(3)
         Registers registers = processor.getRegisters()
@@ -401,7 +404,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(4)
         Registers registers = processor.getRegisters()
@@ -426,7 +429,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step()
         Registers registers = processor.getRegisters()
@@ -453,7 +456,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(3)
         Registers registers = processor.getRegisters()
@@ -478,7 +481,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(4)
         Registers registers = processor.getRegisters()
@@ -506,7 +509,7 @@ class OpCodeSpec extends Specification {
         memory.setByteAt(addressHi << 8 | addressLo, firstValue)
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step()
         Registers registers = processor.getRegisters()
@@ -534,7 +537,7 @@ class OpCodeSpec extends Specification {
         memory.setByteAt((addressHi << 8 | addressLo)+index, firstValue)
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(2)
         Registers registers = processor.getRegisters()
@@ -559,7 +562,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(2)
         Registers registers = processor.getRegisters()
@@ -587,7 +590,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(3)
         Registers registers = processor.getRegisters()
@@ -615,7 +618,7 @@ class OpCodeSpec extends Specification {
         memory.setByteAt(0x30, secondValue)
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(2)
         Registers registers = processor.getRegisters()
@@ -643,7 +646,7 @@ class OpCodeSpec extends Specification {
         memory.setByteAt(300, secondValue)
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(2)
         Registers registers = processor.getRegisters()
@@ -671,7 +674,7 @@ class OpCodeSpec extends Specification {
         memory.setByteAt(300 + index, secondValue)
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(3)
         Registers registers = processor.getRegisters()
@@ -701,7 +704,7 @@ class OpCodeSpec extends Specification {
         memory.setByteAt(300 + index, secondValue)
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(3)
         Registers registers = processor.getRegisters()
@@ -736,7 +739,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(9)
         Registers registers = processor.getRegisters()
@@ -771,7 +774,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(9)
         Registers registers = processor.getRegisters()
@@ -803,7 +806,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(6)
         Registers registers = processor.getRegisters()
@@ -833,7 +836,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(2)
         Registers registers = processor.getRegisters()
@@ -862,7 +865,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(4)
         Registers registers = processor.getRegisters()
@@ -892,7 +895,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(5)
         Registers registers = processor.getRegisters()
@@ -921,7 +924,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(4)
         Registers registers = processor.getRegisters()
@@ -951,7 +954,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(5)
         Registers registers = processor.getRegisters()
@@ -981,7 +984,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(5)
         Registers registers = processor.getRegisters()
@@ -1015,7 +1018,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(9)
         Registers registers = processor.getRegisters()
@@ -1049,7 +1052,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(9)
         Registers registers = processor.getRegisters()
@@ -1073,7 +1076,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(2)
         Registers registers = processor.getRegisters()
@@ -1103,7 +1106,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(4)
         Registers registers = processor.getRegisters()
@@ -1134,7 +1137,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(5)
         Registers registers = processor.getRegisters()
@@ -1164,7 +1167,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(4)
         Registers registers = processor.getRegisters()
@@ -1195,7 +1198,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(5)
         Registers registers = processor.getRegisters()
@@ -1226,7 +1229,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(5)
         Registers registers = processor.getRegisters()
@@ -1261,7 +1264,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(9)
         Registers registers = processor.getRegisters()
@@ -1296,7 +1299,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(9)
         Registers registers = processor.getRegisters()
@@ -1320,7 +1323,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(2)
         Registers registers = processor.getRegisters()
@@ -1348,7 +1351,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(4)
         Registers registers = processor.getRegisters()
@@ -1377,7 +1380,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(5)
         Registers registers = processor.getRegisters()
@@ -1405,7 +1408,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(4)
         Registers registers = processor.getRegisters()
@@ -1434,7 +1437,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(5)
         Registers registers = processor.getRegisters()
@@ -1463,7 +1466,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(5)
         Registers registers = processor.getRegisters()
@@ -1496,7 +1499,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(9)
         Registers registers = processor.getRegisters()
@@ -1529,7 +1532,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(9)
         Registers registers = processor.getRegisters()
@@ -1557,7 +1560,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(7)
     
@@ -1586,7 +1589,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(7)
         Registers registers = processor.getRegisters()
@@ -1613,7 +1616,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(3)
         Registers registers = processor.getRegisters()
@@ -1644,7 +1647,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(5)
         Registers registers = processor.getRegisters()
@@ -1676,7 +1679,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(6)
         Registers registers = processor.getRegisters()
@@ -1707,7 +1710,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(5)
         Registers registers = processor.getRegisters()
@@ -1739,7 +1742,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(6)
         Registers registers = processor.getRegisters()
@@ -1771,7 +1774,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(6)
         Registers registers = processor.getRegisters()
@@ -1807,7 +1810,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(10)
         Registers registers = processor.getRegisters()
@@ -1842,7 +1845,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(10)
         Registers registers = processor.getRegisters()
@@ -1867,7 +1870,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(2)
         Registers registers = processor.getRegisters()
@@ -1894,7 +1897,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(3)
         Registers registers = processor.getRegisters()
@@ -1922,7 +1925,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(4)
         Registers registers = processor.getRegisters()
@@ -1949,7 +1952,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(3)
         Registers registers = processor.getRegisters()
@@ -1977,7 +1980,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(4)
         Registers registers = processor.getRegisters()
@@ -2004,7 +2007,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(3)
         Registers registers = processor.getRegisters()
@@ -2032,7 +2035,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(4)
         Registers registers = processor.getRegisters()
@@ -2059,7 +2062,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(3)
         Registers registers = processor.getRegisters()
@@ -2087,7 +2090,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(4)
         Registers registers = processor.getRegisters()
@@ -2112,7 +2115,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(2)
         Registers registers = processor.getRegisters()
@@ -2137,7 +2140,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(2)
         Registers registers = processor.getRegisters()
@@ -2162,7 +2165,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(2)
         Registers registers = processor.getRegisters()
@@ -2190,7 +2193,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         Registers registers = processor.getRegisters()
     
@@ -2220,7 +2223,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         Registers registers = processor.getRegisters()
     
@@ -2253,7 +2256,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         Registers registers = processor.getRegisters()
     
@@ -2286,7 +2289,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         Registers registers = processor.getRegisters()
     
@@ -2320,7 +2323,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         Registers registers = processor.getRegisters()
     
@@ -2354,7 +2357,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         Registers registers = processor.getRegisters()
     
@@ -2386,7 +2389,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         Registers registers = processor.getRegisters()
     
@@ -2417,7 +2420,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         Registers registers = processor.getRegisters()
     
@@ -2449,7 +2452,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         Registers registers = processor.getRegisters()
     
@@ -2480,7 +2483,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         Registers registers = processor.getRegisters()
     
@@ -2512,7 +2515,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         Registers registers = processor.getRegisters()
     
@@ -2547,7 +2550,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         Registers registers = processor.getRegisters()
     
@@ -2584,7 +2587,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         Registers registers = processor.getRegisters()
     
@@ -2611,7 +2614,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         Registers registers = processor.getRegisters()
     
@@ -2637,7 +2640,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         Registers registers = processor.getRegisters()
     
@@ -2664,7 +2667,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         Registers registers = processor.getRegisters()
     
@@ -2699,7 +2702,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         Registers registers = processor.getRegisters()
     
@@ -2733,7 +2736,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         Registers registers = processor.getRegisters()
     
@@ -2766,7 +2769,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         Registers registers = processor.getRegisters()
     
@@ -2800,7 +2803,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         Registers registers = processor.getRegisters()
     
@@ -2832,7 +2835,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         Registers registers = processor.getRegisters()
     
@@ -2871,7 +2874,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         Registers registers = processor.getRegisters()
     
@@ -2898,7 +2901,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         Registers registers = processor.getRegisters()
     
@@ -2929,7 +2932,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         Registers registers = processor.getRegisters()
     
@@ -2960,7 +2963,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         Registers registers = processor.getRegisters()
     
@@ -2992,7 +2995,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         Registers registers = processor.getRegisters()
     
@@ -3024,7 +3027,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         Registers registers = processor.getRegisters()
     
@@ -3049,7 +3052,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         Registers registers = processor.getRegisters()
     
@@ -3078,7 +3081,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         Registers registers = processor.getRegisters()
     
@@ -3106,7 +3109,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         Registers registers = processor.getRegisters()
     
@@ -3134,7 +3137,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         Registers registers = processor.getRegisters()
     
@@ -3162,7 +3165,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         Registers registers = processor.getRegisters()
     
@@ -3194,7 +3197,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         Registers registers = processor.getRegisters()
     
@@ -3226,7 +3229,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         Registers registers = processor.getRegisters()
     
@@ -3257,7 +3260,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         Registers registers = processor.getRegisters()
     
@@ -3284,7 +3287,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         Registers registers = processor.getRegisters()
     
@@ -3310,7 +3313,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         Registers registers = processor.getRegisters()
     
@@ -3338,7 +3341,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         Registers registers = processor.getRegisters()
     
@@ -3364,7 +3367,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         Registers registers = processor.getRegisters()
     
@@ -3390,7 +3393,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         Registers registers = processor.getRegisters()
     
@@ -3422,7 +3425,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         Registers registers = processor.getRegisters()
     
@@ -3455,7 +3458,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         Registers registers = processor.getRegisters()
     
@@ -3487,7 +3490,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         Registers registers = processor.getRegisters()
     
@@ -3520,7 +3523,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         Registers registers = processor.getRegisters()
     
@@ -3553,7 +3556,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         Registers registers = processor.getRegisters()
     
@@ -3590,7 +3593,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(9)
         Registers registers = processor.getRegisters()
@@ -3625,7 +3628,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         processor.step(9)
         Registers registers = processor.getRegisters()
@@ -3652,7 +3655,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         Registers registers = processor.getRegisters()
     
@@ -3683,7 +3686,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         Registers registers = processor.getRegisters()
     
@@ -3714,7 +3717,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         Registers registers = processor.getRegisters()
     
@@ -3745,7 +3748,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         Registers registers = processor.getRegisters()
     
@@ -3776,7 +3779,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         Registers registers = processor.getRegisters()
     
@@ -3805,7 +3808,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         Registers registers = processor.getRegisters()
     
@@ -3835,7 +3838,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         Registers registers = processor.getRegisters()
     
@@ -3865,7 +3868,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         Registers registers = processor.getRegisters()
     
@@ -3890,7 +3893,7 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         Registers registers = processor.getRegisters()
     
@@ -3933,7 +3936,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0xFFFB, 2)
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         Registers registers = processor.getRegisters()
     
@@ -3980,7 +3983,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0xFFFB, 2)
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         Registers registers = processor.getRegisters()
     
@@ -4029,7 +4032,7 @@ class OpCodeSpec extends Specification {
         memory.setByteAt(0xFFFF, 0x00)
     
         and:
-        Mos6502 processor = new Mos6502(memory)
+        
         processor.reset()
         Registers registers = processor.getRegisters()
     
@@ -4068,7 +4071,7 @@ class OpCodeSpec extends Specification {
     //        memory.setBlock(0, programText)
     //
     //        and:
-    //        Mos6502 processor = new Mos6502(memory)
+    //        
     //        processor.reset()
     //        Registers registers = processor.getRegisters()
     //
