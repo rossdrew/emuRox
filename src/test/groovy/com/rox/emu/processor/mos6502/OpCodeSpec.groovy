@@ -31,7 +31,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step()
         Registers registers = processor.getRegisters()
     
@@ -59,7 +59,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step()
         Registers registers = processor.getRegisters()
     
@@ -88,7 +88,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step()
         Registers registers = processor.getRegisters()
     
@@ -119,7 +119,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(2)
         Registers registers = processor.getRegisters()
     
@@ -145,7 +145,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step()
         Registers registers = processor.getRegisters()
     
@@ -176,7 +176,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(2)
         Registers registers = processor.getRegisters()
     
@@ -205,7 +205,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(2)
         Registers registers = processor.getRegisters()
     
@@ -237,7 +237,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(8)
         Registers registers = processor.getRegisters()
     
@@ -270,7 +270,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(9)
         Registers registers = processor.getRegisters()
     
@@ -294,7 +294,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step()
         Registers registers = processor.getRegisters()
     
@@ -322,7 +322,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step()
         Registers registers = processor.getRegisters()
     
@@ -350,7 +350,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(4)
         Registers registers = processor.getRegisters()
     
@@ -377,7 +377,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(3)
         Registers registers = processor.getRegisters()
     
@@ -405,7 +405,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(4)
         Registers registers = processor.getRegisters()
     
@@ -430,7 +430,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step()
         Registers registers = processor.getRegisters()
     
@@ -457,7 +457,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(3)
         Registers registers = processor.getRegisters()
     
@@ -482,7 +482,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(4)
         Registers registers = processor.getRegisters()
     
@@ -510,7 +510,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step()
         Registers registers = processor.getRegisters()
     
@@ -538,7 +538,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(2)
         Registers registers = processor.getRegisters()
     
@@ -563,7 +563,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(2)
         Registers registers = processor.getRegisters()
     
@@ -591,7 +591,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(3)
         Registers registers = processor.getRegisters()
     
@@ -619,7 +619,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(2)
         Registers registers = processor.getRegisters()
     
@@ -647,7 +647,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(2)
         Registers registers = processor.getRegisters()
     
@@ -675,7 +675,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(3)
         Registers registers = processor.getRegisters()
     
@@ -705,7 +705,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(3)
         Registers registers = processor.getRegisters()
     
@@ -740,7 +740,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(9)
         Registers registers = processor.getRegisters()
     
@@ -775,7 +775,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(9)
         Registers registers = processor.getRegisters()
     
@@ -807,7 +807,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(6)
         Registers registers = processor.getRegisters()
     
@@ -837,7 +837,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(2)
         Registers registers = processor.getRegisters()
     
@@ -866,7 +866,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(4)
         Registers registers = processor.getRegisters()
     
@@ -896,7 +896,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(5)
         Registers registers = processor.getRegisters()
     
@@ -925,7 +925,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(4)
         Registers registers = processor.getRegisters()
     
@@ -955,7 +955,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(5)
         Registers registers = processor.getRegisters()
     
@@ -985,7 +985,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(5)
         Registers registers = processor.getRegisters()
     
@@ -1019,7 +1019,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(9)
         Registers registers = processor.getRegisters()
     
@@ -1053,7 +1053,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(9)
         Registers registers = processor.getRegisters()
     
@@ -1077,7 +1077,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(2)
         Registers registers = processor.getRegisters()
     
@@ -1107,7 +1107,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(4)
         Registers registers = processor.getRegisters()
     
@@ -1138,7 +1138,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(5)
         Registers registers = processor.getRegisters()
     
@@ -1168,7 +1168,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(4)
         Registers registers = processor.getRegisters()
     
@@ -1199,7 +1199,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(5)
         Registers registers = processor.getRegisters()
     
@@ -1230,7 +1230,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(5)
         Registers registers = processor.getRegisters()
     
@@ -1265,7 +1265,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(9)
         Registers registers = processor.getRegisters()
     
@@ -1300,7 +1300,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(9)
         Registers registers = processor.getRegisters()
     
@@ -1324,7 +1324,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(2)
         Registers registers = processor.getRegisters()
     
@@ -1352,7 +1352,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(4)
         Registers registers = processor.getRegisters()
     
@@ -1381,7 +1381,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(5)
         Registers registers = processor.getRegisters()
     
@@ -1409,7 +1409,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(4)
         Registers registers = processor.getRegisters()
     
@@ -1438,7 +1438,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(5)
         Registers registers = processor.getRegisters()
     
@@ -1467,7 +1467,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(5)
         Registers registers = processor.getRegisters()
     
@@ -1500,7 +1500,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(9)
         Registers registers = processor.getRegisters()
     
@@ -1533,7 +1533,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(9)
         Registers registers = processor.getRegisters()
     
@@ -1561,7 +1561,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(7)
     
         then: 'The value has been stored at the expected address'
@@ -1590,7 +1590,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(7)
         Registers registers = processor.getRegisters()
     
@@ -1617,7 +1617,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(3)
         Registers registers = processor.getRegisters()
     
@@ -1648,7 +1648,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(5)
         Registers registers = processor.getRegisters()
     
@@ -1680,7 +1680,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(6)
         Registers registers = processor.getRegisters()
     
@@ -1711,7 +1711,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(5)
         Registers registers = processor.getRegisters()
     
@@ -1743,7 +1743,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(6)
         Registers registers = processor.getRegisters()
     
@@ -1775,7 +1775,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(6)
         Registers registers = processor.getRegisters()
     
@@ -1811,7 +1811,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(10)
         Registers registers = processor.getRegisters()
     
@@ -1846,7 +1846,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(10)
         Registers registers = processor.getRegisters()
     
@@ -1871,7 +1871,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(2)
         Registers registers = processor.getRegisters()
     
@@ -1898,7 +1898,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(3)
         Registers registers = processor.getRegisters()
     
@@ -1926,7 +1926,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(4)
         Registers registers = processor.getRegisters()
     
@@ -1953,7 +1953,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(3)
         Registers registers = processor.getRegisters()
     
@@ -1981,7 +1981,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(4)
         Registers registers = processor.getRegisters()
     
@@ -2008,7 +2008,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(3)
         Registers registers = processor.getRegisters()
     
@@ -2036,7 +2036,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(4)
         Registers registers = processor.getRegisters()
     
@@ -2063,7 +2063,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(3)
         Registers registers = processor.getRegisters()
     
@@ -2091,7 +2091,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(4)
         Registers registers = processor.getRegisters()
     
@@ -2116,7 +2116,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(2)
         Registers registers = processor.getRegisters()
     
@@ -2141,7 +2141,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(2)
         Registers registers = processor.getRegisters()
     
@@ -2166,7 +2166,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(2)
         Registers registers = processor.getRegisters()
     
@@ -2194,7 +2194,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         Registers registers = processor.getRegisters()
     
         and:
@@ -2224,7 +2224,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         Registers registers = processor.getRegisters()
     
         and:
@@ -2257,7 +2257,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         Registers registers = processor.getRegisters()
     
         and:
@@ -2290,7 +2290,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         Registers registers = processor.getRegisters()
     
         and:
@@ -2324,7 +2324,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         Registers registers = processor.getRegisters()
     
         and:
@@ -2358,7 +2358,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         Registers registers = processor.getRegisters()
     
         and:
@@ -2390,7 +2390,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         Registers registers = processor.getRegisters()
     
         and:
@@ -2421,7 +2421,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         Registers registers = processor.getRegisters()
     
         and:
@@ -2453,7 +2453,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         Registers registers = processor.getRegisters()
     
         and:
@@ -2484,7 +2484,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         Registers registers = processor.getRegisters()
     
         and:
@@ -2516,7 +2516,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         Registers registers = processor.getRegisters()
     
         and:
@@ -2551,7 +2551,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         Registers registers = processor.getRegisters()
     
         and:
@@ -2588,7 +2588,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         Registers registers = processor.getRegisters()
     
         and:
@@ -2615,7 +2615,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         Registers registers = processor.getRegisters()
     
         and:
@@ -2641,7 +2641,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         Registers registers = processor.getRegisters()
     
         and:
@@ -2668,7 +2668,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         Registers registers = processor.getRegisters()
     
         and:
@@ -2703,7 +2703,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         Registers registers = processor.getRegisters()
     
         and:
@@ -2737,7 +2737,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         Registers registers = processor.getRegisters()
     
         and:
@@ -2770,7 +2770,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         Registers registers = processor.getRegisters()
     
         and:
@@ -2804,7 +2804,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         Registers registers = processor.getRegisters()
     
         and:
@@ -2836,7 +2836,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         Registers registers = processor.getRegisters()
     
         and:
@@ -2875,7 +2875,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         Registers registers = processor.getRegisters()
     
         and:
@@ -2902,7 +2902,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         Registers registers = processor.getRegisters()
     
         and:
@@ -2933,7 +2933,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         Registers registers = processor.getRegisters()
     
         and:
@@ -2964,7 +2964,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         Registers registers = processor.getRegisters()
     
         and:
@@ -2996,7 +2996,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         Registers registers = processor.getRegisters()
     
         and:
@@ -3028,7 +3028,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         Registers registers = processor.getRegisters()
     
         and:
@@ -3053,7 +3053,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         Registers registers = processor.getRegisters()
     
         and:
@@ -3082,7 +3082,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         Registers registers = processor.getRegisters()
     
         and:
@@ -3110,7 +3110,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         Registers registers = processor.getRegisters()
     
         and:
@@ -3138,7 +3138,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         Registers registers = processor.getRegisters()
     
         and:
@@ -3166,7 +3166,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         Registers registers = processor.getRegisters()
     
         and:
@@ -3198,7 +3198,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         Registers registers = processor.getRegisters()
     
         and:
@@ -3230,7 +3230,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         Registers registers = processor.getRegisters()
     
         and:
@@ -3261,7 +3261,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         Registers registers = processor.getRegisters()
     
         and:
@@ -3288,7 +3288,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         Registers registers = processor.getRegisters()
     
         and:
@@ -3314,7 +3314,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         Registers registers = processor.getRegisters()
     
         and:
@@ -3342,7 +3342,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         Registers registers = processor.getRegisters()
     
         and:
@@ -3368,7 +3368,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         Registers registers = processor.getRegisters()
     
         and:
@@ -3394,7 +3394,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         Registers registers = processor.getRegisters()
     
         and:
@@ -3426,7 +3426,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         Registers registers = processor.getRegisters()
     
         and:
@@ -3459,7 +3459,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         Registers registers = processor.getRegisters()
     
         and:
@@ -3491,7 +3491,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         Registers registers = processor.getRegisters()
     
         and:
@@ -3524,7 +3524,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         Registers registers = processor.getRegisters()
     
         and:
@@ -3557,7 +3557,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         Registers registers = processor.getRegisters()
     
         and:
@@ -3594,7 +3594,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(9)
         Registers registers = processor.getRegisters()
     
@@ -3629,7 +3629,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         processor.step(9)
         Registers registers = processor.getRegisters()
     
@@ -3656,7 +3656,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         Registers registers = processor.getRegisters()
     
         and:
@@ -3687,7 +3687,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         Registers registers = processor.getRegisters()
     
         and:
@@ -3718,7 +3718,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         Registers registers = processor.getRegisters()
     
         and:
@@ -3749,7 +3749,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         Registers registers = processor.getRegisters()
     
         and:
@@ -3780,7 +3780,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         Registers registers = processor.getRegisters()
     
         and:
@@ -3809,7 +3809,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         Registers registers = processor.getRegisters()
     
         and:
@@ -3839,7 +3839,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         Registers registers = processor.getRegisters()
     
         and:
@@ -3869,7 +3869,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         Registers registers = processor.getRegisters()
     
         and:
@@ -3894,7 +3894,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         Registers registers = processor.getRegisters()
     
         and: 'The status register is set to a value that will be pushed to stack'
@@ -3937,7 +3937,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         Registers registers = processor.getRegisters()
     
         and:
@@ -3984,7 +3984,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         Registers registers = processor.getRegisters()
     
         and:
@@ -4033,7 +4033,7 @@ class OpCodeSpec extends Specification {
     
         and:
         
-        processor.reset()
+
         Registers registers = processor.getRegisters()
     
         and:
@@ -4072,7 +4072,7 @@ class OpCodeSpec extends Specification {
     //
     //        and:
     //        
-    //        processor.reset()
+    //
     //        Registers registers = processor.getRegisters()
     //
     //        and:
