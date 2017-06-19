@@ -10,15 +10,19 @@ import spock.lang.Unroll
 import static com.rox.emu.processor.mos6502.op.OpCode.*
 
 class OpCodeSpec extends Specification {
-
+    private Memory memory;
+    
+    def setup(){
+        memory = new SimpleMemory()
+    }
+    
     def testNewOpCode(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDA_I, loadValue)
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step()
         Registers registers = processor.getRegisters()
@@ -42,12 +46,11 @@ class OpCodeSpec extends Specification {
     @Unroll("LDA (Immediate) #Expected: Load #loadValue == #expectedAccumulator")
     testImmediateLDA() {
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDA_I, loadValue)
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step()
         Registers registers = processor.getRegisters()
@@ -71,13 +74,12 @@ class OpCodeSpec extends Specification {
     @Unroll("LDA (Zero Page) #Expected: Expecting #loadValue @ [30]")
     testLDAFromZeroPage() {
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDA_Z, 30)
         memory.setByteAt(30, loadValue)
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step()
         Registers registers = processor.getRegisters()
@@ -101,7 +103,6 @@ class OpCodeSpec extends Specification {
     @Unroll("LDA (Zero Page[X]) #Expected: Load [0x30 + X(#index)] -> #expectedAccumulator")
     testLDAFromZeroPageIndexedByX() {
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDX_I, index,
                          LDA_Z_IX, 0x30)
         int[] values = [0, 11, 0b11111111]
@@ -109,7 +110,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(2)
         Registers registers = processor.getRegisters()
@@ -130,13 +131,12 @@ class OpCodeSpec extends Specification {
     @Unroll("LDA (Absolute) #Expected: Expecting #loadValue @ [300]")
     testAbsoluteLDA() {
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDA_ABS, 0x1, 0x2C)
         memory.setByteAt(300, loadValue)
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step()
         Registers registers = processor.getRegisters()
@@ -160,7 +160,6 @@ class OpCodeSpec extends Specification {
     @Unroll("LDA (Absolute[X]). #Expected: 300[#index] = #expectedAccumulator")
     testLDAIndexedByX() {
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDX_I, index,
                          LDA_ABS_IX, 1, 0x2C)
         int[] values = [0, 11, 0b11111111]
@@ -168,7 +167,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(2)
         Registers registers = processor.getRegisters()
@@ -190,7 +189,6 @@ class OpCodeSpec extends Specification {
     @Unroll("LDA (Absolute[Y]). #Expected: 300[#index] = #expectedAccumulator")
     testLDAIndexedByY() {
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDY_I, index,
                          LDA_ABS_IY, 1, 0x2C)
         int[] values = [0, 11, 0b11111111]
@@ -198,7 +196,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(2)
         Registers registers = processor.getRegisters()
@@ -219,7 +217,6 @@ class OpCodeSpec extends Specification {
     @Unroll("LDA (Indirect, X). #Expected: 0x30[#index] -> [#indAddressHi|#indAddressLo] = #expectedAccumulator")
     testLDA_IND_IX() {
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDA_I, firstValue,    //Value at indirect address
                          STA_ABS, indAddressHi, indAddressLo,
                          LDX_I, index,
@@ -231,7 +228,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(8)
         Registers registers = processor.getRegisters()
@@ -252,7 +249,6 @@ class OpCodeSpec extends Specification {
     @Unroll("LDA (Indirect, Y). #expected: 0x60 -> [#pointerHi|#pointerLo]@[#index] = #value")
     testLDA_IND_IY() {
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDY_I, index,           //Index to use
                          LDA_I, value,           //High order byte at pointer
                          STA_ABS_IY, pointerHi, pointerLo,
@@ -265,7 +261,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(9)
         Registers registers = processor.getRegisters()
@@ -285,12 +281,11 @@ class OpCodeSpec extends Specification {
     @Unroll("LDX (Immediate): Load #firstValue")
     testLDX(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDX_I, firstValue)
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step()
         Registers registers = processor.getRegisters()
@@ -311,7 +306,6 @@ class OpCodeSpec extends Specification {
     @Unroll("LDX (Absolute): Load #firstValue from [#addressHi | #addressLo]")
     testLDX_ABS(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDX_ABS, addressHi, addressLo)
         memory.setBlock(0, program.getProgramAsByteArray())
 
@@ -319,7 +313,7 @@ class OpCodeSpec extends Specification {
         memory.setByteAt(addressHi << 8 | addressLo, firstValue)
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step()
         Registers registers = processor.getRegisters()
@@ -340,7 +334,6 @@ class OpCodeSpec extends Specification {
     @Unroll("LDX (Absolute[Y]): #Expected #firstValue from [#addressHi | #addressLo]")
     testLDX_ABS_IX(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDY_I, index,
                                              LDA_I, firstValue,
                                              STA_ABS_IY, addressHi, addressLo,
@@ -348,7 +341,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(4)
         Registers registers = processor.getRegisters()
@@ -369,14 +362,13 @@ class OpCodeSpec extends Specification {
     @Unroll("LDX (Zero Page): Load #firstValue from [#address]")
     testLX_Z(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDA_I, firstValue,
                          STA_Z, address,
                          LDX_Z, address)
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(3)
         Registers registers = processor.getRegisters()
@@ -397,7 +389,6 @@ class OpCodeSpec extends Specification {
     @Unroll("LDX (Zero Page[Y]): Load #firstValue from [#address[#index]")
     testLX_Z_IY(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDY_I, index,
                          LDA_I, firstValue,
                          STA_Z, address,
@@ -405,7 +396,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(4)
         Registers registers = processor.getRegisters()
@@ -426,12 +417,11 @@ class OpCodeSpec extends Specification {
     @Unroll("LDY (Immediate): Load #firstValue")
     testLDY(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDY_I, firstValue)
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step()
         Registers registers = processor.getRegisters()
@@ -452,14 +442,13 @@ class OpCodeSpec extends Specification {
     @Unroll("LDY (Zero Page): Load #firstValue from [#address]")
     testLDY_Z(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDA_I, firstValue,
                          STA_Z, address,
                          LDY_Z, address)
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(3)
         Registers registers = processor.getRegisters()
@@ -480,12 +469,11 @@ class OpCodeSpec extends Specification {
     @Unroll("LDY (Zero Page[X]): Load Y with #firstValue from #address[#index#]")
     testLDY_Z_IX(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDX_I, index, LDA_I, firstValue, STA_Z_IX, address, LDY_Z_IX, address)
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(4)
         Registers registers = processor.getRegisters()
@@ -506,7 +494,6 @@ class OpCodeSpec extends Specification {
     @Unroll("LDY (Absolute): Load Y with #firstValue at [#addressHi | #addressLo]")
     testLDY_ABS(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDY_ABS, addressHi, addressLo)
         memory.setBlock(0, program.getProgramAsByteArray())
 
@@ -514,7 +501,7 @@ class OpCodeSpec extends Specification {
         memory.setByteAt(addressHi << 8 | addressLo, firstValue)
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step()
         Registers registers = processor.getRegisters()
@@ -535,7 +522,6 @@ class OpCodeSpec extends Specification {
     @Unroll("LDY (Absolute[X]): Load Y with #firstValue at [#addressHi | #addressLo][#index]")
     testLDY_ABS_IX(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDX_I, index, LDY_ABS_IX, addressHi, addressLo)
         memory.setBlock(0, program.getProgramAsByteArray())
 
@@ -543,7 +529,7 @@ class OpCodeSpec extends Specification {
         memory.setByteAt((addressHi << 8 | addressLo)+index, firstValue)
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(2)
         Registers registers = processor.getRegisters()
@@ -564,12 +550,11 @@ class OpCodeSpec extends Specification {
     @Unroll("ADC (Immediate) #Expected:  #firstValue + #secondValue = #expectedAccumulator in Accumulator.")
     testADC(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDA_I, firstValue, ADC_I, secondValue)
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(2)
         Registers registers = processor.getRegisters()
@@ -592,13 +577,12 @@ class OpCodeSpec extends Specification {
     @Unroll("ADC (Zero Page[X]) #Expected: #firstValue + #secondValue = #expectedAccumulator in Accumulator.")
     testADC_Z_IX(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDA_I, firstValue, LDX_I, index, ADC_Z_IX, indexPoint)
         memory.setByteAt(memLoc, secondValue)
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(3)
         Registers registers = processor.getRegisters()
@@ -621,13 +605,12 @@ class OpCodeSpec extends Specification {
     @Unroll("ADC (Zero Page) #Expected:  #firstValue + #secondValue = #expectedAccumulator in Accumulator.")
     testADC_Z(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDA_I, firstValue, ADC_Z, 0x30)
         memory.setBlock(0, program.getProgramAsByteArray())
         memory.setByteAt(0x30, secondValue)
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(2)
         Registers registers = processor.getRegisters()
@@ -650,13 +633,12 @@ class OpCodeSpec extends Specification {
     @Unroll("ADC (Absolute) #Expected:  #firstValue + #secondValue = #expectedAccumulator in Accumulator.")
     testADC_ABS(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDA_I, firstValue, ADC_ABS, 0x1, 0x2C)
         memory.setBlock(0, program.getProgramAsByteArray())
         memory.setByteAt(300, secondValue)
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(2)
         Registers registers = processor.getRegisters()
@@ -679,13 +661,12 @@ class OpCodeSpec extends Specification {
     @Unroll("ADC (Absolute[X)) #Expected:  #firstValue + #secondValue = #expectedAccumulator in Accumulator.")
     testADC_ABS_IX(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDX_I, index, LDA_I, firstValue, ADC_ABS_IX, 0x1, 0x2C)
         memory.setBlock(0, program.getProgramAsByteArray())
         memory.setByteAt(300 + index, secondValue)
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(3)
         Registers registers = processor.getRegisters()
@@ -708,7 +689,6 @@ class OpCodeSpec extends Specification {
     @Unroll("ADC (Absolute[Y]) #Expected:  #firstValue + #secondValue = #expectedAccumulator in Accumulator.")
     testADC_ABS_IY(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDY_I, index,
                          LDA_I, firstValue,
                          ADC_ABS_IY, 0x1, 0x2C)
@@ -716,7 +696,7 @@ class OpCodeSpec extends Specification {
         memory.setByteAt(300 + index, secondValue)
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(3)
         Registers registers = processor.getRegisters()
@@ -739,7 +719,6 @@ class OpCodeSpec extends Specification {
     @Unroll("ADC (Indirect, X) #Expected: #firstValue (@[#locationHi|#locationLo]) & #secondValue = #expectedAcc")
     testADC_IND_IX() {
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDA_I, firstValue,    //Value at indirect address
                          STA_ABS, locationHi, locationLo,
                          LDX_I, index,
@@ -752,7 +731,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(9)
         Registers registers = processor.getRegisters()
@@ -775,7 +754,6 @@ class OpCodeSpec extends Specification {
     @Unroll("ADC (Indirect, Y) #Expected: #firstValue + #secondValue -> #expectedAcc")
     testADC_IND_IY() {
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDY_I, index,           //Index to use
                          LDA_I, firstValue,      //High order byte at pointer
                          STA_ABS_IY, pointerHi, pointerLo,
@@ -788,7 +766,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(9)
         Registers registers = processor.getRegisters()
@@ -811,7 +789,6 @@ class OpCodeSpec extends Specification {
     @Unroll("ADC 16bit [#lowFirstByte|#highFirstByte] + [#lowSecondByte|#highSecondByte] = #Expected")
     testMultiByteADC(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(CLC,
                          LDA_I, lowFirstByte,
                          ADC_I, lowSecondByte,
@@ -821,7 +798,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(6)
         Registers registers = processor.getRegisters()
@@ -847,12 +824,11 @@ class OpCodeSpec extends Specification {
     @Unroll("AND (Immediate) #Expected:  #firstValue & #secondValue = #expectedAccumulator in Accumulator.")
     testAND(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDA_I, firstValue, AND_I, secondValue)
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(2)
         Registers registers = processor.getRegisters()
@@ -874,7 +850,6 @@ class OpCodeSpec extends Specification {
     @Unroll("AND (Zero Page) #Expected: #firstValue & #secondValue = #expectedAccumulator in Accumulator.")
     testAND_Z(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDA_I, firstValue,
                          STA_Z, 0x20,
                          LDA_I, secondValue,
@@ -882,7 +857,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(4)
         Registers registers = processor.getRegisters()
@@ -904,7 +879,6 @@ class OpCodeSpec extends Specification {
     @Unroll("AND (Zero Page[X]) #Expected: #firstValue & #secondValue = #expectedAcc")
     testAND_Z_IX(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDX_I, index,
                          LDA_I, firstValue,
                          STA_Z_IX, 0x20,
@@ -913,7 +887,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(5)
         Registers registers = processor.getRegisters()
@@ -935,7 +909,6 @@ class OpCodeSpec extends Specification {
     @Unroll("AND (Absolute) #Expected:  #firstValue & #secondValue = #expectedAccumulator in Accumulator.")
     testAND_A(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDA_I, firstValue,
                          STA_ABS, 0x20, 0x01,
                          LDA_I, secondValue,
@@ -943,7 +916,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(4)
         Registers registers = processor.getRegisters()
@@ -965,7 +938,6 @@ class OpCodeSpec extends Specification {
     @Unroll("AND (Absolute[X]) #Expected: #firstValue & #secondValue = #expectedAcc")
     testAND_ABS_IX(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDX_I, index,
                          LDA_I, firstValue,
                          STA_ABS_IX, locationHi, locationLo,
@@ -974,7 +946,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(5)
         Registers registers = processor.getRegisters()
@@ -996,7 +968,6 @@ class OpCodeSpec extends Specification {
     @Unroll("AND (Absolute[Y]) #Expected: #firstValue & #secondValue = #expectedAcc")
     testAND_ABS_IY(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDY_I, index,
                          LDA_I, firstValue,
                          STA_ABS_IY, locationHi, locationLo,
@@ -1005,7 +976,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(5)
         Registers registers = processor.getRegisters()
@@ -1027,7 +998,6 @@ class OpCodeSpec extends Specification {
     @Unroll("AND (Indirect, X) #Expected: #firstValue (@[#locationHi|#locationLo]) & #secondValue = #expectedAcc")
     testAND_IND_IX() {
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDA_I, firstValue,    //Value at indirect address
                          STA_ABS, locationHi, locationLo,
                          LDX_I, index,
@@ -1040,7 +1010,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(9)
         Registers registers = processor.getRegisters()
@@ -1062,7 +1032,6 @@ class OpCodeSpec extends Specification {
     @Unroll("AND (Indirect, Y) #Expected: #firstValue & #secondValue -> #expectedAcc")
     testAND_IND_IY() {
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDY_I, index,           //Index to use
                          LDA_I, firstValue,      //High order byte at pointer
                          STA_ABS_IY, pointerHi, pointerLo,
@@ -1075,7 +1044,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(9)
         Registers registers = processor.getRegisters()
@@ -1095,12 +1064,11 @@ class OpCodeSpec extends Specification {
     @Unroll("ORA (Immediate) #Expected:  #firstValue | #secondValue = #expectedAccumulator in Accumulator.")
     testOR(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDA_I, firstValue, ORA_I, secondValue)
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(2)
         Registers registers = processor.getRegisters()
@@ -1123,7 +1091,6 @@ class OpCodeSpec extends Specification {
     @Unroll("ORA (Zero Page) #Expected:  #firstValue | #secondValue = #expectedAccumulator in Accumulator.")
     testOR_Z(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDA_I, firstValue,
                          STA_Z, 0x20,
                          LDA_I, secondValue,
@@ -1131,7 +1098,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(4)
         Registers registers = processor.getRegisters()
@@ -1154,7 +1121,6 @@ class OpCodeSpec extends Specification {
     @Unroll("ORA (Zero Page[X)) #Expected:  #firstValue | #secondValue = #expectedAccumulator in Accumulator.")
     testOR_Z_IX(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDX_I, index,
                          LDA_I, firstValue,
                          STA_Z_IX, 0x20,
@@ -1163,7 +1129,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(5)
         Registers registers = processor.getRegisters()
@@ -1186,7 +1152,6 @@ class OpCodeSpec extends Specification {
     @Unroll("ORA (Absolute) #Expected:  #firstValue | #secondValue = #expectedAccumulator in Accumulator.")
     testOR_ABS(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDA_I, firstValue,
                          STA_ABS, 0x20, 0x05,
                          LDA_I, secondValue,
@@ -1194,7 +1159,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(4)
         Registers registers = processor.getRegisters()
@@ -1217,7 +1182,6 @@ class OpCodeSpec extends Specification {
     @Unroll("ORA (Absolute[X]) #Expected:  #firstValue | #secondValue = #expectedAccumulator in Accumulator.")
     testOR_ABS_IX(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDX_I, index,
                          LDA_I, firstValue,
                          STA_ABS_IX, 0x20, 0x05,
@@ -1226,7 +1190,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(5)
         Registers registers = processor.getRegisters()
@@ -1249,7 +1213,6 @@ class OpCodeSpec extends Specification {
     @Unroll("ORA (Absolute[Y]) #Expected:  #firstValue | #secondValue = #expectedAccumulator in Accumulator.")
     testOR_ABS_IY(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDY_I, index,
                          LDA_I, firstValue,
                          STA_ABS_IY, 0x20, 0x05,
@@ -1258,7 +1221,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(5)
         Registers registers = processor.getRegisters()
@@ -1281,7 +1244,6 @@ class OpCodeSpec extends Specification {
     @Unroll("ORA (Indirect, X) #Expected: #firstValue (@[#locationHi|#locationLo]) | #secondValue = #expectedAcc")
     testOR_IND_IX() {
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDA_I, firstValue,    //Value at indirect address
                          STA_ABS, locationHi, locationLo,
                          LDX_I, index,
@@ -1294,7 +1256,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(9)
         Registers registers = processor.getRegisters()
@@ -1317,7 +1279,6 @@ class OpCodeSpec extends Specification {
     @Unroll("ORA (Indirect, Y) #Expected: #firstValue | #secondValue -> #expectedAcc")
     testORA_IND_IY() {
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDY_I, index,           //Index to use
                          LDA_I, firstValue,      //High order byte at pointer
                          STA_ABS_IY, pointerHi, pointerLo,
@@ -1330,7 +1291,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(9)
         Registers registers = processor.getRegisters()
@@ -1350,12 +1311,11 @@ class OpCodeSpec extends Specification {
     @Unroll("EOR (Immediate) #Expected:  #firstValue ^ #secondValue = #expectedAccumulator in Accumulator.")
     testEOR(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDA_I, firstValue, EOR_I, secondValue)
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(2)
         Registers registers = processor.getRegisters()
@@ -1376,7 +1336,6 @@ class OpCodeSpec extends Specification {
     @Unroll("EOR (Zero Page) #Expected:  #firstValue ^ #secondValue = #expectedAccumulator in Accumulator.")
     testEOR_Z(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDA_I, secondValue,
                          STA_Z, 0x20,
                          LDA_I, firstValue,
@@ -1384,7 +1343,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(4)
         Registers registers = processor.getRegisters()
@@ -1405,7 +1364,6 @@ class OpCodeSpec extends Specification {
     @Unroll("EOR (Zero Page[X]) #Expected:  #firstValue ^ #secondValue = #expectedAccumulator in Accumulator.")
     testEOR_Z_IX(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDX_I, index,
                          LDA_I, secondValue,
                          STA_Z_IX, 0x20,
@@ -1414,7 +1372,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(5)
         Registers registers = processor.getRegisters()
@@ -1435,7 +1393,6 @@ class OpCodeSpec extends Specification {
     @Unroll("EOR (Absolute) #Expected:  #firstValue ^ #secondValue = #expectedAccumulator in Accumulator.")
     testEOR_ABS(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDA_I, secondValue,
                          STA_ABS, 0x20, 0x04,
                          LDA_I, firstValue,
@@ -1443,7 +1400,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(4)
         Registers registers = processor.getRegisters()
@@ -1464,7 +1421,6 @@ class OpCodeSpec extends Specification {
     @Unroll("EOR (Absolute[X]) #Expected:  #firstValue ^ #secondValue = #expectedAccumulator in Accumulator.")
     testEOR_ABS_IX(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDX_I, index,
                          LDA_I, secondValue,
                          STA_ABS_IX, 0x20, 0x04,
@@ -1473,7 +1429,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(5)
         Registers registers = processor.getRegisters()
@@ -1494,7 +1450,6 @@ class OpCodeSpec extends Specification {
     @Unroll("EOR (Absolute[Y]) #Expected:  #firstValue ^ #secondValue = #expectedAccumulator in Accumulator.")
     testEOR_ABS_IY(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDY_I, index,
                          LDA_I, secondValue,
                          STA_ABS_IY, 0x20, 0x04,
@@ -1503,7 +1458,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(5)
         Registers registers = processor.getRegisters()
@@ -1524,7 +1479,6 @@ class OpCodeSpec extends Specification {
     @Unroll("EOR (Indirect, X) #Expected: #firstValue (@[#locationHi|#locationLo]) EOR #secondValue = #expectedAcc")
     testEOR_IND_IX() {
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDA_I, firstValue,      //Value at indirect address
                          STA_ABS, locationHi, locationLo,
                          LDX_I, index,
@@ -1537,7 +1491,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(9)
         Registers registers = processor.getRegisters()
@@ -1558,7 +1512,6 @@ class OpCodeSpec extends Specification {
     @Unroll("EOR (Indirect, Y) #Expected: #firstValue ^ #secondValue -> #expectedAcc")
     testEOR_IND_IY() {
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDY_I, index,           //Index to use
                          LDA_I, firstValue,      //High order byte at pointer
                          STA_ABS_IY, pointerHi, pointerLo,
@@ -1571,7 +1524,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(9)
         Registers registers = processor.getRegisters()
@@ -1589,7 +1542,6 @@ class OpCodeSpec extends Specification {
     @Unroll("STA (Indirect, X) #Expected: #value stored at [#locationHi|#locationLo]")
     testSTA_IND_IX() {
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDX_I, index,
                          LDA_I, locationHi,      //Indirect address in memory
                          STA_Z_IX, 0x30,
@@ -1600,7 +1552,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(7)
 
@@ -1619,7 +1571,6 @@ class OpCodeSpec extends Specification {
     @Unroll("STA (Indirect, Y) #Expected: #value stored at [#locationHi|#locationLo]")
     testSTA_IND_IY() {
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDA_I, locationHi,      //Indirect address in memory
                          STA_Z, 0x30,
                          LDA_I, locationLo,
@@ -1630,7 +1581,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(7)
         Registers registers = processor.getRegisters()
@@ -1652,13 +1603,12 @@ class OpCodeSpec extends Specification {
     @Unroll("SBC (Immediate) #Expected:  #firstValue - #secondValue = #expectedAccumulator in Accumulator.")
     testSBC(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(SEC, LDA_I, firstValue,
                          SBC_I, secondValue)
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(3)
         Registers registers = processor.getRegisters()
@@ -1681,7 +1631,6 @@ class OpCodeSpec extends Specification {
     @Unroll("SBC (Zero Page) #Expected:  #firstValue - #secondValue = #expectedAccumulator in Accumulator.")
     testSBC_Z(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDA_I, secondValue,
                          STA_Z, 0x20,
                          LDA_I, firstValue,
@@ -1690,7 +1639,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(5)
         Registers registers = processor.getRegisters()
@@ -1713,7 +1662,6 @@ class OpCodeSpec extends Specification {
     @Unroll("SBC (Zero Page[X]) #Expected:  #firstValue - #secondValue = #expectedAccumulator in Accumulator.")
     testSBC_Z_IX(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDX_I, index,
                          LDA_I, secondValue,
                          STA_Z_IX, 0x20,
@@ -1723,7 +1671,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(6)
         Registers registers = processor.getRegisters()
@@ -1746,7 +1694,6 @@ class OpCodeSpec extends Specification {
     @Unroll("SBC (Absolute) #Expected:  #firstValue - #secondValue = #expectedAccumulator in Accumulator.")
     testSBC_ABS(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDA_I, secondValue,
                          STA_ABS, 0x02, 0x20,
                          LDA_I, firstValue,
@@ -1755,7 +1702,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(5)
         Registers registers = processor.getRegisters()
@@ -1778,7 +1725,6 @@ class OpCodeSpec extends Specification {
     @Unroll("SBC (Absolute[X]) #Expected:  #firstValue - #secondValue = #expectedAccumulator in Accumulator.")
     testSBC_ABS_IX(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDX_I, index,
                          LDA_I, secondValue,
                          STA_ABS_IX, 0x02, 0x20,
@@ -1788,7 +1734,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(6)
         Registers registers = processor.getRegisters()
@@ -1811,7 +1757,6 @@ class OpCodeSpec extends Specification {
     @Unroll("SBC (Absolute[Y]) #Expected:  #firstValue - #secondValue = #expectedAccumulator in Accumulator.")
     testSBC_ABS_IY(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDY_I, index,
                          LDA_I, secondValue,
                          STA_ABS_IY, 0x02, 0x20,
@@ -1821,7 +1766,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(6)
         Registers registers = processor.getRegisters()
@@ -1844,7 +1789,6 @@ class OpCodeSpec extends Specification {
     @Unroll("SBC (Indirect, X) #Expected: #firstValue (@[#locationHi|#locationLo]) - #secondValue = #expectedAcc")
     testSBC_IND_IX() {
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDA_I, secondValue,    //Value at indirect address
                          STA_ABS, locationHi, locationLo,
                          LDX_I, index,
@@ -1858,7 +1802,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(10)
         Registers registers = processor.getRegisters()
@@ -1880,7 +1824,6 @@ class OpCodeSpec extends Specification {
     @Unroll("SBC (Indirect, Y) #Expected: #firstValue (@[#locationHi|#locationLo]) - #secondValue = #expectedAcc")
     testSBC_IND_IY() {
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDY_I, index,           //Index to use
                          LDA_I, secondValue,      //High order byte at pointer
                          STA_ABS_IY, pointerHi, pointerLo,
@@ -1894,7 +1837,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(10)
         Registers registers = processor.getRegisters()
@@ -1915,12 +1858,11 @@ class OpCodeSpec extends Specification {
     @Unroll("INX #Expected: on #firstValue = #expectedX")
     testINX(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDX_I, firstValue, INX)
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(2)
         Registers registers = processor.getRegisters()
@@ -1941,14 +1883,13 @@ class OpCodeSpec extends Specification {
     @Unroll("INC (Zero Page) #Expected: on #firstValue = #expectedMem")
     testINC_Z(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDA_I, firstValue,
                          STA_Z, 0x20,
                          INC_Z, 0x20)
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(3)
         Registers registers = processor.getRegisters()
@@ -1969,7 +1910,6 @@ class OpCodeSpec extends Specification {
     @Unroll("INC (Zero Page[X]) #Expected: on #firstValue = #expectedMem")
     testINC_Z_IX(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDX_I, index,
                          LDA_I, firstValue,
                          STA_Z_IX, 0x20,
@@ -1977,7 +1917,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(4)
         Registers registers = processor.getRegisters()
@@ -1998,14 +1938,13 @@ class OpCodeSpec extends Specification {
     @Unroll("INC (Absolute) #Expected: on #firstValue = #expectedMem")
     testINC_ABS(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDA_I, firstValue,
                          STA_ABS, 0x01, 0x20,
                          INC_ABS, 0x01, 0x20)
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(3)
         Registers registers = processor.getRegisters()
@@ -2026,7 +1965,6 @@ class OpCodeSpec extends Specification {
     @Unroll("INC (Absolute, X) #Expected: at 0x120[#index] on #firstValue = #expectedMem")
     testINC_ABS_IX(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDX_I, index,
                          LDA_I, firstValue,
                          STA_ABS_IX, 0x01, 0x20,
@@ -2034,7 +1972,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(4)
         Registers registers = processor.getRegisters()
@@ -2055,14 +1993,13 @@ class OpCodeSpec extends Specification {
     @Unroll("DEC (Zero Page) #Expected: on #firstValue = #expectedMem")
     testDEC_Z(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDA_I, firstValue,
                          STA_Z, 0x20,
                          DEC_Z, 0x20)
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(3)
         Registers registers = processor.getRegisters()
@@ -2083,7 +2020,6 @@ class OpCodeSpec extends Specification {
     @Unroll("DEC (Zero Page[X]) #Expected: on #firstValue at #loc[#index) = #expectedMem")
     testDEC_Z_IX(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDX_I, index,
                          LDA_I, firstValue,
                          STA_Z_IX, loc,
@@ -2091,7 +2027,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(4)
         Registers registers = processor.getRegisters()
@@ -2112,14 +2048,13 @@ class OpCodeSpec extends Specification {
     @Unroll("DEC (Absolute) #Expected: on #firstValue = #expectedMem")
     testDEC_ABS(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDA_I, firstValue,
                          STA_ABS, 0x01, 0x20,
                          DEC_ABS, 0x01, 0x20)
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(3)
         Registers registers = processor.getRegisters()
@@ -2140,7 +2075,6 @@ class OpCodeSpec extends Specification {
     @Unroll("DEC (Absolute[X]) #Expected: on #firstValue = #expectedMem")
     testDEC_ABS_IX(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDX_I, index,
                          LDA_I, firstValue,
                          STA_ABS_IX, 0x01, 0x20,
@@ -2148,7 +2082,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(4)
         Registers registers = processor.getRegisters()
@@ -2169,12 +2103,11 @@ class OpCodeSpec extends Specification {
     @Unroll("DEX #Expected: on #firstValue = #expectedX")
     testDEX(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDX_I, firstValue, DEX)
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(2)
         Registers registers = processor.getRegisters()
@@ -2195,12 +2128,11 @@ class OpCodeSpec extends Specification {
     @Unroll("INY #Expected: on #firstValue = #expectedX")
     testINY(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDY_I, firstValue, INY)
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(2)
         Registers registers = processor.getRegisters()
@@ -2221,12 +2153,11 @@ class OpCodeSpec extends Specification {
     @Unroll("DEY #Expected: on #firstValue = #expectedY")
     testDEY(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDY_I, firstValue, DEY)
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(2)
         Registers registers = processor.getRegisters()
@@ -2247,7 +2178,6 @@ class OpCodeSpec extends Specification {
     @Unroll("PLA #Expected: #firstValue from stack at (#expectedSP - 1)")
     testPLA(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDA_I, firstValue,
                          PHA,
                          LDA_I, 0x11,
@@ -2255,7 +2185,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         Registers registers = processor.getRegisters()
 
@@ -2280,13 +2210,12 @@ class OpCodeSpec extends Specification {
     @Unroll("ASL (Accumulator) #Expected: #firstValue becomes #expectedAccumulator")
     testASL(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDA_I, firstValue,
                          ASL_A)
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         Registers registers = processor.getRegisters()
 
@@ -2313,14 +2242,13 @@ class OpCodeSpec extends Specification {
     @Unroll("ASL (ZeroPage) #Expected: #firstValue becomes #expectedMem")
     testASL_Z(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDA_I, firstValue,
                          STA_Z, 0x20,
                          ASL_Z, 0x20)
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         Registers registers = processor.getRegisters()
 
@@ -2347,14 +2275,13 @@ class OpCodeSpec extends Specification {
     @Unroll("ASL (Absolute) #Expected: #firstValue becomes #expectedMem")
     testASL_A(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDA_I, firstValue,
                          STA_ABS, 0x01, 0x20,
                          ASL_ABS, 0x01, 0x20)
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         Registers registers = processor.getRegisters()
 
@@ -2381,7 +2308,6 @@ class OpCodeSpec extends Specification {
     @Unroll("ASL (Zero Page at X) #Expected: #firstValue (@ 0x20[#index]) becomes #expectedMem")
     testASL_Z_IX(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDA_I, firstValue,
                          LDX_I, index,
                          STA_Z_IX, 0x20,
@@ -2389,7 +2315,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         Registers registers = processor.getRegisters()
 
@@ -2416,7 +2342,6 @@ class OpCodeSpec extends Specification {
     @Unroll("ASL (Absolute[X]) #Expected: #firstValue (@ 0x20[#index]) becomes #expectedMem")
     testASL_ABS_IX(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDA_I, firstValue,
                          LDX_I, index,
                          STA_ABS_IX, 0x01, 0x20,
@@ -2424,7 +2349,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         Registers registers = processor.getRegisters()
 
@@ -2451,13 +2376,12 @@ class OpCodeSpec extends Specification {
     @Unroll("LSR (Accumulator) #Expected: #firstValue becomes #expectedAccumulator")
     testLSR(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDA_I, firstValue,
                          LSR_A)
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         Registers registers = processor.getRegisters()
 
@@ -2482,14 +2406,13 @@ class OpCodeSpec extends Specification {
     @Unroll("LSR (Zero Page) #Expected: #firstValue becomes #expectedMem")
     testLSR_Z(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDA_I, firstValue,
                          STA_Z, 0x20,
                          LSR_Z, 0x20)
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         Registers registers = processor.getRegisters()
 
@@ -2514,7 +2437,6 @@ class OpCodeSpec extends Specification {
     @Unroll("LSR (Zero Page[X]) #Expected: #firstValue becomes #expectedMem")
     testLSR_Z_IX(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDX_I, index,
                          LDA_I, firstValue,
                          STA_Z_IX, 0x20,
@@ -2522,7 +2444,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         Registers registers = processor.getRegisters()
 
@@ -2547,14 +2469,13 @@ class OpCodeSpec extends Specification {
     @Unroll("LSR (Absolute) #Expected: #firstValue becomes #expectedMem")
     testLSR_ABS(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDA_I, firstValue,
                          STA_ABS, 0x02, 0x20,
                          LSR_ABS, 0x02, 0x20)
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         Registers registers = processor.getRegisters()
 
@@ -2579,7 +2500,6 @@ class OpCodeSpec extends Specification {
     @Unroll("LSR (Absolute[X]) #Expected: #firstValue becomes #expectedMem")
     testLSR_ABS_IX(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDX_I, index,
                          LDA_I, firstValue,
                          STA_ABS_IX, 0x02, 0x20,
@@ -2587,7 +2507,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         Registers registers = processor.getRegisters()
 
@@ -2612,7 +2532,6 @@ class OpCodeSpec extends Specification {
     @Unroll("JMP #expected: [#jmpLocationHi | #jmpLocationLow] -> #expectedPC")
     testJMP(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(NOP,
                          NOP,
                          NOP,
@@ -2623,7 +2542,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         Registers registers = processor.getRegisters()
 
@@ -2646,7 +2565,6 @@ class OpCodeSpec extends Specification {
     @Unroll("JMP (Indirect) #expected: [#jmpLocationHi | #jmpLocationLow] -> #expectedPC")
     testIndirectJMP(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDA_I, jmpLocationHi,
                          STA_ABS, 0x01, 0x40,
                          LDA_I, jmpLocationLow,
@@ -2661,7 +2579,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         Registers registers = processor.getRegisters()
 
@@ -2684,12 +2602,11 @@ class OpCodeSpec extends Specification {
     @Unroll("BCC #expected: ending up at mem[#expectedPC) after #instructions steps")
     testBCC(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(NOP, NOP, NOP, preInstr, BCC, jmpSteps, NOP, NOP, NOP, NOP)
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         Registers registers = processor.getRegisters()
 
@@ -2711,12 +2628,11 @@ class OpCodeSpec extends Specification {
     @Unroll("BCS #expected: ending up at mem[#expectedPC) after #instructions steps")
     testBCS(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(NOP, NOP, NOP, preInstr, BCS, jmpSteps, NOP, NOP, NOP, NOP)
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         Registers registers = processor.getRegisters()
 
@@ -2738,13 +2654,12 @@ class OpCodeSpec extends Specification {
     @Unroll("ROL (Accumulator) #expected: #firstValue -> #expectedAccumulator")
     testROL_A(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(preInstr, LDA_I,
                          firstValue, ROL_A)
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         Registers registers = processor.getRegisters()
 
@@ -2772,7 +2687,6 @@ class OpCodeSpec extends Specification {
     @Unroll("ROL (Zero Page) #Expected: #firstValue -> #expectedMem")
     testROL_Z(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(firstInstr,
                          LDA_I, firstValue,
                          STA_Z, 0x20,
@@ -2780,7 +2694,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         Registers registers = processor.getRegisters()
 
@@ -2806,7 +2720,6 @@ class OpCodeSpec extends Specification {
     @Unroll("ROL (Zero Page[X]) #Expected: #firstValue -> #expectedMem")
     testROL_Z_IX(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDX_I, index,
                          firstInstr,
                          LDA_I, firstValue,
@@ -2815,7 +2728,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         Registers registers = processor.getRegisters()
 
@@ -2841,7 +2754,6 @@ class OpCodeSpec extends Specification {
     @Unroll("ROL (Absolute) #Expected: #firstValue -> #expectedMem")
     testROL_ABS(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(firstInstr,
                          LDA_I, firstValue,
                          STA_ABS, 0x20, 0x07,
@@ -2849,7 +2761,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         Registers registers = processor.getRegisters()
 
@@ -2875,7 +2787,6 @@ class OpCodeSpec extends Specification {
     @Unroll("ROL (Absolute[X]) #Expected: #firstValue -> #expectedMem")
     testROL_ABS_IX(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDX_I, index,
                          firstInstr,
                          LDA_I, firstValue,
@@ -2884,7 +2795,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         Registers registers = processor.getRegisters()
 
@@ -2910,14 +2821,13 @@ class OpCodeSpec extends Specification {
     @Unroll("ROR (Accumulator) #expected: #firstValue -> #expectedAccumulator")
     testROR_A(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(preInstr,
                          LDA_I, firstValue,
                          ROR_A)
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         Registers registers = processor.getRegisters()
 
@@ -2945,7 +2855,6 @@ class OpCodeSpec extends Specification {
     @Unroll("BNE #expected: With accumulator set to #accumulatorValue, we end up at mem[#expectedPC] after #instructions steps")
     testBNE(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(NOP,
                          NOP,
                          NOP,
@@ -2957,7 +2866,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         Registers registers = processor.getRegisters()
 
@@ -2977,7 +2886,6 @@ class OpCodeSpec extends Specification {
     @Unroll("BEQ #expected: With accumulator set to #accumulatorValue, we end up at mem[#expectedPC] after #instructions steps")
     testBEQ(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(NOP, NOP, NOP,
                          LDA_I, accumulatorValue,
                          BEQ, jumpSteps,
@@ -2985,7 +2893,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         Registers registers = processor.getRegisters()
 
@@ -3005,7 +2913,6 @@ class OpCodeSpec extends Specification {
     @Unroll("BMI #expected: With accumulator set to #accumulatorValue, we end up at mem[#expectedPC] after #instructions steps")
     testBMI(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(NOP,
                          NOP,
                          NOP,
@@ -3017,7 +2924,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         Registers registers = processor.getRegisters()
 
@@ -3037,7 +2944,6 @@ class OpCodeSpec extends Specification {
     @Unroll("BPL #expected: With accumulator set to #accumulatorValue, we end up at mem[#expectedPC] after #instructions steps")
     testBPL(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(NOP,
                          NOP,
                          NOP,
@@ -3049,7 +2955,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         Registers registers = processor.getRegisters()
 
@@ -3069,7 +2975,6 @@ class OpCodeSpec extends Specification {
     @Unroll("BVC #expected: #accumulatorValue + #addedValue, checking overflow we end up at mem[#expectedPC] after #instructions steps")
     testBVC(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(NOP,
                          NOP,
                          NOP,
@@ -3082,7 +2987,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         Registers registers = processor.getRegisters()
 
@@ -3102,7 +3007,6 @@ class OpCodeSpec extends Specification {
     @Unroll("BVC #expected: #accumulatorValue + #addedValue, checking overflow we end up at mem[#expectedPC] after #instructions steps")
     testBVS(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(NOP,
                          NOP,
                          NOP,
@@ -3115,7 +3019,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         Registers registers = processor.getRegisters()
 
@@ -3135,13 +3039,12 @@ class OpCodeSpec extends Specification {
     @Unroll("TAX #expected: #loadedValue to X")
     testTAX(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDA_I, loadedValue,
                          TAX)
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         Registers registers = processor.getRegisters()
 
@@ -3165,13 +3068,12 @@ class OpCodeSpec extends Specification {
     @Unroll("TAY #expected: #loadedValue to Y")
     testTAY(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDA_I, loadedValue,
                          TAY)
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         Registers registers = processor.getRegisters()
 
@@ -3195,12 +3097,11 @@ class OpCodeSpec extends Specification {
     @Unroll("TYA #expected: #loadedValue to Accumulator")
     testTYA(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDY_I, loadedValue, TYA)
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         Registers registers = processor.getRegisters()
 
@@ -3224,12 +3125,11 @@ class OpCodeSpec extends Specification {
     @Unroll("TXA #expected: #loadedValue to Accumulator")
     testTXA(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDX_I, loadedValue, TXA)
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         Registers registers = processor.getRegisters()
 
@@ -3253,12 +3153,11 @@ class OpCodeSpec extends Specification {
     @Unroll("TSX #expected: load #SPValue in SP into X")
     testTSX(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(TSX)
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         Registers registers = processor.getRegisters()
 
@@ -3283,7 +3182,6 @@ class OpCodeSpec extends Specification {
     @Unroll("BIT (Zero Page) #expected: #firstValue and #secondValue")
     testBIT(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDA_I, firstValue,
                          STA_Z, memLoc,
                          LDA_I, secondValue,
@@ -3291,7 +3189,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         Registers registers = processor.getRegisters()
 
@@ -3316,7 +3214,6 @@ class OpCodeSpec extends Specification {
     @Unroll("BIT (Absolute) #expected: #firstValue and #secondValue")
     testBIT_ABS(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDA_I, firstValue,
                          STA_ABS, memLocHi, memLocLo,
                          LDA_I, secondValue,
@@ -3324,7 +3221,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         Registers registers = processor.getRegisters()
 
@@ -3349,14 +3246,13 @@ class OpCodeSpec extends Specification {
     @Unroll("STA (Zero Page[X]) #expected: Store #value at #location[#index]")
     testSTA_Z_IX(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDA_I, value,
                          LDX_I, index,
                          STA_Z_IX, location)
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         Registers registers = processor.getRegisters()
 
@@ -3378,13 +3274,12 @@ class OpCodeSpec extends Specification {
     @Unroll("STA (Absolute) #expected: Store #value at [#locationHi|#locationLo]")
     testSTA_ABS(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDA_I, value,
                          STA_ABS, locationHi, locationLo)
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         Registers registers = processor.getRegisters()
 
@@ -3404,14 +3299,13 @@ class OpCodeSpec extends Specification {
     @Unroll("STA (Absolute[X]) #expected: Store #value at [#locationHi|#locationLo@#index]")
     testSTA_ABS_IX(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDA_I, value,
                          LDX_I, index,
                          STA_ABS_IX, locationHi, locationLo)
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         Registers registers = processor.getRegisters()
 
@@ -3433,14 +3327,13 @@ class OpCodeSpec extends Specification {
     @Unroll("STA (Absolute[Y]) #expected: Store #value at [#locationHi|#locationLo@#index]")
     testSTA_ABS_IY(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDA_I, value,
                          LDY_I, index,
                          STA_ABS_IY, locationHi, locationLo)
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         Registers registers = processor.getRegisters()
 
@@ -3462,12 +3355,11 @@ class OpCodeSpec extends Specification {
     @Unroll("STY (Zero Page[X] #expected: Store #firstValue at #memLocation[#index]")
     testSTY_Z_IX(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDX_I, index, LDY_I, firstValue, STY_Z_IX, memLocation)
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         Registers registers = processor.getRegisters()
 
@@ -3488,13 +3380,12 @@ class OpCodeSpec extends Specification {
     @Unroll("CMP (Immediate) #Expected: #firstValue == #secondValue")
     testCMP_I(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDA_I, firstValue,
                          CMP_I, secondValue)
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         Registers registers = processor.getRegisters()
 
@@ -3519,7 +3410,6 @@ class OpCodeSpec extends Specification {
     @Unroll("CMP (Zero Page) #Expected: #firstValue == #secondValue")
     testCMP_Z(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDA_I, secondValue,
                          STA_Z, 0x20,
                          LDA_I, firstValue,
@@ -3527,7 +3417,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         Registers registers = processor.getRegisters()
 
@@ -3552,7 +3442,6 @@ class OpCodeSpec extends Specification {
     @Unroll("CMP (Zero Page[X]) #Expected: #firstValue == #secondValue")
     testCMP_Z_IX(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDX_I, index,
                          LDA_I, secondValue,
                          STA_Z_IX, 0x20,
@@ -3561,7 +3450,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         Registers registers = processor.getRegisters()
 
@@ -3586,7 +3475,6 @@ class OpCodeSpec extends Specification {
     @Unroll("CMP (Absolute) #Expected: #firstValue == #secondValue")
     testCMP_ABS(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDA_I, secondValue,
                          STA_ABS, 0x01, 0x20,
                          LDA_I, firstValue,
@@ -3594,7 +3482,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         Registers registers = processor.getRegisters()
 
@@ -3619,7 +3507,6 @@ class OpCodeSpec extends Specification {
     @Unroll("CMP (Absolute[X]) #Expected: #firstValue == #secondValue")
     testCMP_ABS_IX(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDX_I, index,
                          LDA_I, secondValue,
                          STA_ABS_IX, 0x01, 0x20,
@@ -3628,7 +3515,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         Registers registers = processor.getRegisters()
 
@@ -3653,7 +3540,6 @@ class OpCodeSpec extends Specification {
     @Unroll("CMP (Absolute[Y]) #Expected: #firstValue == #secondValue")
     testCMP_ABS_IY(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDY_I, index,
                          LDA_I, secondValue,
                          STA_ABS_IY, 0x01, 0x20,
@@ -3662,7 +3548,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         Registers registers = processor.getRegisters()
 
@@ -3687,7 +3573,6 @@ class OpCodeSpec extends Specification {
     @Unroll("CMP (Indirect, X). #Expected: #firstValue == #secondValue")
     testCMP_IND_IX() {
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDA_I, secondValue,    //Value at indirect address
                          STA_ABS, pointerHi, pointerLo,
                          LDX_I, index,
@@ -3700,7 +3585,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(9)
         Registers registers = processor.getRegisters()
@@ -3723,7 +3608,6 @@ class OpCodeSpec extends Specification {
     @Unroll("CMP (Indirect, Y) #Expected: #firstValue == #secondValue")
     testCMP_IND_IY() {
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDY_I, index,           //Index to use
                          LDA_I, firstValue,      //High order byte at pointer
                          STA_ABS_IY, pointerHi, pointerLo,
@@ -3736,7 +3620,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         processor.step(9)
         Registers registers = processor.getRegisters()
@@ -3758,13 +3642,12 @@ class OpCodeSpec extends Specification {
     @Unroll("CPY (Immediate) #Expected: #firstValue == #secondValue")
     testCPY_I(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDY_I, firstValue,
                          CPY_I, secondValue)
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         Registers registers = processor.getRegisters()
 
@@ -3788,7 +3671,6 @@ class OpCodeSpec extends Specification {
     @Unroll("CPY (Zero Page) #Expected: #firstValue == #secondValue")
     testCPY_Z(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDA_I, secondValue,
                          STA_Z, 0x20,
                          LDY_I, firstValue,
@@ -3796,7 +3678,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         Registers registers = processor.getRegisters()
 
@@ -3820,7 +3702,6 @@ class OpCodeSpec extends Specification {
     @Unroll("CPY (Absolute) #Expected: #firstValue == #secondValue")
     testCPY_ABS(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDA_I, secondValue,
                          STA_ABS, 0x01, 0x20,
                          LDY_I, firstValue,
@@ -3828,7 +3709,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         Registers registers = processor.getRegisters()
 
@@ -3852,7 +3733,6 @@ class OpCodeSpec extends Specification {
     @Unroll("CPX (Zero Page) #Expected: #firstValue == #secondValue")
     testCPX_Z(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDA_I, secondValue,
                          STA_Z, 0x20,
                          LDX_I, firstValue,
@@ -3860,7 +3740,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         Registers registers = processor.getRegisters()
 
@@ -3884,7 +3764,6 @@ class OpCodeSpec extends Specification {
     @Unroll("CPX (Absolute) #Expected: #firstValue == #secondValue")
     testCPX_ABS(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDA_I, secondValue,
                          STA_ABS, 0x01, 0x20,
                          LDX_I, firstValue,
@@ -3892,7 +3771,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         Registers registers = processor.getRegisters()
 
@@ -3916,13 +3795,12 @@ class OpCodeSpec extends Specification {
     @Unroll("CPX (Immediate) #Expected: #firstValue == #secondValue")
     testCPX_I(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDX_I, firstValue,
                          CPX_I, secondValue)
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         Registers registers = processor.getRegisters()
 
@@ -3946,14 +3824,13 @@ class OpCodeSpec extends Specification {
     @Unroll("STX (Zero Page[X] #expected: #firstValue -> #location[#index]")
     STX_Z_IY(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDY_I, index,
                          LDX_I, firstValue,
                          STX_Z_IY, location)
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         Registers registers = processor.getRegisters()
 
@@ -3975,7 +3852,6 @@ class OpCodeSpec extends Specification {
     @Unroll("RTS #expected")
     testRTS(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDA_I, memHi,
                          PHA,
                          LDA_I, memLo,
@@ -3984,7 +3860,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         Registers registers = processor.getRegisters()
 
@@ -4003,14 +3879,13 @@ class OpCodeSpec extends Specification {
     @Unroll("BRK #expected")
     testBRK(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(BRK)
         memory.setByteAt(0xFFFE, newPCHi)
         memory.setByteAt(0xFFFF, newPCLo)
         memory.setBlock(0, program.getProgramAsByteArray())
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         Registers registers = processor.getRegisters()
 
@@ -4041,7 +3916,6 @@ class OpCodeSpec extends Specification {
     @Unroll("IRQ #expected #statusValue->#pushedStatus")
     testIRQ(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDA_I, 1,
                          LDA_I, 2,
                          LDA_I, 3,
@@ -4054,7 +3928,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0xFFFB, 2)
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         Registers registers = processor.getRegisters()
 
@@ -4089,7 +3963,6 @@ class OpCodeSpec extends Specification {
     @Unroll("NMI #expected #statusValue->#pushedStatus")
     testNMI(){
         when:
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDA_I, 1,
                          LDA_I, 2,
                          LDA_I, 3,
@@ -4102,7 +3975,7 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0xFFFB, 2)
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         Registers registers = processor.getRegisters()
 
@@ -4137,7 +4010,6 @@ class OpCodeSpec extends Specification {
     @Unroll("RTI #expected ")
     testRTI(){
         when: 'We have a programText which will be interrupted'
-        Memory memory = new SimpleMemory()
         Program program = new Program().with(LDA_I, 1,
                          LDA_I, 2, //--> IRQ Here
                          LDA_I, 4, //<-- Return here
@@ -4152,7 +4024,7 @@ class OpCodeSpec extends Specification {
         memory.setByteAt(0xFFFF, 0x00)
 
         and:
-        CPU processor = new CPU(memory)
+        Mos6502 processor = new Mos6502(memory)
         processor.reset()
         Registers registers = processor.getRegisters()
 
@@ -4191,7 +4063,7 @@ class OpCodeSpec extends Specification {
 //        memory.setBlock(0, programText)
 //
 //        and:
-//        CPU processor = new CPU(memory)
+//        Mos6502 processor = new Mos6502(memory)
 //        processor.reset()
 //        Registers registers = processor.getRegisters()
 //
