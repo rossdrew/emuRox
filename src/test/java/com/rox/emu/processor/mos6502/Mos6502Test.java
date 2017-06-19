@@ -12,10 +12,10 @@ import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.spockframework.util.Assert.fail;
 
-public class CPUTest {
+public class Mos6502Test {
 
     private Memory memory;
-    private CPU processor;
+    private Mos6502 processor;
 
     @Before
     public void setUp() {
@@ -23,7 +23,7 @@ public class CPUTest {
         memory.setByteAt(0xFFFC, 0);
         memory.setByteAt(0xFFFD, 0);
 
-        processor = new CPU(memory);
+        processor = new Mos6502(memory);
         processor.reset();
     }
 
@@ -33,7 +33,7 @@ public class CPUTest {
         memory.setByteAt(0xFFFC, 0x1);
         memory.setByteAt(0xFFFD, 0x1);
 
-        processor = new CPU(memory);
+        processor = new Mos6502(memory);
         processor.reset();
 
         Registers registers = processor.getRegisters();

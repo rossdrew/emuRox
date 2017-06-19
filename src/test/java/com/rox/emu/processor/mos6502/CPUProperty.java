@@ -18,7 +18,7 @@ import static com.rox.emu.processor.mos6502.op.OpCode.*;
 @RunWith(JUnitQuickcheck.class)
 public class CPUProperty {
     private Memory memory;
-    private CPU processor;
+    private Mos6502 processor;
 
     @Before
     public void setUp() {
@@ -26,7 +26,7 @@ public class CPUProperty {
         memory.setByteAt(0x0, 0xFFFC);
         memory.setByteAt(0x0, 0xFFFD);
 
-        processor = new CPU(memory);
+        processor = new Mos6502(memory);
         processor.reset();
     }
 
@@ -37,7 +37,7 @@ public class CPUProperty {
         memory.setByteAt(0xFFFC, memHi);
         memory.setByteAt(0xFFFD, memLo);
 
-        processor = new CPU(memory);
+        processor = new Mos6502(memory);
         processor.reset();
 
         Registers registers = processor.getRegisters();

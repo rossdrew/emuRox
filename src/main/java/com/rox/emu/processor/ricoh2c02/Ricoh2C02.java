@@ -16,7 +16,7 @@ import com.rox.emu.mem.Memory;
  *     <tr>
  *         <td>$2001</td>
  *         <td>PPU Control Register 1</td>
- *         <td>7-Disable NMI to CPU at the end of each frame (V-Bank), 5-8x8/8x16, 2-Memory Inc (0 = 1 for horizontal, 1 = 32 for vertical)</td>
+ *         <td>7-Disable NMI to Mos6502 at the end of each frame (V-Bank), 5-8x8/8x16, 2-Memory Inc (0 = 1 for horizontal, 1 = 32 for vertical)</td>
  *      </tr>
  *      <tr>
  *         <td>$2002</td>

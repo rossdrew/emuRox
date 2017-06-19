@@ -1,7 +1,7 @@
 package com.rox.emu.processor.mos6502.op;
 
 import com.rox.emu.UnknownOpCodeException;
-import com.rox.emu.processor.mos6502.CPU;
+import com.rox.emu.processor.mos6502.Mos6502;
 import com.rox.emu.processor.mos6502.op.util.OpCodeConverter;
 
 import java.util.Arrays;
@@ -10,7 +10,7 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 /**
- * Enum representation of {@link CPU} op-codes.  Each represented by an enum name using the convention
+ * Enum representation of {@link Mos6502} op-codes.  Each represented by an enum name using the convention
  * '{OP-CODE}{@value #TOKEN_SEPARATOR}{ADDRESSING-MODE}{@value #TOKEN_SEPARATOR}{INDEXING-MODE}'.
  *
  * @author Ross Drew

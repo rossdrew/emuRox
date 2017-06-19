@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Ross Drew
  */
-public class CPU {
+public class Mos6502 {
     private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
     private final Memory memory;
@@ -24,7 +24,7 @@ public class CPU {
     /** The bit set on a byte when a it is negative */
     public static final int NEGATIVE_INDICATOR_BIT = 0x80;
 
-    public CPU(Memory memory) {
+    public Mos6502(Memory memory) {
         this.memory = memory;
     }
 
@@ -884,7 +884,7 @@ public class CPU {
     }
 
     /**
-     * Call {@link CPU#branchTo(int)} with next program byte
+     * Call {@link Mos6502#branchTo(int)} with next program byte
      *
      * @param condition if {@code true} then branch is followed
      */

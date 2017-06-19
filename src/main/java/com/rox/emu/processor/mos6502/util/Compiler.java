@@ -1,7 +1,7 @@
 package com.rox.emu.processor.mos6502.util;
 
 import com.rox.emu.UnknownOpCodeException;
-import com.rox.emu.processor.mos6502.CPU;
+import com.rox.emu.processor.mos6502.Mos6502;
 import com.rox.emu.processor.mos6502.op.AddressingMode;
 import com.rox.emu.processor.mos6502.op.OpCode;
 
@@ -10,7 +10,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- *  A compiler for a {@link CPU} for taking a textual program and converting it into an executable byte stream, e.g.<br/>
+ *  A compiler for a {@link Mos6502} for taking a textual program and converting it into an executable byte stream, e.g.<br/>
  *  <br/>
  *  <code>
  *      LDA {@value IMMEDIATE_VALUE_PREFIX}52 <br/>

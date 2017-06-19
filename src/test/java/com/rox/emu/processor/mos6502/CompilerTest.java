@@ -350,7 +350,7 @@ public class CompilerTest {
         final int[] programByte = program.getProgramAsByteArray();
 
         Memory memory = new SimpleMemory();
-        CPU processor = new CPU(memory);
+        Mos6502 processor = new Mos6502(memory);
         processor.reset();
         memory.setBlock(0, programByte);
 
@@ -369,7 +369,7 @@ public class CompilerTest {
         final int[] programByte = program.getProgramAsByteArray();
 
         Memory memory = new SimpleMemory();
-        CPU processor = new CPU(memory);
+        Mos6502 processor = new Mos6502(memory);
         processor.reset();
         memory.setBlock(0, programByte);
 

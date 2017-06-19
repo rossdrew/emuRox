@@ -3,7 +3,7 @@ package com.rox.emu.processor.mos6502.dbg.ui;
 import com.rox.emu.UnknownOpCodeException;
 import com.rox.emu.mem.Memory;
 import com.rox.emu.mem.SimpleMemory;
-import com.rox.emu.processor.mos6502.CPU;
+import com.rox.emu.processor.mos6502.Mos6502;
 import com.rox.emu.processor.mos6502.Registers;
 import com.rox.emu.processor.mos6502.dbg.ui.component.MemoryPanel;
 import com.rox.emu.processor.mos6502.dbg.ui.component.Registers6502;
@@ -23,7 +23,7 @@ import java.util.Map;
  * @author Ross Drew
  */
 final class DebuggerWindow extends JFrame {
-    private CPU processor;
+    private Mos6502 processor;
     private Memory memory;
 
     private Registers6502 newRegisterPanel;
@@ -185,7 +185,7 @@ final class DebuggerWindow extends JFrame {
 
     private void init(){
         memory = new SimpleMemory();
-        processor = new CPU(memory);
+        processor = new Mos6502(memory);
 
         newRegisterPanel = new Registers6502(processor.getRegisters());
     }
