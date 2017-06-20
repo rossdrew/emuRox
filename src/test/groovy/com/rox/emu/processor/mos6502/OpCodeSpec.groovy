@@ -1580,23 +1580,19 @@ class OpCodeSpec extends Specification {
     testSBC_IND_IX() {
         when:
         Program program = loadMemoryWithProgram(LDA_I, secondValue,    //Value at indirect address
-                STA_ABS, locationHi, locationLo,
-                LDX_I, index,
-                LDA_I, locationHi,     //Indirect address in memory
-                STA_Z_IX, 0x30,
-                LDA_I, locationLo,
-                STA_Z_IX, 0x31,
-                LDA_I, firstValue,
-                SEC,
-                SBC_IND_IX, 0x30)
-        
-    
-        and:
-        
+                                                STA_ABS, locationHi, locationLo,
+                                                LDX_I, index,
+                                                LDA_I, locationHi,     //Indirect address in memory
+                                                STA_Z_IX, 0x30,
+                                                LDA_I, locationLo,
+                                                STA_Z_IX, 0x31,
+                                                LDA_I, firstValue,
+                                                SEC,
+                                                SBC_IND_IX, 0x30)
 
+        and:
         processor.step(10)
-        
-    
+
         then:
         expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
@@ -1614,24 +1610,21 @@ class OpCodeSpec extends Specification {
     @Unroll("SBC (Indirect, Y) #Expected: #firstValue (@[#locationHi|#locationLo]) - #secondValue = #expectedAccumulator")
     testSBC_IND_IY() {
         when:
-        Program program = loadMemoryWithProgram(LDY_I, index,           //Index to use
-                LDA_I, secondValue,      //High order byte at pointer
-                STA_ABS_IY, pointerHi, pointerLo,
-                LDA_I, pointerHi,       //Pointer location
-                STA_Z, 0x60,
-                LDA_I, pointerLo,       //Pointer location
-                STA_Z, 0x61,
-                LDA_I, firstValue,
-                SEC,
-                SBC_IND_IY, 0x60)
+        loadMemoryWithProgram(LDY_I, index,           //Index to use
+                              LDA_I, secondValue,     //High order byte at pointer
+                              STA_ABS_IY, pointerHi, pointerLo,
+                              LDA_I, pointerHi,       //Pointer location
+                              STA_Z, 0x60,
+                              LDA_I, pointerLo,       //Pointer location
+                              STA_Z, 0x61,
+                              LDA_I, firstValue,
+                              SEC,
+                              SBC_IND_IY, 0x60)
         
     
         and:
-        
-
         processor.step(10)
         
-    
         then:
         expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         Z == registers.getFlag(Registers.Z)
@@ -1650,15 +1643,11 @@ class OpCodeSpec extends Specification {
         when:
         Program program = loadMemoryWithProgram(LDX_I, firstValue, INX)
         
-    
         and:
-        
-
         processor.step(2)
-        
     
         then:
-        registers.getRegister(Registers.REG_X_INDEX) == expectedX
+        expectedX == registers.getRegister(Registers.REG_X_INDEX)
         program.length == registers.getPC()
         Z == registers.getFlag(Registers.Z)
         N == registers.getFlag(Registers.N)
@@ -1674,18 +1663,14 @@ class OpCodeSpec extends Specification {
     testINC_Z(){
         when:
         Program program = loadMemoryWithProgram(LDA_I, firstValue,
-                STA_Z, 0x20,
-                INC_Z, 0x20)
+                                                STA_Z, 0x20,
+                                                INC_Z, 0x20)
         
-    
         and:
-        
-
         processor.step(3)
         
-    
         then:
-        memory.getByte(0x20) == expectedMem
+        expectedMem == memory.getByte(0x20)
         program.length == registers.getPC()
         Z == registers.getFlag(Registers.Z)
         N == registers.getFlag(Registers.N)
@@ -1701,19 +1686,15 @@ class OpCodeSpec extends Specification {
     testINC_Z_IX(){
         when:
         Program program = loadMemoryWithProgram(LDX_I, index,
-                LDA_I, firstValue,
-                STA_Z_IX, 0x20,
-                INC_Z_IX, 0x20)
-        
-    
-        and:
-        
+                                                LDA_I, firstValue,
+                                                STA_Z_IX, 0x20,
+                                                INC_Z_IX, 0x20)
 
+        and:
         processor.step(4)
-        
-    
+
         then:
-        memory.getByte(0x20 + index) == expectedMem
+        expectedMem == memory.getByte(0x20 + index)
         program.length == registers.getPC()
         Z == registers.getFlag(Registers.Z)
         N == registers.getFlag(Registers.N)
@@ -1729,18 +1710,14 @@ class OpCodeSpec extends Specification {
     testINC_ABS(){
         when:
         Program program = loadMemoryWithProgram(LDA_I, firstValue,
-                STA_ABS, 0x01, 0x20,
-                INC_ABS, 0x01, 0x20)
-        
-    
-        and:
-        
+                                                STA_ABS, 0x01, 0x20,
+                                                INC_ABS, 0x01, 0x20)
 
+        and:
         processor.step(3)
-        
-    
+
         then:
-        memory.getByte(0x0120) == expectedMem
+        expectedMem == memory.getByte(0x0120)
         program.length == registers.getPC()
         Z == registers.getFlag(Registers.Z)
         N == registers.getFlag(Registers.N)
@@ -1756,19 +1733,15 @@ class OpCodeSpec extends Specification {
     testINC_ABS_IX(){
         when:
         Program program = loadMemoryWithProgram(LDX_I, index,
-                LDA_I, firstValue,
-                STA_ABS_IX, 0x01, 0x20,
-                INC_ABS_IX, 0x01, 0x20)
+                                                LDA_I, firstValue,
+                                                STA_ABS_IX, 0x01, 0x20,
+                                                INC_ABS_IX, 0x01, 0x20)
         
-    
         and:
-        
-
         processor.step(4)
         
-    
         then:
-        memory.getByte(0x0120 + index) == expectedMem
+        expectedMem == memory.getByte(0x0120 + index)
         program.length == registers.getPC()
         Z == registers.getFlag(Registers.Z)
         N == registers.getFlag(Registers.N)
@@ -1784,18 +1757,14 @@ class OpCodeSpec extends Specification {
     testDEC_Z(){
         when:
         Program program = loadMemoryWithProgram(LDA_I, firstValue,
-                STA_Z, 0x20,
-                DEC_Z, 0x20)
+                                                STA_Z, 0x20,
+                                                DEC_Z, 0x20)
         
-    
         and:
-        
-
         processor.step(3)
         
-    
         then:
-        memory.getByte(0x20) == expectedMem
+        expectedMem == memory.getByte(0x20)
         program.length == registers.getPC()
         Z == registers.getFlag(Registers.Z)
         N == registers.getFlag(Registers.N)
@@ -1811,19 +1780,15 @@ class OpCodeSpec extends Specification {
     testDEC_Z_IX(){
         when:
         Program program = loadMemoryWithProgram(LDX_I, index,
-                LDA_I, firstValue,
-                STA_Z_IX, loc,
-                DEC_Z_IX, loc)
+                                                LDA_I, firstValue,
+                                                STA_Z_IX, loc,
+                                                DEC_Z_IX, loc)
         
-    
         and:
-        
-
         processor.step(4)
         
-    
         then:
-        memory.getByte(loc + index) == expectedMem
+        expectedMem == memory.getByte(loc + index)
         program.length == registers.getPC()
         Z == registers.getFlag(Registers.Z)
         N == registers.getFlag(Registers.N)
@@ -1878,7 +1843,7 @@ class OpCodeSpec extends Specification {
         
     
         then:
-        memory.getByte(0x0120 + index) == expectedMem
+        expectedMem == memory.getByte(0x0120 + index)
         program.length == registers.getPC()
         Z == registers.getFlag(Registers.Z)
         N == registers.getFlag(Registers.N)
@@ -1903,7 +1868,7 @@ class OpCodeSpec extends Specification {
         
     
         then:
-        registers.getRegister(Registers.REG_X_INDEX) == expectedX
+        expectedX == registers.getRegister(Registers.REG_X_INDEX)
         program.length == registers.getPC()
         Z == registers.getFlag(Registers.Z)
         N == registers.getFlag(Registers.N)
@@ -2047,7 +2012,7 @@ class OpCodeSpec extends Specification {
     
         then:
         program.length == registers.getPC()
-        memory.getByte(0x20) == expectedMem
+        expectedMem == memory.getByte(0x20)
         Z == registers.getFlag(Registers.Z)
         N == registers.getFlag(Registers.N)
         C == registers.getFlag(Registers.C)
@@ -2211,7 +2176,7 @@ class OpCodeSpec extends Specification {
     
         then:
         program.length == registers.getPC()
-        memory.getByte(0x20) == expectedMem
+        expectedMem == memory.getByte(0x20)
         Z == registers.getFlag(Registers.Z)
         N == registers.getFlag(Registers.N)
         C == registers.getFlag(Registers.C)
@@ -3539,7 +3504,7 @@ class OpCodeSpec extends Specification {
     
         then:
         program.length == registers.getPC()
-        registers.getRegister(Registers.REG_X_INDEX) == expectedX
+        expectedX == registers.getRegister(Registers.REG_X_INDEX)
         Z == registers.getFlag(Registers.Z)
         N == registers.getFlag(Registers.N)
         C == registers.getFlag(Registers.C)
@@ -3570,7 +3535,7 @@ class OpCodeSpec extends Specification {
     
         then:
         program.length == registers.getPC()
-        registers.getRegister(Registers.REG_X_INDEX) == expectedX
+        expectedX == registers.getRegister(Registers.REG_X_INDEX)
         Z == registers.getFlag(Registers.Z)
         N == registers.getFlag(Registers.N)
         C == registers.getFlag(Registers.C)
@@ -3599,7 +3564,7 @@ class OpCodeSpec extends Specification {
     
         then:
         program.length == registers.getPC()
-        registers.getRegister(Registers.REG_X_INDEX) == expectedX
+        expectedX == registers.getRegister(Registers.REG_X_INDEX)
         Z == registers.getFlag(Registers.Z)
         N == registers.getFlag(Registers.N)
         C == registers.getFlag(Registers.C)
