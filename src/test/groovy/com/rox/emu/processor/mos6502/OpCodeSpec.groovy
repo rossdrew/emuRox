@@ -605,9 +605,9 @@ class OpCodeSpec extends Specification {
     
         where:
         firstValue | secondValue | index | expectedAccumulatorumulator | Z      | N     | C     | O     | Expected
-        0x0        | 0x0         | 0     | 0x0                 | true   | false | false | false | "With zero result"
-        0x50       | 0xD0        | 1     | 0x20                | false  | false | true  | false | "With positive, carried result"
-        0x50       | 0x50        | 2     | 0xA0                | false  | true  | false | true  | "With negative overflow"
+        0x0        | 0x0         | 0     | 0x0                         | true   | false | false | false | "With zero result"
+        0x50       | 0xD0        | 1     | 0x20                        | false  | false | true  | false | "With positive, carried result"
+        0x50       | 0x50        | 2     | 0xA0                        | false  | true  | false | true  | "With negative overflow"
     }
     
     @Unroll("ADC (Absolute[Y]) #Expected:  #firstValue + #secondValue = #expectedAccumulatorumulator in Accumulator.")
@@ -633,9 +633,9 @@ class OpCodeSpec extends Specification {
     
         where:
         firstValue | secondValue | index | expectedAccumulatorumulator | Z      | N     | C     | O     | Expected
-        0x0        | 0x0         | 0     | 0x0                 | true   | false | false | false | "With zero result"
-        0x50       | 0xD0        | 1     | 0x20                | false  | false | true  | false | "With positive, carried result"
-        0x50       | 0x50        | 2     | 0xA0                | false  | true  | false | true  | "With negative overflow"
+        0x0        | 0x0         | 0     | 0x0                         | true   | false | false | false | "With zero result"
+        0x50       | 0xD0        | 1     | 0x20                        | false  | false | true  | false | "With positive, carried result"
+        0x50       | 0x50        | 2     | 0xA0                        | false  | true  | false | true  | "With negative overflow"
     }
     
     @Unroll("ADC (Indirect, X) #Expected: #firstValue (@[#locationHi|#locationLo]) & #secondValue = #expectedAccumulator")
@@ -665,23 +665,23 @@ class OpCodeSpec extends Specification {
     
         where:
         locationHi | locationLo | firstValue | secondValue | index | expectedAccumulatorumulator | Z      | N     | C     | O     | Expected
-        0x1        | 0x10       | 0x0        | 0x0         | 0     | 0x0                 | true   | false | false | false | "With zero result"
-        0x1        | 0x10       | 0x50       | 0x50        | 2     | 0xA0                | false  | true  | false | true  | "With negative overflow"
-     //   0x1        | 0x10       | 0x50       | 0xD0        | 1     | 0x20        | false  | false | true  | false | "With positive, carried result"
+        0x1        | 0x10       | 0x0        | 0x0         | 0     | 0x0                         | true   | false | false | false | "With zero result"
+        0x1        | 0x10       | 0x50       | 0x50        | 2     | 0xA0                        | false  | true  | false | true  | "With negative overflow"
+     //   0x1        | 0x10       | 0x50       | 0xD0        | 1     | 0x20              | false  | false | true  | false | "With positive, carried result"
     }
     
     @Unroll("ADC (Indirect, Y) #Expected: #firstValue + #secondValue -> #expectedAccumulator")
     testADC_IND_IY() {
         when:
         Program program = loadMemoryWithProgram(LDY_I, index,           //Index to use
-                LDA_I, firstValue,      //High order byte at pointer
-                STA_ABS_IY, pointerHi, pointerLo,
-                LDA_I, pointerHi,       //Pointer location
-                STA_Z, 0x60,
-                LDA_I, pointerLo,       //Pointer location
-                STA_Z, 0x61,
-                LDA_I, secondValue,
-                ADC_IND_IY, 0x60)
+                                                LDA_I, firstValue,      //High order byte at pointer
+                                                STA_ABS_IY, pointerHi, pointerLo,
+                                                LDA_I, pointerHi,       //Pointer location
+                                                STA_Z, 0x60,
+                                                LDA_I, pointerLo,       //Pointer location
+                                                STA_Z, 0x61,
+                                                LDA_I, secondValue,
+                                                ADC_IND_IY, 0x60)
 
         and:
         processor.step(9)
@@ -696,8 +696,8 @@ class OpCodeSpec extends Specification {
     
         where:
         pointerHi | pointerLo | firstValue | secondValue | index | expectedAccumulatorumulator | Z      | N     | C     | O     | Expected
-        0x1       | 0x10      | 0x0        | 0x0         | 0     | 0x0                 | true   | false | false | false | "With zero result"
-        0x1       | 0x10      | 0x50       | 0x50        | 2     | 0xA0                | false  | true  | false | true  | "With negative overflow"
+        0x1       | 0x10      | 0x0        | 0x0         | 0     | 0x0                         | true   | false | false | false | "With zero result"
+        0x1       | 0x10      | 0x50       | 0x50        | 2     | 0xA0                        | false  | true  | false | true  | "With negative overflow"
     //    0x1       | 0x10      | 0x50       | 0xD0        | 1     | 0x20                | false  | false | true  | false | "With positive, carried result"
     }
     
@@ -705,11 +705,11 @@ class OpCodeSpec extends Specification {
     testMultiByteADC(){
         when:
         Program program = loadMemoryWithProgram(CLC,
-                LDA_I, lowFirstByte,
-                ADC_I, lowSecondByte,
-                STA_Z, 40,
-                LDA_I, highFirstByte,
-                ADC_I, highSecondByte)
+                                                LDA_I, lowFirstByte,
+                                                ADC_I, lowSecondByte,
+                                                STA_Z, 40,
+                                                LDA_I, highFirstByte,
+                                                ADC_I, highSecondByte)
 
         and:
         processor.step(6)
@@ -725,11 +725,11 @@ class OpCodeSpec extends Specification {
     
         where:
         lowFirstByte | lowSecondByte | highFirstByte | highSecondByte | expectedAccumulatorumulator | storedValue | Z     | N     | C     | O     | Expected
-        0            | 0             | 0             | 0              | 0                   | 0           | true  | false | false | false | "With zero result"
-        0x50         | 0xD0          | 0             | 0              | 1                   | 0x20        | false | false | false | false | "With simple carry to high byte"
-        0x50         | 0xD3          | 0             | 1              | 2                   | 0x23        | false | false | false | false | "With carry to high byte and changed high"
-        0            | 0             | 0x50          | 0x50           | 0xA0                | 0           | false | true  | false | true  | "With negative overflow"
-        0            | 0             | 0x50          | 0xD0           | 0x20                | 0           | false | false | true  | false | "With carried result"
+        0            | 0             | 0             | 0              | 0                           | 0           | true  | false | false | false | "With zero result"
+        0x50         | 0xD0          | 0             | 0              | 1                           | 0x20        | false | false | false | false | "With simple carry to high byte"
+        0x50         | 0xD3          | 0             | 1              | 2                           | 0x23        | false | false | false | false | "With carry to high byte and changed high"
+        0            | 0             | 0x50          | 0x50           | 0xA0                        | 0           | false | true  | false | true  | "With negative overflow"
+        0            | 0             | 0x50          | 0xD0           | 0x20                        | 0           | false | false | true  | false | "With carried result"
     }
     
     @Unroll("AND (Immediate) #Expected:  #firstValue & #secondValue = #expectedAccumulatorumulator in Accumulator.")
@@ -748,10 +748,10 @@ class OpCodeSpec extends Specification {
     
         where:
         firstValue | secondValue | expectedAccumulatorumulator | Z      | N     | Expected
-        0b00000001 | 0b00000001  | 0b00000001          | false  | false | "Unchanged accumulator"
-        0b00000001 | 0b00000010  | 0b00000000          | true   | false | "No matching bits"
-        0b00000011 | 0b00000010  | 0b00000010          | false  | false | "1 matched bit, 1 unmatched"
-        0b00101010 | 0b00011010  | 0b00001010          | false  | false | "Multiple matched/unmatched bits"
+        0b00000001 | 0b00000001  | 0b00000001                  | false  | false | "Unchanged accumulator"
+        0b00000001 | 0b00000010  | 0b00000000                  | true   | false | "No matching bits"
+        0b00000011 | 0b00000010  | 0b00000010                  | false  | false | "1 matched bit, 1 unmatched"
+        0b00101010 | 0b00011010  | 0b00001010                  | false  | false | "Multiple matched/unmatched bits"
     }
     
     @Unroll("AND (Zero Page) #Expected: #firstValue & #secondValue = #expectedAccumulatorumulator in Accumulator.")
@@ -763,7 +763,6 @@ class OpCodeSpec extends Specification {
                                                 AND_Z, 0x20)
 
         and:
-
         processor.step(4)
 
         then:
@@ -774,10 +773,10 @@ class OpCodeSpec extends Specification {
     
         where:
         firstValue | secondValue | expectedAccumulatorumulator | Z      | N     | Expected
-        0b00000001 | 0b00000001  | 0b00000001          | false  | false | "Unchanged accumulator"
-        0b00000001 | 0b00000010  | 0b00000000          | true   | false | "No matching bits"
-        0b00000011 | 0b00000010  | 0b00000010          | false  | false | "1 matched bit, 1 unmatched"
-        0b00101010 | 0b00011010  | 0b00001010          | false  | false | "Multiple matched/unmatched bits"
+        0b00000001 | 0b00000001  | 0b00000001                  | false  | false | "Unchanged accumulator"
+        0b00000001 | 0b00000010  | 0b00000000                  | true   | false | "No matching bits"
+        0b00000011 | 0b00000010  | 0b00000010                  | false  | false | "1 matched bit, 1 unmatched"
+        0b00101010 | 0b00011010  | 0b00001010                  | false  | false | "Multiple matched/unmatched bits"
     }
     
     @Unroll("AND (Zero Page[X]) #Expected: #firstValue & #secondValue = #expectedAccumulator")
@@ -800,10 +799,10 @@ class OpCodeSpec extends Specification {
     
         where:
         firstValue | index | secondValue | expectedAccumulator | Z      | N     | Expected
-        0b00000001 | 0     | 0b00000001  | 0b00000001  | false  | false | "Unchanged accumulator"
-        0b00000001 | 1     | 0b00000010  | 0b00000000  | true   | false | "No matching bits"
-        0b00000011 | 2     | 0b00000010  | 0b00000010  | false  | false | "1 matched bit, 1 unmatched"
-        0b00101010 | 3     | 0b00011010  | 0b00001010  | false  | false | "Multiple matched/unmatched bits"
+        0b00000001 | 0     | 0b00000001  | 0b00000001          | false  | false | "Unchanged accumulator"
+        0b00000001 | 1     | 0b00000010  | 0b00000000          | true   | false | "No matching bits"
+        0b00000011 | 2     | 0b00000010  | 0b00000010          | false  | false | "1 matched bit, 1 unmatched"
+        0b00101010 | 3     | 0b00011010  | 0b00001010          | false  | false | "Multiple matched/unmatched bits"
     }
     
     @Unroll("AND (Absolute) #Expected:  #firstValue & #secondValue = #expectedAccumulatorumulator in Accumulator.")
@@ -825,10 +824,10 @@ class OpCodeSpec extends Specification {
     
         where:
         firstValue | secondValue | expectedAccumulatorumulator | Z      | N     | Expected
-        0b00000001 | 0b00000001  | 0b00000001          | false  | false | "Unchanged accumulator"
-        0b00000001 | 0b00000010  | 0b00000000          | true   | false | "No matching bits"
-        0b00000011 | 0b00000010  | 0b00000010          | false  | false | "1 matched bit, 1 unmatched"
-        0b00101010 | 0b00011010  | 0b00001010          | false  | false | "Multiple matched/unmatched bits"
+        0b00000001 | 0b00000001  | 0b00000001                  | false  | false | "Unchanged accumulator"
+        0b00000001 | 0b00000010  | 0b00000000                  | true   | false | "No matching bits"
+        0b00000011 | 0b00000010  | 0b00000010                  | false  | false | "1 matched bit, 1 unmatched"
+        0b00101010 | 0b00011010  | 0b00001010                  | false  | false | "Multiple matched/unmatched bits"
     }
     
     @Unroll("AND (Absolute[X]) #Expected: #firstValue & #secondValue = #expectedAccumulator")
@@ -851,10 +850,10 @@ class OpCodeSpec extends Specification {
     
         where:
         locationHi | locationLo | firstValue | index | secondValue | expectedAccumulatorumulator | Z      | N     | Expected
-        0x1        | 0x10       | 0b00000001 | 0     | 0b00000001  | 0b00000001          | false  | false | "Unchanged accumulator"
-        0x2        | 0x20       | 0b00000001 | 1     | 0b00000010  | 0b00000000          | true   | false | "No matching bits"
-        0x3        | 0x30       | 0b00000011 | 2     | 0b00000010  | 0b00000010          | false  | false | "1 matched bit, 1 unmatched"
-        0x4        | 0x40       | 0b00101010 | 3     | 0b00011010  | 0b00001010          | false  | false | "Multiple matched/unmatched bits"
+        0x1        | 0x10       | 0b00000001 | 0     | 0b00000001  | 0b00000001                  | false  | false | "Unchanged accumulator"
+        0x2        | 0x20       | 0b00000001 | 1     | 0b00000010  | 0b00000000                  | true   | false | "No matching bits"
+        0x3        | 0x30       | 0b00000011 | 2     | 0b00000010  | 0b00000010                  | false  | false | "1 matched bit, 1 unmatched"
+        0x4        | 0x40       | 0b00101010 | 3     | 0b00011010  | 0b00001010                  | false  | false | "Multiple matched/unmatched bits"
     }
     
     @Unroll("AND (Absolute[Y]) #Expected: #firstValue & #secondValue = #expectedAccumulator")
@@ -957,11 +956,11 @@ class OpCodeSpec extends Specification {
     
         where:
         firstValue | secondValue | expectedAccumulatorumulator | Z      | N     | Expected
-        0b00000001 | 0b00000001  | 0b00000001          | false  | false | "Duplicate bits"
-        0b00000000 | 0b00000001  | 0b00000001          | false  | false | "One bit in Accumulator"
-        0b00000001 | 0b00000000  | 0b00000001          | false  | false | "One bit from passed value"
-        0b00000001 | 0b00000010  | 0b00000011          | false  | false | "One bit fro Accumulator, one from new value"
-        0b00000001 | 0b10000010  | 0b10000011          | false  | true  | "Negative result"
+        0b00000001 | 0b00000001  | 0b00000001                  | false  | false | "Duplicate bits"
+        0b00000000 | 0b00000001  | 0b00000001                  | false  | false | "One bit in Accumulator"
+        0b00000001 | 0b00000000  | 0b00000001                  | false  | false | "One bit from passed value"
+        0b00000001 | 0b00000010  | 0b00000011                  | false  | false | "One bit fro Accumulator, one from new value"
+        0b00000001 | 0b10000010  | 0b10000011                  | false  | true  | "Negative result"
     }
     
     @Unroll("ORA (Zero Page) #Expected:  #firstValue | #secondValue = #expectedAccumulatorumulator in Accumulator.")
@@ -983,11 +982,11 @@ class OpCodeSpec extends Specification {
     
         where:
         firstValue | secondValue | expectedAccumulatorumulator | Z      | N     | Expected
-        0b00000001 | 0b00000001  | 0b00000001          | false  | false | "Duplicate bits"
-        0b00000000 | 0b00000001  | 0b00000001          | false  | false | "One bit in Accumulator"
-        0b00000001 | 0b00000000  | 0b00000001          | false  | false | "One bit from passed value"
-        0b00000001 | 0b00000010  | 0b00000011          | false  | false | "One bit fro Accumulator, one from new value"
-        0b00000001 | 0b10000010  | 0b10000011          | false  | true  | "Negative result"
+        0b00000001 | 0b00000001  | 0b00000001                  | false  | false | "Duplicate bits"
+        0b00000000 | 0b00000001  | 0b00000001                  | false  | false | "One bit in Accumulator"
+        0b00000001 | 0b00000000  | 0b00000001                  | false  | false | "One bit from passed value"
+        0b00000001 | 0b00000010  | 0b00000011                  | false  | false | "One bit fro Accumulator, one from new value"
+        0b00000001 | 0b10000010  | 0b10000011                  | false  | true  | "Negative result"
     }
     
     @Unroll("ORA (Zero Page[X)) #Expected:  #firstValue | #secondValue = #expectedAccumulatorumulator in Accumulator.")
@@ -1010,11 +1009,11 @@ class OpCodeSpec extends Specification {
     
         where:
         firstValue | index | secondValue | expectedAccumulatorumulator | Z      | N     | Expected
-        0b00000001 | 0     | 0b00000001  | 0b00000001          | false  | false | "Duplicate bits"
-        0b00000000 | 1     | 0b00000001  | 0b00000001          | false  | false | "One bit in Accumulator"
-        0b00000001 | 2     | 0b00000000  | 0b00000001          | false  | false | "One bit from passed value"
-        0b00000001 | 3     | 0b00000010  | 0b00000011          | false  | false | "One bit fro Accumulator, one from new value"
-        0b00000001 | 4     | 0b10000010  | 0b10000011          | false  | true  | "Negative result"
+        0b00000001 | 0     | 0b00000001  | 0b00000001                  | false  | false | "Duplicate bits"
+        0b00000000 | 1     | 0b00000001  | 0b00000001                  | false  | false | "One bit in Accumulator"
+        0b00000001 | 2     | 0b00000000  | 0b00000001                  | false  | false | "One bit from passed value"
+        0b00000001 | 3     | 0b00000010  | 0b00000011                  | false  | false | "One bit fro Accumulator, one from new value"
+        0b00000001 | 4     | 0b10000010  | 0b10000011                  | false  | true  | "Negative result"
     }
     
     @Unroll("ORA (Absolute) #Expected:  #firstValue | #secondValue = #expectedAccumulatorumulator in Accumulator.")
@@ -1036,21 +1035,21 @@ class OpCodeSpec extends Specification {
     
         where:
         firstValue | secondValue | expectedAccumulatorumulator | Z      | N     | Expected
-        0b00000001 | 0b00000001  | 0b00000001          | false  | false | "Duplicate bits"
-        0b00000000 | 0b00000001  | 0b00000001          | false  | false | "One bit in Accumulator"
-        0b00000001 | 0b00000000  | 0b00000001          | false  | false | "One bit from passed value"
-        0b00000001 | 0b00000010  | 0b00000011          | false  | false | "One bit fro Accumulator, one from new value"
-        0b00000001 | 0b10000010  | 0b10000011          | false  | true  | "Negative result"
+        0b00000001 | 0b00000001  | 0b00000001                  | false  | false | "Duplicate bits"
+        0b00000000 | 0b00000001  | 0b00000001                  | false  | false | "One bit in Accumulator"
+        0b00000001 | 0b00000000  | 0b00000001                  | false  | false | "One bit from passed value"
+        0b00000001 | 0b00000010  | 0b00000011                  | false  | false | "One bit fro Accumulator, one from new value"
+        0b00000001 | 0b10000010  | 0b10000011                  | false  | true  | "Negative result"
     }
     
     @Unroll("ORA (Absolute[X]) #Expected:  #firstValue | #secondValue = #expectedAccumulatorumulator in Accumulator.")
     testOR_ABS_IX(){
         when:
         Program program = loadMemoryWithProgram(LDX_I, index,
-                LDA_I, firstValue,
-                STA_ABS_IX, 0x20, 0x05,
-                LDA_I, secondValue,
-                ORA_ABS_IX, 0x20, 0x05)
+                                                LDA_I, firstValue,
+                                                STA_ABS_IX, 0x20, 0x05,
+                                                LDA_I, secondValue,
+                                                ORA_ABS_IX, 0x20, 0x05)
         
         and:
         processor.step(5)
@@ -1063,21 +1062,21 @@ class OpCodeSpec extends Specification {
     
         where:
         firstValue | index | secondValue | expectedAccumulatorumulator | Z      | N     | Expected
-        0b00000001 | 0     | 0b00000001  | 0b00000001          | false  | false | "Duplicate bits"
-        0b00000000 | 1     | 0b00000001  | 0b00000001          | false  | false | "One bit in Accumulator"
-        0b00000001 | 2     | 0b00000000  | 0b00000001          | false  | false | "One bit from passed value"
-        0b00000001 | 3     | 0b00000010  | 0b00000011          | false  | false | "One bit fro Accumulator, one from new value"
-        0b00000001 | 4     | 0b10000010  | 0b10000011          | false  | true  | "Negative result"
+        0b00000001 | 0     | 0b00000001  | 0b00000001                  | false  | false | "Duplicate bits"
+        0b00000000 | 1     | 0b00000001  | 0b00000001                  | false  | false | "One bit in Accumulator"
+        0b00000001 | 2     | 0b00000000  | 0b00000001                  | false  | false | "One bit from passed value"
+        0b00000001 | 3     | 0b00000010  | 0b00000011                  | false  | false | "One bit fro Accumulator, one from new value"
+        0b00000001 | 4     | 0b10000010  | 0b10000011                  | false  | true  | "Negative result"
     }
     
     @Unroll("ORA (Absolute[Y]) #Expected:  #firstValue | #secondValue = #expectedAccumulatorumulator in Accumulator.")
     testOR_ABS_IY(){
         when:
         Program program = loadMemoryWithProgram(LDY_I, index,
-                LDA_I, firstValue,
-                STA_ABS_IY, 0x20, 0x05,
-                LDA_I, secondValue,
-                ORA_ABS_IY, 0x20, 0x05)
+                                                LDA_I, firstValue,
+                                                STA_ABS_IY, 0x20, 0x05,
+                                                LDA_I, secondValue,
+                                                ORA_ABS_IY, 0x20, 0x05)
         
         and:
         processor.step(5)
@@ -1091,11 +1090,11 @@ class OpCodeSpec extends Specification {
     
         where:
         firstValue | index | secondValue | expectedAccumulatorumulator | Z      | N     | Expected
-        0b00000001 | 0     | 0b00000001  | 0b00000001          | false  | false | "Duplicate bits"
-        0b00000000 | 1     | 0b00000001  | 0b00000001          | false  | false | "One bit in Accumulator"
-        0b00000001 | 2     | 0b00000000  | 0b00000001          | false  | false | "One bit from passed value"
-        0b00000001 | 3     | 0b00000010  | 0b00000011          | false  | false | "One bit fro Accumulator, one from new value"
-        0b00000001 | 4     | 0b10000010  | 0b10000011          | false  | true  | "Negative result"
+        0b00000001 | 0     | 0b00000001  | 0b00000001                  | false  | false | "Duplicate bits"
+        0b00000000 | 1     | 0b00000001  | 0b00000001                  | false  | false | "One bit in Accumulator"
+        0b00000001 | 2     | 0b00000000  | 0b00000001                  | false  | false | "One bit from passed value"
+        0b00000001 | 3     | 0b00000010  | 0b00000011                  | false  | false | "One bit fro Accumulator, one from new value"
+        0b00000001 | 4     | 0b10000010  | 0b10000011                  | false  | true  | "Negative result"
     }
     
     @Unroll("ORA (Indirect, X) #Expected: #firstValue (@[#locationHi|#locationLo]) | #secondValue = #expectedAccumulator")
@@ -1122,11 +1121,11 @@ class OpCodeSpec extends Specification {
     
         where:
         locationHi | locationLo | firstValue | index | secondValue | expectedAccumulator | Z      | N     | Expected
-        0x1        | 0x10       | 0b00000001 | 0     | 0b00000001  | 0b00000001  | false  | false | "Duplicate bits"
-        0x2        | 0x20       | 0b00000000 | 1     | 0b00000001  | 0b00000001  | false  | false | "One bit in Accumulator"
-        0x3        | 0x30       | 0b00000001 | 2     | 0b00000000  | 0b00000001  | false  | false | "One bit from passed value"
-        0x4        | 0x40       | 0b00000001 | 3     | 0b00000010  | 0b00000011  | false  | false | "One bit fro Accumulator, one from new value"
-        0x5        | 0x50       | 0b00000001 | 4     | 0b10000010  | 0b10000011  | false  | true  | "Negative result"
+        0x1        | 0x10       | 0b00000001 | 0     | 0b00000001  | 0b00000001          | false  | false | "Duplicate bits"
+        0x2        | 0x20       | 0b00000000 | 1     | 0b00000001  | 0b00000001          | false  | false | "One bit in Accumulator"
+        0x3        | 0x30       | 0b00000001 | 2     | 0b00000000  | 0b00000001          | false  | false | "One bit from passed value"
+        0x4        | 0x40       | 0b00000001 | 3     | 0b00000010  | 0b00000011          | false  | false | "One bit fro Accumulator, one from new value"
+        0x5        | 0x50       | 0b00000001 | 4     | 0b10000010  | 0b10000011          | false  | true  | "Negative result"
     }
     
     @Unroll("ORA (Indirect, Y) #Expected: #firstValue | #secondValue -> #expectedAccumulator")
@@ -1247,9 +1246,9 @@ class OpCodeSpec extends Specification {
     
         where:
         firstValue | secondValue | expectedAccumulatorumulator | Z      | N     | Expected
-        0b00000001 | 0b00000000  | 0b00000001          | false  | false | "One"
-        0b00000000 | 0b00000001  | 0b00000001          | false  | false | "The other"
-        0b00000001 | 0b00000001  | 0b00000000          | true   | false | "Not both"
+        0b00000001 | 0b00000000  | 0b00000001                  | false  | false | "One"
+        0b00000000 | 0b00000001  | 0b00000001                  | false  | false | "The other"
+        0b00000001 | 0b00000001  | 0b00000000                  | true   | false | "Not both"
     }
     
     @Unroll("EOR (Absolute[X]) #Expected:  #firstValue ^ #secondValue = #expectedAccumulatorumulator in Accumulator.")
@@ -1354,9 +1353,9 @@ class OpCodeSpec extends Specification {
     
         where:
         pointerHi | pointerLo | index | firstValue | secondValue | expectedAccumulator | Z      | N     | Expected
-        0x1       | 0x10      | 0     | 0b00000001 | 0b00000000  | 0b00000001  | false  | false | "One"
-        0x2       | 0x20      | 1     | 0b00000000 | 0b00000001  | 0b00000001  | false  | false | "The other"
-        0x3       | 0x34      | 2     | 0b00000001 | 0b00000001  | 0b00000000  | true   | false | "Not both"
+        0x1       | 0x10      | 0     | 0b00000001 | 0b00000000  | 0b00000001          | false  | false | "One"
+        0x2       | 0x20      | 1     | 0b00000000 | 0b00000001  | 0b00000001          | false  | false | "The other"
+        0x3       | 0x34      | 2     | 0b00000001 | 0b00000001  | 0b00000000          | true   | false | "Not both"
     }
     
     @Unroll("STA (Indirect, X) #Expected: #value stored at [#locationHi|#locationLo]")
@@ -1602,9 +1601,9 @@ class OpCodeSpec extends Specification {
     
         where:
         locationHi | locationLo | index | firstValue | secondValue | expectedAccumulator | Z      | N     | O     | C     | Expected
-        0x1        | 0x10       | 0     | 0x5        | 0x3         | 0x2         | false  | false | false | false | "Basic subtraction"
-        0x2        | 0x13       | 1     | 0x5        | 0x5         | 0x0         | true   | false | false | false | "With zero result"
-        0x3        | 0x26       | 2     | 0x5        | 0x6         | 0xFF        | false  | true  | false | false | "with negative result"
+        0x1        | 0x10       | 0     | 0x5        | 0x3         | 0x2                 | false  | false | false | false | "Basic subtraction"
+        0x2        | 0x13       | 1     | 0x5        | 0x5         | 0x0                 | true   | false | false | false | "With zero result"
+        0x3        | 0x26       | 2     | 0x5        | 0x6         | 0xFF                | false  | true  | false | false | "with negative result"
     }
     
     @Unroll("SBC (Indirect, Y) #Expected: #firstValue (@[#locationHi|#locationLo]) - #secondValue = #expectedAccumulator")
@@ -1633,9 +1632,9 @@ class OpCodeSpec extends Specification {
     
         where:
         pointerHi | pointerLo | index | firstValue | secondValue | expectedAccumulator | Z      | N     | O     | C     | Expected
-        0x1       | 0x10      | 0     | 0x5        | 0x3         | 0x2         | false  | false | false | false | "Basic subtraction"
-        0x2       | 0x13      | 1     | 0x5        | 0x5         | 0x0         | true   | false | false | false | "With zero result"
-        0x3       | 0x26      | 2     | 0x5        | 0x6         | 0xFF        | false  | true  | false | false | "with negative result"
+        0x1       | 0x10      | 0     | 0x5        | 0x3         | 0x2                 | false  | false | false | false | "Basic subtraction"
+        0x2       | 0x13      | 1     | 0x5        | 0x5         | 0x0                 | true   | false | false | false | "With zero result"
+        0x3       | 0x26      | 2     | 0x5        | 0x6         | 0xFF                | false  | true  | false | false | "with negative result"
     }
     
     @Unroll("INX #Expected: on #firstValue = #expectedX")
