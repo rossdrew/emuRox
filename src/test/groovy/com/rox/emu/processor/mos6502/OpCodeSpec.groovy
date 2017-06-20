@@ -26,6 +26,17 @@ class OpCodeSpec extends Specification {
         memory.setBlock(0, program.getProgramAsByteArray())
         return program
     }
+
+    boolean testFlags(boolean Z,
+                      boolean N,
+                      boolean C = registers.getFlag(Registers.C),
+                      boolean V = registers.getFlag(Registers.V)){
+
+        return Z == registers.getFlag(Registers.Z) &&
+               N == registers.getFlag(Registers.N) &&
+               C == registers.getFlag(Registers.C) &&
+               V == registers.getFlag(Registers.V)
+    }
     
     def testNewOpCode(){
         when:
@@ -37,8 +48,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
+        testFlags(Z, N)
     
         where:
         loadValue | expectedAccumulatorumulator | Z     | N     | Expected
@@ -61,8 +71,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
+        testFlags(Z, N)
     
         where:
         loadValue | expectedAccumulatorumulator | Z     | N     | Expected
@@ -86,8 +95,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
+        testFlags(Z, N)
     
         where:
         loadValue | expectedAccumulatorumulator | Z     | N     | Expected
@@ -102,8 +110,7 @@ class OpCodeSpec extends Specification {
     @Unroll("LDA (Zero Page[X]) #Expected: Load [0x30 + X(#index)] -> #expectedAccumulatorumulator")
     testLDAFromZeroPageIndexedByX() {
         when:
-        Program program = loadMemoryWithProgram(LDX_I, index,
-                LDA_Z_IX, 0x30)
+        Program program = loadMemoryWithProgram(LDX_I, index, LDA_Z_IX, 0x30)
         int[] values = [0, 11, 0b11111111]
         memory.setBlock(0x30, values)
 
@@ -113,8 +120,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
+        testFlags(Z, N)
     
         where:
         index | expectedAccumulatorumulator | Z     | N     | Expected
@@ -135,8 +141,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
+        testFlags(Z, N)
     
         where:
         loadValue | expectedAccumulatorumulator | Z     | N     | Expected
@@ -154,16 +159,14 @@ class OpCodeSpec extends Specification {
         Program program = loadMemoryWithProgram(LDX_I, index, LDA_ABS_IX, 1, 0x2C)
         int[] values = [0, 11, 0b11111111]
         memory.setBlock(300, values)
-        
-    
+
         and:
         processor.step(2)
     
         then:
         expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
+        testFlags(Z, N)
     
         where:
         index | expectedAccumulatorumulator | Z     | N     | Expected
@@ -186,8 +189,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
+        testFlags(Z, N)
     
         where:
         index | expectedAccumulatorumulator | Z     | N     | Expected
@@ -214,8 +216,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
+        testFlags(Z, N)
     
         where:
         indAddressHi | indAddressLo | index | firstValue | expectedAccumulatorumulator | Z     | N     | Expected
@@ -263,8 +264,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedX == registers.getRegister(Registers.REG_X_INDEX)
         program.length == registers.getPC()
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
+        testFlags(Z,N)
     
         where:
         firstValue | expectedX  | Z      | N     | Expected
@@ -287,8 +287,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedX == registers.getRegister(Registers.REG_X_INDEX)
         program.length == registers.getPC()
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
+		testFlags(Z,N)
     
         where:
         addressHi | addressLo  | firstValue | expectedX  | Z      | N     | Expected
@@ -311,8 +310,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedX == registers.getRegister(Registers.REG_X_INDEX)
         program.length == registers.getPC()
-        registers.getFlag(Registers.Z) == Z
-        registers.getFlag(Registers.N) == N
+		testFlags(Z,N)
     
         where:
         index | addressHi | addressLo  | firstValue | expectedX  | Z      | N     | Expected
@@ -334,8 +332,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedX == registers.getRegister(Registers.REG_X_INDEX)
         program.length == registers.getPC()
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
+		testFlags(Z,N)
     
         where:
         address | firstValue | expectedX  | Z      | N     | Expected
@@ -358,8 +355,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedX == registers.getRegister(Registers.REG_X_INDEX)
         program.length == registers.getPC()
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
+		testFlags(Z,N)
     
         where:
         address | index | firstValue | expectedX  | Z      | N     | Expected
@@ -379,8 +375,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedY == registers.getRegister(Registers.REG_Y_INDEX)
         program.length == registers.getPC()
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
+		testFlags(Z,N)
     
         where:
         firstValue | expectedY  | Z      | N     | Expected
@@ -402,8 +397,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedY == registers.getRegister(Registers.REG_Y_INDEX)
         program.length == registers.getPC()
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
+		testFlags(Z,N)
     
         where:
         address | firstValue | expectedY  | Z      | N     | Expected
@@ -423,8 +417,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedY == registers.getRegister(Registers.REG_Y_INDEX)
         program.length == registers.getPC()
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
+		testFlags(Z,N)
     
         where:
         address |index| firstValue | expectedY  | Z      | N     | Expected
@@ -447,8 +440,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedY == registers.getRegister(Registers.REG_Y_INDEX)
         program.length == registers.getPC()
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
+		testFlags(Z,N)
     
         where:
         addressHi | addressLo | firstValue | expectedY  | Z      | N     | Expected
@@ -471,8 +463,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedY == registers.getRegister(Registers.REG_Y_INDEX)
         program.length == registers.getPC()
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
+		testFlags(Z,N)
     
         where:
         addressHi | addressLo | index | firstValue | expectedY  | Z      | N     | Expected
@@ -492,10 +483,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
-        C == registers.getFlag(Registers.C)
-        Z == registers.getFlag(Registers.Z)
-        O == registers.getFlag(Registers.V)
-        N == registers.getFlag(Registers.N)
+		testFlags(Z,N,C,O)
     
         where:
         firstValue | secondValue | expectedAccumulatorumulator | Z      | N     | C     | O     | Expected
@@ -518,10 +506,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
-        C == registers.getFlag(Registers.C)
-        Z == registers.getFlag(Registers.Z)
-        O == registers.getFlag(Registers.V)
-        N == registers.getFlag(Registers.N)
+		testFlags(Z,N,C,O)
     
         where:
         memLoc | firstValue  | secondValue | indexPoint  | index | expectedAccumulatorumulator | Z      | N     | C     | O     | Expected
@@ -545,10 +530,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
-        C == registers.getFlag(Registers.C)
-        Z == registers.getFlag(Registers.Z)
-        O == registers.getFlag(Registers.V)
-        N == registers.getFlag(Registers.N)
+		testFlags(Z,N,C,O)
     
         where:
         firstValue | secondValue | expectedAccumulatorumulator | Z      | N     | C     | O     | Expected
@@ -572,10 +554,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
-        C == registers.getFlag(Registers.C)
-        Z == registers.getFlag(Registers.Z)
-        O == registers.getFlag(Registers.V)
-        N == registers.getFlag(Registers.N)
+		testFlags(Z,N,C,O)
     
         where:
         firstValue | secondValue | expectedAccumulatorumulator | Z      | N     | C     | O     | Expected
@@ -598,10 +577,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
-        C == registers.getFlag(Registers.C)
-        Z == registers.getFlag(Registers.Z)
-        O == registers.getFlag(Registers.V)
-        N == registers.getFlag(Registers.N)
+		testFlags(Z,N,C,O)
     
         where:
         firstValue | secondValue | index | expectedAccumulatorumulator | Z      | N     | C     | O     | Expected
@@ -626,10 +602,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
-        C == registers.getFlag(Registers.C)
-        Z == registers.getFlag(Registers.Z)
-        O == registers.getFlag(Registers.V)
-        N == registers.getFlag(Registers.N)
+		testFlags(Z,N,C,O)
     
         where:
         firstValue | secondValue | index | expectedAccumulatorumulator | Z      | N     | C     | O     | Expected
@@ -658,10 +631,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
-        C == registers.getFlag(Registers.C)
-        Z == registers.getFlag(Registers.Z)
-        O == registers.getFlag(Registers.V)
-        N == registers.getFlag(Registers.N)
+		testFlags(Z,N,C,O)
     
         where:
         locationHi | locationLo | firstValue | secondValue | index | expectedAccumulatorumulator | Z      | N     | C     | O     | Expected
@@ -689,10 +659,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
-        C == registers.getFlag(Registers.C)
-        Z == registers.getFlag(Registers.Z)
-        O == registers.getFlag(Registers.V)
-        N == registers.getFlag(Registers.N)
+		testFlags(Z,N,C,O)
     
         where:
         pointerHi | pointerLo | firstValue | secondValue | index | expectedAccumulatorumulator | Z      | N     | C     | O     | Expected
@@ -717,10 +684,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
-        C == registers.getFlag(Registers.C)
-        Z == registers.getFlag(Registers.Z)
-        O == registers.getFlag(Registers.V)
-        N == registers.getFlag(Registers.N)
+		testFlags(Z,N,C,O)
         storedValue == memory.getByte(40)
     
         where:
@@ -743,8 +707,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
+		testFlags(Z,N)
     
         where:
         firstValue | secondValue | expectedAccumulatorumulator | Z      | N     | Expected
@@ -768,8 +731,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
+		testFlags(Z,N)
     
         where:
         firstValue | secondValue | expectedAccumulatorumulator | Z      | N     | Expected
@@ -794,8 +756,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
+		testFlags(Z,N)
     
         where:
         firstValue | index | secondValue | expectedAccumulator | Z      | N     | Expected
@@ -819,8 +780,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
+		testFlags(Z,N)
     
         where:
         firstValue | secondValue | expectedAccumulatorumulator | Z      | N     | Expected
@@ -845,8 +805,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
+		testFlags(Z,N)
     
         where:
         locationHi | locationLo | firstValue | index | secondValue | expectedAccumulatorumulator | Z      | N     | Expected
@@ -871,8 +830,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
+		testFlags(Z,N)
     
         where:
         locationHi | locationLo | firstValue | index | secondValue | expectedAccumulator | Z      | N     | Expected
@@ -901,8 +859,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
+		testFlags(Z,N)
     
         where:
         locationHi | locationLo | firstValue | index | secondValue | expectedAccumulator | Z      | N     | Expected
@@ -951,8 +908,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
+		testFlags(Z,N)
     
         where:
         firstValue | secondValue | expectedAccumulatorumulator | Z      | N     | Expected
@@ -977,8 +933,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
+		testFlags(Z,N)
     
         where:
         firstValue | secondValue | expectedAccumulatorumulator | Z      | N     | Expected
@@ -1004,8 +959,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
+		testFlags(Z,N)
     
         where:
         firstValue | index | secondValue | expectedAccumulatorumulator | Z      | N     | Expected
@@ -1030,8 +984,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
+		testFlags(Z,N)
     
         where:
         firstValue | secondValue | expectedAccumulatorumulator | Z      | N     | Expected
@@ -1057,8 +1010,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
+		testFlags(Z,N)
     
         where:
         firstValue | index | secondValue | expectedAccumulatorumulator | Z      | N     | Expected
@@ -1085,8 +1037,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
+		testFlags(Z,N)
     
         where:
         firstValue | index | secondValue | expectedAccumulatorumulator | Z      | N     | Expected
@@ -1116,8 +1067,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
+		testFlags(Z,N)
     
         where:
         locationHi | locationLo | firstValue | index | secondValue | expectedAccumulator | Z      | N     | Expected
@@ -1168,8 +1118,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
+		testFlags(Z,N)
     
         where:
         firstValue | secondValue | expectedAccumulatorumulator | Z      | N     | Expected
@@ -1192,8 +1141,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
+		testFlags(Z,N)
     
         where:
         firstValue | secondValue | expectedAccumulatorumulator | Z      | N     | Expected
@@ -1217,8 +1165,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
+		testFlags(Z,N)
     
         where:
         index | firstValue | secondValue | expectedAccumulatorumulator | Z      | N     | Expected
@@ -1241,8 +1188,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
+		testFlags(Z,N)
     
         where:
         firstValue | secondValue | expectedAccumulatorumulator | Z      | N     | Expected
@@ -1266,8 +1212,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
+		testFlags(Z,N)
     
         where:
         index | firstValue | secondValue | expectedAccumulatorumulator | Z      | N     | Expected
@@ -1291,8 +1236,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
+		testFlags(Z,N)
     
         where:
         index | firstValue | secondValue | expectedAccumulatorumulator | Z      | N     | Expected
@@ -1320,8 +1264,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
+		testFlags(Z,N)
     
         where:
         locationHi | locationLo | index | firstValue | secondValue | expectedAccumulator | Z      | N     | Expected
@@ -1425,10 +1368,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
-        Z == registers.getFlag(Registers.Z)
-        O == registers.getFlag(Registers.V)
-        N == registers.getFlag(Registers.N)
-        C == registers.getFlag(Registers.C)
+		testFlags(Z,N,C,O)
     
         where:
         firstValue | secondValue | expectedAccumulatorumulator  | Z      | N     | O     | C     | Expected
@@ -1452,10 +1392,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
-        Z == registers.getFlag(Registers.Z)
-        O == registers.getFlag(Registers.V)
-        N == registers.getFlag(Registers.N)
-        C == registers.getFlag(Registers.C)
+		testFlags(Z,N,C,O)
     
         where:
         firstValue | secondValue | expectedAccumulatorumulator  | Z      | N     | O     | C     | Expected
@@ -1480,10 +1417,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
-        Z == registers.getFlag(Registers.Z)
-        O == registers.getFlag(Registers.V)
-        N == registers.getFlag(Registers.N)
-        C == registers.getFlag(Registers.C)
+		testFlags(Z,N,C,O)
     
         where:
         firstValue | index | secondValue | expectedAccumulatorumulator  | Z      | N     | O     | C     | Expected
@@ -1507,10 +1441,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
-        Z == registers.getFlag(Registers.Z)
-        O == registers.getFlag(Registers.V)
-        N == registers.getFlag(Registers.N)
-        C == registers.getFlag(Registers.C)
+		testFlags(Z,N,C,O)
     
         where:
         firstValue | secondValue | expectedAccumulatorumulator  | Z      | N     | O     | C     | Expected
@@ -1535,10 +1466,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
-        Z == registers.getFlag(Registers.Z)
-        O == registers.getFlag(Registers.V)
-        N == registers.getFlag(Registers.N)
-        C == registers.getFlag(Registers.C)
+		testFlags(Z,N,C,O)
     
         where:
         index | firstValue | secondValue | expectedAccumulatorumulator  | Z      | N     | O     | C     | Expected
@@ -1563,10 +1491,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
-        Z == registers.getFlag(Registers.Z)
-        O == registers.getFlag(Registers.V)
-        N == registers.getFlag(Registers.N)
-        C == registers.getFlag(Registers.C)
+		testFlags(Z,N,C,O)
     
         where:
         index | firstValue | secondValue | expectedAccumulatorumulator  | Z      | N     | O     | C     | Expected
@@ -1595,8 +1520,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
+		testFlags(Z,N)
         //TODO O/C
     
         where:
@@ -1626,8 +1550,7 @@ class OpCodeSpec extends Specification {
         
         then:
         expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
+		testFlags(Z,N)
         //TODO O/C
     
         where:
@@ -1648,8 +1571,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedX == registers.getRegister(Registers.REG_X_INDEX)
         program.length == registers.getPC()
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
+		testFlags(Z,N)
     
         where:
         firstValue | expectedX | Z      | N     | Expected
@@ -1671,8 +1593,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedMem == memory.getByte(0x20)
         program.length == registers.getPC()
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
+		testFlags(Z,N)
     
         where:
         firstValue | expectedMem | Z      | N     | Expected
@@ -1695,8 +1616,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedMem == memory.getByte(0x20 + index)
         program.length == registers.getPC()
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
+		testFlags(Z,N)
     
         where:
         firstValue | index | expectedMem | Z      | N     | Expected
@@ -1718,8 +1638,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedMem == memory.getByte(0x0120)
         program.length == registers.getPC()
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
+		testFlags(Z,N)
     
         where:
         firstValue | expectedMem | Z      | N     | Expected
@@ -1742,8 +1661,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedMem == memory.getByte(0x0120 + index)
         program.length == registers.getPC()
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
+		testFlags(Z,N)
     
         where:
         firstValue | index | expectedMem | Z      | N     | Expected
@@ -1765,8 +1683,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedMem == memory.getByte(0x20)
         program.length == registers.getPC()
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
+		testFlags(Z,N)
     
         where:
         firstValue | expectedMem | Z      | N     | Expected
@@ -1789,8 +1706,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedMem == memory.getByte(loc + index)
         program.length == registers.getPC()
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
+		testFlags(Z,N)
     
         where:
         firstValue | loc  | index | expectedMem | Z      | N     | Expected
@@ -1812,8 +1728,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedMem == memory.getByte(0x0120)
         program.length == registers.getPC()
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
+		testFlags(Z,N)
     
         where:
         firstValue | expectedMem | Z      | N     | Expected
@@ -1836,8 +1751,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedMem == memory.getByte(0x0120 + index)
         program.length == registers.getPC()
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
+		testFlags(Z,N)
     
         where:
         index | firstValue | expectedMem | Z      | N     | Expected
@@ -1857,8 +1771,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedX == registers.getRegister(Registers.REG_X_INDEX)
         program.length == registers.getPC()
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
+		testFlags(Z,N)
     
         where:
         firstValue | expectedX | Z      | N     | Expected
@@ -1878,8 +1791,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedX == registers.getRegister(Registers.REG_Y_INDEX)
         program.length == registers.getPC()
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
+		testFlags(Z,N)
     
         where:
         firstValue | expectedX | Z      | N     | Expected
@@ -1899,8 +1811,7 @@ class OpCodeSpec extends Specification {
         then:
         expectedY == registers.getRegister(Registers.REG_Y_INDEX)
         program.length == registers.getPC()
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
+		testFlags(Z,N)
     
         where:
         firstValue | expectedY | Z      | N     | Expected
@@ -1946,9 +1857,7 @@ class OpCodeSpec extends Specification {
         then:
         program.length == registers.getPC()
         expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
-        C == registers.getFlag(Registers.C)
+		testFlags(Z,N,C)
     
         where:
         firstValue | expectedAccumulatorumulator | Z     | N     | C     | Expected
@@ -1973,9 +1882,7 @@ class OpCodeSpec extends Specification {
         then:
         program.length == registers.getPC()
         expectedMem == memory.getByte(0x20)
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
-        C == registers.getFlag(Registers.C)
+		testFlags(Z,N,C)
     
         where:
         firstValue | expectedMem | Z     | N     | C     | Expected
@@ -2000,9 +1907,7 @@ class OpCodeSpec extends Specification {
         then:
         program.length == registers.getPC()
         expectedMem == memory.getByte(0x120)
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
-        C == registers.getFlag(Registers.C)
+		testFlags(Z,N,C)
     
         where:
         firstValue | expectedMem | Z     | N     | C     | Expected
@@ -2028,9 +1933,7 @@ class OpCodeSpec extends Specification {
         then:
         program.length == registers.getPC()
         expectedMem == memory.getByte(0x20 + index)
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
-        C == registers.getFlag(Registers.C)
+		testFlags(Z,N,C)
     
         where:
         firstValue | expectedMem | index | Z     | N     | C     | Expected
@@ -2056,9 +1959,7 @@ class OpCodeSpec extends Specification {
         then:
         program.length == registers.getPC()
         expectedMem == memory.getByte(0x120 + index)
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
-        C == registers.getFlag(Registers.C)
+		testFlags(Z,N,C)
     
         where:
         firstValue | expectedMem | index | Z     | N     | C     | Expected
@@ -2081,9 +1982,7 @@ class OpCodeSpec extends Specification {
         then:
         program.length == registers.getPC()
         expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
-        C == registers.getFlag(Registers.C)
+		testFlags(Z,N,C)
     
         where:
         firstValue | expectedAccumulatorumulator | Z     | N     | C     | Expected
@@ -2106,9 +2005,7 @@ class OpCodeSpec extends Specification {
         then:
         program.length == registers.getPC()
         expectedMem == memory.getByte(0x20)
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
-        C == registers.getFlag(Registers.C)
+		testFlags(Z,N,C)
     
         where:
         firstValue | expectedMem | Z     | N     | C     | Expected
@@ -2131,9 +2028,7 @@ class OpCodeSpec extends Specification {
         then:
         program.length == registers.getPC()
         expectedMem == memory.getByte(0x20 + index)
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
-        C == registers.getFlag(Registers.C)
+		testFlags(Z,N,C)
     
         where:
         firstValue | index | expectedMem | Z     | N     | C     | Expected
@@ -2156,9 +2051,7 @@ class OpCodeSpec extends Specification {
         then:
         program.length == registers.getPC()
         expectedMem == memory.getByte(0x220)
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
-        C == registers.getFlag(Registers.C)
+		testFlags(Z,N,C)
     
         where:
         firstValue | expectedMem | Z     | N     | C     | Expected
@@ -2182,9 +2075,7 @@ class OpCodeSpec extends Specification {
         then:
         program.length == registers.getPC()
         expectedMem == memory.getByte(0x220 + index)
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
-        C == registers.getFlag(Registers.C)
+		testFlags(Z,N,C)
     
         where:
         firstValue | index | expectedMem | Z     | N     | C     | Expected
@@ -2297,9 +2188,7 @@ class OpCodeSpec extends Specification {
         then:
         program.length == registers.getPC()
         expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
-        C == registers.getFlag(Registers.C)
+		testFlags(Z,N,C)
     
         where:
         preInstr | firstValue | expectedAccumulatorumulator | Z     | N     | C     | expected
@@ -2326,9 +2215,7 @@ class OpCodeSpec extends Specification {
         then:
         program.length == registers.getPC()
         expectedMem == memory.getByte(0x20)
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
-        C == registers.getFlag(Registers.C)
+		testFlags(Z,N,C)
     
         where:
         firstInstr  |firstValue  | expectedMem | Z     | N     | C     | Expected
@@ -2354,9 +2241,7 @@ class OpCodeSpec extends Specification {
         then:
         program.length == registers.getPC()
         expectedMem == memory.getByte(0x20 + index)
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
-        C == registers.getFlag(Registers.C)
+		testFlags(Z,N,C)
     
         where:
         firstInstr | index | firstValue | expectedMem | Z     | N     | C     | Expected
@@ -2381,9 +2266,7 @@ class OpCodeSpec extends Specification {
         then:
         program.length == registers.getPC()
         expectedMem == memory.getByte( 0x2007 )
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
-        C == registers.getFlag(Registers.C)
+		testFlags(Z,N,C)
     
         where:
         firstInstr  |firstValue  | expectedMem | Z     | N     | C     | Expected
@@ -2409,9 +2292,7 @@ class OpCodeSpec extends Specification {
         then:
         program.length == registers.getPC()
         expectedMem == memory.getByte( 0x2007 + index)
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
-        C == registers.getFlag(Registers.C)
+		testFlags(Z,N,C)
     
         where:
         firstInstr  | index | firstValue | expectedMem | Z     | N     | C     | Expected
@@ -2435,9 +2316,7 @@ class OpCodeSpec extends Specification {
         then:
         program.length == registers.getPC()
         expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
-        C == registers.getFlag(Registers.C)
+		testFlags(Z,N,C)
     
         where:
         preInstr | firstValue | expectedAccumulatorumulator | Z     | N     | C     | expected
@@ -2610,8 +2489,7 @@ class OpCodeSpec extends Specification {
         program.length == registers.getPC()
         expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         X == registers.getRegister(Registers.REG_X_INDEX)
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
+		testFlags(Z,N)
     
         where:
         loadedValue | expectedAccumulatorumulator | X          | N     | Z     | expected
@@ -2632,8 +2510,7 @@ class OpCodeSpec extends Specification {
         program.length == registers.getPC()
         expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         Y == registers.getRegister(Registers.REG_Y_INDEX)
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
+		testFlags(Z,N)
     
         where:
         loadedValue | expectedAccumulatorumulator | Y          | N      | Z     | expected
@@ -2654,8 +2531,7 @@ class OpCodeSpec extends Specification {
         program.length == registers.getPC()
         expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         Y == registers.getRegister(Registers.REG_Y_INDEX)
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
+		testFlags(Z,N)
     
         where:
         loadedValue | expectedAccumulatorumulator | Y          | N      | Z     | expected
@@ -2676,8 +2552,7 @@ class OpCodeSpec extends Specification {
         program.length == registers.getPC()
         expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         X == registers.getRegister(Registers.REG_X_INDEX)
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
+		testFlags(Z,N)
     
         where:
         loadedValue | expectedAccumulatorumulator | X          | N      | Z     | expected
@@ -2699,8 +2574,7 @@ class OpCodeSpec extends Specification {
         program.length == registers.getPC()
         X == registers.getRegister(Registers.REG_X_INDEX)
         expectedSP == registers.getRegister(Registers.REG_SP)
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
+		testFlags(Z,N)
     
         where:
         SPValue | expectedSP | X    | Z     | N     | expected
@@ -2722,8 +2596,7 @@ class OpCodeSpec extends Specification {
     
         then:
         program.length == registers.getPC()
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
+		testFlags(Z,N)
         O == registers.getFlag(Registers.V)
     
         where:
@@ -2748,8 +2621,7 @@ class OpCodeSpec extends Specification {
     
         then:
         program.length == registers.getPC()
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
+		testFlags(Z,N)
         O == registers.getFlag(Registers.V)
     
         where:
@@ -2876,9 +2748,7 @@ class OpCodeSpec extends Specification {
         then:
         program.length == registers.getPC()
         firstValue == registers.getRegister(Registers.REG_ACCUMULATOR)
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
-        C == registers.getFlag(Registers.C)
+		testFlags(Z,N,C)
     
         where:
         firstValue | secondValue | Z     | N     | C     | Expected
@@ -2902,9 +2772,7 @@ class OpCodeSpec extends Specification {
         then:
         program.length == registers.getPC()
         firstValue == registers.getRegister(Registers.REG_ACCUMULATOR)
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
-        C == registers.getFlag(Registers.C)
+		testFlags(Z,N,C)
     
         where:
         firstValue | secondValue | Z     | N     | C     | Expected
@@ -2929,9 +2797,7 @@ class OpCodeSpec extends Specification {
         then:
         program.length == registers.getPC()
         firstValue == registers.getRegister(Registers.REG_ACCUMULATOR)
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
-        C == registers.getFlag(Registers.C)
+		testFlags(Z,N,C)
     
         where:
         firstValue | secondValue | index | Z     | N     | C     | Expected
@@ -2955,9 +2821,7 @@ class OpCodeSpec extends Specification {
         then:
         program.length == registers.getPC()
         firstValue == registers.getRegister(Registers.REG_ACCUMULATOR)
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
-        C == registers.getFlag(Registers.C)
+		testFlags(Z,N,C)
     
         where:
         firstValue | secondValue | Z     | N     | C     | Expected
@@ -2982,9 +2846,7 @@ class OpCodeSpec extends Specification {
         then:
         program.length == registers.getPC()
         firstValue == registers.getRegister(Registers.REG_ACCUMULATOR)
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
-        C == registers.getFlag(Registers.C)
+		testFlags(Z,N,C)
     
         where:
         firstValue | secondValue | index | Z     | N     | C     | Expected
@@ -3009,9 +2871,7 @@ class OpCodeSpec extends Specification {
         then:
         program.length == registers.getPC()
         firstValue == registers.getRegister(Registers.REG_ACCUMULATOR)
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
-        C == registers.getFlag(Registers.C)
+		testFlags(Z,N,C)
     
         where:
         firstValue | secondValue | index | Z     | N     | C     | Expected
@@ -3039,9 +2899,7 @@ class OpCodeSpec extends Specification {
         then:
         firstValue == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
-        C == registers.getFlag(Registers.C)
+        testFlags(Z,N,C)
     
         where:
         pointerHi | pointerLo | firstValue | secondValue | index | Z     | N     | C     | Expected
@@ -3050,7 +2908,7 @@ class OpCodeSpec extends Specification {
         0x03      | 0x35      | 0x10       | 0x11        | 2     | false | true  | false | "Smaller value - larger"
         0x04      | 0x41      | 0xFF       | 0x01        | 3     | false | true  | true  | "Negative result"
     }
-    
+
     @Unroll("CMP (Indirect, Y) #Expected: #firstValue == #secondValue")
     testCMP_IND_IY() {
         when:
@@ -3092,9 +2950,7 @@ class OpCodeSpec extends Specification {
         then:
         program.length == registers.getPC()
         expectedY == registers.getRegister(Registers.REG_Y_INDEX)
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
-        C == registers.getFlag(Registers.C)
+		testFlags(Z,N,C)
     
         where:
         firstValue | secondValue | expectedY | Z     | N     | C     | Expected
@@ -3117,9 +2973,7 @@ class OpCodeSpec extends Specification {
         then:
         program.length == registers.getPC()
         expectedY == registers.getRegister(Registers.REG_Y_INDEX)
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
-        C == registers.getFlag(Registers.C)
+		testFlags(Z,N,C)
     
         where:
         firstValue | secondValue | expectedY | Z     | N     | C     | Expected
@@ -3142,9 +2996,7 @@ class OpCodeSpec extends Specification {
         then:
         program.length == registers.getPC()
         expectedY == registers.getRegister(Registers.REG_Y_INDEX)
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
-        C == registers.getFlag(Registers.C)
+		testFlags(Z,N,C)
     
         where:
         firstValue | secondValue | expectedY | Z     | N     | C     | Expected
@@ -3167,9 +3019,7 @@ class OpCodeSpec extends Specification {
         then:
         program.length == registers.getPC()
         expectedX == registers.getRegister(Registers.REG_X_INDEX)
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
-        C == registers.getFlag(Registers.C)
+		testFlags(Z,N,C)
     
         where:
         firstValue | secondValue | expectedX | Z     | N     | C     | Expected
@@ -3192,9 +3042,7 @@ class OpCodeSpec extends Specification {
         then:
         program.length == registers.getPC()
         expectedX == registers.getRegister(Registers.REG_X_INDEX)
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
-        C == registers.getFlag(Registers.C)
+		testFlags(Z,N,C)
     
         where:
         firstValue | secondValue | expectedX | Z     | N     | C     | Expected
@@ -3214,9 +3062,7 @@ class OpCodeSpec extends Specification {
         then:
         program.length == registers.getPC()
         expectedX == registers.getRegister(Registers.REG_X_INDEX)
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
-        C == registers.getFlag(Registers.C)
+		testFlags(Z,N,C)
     
         where:
         firstValue | secondValue | expectedX | Z     | N     | C     | Expected
