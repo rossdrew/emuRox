@@ -42,12 +42,12 @@ class OpCodeSpec extends Specification {
     
         where:
         loadValue | expectedAccumulatorumulator | Z     | N     | Expected
-        0x0       | 0x0                 | true  | false | "With zero result"
-        0x1       | 0x1                 | false | false | "Generic test 1"
-        0x7F      | 0x7F                | false | false | "Generic test 2"
-        0x80      | 0x80                | false | true  | "With negative result"
-        0x81      | 0x81                | false | true  | "With (boundary test) negative result "
-        0xFF      | 0xFF                | false | true  | "With max negative result"
+        0x0       | 0x0                         | true  | false | "With zero result"
+        0x1       | 0x1                         | false | false | "Generic test 1"
+        0x7F      | 0x7F                        | false | false | "Generic test 2"
+        0x80      | 0x80                        | false | true  | "With negative result"
+        0x81      | 0x81                        | false | true  | "With (boundary test) negative result "
+        0xFF      | 0xFF                        | false | true  | "With max negative result"
     }
     
     @Unroll("LDA (Immediate) #Expected: Load #loadValue == #expectedAccumulatorumulator")
@@ -66,12 +66,12 @@ class OpCodeSpec extends Specification {
     
         where:
         loadValue | expectedAccumulatorumulator | Z     | N     | Expected
-        0x0       | 0x0                 | true  | false | "With zero result"
-        0x1       | 0x1                 | false | false | "Generic test 1"
-        0x7F      | 0x7F                | false | false | "Generic test 2"
-        0x80      | 0x80                | false | true  | "With negative result"
-        0x81      | 0x81                | false | true  | "With (boundary test) negative result "
-        0xFF      | 0xFF                | false | true  | "With max negative result"
+        0x0       | 0x0                         | true  | false | "With zero result"
+        0x1       | 0x1                         | false | false | "Generic test 1"
+        0x7F      | 0x7F                        | false | false | "Generic test 2"
+        0x80      | 0x80                        | false | true  | "With negative result"
+        0x81      | 0x81                        | false | true  | "With (boundary test) negative result "
+        0xFF      | 0xFF                        | false | true  | "With max negative result"
     }
     
     @Unroll("LDA (Zero Page) #Expected: Expecting #loadValue @ [30]")
@@ -91,12 +91,12 @@ class OpCodeSpec extends Specification {
     
         where:
         loadValue | expectedAccumulatorumulator | Z     | N     | Expected
-        0x0       | 0x0                 | true  | false | "With zero result"
-        0x1       | 0x1                 | false | false | "Generic test 1"
-        0x7F      | 0x7F                | false | false | "Generic test 2"
-        0x80      | 0x80                | false | true  | "With negative result"
-        0x81      | 0x81                | false | true  | "With (boundary test) negative result "
-        0xFF      | 0xFF                | false | true  | "With max negative result"
+        0x0       | 0x0                         | true  | false | "With zero result"
+        0x1       | 0x1                         | false | false | "Generic test 1"
+        0x7F      | 0x7F                        | false | false | "Generic test 2"
+        0x80      | 0x80                        | false | true  | "With negative result"
+        0x81      | 0x81                        | false | true  | "With (boundary test) negative result "
+        0xFF      | 0xFF                        | false | true  | "With max negative result"
     }
     
     @Unroll("LDA (Zero Page[X]) #Expected: Load [0x30 + X(#index)] -> #expectedAccumulatorumulator")
@@ -118,9 +118,9 @@ class OpCodeSpec extends Specification {
     
         where:
         index | expectedAccumulatorumulator | Z     | N     | Expected
-        0   | 0                   | true  | false | "With zero result"
-        1   | 11                  | false | false | "With normal result"
-        2   | 0xFF                | false | true  | "With negative result"
+        0     | 0                           | true  | false | "With zero result"
+        1     | 11                          | false | false | "With normal result"
+        2     | 0xFF                        | false | true  | "With negative result"
     }
     
     @Unroll("LDA (Absolute) #Expected: Expecting #loadValue @ [300]")
@@ -140,12 +140,12 @@ class OpCodeSpec extends Specification {
     
         where:
         loadValue | expectedAccumulatorumulator | Z     | N     | Expected
-        0x0       | 0x0                 | true  | false | "With zero result"
-        0x1       | 0x1                 | false | false | "Generic test 1"
-        0x7F      | 0x7F                | false | false | "Generic test 2"
-        0x80      | 0x80                | false | true  | "With negative result"
-        0x81      | 0x81                | false | true  | "With (boundary test) negative result "
-        0xFF      | 0xFF                | false | true  | "With max negative result"
+        0x0       | 0x0                         | true  | false | "With zero result"
+        0x1       | 0x1                         | false | false | "Generic test 1"
+        0x7F      | 0x7F                        | false | false | "Generic test 2"
+        0x80      | 0x80                        | false | true  | "With negative result"
+        0x81      | 0x81                        | false | true  | "With (boundary test) negative result "
+        0xFF      | 0xFF                        | false | true  | "With max negative result"
     }
     
     @Unroll("LDA (Absolute[X]). #Expected: 300[#index] = #expectedAccumulatorumulator")
@@ -167,9 +167,9 @@ class OpCodeSpec extends Specification {
     
         where:
         index | expectedAccumulatorumulator | Z     | N     | Expected
-        0     | 0                   | true  | false | "With zero result"
-        1     | 11                  | false | false | "With normal result"
-        2     | 0xFF                | false | true  | "With negative result"
+        0     | 0                           | true  | false | "With zero result"
+        1     | 11                          | false | false | "With normal result"
+        2     | 0xFF                        | false | true  | "With negative result"
     }
     
     
@@ -191,9 +191,9 @@ class OpCodeSpec extends Specification {
     
         where:
         index | expectedAccumulatorumulator | Z     | N     | Expected
-        0     | 0                   | true  | false | "With zero result"
-        1     | 11                  | false | false | "With normal result"
-        2     | 0xFF                | false | true  | "With negative result"
+        0     | 0                           | true  | false | "With zero result"
+        1     | 11                          | false | false | "With normal result"
+        2     | 0xFF                        | false | true  | "With negative result"
     }
     
     @Unroll("LDA (Indirect, X). #Expected: 0x30[#index] -> [#indAddressHi|#indAddressLo] = #expectedAccumulatorumulator")
@@ -219,9 +219,9 @@ class OpCodeSpec extends Specification {
     
         where:
         indAddressHi | indAddressLo | index | firstValue | expectedAccumulatorumulator | Z     | N     | Expected
-        0x02         | 0x20         | 0     | 0          | 0                   | true  | false | "With zero result"
-        0x03         | 0x40         | 1     | 11         | 11                  | false | false | "With normal result"
-        0x04         | 0x24         | 2     | 0xFF       | 0xFF                | false | true  | "With negative result"
+        0x02         | 0x20         | 0     | 0          | 0                           | true  | false | "With zero result"
+        0x03         | 0x40         | 1     | 11         | 11                          | false | false | "With normal result"
+        0x04         | 0x24         | 2     | 0xFF       | 0xFF                        | false | true  | "With negative result"
     }
     
     @Unroll("LDA (Indirect, Y). #expected: 0x60 -> [#pointerHi|#pointerLo]@[#index] = #value")
@@ -499,9 +499,9 @@ class OpCodeSpec extends Specification {
     
         where:
         firstValue | secondValue | expectedAccumulatorumulator | Z      | N     | C     | O     | Expected
-        0x0        | 0x0         | 0x0                 | true   | false | false | false | "With zero result"
-        0x50       | 0xD0        | 0x20                | false  | false | true  | false | "With positive, carried result"
-        0x50       | 0x50        | 0xA0                | false  | true  | false | true  | "With negative overflow"
+        0x0        | 0x0         | 0x0                         | true   | false | false | false | "With zero result"
+        0x50       | 0xD0        | 0x20                        | false  | false | true  | false | "With positive, carried result"
+        0x50       | 0x50        | 0xA0                        | false  | true  | false | true  | "With negative overflow"
     }
     
     @Unroll("ADC (Zero Page[X]) #Expected: #firstValue + #secondValue = #expectedAccumulatorumulator in Accumulator.")
@@ -525,9 +525,9 @@ class OpCodeSpec extends Specification {
     
         where:
         memLoc | firstValue  | secondValue | indexPoint  | index | expectedAccumulatorumulator | Z      | N     | C     | O     | Expected
-        0x51   | 0x0         | 0x0         | 0x50        | 1     | 0x0                 | true   | false | false | false | "With zero result"
-        0x53   | 0x50        | 0xD0        | 0x50        | 3     | 0x20                | false  | false | true  | false | "With positive, carried result"
-        0x97   | 0x50        | 0x50        | 0x90        | 7     | 0xA0                | false  | true  | false | true  | "With negative overflow"
+        0x51   | 0x0         | 0x0         | 0x50        | 1     | 0x0                         | true   | false | false | false | "With zero result"
+        0x53   | 0x50        | 0xD0        | 0x50        | 3     | 0x20                        | false  | false | true  | false | "With positive, carried result"
+        0x97   | 0x50        | 0x50        | 0x90        | 7     | 0xA0                        | false  | true  | false | true  | "With negative overflow"
     }
     
     @Unroll("ADC (Zero Page) #Expected:  #firstValue + #secondValue = #expectedAccumulatorumulator in Accumulator.")
@@ -552,9 +552,9 @@ class OpCodeSpec extends Specification {
     
         where:
         firstValue | secondValue | expectedAccumulatorumulator | Z      | N     | C     | O     | Expected
-        0x0        | 0x0         | 0x0                 | true   | false | false | false | "With zero result"
-        0x50       | 0xD0        | 0x20                | false  | false | true  | false | "With positive, carried result"
-        0x50       | 0x50        | 0xA0                | false  | true  | false | true  | "With negative overflow"
+        0x0        | 0x0         | 0x0                         | true   | false | false | false | "With zero result"
+        0x50       | 0xD0        | 0x20                        | false  | false | true  | false | "With positive, carried result"
+        0x50       | 0x50        | 0xA0                        | false  | true  | false | true  | "With negative overflow"
     }
     
     @Unroll("ADC (Absolute) #Expected:  #firstValue + #secondValue = #expectedAccumulatorumulator in Accumulator.")
@@ -579,9 +579,9 @@ class OpCodeSpec extends Specification {
     
         where:
         firstValue | secondValue | expectedAccumulatorumulator | Z      | N     | C     | O     | Expected
-        0x0        | 0x0         | 0x0                 | true   | false | false | false | "With zero result"
-        0x50       | 0xD0        | 0x20                | false  | false | true  | false | "With positive, carried result"
-        0x50       | 0x50        | 0xA0                | false  | true  | false | true  | "With negative overflow"
+        0x0        | 0x0         | 0x0                         | true   | false | false | false | "With zero result"
+        0x50       | 0xD0        | 0x20                        | false  | false | true  | false | "With positive, carried result"
+        0x50       | 0x50        | 0xA0                        | false  | true  | false | true  | "With negative overflow"
     }
     
     @Unroll("ADC (Absolute[X)) #Expected:  #firstValue + #secondValue = #expectedAccumulatorumulator in Accumulator.")
