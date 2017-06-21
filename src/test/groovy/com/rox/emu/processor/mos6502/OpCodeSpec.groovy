@@ -2596,8 +2596,7 @@ class OpCodeSpec extends Specification {
     
         then:
         program.length == registers.getPC()
-		testFlags(Z,N)
-        O == registers.getFlag(Registers.V)
+		testFlags(Z,N, registers.getFlag(Registers.C), O)
     
         where:
         firstValue | secondValue | memLoc | O     | Z     | N     | expected
@@ -2621,8 +2620,7 @@ class OpCodeSpec extends Specification {
     
         then:
         program.length == registers.getPC()
-		testFlags(Z,N)
-        O == registers.getFlag(Registers.V)
+		testFlags(Z,N, registers.getFlag(Registers.C), O)
     
         where:
         firstValue | secondValue | memLocHi | memLocLo | O     | Z     | N     | expected
