@@ -2493,9 +2493,9 @@ class OpCodeSpec extends Specification {
     
         where:
         loadedValue | expectedAccumulator | X          | N     | Z     | expected
-        0x10        | 0x10                        | 0x10       | false | false | "Basic transfer"
-        0x0         | 0x0                         | 0x0        | false | true  | "Zero transferred"
-        0b11111110  | 0b11111110                  | 0b11111110 | true  | false | "Negative transferred"
+        0x10        | 0x10                | 0x10       | false | false | "Basic transfer"
+        0x0         | 0x0                 | 0x0        | false | true  | "Zero transferred"
+        0b11111110  | 0b11111110          | 0b11111110 | true  | false | "Negative transferred"
     }
     
     @Unroll("TAY #expected: #loadedValue to Y")
@@ -2514,9 +2514,9 @@ class OpCodeSpec extends Specification {
     
         where:
         loadedValue | expectedAccumulator | Y          | N      | Z     | expected
-        0x10        | 0x10                        | 0x10       | false  | false | "Basic transfer"
-        0x0         | 0x0                         | 0x0        | false  | true  | "Zero transferred"
-        0b11111110  | 0b11111110                  | 0b11111110 | true   | false | "Negative transferred"
+        0x10        | 0x10                | 0x10       | false  | false | "Basic transfer"
+        0x0         | 0x0                 | 0x0        | false  | true  | "Zero transferred"
+        0b11111110  | 0b11111110          | 0b11111110 | true   | false | "Negative transferred"
     }
     
     @Unroll("TYA #expected: #loadedValue to Accumulator")
@@ -2535,9 +2535,9 @@ class OpCodeSpec extends Specification {
     
         where:
         loadedValue | expectedAccumulator | Y          | N      | Z     | expected
-        0x10        | 0x10                        | 0x10       | false  | false | "Basic transfer"
-        0x0         | 0x0                         | 0x0        | false  | true  | "Zero transferred"
-        0b11111110  | 0b11111110                  | 0b11111110 | true   | false | "Negative transferred"
+        0x10        | 0x10                | 0x10       | false  | false | "Basic transfer"
+        0x0         | 0x0                 | 0x0        | false  | true  | "Zero transferred"
+        0b11111110  | 0b11111110          | 0b11111110 | true   | false | "Negative transferred"
     }
     
     @Unroll("TXA #expected: #loadedValue to Accumulator")
@@ -2556,9 +2556,9 @@ class OpCodeSpec extends Specification {
     
         where:
         loadedValue | expectedAccumulator | X          | N      | Z     | expected
-        0x10        | 0x10                        | 0x10       | false  | false | "Basic transfer"
-        0x0         | 0x0                         | 0x0        | false  | true  | "Zero transferred"
-        0b11111110  | 0b11111110                  | 0b11111110 | true   | false | "Negative transferred"
+        0x10        | 0x10                | 0x10       | false  | false | "Basic transfer"
+        0x0         | 0x0                 | 0x0        | false  | true  | "Zero transferred"
+        0b11111110  | 0b11111110          | 0b11111110 | true   | false | "Negative transferred"
     }
     
     @Unroll("TSX #expected: load #SPValue in SP into X")
