@@ -46,12 +46,12 @@ class OpCodeSpec extends Specification {
         processor.step()
     
         then:
-        expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
+        expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
         testFlags(Z, N)
     
         where:
-        loadValue | expectedAccumulatorumulator | Z     | N     | Expected
+        loadValue | expectedAccumulator | Z     | N     | Expected
         0x0       | 0x0                         | true  | false | "With zero result"
         0x1       | 0x1                         | false | false | "Generic test 1"
         0x7F      | 0x7F                        | false | false | "Generic test 2"
@@ -60,7 +60,7 @@ class OpCodeSpec extends Specification {
         0xFF      | 0xFF                        | false | true  | "With max negative result"
     }
     
-    @Unroll("LDA (Immediate) #Expected: Load #loadValue == #expectedAccumulatorumulator")
+    @Unroll("LDA (Immediate) #Expected: Load #loadValue == #expectedAccumulator")
     testImmediateLDA() {
         when:
         Program program = loadMemoryWithProgram(LDA_I, loadValue)
@@ -69,12 +69,12 @@ class OpCodeSpec extends Specification {
         processor.step()
     
         then:
-        expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
+        expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
         testFlags(Z, N)
     
         where:
-        loadValue | expectedAccumulatorumulator | Z     | N     | Expected
+        loadValue | expectedAccumulator | Z     | N     | Expected
         0x0       | 0x0                         | true  | false | "With zero result"
         0x1       | 0x1                         | false | false | "Generic test 1"
         0x7F      | 0x7F                        | false | false | "Generic test 2"
@@ -93,12 +93,12 @@ class OpCodeSpec extends Specification {
         processor.step()
     
         then:
-        expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
+        expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
         testFlags(Z, N)
     
         where:
-        loadValue | expectedAccumulatorumulator | Z     | N     | Expected
+        loadValue | expectedAccumulator | Z     | N     | Expected
         0x0       | 0x0                         | true  | false | "With zero result"
         0x1       | 0x1                         | false | false | "Generic test 1"
         0x7F      | 0x7F                        | false | false | "Generic test 2"
@@ -107,7 +107,7 @@ class OpCodeSpec extends Specification {
         0xFF      | 0xFF                        | false | true  | "With max negative result"
     }
     
-    @Unroll("LDA (Zero Page[X]) #Expected: Load [0x30 + X(#index)] -> #expectedAccumulatorumulator")
+    @Unroll("LDA (Zero Page[X]) #Expected: Load [0x30 + X(#index)] -> #expectedAccumulator")
     testLDAFromZeroPageIndexedByX() {
         when:
         Program program = loadMemoryWithProgram(LDX_I, index, LDA_Z_IX, 0x30)
@@ -118,12 +118,12 @@ class OpCodeSpec extends Specification {
         processor.step(2)
     
         then:
-        expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
+        expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
         testFlags(Z, N)
     
         where:
-        index | expectedAccumulatorumulator | Z     | N     | Expected
+        index | expectedAccumulator | Z     | N     | Expected
         0     | 0                           | true  | false | "With zero result"
         1     | 11                          | false | false | "With normal result"
         2     | 0xFF                        | false | true  | "With negative result"
@@ -139,12 +139,12 @@ class OpCodeSpec extends Specification {
         processor.step()
     
         then:
-        expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
+        expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
         testFlags(Z, N)
     
         where:
-        loadValue | expectedAccumulatorumulator | Z     | N     | Expected
+        loadValue | expectedAccumulator | Z     | N     | Expected
         0x0       | 0x0                         | true  | false | "With zero result"
         0x1       | 0x1                         | false | false | "Generic test 1"
         0x7F      | 0x7F                        | false | false | "Generic test 2"
@@ -153,7 +153,7 @@ class OpCodeSpec extends Specification {
         0xFF      | 0xFF                        | false | true  | "With max negative result"
     }
     
-    @Unroll("LDA (Absolute[X]). #Expected: 300[#index] = #expectedAccumulatorumulator")
+    @Unroll("LDA (Absolute[X]). #Expected: 300[#index] = #expectedAccumulator")
     testLDAIndexedByX() {
         when:
         Program program = loadMemoryWithProgram(LDX_I, index, LDA_ABS_IX, 1, 0x2C)
@@ -164,19 +164,19 @@ class OpCodeSpec extends Specification {
         processor.step(2)
     
         then:
-        expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
+        expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
         testFlags(Z, N)
     
         where:
-        index | expectedAccumulatorumulator | Z     | N     | Expected
+        index | expectedAccumulator | Z     | N     | Expected
         0     | 0                           | true  | false | "With zero result"
         1     | 11                          | false | false | "With normal result"
         2     | 0xFF                        | false | true  | "With negative result"
     }
     
     
-    @Unroll("LDA (Absolute[Y]). #Expected: 300[#index] = #expectedAccumulatorumulator")
+    @Unroll("LDA (Absolute[Y]). #Expected: 300[#index] = #expectedAccumulator")
     testLDAIndexedByY() {
         when:
         Program program = loadMemoryWithProgram(LDY_I, index, LDA_ABS_IY, 1, 0x2C)
@@ -187,18 +187,18 @@ class OpCodeSpec extends Specification {
         processor.step(2)
     
         then:
-        expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
+        expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
         testFlags(Z, N)
     
         where:
-        index | expectedAccumulatorumulator | Z     | N     | Expected
+        index | expectedAccumulator | Z     | N     | Expected
         0     | 0                           | true  | false | "With zero result"
         1     | 11                          | false | false | "With normal result"
         2     | 0xFF                        | false | true  | "With negative result"
     }
     
-    @Unroll("LDA (Indirect, X). #Expected: 0x30[#index] -> [#indAddressHi|#indAddressLo] = #expectedAccumulatorumulator")
+    @Unroll("LDA (Indirect, X). #Expected: 0x30[#index] -> [#indAddressHi|#indAddressLo] = #expectedAccumulator")
     testLDA_IND_IX() {
         when:
         Program program = loadMemoryWithProgram(LDA_I, firstValue,    //Value at indirect address
@@ -214,18 +214,18 @@ class OpCodeSpec extends Specification {
         processor.step(8)
     
         then:
-        expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
+        expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
         testFlags(Z, N)
     
         where:
-        indAddressHi | indAddressLo | index | firstValue | expectedAccumulatorumulator | Z     | N     | Expected
+        indAddressHi | indAddressLo | index | firstValue | expectedAccumulator | Z     | N     | Expected
         0x02         | 0x20         | 0     | 0          | 0                           | true  | false | "With zero result"
         0x03         | 0x40         | 1     | 11         | 11                          | false | false | "With normal result"
         0x04         | 0x24         | 2     | 0xFF       | 0xFF                        | false | true  | "With negative result"
     }
     
-    @Unroll("LDA (Indirect, Y). #expected: 0x60 -> [#pointerHi|#pointerLo]@[#index] = #value")
+    @Unroll("LDA (Indirect, Y). #expected: 0x60 -> *[#pointerHi|#pointerLo]@[#index] = #expectedValue")
     testLDA_IND_IY() {
         when:
         loadMemoryWithProgram(LDY_I, index,           //Index to use
@@ -406,7 +406,7 @@ class OpCodeSpec extends Specification {
         3       | 0b11111111 | 0b11111111 | false  | true  | "Load negative value"
     }
     
-    @Unroll("LDY (Zero Page[X]): Load Y with #firstValue from #address[#index#]")
+    @Unroll("LDY (Zero Page[X]): Load Y with #firstValue from #address[#index]")
     testLDY_Z_IX(){
         when: 'We place a value in memory[X] via the accumulator, then retrieve it again into Y'
         Program program = loadMemoryWithProgram(LDX_I, index, LDA_I, firstValue, STA_Z_IX, address, LDY_Z_IX, address)
@@ -472,7 +472,7 @@ class OpCodeSpec extends Specification {
         3         | 0x21      | 10    | 0b11111111 | 0b11111111 | false  | true  | "Load negative value"
     }
     
-    @Unroll("ADC (Immediate) #Expected:  #firstValue + #secondValue = #expectedAccumulatorumulator in Accumulator.")
+    @Unroll("ADC (Immediate) #Expected:  #firstValue + #secondValue = #expectedAccumulator in Accumulator.")
     testADC(){
         when:
         Program program = loadMemoryWithProgram(LDA_I, firstValue, ADC_I, secondValue)
@@ -481,18 +481,18 @@ class OpCodeSpec extends Specification {
         processor.step(2)
 
         then:
-        expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
+        expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
 		testFlags(Z,N,C,O)
     
         where:
-        firstValue | secondValue | expectedAccumulatorumulator | Z      | N     | C     | O     | Expected
+        firstValue | secondValue | expectedAccumulator | Z      | N     | C     | O     | Expected
         0x0        | 0x0         | 0x0                         | true   | false | false | false | "With zero result"
         0x50       | 0xD0        | 0x20                        | false  | false | true  | false | "With positive, carried result"
         0x50       | 0x50        | 0xA0                        | false  | true  | false | true  | "With negative overflow"
     }
     
-    @Unroll("ADC (Zero Page[X]) #Expected: #firstValue + #secondValue = #expectedAccumulatorumulator in Accumulator.")
+    @Unroll("ADC (Zero Page[X]) #Expected: #firstValue + #secondValue = #expectedAccumulator in Accumulator.")
     testADC_Z_IX(){
         when:
         Program program = loadMemoryWithProgram(LDA_I, firstValue, LDX_I, index, ADC_Z_IX, indexPoint)
@@ -504,18 +504,18 @@ class OpCodeSpec extends Specification {
         processor.step(3)
     
         then:
-        expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
+        expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
 		testFlags(Z,N,C,O)
     
         where:
-        memLoc | firstValue  | secondValue | indexPoint  | index | expectedAccumulatorumulator | Z      | N     | C     | O     | Expected
+        memLoc | firstValue  | secondValue | indexPoint  | index | expectedAccumulator | Z      | N     | C     | O     | Expected
         0x51   | 0x0         | 0x0         | 0x50        | 1     | 0x0                         | true   | false | false | false | "With zero result"
         0x53   | 0x50        | 0xD0        | 0x50        | 3     | 0x20                        | false  | false | true  | false | "With positive, carried result"
         0x97   | 0x50        | 0x50        | 0x90        | 7     | 0xA0                        | false  | true  | false | true  | "With negative overflow"
     }
     
-    @Unroll("ADC (Zero Page) #Expected:  #firstValue + #secondValue = #expectedAccumulatorumulator in Accumulator.")
+    @Unroll("ADC (Zero Page) #Expected:  #firstValue + #secondValue = #expectedAccumulator in Accumulator.")
     testADC_Z(){
         when:
         Program program = loadMemoryWithProgram(LDA_I, firstValue, ADC_Z, 0x30)
@@ -528,18 +528,18 @@ class OpCodeSpec extends Specification {
         
     
         then:
-        expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
+        expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
 		testFlags(Z,N,C,O)
     
         where:
-        firstValue | secondValue | expectedAccumulatorumulator | Z      | N     | C     | O     | Expected
+        firstValue | secondValue | expectedAccumulator | Z      | N     | C     | O     | Expected
         0x0        | 0x0         | 0x0                         | true   | false | false | false | "With zero result"
         0x50       | 0xD0        | 0x20                        | false  | false | true  | false | "With positive, carried result"
         0x50       | 0x50        | 0xA0                        | false  | true  | false | true  | "With negative overflow"
     }
     
-    @Unroll("ADC (Absolute) #Expected:  #firstValue + #secondValue = #expectedAccumulatorumulator in Accumulator.")
+    @Unroll("ADC (Absolute) #Expected:  #firstValue + #secondValue = #expectedAccumulator in Accumulator.")
     testADC_ABS(){
         when:
         Program program = loadMemoryWithProgram(LDA_I, firstValue, ADC_ABS, 0x1, 0x2C)
@@ -552,18 +552,18 @@ class OpCodeSpec extends Specification {
         
     
         then:
-        expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
+        expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
 		testFlags(Z,N,C,O)
     
         where:
-        firstValue | secondValue | expectedAccumulatorumulator | Z      | N     | C     | O     | Expected
+        firstValue | secondValue | expectedAccumulator | Z      | N     | C     | O     | Expected
         0x0        | 0x0         | 0x0                         | true   | false | false | false | "With zero result"
         0x50       | 0xD0        | 0x20                        | false  | false | true  | false | "With positive, carried result"
         0x50       | 0x50        | 0xA0                        | false  | true  | false | true  | "With negative overflow"
     }
     
-    @Unroll("ADC (Absolute[X)) #Expected:  #firstValue + #secondValue = #expectedAccumulatorumulator in Accumulator.")
+    @Unroll("ADC (Absolute[X)) #Expected:  #firstValue + #secondValue = #expectedAccumulator in Accumulator.")
     testADC_ABS_IX(){
         when:
         Program program = loadMemoryWithProgram(LDX_I, index, LDA_I, firstValue, ADC_ABS_IX, 0x1, 0x2C)
@@ -575,18 +575,18 @@ class OpCodeSpec extends Specification {
         processor.step(3)
     
         then:
-        expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
+        expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
 		testFlags(Z,N,C,O)
     
         where:
-        firstValue | secondValue | index | expectedAccumulatorumulator | Z      | N     | C     | O     | Expected
+        firstValue | secondValue | index | expectedAccumulator | Z      | N     | C     | O     | Expected
         0x0        | 0x0         | 0     | 0x0                         | true   | false | false | false | "With zero result"
         0x50       | 0xD0        | 1     | 0x20                        | false  | false | true  | false | "With positive, carried result"
         0x50       | 0x50        | 2     | 0xA0                        | false  | true  | false | true  | "With negative overflow"
     }
     
-    @Unroll("ADC (Absolute[Y]) #Expected:  #firstValue + #secondValue = #expectedAccumulatorumulator in Accumulator.")
+    @Unroll("ADC (Absolute[Y]) #Expected:  #firstValue + #secondValue = #expectedAccumulator in Accumulator.")
     testADC_ABS_IY(){
         when:
         Program program = loadMemoryWithProgram(LDY_I, index,
@@ -600,18 +600,18 @@ class OpCodeSpec extends Specification {
         processor.step(3)
 
         then:
-        expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
+        expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
 		testFlags(Z,N,C,O)
     
         where:
-        firstValue | secondValue | index | expectedAccumulatorumulator | Z      | N     | C     | O     | Expected
+        firstValue | secondValue | index | expectedAccumulator | Z      | N     | C     | O     | Expected
         0x0        | 0x0         | 0     | 0x0                         | true   | false | false | false | "With zero result"
         0x50       | 0xD0        | 1     | 0x20                        | false  | false | true  | false | "With positive, carried result"
         0x50       | 0x50        | 2     | 0xA0                        | false  | true  | false | true  | "With negative overflow"
     }
     
-    @Unroll("ADC (Indirect, X) #Expected: #firstValue (@[#locationHi|#locationLo]) & #secondValue = #expectedAccumulator")
+    @Unroll("ADC (Indirect, X) #Expected: #firstValue *[#locationHi|#locationLo] & #secondValue = #expectedAccumulator")
     testADC_IND_IX() {
         when:
         Program program = loadMemoryWithProgram(LDA_I, firstValue,    //Value at indirect address
@@ -629,14 +629,14 @@ class OpCodeSpec extends Specification {
         processor.step(9)
 
         then:
-        expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
+        expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
 		testFlags(Z,N,C,O)
     
         where:
-        locationHi | locationLo | firstValue | secondValue | index | expectedAccumulatorumulator | Z      | N     | C     | O     | Expected
-        0x1        | 0x10       | 0x0        | 0x0         | 0     | 0x0                         | true   | false | false | false | "With zero result"
-        0x1        | 0x10       | 0x50       | 0x50        | 2     | 0xA0                        | false  | true  | false | true  | "With negative overflow"
+        locationHi | locationLo | firstValue | secondValue | index | expectedAccumulator | Z      | N     | C     | O     | Expected
+        0x1        | 0x10       | 0x0        | 0x0         | 0     | 0x0                 | true   | false | false | false | "With zero result"
+        0x1        | 0x10       | 0x50       | 0x50        | 2     | 0xA0                | false  | true  | false | true  | "With negative overflow"
      //   0x1        | 0x10       | 0x50       | 0xD0        | 1     | 0x20              | false  | false | true  | false | "With positive, carried result"
     }
     
@@ -657,14 +657,14 @@ class OpCodeSpec extends Specification {
         processor.step(9)
 
         then:
-        expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
+        expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
 		testFlags(Z,N,C,O)
     
         where:
-        pointerHi | pointerLo | firstValue | secondValue | index | expectedAccumulatorumulator | Z      | N     | C     | O     | Expected
-        0x1       | 0x10      | 0x0        | 0x0         | 0     | 0x0                         | true   | false | false | false | "With zero result"
-        0x1       | 0x10      | 0x50       | 0x50        | 2     | 0xA0                        | false  | true  | false | true  | "With negative overflow"
+        pointerHi | pointerLo | firstValue | secondValue | index | expectedAccumulator | Z      | N     | C     | O     | Expected
+        0x1       | 0x10      | 0x0        | 0x0         | 0     | 0x0                 | true   | false | false | false | "With zero result"
+        0x1       | 0x10      | 0x50       | 0x50        | 2     | 0xA0                | false  | true  | false | true  | "With negative overflow"
     //    0x1       | 0x10      | 0x50       | 0xD0        | 1     | 0x20                | false  | false | true  | false | "With positive, carried result"
     }
     
@@ -682,13 +682,13 @@ class OpCodeSpec extends Specification {
         processor.step(6)
 
         then:
-        expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
+        expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
 		testFlags(Z,N,C,O)
         storedValue == memory.getByte(40)
     
         where:
-        lowFirstByte | lowSecondByte | highFirstByte | highSecondByte | expectedAccumulatorumulator | storedValue | Z     | N     | C     | O     | Expected
+        lowFirstByte | lowSecondByte | highFirstByte | highSecondByte | expectedAccumulator | storedValue | Z     | N     | C     | O     | Expected
         0            | 0             | 0             | 0              | 0                           | 0           | true  | false | false | false | "With zero result"
         0x50         | 0xD0          | 0             | 0              | 1                           | 0x20        | false | false | false | false | "With simple carry to high byte"
         0x50         | 0xD3          | 0             | 1              | 2                           | 0x23        | false | false | false | false | "With carry to high byte and changed high"
@@ -696,7 +696,7 @@ class OpCodeSpec extends Specification {
         0            | 0             | 0x50          | 0xD0           | 0x20                        | 0           | false | false | true  | false | "With carried result"
     }
     
-    @Unroll("AND (Immediate) #Expected:  #firstValue & #secondValue = #expectedAccumulatorumulator in Accumulator.")
+    @Unroll("AND (Immediate) #Expected:  #firstValue & #secondValue = #expectedAccumulator in Accumulator.")
     testAND(){
         when:
         Program program = loadMemoryWithProgram(LDA_I, firstValue, AND_I, secondValue)
@@ -705,19 +705,19 @@ class OpCodeSpec extends Specification {
         processor.step(2)
 
         then:
-        expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
+        expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
 		testFlags(Z,N)
     
         where:
-        firstValue | secondValue | expectedAccumulatorumulator | Z      | N     | Expected
+        firstValue | secondValue | expectedAccumulator | Z      | N     | Expected
         0b00000001 | 0b00000001  | 0b00000001                  | false  | false | "Unchanged accumulator"
         0b00000001 | 0b00000010  | 0b00000000                  | true   | false | "No matching bits"
         0b00000011 | 0b00000010  | 0b00000010                  | false  | false | "1 matched bit, 1 unmatched"
         0b00101010 | 0b00011010  | 0b00001010                  | false  | false | "Multiple matched/unmatched bits"
     }
     
-    @Unroll("AND (Zero Page) #Expected: #firstValue & #secondValue = #expectedAccumulatorumulator in Accumulator.")
+    @Unroll("AND (Zero Page) #Expected: #firstValue & #secondValue = #expectedAccumulator in Accumulator.")
     testAND_Z(){
         when:
         Program program = loadMemoryWithProgram(LDA_I, firstValue,
@@ -729,12 +729,12 @@ class OpCodeSpec extends Specification {
         processor.step(4)
 
         then:
-        expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
+        expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
 		testFlags(Z,N)
     
         where:
-        firstValue | secondValue | expectedAccumulatorumulator | Z      | N     | Expected
+        firstValue | secondValue | expectedAccumulator | Z      | N     | Expected
         0b00000001 | 0b00000001  | 0b00000001                  | false  | false | "Unchanged accumulator"
         0b00000001 | 0b00000010  | 0b00000000                  | true   | false | "No matching bits"
         0b00000011 | 0b00000010  | 0b00000010                  | false  | false | "1 matched bit, 1 unmatched"
@@ -766,7 +766,7 @@ class OpCodeSpec extends Specification {
         0b00101010 | 3     | 0b00011010  | 0b00001010          | false  | false | "Multiple matched/unmatched bits"
     }
     
-    @Unroll("AND (Absolute) #Expected:  #firstValue & #secondValue = #expectedAccumulatorumulator in Accumulator.")
+    @Unroll("AND (Absolute) #Expected:  #firstValue & #secondValue = #expectedAccumulator in Accumulator.")
     testAND_A(){
         when:
         Program program = loadMemoryWithProgram(LDA_I, firstValue,
@@ -778,12 +778,12 @@ class OpCodeSpec extends Specification {
         processor.step(4)
 
         then:
-        expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
+        expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
 		testFlags(Z,N)
     
         where:
-        firstValue | secondValue | expectedAccumulatorumulator | Z      | N     | Expected
+        firstValue | secondValue | expectedAccumulator | Z      | N     | Expected
         0b00000001 | 0b00000001  | 0b00000001                  | false  | false | "Unchanged accumulator"
         0b00000001 | 0b00000010  | 0b00000000                  | true   | false | "No matching bits"
         0b00000011 | 0b00000010  | 0b00000010                  | false  | false | "1 matched bit, 1 unmatched"
@@ -803,16 +803,16 @@ class OpCodeSpec extends Specification {
         processor.step(5)
 
         then:
-        expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
+        expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
 		testFlags(Z,N)
     
         where:
-        locationHi | locationLo | firstValue | index | secondValue | expectedAccumulatorumulator | Z      | N     | Expected
-        0x1        | 0x10       | 0b00000001 | 0     | 0b00000001  | 0b00000001                  | false  | false | "Unchanged accumulator"
-        0x2        | 0x20       | 0b00000001 | 1     | 0b00000010  | 0b00000000                  | true   | false | "No matching bits"
-        0x3        | 0x30       | 0b00000011 | 2     | 0b00000010  | 0b00000010                  | false  | false | "1 matched bit, 1 unmatched"
-        0x4        | 0x40       | 0b00101010 | 3     | 0b00011010  | 0b00001010                  | false  | false | "Multiple matched/unmatched bits"
+        locationHi | locationLo | firstValue | index | secondValue | expectedAccumulator | Z      | N     | Expected
+        0x1        | 0x10       | 0b00000001 | 0     | 0b00000001  | 0b00000001          | false  | false | "Unchanged accumulator"
+        0x2        | 0x20       | 0b00000001 | 1     | 0b00000010  | 0b00000000          | true   | false | "No matching bits"
+        0x3        | 0x30       | 0b00000011 | 2     | 0b00000010  | 0b00000010          | false  | false | "1 matched bit, 1 unmatched"
+        0x4        | 0x40       | 0b00101010 | 3     | 0b00011010  | 0b00001010          | false  | false | "Multiple matched/unmatched bits"
     }
     
     @Unroll("AND (Absolute[Y]) #Expected: #firstValue & #secondValue = #expectedAccumulator")
@@ -897,7 +897,7 @@ class OpCodeSpec extends Specification {
         0x4       | 0x40      | 0b00101010 | 3     | 0b00011010  | 0b00001010          | false  | false | "Multiple matched/unmatched bits"
     }
     
-    @Unroll("ORA (Immediate) #Expected:  #firstValue | #secondValue = #expectedAccumulatorumulator in Accumulator.")
+    @Unroll("ORA (Immediate) #Expected:  #firstValue | #secondValue = #expectedAccumulator in Accumulator.")
     testOR(){
         when:
         Program program = loadMemoryWithProgram(LDA_I, firstValue, ORA_I, secondValue)
@@ -906,20 +906,20 @@ class OpCodeSpec extends Specification {
         processor.step(2)
         
         then:
-        expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
+        expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
 		testFlags(Z,N)
     
         where:
-        firstValue | secondValue | expectedAccumulatorumulator | Z      | N     | Expected
-        0b00000001 | 0b00000001  | 0b00000001                  | false  | false | "Duplicate bits"
-        0b00000000 | 0b00000001  | 0b00000001                  | false  | false | "One bit in Accumulator"
-        0b00000001 | 0b00000000  | 0b00000001                  | false  | false | "One bit from passed value"
-        0b00000001 | 0b00000010  | 0b00000011                  | false  | false | "One bit fro Accumulator, one from new value"
-        0b00000001 | 0b10000010  | 0b10000011                  | false  | true  | "Negative result"
+        firstValue | secondValue | expectedAccumulator | Z      | N     | Expected
+        0b00000001 | 0b00000001  | 0b00000001          | false  | false | "Duplicate bits"
+        0b00000000 | 0b00000001  | 0b00000001          | false  | false | "One bit in Accumulator"
+        0b00000001 | 0b00000000  | 0b00000001          | false  | false | "One bit from passed value"
+        0b00000001 | 0b00000010  | 0b00000011          | false  | false | "One bit fro Accumulator, one from new value"
+        0b00000001 | 0b10000010  | 0b10000011          | false  | true  | "Negative result"
     }
     
-    @Unroll("ORA (Zero Page) #Expected:  #firstValue | #secondValue = #expectedAccumulatorumulator in Accumulator.")
+    @Unroll("ORA (Zero Page) #Expected:  #firstValue | #secondValue = #expectedAccumulator in Accumulator.")
     testOR_Z(){
         when:
         Program program = loadMemoryWithProgram(LDA_I, firstValue,
@@ -931,20 +931,20 @@ class OpCodeSpec extends Specification {
         processor.step(4)
         
         then:
-        expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
+        expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
 		testFlags(Z,N)
     
         where:
-        firstValue | secondValue | expectedAccumulatorumulator | Z      | N     | Expected
-        0b00000001 | 0b00000001  | 0b00000001                  | false  | false | "Duplicate bits"
-        0b00000000 | 0b00000001  | 0b00000001                  | false  | false | "One bit in Accumulator"
-        0b00000001 | 0b00000000  | 0b00000001                  | false  | false | "One bit from passed value"
-        0b00000001 | 0b00000010  | 0b00000011                  | false  | false | "One bit fro Accumulator, one from new value"
-        0b00000001 | 0b10000010  | 0b10000011                  | false  | true  | "Negative result"
+        firstValue | secondValue | expectedAccumulator | Z      | N     | Expected
+        0b00000001 | 0b00000001  | 0b00000001          | false  | false | "Duplicate bits"
+        0b00000000 | 0b00000001  | 0b00000001          | false  | false | "One bit in Accumulator"
+        0b00000001 | 0b00000000  | 0b00000001          | false  | false | "One bit from passed value"
+        0b00000001 | 0b00000010  | 0b00000011          | false  | false | "One bit fro Accumulator, one from new value"
+        0b00000001 | 0b10000010  | 0b10000011          | false  | true  | "Negative result"
     }
     
-    @Unroll("ORA (Zero Page[X)) #Expected:  #firstValue | #secondValue = #expectedAccumulatorumulator in Accumulator.")
+    @Unroll("ORA (Zero Page[X)) #Expected:  #firstValue | #secondValue = #expectedAccumulator in Accumulator.")
     testOR_Z_IX(){
         when:
         Program program = loadMemoryWithProgram(LDX_I, index,
@@ -957,20 +957,20 @@ class OpCodeSpec extends Specification {
         processor.step(5)
         
         then:
-        expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
+        expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
 		testFlags(Z,N)
     
         where:
-        firstValue | index | secondValue | expectedAccumulatorumulator | Z      | N     | Expected
-        0b00000001 | 0     | 0b00000001  | 0b00000001                  | false  | false | "Duplicate bits"
-        0b00000000 | 1     | 0b00000001  | 0b00000001                  | false  | false | "One bit in Accumulator"
-        0b00000001 | 2     | 0b00000000  | 0b00000001                  | false  | false | "One bit from passed value"
-        0b00000001 | 3     | 0b00000010  | 0b00000011                  | false  | false | "One bit fro Accumulator, one from new value"
-        0b00000001 | 4     | 0b10000010  | 0b10000011                  | false  | true  | "Negative result"
+        firstValue | index | secondValue | expectedAccumulator | Z      | N     | Expected
+        0b00000001 | 0     | 0b00000001  | 0b00000001          | false  | false | "Duplicate bits"
+        0b00000000 | 1     | 0b00000001  | 0b00000001          | false  | false | "One bit in Accumulator"
+        0b00000001 | 2     | 0b00000000  | 0b00000001          | false  | false | "One bit from passed value"
+        0b00000001 | 3     | 0b00000010  | 0b00000011          | false  | false | "One bit fro Accumulator, one from new value"
+        0b00000001 | 4     | 0b10000010  | 0b10000011          | false  | true  | "Negative result"
     }
     
-    @Unroll("ORA (Absolute) #Expected:  #firstValue | #secondValue = #expectedAccumulatorumulator in Accumulator.")
+    @Unroll("ORA (Absolute) #Expected:  #firstValue | #secondValue = #expectedAccumulator in Accumulator.")
     testOR_ABS(){
         when:
         Program program = loadMemoryWithProgram(LDA_I, firstValue,
@@ -982,20 +982,20 @@ class OpCodeSpec extends Specification {
         processor.step(4)
         
         then:
-        expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
+        expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
 		testFlags(Z,N)
     
         where:
-        firstValue | secondValue | expectedAccumulatorumulator | Z      | N     | Expected
-        0b00000001 | 0b00000001  | 0b00000001                  | false  | false | "Duplicate bits"
-        0b00000000 | 0b00000001  | 0b00000001                  | false  | false | "One bit in Accumulator"
-        0b00000001 | 0b00000000  | 0b00000001                  | false  | false | "One bit from passed value"
-        0b00000001 | 0b00000010  | 0b00000011                  | false  | false | "One bit fro Accumulator, one from new value"
-        0b00000001 | 0b10000010  | 0b10000011                  | false  | true  | "Negative result"
+        firstValue | secondValue | expectedAccumulator | Z      | N     | Expected
+        0b00000001 | 0b00000001  | 0b00000001          | false  | false | "Duplicate bits"
+        0b00000000 | 0b00000001  | 0b00000001          | false  | false | "One bit in Accumulator"
+        0b00000001 | 0b00000000  | 0b00000001          | false  | false | "One bit from passed value"
+        0b00000001 | 0b00000010  | 0b00000011          | false  | false | "One bit fro Accumulator, one from new value"
+        0b00000001 | 0b10000010  | 0b10000011          | false  | true  | "Negative result"
     }
     
-    @Unroll("ORA (Absolute[X]) #Expected:  #firstValue | #secondValue = #expectedAccumulatorumulator in Accumulator.")
+    @Unroll("ORA (Absolute[X]) #Expected:  #firstValue | #secondValue = #expectedAccumulator in Accumulator.")
     testOR_ABS_IX(){
         when:
         Program program = loadMemoryWithProgram(LDX_I, index,
@@ -1008,20 +1008,20 @@ class OpCodeSpec extends Specification {
         processor.step(5)
         
         then:
-        expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
+        expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
 		testFlags(Z,N)
     
         where:
-        firstValue | index | secondValue | expectedAccumulatorumulator | Z      | N     | Expected
-        0b00000001 | 0     | 0b00000001  | 0b00000001                  | false  | false | "Duplicate bits"
-        0b00000000 | 1     | 0b00000001  | 0b00000001                  | false  | false | "One bit in Accumulator"
-        0b00000001 | 2     | 0b00000000  | 0b00000001                  | false  | false | "One bit from passed value"
-        0b00000001 | 3     | 0b00000010  | 0b00000011                  | false  | false | "One bit fro Accumulator, one from new value"
-        0b00000001 | 4     | 0b10000010  | 0b10000011                  | false  | true  | "Negative result"
+        firstValue | index | secondValue | expectedAccumulator | Z      | N     | Expected
+        0b00000001 | 0     | 0b00000001  | 0b00000001          | false  | false | "Duplicate bits"
+        0b00000000 | 1     | 0b00000001  | 0b00000001          | false  | false | "One bit in Accumulator"
+        0b00000001 | 2     | 0b00000000  | 0b00000001          | false  | false | "One bit from passed value"
+        0b00000001 | 3     | 0b00000010  | 0b00000011          | false  | false | "One bit fro Accumulator, one from new value"
+        0b00000001 | 4     | 0b10000010  | 0b10000011          | false  | true  | "Negative result"
     }
     
-    @Unroll("ORA (Absolute[Y]) #Expected:  #firstValue | #secondValue = #expectedAccumulatorumulator in Accumulator.")
+    @Unroll("ORA (Absolute[Y]) #Expected:  #firstValue | #secondValue = #expectedAccumulator in Accumulator.")
     testOR_ABS_IY(){
         when:
         Program program = loadMemoryWithProgram(LDY_I, index,
@@ -1035,17 +1035,17 @@ class OpCodeSpec extends Specification {
         
     
         then:
-        expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
+        expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
 		testFlags(Z,N)
     
         where:
-        firstValue | index | secondValue | expectedAccumulatorumulator | Z      | N     | Expected
-        0b00000001 | 0     | 0b00000001  | 0b00000001                  | false  | false | "Duplicate bits"
-        0b00000000 | 1     | 0b00000001  | 0b00000001                  | false  | false | "One bit in Accumulator"
-        0b00000001 | 2     | 0b00000000  | 0b00000001                  | false  | false | "One bit from passed value"
-        0b00000001 | 3     | 0b00000010  | 0b00000011                  | false  | false | "One bit fro Accumulator, one from new value"
-        0b00000001 | 4     | 0b10000010  | 0b10000011                  | false  | true  | "Negative result"
+        firstValue | index | secondValue | expectedAccumulator | Z      | N     | Expected
+        0b00000001 | 0     | 0b00000001  | 0b00000001          | false  | false | "Duplicate bits"
+        0b00000000 | 1     | 0b00000001  | 0b00000001          | false  | false | "One bit in Accumulator"
+        0b00000001 | 2     | 0b00000000  | 0b00000001          | false  | false | "One bit from passed value"
+        0b00000001 | 3     | 0b00000010  | 0b00000011          | false  | false | "One bit fro Accumulator, one from new value"
+        0b00000001 | 4     | 0b10000010  | 0b10000011          | false  | true  | "Negative result"
     }
     
     @Unroll("ORA (Indirect, X) #Expected: #firstValue (@[#locationHi|#locationLo]) | #secondValue = #expectedAccumulator")
@@ -1107,7 +1107,7 @@ class OpCodeSpec extends Specification {
         0x5       | 0x50      | 0b00000001 | 4     | 0b10000010  | 0b10000011          | false  | true  | "Negative result"
     }
     
-    @Unroll("EOR (Immediate) #Expected:  #firstValue ^ #secondValue = #expectedAccumulatorumulator in Accumulator.")
+    @Unroll("EOR (Immediate) #Expected:  #firstValue ^ #secondValue = #expectedAccumulator in Accumulator.")
     testEOR(){
         when:
         Program program = loadMemoryWithProgram(LDA_I, firstValue, EOR_I, secondValue)
@@ -1116,18 +1116,18 @@ class OpCodeSpec extends Specification {
         processor.step(2)
 
         then:
-        expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
+        expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
 		testFlags(Z,N)
     
         where:
-        firstValue | secondValue | expectedAccumulatorumulator | Z      | N     | Expected
-        0b00000001 | 0b00000000  | 0b00000001                  | false  | false | "One"
-        0b00000000 | 0b00000001  | 0b00000001                  | false  | false | "The other"
-        0b00000001 | 0b00000001  | 0b00000000                  | true   | false | "Not both"
+        firstValue | secondValue | expectedAccumulator | Z      | N     | Expected
+        0b00000001 | 0b00000000  | 0b00000001          | false  | false | "One"
+        0b00000000 | 0b00000001  | 0b00000001          | false  | false | "The other"
+        0b00000001 | 0b00000001  | 0b00000000          | true   | false | "Not both"
     }
     
-    @Unroll("EOR (Zero Page) #Expected:  #firstValue ^ #secondValue = #expectedAccumulatorumulator in Accumulator.")
+    @Unroll("EOR (Zero Page) #Expected:  #firstValue ^ #secondValue = #expectedAccumulator in Accumulator.")
     testEOR_Z(){
         when:
         Program program = loadMemoryWithProgram(LDA_I, secondValue,
@@ -1139,18 +1139,18 @@ class OpCodeSpec extends Specification {
         processor.step(4)
 
         then:
-        expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
+        expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
 		testFlags(Z,N)
     
         where:
-        firstValue | secondValue | expectedAccumulatorumulator | Z      | N     | Expected
-        0b00000001 | 0b00000000  | 0b00000001                  | false  | false | "One"
-        0b00000000 | 0b00000001  | 0b00000001                  | false  | false | "The other"
-        0b00000001 | 0b00000001  | 0b00000000                  | true   | false | "Not both"
+        firstValue | secondValue | expectedAccumulator | Z      | N     | Expected
+        0b00000001 | 0b00000000  | 0b00000001          | false  | false | "One"
+        0b00000000 | 0b00000001  | 0b00000001          | false  | false | "The other"
+        0b00000001 | 0b00000001  | 0b00000000          | true   | false | "Not both"
     }
     
-    @Unroll("EOR (Zero Page[X]) #Expected:  #firstValue ^ #secondValue = #expectedAccumulatorumulator in Accumulator.")
+    @Unroll("EOR (Zero Page[X]) #Expected:  #firstValue ^ #secondValue = #expectedAccumulator in Accumulator.")
     testEOR_Z_IX(){
         when:
         Program program = loadMemoryWithProgram(LDX_I, index,
@@ -1163,18 +1163,18 @@ class OpCodeSpec extends Specification {
         processor.step(5)
 
         then:
-        expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
+        expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
 		testFlags(Z,N)
     
         where:
-        index | firstValue | secondValue | expectedAccumulatorumulator | Z      | N     | Expected
+        index | firstValue | secondValue | expectedAccumulator | Z      | N     | Expected
         0     | 0b00000001 | 0b00000000  | 0b00000001          | false  | false | "One"
         1     | 0b00000000 | 0b00000001  | 0b00000001          | false  | false | "The other"
         2     | 0b00000001 | 0b00000001  | 0b00000000          | true   | false | "Not both"
     }
     
-    @Unroll("EOR (Absolute) #Expected:  #firstValue ^ #secondValue = #expectedAccumulatorumulator in Accumulator.")
+    @Unroll("EOR (Absolute) #Expected:  #firstValue ^ #secondValue = #expectedAccumulator in Accumulator.")
     testEOR_ABS(){
         when:
         Program program = loadMemoryWithProgram(LDA_I, secondValue,
@@ -1186,18 +1186,18 @@ class OpCodeSpec extends Specification {
         processor.step(4)
 
         then:
-        expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
+        expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
 		testFlags(Z,N)
     
         where:
-        firstValue | secondValue | expectedAccumulatorumulator | Z      | N     | Expected
-        0b00000001 | 0b00000000  | 0b00000001                  | false  | false | "One"
-        0b00000000 | 0b00000001  | 0b00000001                  | false  | false | "The other"
-        0b00000001 | 0b00000001  | 0b00000000                  | true   | false | "Not both"
+        firstValue | secondValue | expectedAccumulator | Z      | N     | Expected
+        0b00000001 | 0b00000000  | 0b00000001          | false  | false | "One"
+        0b00000000 | 0b00000001  | 0b00000001          | false  | false | "The other"
+        0b00000001 | 0b00000001  | 0b00000000          | true   | false | "Not both"
     }
     
-    @Unroll("EOR (Absolute[X]) #Expected:  #firstValue ^ #secondValue = #expectedAccumulatorumulator in Accumulator.")
+    @Unroll("EOR (Absolute[X]) #Expected:  #firstValue ^ #secondValue = #expectedAccumulator in Accumulator.")
     testEOR_ABS_IX(){
         when:
         Program program = loadMemoryWithProgram(LDX_I, index,
@@ -1210,18 +1210,18 @@ class OpCodeSpec extends Specification {
         processor.step(5)
 
         then:
-        expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
+        expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
 		testFlags(Z,N)
     
         where:
-        index | firstValue | secondValue | expectedAccumulatorumulator | Z      | N     | Expected
-        0     | 0b00000001 | 0b00000000  | 0b00000001                  | false  | false | "One"
-        1     | 0b00000000 | 0b00000001  | 0b00000001                  | false  | false | "The other"
-        2     | 0b00000001 | 0b00000001  | 0b00000000                  | true   | false | "Not both"
+        index | firstValue | secondValue | expectedAccumulator | Z      | N     | Expected
+        0     | 0b00000001 | 0b00000000  | 0b00000001          | false  | false | "One"
+        1     | 0b00000000 | 0b00000001  | 0b00000001          | false  | false | "The other"
+        2     | 0b00000001 | 0b00000001  | 0b00000000          | true   | false | "Not both"
     }
     
-    @Unroll("EOR (Absolute[Y]) #Expected:  #firstValue ^ #secondValue = #expectedAccumulatorumulator in Accumulator.")
+    @Unroll("EOR (Absolute[Y]) #Expected:  #firstValue ^ #secondValue = #expectedAccumulator in Accumulator.")
     testEOR_ABS_IY(){
         when:
         Program program = loadMemoryWithProgram(LDY_I, index,
@@ -1234,15 +1234,15 @@ class OpCodeSpec extends Specification {
         processor.step(5)
 
         then:
-        expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
+        expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
 		testFlags(Z,N)
     
         where:
-        index | firstValue | secondValue | expectedAccumulatorumulator | Z      | N     | Expected
-        0     | 0b00000001 | 0b00000000  | 0b00000001                  | false  | false | "One"
-        1     | 0b00000000 | 0b00000001  | 0b00000001                  | false  | false | "The other"
-        2     | 0b00000001 | 0b00000001  | 0b00000000                  | true   | false | "Not both"
+        index | firstValue | secondValue | expectedAccumulator | Z      | N     | Expected
+        0     | 0b00000001 | 0b00000000  | 0b00000001          | false  | false | "One"
+        1     | 0b00000000 | 0b00000001  | 0b00000001          | false  | false | "The other"
+        2     | 0b00000001 | 0b00000001  | 0b00000000          | true   | false | "Not both"
     }
     
     @Unroll("EOR (Indirect, X) #Expected: #firstValue (@[#locationHi|#locationLo]) EOR #secondValue = #expectedAccumulator")
@@ -1357,7 +1357,7 @@ class OpCodeSpec extends Specification {
         0x04       | 0x11       | 12    | 4     | "Store at different high order location"
     }
     
-    @Unroll("SBC (Immediate) #Expected:  #firstValue - #secondValue = #expectedAccumulatorumulator in Accumulator.")
+    @Unroll("SBC (Immediate) #Expected:  #firstValue - #secondValue = #expectedAccumulator in Accumulator.")
     testSBC(){
         when:
         Program program = loadMemoryWithProgram(SEC, LDA_I, firstValue, SBC_I, secondValue)
@@ -1366,18 +1366,18 @@ class OpCodeSpec extends Specification {
         processor.step(3)
 
         then:
-        expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
+        expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
 		testFlags(Z,N,C,O)
     
         where:
-        firstValue | secondValue | expectedAccumulatorumulator  | Z      | N     | O     | C     | Expected
-        0x5        | 0x3         | 0x2                          | false  | false | false | false | "Basic subtraction"
-        0x5        | 0x5         | 0x0                          | true   | false | false | false | "With zero result"
-        0x5        | 0x6         | 0xFF                         | false  | true  | false | false | "with negative result"
+        firstValue | secondValue | expectedAccumulator  | Z      | N     | O     | C     | Expected
+        0x5        | 0x3         | 0x2                  | false  | false | false | false | "Basic subtraction"
+        0x5        | 0x5         | 0x0                  | true   | false | false | false | "With zero result"
+        0x5        | 0x6         | 0xFF                 | false  | true  | false | false | "with negative result"
     }
     
-    @Unroll("SBC (Zero Page) #Expected:  #firstValue - #secondValue = #expectedAccumulatorumulator in Accumulator.")
+    @Unroll("SBC (Zero Page) #Expected:  #firstValue - #secondValue = #expectedAccumulator in Accumulator.")
     testSBC_Z(){
         when:
         Program program = loadMemoryWithProgram(LDA_I, secondValue,
@@ -1390,18 +1390,18 @@ class OpCodeSpec extends Specification {
         processor.step(5)
 
         then:
-        expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
+        expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
 		testFlags(Z,N,C,O)
     
         where:
-        firstValue | secondValue | expectedAccumulatorumulator  | Z      | N     | O     | C     | Expected
-        0x5        | 0x3         | 0x2                          | false  | false | false | false | "Basic subtraction"
-        0x5        | 0x5         | 0x0                          | true   | false | false | false | "With zero result"
-        0x5        | 0x6         | 0xFF                         | false  | true  | false | false | "with negative result"
+        firstValue | secondValue | expectedAccumulator  | Z      | N     | O     | C     | Expected
+        0x5        | 0x3         | 0x2                  | false  | false | false | false | "Basic subtraction"
+        0x5        | 0x5         | 0x0                  | true   | false | false | false | "With zero result"
+        0x5        | 0x6         | 0xFF                 | false  | true  | false | false | "with negative result"
     }
     
-    @Unroll("SBC (Zero Page[X]) #Expected:  #firstValue - #secondValue = #expectedAccumulatorumulator in Accumulator.")
+    @Unroll("SBC (Zero Page[X]) #Expected:  #firstValue - #secondValue = #expectedAccumulator in Accumulator.")
     testSBC_Z_IX(){
         when:
         Program program = loadMemoryWithProgram(LDX_I, index,
@@ -1415,18 +1415,18 @@ class OpCodeSpec extends Specification {
         processor.step(6)
     
         then:
-        expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
+        expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
 		testFlags(Z,N,C,O)
     
         where:
-        firstValue | index | secondValue | expectedAccumulatorumulator  | Z      | N     | O     | C     | Expected
-        0x5        | 0     | 0x3         | 0x2                          | false  | false | false | false | "Basic subtraction"
-        0x5        | 1     | 0x5         | 0x0                          | true   | false | false | false | "With zero result"
-        0x5        | 2     | 0x6         | 0xFF                         | false  | true  | false | false | "with negative result"
+        firstValue | index | secondValue | expectedAccumulator  | Z      | N     | O     | C     | Expected
+        0x5        | 0     | 0x3         | 0x2                  | false  | false | false | false | "Basic subtraction"
+        0x5        | 1     | 0x5         | 0x0                  | true   | false | false | false | "With zero result"
+        0x5        | 2     | 0x6         | 0xFF                 | false  | true  | false | false | "with negative result"
     }
     
-    @Unroll("SBC (Absolute) #Expected:  #firstValue - #secondValue = #expectedAccumulatorumulator in Accumulator.")
+    @Unroll("SBC (Absolute) #Expected:  #firstValue - #secondValue = #expectedAccumulator in Accumulator.")
     testSBC_ABS(){
         when:
         Program program = loadMemoryWithProgram(LDA_I, secondValue,
@@ -1439,18 +1439,18 @@ class OpCodeSpec extends Specification {
         processor.step(5)
 
         then:
-        expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
+        expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
 		testFlags(Z,N,C,O)
     
         where:
-        firstValue | secondValue | expectedAccumulatorumulator  | Z      | N     | O     | C     | Expected
-        0x5        | 0x3         | 0x2                          | false  | false | false | false | "Basic subtraction"
-        0x5        | 0x5         | 0x0                          | true   | false | false | false | "With zero result"
-        0x5        | 0x6         | 0xFF                         | false  | true  | false | false | "with negative result"
+        firstValue | secondValue | expectedAccumulator  | Z      | N     | O     | C     | Expected
+        0x5        | 0x3         | 0x2                  | false  | false | false | false | "Basic subtraction"
+        0x5        | 0x5         | 0x0                  | true   | false | false | false | "With zero result"
+        0x5        | 0x6         | 0xFF                 | false  | true  | false | false | "with negative result"
     }
     
-    @Unroll("SBC (Absolute[X]) #Expected:  #firstValue - #secondValue = #expectedAccumulatorumulator in Accumulator.")
+    @Unroll("SBC (Absolute[X]) #Expected:  #firstValue - #secondValue = #expectedAccumulator in Accumulator.")
     testSBC_ABS_IX(){
         when:
         Program program = loadMemoryWithProgram(LDX_I, index,
@@ -1464,18 +1464,18 @@ class OpCodeSpec extends Specification {
         processor.step(6)
 
         then:
-        expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
+        expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
 		testFlags(Z,N,C,O)
     
         where:
-        index | firstValue | secondValue | expectedAccumulatorumulator  | Z      | N     | O     | C     | Expected
-        0     | 0x5        | 0x3         | 0x2                          | false  | false | false | false | "Basic subtraction"
-        1     | 0x5        | 0x5         | 0x0                          | true   | false | false | false | "With zero result"
-        2     | 0x5        | 0x6         | 0xFF                         | false  | true  | false | false | "with negative result"
+        index | firstValue | secondValue | expectedAccumulator  | Z      | N     | O     | C     | Expected
+        0     | 0x5        | 0x3         | 0x2                  | false  | false | false | false | "Basic subtraction"
+        1     | 0x5        | 0x5         | 0x0                  | true   | false | false | false | "With zero result"
+        2     | 0x5        | 0x6         | 0xFF                 | false  | true  | false | false | "with negative result"
     }
     
-    @Unroll("SBC (Absolute[Y]) #Expected:  #firstValue - #secondValue = #expectedAccumulatorumulator in Accumulator.")
+    @Unroll("SBC (Absolute[Y]) #Expected:  #firstValue - #secondValue = #expectedAccumulator in Accumulator.")
     testSBC_ABS_IY(){
         when:
         Program program = loadMemoryWithProgram(LDY_I, index,
@@ -1489,15 +1489,15 @@ class OpCodeSpec extends Specification {
         processor.step(6)
 
         then:
-        expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
+        expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
 		testFlags(Z,N,C,O)
     
         where:
-        index | firstValue | secondValue | expectedAccumulatorumulator  | Z      | N     | O     | C     | Expected
-        0     | 0x5        | 0x3         | 0x2                          | false  | false | false | false | "Basic subtraction"
-        1     | 0x5        | 0x5         | 0x0                          | true   | false | false | false | "With zero result"
-        2     | 0x5        | 0x6         | 0xFF                         | false  | true  | false | false | "with negative result"
+        index | firstValue | secondValue | expectedAccumulator  | Z      | N     | O     | C     | Expected
+        0     | 0x5        | 0x3         | 0x2                  | false  | false | false | false | "Basic subtraction"
+        1     | 0x5        | 0x5         | 0x0                  | true   | false | false | false | "With zero result"
+        2     | 0x5        | 0x6         | 0xFF                 | false  | true  | false | false | "with negative result"
     }
     
     @Unroll("SBC (Indirect, X) #Expected: #firstValue (@[#locationHi|#locationLo]) - #secondValue = #expectedAccumulator")
@@ -1836,17 +1836,17 @@ class OpCodeSpec extends Specification {
         then:
         program.length == registers.getPC()
         expectedSP == registers.getRegister(Registers.REG_SP)
-        expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
+        expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         stackItem == memory.getByte(0x01FF)
     
         where:
-        firstValue | expectedSP | stackItem  | expectedAccumulatorumulator  | Z     | N     | Expected
-        0x99       | 0x0FF      | 0x99       | 0x99                         | false | false | "Basic stack push"
-        0x0        | 0x0FF      | 0x0        | 0x0                          | false | true  | "Zero stack push"
-        0b10001111 | 0x0FF      | 0b10001111 | 0b10001111                   | true  | true  | "Negative stack push"
+        firstValue | expectedSP | stackItem  | expectedAccumulator  | Z     | N     | Expected
+        0x99       | 0x0FF      | 0x99       | 0x99                 | false | false | "Basic stack push"
+        0x0        | 0x0FF      | 0x0        | 0x0                  | false | true  | "Zero stack push"
+        0b10001111 | 0x0FF      | 0b10001111 | 0b10001111           | true  | true  | "Negative stack push"
     }
     
-    @Unroll("ASL (Accumulator) #Expected: #firstValue becomes #expectedAccumulatorumulator")
+    @Unroll("ASL (Accumulator) #Expected: #firstValue becomes #expectedAccumulator")
     testASL(){
         when:
         Program program = loadMemoryWithProgram(LDA_I, firstValue, ASL_A)
@@ -1856,11 +1856,11 @@ class OpCodeSpec extends Specification {
     
         then:
         program.length == registers.getPC()
-        expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
+        expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
 		testFlags(Z,N,C)
     
         where:
-        firstValue | expectedAccumulatorumulator | Z     | N     | C     | Expected
+        firstValue | expectedAccumulator | Z     | N     | C     | Expected
         0b00010101 | 0b00101010          | false | false | false | "Basic shift"
         0b00000000 | 0b00000000          | true  | false | false | "Zero shift"
         0b01000000 | 0b10000000          | false | true  | false | "Negative shift"
@@ -1971,7 +1971,7 @@ class OpCodeSpec extends Specification {
         0b11000000 | 0b10000000  | 5     | false | true  | true  | "Carried, negative shift"
     }
     
-    @Unroll("LSR (Accumulator) #Expected: #firstValue becomes #expectedAccumulatorumulator")
+    @Unroll("LSR (Accumulator) #Expected: #firstValue becomes #expectedAccumulator")
     testLSR(){
         when:
         Program program = loadMemoryWithProgram(LDA_I, firstValue, LSR_A)
@@ -1981,11 +1981,11 @@ class OpCodeSpec extends Specification {
     
         then:
         program.length == registers.getPC()
-        expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
+        expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
 		testFlags(Z,N,C)
     
         where:
-        firstValue | expectedAccumulatorumulator | Z     | N     | C     | Expected
+        firstValue | expectedAccumulator | Z     | N     | C     | Expected
         0b01000000 | 0b00100000          | false | false | false | "Basic shift"
         0b00000000 | 0b00000000          | true  | false | false | "Shift to zero"
         0b00000011 | 0b00000001          | false | false | true  | "Shift with carry"
@@ -2177,7 +2177,7 @@ class OpCodeSpec extends Specification {
         SEC      | 0b11111011 | 6            | 0x3        | "Basic backward jump and step"
     }
     
-    @Unroll("ROL (Accumulator) #expected: #firstValue -> #expectedAccumulatorumulator")
+    @Unroll("ROL (Accumulator) #expected: #firstValue -> #expectedAccumulator")
     testROL_A(){
         when:
         Program program = loadMemoryWithProgram(preInstr, LDA_I, firstValue, ROL_A)
@@ -2187,18 +2187,18 @@ class OpCodeSpec extends Specification {
     
         then:
         program.length == registers.getPC()
-        expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
+        expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
 		testFlags(Z,N,C)
     
         where:
-        preInstr | firstValue | expectedAccumulatorumulator | Z     | N     | C     | expected
-        CLC      | 0b00000001 | 0b00000010                  | false | false | false | "Standard rotate left"
-        CLC      | 0b00000000 | 0b00000000                  | true  | false | false | "Rotate to zero"
-        CLC      | 0b01000000 | 0b10000000                  | false | true  | false | "Rotate to negative"
-        CLC      | 0b10000001 | 0b00000010                  | false | false | true  | "Rotate to carry out"
-        SEC      | 0b00000001 | 0b00000011                  | false | false | false | "Rotate with carry in, no carry out"
-        SEC      | 0b10000000 | 0b00000001                  | false | false | true  | "Carry in then carry out"
-        SEC      | 0b01000000 | 0b10000001                  | false | true  | false | "Carry in to negative"
+        preInstr | firstValue | expectedAccumulator | Z     | N     | C     | expected
+        CLC      | 0b00000001 | 0b00000010          | false | false | false | "Standard rotate left"
+        CLC      | 0b00000000 | 0b00000000          | true  | false | false | "Rotate to zero"
+        CLC      | 0b01000000 | 0b10000000          | false | true  | false | "Rotate to negative"
+        CLC      | 0b10000001 | 0b00000010          | false | false | true  | "Rotate to carry out"
+        SEC      | 0b00000001 | 0b00000011          | false | false | false | "Rotate with carry in, no carry out"
+        SEC      | 0b10000000 | 0b00000001          | false | false | true  | "Carry in then carry out"
+        SEC      | 0b01000000 | 0b10000001          | false | true  | false | "Carry in to negative"
     }
     
     @Unroll("ROL (Zero Page) #Expected: #firstValue -> #expectedMem")
@@ -2303,7 +2303,7 @@ class OpCodeSpec extends Specification {
         SEC         | 4     | 0b00000000 | 0b00000001  | false | false | false | "Rotate from zero to carry in"
     }
     
-    @Unroll("ROR (Accumulator) #expected: #firstValue -> #expectedAccumulatorumulator")
+    @Unroll("ROR (Accumulator) #expected: #firstValue -> #expectedAccumulator")
     testROR_A(){
         when:
         Program program = loadMemoryWithProgram(preInstr,
@@ -2315,11 +2315,11 @@ class OpCodeSpec extends Specification {
     
         then:
         program.length == registers.getPC()
-        expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
+        expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
 		testFlags(Z,N,C)
     
         where:
-        preInstr | firstValue | expectedAccumulatorumulator | Z     | N     | C     | expected
+        preInstr | firstValue | expectedAccumulator | Z     | N     | C     | expected
         CLC      | 0b00000010 | 0b00000001          | false | false | false | "Standard rotate right"
         CLC      | 0b00000001 | 0b00000000          | true  | false | true  | "Rotate to zero"
         SEC      | 0b00000000 | 0b10000000          | false | true  | false | "Rotate to (carry in) negative"
@@ -2487,12 +2487,12 @@ class OpCodeSpec extends Specification {
     
         then:
         program.length == registers.getPC()
-        expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
+        expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         X == registers.getRegister(Registers.REG_X_INDEX)
 		testFlags(Z,N)
     
         where:
-        loadedValue | expectedAccumulatorumulator | X          | N     | Z     | expected
+        loadedValue | expectedAccumulator | X          | N     | Z     | expected
         0x10        | 0x10                        | 0x10       | false | false | "Basic transfer"
         0x0         | 0x0                         | 0x0        | false | true  | "Zero transferred"
         0b11111110  | 0b11111110                  | 0b11111110 | true  | false | "Negative transferred"
@@ -2508,12 +2508,12 @@ class OpCodeSpec extends Specification {
     
         then:
         program.length == registers.getPC()
-        expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
+        expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         Y == registers.getRegister(Registers.REG_Y_INDEX)
 		testFlags(Z,N)
     
         where:
-        loadedValue | expectedAccumulatorumulator | Y          | N      | Z     | expected
+        loadedValue | expectedAccumulator | Y          | N      | Z     | expected
         0x10        | 0x10                        | 0x10       | false  | false | "Basic transfer"
         0x0         | 0x0                         | 0x0        | false  | true  | "Zero transferred"
         0b11111110  | 0b11111110                  | 0b11111110 | true   | false | "Negative transferred"
@@ -2529,12 +2529,12 @@ class OpCodeSpec extends Specification {
     
         then:
         program.length == registers.getPC()
-        expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
+        expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         Y == registers.getRegister(Registers.REG_Y_INDEX)
 		testFlags(Z,N)
     
         where:
-        loadedValue | expectedAccumulatorumulator | Y          | N      | Z     | expected
+        loadedValue | expectedAccumulator | Y          | N      | Z     | expected
         0x10        | 0x10                        | 0x10       | false  | false | "Basic transfer"
         0x0         | 0x0                         | 0x0        | false  | true  | "Zero transferred"
         0b11111110  | 0b11111110                  | 0b11111110 | true   | false | "Negative transferred"
@@ -2550,12 +2550,12 @@ class OpCodeSpec extends Specification {
     
         then:
         program.length == registers.getPC()
-        expectedAccumulatorumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
+        expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         X == registers.getRegister(Registers.REG_X_INDEX)
 		testFlags(Z,N)
     
         where:
-        loadedValue | expectedAccumulatorumulator | X          | N      | Z     | expected
+        loadedValue | expectedAccumulator | X          | N      | Z     | expected
         0x10        | 0x10                        | 0x10       | false  | false | "Basic transfer"
         0x0         | 0x0                         | 0x0        | false  | true  | "Zero transferred"
         0b11111110  | 0b11111110                  | 0b11111110 | true   | false | "Negative transferred"
