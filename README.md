@@ -15,6 +15,7 @@ With a first version of the 6502 processor (including a graphical debugger and c
  
   - getting rid of java performed arithmetic (usually in `+`/`-` cases) in favor of ALU performed arithmetic, it's causing problems...as expected
   - compressing the data driven tests;  extracting out common patterns, etc
+  - abstracting away bytes into a custom class so that I don't need workarounds for Java types
   
 BCD and proper timing is a thing for another day as my first objective for now, is the NES emulator.
 
