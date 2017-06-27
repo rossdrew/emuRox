@@ -13,6 +13,10 @@ import com.rox.emu.processor.mos6502.util.Compiler;
 import com.rox.emu.processor.mos6502.util.Program;
 
 import javax.swing.*;
+import javax.swing.text.DefaultStyledDocument;
+import javax.swing.text.Style;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyleContext;
 import java.awt.*;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -27,7 +31,6 @@ final class DebuggerWindow extends JFrame {
     private Memory memory;
 
     private Registers6502 newRegisterPanel;
-    private JTextArea codeArea = new JTextArea();
 
     private String instructionName = "...";
     private final JLabel instruction = new JLabel(instructionName);
@@ -65,6 +68,7 @@ final class DebuggerWindow extends JFrame {
     }
 
     private JComponent getCodeInput(){
+        final JTextPane codeArea = getCodeArea();
         final JScrollPane codeScroller = new JScrollPane(codeArea);
         final JButton compilerButton = new JButton("Compile");
         compilerButton.addActionListener(e -> compile(codeArea.getText()));
@@ -75,6 +79,24 @@ final class DebuggerWindow extends JFrame {
         codePanel.add(compilerButton, BorderLayout.SOUTH);
 
         return codePanel;
+    }
+
+    private JTextPane getCodeArea(){
+        final StyleContext sc = new StyleContext();
+        final DefaultStyledDocument doc = new DefaultStyledDocument(sc);
+
+        final JTextPane codeArea = new JTextPane(doc);
+        codeArea.setBackground(new Color(0x25401C));
+
+        final Style bodyStyle = sc.addStyle("body", null);
+        bodyStyle.addAttribute(StyleConstants.Foreground, new Color(0x789C6C));
+        bodyStyle.addAttribute(StyleConstants.FontSize, new Integer(13));
+        bodyStyle.addAttribute(StyleConstants.FontFamily, "monospaced");
+        bodyStyle.addAttribute(StyleConstants.Bold, new Boolean(true));
+
+        doc.setLogicalStyle(0, bodyStyle);
+
+        return codeArea;
     }
 
     private JComponent getMemoryPanel(){
