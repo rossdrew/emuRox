@@ -87,6 +87,7 @@ final class DebuggerWindow extends JFrame {
 
         final JTextPane codeArea = new JTextPane(doc);
         codeArea.setBackground(new Color(0x25401C));
+        codeArea.setCaretColor(new Color(0xD1E8CE));
 
         final Style bodyStyle = sc.addStyle("body", null);
         bodyStyle.addAttribute(StyleConstants.Foreground, new Color(0x789C6C));
