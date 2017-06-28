@@ -92,7 +92,7 @@ final class DebuggerWindow extends JFrame {
         bodyStyle.addAttribute(StyleConstants.Foreground, new Color(0x789C6C));
         bodyStyle.addAttribute(StyleConstants.FontSize, Integer.valueOf(13));
         bodyStyle.addAttribute(StyleConstants.FontFamily, "monospaced");
-        bodyStyle.addAttribute(StyleConstants.Bold, new Boolean(true));
+        bodyStyle.addAttribute(StyleConstants.Bold, true);
 
         doc.setLogicalStyle(0, bodyStyle);
 
