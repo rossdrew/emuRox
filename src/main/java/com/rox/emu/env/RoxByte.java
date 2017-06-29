@@ -37,7 +37,8 @@ public final class RoxByte {
     private final int byteValue;
     private final ByteFormat format;
 
-    private static int[] PLACE_VALUE = {1,2,4,8,16,32,64,128};
+    /** Binary digit place values */
+    private static int[] PLACE_VALUE = {1, 2, 4, 8, 16, 32, 64, 128};
 
     /**
      * A {@link RoxByte} representing zero
