@@ -12,51 +12,51 @@ import org.slf4j.LoggerFactory;
 public class Registers {
     private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
-    private enum Register {
-        ACCUMULATOR(0),
-        Y_INDEX(1),
-        X_INDEX(2),
-        PROGRAM_COUNTER_HI(3),
-        PROGRAM_COUNTER_LOW(4),
-        STACK_POINTER_LOW(5),
-        STACK_POINTER_HI(6),
-        STATUS_FLAGS(7);
-
-        private final String description;
-        private final int index;
-        private final int placeValue;
-
-        Register(int index){
-            this.index = index;
-            this.placeValue = 1 << index;
-            description = prettifyName(name());
-        }
-
-        private static String prettifyName(String originalName){
-            String name = originalName.replaceAll("_"," ")
-                                      .toLowerCase()
-                                      .replace("hi","(High)")
-                                      .replace("low","(Low)");
-
-            name = name.substring(0, 1).toUpperCase() + name.substring(1);
-            int spaceIndex = name.indexOf(' ');
-            if (spaceIndex > 0)
-                name = name.substring(0, spaceIndex) + name.substring(spaceIndex, spaceIndex+2).toUpperCase() + name.substring(spaceIndex+2);
-            return name;
-        }
-
-        public String getDescription(){
-            return description;
-        }
-
-        public int getIndex(){
-            return this.index;
-        }
-
-        public int getPlaceValue(){
-            return this.placeValue;
-        }
-    }
+//    private enum Register {
+//        ACCUMULATOR(0),
+//        Y_INDEX(1),
+//        X_INDEX(2),
+//        PROGRAM_COUNTER_HI(3),
+//        PROGRAM_COUNTER_LOW(4),
+//        STACK_POINTER_LOW(5),
+//        STACK_POINTER_HI(6),
+//        STATUS_FLAGS(7);
+//
+//        private final String description;
+//        private final int index;
+//        private final int placeValue;
+//
+//        Register(int index){
+//            this.index = index;
+//            this.placeValue = 1 << index;
+//            description = prettifyName(name());
+//        }
+//
+//        private static String prettifyName(String originalName){
+//            String name = originalName.replaceAll("_"," ")
+//                                      .toLowerCase()
+//                                      .replace("hi","(High)")
+//                                      .replace("low","(Low)");
+//
+//            name = name.substring(0, 1).toUpperCase() + name.substring(1);
+//            int spaceIndex = name.indexOf(' ');
+//            if (spaceIndex > 0)
+//                name = name.substring(0, spaceIndex) + name.substring(spaceIndex, spaceIndex+2).toUpperCase() + name.substring(spaceIndex+2);
+//            return name;
+//        }
+//
+//        public String getDescription(){
+//            return description;
+//        }
+//
+//        public int getIndex(){
+//            return this.index;
+//        }
+//
+//        public int getPlaceValue(){
+//            return this.placeValue;
+//        }
+//    }
 
     /** Register ID of the Accumulator */
     public static final int REG_ACCUMULATOR = 0;
