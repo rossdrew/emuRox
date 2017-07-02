@@ -1,6 +1,7 @@
 package com.rox.emu.processor.mos6502.util
 
 import com.rox.emu.processor.mos6502.op.OpCode
+import spock.lang.Ignore
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -37,6 +38,34 @@ class ProgramSpec extends Specification {
         ["A:", OpCode.ADC_ABS, 0x10, 0x02,
          "B:", OpCode.CLC,
          'C:']                                               || 4           | 3          | 0        | "Multiple labels"
+    }
+
+    @Ignore("Failing test for label replacement")
+    def testLabelReplacement(){
+        given:
+        final Program labelProgram = new Program().with("Start",
+                                                         OpCode.BEQ, "MyLabel",
+                                                         OpCode.LDA_I, 0x1,
+                                                         "MyLabel",
+                                                         OpCode.LDA_I, 0x2,
+                                                         OpCode.BNE, "Start",
+                                                         OpCode.LDA_I, 0x3)
+
+        when:
+        byte[] compiledProgram = labelProgram.getProgramAsByteArray()
+
+        then:
+        compiledProgram == [OpCode.BEQ.byteValue, 0b00000011,
+                            OpCode.LDA_I.byteValue, 0x1,
+                            OpCode.LDA_I.byteValue, 0x2,
+                            OpCode.BNE.byteValue, 0x0,
+                            OpCode.LDA_I.byteValue, 0x3]
+
+        /*
+        E:  240, 3,  169, 1,  169, 2,   208, 0, 169, 3
+        A: -16, -87, 1,  -87, 2,  -48, -87,  3
+
+         */
     }
 
     def testInvalidLabel(){
