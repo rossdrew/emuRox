@@ -24,11 +24,11 @@ public class CompilerTest {
     @Test
     public void testPrefixExtraction(){
         try {
-            assertEquals("$", extractFirstOccurrence(PREFIX_REGEX, "$10"));
-            assertEquals("#$", extractFirstOccurrence(PREFIX_REGEX, "#$10"));
-            assertEquals("$", extractFirstOccurrence(PREFIX_REGEX, "$AA"));
-            assertEquals("#$", extractFirstOccurrence(PREFIX_REGEX, "#$AA"));
-            assertEquals("($", extractFirstOccurrence(PREFIX_REGEX, "($AA,X)"));
+            assertEquals("$", extractFirstOccurrence(ARG_PREFIX_REGEX, "$10"));
+            assertEquals("#$", extractFirstOccurrence(ARG_PREFIX_REGEX, "#$10"));
+            assertEquals("$", extractFirstOccurrence(ARG_PREFIX_REGEX, "$AA"));
+            assertEquals("#$", extractFirstOccurrence(ARG_PREFIX_REGEX, "#$AA"));
+            assertEquals("($", extractFirstOccurrence(ARG_PREFIX_REGEX, "($AA,X)"));
         }catch (UnknownOpCodeException e){
             fail(e.getMessage());
         }
@@ -37,15 +37,15 @@ public class CompilerTest {
     @Test
     public void testValueExtraction(){
         try {
-            assertEquals("10", extractFirstOccurrence(VALUE_REGEX, "$10"));
-            assertEquals("10", extractFirstOccurrence(VALUE_REGEX, "#$10"));
-            assertEquals("AA", extractFirstOccurrence(VALUE_REGEX, "$AA"));
-            assertEquals("AA", extractFirstOccurrence(VALUE_REGEX, "#$AA"));
-            assertEquals("AA", extractFirstOccurrence(VALUE_REGEX, "($AA,X)"));
+            assertEquals("10", extractFirstOccurrence(ARG_VALUE_REGEX, "$10"));
+            assertEquals("10", extractFirstOccurrence(ARG_VALUE_REGEX, "#$10"));
+            assertEquals("AA", extractFirstOccurrence(ARG_VALUE_REGEX, "$AA"));
+            assertEquals("AA", extractFirstOccurrence(ARG_VALUE_REGEX, "#$AA"));
+            assertEquals("AA", extractFirstOccurrence(ARG_VALUE_REGEX, "($AA,X)"));
 
-            assertEquals("A", extractFirstOccurrence(VALUE_REGEX, "($A,X)"));
-            assertEquals("BBB", extractFirstOccurrence(VALUE_REGEX, "($BBB,X)"));
-            assertEquals("CCCC", extractFirstOccurrence(VALUE_REGEX, "($CCCC,X)"));
+            assertEquals("A", extractFirstOccurrence(ARG_VALUE_REGEX, "($A,X)"));
+            assertEquals("BBB", extractFirstOccurrence(ARG_VALUE_REGEX, "($BBB,X)"));
+            assertEquals("CCCC", extractFirstOccurrence(ARG_VALUE_REGEX, "($CCCC,X)"));
         }catch (UnknownOpCodeException e){
             fail(e.getMessage());
         }
@@ -54,9 +54,9 @@ public class CompilerTest {
     @Test
     public void testPostfixExtraction(){
         try {
-            assertEquals(",X", extractFirstOccurrence(POSTFIX_REGEX, "$10,X"));
-            assertEquals(",Y", extractFirstOccurrence(POSTFIX_REGEX, "$AA,Y"));
-            assertEquals(",X)", extractFirstOccurrence(POSTFIX_REGEX, "($AA,X)"));
+            assertEquals(",X", extractFirstOccurrence(ARG_POSTFIX_REGEX, "$10,X"));
+            assertEquals(",Y", extractFirstOccurrence(ARG_POSTFIX_REGEX, "$AA,Y"));
+            assertEquals(",X)", extractFirstOccurrence(ARG_POSTFIX_REGEX, "($AA,X)"));
         }catch (UnknownOpCodeException e){
             fail(e.getMessage());
         }
@@ -67,7 +67,7 @@ public class CompilerTest {
         final String[] invalidPostfixes = new String[] {"($AA,Y)"};
 
         for (String invalidPostfix : invalidPostfixes) {
-            assertTrue(extractFirstOccurrence(POSTFIX_REGEX, invalidPostfix).isEmpty());
+            assertTrue(extractFirstOccurrence(ARG_POSTFIX_REGEX, invalidPostfix).isEmpty());
         }
     }
 

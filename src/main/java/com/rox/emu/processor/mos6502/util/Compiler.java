@@ -77,17 +77,21 @@ import java.util.regex.Pattern;
  *
  *  </Table>
  *
+ *  TODO accept tokens as arguments.
+ *
  * @author Ross Drew
  */
 public class Compiler {
     /** Regex used to extract an argument prefix */
-    public static final Pattern PREFIX_REGEX = Pattern.compile("^[^0-9a-fA-F]{1,4}");
+    public static final Pattern ARG_PREFIX_REGEX = Pattern.compile("^[^0-9a-fA-F]{1,4}");
     /** Regex used to extract an argument value */
-    public static final Pattern VALUE_REGEX = Pattern.compile("[0-9a-fA-F]+");
+    public static final Pattern ARG_VALUE_REGEX = Pattern.compile("[0-9a-fA-F]+");
     /** Regex used to extract an argument postfix */
-    public static final Pattern POSTFIX_REGEX = Pattern.compile("(?<=\\w)(,[XY]|,X\\)|\\),Y)$");
+    public static final Pattern ARG_POSTFIX_REGEX = Pattern.compile("(?<=\\w)(,[XY]|,X\\)|\\),Y)$");
+    /** Regex used to extract a program label reference as an opcode argument */
+    public static final Pattern LABEL_REF_REGEX = Pattern.compile("\\w+");
     /** Regex used to extract a program label */
-    public static final Pattern LABEL_REGEX = Pattern.compile("\\w+:");
+    public static final Pattern LABEL_REGEX = Pattern.compile(LABEL_REF_REGEX + ":");
 
     /** The prefix expected for an accumulator addressed argument */
     public static final String ACCUMULATOR_PREFIX = "#";
@@ -133,6 +137,15 @@ public class Compiler {
             final String opCodeToken = tokenizer.nextToken();
 
             switch(opCodeToken){
+                //These need to work with hard coded values as well
+                case "BPL": case "BMI": case "BVC": case "BVS": case "BCC": case "BCS": case "BNE": case "BEQ":
+//                    final String argToken = tokenizer.nextToken().trim();
+//                    //XXX Check for label.
+//                    //    -> on compilation, check for markets and do (label.index - label.reference)
+//                    final String labelReference = extractFirstOccurrence(LABEL_REF_REGEX, argToken).trim();
+//                    if (labelReference != null && !labelReference.isEmpty()){
+//                        System.out.println("FOUND LABEL '" + labelReference + "'");
+//                    }
                 case "TAX": case "TAY":
                 case "TYA": case "TXA": case "TXS": case "TXY": case "TSX":
                 case "PHA": case "PLA":
@@ -141,7 +154,6 @@ public class Compiler {
                 case "INX": case "DEX":
                 case "RTS": case "RTI":
                 case "JSR":
-                case "BPL": case "BMI": case "BVC": case "BVS": case "BCC": case "BCS": case "BNE": case "BEQ":
                 case "SEC": case "CLC":
                 case "SEI": case "SED":
                 case "CLD": case "CLI": case "CLV":
@@ -162,9 +174,10 @@ public class Compiler {
 
                 case "ROR": //Accumulator only
                     final String valueToken = tokenizer.nextToken().trim();
-                    final String prefix = extractFirstOccurrence(PREFIX_REGEX, valueToken).trim();
-                    final String value = extractFirstOccurrence(VALUE_REGEX, valueToken).trim();
-                    final String postfix = extractFirstOccurrence(POSTFIX_REGEX, valueToken).trim();
+
+                    final String prefix = extractFirstOccurrence(ARG_PREFIX_REGEX, valueToken).trim();
+                    final String value = extractFirstOccurrence(ARG_VALUE_REGEX, valueToken).trim();
+                    final String postfix = extractFirstOccurrence(ARG_POSTFIX_REGEX, valueToken).trim();
 
                     final AddressingMode addressingMode = getAddressingModeFrom(prefix, value, postfix);
 
