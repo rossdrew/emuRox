@@ -16,7 +16,16 @@ With a first version of the 6502 processor (including a graphical debugger and c
   - getting rid of java performed arithmetic (usually in `+`/`-` cases) in favor of ALU performed arithmetic, it's causing problems...as expected
   - compressing the data driven tests;  extracting out common patterns, etc
   - abstracting away bytes into a custom class so that I don't need workarounds for Java types
-  - making the 6502 emulator, compiler and debugger availiable to 6502 community for testing.  This means getting labels to work, which means a refactor of Program
+  - making the 6502 emulator, compiler and debugger available to 6502 community for testing.  This means getting labels to work, which means a refactor of Program, i.e.
+                                                                                                                                                                   
+```6502 Assembly
+LDA #$1
+STA $3C
+TESTLABEL:
+INC $3C
+LDA #$0
+BCC TESTLABEL
+```
   
 BCD and proper timing is a thing for another day as my first objective for now, is the NES emulator.
 
