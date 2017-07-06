@@ -41,7 +41,7 @@ class ProgramSpec extends Specification {
     }
 
     @Ignore("Failing test for label replacement")
-    def testLabelReplacement(){
+    testLabelReplacement(){
         given:
         final Program labelProgram = new Program().with("Start",
                                                          OpCode.BEQ, "MyLabel",
