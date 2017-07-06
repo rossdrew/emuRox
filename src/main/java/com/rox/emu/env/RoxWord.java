@@ -5,7 +5,7 @@ package com.rox.emu.env;
  *
  * {@see RoxByte}
  */
-public class RoxWord {
+public final class RoxWord {
     private final int wordValue;
 
     private RoxWord(int wordValue) {
