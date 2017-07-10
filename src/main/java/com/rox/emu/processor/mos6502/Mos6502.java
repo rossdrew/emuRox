@@ -132,13 +132,13 @@ public class Mos6502 {
      * Execute the next program instruction as per {@link Registers#getNextProgramCounter()}
      */
     public void step() {
-        if (LOG.isTraceEnabled())if (LOG.isTraceEnabled()) LOG.debug("STEP >>>");
+        if (LOG.isTraceEnabled()) LOG.debug("STEP >>>");
 
         final int opCodeByte = nextProgramByte();
         final OpCode opCode = OpCode.from(opCodeByte);
 
         //Execute the opcode
-        if (LOG.isDebugEnabled()) if (LOG.isDebugEnabled()) LOG.debug("Instruction: " + opCode.getOpCodeName() + "...");
+        if (LOG.isDebugEnabled()) LOG.debug("Instruction: " + opCode.getOpCodeName() + "...");
         switch (opCode){
             default:
             case BRK:
