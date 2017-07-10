@@ -45,7 +45,7 @@ public class Mos6502 {
      * Note: IRL this takes 6 CPU cycles but we'll cross that bridge IF we come to it-
      */
     public void reset(){
-        LOG.trace("RESETTING...");
+       if (LOG.isTraceEnabled()) LOG.debug("RESETTING...");
         setRegisterValue(REG_ACCUMULATOR, 0x0);
         setRegisterValue(REG_X_INDEX, 0x0);
         setRegisterValue(REG_Y_INDEX, 0x0);
@@ -53,7 +53,7 @@ public class Mos6502 {
         setRegisterValue(REG_PC_HIGH, getByteOfMemoryAt(0xFFFC));
         setRegisterValue(REG_PC_LOW, getByteOfMemoryAt(0xFFFD));
         setRegisterValue(REG_SP, 0xFF);
-        LOG.trace("...READY!");
+       if (LOG.isTraceEnabled()) LOG.debug("...READY!");
     }
 
     /**
@@ -64,7 +64,7 @@ public class Mos6502 {
      * <b>R</b>outine is expected to be
      */
     public void irq() {
-        LOG.debug("IRQ!");
+        if (LOG.isDebugEnabled()) LOG.debug("IRQ!");
         registers.setFlag(I);
 
         pushRegister(REG_PC_HIGH);
@@ -82,7 +82,7 @@ public class Mos6502 {
      * and <code>0xFFFB</code> where the <b>I</b>nterrupt <b>S</b>ervice <b>R</b>outine is expected to be
      */
     public void nmi() {
-        LOG.debug("NMI!");
+        if (LOG.isDebugEnabled()) LOG.debug("NMI!");
         registers.setFlag(I);
 
         pushRegister(REG_PC_HIGH);
@@ -132,13 +132,13 @@ public class Mos6502 {
      * Execute the next program instruction as per {@link Registers#getNextProgramCounter()}
      */
     public void step() {
-        LOG.trace("STEP >>>");
+        if (LOG.isTraceEnabled())if (LOG.isTraceEnabled()) LOG.debug("STEP >>>");
 
         final int opCodeByte = nextProgramByte();
         final OpCode opCode = OpCode.from(opCodeByte);
 
         //Execute the opcode
-        LOG.debug("Instruction: " + opCode.getOpCodeName() + "...");
+        if (LOG.isDebugEnabled()) if (LOG.isDebugEnabled()) LOG.debug("Instruction: " + opCode.getOpCodeName() + "...");
         switch (opCode){
             default:
             case BRK:
@@ -806,7 +806,7 @@ public class Mos6502 {
         setRegisterValue(REG_SP, getRegisterValue(REG_SP) + 1);
         int address = 0x0100 | getRegisterValue(REG_SP);
         int value = getByteOfMemoryAt(address);
-        LOG.trace("POP " + value + "(0b" + Integer.toBinaryString(value) + ") from mem[0x" + Integer.toHexString(address).toUpperCase() + "]");
+       if (LOG.isTraceEnabled()) LOG.debug("POP " + value + "(0b" + Integer.toBinaryString(value) + ") from mem[0x" + Integer.toHexString(address).toUpperCase() + "]");
         return value;
     }
 
@@ -820,7 +820,7 @@ public class Mos6502 {
      * @param value value to push
      */
     private void push(int value){
-        LOG.trace("PUSH " + value + "(0b" + Integer.toBinaryString(value) + ") to mem[0x" + Integer.toHexString(getRegisterValue(REG_SP)).toUpperCase() + "]");
+       if (LOG.isTraceEnabled()) LOG.debug("PUSH " + value + "(0b" + Integer.toBinaryString(value) + ") to mem[0x" + Integer.toHexString(getRegisterValue(REG_SP)).toUpperCase() + "]");
         setByteOfMemoryAt(0x0100 | getRegisterValue(REG_SP), value);
         setRegisterValue(REG_SP, getRegisterValue(REG_SP) - 1);
     }
@@ -843,7 +843,7 @@ public class Mos6502 {
 
     private int getByteOfMemoryAt(int location, int index){
         final int memoryByte = memory.getByte(location + index);
-        LOG.trace("Got 0x" + Integer.toHexString(memoryByte) + " from mem[" + location + (index != 0 ? "[" + index + "]" : "") +"]");
+       if (LOG.isTraceEnabled()) LOG.debug("Got 0x" + Integer.toHexString(memoryByte) + " from mem[" + location + (index != 0 ? "[" + index + "]" : "") +"]");
         return memoryByte;
     }
 
@@ -857,7 +857,7 @@ public class Mos6502 {
 
     private void setByteOfMemoryAt(int location, int index, int newByte){
         memory.setByteAt(location + index, newByte);
-        LOG.trace("Stored 0x" + Integer.toHexString(newByte) + " at mem[" + location + (index != 0 ? "[" + index + "]" : "") +"]");
+       if (LOG.isTraceEnabled()) LOG.debug("Stored 0x" + Integer.toHexString(newByte) + " at mem[" + location + (index != 0 ? "[" + index + "]" : "") +"]");
     }
 
     private int getWordOfMemoryXIndexedAt(int location){
@@ -867,7 +867,7 @@ public class Mos6502 {
 
     private int getWordOfMemoryAt(int location) {
         int memoryWord = memory.getWord(location);
-        LOG.trace("Got 0x" + Integer.toHexString(memoryWord) + " from mem[" + location +"]");
+       if (LOG.isTraceEnabled()) LOG.debug("Got 0x" + Integer.toHexString(memoryWord) + " from mem[" + location +"]");
         return memoryWord;
     }
 
@@ -892,7 +892,7 @@ public class Mos6502 {
      */
     private void branchIf(boolean condition){
         int location = nextProgramByte();
-        LOG.debug("{Branch:0x" + Integer.toHexString(registers.getPC()) + " by " + Integer.toBinaryString(location) + "} " + (condition ? "YES->" : "NO..."));
+        if (LOG.isDebugEnabled()) LOG.debug("{Branch:0x" + Integer.toHexString(registers.getPC()) + " by " + Integer.toBinaryString(location) + "} " + (condition ? "YES->" : "NO..."));
         if (condition) branchTo(location);
     }
 
