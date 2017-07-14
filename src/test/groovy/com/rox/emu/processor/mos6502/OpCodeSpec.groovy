@@ -2746,7 +2746,7 @@ class OpCodeSpec extends Specification {
         Program program = loadMemoryWithProgram(LDA_I, firstValue, CMP_I, secondValue)
 
         and: 'We set C to make sure we KNOW its been changed'
-        initialCValue ? registers.setFlag(Registers.C) : registers.clearFlag(Registers.C)
+        !C ? registers.setFlag(Registers.C) : registers.clearFlag(Registers.C)
 
         and:
         processor.step(2)
@@ -2757,11 +2757,11 @@ class OpCodeSpec extends Specification {
 		testFlags(Z,N,C)
     
         where:
-        initialCValue | firstValue | secondValue | Z     | N     | C     | Expected
-        false         | 0x10       | 0x10        | true  | false | true  | "Basic compare"
-        false         | 0x11       | 0x10        | false | false | true  | "Carry flag set"
-        true          | 0x10       | 0x11        | false | true  | false | "Smaller value - larger"
-        false         | 0xFF       | 0x01        | false | true  | true  | "Negative result"
+        firstValue | secondValue | Z     | N     | C     | Expected
+        0x10       | 0x10        | true  | false | true  | "Basic compare"
+        0x11       | 0x10        | false | false | true  | "Carry flag set"
+        0x10       | 0x11        | false | true  | false | "Smaller value - larger"
+        0xFF       | 0x01        | false | true  | true  | "Negative result"
     }
     
     @Unroll("CMP (Zero Page) #Expected: #firstValue == #secondValue")
