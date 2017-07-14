@@ -32,6 +32,11 @@ class OpCodeSpec extends Specification {
                       boolean C = registers.getFlag(Registers.C),
                       boolean V = registers.getFlag(Registers.V)){
 
+        assert Z == registers.getFlag(Registers.Z) : "Expected Z to be " + Z + ", was " + registers.getFlag(Registers.Z)
+        assert N == registers.getFlag(Registers.N) : "Expected N to be " + N + ", was " + registers.getFlag(Registers.N)
+        assert C == registers.getFlag(Registers.C) : "Expected C to be " + C + ", was " + registers.getFlag(Registers.C)
+        assert V == registers.getFlag(Registers.V) : "Expected V to be " + V + ", was " + registers.getFlag(Registers.V)
+
         return Z == registers.getFlag(Registers.Z) &&
                N == registers.getFlag(Registers.N) &&
                C == registers.getFlag(Registers.C) &&
@@ -52,12 +57,12 @@ class OpCodeSpec extends Specification {
     
         where:
         loadValue | expectedAccumulator | Z     | N     | Expected
-        0x0       | 0x0                         | true  | false | "With zero result"
-        0x1       | 0x1                         | false | false | "Generic test 1"
-        0x7F      | 0x7F                        | false | false | "Generic test 2"
-        0x80      | 0x80                        | false | true  | "With negative result"
-        0x81      | 0x81                        | false | true  | "With (boundary test) negative result "
-        0xFF      | 0xFF                        | false | true  | "With max negative result"
+        0x0       | 0x0                 | true  | false | "With zero result"
+        0x1       | 0x1                 | false | false | "Generic test 1"
+        0x7F      | 0x7F                | false | false | "Generic test 2"
+        0x80      | 0x80                | false | true  | "With negative result"
+        0x81      | 0x81                | false | true  | "With (boundary test) negative result "
+        0xFF      | 0xFF                | false | true  | "With max negative result"
     }
     
     @Unroll("LDA (Immediate) #Expected: Load #loadValue == #expectedAccumulator")
@@ -75,12 +80,12 @@ class OpCodeSpec extends Specification {
     
         where:
         loadValue | expectedAccumulator | Z     | N     | Expected
-        0x0       | 0x0                         | true  | false | "With zero result"
-        0x1       | 0x1                         | false | false | "Generic test 1"
-        0x7F      | 0x7F                        | false | false | "Generic test 2"
-        0x80      | 0x80                        | false | true  | "With negative result"
-        0x81      | 0x81                        | false | true  | "With (boundary test) negative result "
-        0xFF      | 0xFF                        | false | true  | "With max negative result"
+        0x0       | 0x0                 | true  | false | "With zero result"
+        0x1       | 0x1                 | false | false | "Generic test 1"
+        0x7F      | 0x7F                | false | false | "Generic test 2"
+        0x80      | 0x80                | false | true  | "With negative result"
+        0x81      | 0x81                | false | true  | "With (boundary test) negative result "
+        0xFF      | 0xFF                | false | true  | "With max negative result"
     }
     
     @Unroll("LDA (Zero Page) #Expected: Expecting #loadValue @ [30]")
@@ -2741,19 +2746,25 @@ class OpCodeSpec extends Specification {
         Program program = loadMemoryWithProgram(LDA_I, firstValue, CMP_I, secondValue)
 
         and:
+        if (initialCValue)
+            registers.setFlag(Registers.C)
+        else
+            registers.clearFlag(Registers.C)
+
+        and:
         processor.step(2)
-    
+
         then:
         program.length == registers.getPC()
         firstValue == registers.getRegister(Registers.REG_ACCUMULATOR)
 		testFlags(Z,N,C)
     
         where:
-        firstValue | secondValue | Z     | N     | C     | Expected
-        0x10       | 0x10        | true  | false | true  | "Basic compare"
-        0x11       | 0x10        | false | false | true  | "Carry flag set"
-        0x10       | 0x11        | false | true  | false | "Smaller value - larger"
-        0xFF       | 0x01        | false | true  | true  | "Negative result"
+        initialCValue | firstValue | secondValue | Z     | N     | C     | Expected
+        false         | 0x10       | 0x10        | true  | false | true  | "Basic compare"
+        false         | 0x11       | 0x10        | false | false | true  | "Carry flag set"
+        true          | 0x10       | 0x11        | false | true  | false | "Smaller value - larger"
+        false         | 0xFF       | 0x01        | false | true  | true  | "Negative result"
     }
     
     @Unroll("CMP (Zero Page) #Expected: #firstValue == #secondValue")
