@@ -2745,11 +2745,8 @@ class OpCodeSpec extends Specification {
         when:
         Program program = loadMemoryWithProgram(LDA_I, firstValue, CMP_I, secondValue)
 
-        and:
-        if (initialCValue)
-            registers.setFlag(Registers.C)
-        else
-            registers.clearFlag(Registers.C)
+        and: 'We set C to make sure we KNOW its been changed'
+        initialCValue ? registers.setFlag(Registers.C) : registers.clearFlag(Registers.C)
 
         and:
         processor.step(2)
