@@ -11,11 +11,14 @@ An emulator for the [6502 processor](https://en.wikipedia.org/wiki/MOS_Technolog
 
 ## 6502 and progress towards a working NES...
 
-With a first version of the 6502 processor (including a graphical debugger and compiler) written, currently I'm looking in to the NES PPU.  Trying to garner enough information to start emulating this piece of hardware while looking at code I've wrote over the last few months and looking at where it might be improved.  For example:-
+After nearly 7 months of close to daily work on this, development is on a little bit of a hold.  I need some time to do proper investigation of the PPU and then some more to do some proper exploratory coding and proper design which my work/personal life isn't allowing at this moment. Should be too long before I'm back bashing at it.
+
+Any small chunks of time I get, I'm looking into improving on what's already written.  For example:-
  
   - getting rid of java performed arithmetic (usually in `+`/`-` cases) in favor of ALU performed arithmetic, it's causing problems...as expected
   - compressing the data driven tests;  extracting out common patterns, etc
   - abstracting away bytes into a custom class so that I don't need workarounds for Java types
+  - abstracting away the concept of a Register into an enum to clean up the code
   - making the 6502 emulator, compiler and debugger available to 6502 community for testing.  This means getting labels to work, which means a refactor of Program, i.e.
                                                                                                                                                                    
 ```6502 Assembly
