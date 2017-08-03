@@ -22,12 +22,12 @@ Any small chunks of time I get, I'm looking into improving on what's already wri
   - making the 6502 emulator, compiler and debugger available to 6502 community for testing.  This means getting labels to work, which means a refactor of Program, i.e.
                                                                                                                                                                    
 ```6502 Assembly
-LDA #$1
-STA $3C
-TESTLABEL:
-INC $3C
-LDA #$0
-BCC TESTLABEL
+        LDA #$1
+        STA $3C
+        TESTLABEL:
+        INC $3C
+        LDA #$0
+        BCC TESTLABEL
 ```
   
 BCD and proper timing is a thing for another day as my first objective for now, is the NES emulator.
