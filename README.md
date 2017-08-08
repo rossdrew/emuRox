@@ -11,7 +11,7 @@ An emulator for the [6502 processor](https://en.wikipedia.org/wiki/MOS_Technolog
 
 ## 6502 and progress towards a working NES...
 
-After nearly 7 months of close to daily work on this, development is on a little bit of a hold.  I need some time to do proper investigation of the PPU and then some more to do some proper exploratory coding and proper design which my work/personal life isn't allowing at this moment. Should be too long before I'm back bashing at it.
+After nearly 7 months of close to daily work on this, development is on a little bit of a hold.  I need some time to do proper investigation of the PPU and then some exploratory coding and design which my work/personal life isn't allowing at this moment. Should be too long before I'm back bashing at it.
 
 Any small chunks of time I get, I'm looking into improving on what's already written.  For example:-
  
