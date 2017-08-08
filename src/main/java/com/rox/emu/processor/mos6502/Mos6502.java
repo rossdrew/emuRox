@@ -100,24 +100,6 @@ public class Mos6502 {
         return registers;
     }
 
-    private int getRegisterValue(int registerID){
-        return registers.getRegister(registerID);
-    }
-
-    private void setRegisterValue(int registerID, int value){
-        registers.setRegister(registerID, value);
-    }
-
-    /**
-     * Get the value of the 16 bit Program Counter (PC) and increment
-     */
-    private int getAndStepPC(){
-        final int originalPC = registers.getPC();
-        registers.setPC(originalPC + 1);
-
-        return originalPC;
-    }
-
     /**
      * Execute the next program instruction as per {@link Registers#getNextProgramCounter()}
      *
@@ -766,6 +748,24 @@ public class Mos6502 {
                 setRegisterValue(REG_PC_HIGH, pop());
                 break;
         }
+    }
+
+    private int getRegisterValue(int registerID){
+        return registers.getRegister(registerID);
+    }
+
+    private void setRegisterValue(int registerID, int value){
+        registers.setRegister(registerID, value);
+    }
+
+    /**
+     * Get the value of the 16 bit Program Counter (PC) and increment
+     */
+    private int getAndStepPC(){
+        final int originalPC = registers.getPC();
+        registers.setPC(originalPC + 1);
+
+        return originalPC;
     }
 
     /**
