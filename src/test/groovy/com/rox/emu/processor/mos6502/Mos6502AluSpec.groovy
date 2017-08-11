@@ -6,7 +6,7 @@ import spock.lang.Unroll
 
 class Mos6502AluSpec extends Specification {
     @Unroll
-    def "ADD (#description): #operandA + #operandB = #expectedResult"(){
+    def "ADD (#description): #operandA + #operandB = #expectedValue"(){
         given:
         Mos6502Alu alu = new Mos6502Alu()
 
@@ -19,11 +19,16 @@ class Mos6502AluSpec extends Specification {
 
         then:
         expectedResult == result.rawValue
+        result.asInt == expectedValue
 
         where:
-        operandA | operandB || expectedResult | description
-        1        | 1        || 2              | "Simple addition"
-        0        | 1        || 1              | "Left hand zero addition"
-        1        | 0        || 1              | "Right hand zero addition"
+        operandA   | operandB || expectedResult | expectedValue | description
+        0          | 0        || 0              | 0             | "No change"
+        1          | 1        || 2              | 2             | "Simple addition"
+        0          | 1        || 1              | 1             | "Left hand zero addition"
+        1          | 0        || 1              | 1             | "Right hand zero addition"
+        127        | 1        || 128            | -128          | "Signed Overflow"
+        0b11111111 | 1        || 0              | 0             | "Signed negative to zero"
+        0b11111111 | 10       || 9              | 9             | "Signed negative to positive"
     }
 }
