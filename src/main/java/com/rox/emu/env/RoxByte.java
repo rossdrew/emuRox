@@ -57,6 +57,13 @@ public final class RoxByte {
             return byteValue;
     }
 
+    /**
+     * @return a new {@link RoxByte} representing this value converted to it's twos compliment value
+     */
+    public RoxByte inTwosCompliment(){
+        return RoxByte.literalFrom(((~getRawValue()) + 1) & 0xFF);
+    }
+
     private boolean bitInRange(int bit){
         return ((bit >= 0) && (bit <= 7));
     }
