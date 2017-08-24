@@ -49,9 +49,12 @@ class Mos6502AluSpec extends Specification {
         result.asInt == expectedValue
 
         where:
-        operandA   | operandB || expectedResult | expectedValue | description
-        0          | 0        || 0              | 0             | "No change"
-        1          | 1        || 0              | 0             | "Number minus itself"
-        10         | 9        || 1              | 1             | "Positive result"
+        operandA   | operandB   || expectedResult | expectedValue | description
+        0          | 0          || 0              | 0             | "No change"
+        1          | 1          || 0              | 0             | "Number minus itself"
+        10         | 9          || 1              | 1             | "Positive result"
+        0          | 1          || 0b11111111     | -1            | "Negative result"
+        0b11111111 | 1          || 0b11111110     | -2            | "Positive subtraction from a negative"
+        0b11111111 | 0b11111111 || 0              | 0             | "Negative subtraction from a negative"
     }
 }
