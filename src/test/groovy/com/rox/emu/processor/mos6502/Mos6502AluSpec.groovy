@@ -31,4 +31,27 @@ class Mos6502AluSpec extends Specification {
         0b11111111 | 1        || 0              | 0             | "Signed negative to zero"
         0b11111111 | 10       || 9              | 9             | "Signed negative to positive"
     }
+
+    @Unroll
+    def "SBC (#description): #operandA - #operandB = #expectedValue"(){
+        given:
+        Mos6502Alu alu = new Mos6502Alu()
+
+        and: 'Some numbers to add'
+        final RoxByte a = RoxByte.literalFrom(operandA)
+        final RoxByte b = RoxByte.literalFrom(operandB)
+
+        when:
+        final RoxByte result = alu.sbc(a,b)
+
+        then:
+        expectedResult == result.rawValue
+        result.asInt == expectedValue
+
+        where:
+        operandA   | operandB || expectedResult | expectedValue | description
+        0          | 0        || 0              | 0             | "No change"
+        1          | 1        || 0              | 0             | "Number minus itself"
+        10         | 9        || 1              | 1             | "Positive result"
+    }
 }

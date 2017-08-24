@@ -12,4 +12,12 @@ public class Mos6502Alu {
     public RoxByte add(final RoxByte byteA, final RoxByte byteB){
         return RoxByte.literalFrom(byteA.getRawValue() + byteB.getRawValue());
     }
+
+    public RoxByte sbc(RoxByte byteA, RoxByte byteB) {
+        return add(byteA, twosComplimentOf(byteB));
+    }
+
+    private RoxByte twosComplimentOf(RoxByte byteValue){
+        return RoxByte.literalFrom(((~byteValue.getRawValue()) + 1) & 0xFF);
+    }
 }
