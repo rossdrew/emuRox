@@ -19,17 +19,19 @@ class Mos6502AluSpec extends Specification {
 
         then:
         expectedResult == result.rawValue
-        expectedValue = result.asInt
+        expectedValue == result.asInt
 
         where:
-        operandA   | operandB || expectedResult | expectedValue | description
-        0          | 0        || 0              | 0             | "No change"
-        1          | 1        || 2              | 2             | "Simple addition"
-        0          | 1        || 1              | 1             | "Left hand zero addition"
-        1          | 0        || 1              | 1             | "Right hand zero addition"
-        127        | 1        || 128            | -128          | "Signed Overflow"
-        0b11111111 | 1        || 0              | 0             | "Signed negative to zero"
-        0b11111111 | 10       || 9              | 9             | "Signed negative to positive"
+        operandA   | operandB   || expectedResult | expectedValue | description
+        0          | 0          || 0              | 0             | "No change"
+        1          | 1          || 2              | 2             | "Simple addition"
+        0          | 1          || 1              | 1             | "Left hand zero addition"
+        1          | 0          || 1              | 1             | "Right hand zero addition"
+        127        | 1          || 128            | -128          | "Signed Overflow"
+        0b11111111 | 1          || 0              | 0             | "Signed negative to zero"
+        0b11111111 | 10         || 9              | 9             | "Signed negative to positive"
+        0b10000000 | 1          || 0b10000001     | -127          | "Positive addition to negative"
+        1          | 0b11111111 || 0              | 0             | "Negative addition to positive"
     }
 
     @Unroll
@@ -46,7 +48,7 @@ class Mos6502AluSpec extends Specification {
 
         then:
         expectedResult == result.rawValue
-        expectedValue = result.asInt
+        expectedValue == result.asInt
 
         where:
         operandA   | operandB   || expectedResult | expectedValue | description
