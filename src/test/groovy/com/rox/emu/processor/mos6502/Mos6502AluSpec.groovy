@@ -104,5 +104,12 @@ class Mos6502AluSpec extends Specification {
         where:
         operandA   | operandB   || expectedResult | expectedValue | description
         0          | 0          || 0              | 0             | "No change"
+        0          | 1          || 0              | 0             | "Bit only in parameter A, so no change"
+        1          | 0          || 0              | 0             | "Bit only in parameter B, so no change"
+        1          | 1          || 1              | 1             | "Bit set in both parameters survives"
+        0b11110000 | 0b11110000 || 0b11110000     | -16           | "Multiple matching bits"
+        0b10101010 | 0b11110000 || 0b10100000     | -96           | "Matched and unmatched bits"
+        0b11111111 | 0b00000001 || 1              | 1             | "Single matched bit"
+
     }
 }
