@@ -84,4 +84,25 @@ class Mos6502AluSpec extends Specification {
         0b10101010 | 0b01010101 || 0b11111111     | -1            | "Full bit merge"
         0b11110000 | 0b00111100 || 0b11111100     | -4            | "Overlapping bit merge"
     }
+
+    @Unroll
+    def "AND (#description): #operandA & #operandB = #expectedValue"(){
+        given:
+        Mos6502Alu alu = new Mos6502Alu()
+
+        and: 'Some numbers to add'
+        final RoxByte a = RoxByte.literalFrom(operandA)
+        final RoxByte b = RoxByte.literalFrom(operandB)
+
+        when:
+        final RoxByte result = alu.and(a,b)
+
+        then:
+        expectedResult == result.rawValue
+        expectedValue == result.asInt
+
+        where:
+        operandA   | operandB   || expectedResult | expectedValue | description
+        0          | 0          || 0              | 0             | "No change"
+    }
 }
