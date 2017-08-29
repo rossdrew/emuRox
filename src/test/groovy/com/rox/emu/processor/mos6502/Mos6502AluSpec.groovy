@@ -35,7 +35,7 @@ class Mos6502AluSpec extends Specification {
     }
 
     @Unroll
-    def "SBC (#description): #operandA - #operandB = #expectedValue"(){
+    def "SUB (#description): #operandA - #operandB = #expectedValue"(){
         given:
         Mos6502Alu alu = new Mos6502Alu()
 
@@ -44,7 +44,7 @@ class Mos6502AluSpec extends Specification {
         final RoxByte b = RoxByte.literalFrom(operandB)
 
         when:
-        final RoxByte result = alu.sbc(a,b)
+        final RoxByte result = alu.sub(a,b)
 
         then:
         expectedResult == result.rawValue

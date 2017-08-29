@@ -24,7 +24,7 @@ public class Mos6502Alu {
      *
      * @return the result of the SBC operation
      */
-    public RoxByte sbc(RoxByte byteA, RoxByte byteB) {
+    public RoxByte sub(RoxByte byteA, RoxByte byteB) {
         return add(byteA, byteB.inTwosCompliment());
     }
 
