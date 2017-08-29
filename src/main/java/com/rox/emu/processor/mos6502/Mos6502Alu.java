@@ -35,4 +35,8 @@ public class Mos6502Alu {
     public RoxByte and(RoxByte byteA, RoxByte byteB) {
         return RoxByte.literalFrom(byteA.getRawValue() & byteB.getRawValue());
     }
+
+    public RoxByte xor(RoxByte byteA, RoxByte byteB) {
+        return RoxByte.literalFrom(byteA.getRawValue() ^ byteB.getRawValue());
+    }
 }

@@ -110,6 +110,32 @@ class Mos6502AluSpec extends Specification {
         0b11110000 | 0b11110000 || 0b11110000     | -16           | "Multiple matching bits"
         0b10101010 | 0b11110000 || 0b10100000     | -96           | "Matched and unmatched bits"
         0b11111111 | 0b00000001 || 1              | 1             | "Single matched bit"
+    }
 
+    @Unroll
+    def "XOR (#description): #operandA ^ #operandB = #expectedValue"(){
+        given:
+        Mos6502Alu alu = new Mos6502Alu()
+
+        and: 'Some numbers to add'
+        final RoxByte a = RoxByte.literalFrom(operandA)
+        final RoxByte b = RoxByte.literalFrom(operandB)
+
+        when:
+        final RoxByte result = alu.xor(a,b)
+
+        then:
+        expectedResult == result.rawValue
+        expectedValue == result.asInt
+
+        where:
+        operandA   | operandB   || expectedResult | expectedValue | description
+        0          | 0          || 0              | 0             | "No matching bits"
+        1          | 0          || 1              | 1             | "Bit present in A"
+        0          | 1          || 1              | 1             | "Bit present in B"
+        1          | 1          || 0              | 0             | "Bit present in A+B"
+        0b11111111 | 0b10101010 || 0b01010101     | 85            | "Alternating bits matching"
+        0b11111111 | 0b11111111 || 0b00000000     | 0             | "ALL bits matching"
+        0b01010101 | 0b10101010 || 0b11111111     | -1            | "Consummate bits"
     }
 }
