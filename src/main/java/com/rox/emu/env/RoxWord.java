@@ -24,4 +24,12 @@ public final class RoxWord {
     public int getAsInt() {
         return wordValue;
     }
+
+    public RoxByte getLowByte() {
+        return RoxByte.literalFrom(wordValue & 0xFF);
+    }
+
+    public RoxByte getHighByte() {
+        return RoxByte.literalFrom(wordValue>>8);
+    }
 }

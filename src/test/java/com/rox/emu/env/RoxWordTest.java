@@ -40,4 +40,16 @@ public class RoxWordTest {
         assertNotNull(myWord);
         assertEquals(257, myWord.getAsInt());
     }
+
+    @Test
+    public void testGetLowByte(){
+        final RoxWord myWord = RoxWord.from(RoxByte.literalFrom(10), RoxByte.literalFrom(20));
+        assertEquals(RoxByte.literalFrom(20), myWord.getLowByte());
+    }
+
+    @Test
+    public void testGetHighByte(){
+        final RoxWord myWord = RoxWord.from(RoxByte.literalFrom(10), RoxByte.literalFrom(20));
+        assertEquals(RoxByte.literalFrom(10), myWord.getHighByte());
+    }
 }

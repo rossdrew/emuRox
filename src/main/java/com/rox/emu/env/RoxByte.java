@@ -149,4 +149,19 @@ public final class RoxByte {
             throw new ArrayIndexOutOfBoundsException("Bit #"+ bitToTest +" is out of range, expected (0-7)");
         return (byteValue & PLACE_VALUE[bitToTest]) == PLACE_VALUE[bitToTest];
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        RoxByte roxByte = (RoxByte) o;
+
+        return (byteValue == roxByte.byteValue);
+    }
+
+    @Override
+    public int hashCode() {
+        return (31 * byteValue);
+    }
 }
