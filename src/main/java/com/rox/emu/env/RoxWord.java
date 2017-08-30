@@ -21,6 +21,10 @@ public final class RoxWord {
         return new RoxWord(lowByte.getRawValue());
     }
 
+    public static RoxWord literalFrom(final int literalValue) {
+        return new RoxWord(literalValue & 0xFFFF);
+    }
+
     public int getAsInt() {
         return wordValue;
     }

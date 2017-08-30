@@ -52,4 +52,17 @@ public class RoxWordTest {
         final RoxWord myWord = RoxWord.from(RoxByte.literalFrom(10), RoxByte.literalFrom(20));
         assertEquals(RoxByte.literalFrom(10), myWord.getHighByte());
     }
+
+    @Test
+    public void testValidLiteralFrom(){
+        //Any value above 0xFFFF will just be treated as 'v &= 0xFFFF'
+        for (int i=0x0; i<0x10010; i++) {
+            final RoxWord word = RoxWord.literalFrom(i);
+            final RoxByte expectedLoByte = RoxByte.literalFrom(i & 0xFF);
+            final RoxByte expectedHiByte = RoxByte.literalFrom((i >> 8) & 0xFF);
+
+            assertEquals(expectedLoByte, word.getLowByte());
+            assertEquals(expectedHiByte, word.getHighByte());
+        }
+    }
 }
