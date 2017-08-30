@@ -164,4 +164,9 @@ public final class RoxByte {
     public int hashCode() {
         return (31 * byteValue);
     }
+
+    @Override
+    public String toString() {
+        return "RoxByte{" + getAsInt() +"}";
+    }
 }

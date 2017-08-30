@@ -16,6 +16,7 @@ public class Mos6502Alu {
      */
     public RoxByte add(final RoxByte byteA, final RoxByte byteB){
         final RoxWord result = RoxWord.literalFrom(byteA.getRawValue() + byteB.getRawValue());
+        //System.out.println("Bit is" + (result.getHighByte().isBitSet(0) ? "" : " NOT") + " set for " + byteA + " + " + byteB + " = " + result.getLowByte()) ;
         return result.getLowByte();
     }
 
