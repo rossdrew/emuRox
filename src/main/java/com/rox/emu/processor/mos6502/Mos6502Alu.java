@@ -1,6 +1,7 @@
 package com.rox.emu.processor.mos6502;
 
 import com.rox.emu.env.RoxByte;
+import com.rox.emu.env.RoxWord;
 
 /**
  * Arithmetic Logic Unit for a {@link Mos6502}.<br/>
@@ -14,7 +15,8 @@ public class Mos6502Alu {
      * @return the result of the ADD operation
      */
     public RoxByte add(final RoxByte byteA, final RoxByte byteB){
-        return RoxByte.literalFrom(byteA.getRawValue() + byteB.getRawValue());
+        final RoxWord result = RoxWord.literalFrom(byteA.getRawValue() + byteB.getRawValue());
+        return result.getLowByte();
     }
 
     /**
