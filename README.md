@@ -15,7 +15,7 @@ After nearly 7 months of close to daily work on this, development is on a little
 
 Any small chunks of time I get, I'm looking into improving on what's already written.  For example:-
  
-  - getting rid of java performed arithmetic (usually in `+`/`-` cases) in favor of ALU performed arithmetic, it's causing problems...as expected
+  - getting rid of java performed arithmetic (usually in `+`/`-` cases) in favor of ALU performed arithmetic (and moving to an ALU class), it's causing problems...as expected
   - compressing the data driven tests;  extracting out common patterns, etc
   - abstracting away bytes into a custom class so that I don't need workarounds for Java types
   - abstracting away the concept of a Register into an enum to clean up the code
