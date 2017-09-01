@@ -3,12 +3,21 @@ package com.rox.emu.processor.mos6502;
 import com.rox.emu.env.RoxByte;
 import com.rox.emu.env.RoxWord;
 
+import static com.rox.emu.processor.mos6502.Registers.V;
+
 /**
  * Arithmetic Logic Unit for a {@link Mos6502}.<br/>
  * <br/>
  * Functions: [ADD, OR, XOR, AND, Shift Right]
  */
 public class Mos6502Alu {
+
+    private final Registers registers;
+
+    public Mos6502Alu(Registers registers) {
+        this.registers = registers;
+    }
+
     /**
      * Perform an ADD of <code>byteA ADD byteB</code>
      *
@@ -16,7 +25,19 @@ public class Mos6502Alu {
      */
     public RoxByte add(final RoxByte byteA, final RoxByte byteB){
         final RoxWord result = RoxWord.literalFrom(byteA.getRawValue() + byteB.getRawValue());
-        //System.out.println("Bit is" + (result.getHighByte().isBitSet(0) ? "" : " NOT") + " set for " + byteA + " + " + byteB + " = " + result.getLowByte()) ;
+
+        //Set Carry, if bit 8 is set on new accumulator value, ignoring in 2s compliment addition (subtraction)
+//        if (result.getHighByte().isBitSet(0))
+//            registers.setFlag(Registers.STATUS_FLAG_CARRY);
+//        else
+//            registers.clearFlag(Registers.STATUS_FLAG_CARRY);
+
+        //Set Overflow if the sign of both inputs is different from the sign of the result
+        //  (a^result) & (b^result) -> bit 7 set?
+//        if (and(xor(byteA, result.getLowByte()),
+//                xor(byteB, result.getLowByte())).isBitSet(7))
+//            registers.setFlag(V);
+
         return result.getLowByte();
     }
 

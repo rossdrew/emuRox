@@ -8,7 +8,8 @@ class Mos6502AluSpec extends Specification {
     @Unroll
     def "ADD (#description): #operandA + #operandB = #expectedValue"(){
         given:
-        Mos6502Alu alu = new Mos6502Alu()
+        final Registers registers = new Registers()
+        final Mos6502Alu alu = new Mos6502Alu(registers)
 
         and: 'Some numbers to add'
         final RoxByte a = RoxByte.literalFrom(operandA)
@@ -37,7 +38,8 @@ class Mos6502AluSpec extends Specification {
     @Unroll
     def "SUB (#description): #operandA - #operandB = #expectedValue"(){
         given:
-        Mos6502Alu alu = new Mos6502Alu()
+        final Registers registers = new Registers()
+        final Mos6502Alu alu = new Mos6502Alu(registers)
 
         and: 'Some numbers to add'
         final RoxByte a = RoxByte.literalFrom(operandA)
@@ -64,7 +66,8 @@ class Mos6502AluSpec extends Specification {
     @Unroll
     def "OR (#description): #operandA | #operandB = #expectedValue"(){
         given:
-        Mos6502Alu alu = new Mos6502Alu()
+        final Registers registers = new Registers()
+        final Mos6502Alu alu = new Mos6502Alu(registers)
 
         and: 'Some numbers to add'
         final RoxByte a = RoxByte.literalFrom(operandA)
@@ -88,7 +91,8 @@ class Mos6502AluSpec extends Specification {
     @Unroll
     def "AND (#description): #operandA & #operandB = #expectedValue"(){
         given:
-        Mos6502Alu alu = new Mos6502Alu()
+        final Registers registers = new Registers()
+        final Mos6502Alu alu = new Mos6502Alu(registers)
 
         and: 'Some numbers to add'
         final RoxByte a = RoxByte.literalFrom(operandA)
@@ -115,7 +119,8 @@ class Mos6502AluSpec extends Specification {
     @Unroll
     def "XOR (#description): #operandA ^ #operandB = #expectedValue"(){
         given:
-        Mos6502Alu alu = new Mos6502Alu()
+        final Registers registers = new Registers()
+        final Mos6502Alu alu = new Mos6502Alu(registers)
 
         and: 'Some numbers to add'
         final RoxByte a = RoxByte.literalFrom(operandA)
