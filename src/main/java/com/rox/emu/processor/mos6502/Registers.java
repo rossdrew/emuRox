@@ -224,6 +224,17 @@ public class Registers {
     }
 
     /**
+     * @param flagBitNumber for which to set the state
+     * @param state to set the flag to
+     */
+    public void setFlagTo(int flagBitNumber, boolean state) {
+        if (state)
+            setFlag(flagBitNumber);
+        else
+            clearFlag(flagBitNumber);
+    }
+
+    /**
      * @param flagBitNumber for which to set to true
      */
     public void setFlag(int flagBitNumber) {

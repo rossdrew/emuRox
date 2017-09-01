@@ -24,7 +24,7 @@ public class Mos6502Alu {
     public RoxByte add(final RoxByte byteA, final RoxByte byteB){
         final RoxWord result = RoxWord.literalFrom(byteA.getRawValue() + byteB.getRawValue() + (registers.getFlag(Registers.C)?1:0));
 
-        setFlagBasedOn(Registers.C, result.getHighByte().isBitSet(0));
+        registers.setFlagTo(Registers.C, result.getHighByte().isBitSet(0));
 
         //Set Overflow if the sign of both inputs is different from the sign of the result
         //  (a^result) & (b^result) -> bit 7 set?
@@ -33,13 +33,6 @@ public class Mos6502Alu {
 //            registers.setFlag(Registers.V);
 
         return result.getLowByte();
-    }
-
-    private void setFlagBasedOn(int flagId, boolean condition){
-        if (condition)
-            registers.setFlag(flagId);
-        else
-            registers.clearFlag(flagId);
     }
 
     /**

@@ -16,10 +16,7 @@ class Mos6502AluSpec extends Specification {
         final RoxByte b = RoxByte.literalFrom(operandB)
 
         and: 'The carry status is setup beforehand'
-        if (carryIn)
-            registers.setFlag(Registers.C)
-        else
-            registers.clearFlag(Registers.C)
+        registers.setFlagTo(Registers.C, carryIn)
 
         when: 'The numbers are added'
         final RoxByte result = alu.add(a,b)
