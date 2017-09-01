@@ -1,5 +1,6 @@
 package com.rox.emu.processor.mos6502;
 
+import com.rox.emu.env.RoxByte;
 import com.rox.emu.mem.Memory;
 import com.rox.emu.processor.mos6502.op.OpCode;
 import org.slf4j.Logger;
@@ -20,6 +21,7 @@ public class Mos6502 {
 
     private final Memory memory;
     private final Registers registers = new Registers();
+    private final Mos6502Alu alu = new Mos6502Alu(registers);
 
     /** The bit set on a word when a byte has carried up */
     public static final int CARRY_INDICATOR_BIT = 0x100;
@@ -1053,14 +1055,14 @@ public class Mos6502 {
     }
 
     private int performADC(int byteValueA, int byteValueB){
-        int carry = (registers.getFlag(C) ? 1 : 0);
-        return (adc(byteValueA, byteValueB + carry) & 0xFF);
+        return alu.add(RoxByte.literalFrom(byteValueA), RoxByte.literalFrom(byteValueB)).getRawValue();
     }
 
     private int performSBC(int byteValueA, int byteValueB){
         registers.setFlag(N);
         int borrow = (registers.getFlag(C) ? 0 : 1);
         int byteValueBAndBorrow = twosComplimentOf(byteValueB + borrow);
+
         return adc(byteValueA, byteValueBAndBorrow) & 0xFF;
     }
 
@@ -1068,6 +1070,7 @@ public class Mos6502 {
         int statusState = registers.getRegister(REG_STATUS);
 
         int result = adc(a,b);
+        //int result = alu.add(RoxByte.literalFrom(a), RoxByte.literalFrom(b)).getRawValue();
 
         registers.setRegister(REG_STATUS, statusState);
         return result;
