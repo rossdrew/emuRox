@@ -7,7 +7,7 @@ import spock.lang.Unroll
 class Mos6502AluSpec extends Specification {
     @Unroll
     def "ADD (#description): #operandA + #operandB = #expectedValue"(){
-        given:
+        given: 'A processor setup'
         final Registers registers = new Registers()
         final Mos6502Alu alu = new Mos6502Alu(registers)
 
@@ -15,11 +15,11 @@ class Mos6502AluSpec extends Specification {
         final RoxByte a = RoxByte.literalFrom(operandA)
         final RoxByte b = RoxByte.literalFrom(operandB)
 
-        and: 'The carry status is setup beforehand'
+        and: 'The status flags are setup beforehand'
+        for (int i=0; i<8; i++) registers.setFlagTo(i, false)
         registers.setFlagTo(Registers.C, carryIn)
-        registers.setFlagTo(Registers.V, false)
 
-        when: 'The numbers are added'
+        when: 'The operation is performed'
         final RoxByte result = alu.add(a,b)
 
         then: 'The values and flags are as expected'
