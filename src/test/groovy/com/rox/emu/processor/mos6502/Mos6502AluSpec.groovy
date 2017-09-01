@@ -15,24 +15,33 @@ class Mos6502AluSpec extends Specification {
         final RoxByte a = RoxByte.literalFrom(operandA)
         final RoxByte b = RoxByte.literalFrom(operandB)
 
-        when:
+        and: 'The carry status is setup beforehand'
+        if (carryIn)
+            registers.setFlag(Registers.C)
+        else
+            registers.clearFlag(Registers.C)
+
+        when: 'The numbers are added'
         final RoxByte result = alu.add(a,b)
 
-        then:
+        then: 'The values and flags are as expected'
         expectedResult == result.rawValue
         expectedValue == result.asInt
+        registers.getFlag(Registers.C) == carryOut
 
         where:
-        operandA   | operandB   || expectedResult | expectedValue | description
-        0          | 0          || 0              | 0             | "No change"
-        1          | 1          || 2              | 2             | "Simple addition"
-        0          | 1          || 1              | 1             | "Left hand zero addition"
-        1          | 0          || 1              | 1             | "Right hand zero addition"
-        127        | 1          || 128            | -128          | "Signed Overflow"
-        0b11111111 | 1          || 0              | 0             | "Signed negative to zero"
-        0b11111111 | 10         || 9              | 9             | "Signed negative to positive"
-        0b10000000 | 1          || 0b10000001     | -127          | "Positive addition to negative"
-        1          | 0b11111111 || 0              | 0             | "Negative addition to positive"
+        operandA   | operandB   | carryIn || expectedResult | expectedValue | carryOut | description
+        0          | 0          | false   || 0              | 0             | false    | "No change"
+        1          | 1          | false   || 2              | 2             | false    | "Simple addition"
+        0          | 1          | false   || 1              | 1             | false    | "Left hand zero addition"
+        1          | 0          | false   || 1              | 1             | false    | "Right hand zero addition"
+        127        | 1          | false   || 128            | -128          | false    | "Signed Overflow"
+        0b11111111 | 1          | false   || 0              | 0             | true     | "Signed negative to zero"
+        0b11111111 | 10         | false   || 9              | 9             | true     | "Signed negative to positive"
+        0b10000000 | 1          | false   || 0b10000001     | -127          | false    | "Positive addition to negative"
+        1          | 0b11111111 | false   || 0              | 0             | true     | "Negative addition to positive"
+        0          | 0          | true    || 1              | 1             | false    | "Carry in"
+        0x50       | 0xD0       | false   || 0x20           | 32            | true     | "Carry out"
     }
 
     @Unroll

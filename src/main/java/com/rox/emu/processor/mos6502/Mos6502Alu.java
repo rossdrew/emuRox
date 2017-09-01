@@ -3,8 +3,6 @@ package com.rox.emu.processor.mos6502;
 import com.rox.emu.env.RoxByte;
 import com.rox.emu.env.RoxWord;
 
-import static com.rox.emu.processor.mos6502.Registers.V;
-
 /**
  * Arithmetic Logic Unit for a {@link Mos6502}.<br/>
  * <br/>
@@ -24,21 +22,24 @@ public class Mos6502Alu {
      * @return the result of the ADD operation
      */
     public RoxByte add(final RoxByte byteA, final RoxByte byteB){
-        final RoxWord result = RoxWord.literalFrom(byteA.getRawValue() + byteB.getRawValue());
+        final RoxWord result = RoxWord.literalFrom(byteA.getRawValue() + byteB.getRawValue() + (registers.getFlag(Registers.C)?1:0));
 
-        //Set Carry, if bit 8 is set on new accumulator value, ignoring in 2s compliment addition (subtraction)
-//        if (result.getHighByte().isBitSet(0))
-//            registers.setFlag(Registers.STATUS_FLAG_CARRY);
-//        else
-//            registers.clearFlag(Registers.STATUS_FLAG_CARRY);
+        setFlagBasedOn(Registers.C, result.getHighByte().isBitSet(0));
 
         //Set Overflow if the sign of both inputs is different from the sign of the result
         //  (a^result) & (b^result) -> bit 7 set?
 //        if (and(xor(byteA, result.getLowByte()),
 //                xor(byteB, result.getLowByte())).isBitSet(7))
-//            registers.setFlag(V);
+//            registers.setFlag(Registers.V);
 
         return result.getLowByte();
+    }
+
+    private void setFlagBasedOn(int flagId, boolean condition){
+        if (condition)
+            registers.setFlag(flagId);
+        else
+            registers.clearFlag(flagId);
     }
 
     /**
