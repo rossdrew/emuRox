@@ -26,11 +26,10 @@ public class Mos6502Alu {
 
         registers.setFlagTo(Registers.C, result.getHighByte().isBitSet(0));
 
-        //Set Overflow if the sign of both inputs is different from the sign of the result
-        //  (a^result) & (b^result) -> bit 7 set?
-//        if (and(xor(byteA, result.getLowByte()),
-//                xor(byteB, result.getLowByte())).isBitSet(7))
-//            registers.setFlag(Registers.V);
+        //Set Overflow if the sign of both inputs is different from the sign of the result i.e. bit 7 set on ((a^result) & (b^result))
+        if (and(xor(byteA, result.getLowByte()),
+                xor(byteB, result.getLowByte())).isBitSet(7))
+            registers.setFlag(Registers.V);
 
         return result.getLowByte();
     }
