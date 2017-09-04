@@ -22,6 +22,7 @@ public class Mos6502Alu {
      * @return the result of the ADD operation
      */
     public RoxByte add(final RoxByte byteA, final RoxByte byteB){
+        //Include SBC: (registers.getFlag(Registers.N) ? !registers.getFlag(Registers.C) : registers.getFlag(Registers.C)
         final RoxWord result = RoxWord.literalFrom(byteA.getRawValue() + byteB.getRawValue() + (registers.getFlag(Registers.C)?1:0));
 
         registers.setFlagTo(Registers.C, result.getHighByte().isBitSet(0));

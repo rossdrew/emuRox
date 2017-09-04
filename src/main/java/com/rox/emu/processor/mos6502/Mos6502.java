@@ -1064,7 +1064,7 @@ public class Mos6502 {
         int borrow = (registers.getFlag(C) ? 0 : 1);
         int byteValueBAndBorrow = twosComplimentOf(byteValueB + borrow);
 
-//        return alu.add(RoxByte.literalFrom(byteValueA), RoxByte.literalFrom(byteValueB)).getRawValue()
+//        return alu.sub(RoxByte.literalFrom(byteValueA), RoxByte.literalFrom(byteValueB)).getRawValue();
         return adc(byteValueA, byteValueBAndBorrow) & 0xFF;
     }
 
