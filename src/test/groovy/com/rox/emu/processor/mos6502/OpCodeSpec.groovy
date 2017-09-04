@@ -1371,7 +1371,7 @@ class OpCodeSpec extends Specification {
         processor.step(3)
 
         then:
-        expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
+        registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
         program.length == registers.getPC()
 		testFlags(Z,N,C,V)
     
@@ -3123,25 +3123,28 @@ class OpCodeSpec extends Specification {
     
     @Unroll("BRK #expected")
     testBRK(){
-        when:
-        loadMemoryWithProgram(BRK)
+        when: 'vector values for PC are in memory'
         memory.setByteAt(0xFFFE, newPCHi)
         memory.setByteAt(0xFFFF, newPCLo)
 
         and: 'The status register is set to a value that will be pushed to stack'
         registers.setRegister(Registers.REG_STATUS, statusReg)
     
-        and:
+        and: 'the program is executed'
+        loadMemoryWithProgram(BRK)
         processor.step(1)
     
-        then:
-        newPCHi == registers.getRegister(Registers.REG_PC_HIGH)
-        newPCLo == registers.getRegister(Registers.REG_PC_LOW)
-        0xFC == registers.getRegister(Registers.REG_SP)
+        then: 'registers now contain the expect values'
+        registers.getRegister(Registers.REG_PC_HIGH) == newPCHi
+        registers.getRegister(Registers.REG_PC_LOW) == newPCLo
+        registers.getRegister(Registers.REG_SP) == 0xFC
 
-        (statusReg | Registers.STATUS_FLAG_BREAK) == memory.getByte(0x1FD)
-        0x03 == memory.getByte(0x1FE)
-        0x00 == memory.getByte(0x1FF)
+        and: 'the pushed status register has the break flag set'
+        memory.getByte(0x1FD) == (statusReg | Registers.STATUS_FLAG_BREAK)
+
+        and: 'the pushed program counter is correct'
+        memory.getByte(0x1FE) == 0x03
+        memory.getByte(0x1FF) == 0x00
     
         //XXX Refactor to test when PC overflows to high byte before loading to stack
     

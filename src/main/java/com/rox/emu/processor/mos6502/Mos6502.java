@@ -126,6 +126,7 @@ public class Mos6502 {
         switch (opCode){
             default:
             case BRK:
+                //XXX Why do we do this at all? A program of [BRK] will push 0x03 as the PC...why is that right?
                 registers.setPC(silentADC(registers.getPC(), 2));
                 push(registers.getRegister(REG_PC_HIGH));
                 push(registers.getRegister(REG_PC_LOW));
@@ -1063,14 +1064,16 @@ public class Mos6502 {
         int borrow = (registers.getFlag(C) ? 0 : 1);
         int byteValueBAndBorrow = twosComplimentOf(byteValueB + borrow);
 
+//        return alu.add(RoxByte.literalFrom(byteValueA), RoxByte.literalFrom(byteValueB)).getRawValue()
         return adc(byteValueA, byteValueBAndBorrow) & 0xFF;
     }
 
     private int silentADC(int a, int b){
         int statusState = registers.getRegister(REG_STATUS);
 
-        int result = adc(a,b);
-        //int result = alu.add(RoxByte.literalFrom(a), RoxByte.literalFrom(b)).getRawValue();
+        //We don't want to take into account the carry here
+        registers.clearFlag(C);
+        int result = alu.add(RoxByte.literalFrom(a), RoxByte.literalFrom(b)).getRawValue();
 
         registers.setRegister(REG_STATUS, statusState);
         return result;
