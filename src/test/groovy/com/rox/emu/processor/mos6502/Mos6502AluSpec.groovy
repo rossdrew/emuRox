@@ -55,7 +55,7 @@ class Mos6502AluSpec extends Specification {
         final RoxByte b = RoxByte.literalFrom(operandB)
 
         and: 'The status flags are setup beforehand'
-        registers.setFlagTo(Registers.C, true)
+        registers.setFlag(Registers.C)
 
         when:
         final RoxByte result = alu.sub(a,b)
@@ -63,18 +63,23 @@ class Mos6502AluSpec extends Specification {
         then:
         expectedResult == result.rawValue
         expectedValue == result.asInt
-//        registers.getFlag(Registers.C) == carryOut
+  /**   registers.getFlag(Registers.C) == carryOut  0-0 and 1-0 should end with a carryOut of 1
+
+         LDA #$0
+         SEC
+         SBC #$0
+         */
 //        registers.getFlag(Registers.V) == overflow
 
         where:
-        operandA   | operandB   || expectedResult | expectedValue | description
-        0          | 0          || 0              | 0             | "No change"
-        1          | 1          || 0              | 0             | "Number minus itself"
-        10         | 9          || 1              | 1             | "Positive result"
-        0          | 1          || 0b11111111     | -1            | "Negative result"
-        0b11111111 | 1          || 0b11111110     | -2            | "Positive subtraction from a negative"
-        0b11111111 | 0b11111111 || 0              | 0             | "Negative subtraction from a negative"
-        0b10000000 | 1          || 0b01111111     | 127           | "Signed underflow "
+        operandA   | operandB   || expectedResult | expectedValue | carryOut | description
+        0          | 0          || 0              | 0             | true     | "No change"
+        1          | 1          || 0              | 0             | true     | "Number minus itself"
+        10         | 9          || 1              | 1             | true     | "Positive result"
+        0          | 1          || 0b11111111     | -1            | true     | "Negative result"
+        0b11111111 | 1          || 0b11111110     | -2            | true     | "Positive subtraction from a negative"
+        0b11111111 | 0b11111111 || 0              | 0             | true     | "Negative subtraction from a negative"
+        0b10000000 | 1          || 0b01111111     | 127           | true     | "Signed underflow "
     }
 
     @Unroll
