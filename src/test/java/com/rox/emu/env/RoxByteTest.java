@@ -138,6 +138,18 @@ public class RoxByteTest extends Specification{
     }
 
     @Property(trials = 10)
+    public void testEqualsEdgesCases(@When(satisfies = "#_ < 255 || #_ > 0") int byteValue){
+        final RoxByte valA = RoxByte.literalFrom(byteValue);
+        final RoxByte valB = RoxByte.literalFrom(byteValue);
+
+        assertTrue(valA.equals(valA));
+        assertTrue(valA.equals(valB));
+
+        assertFalse(valA.equals(null));
+        assertFalse(valA.equals("This does not match"));
+    }
+
+    @Property(trials = 10)
     public void testHashcode(@When(satisfies = "#_ < 255 || #_ > 0") int byteValue){
         final RoxByte valA = RoxByte.literalFrom(byteValue);
         final RoxByte valB = RoxByte.literalFrom(byteValue);
