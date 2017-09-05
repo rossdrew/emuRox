@@ -9,13 +9,17 @@
 
 An emulator for the [6502 processor](https://en.wikipedia.org/wiki/MOS_Technology_6502).  The plan is to evolve this into a working [NES](https://en.wikipedia.org/wiki/Nintendo_Entertainment_System) emulator so I'm developing the 6502 without BCD mode for now.  If/When I get that working, I'll expand the 6502 and move onto another 6502 system (Atari 2600, Commodore 64...) then perhaps add processors and more emulated hardware, in theory, creating a pluggable multi-emulator.
 
+##Origins
+This project came about as I wanted a larger scale project to concentrate on building readable, highly tested code that I can refactor as much as I fancy.  That would allow me to play with ticket management, CI, testing, and any other products and learn what works and and what doesn't.  
+Everytime I finish writing a section I realise that there were better ways to do it and in a commercial environment, that's accepted as technical debt and it's on to the next.  In this environment I can iterate as much as I like.
+
 ## 6502 and progress towards a working NES...
 
 After nearly 7 months of close to daily work on this, development is on a little bit of a hold.  I need some time to do proper investigation of the PPU and then some exploratory coding and design which my work/personal life isn't allowing at this moment. Should be too long before I'm back bashing at it.
 
 Any small chunks of time I get, I'm looking into improving on what's already written.  For example:-
  
-  - getting rid of java performed arithmetic (usually in `+`/`-` cases) in favor of ALU performed arithmetic (and moving to an ALU class), it's causing problems...as expected
+  - getting rid of java performed arithmetic (usually in `+`/`-` cases) in favor of ALU performed arithmetic (and moving to an ALU class)
   - compressing the data driven tests;  extracting out common patterns, etc
   - abstracting away bytes into a custom class so that I don't need workarounds for Java types
   - abstracting away the concept of a Register into an enum to clean up the code
