@@ -22,8 +22,10 @@ public class Mos6502Alu {
      * @return the result of the ADD operation
      */
     public RoxByte add(final RoxByte byteA, final RoxByte byteB){
-        //Include SBC: (registers.getFlag(Registers.N) ? !registers.getFlag(Registers.C) : registers.getFlag(Registers.C)
-        final RoxWord result = RoxWord.literalFrom(byteA.getRawValue() + byteB.getRawValue() + (registers.getFlag(Registers.C)?1:0));
+        //Carry: If Negative and Carry flags differ, then include a carry
+        int carry = (registers.getFlag(Registers.C) ^ registers.getFlag(Registers.N) ) ? 1 : 0;
+
+        final RoxWord result = RoxWord.literalFrom(byteA.getRawValue() + byteB.getRawValue() + carry);
 
         registers.setFlagTo(Registers.C, result.getHighByte().isBitSet(0));
 
@@ -43,6 +45,7 @@ public class Mos6502Alu {
      * @return the result of the SBC operation
      */
     public RoxByte sub(RoxByte byteA, RoxByte byteB) {
+        registers.setFlag(Registers.N);
         return add(byteA, byteB.inTwosCompliment());
     }
 

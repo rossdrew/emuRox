@@ -55,7 +55,7 @@ class Mos6502AluSpec extends Specification {
         final RoxByte b = RoxByte.literalFrom(operandB)
 
         and: 'The status flags are setup beforehand'
-        registers.setFlagTo(Registers.N, true) //XXX Expand tests to test subtract without negative (addition)??  or will addition cover that enough
+        registers.setFlagTo(Registers.C, true) //XXX Expand tests to test subtract without negative (addition)??  or will addition cover that enough
 
         when:
         final RoxByte result = alu.sub(a,b)

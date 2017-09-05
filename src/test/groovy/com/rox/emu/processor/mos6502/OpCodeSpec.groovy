@@ -3152,7 +3152,7 @@ class OpCodeSpec extends Specification {
         newPCHi | newPCLo | statusReg  | expected
         0x0     | 0x0     | 0b00000000 | "With empty status register and B not set"
         0x0     | 0x0     | 0b00100000 | "With empty status register and B already set"
-        0x1     | 0x1     | 0b10000101 | "With loaded status register"
+        0x1     | 0x1     | 0b00100101 | "With loaded status register"
     }
     
     @Unroll("IRQ #expected #statusValue->#pushedStatus")
