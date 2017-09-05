@@ -129,6 +129,22 @@ public class RoxByteTest extends Specification{
         }
     }
 
+    @Property(trials = 10)
+    public void testEquals(@When(satisfies = "#_ < 255 || #_ > 0") int byteValue){
+        final RoxByte valA = RoxByte.literalFrom(byteValue);
+        final RoxByte valB = RoxByte.literalFrom(byteValue);
+
+        assertTrue(valA.equals(valB));
+    }
+
+    @Property(trials = 10)
+    public void testHashcode(@When(satisfies = "#_ < 255 || #_ > 0") int byteValue){
+        final RoxByte valA = RoxByte.literalFrom(byteValue);
+        final RoxByte valB = RoxByte.literalFrom(byteValue);
+
+        assertTrue(valA.hashCode() == valB.hashCode());
+    }
+
     @Property(trials = 5)
     public void testIsBitSetInvalidChoice(@When(satisfies = "#_ < 0 || #_ > 7") int bit){
         final RoxByte myByte = RoxByte.ZERO;
