@@ -39,7 +39,7 @@ BCD and proper timing is a thing for another day as my first objective for now, 
 ## Development & Testing
 
  The plan was to develop this, a larger personal project, in a TDD (Test Driven Development) centric way.  This means writing failing tests that describe functionality then writing that functionality to make the tests pass and iteratively writing a complete application.
- This larger personal project that you are now looking at I am using to test out other technologies and resources.  Here is a list of those that I am using or have used along the way:-
+ Here is a list of those that I am using or have used along the way:-
  
  - [Trello](https://trello.com/b/ZWcFxEu3/emurox) for work breakdown and project management.
  - [Java](https://www.java.com/)/[JUnit](http://junit.org/junit4/) for basic functionality tests.  
