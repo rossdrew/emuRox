@@ -5,18 +5,23 @@ import spock.lang.Specification
 import spock.lang.Unroll
 
 class Mos6502AluSpec extends Specification {
+    private Registers registers
+    private Mos6502Alu alu
+
+    def setup(){
+        registers = new Registers()
+        for (int i=0; i<8; i++) registers.setFlagTo(i, false)
+
+        alu = new Mos6502Alu(registers)
+    }
+
     @Unroll
     def "ADD (#description): #operandA + #operandB = #expectedValue"(){
-        given: 'A processor setup'
-        final Registers registers = new Registers()
-        final Mos6502Alu alu = new Mos6502Alu(registers)
-
-        and: 'Some numbers to add'
+        given: 'Some numbers to add'
         final RoxByte a = RoxByte.literalFrom(operandA)
         final RoxByte b = RoxByte.literalFrom(operandB)
 
         and: 'The status flags are setup beforehand'
-        for (int i=0; i<8; i++) registers.setFlagTo(i, false)
         registers.setFlagTo(Registers.C, carryIn)
 
         when: 'The operation is performed'
@@ -45,13 +50,12 @@ class Mos6502AluSpec extends Specification {
 
     @Unroll
     def "SUB (#description): #operandA - #operandB = #expectedValue"(){
-        given:
-        final Registers registers = new Registers()
-        final Mos6502Alu alu = new Mos6502Alu(registers)
-
-        and: 'Some numbers to add'
+        given: 'Some numbers to subtract'
         final RoxByte a = RoxByte.literalFrom(operandA)
         final RoxByte b = RoxByte.literalFrom(operandB)
+
+        and: 'The status flags are setup beforehand'
+        registers.setFlagTo(Registers.N, true) //XXX Expand tests to test subtract without negative (addition)??  or will addition cover that enough
 
         when:
         final RoxByte result = alu.sub(a,b)
@@ -59,6 +63,8 @@ class Mos6502AluSpec extends Specification {
         then:
         expectedResult == result.rawValue
         expectedValue == result.asInt
+//        registers.getFlag(Registers.C) == carryOut
+//        registers.getFlag(Registers.V) == overflow
 
         where:
         operandA   | operandB   || expectedResult | expectedValue | description
@@ -73,11 +79,7 @@ class Mos6502AluSpec extends Specification {
 
     @Unroll
     def "OR (#description): #operandA | #operandB = #expectedValue"(){
-        given:
-        final Registers registers = new Registers()
-        final Mos6502Alu alu = new Mos6502Alu(registers)
-
-        and: 'Some numbers to add'
+        given: 'Some numbers to or'
         final RoxByte a = RoxByte.literalFrom(operandA)
         final RoxByte b = RoxByte.literalFrom(operandB)
 
@@ -98,11 +100,7 @@ class Mos6502AluSpec extends Specification {
 
     @Unroll
     def "AND (#description): #operandA & #operandB = #expectedValue"(){
-        given:
-        final Registers registers = new Registers()
-        final Mos6502Alu alu = new Mos6502Alu(registers)
-
-        and: 'Some numbers to add'
+        given: 'Some numbers to and'
         final RoxByte a = RoxByte.literalFrom(operandA)
         final RoxByte b = RoxByte.literalFrom(operandB)
 
@@ -126,11 +124,7 @@ class Mos6502AluSpec extends Specification {
 
     @Unroll
     def "XOR (#description): #operandA ^ #operandB = #expectedValue"(){
-        given:
-        final Registers registers = new Registers()
-        final Mos6502Alu alu = new Mos6502Alu(registers)
-
-        and: 'Some numbers to add'
+        given: 'Some numbers to xor'
         final RoxByte a = RoxByte.literalFrom(operandA)
         final RoxByte b = RoxByte.literalFrom(operandB)
 
