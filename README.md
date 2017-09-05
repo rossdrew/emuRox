@@ -9,7 +9,7 @@
 
 An emulator for the [6502 processor](https://en.wikipedia.org/wiki/MOS_Technology_6502).  The plan is to evolve this into a working [NES](https://en.wikipedia.org/wiki/Nintendo_Entertainment_System) emulator so I'm developing the 6502 without BCD mode for now.  If/When I get that working, I'll expand the 6502 and move onto another 6502 system (Atari 2600, Commodore 64...) then perhaps add processors and more emulated hardware, in theory, creating a pluggable multi-emulator.
 
-##Origins
+## Origins
 This project came about as I wanted a larger scale project to concentrate on building readable, highly tested code that I can refactor as much as I fancy.  That would allow me to play with ticket management, CI, testing, and any other products and learn what works and and what doesn't.  
 Everytime I finish writing a section I realise that there were better ways to do it and in a commercial environment, that's accepted as technical debt and it's on to the next.  In this environment I can iterate as much as I like.
 
