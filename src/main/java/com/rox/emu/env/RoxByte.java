@@ -157,7 +157,7 @@ public final class RoxByte {
 
         RoxByte roxByte = (RoxByte) o;
 
-        return (byteValue == roxByte.byteValue);
+        return (byteValue == roxByte.getRawValue());
     }
 
     @Override
