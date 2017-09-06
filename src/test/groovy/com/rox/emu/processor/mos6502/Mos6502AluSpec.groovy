@@ -63,7 +63,8 @@ class Mos6502AluSpec extends Specification {
         then:
         expectedResult == result.rawValue
         expectedValue == result.asInt
-  /**   registers.getFlag(Registers.C) == carryOut  0-0 and 1-0 should end with a carryOut of 1
+  /**   registers.getFlag(Registers.C) == carryOut
+         0-0 and 1-0 should end with a carryOut of 1 but our adc operation sets carry or clears it
 
          LDA #$0
          SEC

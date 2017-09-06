@@ -684,6 +684,9 @@ class OpCodeSpec extends Specification {
                                                 ADC_I, highSecondByte)
 
         and:
+        registers.clearFlag(Registers.C)
+
+        and:
         processor.step(6)
 
         then:
@@ -691,9 +694,31 @@ class OpCodeSpec extends Specification {
         program.length == registers.getPC()
 		testFlags(Z,N,C,O)
         storedValue == memory.getByte(40)
-    
+
+        /**
+         This should result in an Accumulator of 01 with no flags set
+
+         CLC
+         LDA #$50
+         ADC #$D0
+         STA $40
+         LDA #$0
+         ADC #$0
+
+         same with (with 02 in Accumulator)
+
+         CLC
+         LDA #$50
+         ADC #$D3
+         STA $40
+         LDA #$0
+         ADC #$1
+
+         C is being set in both
+         */
+
         where:
-        lowFirstByte | lowSecondByte | highFirstByte | highSecondByte | expectedAccumulator | storedValue | Z     | N     | C     | O     | Expected
+        lowFirstByte | lowSecondByte | highFirstByte | highSecondByte | expectedAccumulator         | storedValue | Z     | N     | C     | O     | Expected
         0            | 0             | 0             | 0              | 0                           | 0           | true  | false | false | false | "With zero result"
         0x50         | 0xD0          | 0             | 0              | 1                           | 0x20        | false | false | false | false | "With simple carry to high byte"
         0x50         | 0xD3          | 0             | 1              | 2                           | 0x23        | false | false | false | false | "With carry to high byte and changed high"
