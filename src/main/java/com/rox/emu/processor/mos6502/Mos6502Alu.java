@@ -21,7 +21,7 @@ public class Mos6502Alu {
      *
      * @return the result of the ADD operation
      */
-    public RoxByte add(final RoxByte byteA, final RoxByte byteB){
+    public RoxByte adc(final RoxByte byteA, final RoxByte byteB){
         //Carry: If Negative and Carry flags differ, then include a carry
         int carry = (registers.getFlag(Registers.C) ^ registers.getFlag(Registers.N) ) ? 1 : 0;
 
@@ -42,13 +42,13 @@ public class Mos6502Alu {
     /**
      * Perform an SBC of <code>byteA SBC byteB</code><br/>
      * <br/>
-     * This is effectively an {@link #add} operation with <code>byteB</code> converted to it's twos compliment
+     * This is effectively an {@link #adc} operation with <code>byteB</code> converted to it's twos compliment
      *
      * @return the result of the SBC operation
      */
-    public RoxByte sub(RoxByte byteA, RoxByte byteB) {
+    public RoxByte sbc(RoxByte byteA, RoxByte byteB) {
         registers.setFlag(Registers.N);
-        return add(byteA, byteB.inTwosCompliment());
+        return adc(byteA, byteB.inTwosCompliment());
     }
 
     public RoxByte or(RoxByte byteA, RoxByte byteB) {

@@ -1056,7 +1056,7 @@ public class Mos6502 {
     }
 
     private int performADC(int byteValueA, int byteValueB){
-        return alu.add(RoxByte.literalFrom(byteValueA), RoxByte.literalFrom(byteValueB)).getRawValue();
+        return alu.adc(RoxByte.literalFrom(byteValueA), RoxByte.literalFrom(byteValueB)).getRawValue();
     }
 
     private int performSBC(int byteValueA, int byteValueB){
@@ -1073,7 +1073,7 @@ public class Mos6502 {
 
         //We don't want to take into account the carry here
         registers.clearFlag(C);
-        int result = alu.add(RoxByte.literalFrom(a), RoxByte.literalFrom(b)).getRawValue();
+        int result = alu.adc(RoxByte.literalFrom(a), RoxByte.literalFrom(b)).getRawValue();
 
         registers.setRegister(REG_STATUS, statusState);
         return result;

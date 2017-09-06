@@ -25,7 +25,7 @@ class Mos6502AluSpec extends Specification {
         registers.setFlagTo(Registers.C, carryIn)
 
         when: 'The operation is performed'
-        final RoxByte result = alu.add(a,b)
+        final RoxByte result = alu.adc(a, b)
 
         then: 'The values and flags are as expected'
         expectedResult == result.rawValue
@@ -58,13 +58,14 @@ class Mos6502AluSpec extends Specification {
         registers.setFlag(Registers.C)
 
         when:
-        final RoxByte result = alu.sub(a,b)
+        final RoxByte result = alu.sbc(a, b)
 
         then:
         expectedResult == result.rawValue
         expectedValue == result.asInt
-  /**   registers.getFlag(Registers.C) == carryOut
-         0-0 and 1-0 should end with a carryOut of 1 but our adc operation sets carry or clears it
+//        registers.getFlag(Registers.C) == carryOut
+/**      0-0 and 1-0 should end with a carryOut of 1 but our adc operation sets carry or clears it
+ *          The new method works btu doesn't work with old tests
 
          LDA #$0
          SEC
