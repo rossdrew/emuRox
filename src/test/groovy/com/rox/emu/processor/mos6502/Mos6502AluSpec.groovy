@@ -50,16 +50,16 @@ class Mos6502AluSpec extends Specification {
     }
 
     @Unroll
-    def "Expected value for: #valA + #valB"(){
+    def "Expected value for: #randomValueA + #randomValueB"(){
         when: 'we add two random numbers'
         final RoxByte result = alu.adc(RoxByte.literalFrom(randomValueA),
                                        RoxByte.literalFrom(randomValueB))
 
-        and: 'the expected result is'
-        final int expected = randomValueA + randomValueB
+        and: 'the expected (one byte) result is'
+        final int expected = ((randomValueA + randomValueB) & 0xFF)
 
         then: 'the one byte result should be'
-        result.getRawValue() == (expected & 0xFF)
+        result.getRawValue() == expected
 
         where: 'we grab 100 sets of random numbers in byte range'
         randomValueA << Gen.integer(0..255).iterator().take(100)
