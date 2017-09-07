@@ -10,6 +10,7 @@ apply plugin: 'application'
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 
 dependencies {
@@ -20,6 +21,7 @@ dependencies {
     testCompile group: 'org.quicktheories', name: 'quicktheories', version: '0.13'
     testCompile group: 'com.pholser', name: 'junit-quickcheck-core', version: '0.8-alpha-3'
     testCompile group: 'com.pholser', name: 'junit-quickcheck-generators', version: '0.8-alpha-3'
+    testCompile group: 'com.nagternal', name : 'spock-genesis', version: '0.6.0'
 
     compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.6.1'
 }

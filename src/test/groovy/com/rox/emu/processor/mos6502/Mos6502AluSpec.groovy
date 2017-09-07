@@ -1,6 +1,7 @@
 package com.rox.emu.processor.mos6502
 
 import com.rox.emu.env.RoxByte
+import spock.genesis.Gen
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -49,7 +50,24 @@ class Mos6502AluSpec extends Specification {
     }
 
     @Unroll
-    def "SUB (#description): #operandA - #operandB = #expectedValue"(){
+    def "Expected value for: #valA + #valB"(){
+        when: 'we add two random numbers'
+        final RoxByte result = alu.adc(RoxByte.literalFrom(valA),
+                                       RoxByte.literalFrom(valB))
+
+        and: 'the expected result is'
+        final int expected = valA + valB
+
+        then: 'the one byte result should be'
+        result.getRawValue() == (expected & 0xFF)
+
+        where: 'we grab 100 sets of random numbers in byte range'
+        valA << Gen.integer(0..255).iterator().take(100)
+        valB << Gen.integer(0..255).iterator().take(100)
+    }
+
+    @Unroll
+    def "SBC (#description): #operandA - #operandB = #expectedValue"(){
         given: 'Some numbers to subtract'
         final RoxByte a = RoxByte.literalFrom(operandA)
         final RoxByte b = RoxByte.literalFrom(operandB)
