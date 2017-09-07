@@ -9,6 +9,8 @@ class Mos6502AluSpec extends Specification {
     private Registers registers
     private Mos6502Alu alu
 
+    private static final int RANDOM_ITERATIONS = 10
+
     def setup(){
         registers = new Registers()
         for (int i=0; i<8; i++) registers.setFlagTo(i, false)
@@ -103,6 +105,26 @@ class Mos6502AluSpec extends Specification {
     }
 
     @Unroll
+    def "Expected value for: #randomValueA - #randomValueB"(){
+        when: 'The status flags are setup beforehand'
+        registers.setFlag(Registers.C)
+
+        and: 'we subtract a number from another'
+        final RoxByte result = alu.sbc(RoxByte.literalFrom(randomValueA),
+                                       RoxByte.literalFrom(randomValueB))
+
+        and: 'the expected (one byte) result is'
+        final int expected = ((randomValueA - randomValueB) & 0xFF)
+
+        then: 'the one byte result should be'
+        result.getRawValue() == expected
+
+        where: 'we grab n sets of random numbers in byte range'
+        randomValueA << Gen.integer(0..255).iterator().take(RANDOM_ITERATIONS)
+        randomValueB << Gen.integer(0..255).iterator().take(RANDOM_ITERATIONS)
+    }
+
+    @Unroll
     def "OR (#description): #operandA | #operandB = #expectedValue"(){
         given: 'Some numbers to or'
         final RoxByte a = RoxByte.literalFrom(operandA)
@@ -121,6 +143,23 @@ class Mos6502AluSpec extends Specification {
         1          | 0          || 1              | 1             | "Basic change"
         0b10101010 | 0b01010101 || 0b11111111     | -1            | "Full bit merge"
         0b11110000 | 0b00111100 || 0b11111100     | -4            | "Overlapping bit merge"
+    }
+
+    @Unroll
+    def "Expected value for: #randomValueA OR #randomValueB"(){
+        when: 'we OR two random numbers'
+        final RoxByte result = alu.or(RoxByte.literalFrom(randomValueA),
+                                      RoxByte.literalFrom(randomValueB))
+
+        and: 'the expected (one byte) result is'
+        final int expected = ((randomValueA | randomValueB) & 0xFF)
+
+        then: 'the one byte result should be'
+        result.getRawValue() == expected
+
+        where: 'we grab n sets of random numbers in byte range'
+        randomValueA << Gen.integer(0..255).iterator().take(RANDOM_ITERATIONS)
+        randomValueB << Gen.integer(0..255).iterator().take(RANDOM_ITERATIONS)
     }
 
     @Unroll
@@ -148,6 +187,23 @@ class Mos6502AluSpec extends Specification {
     }
 
     @Unroll
+    def "Expected value for: #randomValueA AND #randomValueB"(){
+        when: 'we AND two random numbers'
+        final RoxByte result = alu.and(RoxByte.literalFrom(randomValueA),
+                                       RoxByte.literalFrom(randomValueB))
+
+        and: 'the expected (one byte) result is'
+        final int expected = ((randomValueA & randomValueB) & 0xFF)
+
+        then: 'the one byte result should be'
+        result.getRawValue() == expected
+
+        where: 'we grab n sets of random numbers in byte range'
+        randomValueA << Gen.integer(0..255).iterator().take(RANDOM_ITERATIONS)
+        randomValueB << Gen.integer(0..255).iterator().take(RANDOM_ITERATIONS)
+    }
+
+    @Unroll
     def "XOR (#description): #operandA ^ #operandB = #expectedValue"(){
         given: 'Some numbers to xor'
         final RoxByte a = RoxByte.literalFrom(operandA)
@@ -169,5 +225,22 @@ class Mos6502AluSpec extends Specification {
         0b11111111 | 0b10101010 || 0b01010101     | 85            | "Alternating bits matching"
         0b11111111 | 0b11111111 || 0b00000000     | 0             | "ALL bits matching"
         0b01010101 | 0b10101010 || 0b11111111     | -1            | "Consummate bits"
+    }
+
+    @Unroll
+    def "Expected value for: #randomValueA XOR #randomValueB"(){
+        when: 'we XOR two random numbers'
+        final RoxByte result = alu.xor(RoxByte.literalFrom(randomValueA),
+                                       RoxByte.literalFrom(randomValueB))
+
+        and: 'the expected (one byte) result is'
+        final int expected = ((randomValueA ^ randomValueB) & 0xFF)
+
+        then: 'the one byte result should be'
+        result.getRawValue() == expected
+
+        where: 'we grab n sets of random numbers in byte range'
+        randomValueA << Gen.integer(0..255).iterator().take(RANDOM_ITERATIONS)
+        randomValueB << Gen.integer(0..255).iterator().take(RANDOM_ITERATIONS)
     }
 }
