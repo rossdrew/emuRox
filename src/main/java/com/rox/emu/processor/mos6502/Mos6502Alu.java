@@ -27,8 +27,10 @@ public class Mos6502Alu {
 
         final RoxWord result = RoxWord.literalFrom(byteA.getRawValue() + byteB.getRawValue() + carry);
 
+        //Works with ALU code
 //        if (result.getHighByte().isBitSet(0))
 //            registers.setFlag(Registers.C);
+        //Works with "legacy"
         registers.setFlagTo(Registers.C, result.getHighByte().isBitSet(0));
 
         //Set Overflow if the sign of both inputs is different from the sign of the result i.e. bit 7 set on ((a^result) & (b^result))

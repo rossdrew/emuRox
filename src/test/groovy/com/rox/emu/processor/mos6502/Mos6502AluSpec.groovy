@@ -75,15 +75,15 @@ class Mos6502AluSpec extends Specification {
         final RoxByte b = RoxByte.literalFrom(operandB)
 
         and: 'The status flags are setup beforehand'
-        registers.setFlag(Registers.C)
+        registers.setFlag(Registers.C) //Carry needs to be set before an SBC operation
 
         when:
-        final RoxByte result = alu.sbc(a, b)
+        final RoxByte result = alu.sbc(a, b) //TODO The carry going into this operation for 0 based operations isn't there
 
         then:
         expectedResult == result.rawValue
         expectedValue == result.asInt
-//        registers.getFlag(Registers.C) == carryOut
+   //     registers.getFlag(Registers.C) == carryOut
 /**      0-0 and 1-0 should end with a carryOut of 1 but our adc operation sets carry or clears it
  *          The new method works btu doesn't work with old tests
 
