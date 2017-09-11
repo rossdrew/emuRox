@@ -50,7 +50,9 @@ class Mos6502AluSpec extends Specification {
         0          | 0          | true    || 1              | 1             | false    | false    | "Carry in"
         0x50       | 0xD0       | false   || 0x20           | 32            | true     | false    | "Carry out"
         0x50       | 0xCF       | true    || 0x20           | 32            | true     | false    | "Carry in, carry out"
-
+        //TODO carry in and overflow
+        //TODO carry out and overflow
+        //TODO carry in, carry out and overflow
     }
 
     @Unroll
