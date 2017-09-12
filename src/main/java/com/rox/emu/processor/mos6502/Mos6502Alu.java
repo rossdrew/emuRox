@@ -53,14 +53,23 @@ public class Mos6502Alu {
         return adc(byteA, byteB.inTwosCompliment());
     }
 
+    /**
+     * @return the result of <code>byteA OR byteB</code><br/>
+     */
     public RoxByte or(RoxByte byteA, RoxByte byteB) {
         return RoxByte.literalFrom(byteA.getRawValue() | byteB.getRawValue());
     }
 
+    /**
+     * @return the result of <code>byteA AND byteB</code><br/>
+     */
     public RoxByte and(RoxByte byteA, RoxByte byteB) {
         return RoxByte.literalFrom(byteA.getRawValue() & byteB.getRawValue());
     }
 
+    /**
+     * @return the result of <code>byteA XOR byteB</code><br/>
+     */
     public RoxByte xor(RoxByte byteA, RoxByte byteB) {
         return RoxByte.literalFrom(byteA.getRawValue() ^ byteB.getRawValue());
     }
