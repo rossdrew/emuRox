@@ -19,7 +19,7 @@ class Mos6502AluSpec extends Specification {
     }
 
     @Unroll
-    def "ADD (#description): #operandA + #operandB = #expectedValue"(){
+    def "ADC (#description): #operandA + #operandB = #expectedValue"(){
         given: 'Some numbers to add'
         final RoxByte a = RoxByte.literalFrom(operandA)
         final RoxByte b = RoxByte.literalFrom(operandB)
