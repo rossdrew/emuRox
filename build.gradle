@@ -55,6 +55,8 @@ jacocoTestReport {
 
 pitest {
     excludedClasses = ['com.rox.emu.processor.mos6502.dbg.ui.*']
+    outputFormats = ['XML']
+    timestampedReports = false
 }
 
 task runDebugUI(type: JavaExec, group: 'application') {
