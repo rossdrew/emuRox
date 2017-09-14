@@ -1,4 +1,5 @@
 import web
+from urllib.request import urlretrieve
 from xml.dom import minidom
 
 titleString = "Pitest Statistics Extractor"
@@ -38,6 +39,7 @@ print ("\tKilled/Survived: ", killed, "/", survived)
 urls = ()
 
 urls += ('/report(.*)', 'report')
+urls += ('/shield(.*)', 'shield')
 
 
 ################ Endpoints #######################
@@ -45,13 +47,32 @@ urls += ('/report(.*)', 'report')
 #Default
 urls += ('/(.*)', 'index')
 
+##
+##TODO badge endpoint
+## https://img.shields.io/badge/mutation_converage-86%25-orange.svg?style=plastic
+
 class index:        
     def GET(self, name):
     	return titleString + " " + versionString
 
+class shield:
+	def GET(self, name):
+		statsFile = open("mostRecent.stats", "r")
+		lastResultString = statsFile.read()
+		statsFile.close()
+
+		lastResults = lastResultString.split(",")
+
+		web.header("Content-Type", 'image/svg+xml;charset=utf-8')
+		
+		web.redirect("https://img.shields.io/badge/mutation_converage-86%25-orange.svg?style=plastic", 200)
+
+		return file
+
+
 class report:        
     def GET(self, name):
-    	"""rest endpoint that show the most recent result"""
+    	"""REST endpoint that show the most recent result"""
     	statsFile = open("mostRecent.stats", "r")
     	lastResultString = statsFile.read()
     	statsFile.close()
@@ -71,7 +92,7 @@ class report:
     	return xmlDoc
 
     def POST(self, name):
-    	"""rest endpoint that accept the XML, adds the results to a history"""
+    	"""RETS endpoint that accept the XML, adds the results to a history"""
     	xmldoc = web.data()
     	##save last input to file
     	resultsFile = open("mostRecent.result", "w")
