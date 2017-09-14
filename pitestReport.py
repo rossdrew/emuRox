@@ -65,12 +65,18 @@ class report:
     	web.header('x-pitest-mutations-no-coverage', lastResults[3]) 
     	web.header('x-pitest-mutations-timed-out', lastResults[4]) 
 
-    	return
+    	resultsFile = open("mostRecent.result", "r")
+    	xmlDoc = resultsFile.read()
+    	resultsFile.close()
+    	return xmlDoc
 
     def POST(self, name):
     	"""rest endpoint that accept the XML, adds the results to a history"""
     	xmldoc = web.data()
-    	##TODO save last input to file
+    	##save last input to file
+    	resultsFile = open("mostRecent.result", "w")
+    	resultsFile.write(str(xmldoc))
+    	resultsFile.close()
 
     	##save stats to file
     	mutations, killed, survived, no_coverage, timed_out = extractPitestStatistics(xmldoc)
