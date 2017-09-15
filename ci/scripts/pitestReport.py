@@ -58,7 +58,6 @@ class index:
 
 class shield:
     def GET(self,name):
-        ##TODO get some real data for here
         statsFile = open("mostRecent.stats", "r")
         lastResultString = statsFile.read()
         statsFile.close()
