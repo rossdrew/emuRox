@@ -1,15 +1,20 @@
 import web
-from urllib.request import urlretrieve
+from urllib.request import Request, urlopen
 from xml.dom import minidom
 
 titleString = "Pitest Statistics Extractor"
 versionString = "v0.01"
 
+mutationsFile = '../../build/reports/pitest/mutations.xml'
+
 print (titleString, versionString)
+
+def getPercentage(mutations, killed):
+    return round(((int(killed) / int(mutations)) * 100), 2)
 
 def extractPitestStatistics(xmlString):
 	"""Given  an XML string that represents Pitest output.  Extract out the statistics"""
-	xmldoc = minidom.parse('./build/reports/pitest/mutations.xml')
+	xmldoc = minidom.parse(mutationsFile)
 	mutationList = xmldoc.getElementsByTagName('mutation')
 
 	mutations = len(mutationList)
@@ -31,8 +36,8 @@ def extractPitestStatistics(xmlString):
 	
 	return mutations, killed, survived, no_coverage, timed_out
 
-mutations, killed, survived, no_coverage, timed_out = extractPitestStatistics("./build/reports/pitest/mutations.xml")
-print ("RESULTS:")
+mutations, killed, survived, no_coverage, timed_out = extractPitestStatistics(mutationsFile)
+print ("RESULTS (" + str(getPercentage(mutations, killed)) + "%):")
 print ("\tMutations: ", mutations, "(of which", (mutations-no_coverage), "are covered and", timed_out, "timed out)")
 print ("\tKilled/Survived: ", killed, "/", survived)
 
@@ -47,28 +52,42 @@ urls += ('/shield(.*)', 'shield')
 #Default
 urls += ('/(.*)', 'index')
 
-##
-##TODO badge endpoint
-## https://img.shields.io/badge/mutation_converage-86%25-orange.svg?style=plastic
-
 class index:        
     def GET(self, name):
     	return titleString + " " + versionString
 
 class shield:
-	def GET(self, name):
-		statsFile = open("mostRecent.stats", "r")
-		lastResultString = statsFile.read()
-		statsFile.close()
+    def GET(self,name):
+        ##TODO get some real data for here
+        statsFile = open("mostRecent.stats", "r")
+        lastResultString = statsFile.read()
+        statsFile.close()
+        lastResults = lastResultString.split(",")
+        mutations = lastResults[0]
+        killed = lastResults[1]
+        survived = lastResults[2]
+        no_coverage = lastResults[3]
+        timed_out = lastResults[4]
 
-		lastResults = lastResultString.split(",")
+        percentageKilled = getPercentage(mutations, killed)
 
-		web.header("Content-Type", 'image/svg+xml;charset=utf-8')
-		
-		web.redirect("https://img.shields.io/badge/mutation_converage-86%25-orange.svg?style=plastic", 200)
+        color = 'lightgrey'
+        if percentageKilled > 95:
+            color = 'brightgreen'
+        elif percentageKilled > 90:
+            color = 'green'
+        elif percentageKilled > 80:
+            color = 'yellowgreen'
+        elif percentageKilled > 70:
+            color = 'orange'
+        else:
+            color = 'red'
 
-		return file
-
+        #to fool the web scraper watcher
+        shieldRequest = Request('https://img.shields.io/badge/mutation_converage-' + str(percentageKilled) + '%25-' + color + '.svg?style=plastic', headers={'User-Agent': 'Mozilla/5.0'})
+        shieldResource = urlopen(shieldRequest).read()
+        web.header('content-type', 'image/svg+xml;charset=utf-8') 
+        return shieldResource
 
 class report:        
     def GET(self, name):
