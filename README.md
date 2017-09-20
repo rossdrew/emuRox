@@ -1,6 +1,7 @@
 [![License](https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000)](https://opensource.org/licenses/MIT) 
 [![Build Status](https://travis-ci.org/rossdrew/emuRox.svg?branch=master)](https://travis-ci.org/rossdrew/emuRox)
 [![Codecov](https://codecov.io/gh/rossdrew/emuRox/branch/master/graph/badge.svg)](https://codecov.io/gh/rossdrew/emuRox)
+[![Pitest](http://rossdrew.pythonanywhere.com/shield)](http://rossdrew.pythonanywhere.com/report)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/519fed1cf9c64216a0c9992eed25a36f)](https://www.codacy.com/app/rossdrew/emuRox?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=rossdrew/emuRox&amp;utm_campaign=Badge_Grade)
 [![Beerpay](https://beerpay.io/rossdrew/emuRox/badge.svg?style=beer-square)](https://beerpay.io/rossdrew/emuRox)
 [![Beerpay](https://beerpay.io/rossdrew/emuRox/make-wish.svg?style=flat-square)](https://beerpay.io/rossdrew/emuRox?focus=wish)
