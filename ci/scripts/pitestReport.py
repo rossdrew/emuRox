@@ -85,7 +85,7 @@ class shield:
             color = 'red'
 
         #to fool the web scraper watcher
-        shieldRequest = Request('https://img.shields.io/badge/mutation_converage-' + str(percentageKilled) + '%25-' + color + '.svg?style=plastic', headers={'User-Agent': 'Mozilla/5.0'})
+        shieldRequest = Request('https://img.shields.io/badge/Pitest-' + str(percentageKilled) + '%25-' + color + '.svg?style=flat', headers={'User-Agent': 'Mozilla/5.0'})
         shieldResource = urlopen(shieldRequest).read()
         web.header('content-type', 'image/svg+xml;charset=utf-8')
         return shieldResource
