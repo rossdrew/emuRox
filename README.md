@@ -83,3 +83,7 @@ Found my project interesting or used it in some way?  Contribute by showing your
 Or even [make a feature suggestion](https://beerpay.io/rossdrew/emuRox?focus=wish) if you are so inclined.
 
 Lastly, feel free to volunteer solutions, fixes, improvements, pull requests, documentation, technology suggestions.  If you are a JavaFX/Swing guru, I'd love to see a better UI on this.  Just note that I'm trying to make this, as well as a working project, a highly tested, nice codebase to work on.
+
+## Image
+
+EmuRox chip image by [Søren Siebuhr](http://sorensiebuhr.dk/)
