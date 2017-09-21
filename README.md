@@ -7,6 +7,7 @@
 [![Beerpay](https://beerpay.io/rossdrew/emuRox/make-wish.svg?style=flat-square)](https://beerpay.io/rossdrew/emuRox?focus=wish)
 
 <table cols="2">
+ <col width="155">
  <tr>
   <td>
    <a href="http://sorensiebuhr.dk/">
