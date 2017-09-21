@@ -6,7 +6,9 @@
 [![Beerpay](https://beerpay.io/rossdrew/emuRox/badge.svg?style=beer-square)](https://beerpay.io/rossdrew/emuRox)
 [![Beerpay](https://beerpay.io/rossdrew/emuRox/make-wish.svg?style=flat-square)](https://beerpay.io/rossdrew/emuRox?focus=wish)
 
-<img src="https://github.com/rossdrew/rossdrew.github.io/blob/master/src/img/EmuRox.png" data-canonical-src="https://github.com/rossdrew/rossdrew.github.io/blob/master/src/img/EmuRox.png" alt="Roxoft - Image by Søren Siebuhr" width="150" />
+<a href="http://sorensiebuhr.dk/">
+<img src="https://github.com/rossdrew/rossdrew.github.io/blob/master/src/img/EmuRox.png" data-canonical-src="https://github.com/rossdrew/rossdrew.github.io/blob/master/src/img/EmuRox.png" alt="EmuRox - Image by Søren Siebuhr" width="150" />
+</a>
 An emulator for the [6502 processor](https://en.wikipedia.org/wiki/MOS_Technology_6502).  The plan is to evolve this into a working [NES](https://en.wikipedia.org/wiki/Nintendo_Entertainment_System) emulator so I'm developing the 6502 without BCD mode for now.  If/When I get that working, I'll expand the 6502 and move onto another 6502 system (Atari 2600, Commodore 64...) then perhaps add processors and more emulated hardware, in theory, creating a pluggable multi-emulator.
 
 ## Origins
