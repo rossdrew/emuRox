@@ -13,8 +13,7 @@ class Mos6502AluSpec extends Specification {
 
     def setup(){
         registers = new Registers()
-        for (int i=0; i<8; i++) registers.setFlagTo(i, false)
-
+        for (flagNumber in 0..7) registers.setFlagTo(flagNumber, false)
         alu = new Mos6502Alu(registers)
     }
 
