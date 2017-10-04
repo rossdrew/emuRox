@@ -97,7 +97,8 @@ class Mos6502AluSpec extends Specification {
         0          | 1          || 0b11111111     | -1            | false    | false     | "Negative result"
         0b11111111 | 1          || 0b11111110     | -2            | true     | false     | "Positive subtraction from a negative"
         0b11111111 | 0b11111111 || 0              | 0             | true     | false     | "Negative subtraction from a negative"
-        0b10000000 | 1          || 0b01111111     | 127           | true     | true      | "Signed underflow "
+        0b10000000 | 1          || 0b01111111     | 127           | true     | true      | "Signed underflow with carry"
+        0x50       | 0xB0       || 0xA0           | -96           | false    | true      | "Signed underflow without carry"
     }
 
     @Unroll
