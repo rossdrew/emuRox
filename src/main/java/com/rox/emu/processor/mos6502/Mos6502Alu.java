@@ -6,7 +6,7 @@ import com.rox.emu.env.RoxWord;
 /**
  * Arithmetic Logic Unit for a {@link Mos6502}.<br/>
  * <br/>
- * Functions: [ADD, OR, XOR, AND, Shift Right]
+ * Functions: [ADC, ABC, OR, XOR, AND]
  */
 public class Mos6502Alu {
 
