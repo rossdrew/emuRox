@@ -22,15 +22,10 @@ public class Mos6502Alu {
      * @return the result of the ADD operation
      */
     public RoxByte adc(final RoxByte byteA, final RoxByte byteB){
-        //Carry: If Negative and Carry flags differ, then include a carry
-        int carry = (registers.getFlag(Registers.C) ^ registers.getFlag(Registers.N) ) ? 1 : 0;
+        int carry = registers.getFlag(Registers.C) ? 1 : 0;
 
         final RoxWord result = RoxWord.literalFrom(byteA.getRawValue() + byteB.getRawValue() + carry);
 
-        //Works with ALU code
-//        if (result.getHighByte().isBitSet(0))
-//            registers.setFlag(Registers.C);
-        //Works with "legacy"
         registers.setFlagTo(Registers.C, result.getHighByte().isBitSet(0));
 
         //Set Overflow if the sign of both inputs is different from the sign of the result i.e. bit 7 set on ((a^result) & (b^result))
@@ -50,7 +45,7 @@ public class Mos6502Alu {
      */
     public RoxByte sbc(RoxByte byteA, RoxByte byteB) {
         registers.setFlag(Registers.N);
-        return adc(byteA, byteB.inTwosCompliment());
+        return adc(byteA, byteB.inOnesCompliment());
     }
 
     /**

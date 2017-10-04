@@ -64,6 +64,13 @@ public final class RoxByte {
         return RoxByte.literalFrom(((~getRawValue()) + 1) & 0xFF);
     }
 
+    /**
+     * @return a new {@link RoxByte} representing this value converted to it's ones compliment value
+     */
+    public RoxByte inOnesCompliment(){
+        return RoxByte.literalFrom(((~getRawValue())) & 0xFF);
+    }
+
     private boolean bitInRange(int bit){
         return ((bit >= 0) && (bit <= 7));
     }
