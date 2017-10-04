@@ -16,6 +16,22 @@ import static org.junit.Assert.*;
 @RunWith(JUnitQuickcheck.class)
 public class RoxByteTest extends Specification{
     @Test
+    public void testToTwosCompliment(){
+        final RoxByte myByte = RoxByte.signedFrom(1);
+        final RoxByte twosCompliment = myByte.inTwosCompliment();
+        assertEquals(-1, twosCompliment.getAsInt());
+        assertEquals(0b11111111, twosCompliment.getRawValue());
+    }
+
+    @Test
+    public void testToOnesCompliment(){
+        final RoxByte myByte = RoxByte.signedFrom(1);
+        final RoxByte onesCompliment = myByte.inOnesCompliment();
+        assertEquals(-2, onesCompliment.getAsInt());
+        assertEquals(0b11111110, onesCompliment.getRawValue());
+    }
+
+    @Test
     public void testEmptyByteCreation(){
         final RoxByte myByte = RoxByte.ZERO;
         assertNotNull(myByte);
