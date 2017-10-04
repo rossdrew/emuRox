@@ -38,19 +38,20 @@ public class OpCodeConverter {
 
         final String addressingModeDescriptor = tokens[OpCode.ADDR_I];
 
+        //XXX Not pretty but necessary for proper test coverage - update if JaCoCo ever learns to deal with it
         final String indexToken = (tokens.length <= OpCode.INDX_I) ? "" : tokens[OpCode.INDX_I];
-        switch (addressingModeDescriptor){
-            case "I": return AddressingMode.IMMEDIATE;
-            case "A": return AddressingMode.ACCUMULATOR;
-            case "Z":
-                return withIndexing(AddressingMode.ZERO_PAGE, indexToken);
-            case "ABS":
-                return withIndexing(AddressingMode.ABSOLUTE, indexToken);
-            case "IND":
-                return withIndexing(AddressingMode.INDIRECT, indexToken);
-            default:
-                throw new UnknownOpCodeException("Unrecognised addressing mode " + addressingModeDescriptor, internalOpCodeName);
-        }
+        if ("I".equals(addressingModeDescriptor))
+            return AddressingMode.IMMEDIATE;
+        else if ("A".equals(addressingModeDescriptor))
+            return AddressingMode.ACCUMULATOR;
+        else if ("Z".equals(addressingModeDescriptor))
+            return withIndexing(AddressingMode.ZERO_PAGE, indexToken);
+        else if ("ABS".equals(addressingModeDescriptor))
+            return withIndexing(AddressingMode.ABSOLUTE, indexToken);
+        else if ("IND".equals(addressingModeDescriptor))
+            return withIndexing(AddressingMode.INDIRECT, indexToken);
+        else
+            throw new UnknownOpCodeException("Unrecognised addressing mode " + addressingModeDescriptor, internalOpCodeName);
     }
 
     private static AddressingMode withIndexing(final AddressingMode addressingMode, final String indexToken){

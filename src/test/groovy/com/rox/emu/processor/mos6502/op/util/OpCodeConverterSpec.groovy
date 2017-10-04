@@ -44,21 +44,6 @@ class OpCodeConverterSpec extends Specification{
         "ADC_IND"         | AddressingMode.INDIRECT
         "ADC_IND_IX"      | AddressingMode.INDIRECT_X
         "ADC_IND_IY"      | AddressingMode.INDIRECT_Y
-
-//        "ADC_\0I"      | AddressingMode.IMPLIED          //INVALID
-//        "ROL_\0A"      | AddressingMode.IMPLIED
-//        "ADC_\0Z"      | AddressingMode.IMPLIED
-//        "ADC_\0Z_IX"   | AddressingMode.IMPLIED
-//        "ADC_Z_\0IX"   | AddressingMode.ZERO_PAGE
-//        "ADC_Z_\0IY"   | AddressingMode.ZERO_PAGE
-//        "ADC_\0ABS"    | AddressingMode.IMPLIED
-//        "ADC_\0ABS_IX" | AddressingMode.IMPLIED
-//        "ADC_ABS_\0IX" | AddressingMode.ABSOLUTE
-//        "ADC_ABS_\0IY" | AddressingMode.ABSOLUTE
-//        "ADC_\0IND"    | AddressingMode.IMPLIED
-//        "ADC_\0IND_IX" | AddressingMode.IMPLIED
-//        "ADC_IND_\0IX" | AddressingMode.INDIRECT
-//        "ADC_IND_\0IY" | AddressingMode.INDIRECT
     }
 
     @Unroll("Get addressing mode (INVALID): #expected")
