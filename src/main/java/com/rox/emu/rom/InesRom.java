@@ -22,9 +22,10 @@ public final class InesRom {
         if (bytes.length < InesRomHeader.HEADER_SIZE)
             throw new UnknownRomException("Invalid iNES header: Too short.");
 
-        final String prefix = "" + (char)bytes[0] + (char)bytes[1] + (char)bytes[2];
-
-        if (!"NES".equals(prefix) || (bytes[3] != 0x1A)){
+        if (bytes[0] != 'N'
+         || bytes[1] != 'E'
+         || bytes[2] != 'S'
+         || bytes[3] != 0x1A ){
             throw new UnknownRomException("Invalid iNES header: iNES prefix missing.");
         }
 

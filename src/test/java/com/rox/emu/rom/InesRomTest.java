@@ -42,9 +42,10 @@ public class InesRomTest {
     }
 
     @Test
-    public void testHeaderTo0ShortForFrom(){
+    public void testHeaderTooShort(){
         try {
-            InesRom.from(new int[]{0x4E, 0x45, 0x53});
+
+            InesRom.from(new int[]{'N', 'E', 'S'});
             fail("ROM contains a NES header that is too short to be valid, should throw an exception");
         }catch(UnknownRomException e){
             assertNotNull(e.getMessage());
@@ -64,8 +65,8 @@ public class InesRomTest {
     @Test
     public void testInvalidFirstHeaderPrefixValue(){
         try {
-            InesRom.from(asPaddedHeader(new int[]{0x4F, 0x45, 0x53, 0x1A, 0x0, 0x0}));
-            fail("ROM contains an invalid NES header (first byte should be 0x4E), should throw an exception");
+            InesRom.from(asPaddedHeader(new int[]{'Z', 'E', 'S', 0x1A, 0x0, 0x0}));
+            fail("ROM contains an invalid NES header (first byte should be 'N'), should throw an exception");
         }catch(UnknownRomException e){
             assertNotNull(e.getMessage());
         }
@@ -74,7 +75,7 @@ public class InesRomTest {
     @Test
     public void testInvalidSecondHeaderPrefixValue(){
         try {
-            InesRom.from(asPaddedHeader(new int[]{0x4E, 0x4E, 0x53, 0x1A, 0x0, 0x0}));
+            InesRom.from(asPaddedHeader(new int[]{'N', 'Z', 'S', 0x1A, 0x0, 0x0}));
             fail("ROM contains an invalid NES header (second byte should be 0x45), should throw an exception");
         }catch(UnknownRomException e){
             assertNotNull(e.getMessage());
@@ -84,7 +85,7 @@ public class InesRomTest {
     @Test
     public void testInvalidThirdHeaderPrefixValue(){
         try {
-            InesRom.from(asPaddedHeader(new int[]{0x4E, 0x45, 0x54, 0x1A, 0x0, 0x0}));
+            InesRom.from(asPaddedHeader(new int[]{'N', 'E', 'Z', 0x1A, 0x0, 0x0}));
             fail("ROM contains an invalid NES header (third byte should be 0x53), should throw an exception");
         }catch(UnknownRomException e){
             assertNotNull(e.getMessage());
@@ -94,7 +95,7 @@ public class InesRomTest {
     @Test
     public void testInvalidFourthHeaderPrefixValue(){
         try {
-            InesRom.from(asPaddedHeader(new int[]{0x4E, 0x45, 0x54, 0x1B, 0x0, 0x0}));
+            InesRom.from(asPaddedHeader(new int[]{'N', 'E', 'S', 0x1B, 0x0, 0x0}));
             fail("ROM contains an invalid NES header (fourth byte should be 0x1A), should throw an exception");
         }catch(UnknownRomException e){
             assertNotNull(e.getMessage());
