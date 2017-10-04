@@ -87,6 +87,8 @@ class Mos6502AluSpec extends Specification {
         expectedResult == result.rawValue
         expectedValue == result.asInt
         registers.getFlag(Registers.C) == carryOut
+
+        and: 'The overflow flag, which functions as an underflow in this context is as expected'
         registers.getFlag(Registers.V) == underflow
 
         where:
