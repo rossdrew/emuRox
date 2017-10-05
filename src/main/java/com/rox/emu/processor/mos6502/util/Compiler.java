@@ -198,14 +198,14 @@ public class Compiler {
         //high byte
         if (value.length() == 4 ) {
             workingProgram = workingProgram.with(Integer.decode("0x" + value.substring(value.length() - 4, 2)));
-        }if (value.length() == 3 ) {
+        }else if (value.length() == 3 ) {
             workingProgram = workingProgram.with(Integer.decode("0x" + value.substring(value.length() - 3 , 1)));
         }
 
         //low byte
         if (value.length() > 1)
             workingProgram = workingProgram.with(Integer.decode("0x" + value.substring(value.length()-2)));
-        else if (value.length() > 0)
+        else if (value.length() == 1)
             workingProgram = workingProgram.with(Integer.decode("0x" + value.substring(value.length()-1)));
 
         return workingProgram;
