@@ -154,6 +154,15 @@ public class RoxByteTest extends Specification{
     }
 
     @Property(trials = 10)
+    public void testNotEquals(@When(satisfies = "#_ < 127 || #_ > 0") int byteValueA,
+                              @When(satisfies = "#_ < 255 || #_ > 128") int byteValueB){
+        final RoxByte valA = RoxByte.literalFrom(byteValueA);
+        final RoxByte valB = RoxByte.literalFrom(byteValueB);
+
+        assertFalse(valA.equals(valB));
+    }
+
+    @Property(trials = 10)
     public void testEqualsEdgesCases(@When(satisfies = "#_ < 255 || #_ > 0") int byteValue){
         final RoxByte valA = RoxByte.literalFrom(byteValue);
         final RoxByte valB = RoxByte.literalFrom(byteValue);
