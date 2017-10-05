@@ -1402,8 +1402,8 @@ class OpCodeSpec extends Specification {
     
         where:
         firstValue | secondValue | expectedAccumulator  | Z      | N     | V     | C     | Expected
-        0x5        | 0x3         | 0x2                  | false  | false | false | false | "Basic subtraction"
-        0x5        | 0x5         | 0x0                  | true   | false | false | false | "With zero result"
+        0x5        | 0x3         | 0x2                  | false  | false | false | true  | "Basic subtraction"
+        0x5        | 0x5         | 0x0                  | true   | false | false | true  | "With zero result"
         0x5        | 0x6         | 0xFF                 | false  | true  | false | false | "With negative result"
 //        0b10000000 | 0x1         | 0b01111111           | false  | false | true  | false | "With overflow"
     }
@@ -1427,8 +1427,8 @@ class OpCodeSpec extends Specification {
     
         where:
         firstValue | secondValue | expectedAccumulator  | Z      | N     | O     | C     | Expected
-        0x5        | 0x3         | 0x2                  | false  | false | false | false | "Basic subtraction"
-        0x5        | 0x5         | 0x0                  | true   | false | false | false | "With zero result"
+        0x5        | 0x3         | 0x2                  | false  | false | false | true  | "Basic subtraction"
+        0x5        | 0x5         | 0x0                  | true   | false | false | true  | "With zero result"
         0x5        | 0x6         | 0xFF                 | false  | true  | false | false | "with negative result"
     }
     
@@ -1452,8 +1452,8 @@ class OpCodeSpec extends Specification {
     
         where:
         firstValue | index | secondValue | expectedAccumulator  | Z      | N     | O     | C     | Expected
-        0x5        | 0     | 0x3         | 0x2                  | false  | false | false | false | "Basic subtraction"
-        0x5        | 1     | 0x5         | 0x0                  | true   | false | false | false | "With zero result"
+        0x5        | 0     | 0x3         | 0x2                  | false  | false | false | true  | "Basic subtraction"
+        0x5        | 1     | 0x5         | 0x0                  | true   | false | false | true  | "With zero result"
         0x5        | 2     | 0x6         | 0xFF                 | false  | true  | false | false | "with negative result"
     }
     
@@ -1476,8 +1476,8 @@ class OpCodeSpec extends Specification {
     
         where:
         firstValue | secondValue | expectedAccumulator  | Z      | N     | O     | C     | Expected
-        0x5        | 0x3         | 0x2                  | false  | false | false | false | "Basic subtraction"
-        0x5        | 0x5         | 0x0                  | true   | false | false | false | "With zero result"
+        0x5        | 0x3         | 0x2                  | false  | false | false | true  | "Basic subtraction"
+        0x5        | 0x5         | 0x0                  | true   | false | false | true  | "With zero result"
         0x5        | 0x6         | 0xFF                 | false  | true  | false | false | "with negative result"
     }
     
@@ -1501,8 +1501,8 @@ class OpCodeSpec extends Specification {
     
         where:
         index | firstValue | secondValue | expectedAccumulator  | Z      | N     | O     | C     | Expected
-        0     | 0x5        | 0x3         | 0x2                  | false  | false | false | false | "Basic subtraction"
-        1     | 0x5        | 0x5         | 0x0                  | true   | false | false | false | "With zero result"
+        0     | 0x5        | 0x3         | 0x2                  | false  | false | false | true  | "Basic subtraction"
+        1     | 0x5        | 0x5         | 0x0                  | true   | false | false | true  | "With zero result"
         2     | 0x5        | 0x6         | 0xFF                 | false  | true  | false | false | "with negative result"
     }
     
@@ -1526,8 +1526,8 @@ class OpCodeSpec extends Specification {
     
         where:
         index | firstValue | secondValue | expectedAccumulator  | Z      | N     | O     | C     | Expected
-        0     | 0x5        | 0x3         | 0x2                  | false  | false | false | false | "Basic subtraction"
-        1     | 0x5        | 0x5         | 0x0                  | true   | false | false | false | "With zero result"
+        0     | 0x5        | 0x3         | 0x2                  | false  | false | false | true  | "Basic subtraction"
+        1     | 0x5        | 0x5         | 0x0                  | true   | false | false | true  | "With zero result"
         2     | 0x5        | 0x6         | 0xFF                 | false  | true  | false | false | "with negative result"
     }
     
@@ -1537,7 +1537,7 @@ class OpCodeSpec extends Specification {
         Program program = loadMemoryWithProgram(LDA_I, secondValue,    //Value at indirect address
                                                 STA_ABS, locationHi, locationLo,
                                                 LDX_I, index,
-                                                LDA_I, locationHi,     //Indirect address in memory
+                                                LDA_I, locationHi,                      //Indirect address in memory
                                                 STA_Z_IX, 0x30,
                                                 LDA_I, locationLo,
                                                 STA_Z_IX, 0x31,
@@ -1551,13 +1551,13 @@ class OpCodeSpec extends Specification {
         then:
         expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
-		testFlags(Z,N,V,C)
+		testFlags(Z,N,C,V)
         //TODO O/C
     
         where:
         locationHi | locationLo | index | firstValue | secondValue | expectedAccumulator | Z      | N     | V     | C     | Expected
-        0x1        | 0x10       | 0     | 0x5        | 0x3         | 0x2                 | false  | false | false | false | "Basic subtraction"
-        0x2        | 0x13       | 1     | 0x5        | 0x5         | 0x0                 | true   | false | false | false | "With zero result"
+        0x1        | 0x10       | 0     | 0x5        | 0x3         | 0x2                 | false  | false | false | true  | "Basic subtraction"
+        0x2        | 0x13       | 1     | 0x5        | 0x5         | 0x0                 | true   | false | false | true  | "With zero result"
         0x3        | 0x26       | 2     | 0x5        | 0x6         | 0xFF                | false  | true  | false | false | "with negative result"
     }
     
@@ -1586,8 +1586,8 @@ class OpCodeSpec extends Specification {
     
         where:
         pointerHi | pointerLo | index | firstValue | secondValue | expectedAccumulator | Z      | N     | O     | C     | Expected
-        0x1       | 0x10      | 0     | 0x5        | 0x3         | 0x2                 | false  | false | false | false | "Basic subtraction"
-        0x2       | 0x13      | 1     | 0x5        | 0x5         | 0x0                 | true   | false | false | false | "With zero result"
+        0x1       | 0x10      | 0     | 0x5        | 0x3         | 0x2                 | false  | false | false | true  | "Basic subtraction"
+        0x2       | 0x13      | 1     | 0x5        | 0x5         | 0x0                 | true   | false | false | true  | "With zero result"
         0x3       | 0x26      | 2     | 0x5        | 0x6         | 0xFF                | false  | true  | false | false | "with negative result"
     }
     

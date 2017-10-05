@@ -1060,12 +1060,7 @@ public class Mos6502 {
     }
 
     private int performSBC(int byteValueA, int byteValueB){
-        registers.setFlag(N);
-        int borrow = (registers.getFlag(C) ? 0 : 1);
-        int byteValueBAndBorrow = twosComplimentOf(byteValueB + borrow);
-
-//        return alu.sub(RoxByte.literalFrom(byteValueA), RoxByte.literalFrom(byteValueB)).getRawValue();
-        return adc(byteValueA, byteValueBAndBorrow) & 0xFF;
+        return alu.sbc(RoxByte.literalFrom(byteValueA), RoxByte.literalFrom(byteValueB)).getRawValue();
     }
 
     private int silentADC(int a, int b){
@@ -1076,29 +1071,6 @@ public class Mos6502 {
         int result = alu.adc(RoxByte.literalFrom(a), RoxByte.literalFrom(b)).getRawValue();
 
         registers.setRegister(REG_STATUS, statusState);
-        return result;
-    }
-
-    /**
-     * Perform a binary addition, setting Carry and Overflow flags as required.
-     *
-     * @param byteValueA addition term 1
-     * @param byteValueB addition term 2
-     * @return the result of (byteValueA + byteValueB)
-     */
-    private int adc(int byteValueA, int byteValueB) {
-        int result = byteValueA + byteValueB;
-
-        //Set Carry, if bit 8 is set on new accumulator value, ignoring in 2s compliment addition (subtraction)
-        if (!registers.getFlag(N)){
-            setCarryFlagBasedOn(result);
-        }else {
-            registers.clearFlag(C);
-        }
-
-        //Set Overflow if the sign of both inputs is different from the sign of the result
-        if (((byteValueA ^ result) & (byteValueB ^ result) & 0x80) != 0)
-            registers.setFlag(V);
         return result;
     }
 }
