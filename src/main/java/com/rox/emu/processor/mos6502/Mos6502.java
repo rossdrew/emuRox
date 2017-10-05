@@ -912,10 +912,6 @@ public class Mos6502 {
             setRegisterValue(REG_PC_LOW, getRegisterValue(REG_PC_LOW) + displacementByte);
     }
 
-    private int twosComplimentOf(int byteValue){
-        return ((~byteValue) + 1) & 0xFF;
-    }
-
     private int fromTwosComplimented(int byteValue){
         //XXX Shouldn't this do the -1 as well, instead of having to do it in CMP and not in JMP?!
         return ((~byteValue)) & 0xFF;
