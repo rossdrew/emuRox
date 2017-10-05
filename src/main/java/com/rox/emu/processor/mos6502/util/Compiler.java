@@ -203,10 +203,11 @@ public class Compiler {
         }
 
         //low byte
-        if (value.length() > 1)
-            workingProgram = workingProgram.with(Integer.decode("0x" + value.substring(value.length()-2)));
-        else if (value.length() == 1)
+        if (value.length() == 1)
             workingProgram = workingProgram.with(Integer.decode("0x" + value.substring(value.length()-1)));
+        else if (value.length() > 1)
+            workingProgram = workingProgram.with(Integer.decode("0x" + value.substring(value.length()-2)));
+
 
         return workingProgram;
     }
