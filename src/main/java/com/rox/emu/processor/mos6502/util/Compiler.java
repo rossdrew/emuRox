@@ -208,7 +208,6 @@ public class Compiler {
         else if (value.length() > 1)
             workingProgram = workingProgram.with(Integer.decode("0x" + value.substring(value.length()-2)));
 
-
         return workingProgram;
     }
 
