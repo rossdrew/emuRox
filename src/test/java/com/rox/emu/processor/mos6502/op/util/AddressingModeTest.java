@@ -54,4 +54,13 @@ public class AddressingModeTest {
             assertNotNull(e.getMessage());
         }
     }
+
+    @Test
+    public void testToStringIsACompleteDescription(){
+        for (AddressingMode addressingMode : AddressingMode.values()) {
+            for (String descriptiveWord : addressingMode.name().split("_")) {
+                addressingMode.toString().toLowerCase().contains(descriptiveWord.toLowerCase());
+            }
+        }
+    }
 }
