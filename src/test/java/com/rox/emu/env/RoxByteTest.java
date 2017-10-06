@@ -90,6 +90,12 @@ public class RoxByteTest extends Specification{
         }
     }
 
+    @Property(trials = 10)
+    public void testToStringIsAccurate(@When(satisfies = "#_ < 255 || #_ > 0") int byteValue){
+        final RoxByte value = RoxByte.literalFrom(byteValue);
+        assertTrue(value.toString().contains(""+value.getAsInt()));
+    }
+
     @Test
     public void testSetBit(){
         final RoxByte myByte = RoxByte.ZERO;
@@ -201,4 +207,6 @@ public class RoxByteTest extends Specification{
             assertNotNull(e);
         }
     }
+
+
 }
