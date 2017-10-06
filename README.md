@@ -21,7 +21,7 @@ Everytime I finish writing a section I realise that there were better ways to do
 
 ## 6502 and progress towards a working NES...
 
-After nearly 7 months of close to daily work on this, development is on a little bit of a hold.  I need some time to do proper investigation of the PPU and then some exploratory coding and design which my work/personal life isn't allowing at this moment. Should be too long before I'm back bashing at it.
+After nearly 7 months of close to daily work on this, feature development is on a little bit of a hold.  I need some time to do proper investigation of the PPU and then some exploratory coding and design which my work/personal life isn't allowing at this moment. Should be too long before I'm back bashing at it.
 
 Any small chunks of time I get, I'm looking into improving on what's already written.  For example:-
  
