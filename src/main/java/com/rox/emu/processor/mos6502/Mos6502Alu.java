@@ -45,7 +45,7 @@ public class Mos6502Alu {
      */
     public RoxByte sbc(RoxByte byteA, RoxByte byteB) {
         registers.setFlag(Registers.N);
-        return adc(byteA, byteB.inOnesCompliment());
+        return adc(byteA, byteB.asOnesCompliment());
     }
 
     /**

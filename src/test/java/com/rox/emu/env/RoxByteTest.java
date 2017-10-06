@@ -18,7 +18,7 @@ public class RoxByteTest extends Specification{
     @Test
     public void testToTwosComplimentSimpleCase(){
         final RoxByte myByte = RoxByte.signedFrom(1);
-        final RoxByte twosCompliment = myByte.inTwosCompliment();
+        final RoxByte twosCompliment = myByte.asTwosCompliment();
         assertEquals(-1, twosCompliment.getAsInt());
         assertEquals(0b11111111, twosCompliment.getRawValue());
     }
@@ -26,7 +26,7 @@ public class RoxByteTest extends Specification{
     @Test
     public void testToTwosComplimentStandardCase(){
         final RoxByte myByte = RoxByte.signedFrom(10);
-        final RoxByte twosCompliment = myByte.inTwosCompliment();
+        final RoxByte twosCompliment = myByte.asTwosCompliment();
         assertEquals(-10, twosCompliment.getAsInt());
         assertEquals(0b11110110, twosCompliment.getRawValue());
     }
@@ -34,7 +34,7 @@ public class RoxByteTest extends Specification{
     @Test
     public void testToOnesComplimentSimpleCase(){
         final RoxByte myByte = RoxByte.signedFrom(1);
-        final RoxByte onesCompliment = myByte.inOnesCompliment();
+        final RoxByte onesCompliment = myByte.asOnesCompliment();
         assertEquals(-2, onesCompliment.getAsInt());
         assertEquals(0b11111110, onesCompliment.getRawValue());
     }

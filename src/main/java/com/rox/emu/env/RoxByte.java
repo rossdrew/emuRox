@@ -60,14 +60,14 @@ public final class RoxByte {
     /**
      * @return a new {@link RoxByte} representing this value converted to it's twos compliment value
      */
-    public RoxByte inTwosCompliment(){
+    public RoxByte asTwosCompliment(){
         return RoxByte.literalFrom(((~getRawValue()) + 1) & 0xFF);
     }
 
     /**
      * @return a new {@link RoxByte} representing this value converted to it's ones compliment value
      */
-    public RoxByte inOnesCompliment(){
+    public RoxByte asOnesCompliment(){
         return RoxByte.literalFrom(((~getRawValue())) & 0xFF);
     }
 
