@@ -127,7 +127,7 @@ public class Mos6502 {
             default:
             case BRK:
                 //XXX Why do we do this at all? A program of [BRK] will push 0x03 as the PC...why is that right?
-                registers.setPC(silentADC(registers.getPC(), 2));
+                registers.setPC(performSilentADC(registers.getPC(), 2));
                 push(registers.getRegister(REG_PC_HIGH));
                 push(registers.getRegister(REG_PC_LOW));
                 push(registers.getRegister(REG_STATUS) | STATUS_FLAG_BREAK);
@@ -927,19 +927,6 @@ public class Mos6502 {
             registers.clearFlag(C);
     }
 
-    /**
-     * Perform an SBC but without affecting any flags
-     */
-    private int performSilentSBC(int a, int b){
-        int statusState = registers.getRegister(REG_STATUS);
-        registers.setFlag(C);
-
-        int result = performSBC(a,b);
-
-        registers.setRegister(REG_STATUS, statusState);
-        return result;
-    }
-
     private int rightShift(int value, boolean carryIn){
         return (value >> 1) | (carryIn ? 0b10000000 : 0);
     }
@@ -1035,8 +1022,6 @@ public class Mos6502 {
         int registerByte = getRegisterValue(registerId);
 
         registers.setRegisterAndFlags(registerId, twoByteOperation.perform(registerByte, byteValue));
-//        else
-//            setRegisterValue(registerId, twoByteOperation.perform(registerByte, byteValue));
     }
 
     private int performAND(int byteValueA, int byteValueB){
@@ -1059,12 +1044,27 @@ public class Mos6502 {
         return alu.sbc(RoxByte.literalFrom(byteValueA), RoxByte.literalFrom(byteValueB)).getRawValue();
     }
 
-    private int silentADC(int a, int b){
+    /**
+     * Perform an ADC but without affecting any flags
+     */
+    private int performSilentADC(int a, int b){
         int statusState = registers.getRegister(REG_STATUS);
 
-        //We don't want to take into account the carry here
-        registers.clearFlag(C);
-        int result = alu.adc(RoxByte.literalFrom(a), RoxByte.literalFrom(b)).getRawValue();
+        registers.clearFlag(C); //Ignore the carry
+        int result = performADC(a,b);
+
+        registers.setRegister(REG_STATUS, statusState);
+        return result;
+    }
+
+    /**
+     * Perform an SBC but without affecting any flags
+     */
+    private int performSilentSBC(int a, int b){
+        int statusState = registers.getRegister(REG_STATUS);
+
+        registers.setFlag(C); //Ignore the carry
+        int result = performSBC(a,b);
 
         registers.setRegister(REG_STATUS, statusState);
         return result;
