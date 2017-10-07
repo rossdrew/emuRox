@@ -127,7 +127,7 @@ public class Mos6502 {
             default:
             case BRK:
                 //XXX Why do we do this at all? A program of [BRK] will push 0x03 as the PC...why is that right?
-                registers.setPC(performSilentADC(registers.getPC(), 2));
+                registers.setPC(performSilentOperation(registers.getPC(), 2, this::performADC, false));
                 push(registers.getRegister(REG_PC_HIGH));
                 push(registers.getRegister(REG_PC_LOW));
                 push(registers.getRegister(REG_STATUS) | STATUS_FLAG_BREAK);
@@ -918,7 +918,7 @@ public class Mos6502 {
     }
 
     private void performCMP(int value, int toRegister){
-        int result = performSilentSBC(getRegisterValue(toRegister), value);
+        int result = performSilentOperation(getRegisterValue(toRegister), value, this::performSBC, true);
         registers.setFlagsBasedOn(result & 0xFF);
 
         if (fromTwosComplimented(result)-1 >=0)
@@ -1044,27 +1044,11 @@ public class Mos6502 {
         return alu.sbc(RoxByte.literalFrom(byteValueA), RoxByte.literalFrom(byteValueB)).getRawValue();
     }
 
-    /**
-     * Perform an ADC but without affecting any flags
-     */
-    private int performSilentADC(int a, int b){
+    private int performSilentOperation(int a, int b, TwoByteOperation operation, boolean carryInState){
         int statusState = registers.getRegister(REG_STATUS);
 
-        registers.clearFlag(C); //Ignore the carry
-        int result = performADC(a,b);
-
-        registers.setRegister(REG_STATUS, statusState);
-        return result;
-    }
-
-    /**
-     * Perform an SBC but without affecting any flags
-     */
-    private int performSilentSBC(int a, int b){
-        int statusState = registers.getRegister(REG_STATUS);
-
-        registers.setFlag(C); //Ignore the carry
-        int result = performSBC(a,b);
+        registers.setFlagTo(C, carryInState); //To allow ignore of the carry
+        int result = operation.perform(a, b);
 
         registers.setRegister(REG_STATUS, statusState);
         return result;
