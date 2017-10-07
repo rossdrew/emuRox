@@ -127,7 +127,7 @@ public class Mos6502 {
             default:
             case BRK:
                 //XXX Why do we do this at all? A program of [BRK] will push 0x03 as the PC...why is that right?
-                registers.setPC(performSilentOperation(registers.getPC(), 2, this::performADC, false));
+                registers.setPC(performSilently(this::performADC, registers.getPC(), 2, false));
                 push(registers.getRegister(REG_PC_HIGH));
                 push(registers.getRegister(REG_PC_LOW));
                 push(registers.getRegister(REG_STATUS) | STATUS_FLAG_BREAK);
@@ -918,7 +918,7 @@ public class Mos6502 {
     }
 
     private void performCMP(int value, int toRegister){
-        int result = performSilentOperation(getRegisterValue(toRegister), value, this::performSBC, true);
+        int result = performSilently(this::performSBC, getRegisterValue(toRegister), value, true);
         registers.setFlagsBasedOn(result & 0xFF);
 
         if (fromTwosComplimented(result)-1 >=0)
@@ -1006,6 +1006,16 @@ public class Mos6502 {
         int perform(int byteValueOne, int byteValueTwo);
     }
 
+    private int performSilently(TwoByteOperation operation, int a, int b, boolean carryInState){
+        int statusState = registers.getRegister(REG_STATUS);
+
+        registers.setFlagTo(C, carryInState); //To allow ignore of the carry
+        int result = operation.perform(a, b);
+
+        registers.setRegister(REG_STATUS, statusState);
+        return result;
+    }
+
     private void withRegisterAndByteAt(int registerId, int memoryLocation, TwoByteOperation twoByteOperation){
         withRegisterAndByte(registerId, getByteOfMemoryAt(memoryLocation), twoByteOperation);
     }
@@ -1043,14 +1053,4 @@ public class Mos6502 {
     private int performSBC(int byteValueA, int byteValueB){
         return alu.sbc(RoxByte.literalFrom(byteValueA), RoxByte.literalFrom(byteValueB)).getRawValue();
     }
-
-    private int performSilentOperation(int a, int b, TwoByteOperation operation, boolean carryInState){
-        int statusState = registers.getRegister(REG_STATUS);
-
-        registers.setFlagTo(C, carryInState); //To allow ignore of the carry
-        int result = operation.perform(a, b);
-
-        registers.setRegister(REG_STATUS, statusState);
-        return result;
     }
-}
