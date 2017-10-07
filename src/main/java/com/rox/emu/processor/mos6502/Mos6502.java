@@ -48,13 +48,13 @@ public class Mos6502 {
      */
     public void reset(){
        LOG.debug("RESETTING...");
-        setRegisterValue(REG_ACCUMULATOR, 0x0);
-        setRegisterValue(REG_X_INDEX, 0x0);
-        setRegisterValue(REG_Y_INDEX, 0x0);
-        setRegisterValue(REG_STATUS, 0x34);
-        setRegisterValue(REG_PC_HIGH, getByteOfMemoryAt(0xFFFC));
-        setRegisterValue(REG_PC_LOW, getByteOfMemoryAt(0xFFFD));
-        setRegisterValue(REG_SP, 0xFF);
+       setRegisterValue(REG_ACCUMULATOR, 0x0);
+       setRegisterValue(REG_X_INDEX, 0x0);
+       setRegisterValue(REG_Y_INDEX, 0x0);
+       setRegisterValue(REG_STATUS, 0x34);
+       setRegisterValue(REG_PC_HIGH, getByteOfMemoryAt(0xFFFC));
+       setRegisterValue(REG_PC_LOW, getByteOfMemoryAt(0xFFFD));
+       setRegisterValue(REG_SP, 0xFF);
        LOG.debug("...READY!");
     }
 
@@ -765,10 +765,10 @@ public class Mos6502 {
      * Get the value of the 16 bit Program Counter (PC) and increment
      */
     private int getAndStepPC(){
-        final int originalPC = registers.getPC();
-        registers.setPC(originalPC + 1);
+       final int originalPC = registers.getPC();
+       registers.setPC(originalPC + 1);
 
-        return originalPC;
+       return originalPC;
     }
 
     /**
@@ -780,8 +780,8 @@ public class Mos6502 {
      * @return byte {@code from mem[ PC[0] ]}
      */
     private int nextProgramByte(){
-        int memoryLocation = getAndStepPC();
-        return getByteOfMemoryAt(memoryLocation);
+       int memoryLocation = getAndStepPC();
+       return getByteOfMemoryAt(memoryLocation);
     }
 
     /**
@@ -796,8 +796,8 @@ public class Mos6502 {
      * @return word made up of both bytes
      */
     private int nextProgramWord(){
-        int byte1 = nextProgramByte();
-        return (byte1 << 8) | nextProgramByte() ;
+       int byte1 = nextProgramByte();
+       return (byte1 << 8) | nextProgramByte() ;
     }
 
     /**
@@ -806,11 +806,11 @@ public class Mos6502 {
      * @return popped value
      */
     private int pop(){
-        setRegisterValue(REG_SP, getRegisterValue(REG_SP) + 1);
-        int address = 0x0100 | getRegisterValue(REG_SP);
-        int value = getByteOfMemoryAt(address);
+       setRegisterValue(REG_SP, getRegisterValue(REG_SP) + 1);
+       int address = 0x0100 | getRegisterValue(REG_SP);
+       int value = getByteOfMemoryAt(address);
        LOG.debug("POP " + value + "(0b" + Integer.toBinaryString(value) + ") from mem[0x" + Integer.toHexString(address).toUpperCase() + "]");
-        return value;
+       return value;
     }
 
     private void pushRegister(int registerID){
@@ -824,20 +824,20 @@ public class Mos6502 {
      */
     private void push(int value){
        LOG.debug("PUSH " + value + "(0b" + Integer.toBinaryString(value) + ") to mem[0x" + Integer.toHexString(getRegisterValue(REG_SP)).toUpperCase() + "]");
-        setByteOfMemoryAt(0x0100 | getRegisterValue(REG_SP), value);
-        setRegisterValue(REG_SP, getRegisterValue(REG_SP) - 1);
+       setByteOfMemoryAt(0x0100 | getRegisterValue(REG_SP), value);
+       setRegisterValue(REG_SP, getRegisterValue(REG_SP) - 1);
     }
 
     private int getByteOfMemoryXIndexedAt(int location){
-        return getByteOfMemoryAt(location, getRegisterValue(REG_X_INDEX));
+       return getByteOfMemoryAt(location, getRegisterValue(REG_X_INDEX));
     }
 
     private int getByteOfMemoryYIndexedAt(int location){
-        return getByteOfMemoryAt(location, getRegisterValue(REG_Y_INDEX));
+       return getByteOfMemoryAt(location, getRegisterValue(REG_Y_INDEX));
     }
 
     private void setByteOfMemoryYIndexedAt(int location, int newByte){
-        setByteOfMemoryAt(location, getRegisterValue(REG_Y_INDEX), newByte);
+       setByteOfMemoryAt(location, getRegisterValue(REG_Y_INDEX), newByte);
     }
 
     private int getByteOfMemoryAt(int location){
@@ -845,13 +845,13 @@ public class Mos6502 {
     }
 
     private int getByteOfMemoryAt(int location, int index){
-        final int memoryByte = memory.getByte(location + index);
+       final int memoryByte = memory.getByte(location + index);
        LOG.debug("Got 0x" + Integer.toHexString(memoryByte) + " from mem[" + location + (index != 0 ? "[" + index + "]" : "") +"]");
-        return memoryByte;
+       return memoryByte;
     }
 
     private void setByteOfMemoryXIndexedAt(int location, int newByte){
-        setByteOfMemoryAt(location, getRegisterValue(REG_X_INDEX), newByte);
+       setByteOfMemoryAt(location, getRegisterValue(REG_X_INDEX), newByte);
     }
 
     private void setByteOfMemoryAt(int location, int newByte){
@@ -859,33 +859,27 @@ public class Mos6502 {
     }
 
     private void setByteOfMemoryAt(int location, int index, int newByte){
-        memory.setByteAt(location + index, newByte);
+       memory.setByteAt(location + index, newByte);
        LOG.debug("Stored 0x" + Integer.toHexString(newByte) + " at mem[" + location + (index != 0 ? "[" + index + "]" : "") +"]");
     }
 
     private int getWordOfMemoryXIndexedAt(int location){
-        int indexedLocation = location + getRegisterValue(REG_X_INDEX);
-        return getWordOfMemoryAt(indexedLocation);
+       int indexedLocation = location + getRegisterValue(REG_X_INDEX);
+       return getWordOfMemoryAt(indexedLocation);
     }
 
     private int getWordOfMemoryAt(int location) {
-        int memoryWord = memory.getWord(location);
+       int memoryWord = memory.getWord(location);
        LOG.debug("Got 0x" + Integer.toHexString(memoryWord) + " from mem[" + location +"]");
-        return memoryWord;
+       return memoryWord;
     }
 
     private void setBorrowFlagFor(int newFakeByte) {
-        if ((newFakeByte & 0x1) == 0x1)
-            registers.setFlag(C);
-        else
-            registers.clearFlag(C);
+       registers.setFlagTo(C, ((newFakeByte & 0x1) == 0x1));
     }
 
     private void setCarryFlagBasedOn(int newFakeByte) {
-        if ((newFakeByte & CARRY_INDICATOR_BIT) == CARRY_INDICATOR_BIT)
-            registers.setFlag(C);
-        else
-            registers.clearFlag(C);
+       registers.setFlagTo(C, ((newFakeByte & CARRY_INDICATOR_BIT) == CARRY_INDICATOR_BIT));
     }
 
     /**
@@ -921,10 +915,7 @@ public class Mos6502 {
         int result = performSilently(this::performSBC, getRegisterValue(toRegister), value, true);
         registers.setFlagsBasedOn(result & 0xFF);
 
-        if (fromTwosComplimented(result)-1 >=0)
-            registers.setFlag(C);
-        else
-            registers.clearFlag(C);
+        registers.setFlagTo(C, (fromTwosComplimented(result)-1 >=0));
     }
 
     private int rightShift(int value, boolean carryIn){
@@ -992,46 +983,43 @@ public class Mos6502 {
     }
 
     private void performBIT(int memData) {
-        if ((memData & getRegisterValue(REG_ACCUMULATOR)) == memData)
-            registers.setFlag(Z);
-        else
-            registers.clearFlag(Z);
+       registers.setFlagTo(Z, ((memData & getRegisterValue(REG_ACCUMULATOR)) == memData));
 
-        //Set N, V to bits 7 and 6 of memory data
-        setRegisterValue(REG_STATUS, (memData & 0b11000000) | (getRegisterValue(REG_STATUS) & 0b00111111));
+       //Set N, V to bits 7 and 6 of memory data
+       setRegisterValue(REG_STATUS, (memData & 0b11000000) | (getRegisterValue(REG_STATUS) & 0b00111111));
     }
 
     @FunctionalInterface
     private interface TwoByteOperation {
-        int perform(int byteValueOne, int byteValueTwo);
+       int perform(int byteValueOne, int byteValueTwo);
     }
 
     private int performSilently(TwoByteOperation operation, int a, int b, boolean carryInState){
-        int statusState = registers.getRegister(REG_STATUS);
+       int statusState = registers.getRegister(REG_STATUS);
 
-        registers.setFlagTo(C, carryInState); //To allow ignore of the carry
-        int result = operation.perform(a, b);
+       registers.setFlagTo(C, carryInState); //To allow ignore of the carry
+       int result = operation.perform(a, b);
 
-        registers.setRegister(REG_STATUS, statusState);
-        return result;
+       registers.setRegister(REG_STATUS, statusState);
+       return result;
     }
 
     private void withRegisterAndByteAt(int registerId, int memoryLocation, TwoByteOperation twoByteOperation){
-        withRegisterAndByte(registerId, getByteOfMemoryAt(memoryLocation), twoByteOperation);
+       withRegisterAndByte(registerId, getByteOfMemoryAt(memoryLocation), twoByteOperation);
     }
 
     private void withRegisterAndByteXIndexedAt(int registerId, int memoryLocation, TwoByteOperation twoByteOperation){
-        withRegisterAndByte(registerId, getByteOfMemoryXIndexedAt(memoryLocation), twoByteOperation);
+       withRegisterAndByte(registerId, getByteOfMemoryXIndexedAt(memoryLocation), twoByteOperation);
     }
 
     private void withRegisterAndByteYIndexedAt(int registerId, int memoryLocation, TwoByteOperation twoByteOperation){
-        withRegisterAndByte(registerId, getByteOfMemoryYIndexedAt(memoryLocation), twoByteOperation);
+       withRegisterAndByte(registerId, getByteOfMemoryYIndexedAt(memoryLocation), twoByteOperation);
     }
 
     private void withRegisterAndByte(int registerId, int byteValue, TwoByteOperation twoByteOperation){
-        int registerByte = getRegisterValue(registerId);
+       int registerByte = getRegisterValue(registerId);
 
-        registers.setRegisterAndFlags(registerId, twoByteOperation.perform(registerByte, byteValue));
+       registers.setRegisterAndFlags(registerId, twoByteOperation.perform(registerByte, byteValue));
     }
 
     private int performAND(int byteValueA, int byteValueB){
@@ -1047,10 +1035,10 @@ public class Mos6502 {
     }
 
     private int performADC(int byteValueA, int byteValueB){
-        return alu.adc(RoxByte.literalFrom(byteValueA), RoxByte.literalFrom(byteValueB)).getRawValue();
+       return alu.adc(RoxByte.literalFrom(byteValueA), RoxByte.literalFrom(byteValueB)).getRawValue();
     }
 
     private int performSBC(int byteValueA, int byteValueB){
-        return alu.sbc(RoxByte.literalFrom(byteValueA), RoxByte.literalFrom(byteValueB)).getRawValue();
+       return alu.sbc(RoxByte.literalFrom(byteValueA), RoxByte.literalFrom(byteValueB)).getRawValue();
     }
 }
