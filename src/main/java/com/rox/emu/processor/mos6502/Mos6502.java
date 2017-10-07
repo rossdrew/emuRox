@@ -1053,4 +1053,4 @@ public class Mos6502 {
     private int performSBC(int byteValueA, int byteValueB){
         return alu.sbc(RoxByte.literalFrom(byteValueA), RoxByte.literalFrom(byteValueB)).getRawValue();
     }
-    }
+}
