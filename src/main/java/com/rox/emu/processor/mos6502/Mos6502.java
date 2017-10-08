@@ -943,8 +943,7 @@ public class Mos6502 {
     }
 
     private int performASL(int byteValue){
-        int newValue = byteValue << 1;
-        setCarryFlagBasedOn(newValue);
+        int newValue = alu.asl(RoxByte.literalFrom(byteValue)).getRawValue();
         registers.setFlagsBasedOn(newValue);
         return newValue;
     }
