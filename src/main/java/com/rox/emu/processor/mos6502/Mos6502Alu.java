@@ -7,6 +7,8 @@ import com.rox.emu.env.RoxWord;
  * Arithmetic Logic Unit for a {@link Mos6502}.<br/>
  * <br/>
  * Functions: [ADC, ABC, OR, XOR, AND, ASL]
+ *
+ * //TODO think about multi byte addition - using this calculating > 1 byte memory doesn't work, of course.
  */
 public class Mos6502Alu {
 
