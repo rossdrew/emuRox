@@ -766,6 +766,7 @@ public class Mos6502 {
      */
     private int getAndStepPC(){
        final int originalPC = registers.getPC();
+
        registers.setPC(originalPC + 1);
 
        return originalPC;
@@ -970,13 +971,13 @@ public class Mos6502 {
     }
 
     private int performINC(int initialValue){
-        int incrementedValue = (initialValue + 1) & 0xFF;
+        int incrementedValue = performSilently(this::performADC, initialValue, 1,false);
         registers.setFlagsBasedOn(incrementedValue);
         return incrementedValue;
     }
 
     private int performDEC(int initialValue){
-        int incrementedValue = (initialValue - 1) & 0xFF;
+        int incrementedValue = performSilently(this::performSBC, initialValue, 1,true);
         registers.setFlagsBasedOn(incrementedValue);
         return incrementedValue;
     }
