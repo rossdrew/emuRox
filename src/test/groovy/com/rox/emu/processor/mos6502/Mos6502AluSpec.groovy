@@ -248,6 +248,9 @@ class Mos6502AluSpec extends Specification {
         given: 'A number to shift left'
         final RoxByte a = RoxByte.literalFrom(operandA)
 
+        and: 'The status flags are setup beforehand'
+        registers.setFlagTo(Registers.C, carryIn)
+
         when:
         final RoxByte result = alu.asl(a)
 
@@ -259,10 +262,14 @@ class Mos6502AluSpec extends Specification {
         registers.getFlag(Registers.C) == carryOut
 
         where:
-        operandA   || expectedResult | expectedValue | carryOut | description
-        0          || 0              | 0             | false    | "Zero to zero"
-        1          || 2              | 2             | false    | "Simplest case"
-        0b01000000 || 0b10000000     | -128          | false    | "Shift positive to negative"
-        0b10000000 || 0              | 0             | true     | "Shift to zero"
+        operandA   | carryIn || expectedResult | expectedValue | carryOut | description
+        0          | false   || 0              | 0             | false    | "Zero to zero"
+        1          | false   || 2              | 2             | false    | "Simplest case"
+        0b01000000 | false   || 0b10000000     | -128          | false    | "Shift positive to negative"
+        0b10000000 | false   || 0              | 0             | true     | "Shift to zero"
+        0b10000000 | false   || 0              | 0             | true     | "Shift to zero"
+        0          | true    || 1              | 1             | false    | "Simple carry in"
+        0b10000001 | true    || 3              | 3             | true     | "Carry in, carry out"
+        0b01111111 | true    || 255            | -1            | false    | "Carry in & shift to negative"
     }
 }

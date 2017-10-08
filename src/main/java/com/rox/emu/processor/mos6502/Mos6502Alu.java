@@ -73,7 +73,8 @@ public class Mos6502Alu {
      * @return the result of <code>ASL byteA</code>
      */
     public RoxByte asl(RoxByte byteA) {
-        final RoxWord result = RoxWord.literalFrom(byteA.getRawValue() << 1);
+        int carry = registers.getFlag(Registers.C) ? 1 : 0;
+        final RoxWord result = RoxWord.literalFrom((byteA.getRawValue() << 1) + carry);
         registers.setFlagTo(Registers.C, result.getHighByte().isBitSet(0));
         return result.getLowByte();
     }
