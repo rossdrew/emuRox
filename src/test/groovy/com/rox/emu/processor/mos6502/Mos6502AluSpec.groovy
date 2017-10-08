@@ -230,7 +230,7 @@ class Mos6502AluSpec extends Specification {
     def "Expected value for: #randomValueA XOR #randomValueB"(){
         when: 'we XOR two random numbers'
         final RoxByte result = alu.xor(RoxByte.literalFrom(randomValueA),
-                                       RoxByte.literalFrom(randomValueB))
+                RoxByte.literalFrom(randomValueB))
 
         and: 'the expected (one byte) result is'
         final int expected = ((randomValueA ^ randomValueB) & 0xFF)
@@ -241,5 +241,28 @@ class Mos6502AluSpec extends Specification {
         where: 'we grab n sets of random numbers in byte range'
         randomValueA << Gen.integer(0..255).iterator().take(RANDOM_ITERATIONS)
         randomValueB << Gen.integer(0..255).iterator().take(RANDOM_ITERATIONS)
+    }
+
+    @Unroll
+    def "ASL (#description): #operandA = #expectedValue"(){
+        given: 'A number to shift left'
+        final RoxByte a = RoxByte.literalFrom(operandA)
+
+        when:
+        final RoxByte result = alu.asl(a)
+
+        then:
+        expectedResult == result.rawValue
+        expectedValue == result.asInt
+
+        and: 'bits shifted out of the end, end up in the carry'
+        registers.getFlag(Registers.C) == carryOut
+
+        where:
+        operandA   || expectedResult | expectedValue | carryOut | description
+        0          || 0              | 0             | false    | "Zero to zero"
+        1          || 2              | 2             | false    | "Simplest case"
+        0b01000000 || 0b10000000     | -128          | false    | "Shift positive to negative"
+        0b10000000 || 0              | 0             | true     | "Shift to zero"
     }
 }

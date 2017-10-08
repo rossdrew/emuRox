@@ -68,4 +68,13 @@ public class Mos6502Alu {
     public RoxByte xor(RoxByte byteA, RoxByte byteB) {
         return RoxByte.literalFrom(byteA.getRawValue() ^ byteB.getRawValue());
     }
+
+    /**
+     * @return the result of <code>ASL byteA</code>
+     */
+    public RoxByte asl(RoxByte byteA) {
+        final RoxWord result = RoxWord.literalFrom(byteA.getRawValue() << 1);
+        registers.setFlagTo(Registers.C, result.getHighByte().isBitSet(0));
+        return result.getLowByte();
+    }
 }
