@@ -6,9 +6,17 @@ import com.rox.emu.env.RoxWord;
 /**
  * Arithmetic Logic Unit for a {@link Mos6502}.<br/>
  * <br/>
- * Functions: [ADC, ABC, OR, XOR, AND, ASL]
+ * Operations:
+ * <ul>
+ *  <li> {@link #adc} </li>
+ *  <li> {@link #sbc} </li>
+ *  <li> {@link #or} </li>
+ *  <li> {@link #xor} </li>
+ *  <li> {@link #and} </li>
+ *  <li> {@link #asl} </li>
+ * </ul>
  *
- * //TODO think about multi byte addition - using this calculating > 1 byte memory doesn't work, of course.
+ * TODO think about multi byte addition - using this calculating > 1 byte memory doesn't work, of course.
  */
 public class Mos6502Alu {
 
@@ -19,9 +27,7 @@ public class Mos6502Alu {
     }
 
     /**
-     * Perform an ADD of <code>byteA ADD byteB</code>
-     *
-     * @return the result of the ADD operation
+     * @return the result of <code>byteA ADD byteB</code>
      */
     public RoxByte adc(final RoxByte byteA, final RoxByte byteB){
         int carry = registers.getFlag(Registers.C) ? 1 : 0;
@@ -39,9 +45,8 @@ public class Mos6502Alu {
     }
 
     /**
-     * Perform an SBC of <code>byteA SBC byteB</code><br/>
-     * <br/>
-     * This is effectively an {@link #adc} operation with <code>byteB</code> converted to it's twos compliment
+     * This is effectively an {@link #adc} operation with <code>byteB</code> converted to it's ones compliment.
+     * Combined with a <em>loaded carry flag</em>, this gives subtraction via twos compliment addition
      *
      * @return the result of the SBC operation
      */
