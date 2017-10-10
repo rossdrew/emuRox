@@ -912,7 +912,7 @@ public class Mos6502 {
     }
 
     private int fromTwosComplimented(int byteValue){
-        return (((~byteValue)) & 0xFF) - 1;
+        return fromOnesComplimented(byteValue) - 1;
     }
 
     private void performCMP(int value, int toRegister){
