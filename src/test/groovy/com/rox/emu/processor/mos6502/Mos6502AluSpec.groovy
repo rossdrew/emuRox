@@ -264,12 +264,42 @@ class Mos6502AluSpec extends Specification {
         where:
         operandA   | carryIn || expectedResult | expectedValue | carryOut | description
         0          | false   || 0              | 0             | false    | "Zero to zero"
+        0          | true    || 0              | 0             | false    | "Zero always \"carried\" in"
         1          | false   || 2              | 2             | false    | "Simplest case"
         0b01000000 | false   || 0b10000000     | -128          | false    | "Shift positive to negative"
         0b10000000 | false   || 0              | 0             | true     | "Shift to zero"
         0b10000000 | false   || 0              | 0             | true     | "Shift to zero"
-        0          | true    || 1              | 1             | false    | "Simple carry in"
-        0b10000001 | true    || 3              | 3             | true     | "Carry in, carry out"
-        0b01111111 | true    || 255            | -1            | false    | "Carry in & shift to negative"
+        0b10000001 | false   || 2              | 2             | true     | "Carry out"
+    }
+
+    @Unroll
+    def "ROL (#description): #operandA = #expectedValue"(){
+        given: 'A number to shift left'
+        final RoxByte a = RoxByte.literalFrom(operandA)
+
+        and: 'The status flags are setup beforehand'
+        registers.setFlagTo(Registers.C, carryIn)
+
+        when:
+        final RoxByte result = alu.rol(a)
+
+        then:
+        expectedResult == result.rawValue
+        expectedValue == result.asInt
+
+        and: 'bits shifted out of the end, end up in the carry'
+        registers.getFlag(Registers.C) == carryOut
+
+        where:
+        operandA   | carryIn || expectedResult | expectedValue | carryOut | description
+        0          | false   || 0              | 0             | false    | "Zero to zero"
+        1          | false   || 2              | 2             | false    | "Simplest case"
+        0b01000000 | false   || 0b10000000     | -128          | false    | "Shift positive to negative"
+        0b10000000 | false   || 0              | 0             | true     | "Shift to zero"
+        0b10000000 | false   || 0              | 0             | true     | "Shift to zero"
+        0b10000001 | false   || 2              | 2             | true     | "Carry out"
+        0          | true    || 1              | 1             | false    | "Carry carried in"
+        0b10000000 | true    || 1              | 1             | true     | "Carry in, carry out"
+        0b01000001 | true    || 0x83           | -125          | false    | "Carry in, positive to negative"
     }
 }

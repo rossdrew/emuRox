@@ -77,9 +77,24 @@ public class Mos6502Alu {
     }
 
     /**
+     * Shift bits left and write a zero into the low order bit, setting the carry to whatever
+     * is shifted out of the high order bit.
+     *
      * @return the result of <code>ASL byteA</code>
      */
     public RoxByte asl(RoxByte byteA) {
+        final RoxWord result = RoxWord.literalFrom((byteA.getRawValue() << 1));
+        registers.setFlagTo(Registers.C, result.getHighByte().isBitSet(0));
+        return result.getLowByte();
+    }
+
+    /**
+     * Shift bits left and write the contents of the carry flag into the low order bit, setting
+     * the carry to whatever is shifted out of the high order bit.
+     *
+     * @return the result of <code>ROL byteA</code>
+     */
+    public RoxByte rol(RoxByte byteA) {
         int carry = registers.getFlag(Registers.C) ? 1 : 0;
         final RoxWord result = RoxWord.literalFrom((byteA.getRawValue() << 1) + carry);
         registers.setFlagTo(Registers.C, result.getHighByte().isBitSet(0));
