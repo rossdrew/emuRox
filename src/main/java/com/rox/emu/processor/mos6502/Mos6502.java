@@ -879,10 +879,6 @@ public class Mos6502 {
        registers.setFlagTo(C, ((newFakeByte & 0x1) == 0x1));
     }
 
-    private void setCarryFlagBasedOn(int newFakeByte) {
-       registers.setFlagTo(C, ((newFakeByte & CARRY_INDICATOR_BIT) == CARRY_INDICATOR_BIT));
-    }
-
     /**
      * Call {@link Mos6502#branchTo(int)} with next program byte
      *
