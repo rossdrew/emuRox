@@ -953,10 +953,9 @@ public class Mos6502 {
     }
 
     private int performROL(int initialValue){
-        int rotatedValue = (initialValue << 1) | (registers.getFlag(C) ? 1 : 0);
-        setCarryFlagBasedOn(rotatedValue);
+        int rotatedValue = alu.rol(RoxByte.literalFrom(initialValue)).getRawValue();
         registers.setFlagsBasedOn(rotatedValue);
-        return rotatedValue & 0xFF;
+        return rotatedValue;
     }
 
     private int performROR(int initialValue){
