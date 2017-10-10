@@ -324,5 +324,7 @@ class Mos6502AluSpec extends Specification {
         where:
         operandA   | carryIn || expectedResult | expectedValue | carryOut | description
         0          | false   || 0              | 0             | false    | "Zero to zero"
+        0b00000001 | false   || 0              | 0             | false    | "Shift to zero" //XXX Should this be a carry?
+        0b00000000 | true    || 0              | 0             | false    | "Zero always \"carried\" in" //XXX Should this be a carry?
     }
 }
