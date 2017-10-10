@@ -137,7 +137,7 @@ public class Mos6502 {
                 break;
 
             case ASL_A:
-                withRegister(REG_ACCUMULATOR, this::performROL);
+                withRegister(REG_ACCUMULATOR, this::performASL);
             break;
 
             case ASL_Z:
