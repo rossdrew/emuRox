@@ -902,21 +902,24 @@ public class Mos6502 {
     private void branchTo(int displacement) {
         int displacementByte = displacement & 0xFF;
         if ((displacementByte & NEGATIVE_INDICATOR_BIT) == NEGATIVE_INDICATOR_BIT)
-            setRegisterValue(REG_PC_LOW, getRegisterValue(REG_PC_LOW) - fromTwosComplimented(displacementByte));
+            setRegisterValue(REG_PC_LOW, getRegisterValue(REG_PC_LOW) - fromOnesComplimented(displacementByte));
         else
             setRegisterValue(REG_PC_LOW, getRegisterValue(REG_PC_LOW) + displacementByte);
     }
 
-    private int fromTwosComplimented(int byteValue){
-        //XXX Shouldn't this do the -1 as well, instead of having to do it in CMP and not in JMP?!
+    private int fromOnesComplimented(int byteValue){
         return ((~byteValue)) & 0xFF;
+    }
+
+    private int fromTwosComplimented(int byteValue){
+        return (((~byteValue)) & 0xFF) - 1;
     }
 
     private void performCMP(int value, int toRegister){
         int result = performSilently(this::performSBC, getRegisterValue(toRegister), value, true);
         registers.setFlagsBasedOn(result & 0xFF);
 
-        registers.setFlagTo(C, (fromTwosComplimented(result)-1 >=0));
+        registers.setFlagTo(C, (fromTwosComplimented(result) >=0));
     }
 
     private int rightShift(int value, boolean carryIn){
