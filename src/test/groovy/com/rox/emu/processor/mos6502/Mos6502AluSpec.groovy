@@ -302,4 +302,27 @@ class Mos6502AluSpec extends Specification {
         0b10000000 | true    || 1              | 1             | true     | "Carry in, carry out"
         0b01000001 | true    || 0x83           | -125          | false    | "Carry in, positive to negative"
     }
+
+    @Unroll
+    def "LSR (#description): #operandA = #expectedValue"(){
+        given: 'A number to shift left'
+        final RoxByte a = RoxByte.literalFrom(operandA)
+
+        and: 'The status flags are setup beforehand'
+        registers.setFlagTo(Registers.C, carryIn)
+
+        when:
+        final RoxByte result = alu.lsr(a)
+
+        then:
+        expectedResult == result.rawValue
+        expectedValue == result.asInt
+
+        and: 'bits shifted out of the end, end up in the carry'
+        registers.getFlag(Registers.C) == carryOut
+
+        where:
+        operandA   | carryIn || expectedResult | expectedValue | carryOut | description
+        0          | false   || 0              | 0             | false    | "Zero to zero"
+    }
 }

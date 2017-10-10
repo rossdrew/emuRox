@@ -100,4 +100,10 @@ public class Mos6502Alu {
         registers.setFlagTo(Registers.C, result.getHighByte().isBitSet(0));
         return result.getLowByte();
     }
+
+    public RoxByte lsr(RoxByte byteA) {
+        final RoxWord result = RoxWord.literalFrom((byteA.getRawValue() >> 1));
+        registers.setFlagTo(Registers.C, result.getHighByte().isBitSet(0));
+        return result.getLowByte();
+    }
 }
