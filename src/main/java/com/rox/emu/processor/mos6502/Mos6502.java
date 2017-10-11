@@ -918,10 +918,6 @@ public class Mos6502 {
         registers.setFlagTo(C, (fromTwosComplimented(result) >=0));
     }
 
-    private int rightShift(int value, boolean carryIn){
-        return (value >> 1) | (carryIn ? 0b10000000 : 0);
-    }
-
     @FunctionalInterface
     private interface SingleByteOperation {
         int perform(int byteValue);
@@ -955,10 +951,9 @@ public class Mos6502 {
     }
 
     private int performROR(int initialValue){
-        int rotatedValue = rightShift(initialValue, (registers.getFlag(C)));
-        setBorrowFlagFor(initialValue);
+        int rotatedValue = alu.ror(RoxByte.literalFrom(initialValue)).getRawValue();
         registers.setFlagsBasedOn(rotatedValue);
-        return rotatedValue & 0xFF;
+        return rotatedValue;
     }
 
     private int performLSR(int initialValue){
