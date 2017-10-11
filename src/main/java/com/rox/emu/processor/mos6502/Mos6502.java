@@ -875,10 +875,6 @@ public class Mos6502 {
        return memoryWord;
     }
 
-    private void setBorrowFlagFor(int newFakeByte) {
-       registers.setFlagTo(C, ((newFakeByte & 0x1) == 0x1));
-    }
-
     /**
      * Call {@link Mos6502#branchTo(int)} with next program byte
      *
