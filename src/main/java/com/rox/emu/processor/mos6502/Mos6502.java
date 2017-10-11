@@ -23,10 +23,8 @@ public class Mos6502 {
     private final Registers registers = new Registers();
     private final Mos6502Alu alu = new Mos6502Alu(registers);
 
-    /** The bit set on a word when a byte has carried up */
-    public static final int CARRY_INDICATOR_BIT = 0x100;
     /** The bit set on a byte when a it is negative */
-    public static final int NEGATIVE_INDICATOR_BIT = 0x80;
+    private static final int NEGATIVE_INDICATOR_BIT = 0x80;
 
     public Mos6502(Memory memory) {
         this.memory = memory;
