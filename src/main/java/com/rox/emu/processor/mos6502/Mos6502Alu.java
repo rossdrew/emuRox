@@ -14,6 +14,9 @@ import com.rox.emu.env.RoxWord;
  *  <li> {@link #xor} </li>
  *  <li> {@link #and} </li>
  *  <li> {@link #asl} </li>
+ *  <li> {@link #rol} </li>
+ *  <li> {@link #lsr} </li>
+ *  <li> {@link #ror} </li>
  * </ul>
  *
  * TODO think about multi byte addition - using this calculating > 1 byte memory doesn't work, of course.
@@ -27,6 +30,12 @@ public class Mos6502Alu {
     }
 
     /**
+     * Return the addition of <code>byteA</code>, <code>byteB</code> and the contents of the {@link Registers} carry
+     * flag.<br/>
+     * <br>
+     * The carry flag is used for multi-byte addition, so it should be cleared at the start of any addition
+     * that doesn't need to take into account a carry from a previous one.
+     *
      * @return the result of <code>byteA ADD byteB</code>
      */
     public RoxByte adc(final RoxByte byteA, final RoxByte byteB){
@@ -45,8 +54,15 @@ public class Mos6502Alu {
     }
 
     /**
+     * Return the subtraction of <code>byteB</code> from <code>byteA</code> using the contents of the
+     * {@link Registers} carry flag as a borrow.<br/>
+     * <br/>
      * This is effectively an {@link #adc} operation with <code>byteB</code> converted to it's ones compliment.
-     * Combined with a <em>loaded carry flag</em>, this gives subtraction via twos compliment addition
+     * Combined with a <em>loaded carry flag</em> used as a borrow, this gives subtraction via twos compliment
+     * addition.<br/>
+     * <br>
+     * This means the opposite of {@link #adc}s carry behaviour is expected.  Any usage that doesn't need
+     * to take into account of a previous bytes borrow, should load the carry flag to get normal behaviour.
      *
      * @return the result of the SBC operation
      */
