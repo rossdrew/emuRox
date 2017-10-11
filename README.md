@@ -47,11 +47,11 @@ BCD and proper timing is a thing for another day as my first objective for now, 
  The plan was to develop this, a larger personal project, in a TDD (Test Driven Development) centric way.  This means writing failing tests that describe functionality then writing that functionality to make the tests pass and iteratively writing a complete application.
  Here is a list of those that I am using or have used along the way:-
  
- - [Trello](https://trello.com/b/ZWcFxEu3/emurox) for work breakdown and project management.
- - [TravisCI](https://travis-ci.org/) for continuous integration & build status GitHub Shield, making sure my build always builds and my tests always pass. 
+ - [Trello](https://trello.com/b/ZWcFxEu3/emurox) for work breakdown and project management. 
  - [Java](https://www.java.com/)/[JUnit](http://junit.org/junit4/) for basic functionality tests.  
  - [Groovy](http://www.groovy-lang.org/)/[Spock](http://spockframework.org/) for [data-driven tests](https://en.wikipedia.org/wiki/Data-driven_testing) .  For covering various variations of class creation and method use in a clear, concise way.  
  - [junit-quickcheck](https://www.google.co.uk/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&cad=rja&uact=8&ved=0ahUKEwjq4-PF-aPSAhWHDsAKHV17BCIQFggaMAA&url=https%3A%2F%2Fgithub.com%2Fpholser%2Fjunit-quickcheck&usg=AFQjCNE37M0yEi68OG8Hr7y1MDoJwcLOaQ&sig2=AUpnbmKM5Sk9efhw1r-bKw&bvm=bv.147448319,d.d2s) and [Spock Genesis](https://github.com/Bijnagte/spock-genesis) for property-based testing in Java and Groovy respectively.
+ - [TravisCI](https://travis-ci.org/) for continuous integration & build status GitHub Shield, making sure my build always builds and my tests always pass.
  - [Pitest](http://pitest.org/) reports. To allow us to use [mutation testing](https://en.wikipedia.org/wiki/Mutation_testing) to validate and improve our ([Spock](http://spockframework.org/) & [JUnit](http://junit.org/junit4/)) unit tests.  The Pitest GitHub shield is a [self made Python program](https://rossdrew.github.io//pitest-ci/).
  - [JaCoCo](http://www.eclemma.org/jacoco/) reports. To allow us to strive for high [code coverage](https://en.wikipedia.org/wiki/Code_coverage).  Mainly for the GitHub shield using [CodeCov](https://codecov.io). 
  - Static analysis done in my development environment on [IntelliJ IDEA](https://www.jetbrains.com/idea/) and online (including GitHub shield) by [Codeacy](https://www.codacy.com/). 
