@@ -962,8 +962,7 @@ public class Mos6502 {
     }
 
     private int performLSR(int initialValue){
-        int rotatedValue = rightShift(initialValue, false);
-        setBorrowFlagFor(initialValue);
+        int rotatedValue = alu.lsr(RoxByte.literalFrom(initialValue)).getRawValue();
         registers.setFlagsBasedOn(rotatedValue);
         return rotatedValue;
     }
