@@ -324,9 +324,37 @@ class Mos6502AluSpec extends Specification {
         where:
         operandA   | carryIn || expectedResult | expectedValue | carryOut | description
         0          | false   || 0              | 0             | false    | "Zero to zero"
-        0b00000001 | false   || 0              | 0             | true     | "Shift to zero"
+        0b00000001 | false   || 0              | 0             | true     | "Shift to zero with carry out"
         0b00000000 | true    || 0              | 0             | false    | "Zero always \"carried\" in"
         0b10000000 | false   || 0b01000000     | 64            | false    | "Shift negative to positive"
         0b11111111 | false   || 0b01111111     | 127           | true     | "Shift negative to positive with carry out"
+    }
+
+    @Unroll
+    def "ROR (#description): #operandA = #expectedValue"(){
+        given: 'A number to shift left'
+        final RoxByte a = RoxByte.literalFrom(operandA)
+
+        and: 'The status flags are setup beforehand'
+        registers.setFlagTo(Registers.C, carryIn)
+
+        when:
+        final RoxByte result = alu.ror(a)
+
+        then:
+        expectedResult == result.rawValue
+        expectedValue == result.asInt
+
+        and: 'bits shifted out of the end, end up in the carry'
+        registers.getFlag(Registers.C) == carryOut
+
+        where:
+        operandA   | carryIn || expectedResult | expectedValue | carryOut | description
+        0          | false   || 0              | 0             | false    | "Zero to zero"
+        0b00000001 | false   || 0              | 0             | true     | "Shift to zero with carry out"
+        0b00000000 | true    || 0b10000000     | -128          | false    | "Carry in to negative"
+        0b10000000 | false   || 0b01000000     | 64            | false    | "Shift negative to positive"
+        0b11111111 | false   || 0b01111111     | 127           | true     | "Shift negative to positive with carry out"
+        0b00000001 | true    || 0b10000000     | -128          | true     | "Carry in, carry out"
     }
 }
