@@ -980,6 +980,15 @@ public class Mos6502 {
        int perform(int byteValueOne, int byteValueTwo);
     }
 
+    /**
+     * Perform a given operation and have the state of the registers be the same as before the operation was performed
+     *
+     * @param operation operation to perform
+     * @param a byte A to pass into the operation
+     * @param b byte B to pass into the operation
+     * @param carryInState the state in which to assume the carry flag is in at the start of the operation
+     * @return the result of the operation.
+     */
     private int performSilently(TwoByteOperation operation, int a, int b, boolean carryInState){
        int statusState = registers.getRegister(REG_STATUS);
 
