@@ -1405,7 +1405,8 @@ class OpCodeSpec extends Specification {
         0x5        | 0x3         | 0x2                  | false  | false | false | true  | "Basic subtraction"
         0x5        | 0x5         | 0x0                  | true   | false | false | true  | "With zero result"
         0x5        | 0x6         | 0xFF                 | false  | true  | false | false | "With negative result"
-//        0b10000000 | 0x1         | 0b01111111           | false  | false | true  | false | "With overflow"
+        0b10000000 | 0x1         | 0b01111111           | false  | false | true  | true  | "With overflow & carry"
+        0x50       | 0xB0        | 0xA0                 | false  | true  | true  | false | "With overflow & no carry"
     }
     
     @Unroll("SBC (Zero Page) #Expected:  #firstValue - #secondValue = #expectedAccumulator in Accumulator.")
@@ -1430,6 +1431,8 @@ class OpCodeSpec extends Specification {
         0x5        | 0x3         | 0x2                  | false  | false | false | true  | "Basic subtraction"
         0x5        | 0x5         | 0x0                  | true   | false | false | true  | "With zero result"
         0x5        | 0x6         | 0xFF                 | false  | true  | false | false | "with negative result"
+        0b10000000 | 0x1         | 0b01111111           | false  | false | true  | true  | "With overflow & carry"
+        0x50       | 0xB0        | 0xA0                 | false  | true  | true  | false | "With overflow & no carry"
     }
     
     @Unroll("SBC (Zero Page[X]) #Expected:  #firstValue - #secondValue = #expectedAccumulator in Accumulator.")
@@ -1455,6 +1458,8 @@ class OpCodeSpec extends Specification {
         0x5        | 0     | 0x3         | 0x2                  | false  | false | false | true  | "Basic subtraction"
         0x5        | 1     | 0x5         | 0x0                  | true   | false | false | true  | "With zero result"
         0x5        | 2     | 0x6         | 0xFF                 | false  | true  | false | false | "with negative result"
+        0b10000000 | 3     | 0x1         | 0b01111111           | false  | false | true  | true  | "With overflow & carry"
+        0x50       | 4     | 0xB0        | 0xA0                 | false  | true  | true  | false | "With overflow & no carry"
     }
     
     @Unroll("SBC (Absolute) #Expected:  #firstValue - #secondValue = #expectedAccumulator in Accumulator.")
@@ -1479,6 +1484,8 @@ class OpCodeSpec extends Specification {
         0x5        | 0x3         | 0x2                  | false  | false | false | true  | "Basic subtraction"
         0x5        | 0x5         | 0x0                  | true   | false | false | true  | "With zero result"
         0x5        | 0x6         | 0xFF                 | false  | true  | false | false | "with negative result"
+        0b10000000 | 0x1         | 0b01111111           | false  | false | true  | true  | "With overflow & carry"
+        0x50       | 0xB0        | 0xA0                 | false  | true  | true  | false | "With overflow & no carry"
     }
     
     @Unroll("SBC (Absolute[X]) #Expected:  #firstValue - #secondValue = #expectedAccumulator in Accumulator.")
@@ -1504,6 +1511,8 @@ class OpCodeSpec extends Specification {
         0     | 0x5        | 0x3         | 0x2                  | false  | false | false | true  | "Basic subtraction"
         1     | 0x5        | 0x5         | 0x0                  | true   | false | false | true  | "With zero result"
         2     | 0x5        | 0x6         | 0xFF                 | false  | true  | false | false | "with negative result"
+        3     | 0b10000000 | 0x1         | 0b01111111           | false  | false | true  | true  | "With overflow & carry"
+        4     | 0x50       | 0xB0        | 0xA0                 | false  | true  | true  | false | "With overflow & no carry"
     }
     
     @Unroll("SBC (Absolute[Y]) #Expected:  #firstValue - #secondValue = #expectedAccumulator in Accumulator.")
@@ -1529,6 +1538,8 @@ class OpCodeSpec extends Specification {
         0     | 0x5        | 0x3         | 0x2                  | false  | false | false | true  | "Basic subtraction"
         1     | 0x5        | 0x5         | 0x0                  | true   | false | false | true  | "With zero result"
         2     | 0x5        | 0x6         | 0xFF                 | false  | true  | false | false | "with negative result"
+        3     | 0b10000000 | 0x1         | 0b01111111           | false  | false | true  | true  | "With overflow & carry"
+        4     | 0x50       | 0xB0        | 0xA0                 | false  | true  | true  | false | "With overflow & no carry"
     }
     
     @Unroll("SBC (Indirect, X) #Expected: #firstValue (@[#locationHi|#locationLo]) - #secondValue = #expectedAccumulator")
@@ -1552,13 +1563,14 @@ class OpCodeSpec extends Specification {
         expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
 		testFlags(Z,N,C,V)
-        //TODO O/C
     
         where:
         locationHi | locationLo | index | firstValue | secondValue | expectedAccumulator | Z      | N     | V     | C     | Expected
         0x1        | 0x10       | 0     | 0x5        | 0x3         | 0x2                 | false  | false | false | true  | "Basic subtraction"
         0x2        | 0x13       | 1     | 0x5        | 0x5         | 0x0                 | true   | false | false | true  | "With zero result"
         0x3        | 0x26       | 2     | 0x5        | 0x6         | 0xFF                | false  | true  | false | false | "with negative result"
+        0x4        | 0x33       | 3     | 0b10000000 | 0x1         | 0b01111111          | false  | false | true  | true  | "With overflow & carry"
+        0x5        | 0x19       | 4     | 0x50       | 0xB0        | 0xA0                | false  | true  | true  | false | "With overflow & no carry"
     }
     
     @Unroll("SBC (Indirect, Y) #Expected: #firstValue (@[#locationHi|#locationLo]) - #secondValue = #expectedAccumulator")
@@ -1582,13 +1594,14 @@ class OpCodeSpec extends Specification {
         then:
         expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
 		testFlags(Z,N)
-        //TODO O/C
     
         where:
         pointerHi | pointerLo | index | firstValue | secondValue | expectedAccumulator | Z      | N     | O     | C     | Expected
         0x1       | 0x10      | 0     | 0x5        | 0x3         | 0x2                 | false  | false | false | true  | "Basic subtraction"
         0x2       | 0x13      | 1     | 0x5        | 0x5         | 0x0                 | true   | false | false | true  | "With zero result"
         0x3       | 0x26      | 2     | 0x5        | 0x6         | 0xFF                | false  | true  | false | false | "with negative result"
+        0x4       | 0x33      | 3     | 0b10000000 | 0x1         | 0b01111111          | false  | false | true  | true  | "With overflow & carry"
+        0x5       | 0x19      | 4     | 0x50       | 0xB0        | 0xA0                | false  | true  | true  | false | "With overflow & no carry"
     }
     
     @Unroll("INX #Expected: on #firstValue = #expectedX")
