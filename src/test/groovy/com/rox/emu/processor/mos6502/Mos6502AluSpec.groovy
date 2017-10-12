@@ -321,7 +321,6 @@ class Mos6502AluSpec extends Specification {
         0          | true    || 1              | 1             | false    | "Carry carried in"
         0b10000000 | true    || 1              | 1             | true     | "Carry in, carry out"
         0b01000001 | true    || 0x83           | -125          | false    | "Carry in, positive to negative"
-        0b00111101 | true    || 0b01111011     | 123           | false    | "TEST"
     }
 
     @Ignore("This test is failing on some numbers, perhaps a badly written test?!")
