@@ -11,9 +11,13 @@ class Mos6502AluSpec extends Specification {
 
     private static final int RANDOM_ITERATIONS = 10
 
+    def clearRegisters(){
+        for (flagNumber in 0..7) registers.setFlagTo(flagNumber, false)
+    }
+
     def setup(){
         registers = new Registers()
-        for (flagNumber in 0..7) registers.setFlagTo(flagNumber, false)
+        clearRegisters()
         alu = new Mos6502Alu(registers)
     }
 
