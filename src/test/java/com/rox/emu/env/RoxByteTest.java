@@ -91,7 +91,7 @@ public class RoxByteTest extends Specification{
     }
 
     @Property(trials = 10)
-    public void testToStringIsAccurate(@When(satisfies = "#_ < 255 || #_ > 0") int byteValue){
+    public void testToStringIsAccurate(@InRange(min = "0", max = "255") int byteValue){
         final RoxByte value = RoxByte.literalFrom(byteValue);
         assertTrue(value.toString().contains(""+value.getAsInt()));
     }
@@ -160,7 +160,7 @@ public class RoxByteTest extends Specification{
     }
 
     @Property(trials = 10)
-    public void testEquals(@When(satisfies = "#_ < 255 || #_ > 0") int byteValue){
+    public void testEquals(@InRange(min = "0", max = "255") int byteValue){
         final RoxByte valA = RoxByte.literalFrom(byteValue);
         final RoxByte valB = RoxByte.literalFrom(byteValue);
 
@@ -177,7 +177,7 @@ public class RoxByteTest extends Specification{
     }
 
     @Property(trials = 10)
-    public void testEqualsEdgesCases(@When(satisfies = "#_ < 255 || #_ > 0") int byteValue){
+    public void testEqualsEdgesCases(@InRange(min = "0", max = "255") int byteValue){
         final RoxByte valA = RoxByte.literalFrom(byteValue);
         final RoxByte valB = RoxByte.literalFrom(byteValue);
 
@@ -189,7 +189,7 @@ public class RoxByteTest extends Specification{
     }
 
     @Property(trials = 10)
-    public void testHashcode(@When(satisfies = "#_ < 255 || #_ > 0") int byteValue){
+    public void testHashcode(@InRange(min = "0", max = "255") int byteValue){
         final RoxByte valA = RoxByte.literalFrom(byteValue);
         final RoxByte valB = RoxByte.literalFrom(byteValue);
 
