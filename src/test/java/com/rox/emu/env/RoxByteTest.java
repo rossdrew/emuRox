@@ -168,12 +168,12 @@ public class RoxByteTest extends Specification{
     }
 
     @Property(trials = 10)
-    public void testNotEquals(@When(satisfies = "#_ < 127 || #_ > 0") int byteValueA,
-                              @When(satisfies = "#_ < 255 || #_ > 128") int byteValueB){
+    public void testNotEquals(@InRange(min = "0", max = "127") int byteValueA,
+                              @InRange(min = "128", max = "255") int byteValueB){
         final RoxByte valA = RoxByte.literalFrom(byteValueA);
         final RoxByte valB = RoxByte.literalFrom(byteValueB);
 
-        assertFalse(valA.equals(valB));
+        assertFalse(valA + " == " + valB + " and was expected not to", valA.equals(valB));
     }
 
     @Property(trials = 10)
