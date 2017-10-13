@@ -1018,15 +1018,15 @@ public class Mos6502 {
     }
 
     private int performAND(int byteValueA, int byteValueB){
-        return byteValueA & byteValueB;
+        return alu.and(RoxByte.literalFrom(byteValueA), RoxByte.literalFrom(byteValueB)).getRawValue();
     }
 
     private int performEOR(int byteValueA, int byteValueB){
-        return byteValueA ^ byteValueB;
+        return alu.xor(RoxByte.literalFrom(byteValueA), RoxByte.literalFrom(byteValueB)).getRawValue();
     }
 
     private int performORA(int byteValueA, int byteValueB){
-        return byteValueA | byteValueB;
+        return alu.or(RoxByte.literalFrom(byteValueA), RoxByte.literalFrom(byteValueB)).getRawValue();
     }
 
     private int performADC(int byteValueA, int byteValueB){
