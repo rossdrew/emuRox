@@ -1021,12 +1021,6 @@ public class Mos6502Test {
 
             processor.step(27);
 
-            System.out.println("RESAD = " + Integer.toBinaryString(memory.getByte(RESAD_0)) + "|" + Integer.toBinaryString(memory.getByte(RESAD_1)));
-            System.out.println("MPD = " + memory.getByte(MPD));
-            System.out.println("MPR = " + memory.getByte(MPR));
-            System.out.println("TMP = " + memory.getByte(TMP));
-            System.out.println("[A] = " + registers.getRegister(Registers.REG_ACCUMULATOR));
-
             assertEquals(0x1C, memory.getByte(RESAD_0));
     }
 }
