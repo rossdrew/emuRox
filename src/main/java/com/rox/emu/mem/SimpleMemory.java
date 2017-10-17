@@ -25,7 +25,7 @@ public class SimpleMemory implements Memory {
     @Override
     public void setByteAt(int location, int byteValue) {
         LOG.trace("mem[" + location + "] << " + byteValue);
-        memoryArray[location] = RoxByte.literalFrom(byteValue & 0xFF);
+        memoryArray[location] = RoxByte.fromLiteral(byteValue & 0xFF);
     }
 
     /**
@@ -35,7 +35,7 @@ public class SimpleMemory implements Memory {
     public void setBlock(int startLocation, int[] byteValues) {
         LOG.trace("mem[" + startLocation + "] << " + byteValues.length + " bytes");
         for (int i=0; i<byteValues.length; i++){
-            memoryArray[startLocation + i] = RoxByte.literalFrom(byteValues[i]);
+            memoryArray[startLocation + i] = RoxByte.fromLiteral(byteValues[i]);
         }
     }
 

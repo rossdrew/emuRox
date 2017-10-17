@@ -933,25 +933,25 @@ public class Mos6502 {
     }
 
     private int performASL(int byteValue){
-        int newValue = alu.asl(RoxByte.literalFrom(byteValue)).getRawValue();
+        int newValue = alu.asl(RoxByte.fromLiteral(byteValue)).getRawValue();
         registers.setFlagsBasedOn(newValue);
         return newValue;
     }
 
     private int performROL(int initialValue){
-        int rotatedValue = alu.rol(RoxByte.literalFrom(initialValue)).getRawValue();
+        int rotatedValue = alu.rol(RoxByte.fromLiteral(initialValue)).getRawValue();
         registers.setFlagsBasedOn(rotatedValue);
         return rotatedValue;
     }
 
     private int performROR(int initialValue){
-        int rotatedValue = alu.ror(RoxByte.literalFrom(initialValue)).getRawValue();
+        int rotatedValue = alu.ror(RoxByte.fromLiteral(initialValue)).getRawValue();
         registers.setFlagsBasedOn(rotatedValue);
         return rotatedValue;
     }
 
     private int performLSR(int initialValue){
-        int rotatedValue = alu.lsr(RoxByte.literalFrom(initialValue)).getRawValue();
+        int rotatedValue = alu.lsr(RoxByte.fromLiteral(initialValue)).getRawValue();
         registers.setFlagsBasedOn(rotatedValue);
         return rotatedValue;
     }
@@ -1018,22 +1018,22 @@ public class Mos6502 {
     }
 
     private int performAND(int byteValueA, int byteValueB){
-        return alu.and(RoxByte.literalFrom(byteValueA), RoxByte.literalFrom(byteValueB)).getRawValue();
+        return alu.and(RoxByte.fromLiteral(byteValueA), RoxByte.fromLiteral(byteValueB)).getRawValue();
     }
 
     private int performEOR(int byteValueA, int byteValueB){
-        return alu.xor(RoxByte.literalFrom(byteValueA), RoxByte.literalFrom(byteValueB)).getRawValue();
+        return alu.xor(RoxByte.fromLiteral(byteValueA), RoxByte.fromLiteral(byteValueB)).getRawValue();
     }
 
     private int performORA(int byteValueA, int byteValueB){
-        return alu.or(RoxByte.literalFrom(byteValueA), RoxByte.literalFrom(byteValueB)).getRawValue();
+        return alu.or(RoxByte.fromLiteral(byteValueA), RoxByte.fromLiteral(byteValueB)).getRawValue();
     }
 
     private int performADC(int byteValueA, int byteValueB){
-       return alu.adc(RoxByte.literalFrom(byteValueA), RoxByte.literalFrom(byteValueB)).getRawValue();
+       return alu.adc(RoxByte.fromLiteral(byteValueA), RoxByte.fromLiteral(byteValueB)).getRawValue();
     }
 
     private int performSBC(int byteValueA, int byteValueB){
-       return alu.sbc(RoxByte.literalFrom(byteValueA), RoxByte.literalFrom(byteValueB)).getRawValue();
+       return alu.sbc(RoxByte.fromLiteral(byteValueA), RoxByte.fromLiteral(byteValueB)).getRawValue();
     }
 }

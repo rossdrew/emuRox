@@ -61,14 +61,14 @@ public final class RoxByte {
      * @return a new {@link RoxByte} representing this value converted to it's twos compliment value
      */
     public RoxByte asTwosCompliment(){
-        return RoxByte.literalFrom(((~getRawValue()) + 1) & 0xFF);
+        return RoxByte.fromLiteral(((~getRawValue()) + 1) & 0xFF);
     }
 
     /**
      * @return a new {@link RoxByte} representing this value converted to it's ones compliment value
      */
     public RoxByte asOnesCompliment(){
-        return RoxByte.literalFrom(((~getRawValue())) & 0xFF);
+        return RoxByte.fromLiteral(((~getRawValue())) & 0xFF);
     }
 
     private boolean bitInRange(int bit){
@@ -94,7 +94,7 @@ public final class RoxByte {
      * @param value an {@link int} from which to extract the bits to make this byte
      * @return a {@link RoxByte} made up from the least significant 8 bits of the given value
      */
-    public static RoxByte literalFrom(int value) {
+    public static RoxByte fromLiteral(int value) {
         return new RoxByte(value & 0xFF, ByteFormat.SIGNED_TWOS_COMPLIMENT);
     }
 

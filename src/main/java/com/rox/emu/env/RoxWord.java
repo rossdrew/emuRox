@@ -30,11 +30,11 @@ public final class RoxWord {
     }
 
     public RoxByte getLowByte() {
-        return RoxByte.literalFrom(wordValue & 0xFF);
+        return RoxByte.fromLiteral(wordValue & 0xFF);
     }
 
     public RoxByte getHighByte() {
-        return RoxByte.literalFrom(wordValue >> 8);
+        return RoxByte.fromLiteral(wordValue >> 8);
     }
 
 }

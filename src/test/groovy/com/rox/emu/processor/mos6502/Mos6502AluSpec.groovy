@@ -25,8 +25,8 @@ class Mos6502AluSpec extends Specification {
     @Unroll
     def "ADC (#description): #operandA + #operandB = #expectedValue"(){
         given: 'Some numbers to add'
-        final RoxByte a = RoxByte.literalFrom(operandA)
-        final RoxByte b = RoxByte.literalFrom(operandB)
+        final RoxByte a = RoxByte.fromLiteral(operandA)
+        final RoxByte b = RoxByte.fromLiteral(operandB)
 
         and: 'The status flags are setup beforehand'
         registers.setFlagTo(Registers.C, carryIn)
@@ -62,8 +62,8 @@ class Mos6502AluSpec extends Specification {
     @Unroll
     def "Expected value for: #randomValueA + #randomValueB"(){
         when: 'we add two random numbers'
-        final RoxByte result = alu.adc(RoxByte.literalFrom(randomValueA),
-                                       RoxByte.literalFrom(randomValueB))
+        final RoxByte result = alu.adc(RoxByte.fromLiteral(randomValueA),
+                                       RoxByte.fromLiteral(randomValueB))
 
         and: 'the expected (one byte) result is'
         final int expected = ((randomValueA + randomValueB) & 0xFF)
@@ -79,8 +79,8 @@ class Mos6502AluSpec extends Specification {
     @Unroll
     def "SBC (#description): #operandA - #operandB = #expectedValue"(){
         given: 'Some numbers to subtract'
-        final RoxByte a = RoxByte.literalFrom(operandA)
-        final RoxByte b = RoxByte.literalFrom(operandB)
+        final RoxByte a = RoxByte.fromLiteral(operandA)
+        final RoxByte b = RoxByte.fromLiteral(operandB)
 
         and: 'Carry is set before an SBC operation'
         registers.setFlag(Registers.C)
@@ -114,8 +114,8 @@ class Mos6502AluSpec extends Specification {
         registers.setFlag(Registers.C)
 
         and: 'we subtract a number from another'
-        final RoxByte result = alu.sbc(RoxByte.literalFrom(randomValueA),
-                                       RoxByte.literalFrom(randomValueB))
+        final RoxByte result = alu.sbc(RoxByte.fromLiteral(randomValueA),
+                                       RoxByte.fromLiteral(randomValueB))
 
         and: 'the expected (one byte) result is'
         final int expected = ((randomValueA - randomValueB) & 0xFF)
@@ -131,8 +131,8 @@ class Mos6502AluSpec extends Specification {
     @Unroll
     def "OR (#description): #operandA | #operandB = #expectedValue"(){
         given: 'Some numbers to or'
-        final RoxByte a = RoxByte.literalFrom(operandA)
-        final RoxByte b = RoxByte.literalFrom(operandB)
+        final RoxByte a = RoxByte.fromLiteral(operandA)
+        final RoxByte b = RoxByte.fromLiteral(operandB)
 
         when:
         final RoxByte result = alu.or(a,b)
@@ -152,8 +152,8 @@ class Mos6502AluSpec extends Specification {
     @Unroll
     def "Expected value for: #randomValueA OR #randomValueB"(){
         when: 'we OR two random numbers'
-        final RoxByte result = alu.or(RoxByte.literalFrom(randomValueA),
-                                      RoxByte.literalFrom(randomValueB))
+        final RoxByte result = alu.or(RoxByte.fromLiteral(randomValueA),
+                                      RoxByte.fromLiteral(randomValueB))
 
         and: 'the expected (one byte) result is'
         final int expected = ((randomValueA | randomValueB) & 0xFF)
@@ -169,8 +169,8 @@ class Mos6502AluSpec extends Specification {
     @Unroll
     def "AND (#description): #operandA & #operandB = #expectedValue"(){
         given: 'Some numbers to and'
-        final RoxByte a = RoxByte.literalFrom(operandA)
-        final RoxByte b = RoxByte.literalFrom(operandB)
+        final RoxByte a = RoxByte.fromLiteral(operandA)
+        final RoxByte b = RoxByte.fromLiteral(operandB)
 
         when:
         final RoxByte result = alu.and(a,b)
@@ -193,8 +193,8 @@ class Mos6502AluSpec extends Specification {
     @Unroll
     def "Expected value for: #randomValueA AND #randomValueB"(){
         when: 'we AND two random numbers'
-        final RoxByte result = alu.and(RoxByte.literalFrom(randomValueA),
-                                       RoxByte.literalFrom(randomValueB))
+        final RoxByte result = alu.and(RoxByte.fromLiteral(randomValueA),
+                                       RoxByte.fromLiteral(randomValueB))
 
         and: 'the expected (one byte) result is'
         final int expected = ((randomValueA & randomValueB) & 0xFF)
@@ -210,8 +210,8 @@ class Mos6502AluSpec extends Specification {
     @Unroll
     def "XOR (#description): #operandA ^ #operandB = #expectedValue"(){
         given: 'Some numbers to xor'
-        final RoxByte a = RoxByte.literalFrom(operandA)
-        final RoxByte b = RoxByte.literalFrom(operandB)
+        final RoxByte a = RoxByte.fromLiteral(operandA)
+        final RoxByte b = RoxByte.fromLiteral(operandB)
 
         when:
         final RoxByte result = alu.xor(a,b)
@@ -234,8 +234,8 @@ class Mos6502AluSpec extends Specification {
     @Unroll
     def "Expected value for: #randomValueA XOR #randomValueB"(){
         when: 'we XOR two random numbers'
-        final RoxByte result = alu.xor(RoxByte.literalFrom(randomValueA),
-                RoxByte.literalFrom(randomValueB))
+        final RoxByte result = alu.xor(RoxByte.fromLiteral(randomValueA),
+                RoxByte.fromLiteral(randomValueB))
 
         and: 'the expected (one byte) result is'
         final int expected = ((randomValueA ^ randomValueB) & 0xFF)
@@ -251,7 +251,7 @@ class Mos6502AluSpec extends Specification {
     @Unroll
     def "ASL (#description): #operandA = #expectedValue"(){
         given: 'A number to shift left'
-        final RoxByte a = RoxByte.literalFrom(operandA)
+        final RoxByte a = RoxByte.fromLiteral(operandA)
 
         and: 'The status flags are setup beforehand'
         registers.setFlagTo(Registers.C, carryIn)
@@ -280,7 +280,7 @@ class Mos6502AluSpec extends Specification {
     @Unroll
     def "Expected value for: ASL #randomValueA"(){
         when: 'we ASL a random number'
-        final RoxByte result = alu.asl(RoxByte.literalFrom(randomValueA))
+        final RoxByte result = alu.asl(RoxByte.fromLiteral(randomValueA))
 
         and: 'the expected (one byte) result is'
         final int expected = ((randomValueA << 1) & 0xFF)
@@ -295,7 +295,7 @@ class Mos6502AluSpec extends Specification {
     @Unroll
     def "ROL (#description): #operandA = #expectedValue"(){
         given: 'A number to shift left'
-        final RoxByte a = RoxByte.literalFrom(operandA)
+        final RoxByte a = RoxByte.fromLiteral(operandA)
 
         and: 'The status flags are setup beforehand'
         registers.setFlagTo(Registers.C, carryIn)
@@ -330,7 +330,7 @@ class Mos6502AluSpec extends Specification {
         int carryIn = randomCarryFlag ? 1 : 0
 
         and: 'we ROL a random number'
-        final RoxByte result = alu.rol(RoxByte.literalFrom(randomValueA))
+        final RoxByte result = alu.rol(RoxByte.fromLiteral(randomValueA))
 
         and: 'the expected (one byte) result, including the carry is'
         final int expected = (((randomValueA << 1) | carryIn) & 0xFF)
@@ -346,7 +346,7 @@ class Mos6502AluSpec extends Specification {
     @Unroll
     def "LSR (#description): #operandA = #expectedValue"(){
         given: 'A number to shift left'
-        final RoxByte a = RoxByte.literalFrom(operandA)
+        final RoxByte a = RoxByte.fromLiteral(operandA)
 
         and: 'The status flags are setup beforehand'
         registers.setFlagTo(Registers.C, carryIn)
@@ -373,7 +373,7 @@ class Mos6502AluSpec extends Specification {
     @Unroll
     def "ROR (#description): #operandA = #expectedValue"(){
         given: 'A number to shift left'
-        final RoxByte a = RoxByte.literalFrom(operandA)
+        final RoxByte a = RoxByte.fromLiteral(operandA)
 
         and: 'The status flags are setup beforehand'
         registers.setFlagTo(Registers.C, carryIn)
