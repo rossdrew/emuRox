@@ -50,13 +50,6 @@ public final class RoxByte {
         this.format = format;
     }
 
-    private int intFromTwosComplimented(int byteValue){
-        if (isBitSet(7))
-            return -(((~(byteValue-1))) & 0xFF);
-        else
-            return byteValue;
-    }
-
     /**
      * @return a new {@link RoxByte} representing this value converted to it's twos compliment value
      */
@@ -148,6 +141,13 @@ public final class RoxByte {
             case SIGNED_TWOS_COMPLIMENT:
                 return intFromTwosComplimented(byteValue);
         }
+    }
+
+    private int intFromTwosComplimented(int byteValue){
+        if (isBitSet(7))
+            return -(((~(byteValue-1))) & 0xFF);
+        else
+            return byteValue;
     }
 
     /**
