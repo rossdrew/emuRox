@@ -99,6 +99,47 @@ public final class RoxByte {
     }
 
     /**
+     * Return this single byte value as it's relative Java {@link int} value.
+     * This means a single, {@link ByteFormat} SIGNED_TWOS_COMPLIMENT value which is negative will fill out an
+     * integer and move the signed bit to the integer msb. i.e.
+     *
+     * <table cols="3">
+     *  <tr>
+     *      <th> Value </th>
+     *      <th> RoxByte </th>
+     *      <td> </td>
+     *      <th> Java int </th>
+     *  </tr>
+     *
+     *  <tr>
+     *      <TD> 1</TD>
+     *      <TD> 00000001 </TD>
+     *      <TD> -></TD>
+     *      <TD> 00000000000000000000000000000001</TD>
+     *  </tr>
+     *
+     *  <tr>
+     *      <TD> 127</TD>
+     *      <TD> 01111111</TD>
+     *      <TD> -></TD>
+     *      <TD> 00000000000000000000000001111111</TD>
+     *  </tr>
+     *
+     *  <tr>
+     *      <TD> -1</TD>
+     *      <TD> 11111111</TD>
+     *      <TD> -></TD>
+     *      <TD> 11111111111111111111111111111111</TD>
+     *  </tr>
+     *
+     *  <tr>
+     *      <TD> -128</TD>
+     *      <TD> 10000000</TD>
+     *      <TD> -></TD>
+     *      <TD> 11111111111111111111111110000000</TD>
+     *  </tr>
+     * </table>
+     *
      * @return this SIGNED_TWOS_COMPLIMENT byte as an integer
      */
     public int getAsInt() {
