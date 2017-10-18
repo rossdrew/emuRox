@@ -118,8 +118,8 @@ public class Registers {
         register = new RoxByte[8];
         for (int i=0; i<8; i++)
             register[i] = RoxByte.ZERO;
-        register[REG_SP_X]   = RoxByte.literalFrom(0b11111111);
-        register[REG_STATUS] = RoxByte.literalFrom(0b00000000);
+        register[REG_SP_X]   = RoxByte.fromLiteral(0b11111111);
+        register[REG_STATUS] = RoxByte.fromLiteral(0b00000000);
     }
 
     /**
@@ -136,7 +136,7 @@ public class Registers {
      */
     public void setRegister(int registerID, int val){
         LOG.debug("'R:" + getRegisterName(registerID) + "' := " + val);
-        register[registerID] = RoxByte.literalFrom(val);
+        register[registerID] = RoxByte.fromLiteral(val);
     }
 
     /**

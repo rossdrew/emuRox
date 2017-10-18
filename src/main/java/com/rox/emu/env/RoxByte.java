@@ -50,25 +50,18 @@ public final class RoxByte {
         this.format = format;
     }
 
-    private int intFromTwosComplimented(int byteValue){
-        if (isBitSet(7))
-            return -(((~(byteValue-1))) & 0xFF);
-        else
-            return byteValue;
-    }
-
     /**
      * @return a new {@link RoxByte} representing this value converted to it's twos compliment value
      */
     public RoxByte asTwosCompliment(){
-        return RoxByte.literalFrom(((~getRawValue()) + 1) & 0xFF);
+        return RoxByte.fromLiteral(((~getRawValue()) + 1) & 0xFF);
     }
 
     /**
      * @return a new {@link RoxByte} representing this value converted to it's ones compliment value
      */
     public RoxByte asOnesCompliment(){
-        return RoxByte.literalFrom(((~getRawValue())) & 0xFF);
+        return RoxByte.fromLiteral(((~getRawValue())) & 0xFF);
     }
 
     private boolean bitInRange(int bit){
@@ -94,11 +87,52 @@ public final class RoxByte {
      * @param value an {@link int} from which to extract the bits to make this byte
      * @return a {@link RoxByte} made up from the least significant 8 bits of the given value
      */
-    public static RoxByte literalFrom(int value) {
+    public static RoxByte fromLiteral(int value) {
         return new RoxByte(value & 0xFF, ByteFormat.SIGNED_TWOS_COMPLIMENT);
     }
 
     /**
+     * Return this single byte value as it's relative Java {@link int} value.
+     * This means a single, {@link ByteFormat} SIGNED_TWOS_COMPLIMENT value which is negative will fill out an
+     * integer and move the signed bit to the integer msb. i.e.
+     *
+     * <table cols="3">
+     *  <tr>
+     *      <th> Value </th>
+     *      <th> RoxByte </th>
+     *      <td> </td>
+     *      <th> Java int </th>
+     *  </tr>
+     *
+     *  <tr>
+     *      <TD> 1</TD>
+     *      <TD> 00000001 </TD>
+     *      <TD> -></TD>
+     *      <TD> 00000000000000000000000000000001</TD>
+     *  </tr>
+     *
+     *  <tr>
+     *      <TD> 127</TD>
+     *      <TD> 01111111</TD>
+     *      <TD> -></TD>
+     *      <TD> 00000000000000000000000001111111</TD>
+     *  </tr>
+     *
+     *  <tr>
+     *      <TD> -1</TD>
+     *      <TD> 11111111</TD>
+     *      <TD> -></TD>
+     *      <TD> 11111111111111111111111111111111</TD>
+     *  </tr>
+     *
+     *  <tr>
+     *      <TD> -128</TD>
+     *      <TD> 10000000</TD>
+     *      <TD> -></TD>
+     *      <TD> 11111111111111111111111110000000</TD>
+     *  </tr>
+     * </table>
+     *
      * @return this SIGNED_TWOS_COMPLIMENT byte as an integer
      */
     public int getAsInt() {
@@ -107,6 +141,13 @@ public final class RoxByte {
             case SIGNED_TWOS_COMPLIMENT:
                 return intFromTwosComplimented(byteValue);
         }
+    }
+
+    private int intFromTwosComplimented(int byteValue){
+        if (isBitSet(7))
+            return -(((~(byteValue-1))) & 0xFF);
+        else
+            return byteValue;
     }
 
     /**

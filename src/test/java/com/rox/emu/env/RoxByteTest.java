@@ -56,7 +56,7 @@ public class RoxByteTest extends Specification{
 
     @Test
     public void testLiteralFromInteger() throws InvalidDataTypeException {
-        final RoxByte myByte = RoxByte.literalFrom(1);
+        final RoxByte myByte = RoxByte.fromLiteral(1);
         assertNotNull(myByte);
         assertEquals(RoxByte.ByteFormat.SIGNED_TWOS_COMPLIMENT, myByte.getFormat());
         assertEquals(0b00000001, myByte.getRawValue());
@@ -64,7 +64,7 @@ public class RoxByteTest extends Specification{
 
     @Test
     public void testByteFromRaw() throws InvalidDataTypeException {
-        final RoxByte myByte = RoxByte.literalFrom(0b11111111);
+        final RoxByte myByte = RoxByte.fromLiteral(0b11111111);
         assertNotNull(myByte);
         assertEquals(RoxByte.ByteFormat.SIGNED_TWOS_COMPLIMENT, myByte.getFormat());
         assertEquals(0b11111111, myByte.getRawValue());
@@ -92,7 +92,7 @@ public class RoxByteTest extends Specification{
 
     @Property(trials = 10)
     public void testToStringIsAccurate(@InRange(min = "0", max = "255") int byteValue){
-        final RoxByte value = RoxByte.literalFrom(byteValue);
+        final RoxByte value = RoxByte.fromLiteral(byteValue);
         assertTrue(value.toString().contains(""+value.getAsInt()));
     }
 
@@ -112,7 +112,7 @@ public class RoxByteTest extends Specification{
 
     @Test
     public void testWithoutBit(){
-        final RoxByte myByte = RoxByte.literalFrom(0b11111111);
+        final RoxByte myByte = RoxByte.fromLiteral(0b11111111);
 
         assertEquals(0b11111110, myByte.withoutBit(0).getRawValue());
         assertEquals(0b11111101, myByte.withoutBit(1).getRawValue());
@@ -161,8 +161,8 @@ public class RoxByteTest extends Specification{
 
     @Property(trials = 10)
     public void testEquals(@InRange(min = "0", max = "255") int byteValue){
-        final RoxByte valA = RoxByte.literalFrom(byteValue);
-        final RoxByte valB = RoxByte.literalFrom(byteValue);
+        final RoxByte valA = RoxByte.fromLiteral(byteValue);
+        final RoxByte valB = RoxByte.fromLiteral(byteValue);
 
         assertTrue(valA.equals(valB));
     }
@@ -170,16 +170,16 @@ public class RoxByteTest extends Specification{
     @Property(trials = 10)
     public void testNotEquals(@InRange(min = "0", max = "127") int byteValueA,
                               @InRange(min = "128", max = "255") int byteValueB){
-        final RoxByte valA = RoxByte.literalFrom(byteValueA);
-        final RoxByte valB = RoxByte.literalFrom(byteValueB);
+        final RoxByte valA = RoxByte.fromLiteral(byteValueA);
+        final RoxByte valB = RoxByte.fromLiteral(byteValueB);
 
         assertFalse(valA + " == " + valB + " and was expected not to", valA.equals(valB));
     }
 
     @Property(trials = 10)
     public void testEqualsEdgesCases(@InRange(min = "0", max = "255") int byteValue){
-        final RoxByte valA = RoxByte.literalFrom(byteValue);
-        final RoxByte valB = RoxByte.literalFrom(byteValue);
+        final RoxByte valA = RoxByte.fromLiteral(byteValue);
+        final RoxByte valB = RoxByte.fromLiteral(byteValue);
 
         assertTrue(valA.equals(valA));
         assertTrue(valA.equals(valB));
@@ -190,8 +190,8 @@ public class RoxByteTest extends Specification{
 
     @Property(trials = 10)
     public void testHashcode(@InRange(min = "0", max = "255") int byteValue){
-        final RoxByte valA = RoxByte.literalFrom(byteValue);
-        final RoxByte valB = RoxByte.literalFrom(byteValue);
+        final RoxByte valA = RoxByte.fromLiteral(byteValue);
+        final RoxByte valB = RoxByte.fromLiteral(byteValue);
 
         assertTrue(valA.hashCode() == valB.hashCode());
     }

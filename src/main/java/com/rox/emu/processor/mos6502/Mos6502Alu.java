@@ -75,21 +75,21 @@ public class Mos6502Alu {
      * @return the result of <code>byteA OR byteB</code><br/>
      */
     public RoxByte or(RoxByte byteA, RoxByte byteB) {
-        return RoxByte.literalFrom(byteA.getRawValue() | byteB.getRawValue());
+        return RoxByte.fromLiteral(byteA.getRawValue() | byteB.getRawValue());
     }
 
     /**
      * @return the result of <code>byteA AND byteB</code><br/>
      */
     public RoxByte and(RoxByte byteA, RoxByte byteB) {
-        return RoxByte.literalFrom(byteA.getRawValue() & byteB.getRawValue());
+        return RoxByte.fromLiteral(byteA.getRawValue() & byteB.getRawValue());
     }
 
     /**
      * @return the result of <code>byteA XOR byteB</code><br/>
      */
     public RoxByte xor(RoxByte byteA, RoxByte byteB) {
-        return RoxByte.literalFrom(byteA.getRawValue() ^ byteB.getRawValue());
+        return RoxByte.fromLiteral(byteA.getRawValue() ^ byteB.getRawValue());
     }
 
     /**
@@ -124,7 +124,7 @@ public class Mos6502Alu {
      * @return the result of <code>LSR byteA</code>
      */
     public RoxByte lsr(RoxByte byteA) {
-        final RoxByte result = RoxByte.literalFrom((byteA.getRawValue() >> 1));
+        final RoxByte result = RoxByte.fromLiteral((byteA.getRawValue() >> 1));
         registers.setFlagTo(Registers.C, byteA.isBitSet(0));
         return result;
     }
@@ -137,7 +137,7 @@ public class Mos6502Alu {
      */
     public RoxByte ror(RoxByte byteA) {
         int carry = registers.getFlag(Registers.C) ? 0b10000000 : 0;
-        final RoxByte result = RoxByte.literalFrom((byteA.getRawValue() >> 1) | carry);
+        final RoxByte result = RoxByte.fromLiteral((byteA.getRawValue() >> 1) | carry);
         registers.setFlagTo(Registers.C, byteA.isBitSet(0));
         return result;
     }
