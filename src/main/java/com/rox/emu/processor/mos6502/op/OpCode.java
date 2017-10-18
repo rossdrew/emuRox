@@ -194,6 +194,15 @@ public enum OpCode {
     RTS(0x60),
     RTI(0x40);
 
+//    public enum Operation {
+//        BRK, ASL, LSR, ADC, LDA, CLV, AND, ORA, EOR, SBC,
+//        CLC, SEC, LDY, LDX, STY, STA, STX, INY, INX, DEX,
+//        INC, DEC, DEY, PHA, PLA, PHP, PLP, NOP, JMP, TAX,
+//        TAY, TYA, TXA, TXS, TSX, BIT, CMP, CPX, CPY, JSR,
+//        BPL, BMI, BVC, BVS, BCC, BCS, BNE, BEQ, ROL, ROR,
+//        CLI, SEI, SED, CLD, RTS, RTI
+//    }
+
     /**
      * The separator used to delimit different elements in the {@link String} enum id
      */
