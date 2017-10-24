@@ -209,17 +209,17 @@ public enum OpCode {
     public static final String TOKEN_SEPARATOR = "_";
     /**
      * The index of the op-code name in the {@link String} enum id,
-     * using the token delimiter '{@value TOKEN_SEPARATOR}'
+     * using the token delimiter {@value TOKEN_SEPARATOR}
      */
     public static final int CODE_I = 0;
     /**
      * The index of the addressing mode token in the {@link String} enum id,
-     * using the token delimiter '{@value TOKEN_SEPARATOR}'
+     * using the token delimiter {@value TOKEN_SEPARATOR}
      */
     public static final int ADDR_I = CODE_I + 1;
     /**
      * The index of the indexing mode token in the {@link String} enum id,
-     * using the token delimiter '{@value TOKEN_SEPARATOR}'
+     * using the token delimiter {@value TOKEN_SEPARATOR}
      */
     public static final int INDX_I = ADDR_I + 1;
 
