@@ -1,6 +1,7 @@
 package com.rox.emu.processor.mos6502;
 
 import com.rox.emu.env.RoxByte;
+import com.rox.emu.env.RoxWord;
 import com.rox.emu.mem.Memory;
 import com.rox.emu.processor.mos6502.op.OpCode;
 import org.slf4j.Logger;
@@ -646,9 +647,9 @@ public class Mos6502 {
             }break;
 
             case JMP_IND: {
-                int h = nextProgramByte();
-                int l = nextProgramByte();
-                int pointer = (h << 8 | l);
+                final RoxByte h = RoxByte.fromLiteral(nextProgramByte());
+                final RoxByte l = RoxByte.fromLiteral(nextProgramByte());
+                int pointer = RoxWord.from(h,l).getAsInt();
                 registers.setPC(getWordOfMemoryAt(pointer));
             }break;
 
@@ -796,7 +797,9 @@ public class Mos6502 {
      */
     private int nextProgramWord(){
        int byte1 = nextProgramByte();
-       return (byte1 << 8) | nextProgramByte() ;
+
+       return RoxWord.from(RoxByte.fromLiteral(byte1),
+                           RoxByte.fromLiteral(nextProgramByte())).getAsInt();
     }
 
     /**
