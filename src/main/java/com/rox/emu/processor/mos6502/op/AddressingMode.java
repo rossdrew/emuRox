@@ -54,9 +54,10 @@ public enum AddressingMode {
     ACCUMULATOR("Accumulator", 1);
 
     private final String name;
+    /* Bytes required to perform this instruction including a byte for the opcode and then it's arguments */
     private final int instructionBytes;
 
-    AddressingMode(String name, int instructionBytes) {
+    AddressingMode(final String name, final int instructionBytes) {
         this.name = name;
         this.instructionBytes = instructionBytes;
     }
