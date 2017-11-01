@@ -1,6 +1,4 @@
-#NES Documentation
-
-##6502
+# 6502 Documentation
 
  Resources:
    - [Online 6502 Emulator](https://skilldrick.github.io/easy6502/)
@@ -8,7 +6,7 @@
    - [In-depth analysis of opcodes](http://www.llx.com/~nparker/a2/opcodes.html)
 
 ----
-####Status Flags
+## Status Flags
     
     NVsB DIZC
     |||| ||||
@@ -23,13 +21,13 @@
     `--------- Negative: Set to bit 7 of the last operation
 
 ----
-#### OpCodes
+## OpCodes
 
 ![6502 OpCodes Page 1](https://github.com/rossdrew/emuRox/blob/master/docs/6502/img/6502_ISR_first_page.gif "6502 OpCodes Page 1")
 ![6502 OpCodes Page 2](https://github.com/rossdrew/emuRox/blob/master/docs/6502/img/6502_ISR_second_page.gif "6502 OpCodes Page 2")
 
 ----
 
-#### Block Diagram
+## Block Diagram
 
 ![6502 Block Diagram](https://github.com/rossdrew/emuRox/blob/master/docs/6502/img/6502_block_diagram.jpg "6502 Block Diagram")

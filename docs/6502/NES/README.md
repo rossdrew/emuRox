@@ -1,10 +1,10 @@
-#Nintento Entertainment System
+# Nintento Entertainment System (NES) / Famicom
 
 This was the original intention of this project, to become a NES emulator.  As such I've added this directory as a source for storing information I may need later when I get beyong the CPU.
 
-##6502
+## 6502 
 
-####Unoficial OpCodes
+#### Unoficial OpCodes
 
 There are [missing opCodes](http://wiki.nesdev.com/w/index.php/CPU_unofficial_opcodes), some of them crash the CPU, some have [strange effects](http://wiki.nesdev.com/w/index.php/Programming_with_unofficial_opcodes) and in order to get every game working, here are some examples
 
@@ -21,14 +21,14 @@ There are [missing opCodes](http://wiki.nesdev.com/w/index.php/CPU_unofficial_op
     - Attribute Zone uses $0B (ANC), $2F (RLA), $4B (ALR), $A7 (LAX), $B3 (LAX), $CB (AXS), $D3 (DCP), $DB (DCP).
     - The port of Zork to the Famicom uses a few unofficial opcodes.
     
-##PPU
+## PPU
 
  - [How NES Graphics work - The Basics](http://web.textfiles.com/games/nesgfx.txt)
  - [Emulating the Nintendo Entertainment System (NES) -  Rupert Shuttleworth](http://www.optimuscopri.me/nes/report.pdf)
  - [PPU Rendering](https://wiki.nesdev.com/w/index.php/PPU_rendering)
  - NES Graphics Series[One](http://www.dustmop.io/blog/2015/04/28/nes-graphics-part-1/), [Two](http://www.dustmop.io/blog/2015/06/08/nes-graphics-part-2/) and [Three](http://www.dustmop.io/blog/2015/12/18/nes-graphics-part-3/)
 
-######Notes
+###### Notes
 
  - Single scrollable playfield, 
  - 64 objects/sprites. 
