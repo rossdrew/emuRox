@@ -198,6 +198,13 @@ public final class RoxByte {
         return (byteValue & PLACE_VALUE[bitToTest]) == PLACE_VALUE[bitToTest];
     }
 
+    /**
+     * @return weather this byte represents a negative number. i.e. it is signed and bit 7 is set
+     */
+    public boolean isNegative() {
+        return format == ByteFormat.SIGNED_TWOS_COMPLIMENT && isBitSet(7);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
