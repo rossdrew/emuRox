@@ -42,12 +42,13 @@ public enum AddressingMode {
      *  to use in the operation.  Can be indexed as {@link #INDIRECT_X} or {@link #INDIRECT_Y} */
     INDIRECT("Indirect", 2),
 
-    /** Expects a one byte argument that contains a zero page address and the X Register to be filled with
-     *  an offset to this address, that points to a two byte address in memory, to be used in the operation */
+    /** <i>Indexed indirect</i>: Expects a one byte argument and an offset in the X Register added together they
+     *  give an address in Zero Page that itself contains a two byte address to be used in the operation */
     INDIRECT_X("Indirect, X", 2),
 
-    /** Expects a one byte argument that contains a zero page address and the Y Register to be filled with
-     *  an offset to this address, that points to a two byte address in memory, to be used in the operation  */
+    /** <i>Indirect indexed</i>: Expects a one byte argument and an offset in the Y Register.  A two byte address
+     *  is fetched from the Zero Page location pointed to by the argument, the offset is added to this address which
+     *  gives the two byte address to be used in the operation  */
     INDIRECT_Y("Indirect, Y", 2),
 
     /** Expects no argument, operation will be performed using the Accumulator Register*/
