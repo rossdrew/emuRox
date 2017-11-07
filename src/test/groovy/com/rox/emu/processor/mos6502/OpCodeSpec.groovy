@@ -2957,15 +2957,15 @@ class OpCodeSpec extends Specification {
     @Unroll("CMP (Indirect, Y) #Expected: #firstValue == #secondValue")
     testCMP_IND_IY() {
         when:
-        Program program = loadMemoryWithProgram(LDY_I, index,           //Index to use
-                                                LDA_I, firstValue,      //High order byte at pointer
+        Program program = loadMemoryWithProgram(LDY_I, index,
+                                                LDA_I, secondValue,      //High order byte at pointer
                                                 STA_ABS_IY, pointerHi, pointerLo,
                                                 LDA_I, pointerHi,       //Pointer location
                                                 STA_Z, pointerHiMem,
                                                 LDA_I, pointerLo,       //Pointer location
                                                 STA_Z, pointerLoMem,
-                                                LDA_I, secondValue,
-                                                CMP_IND_IY, 0x60)
+                                                LDA_I, firstValue,
+                                                CMP_IND_IY, pointerHiMem )
 
         processor.step(9)
         
@@ -2973,8 +2973,8 @@ class OpCodeSpec extends Specification {
         then:
         program.length == registers.getPC()
         Z == registers.getFlag(Registers.Z)
-        //  N == registers.getFlag(Registers.N)
-        //  C == registers.getFlag(Registers.C)
+        N == registers.getFlag(Registers.N)
+        C == registers.getFlag(Registers.C)
     
         where:
         pointerHiMem | pointerLoMem | pointerHi | pointerLo | firstValue | secondValue | index | Z     | N     | C     | Expected
