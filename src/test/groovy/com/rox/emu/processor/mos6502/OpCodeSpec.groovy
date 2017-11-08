@@ -42,28 +42,6 @@ class OpCodeSpec extends Specification {
                C == registers.getFlag(Registers.C) &&
                V == registers.getFlag(Registers.V)
     }
-    
-    def testNewOpCode(){
-        when:
-        Program program = loadMemoryWithProgram(LDA_I, loadValue)
-    
-        and:
-        processor.step()
-    
-        then:
-        expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
-        program.length == registers.getPC()
-        testFlags(Z, N)
-    
-        where:
-        loadValue | expectedAccumulator | Z     | N     | Expected
-        0x0       | 0x0                 | true  | false | "With zero result"
-        0x1       | 0x1                 | false | false | "Generic test 1"
-        0x7F      | 0x7F                | false | false | "Generic test 2"
-        0x80      | 0x80                | false | true  | "With negative result"
-        0x81      | 0x81                | false | true  | "With (boundary test) negative result "
-        0xFF      | 0xFF                | false | true  | "With max negative result"
-    }
 
     def LDATestData(){
         return [//loadValue | Z     | N     | Expected
