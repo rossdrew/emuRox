@@ -68,15 +68,16 @@ class OpCodeSpec extends Specification {
     def LDATestData(){
         return [//loadValue | Z     | N     | Expected
                  [0x0,        true,   false,  "With zero result"],
-                 [0x1,        false , false , "Generic test 1"],
-                 [0x7F,       false , false , "Generic test 2"],
-                 [0x80,       false , true  , "With negative result"],
-                 [0x81,       false , true  , "With (boundary test) negative result "],
-                 [0xFF,       false , true  , "With max negative result"]
+                 [0x1,        false,  false,  "Generic test 1"],
+                 [0x7F,       false,  false,  "Generic test 2"],
+                 [0x80,       false,  true,   "With negative result"],
+                 [0x81,       false,  true,   "With (boundary test) negative result "],
+                 [0xFF,       false,  true,   "With max negative result"],
+                 [0b01111111, false,  false,  "With max positive result"]
                ]
     }
     
-    @Unroll("LDA (Immediate) #Expected: Load #loadValue == #expectedAccumulator")
+    @Unroll("LDA (Immediate) #Expected: Load #loadValue")
     testImmediateLDA() {
         when:
         Program program = loadMemoryWithProgram(LDA_I, loadValue)
