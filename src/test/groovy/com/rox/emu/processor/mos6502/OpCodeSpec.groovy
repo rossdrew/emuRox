@@ -231,24 +231,21 @@ class OpCodeSpec extends Specification {
         [pointerHi, pointerLo, index, expectedValue, Z, N, Expected] << withWordPointer(withIndex(LDATestData()))
     }
     
-    @Unroll("LDX (Immediate): Load #firstValue")
+    @Unroll("LDX (Immediate): Load #value")
     testLDX(){
         when:
-        Program program = loadMemoryWithProgram(LDX_I, firstValue)
+        Program program = loadMemoryWithProgram(LDX_I, value)
 
         and:
         processor.step()
     
         then:
-        expectedX == registers.getRegister(Registers.REG_X_INDEX)
+        value == registers.getRegister(Registers.REG_X_INDEX)
         program.length == registers.getPC()
         testFlags(Z,N)
     
         where:
-        firstValue | expectedX  | Z      | N     | Expected
-        99         | 99         | false  | false | "Simple load"
-        0          | 0          | true   | false | "Load zero"
-        0b11111111 | 0b11111111 | false  | true  | "Load negative value"
+        [value, Z, N, Expected] << LDATestData()
     }
     
     @Unroll("LDX (Absolute): Load #firstValue from [#addressHi | #addressLo]")
