@@ -43,16 +43,27 @@ class OpCodeSpec extends Specification {
                V == registers.getFlag(Registers.V)
     }
 
+    /**
+     * loadValue | Z     | N     | Expected
+     */
     def LDATestData(){
-        return [//loadValue | Z     | N     | Expected
-                 [0x0,        true,   false,  "With zero result"],
-                 [0x1,        false,  false,  "Generic test 1"],
-                 [0x7F,       false,  false,  "Generic test 2"],
-                 [0x80,       false,  true,   "With negative result"],
-                 [0x81,       false,  true,   "With (boundary test) negative result "],
-                 [0xFF,       false,  true,   "With max negative result"],
-                 [0b01111111, false,  false,  "With max positive result"]
-               ]
+        [
+          [0x0,        true,   false,  "With zero result"],
+          [0x1,        false,  false,  "Generic test 1"],
+          [0x7F,       false,  false,  "Generic test 2"],
+          [0x80,       false,  true,   "With negative result"],
+          [0x81,       false,  true,   "With (boundary test) negative result "],
+          [0xFF,       false,  true,   "With max negative result"],
+          [0b01111111, false,  false,  "With max positive result"]
+        ]
+    }
+
+    /**
+     * index | {test data ...}
+     */
+    def withIndex(testData){
+        int i = 0
+        testData.collect{ [i++, *it] }
     }
     
     @Unroll("LDA (Immediate) #Expected: Load #loadValue")
@@ -87,15 +98,14 @@ class OpCodeSpec extends Specification {
         testFlags(Z, N)
     
         where:
-        [loadValue, Z, N, Expected] << LDATestData()
+         [loadValue, Z, N, Expected] << LDATestData()
     }
     
     @Unroll("LDA (Zero Page[X]) #Expected: Load [0x30 + X(#index)] -> #expectedAccumulator")
     testLDAFromZeroPageIndexedByX() {
         when:
         Program program = loadMemoryWithProgram(LDX_I, index, LDA_Z_IX, 0x30)
-        int[] values = [0, 11, 0b11111111]
-        memory.setBlock(0x30, values)
+        memory.setByteAt(0x30 + index, expectedAccumulator)
 
         and:
         processor.step(2)
@@ -106,10 +116,7 @@ class OpCodeSpec extends Specification {
         testFlags(Z, N)
     
         where:
-        index | expectedAccumulator | Z     | N     | Expected
-        0     | 0                   | true  | false | "With zero result"
-        1     | 11                  | false | false | "With normal result"
-        2     | 0xFF                | false | true  | "With negative result"
+        [index, expectedAccumulator, Z, N, Expected] << withIndex(LDATestData())
     }
     
     @Unroll("LDA (Absolute) #Expected: Expecting #loadValue @ [300]")
@@ -134,8 +141,7 @@ class OpCodeSpec extends Specification {
     testLDAIndexedByX() {
         when:
         Program program = loadMemoryWithProgram(LDX_I, index, LDA_ABS_IX, 1, 0x2C)
-        int[] values = [0, 11, 0b11111111]
-        memory.setBlock(300, values)
+        memory.setByteAt(300 + index, expectedAccumulator)
 
         and:
         processor.step(2)
@@ -146,10 +152,7 @@ class OpCodeSpec extends Specification {
         testFlags(Z, N)
     
         where:
-        index | expectedAccumulator | Z     | N     | Expected
-        0     | 0                   | true  | false | "With zero result"
-        1     | 11                  | false | false | "With normal result"
-        2     | 0xFF                | false | true  | "With negative result"
+        [index, expectedAccumulator, Z, N, Expected] << withIndex(LDATestData())
     }
     
     
@@ -157,8 +160,7 @@ class OpCodeSpec extends Specification {
     testLDAIndexedByY() {
         when:
         Program program = loadMemoryWithProgram(LDY_I, index, LDA_ABS_IY, 1, 0x2C)
-        int[] values = [0, 11, 0b11111111]
-        memory.setBlock(300, values)
+        memory.setByteAt(300 + index, expectedAccumulator)
 
         and:
         processor.step(2)
@@ -169,10 +171,7 @@ class OpCodeSpec extends Specification {
         testFlags(Z, N)
     
         where:
-        index | expectedAccumulator | Z     | N     | Expected
-        0     | 0                   | true  | false | "With zero result"
-        1     | 11                  | false | false | "With normal result"
-        2     | 0xFF                | false | true  | "With negative result"
+        [index, expectedAccumulator, Z, N, Expected] << withIndex(LDATestData())
     }
     
     @Unroll("LDA (Indirect, X). #Expected: 0x30[#index] -> [#indAddressHi|#indAddressLo] = #expectedAccumulator")
