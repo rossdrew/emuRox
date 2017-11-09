@@ -225,14 +225,10 @@ class OpCodeSpec extends Specification {
     
         then:
         expectedValue == registers.getRegister(Registers.REG_ACCUMULATOR)
+        testFlags(Z, N)
     
         where:
-        pointerHi | pointerLo | index | expectedValue | expected
-        0x02      | 0x10      | 0     | 0x01          | "Simple, small value"
-        0x03      | 0x10      | 0     | 0x01          | "Alternate high byte of pointer"
-        0x04      | 0x11      | 0     | 0x01          | "Alternate low byte of pointer"
-        0x05      | 0x12      | 1     | 0x01          | "Using index"
-        0x06      | 0x13      | 2     | 0x0F          | "A different value"
+        [pointerHi, pointerLo, index, expectedValue, Z, N, Expected] << withWordPointer(withIndex(LDATestData()))
     }
     
     @Unroll("LDX (Immediate): Load #firstValue")
