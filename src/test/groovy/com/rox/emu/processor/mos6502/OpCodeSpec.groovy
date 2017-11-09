@@ -65,6 +65,15 @@ class OpCodeSpec extends Specification {
         int i = 0
         testData.collect{ [i++, *it] }
     }
+
+    /**
+     * pointerHi | pointerLo | {test data ...}
+     */
+    def withWordPointer(testData){
+        int hi = 1
+        int lo = 10
+        testData.collect{ [hi++, lo+=10, *it] }
+    }
     
     @Unroll("LDA (Immediate) #Expected: Load #loadValue")
     testImmediateLDA() {
@@ -98,7 +107,7 @@ class OpCodeSpec extends Specification {
         testFlags(Z, N)
     
         where:
-         [loadValue, Z, N, Expected] << LDATestData()
+        [loadValue, Z, N, Expected] << LDATestData()
     }
     
     @Unroll("LDA (Zero Page[X]) #Expected: Load [0x30 + X(#index)] -> #expectedAccumulator")
@@ -177,7 +186,7 @@ class OpCodeSpec extends Specification {
     @Unroll("LDA (Indirect, X). #Expected: 0x30[#index] -> [#indAddressHi|#indAddressLo] = #expectedAccumulator")
     testLDA_IND_IX() {
         when:
-        Program program = loadMemoryWithProgram(LDA_I, firstValue,    //Value at indirect address
+        Program program = loadMemoryWithProgram(LDA_I, expectedAccumulator,    //Value at indirect address
                                                 STA_ABS, indAddressHi, indAddressLo,
                                                 LDX_I, index,
                                                 LDA_I, indAddressHi,  //Indirect address in memory
@@ -195,10 +204,7 @@ class OpCodeSpec extends Specification {
         testFlags(Z, N)
     
         where:
-        indAddressHi | indAddressLo | index | firstValue | expectedAccumulator | Z     | N     | Expected
-        0x02         | 0x20         | 0     | 0          | 0                           | true  | false | "With zero result"
-        0x03         | 0x40         | 1     | 11         | 11                          | false | false | "With normal result"
-        0x04         | 0x24         | 2     | 0xFF       | 0xFF                        | false | true  | "With negative result"
+        [indAddressHi, indAddressLo, index, expectedAccumulator, Z, N, Expected] << withWordPointer(withIndex(LDATestData()))
     }
     
     @Unroll("LDA (Indirect, Y). #expected: 0x60 -> *[#pointerHi|#pointerLo]@[#index] = #expectedValue")
