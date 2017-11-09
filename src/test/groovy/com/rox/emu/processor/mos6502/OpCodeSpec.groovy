@@ -75,118 +75,118 @@ class OpCodeSpec extends Specification {
         testData.collect{ [hi++, lo+=10, *it] }
     }
     
-    @Unroll("LDA (Immediate) #Expected: Load #loadValue")
+    @Unroll("LDA (Immediate) #Expected: Load #value")
     testImmediateLDA() {
         when:
-        Program program = loadMemoryWithProgram(LDA_I, loadValue)
+        Program program = loadMemoryWithProgram(LDA_I, value)
 
         and:
         processor.step()
     
         then:
-        loadValue == registers.getRegister(Registers.REG_ACCUMULATOR)
+        value == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
         testFlags(Z, N)
     
         where:
-        [loadValue, Z, N, Expected] << LDATestData()
+        [value, Z, N, Expected] << LDATestData()
     }
     
-    @Unroll("LDA (Zero Page) #Expected: Expecting #loadValue @ [30]")
+    @Unroll("LDA (Zero Page) #Expected: Expecting #value @ [30]")
     testLDAFromZeroPage() {
         when:
         Program program = loadMemoryWithProgram(LDA_Z, 30)
-        memory.setByteAt(30, loadValue)
+        memory.setByteAt(30, value)
 
         and:
         processor.step()
     
         then:
-        loadValue == registers.getRegister(Registers.REG_ACCUMULATOR)
+        value == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
         testFlags(Z, N)
     
         where:
-        [loadValue, Z, N, Expected] << LDATestData()
+        [value, Z, N, Expected] << LDATestData()
     }
     
-    @Unroll("LDA (Zero Page[X]) #Expected: Load [0x30 + X(#index)] -> #expectedAccumulator")
+    @Unroll("LDA (Zero Page[X]) #Expected: Load [0x30 + X(#index)] -> #value")
     testLDAFromZeroPageIndexedByX() {
         when:
         Program program = loadMemoryWithProgram(LDX_I, index, LDA_Z_IX, 0x30)
-        memory.setByteAt(0x30 + index, expectedAccumulator)
+        memory.setByteAt(0x30 + index, value)
 
         and:
         processor.step(2)
     
         then:
-        expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
+        value == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
         testFlags(Z, N)
     
         where:
-        [index, expectedAccumulator, Z, N, Expected] << withIndex(LDATestData())
+        [index, value, Z, N, Expected] << withIndex(LDATestData())
     }
     
-    @Unroll("LDA (Absolute) #Expected: Expecting #loadValue @ [300]")
+    @Unroll("LDA (Absolute) #Expected: Expecting #value @ [300]")
     testAbsoluteLDA() {
         when:
         Program program = loadMemoryWithProgram(LDA_ABS, 0x1, 0x2C)
-        memory.setByteAt(300, loadValue)
+        memory.setByteAt(300, value)
 
         and:
         processor.step()
     
         then:
-        loadValue == registers.getRegister(Registers.REG_ACCUMULATOR)
+        value == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
         testFlags(Z, N)
     
         where:
-        [loadValue, Z, N, Expected] << LDATestData()
+        [value, Z, N, Expected] << LDATestData()
     }
     
-    @Unroll("LDA (Absolute[X]). #Expected: 300[#index] = #expectedAccumulator")
+    @Unroll("LDA (Absolute[X]). #Expected: 300[#index] = #value")
     testLDAIndexedByX() {
         when:
         Program program = loadMemoryWithProgram(LDX_I, index, LDA_ABS_IX, 1, 0x2C)
-        memory.setByteAt(300 + index, expectedAccumulator)
+        memory.setByteAt(300 + index, value)
 
         and:
         processor.step(2)
     
         then:
-        expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
+        value == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
         testFlags(Z, N)
     
         where:
-        [index, expectedAccumulator, Z, N, Expected] << withIndex(LDATestData())
+        [index, value, Z, N, Expected] << withIndex(LDATestData())
     }
     
     
-    @Unroll("LDA (Absolute[Y]). #Expected: 300[#index] = #expectedAccumulator")
+    @Unroll("LDA (Absolute[Y]). #Expected: 300[#index] = #value")
     testLDAIndexedByY() {
         when:
         Program program = loadMemoryWithProgram(LDY_I, index, LDA_ABS_IY, 1, 0x2C)
-        memory.setByteAt(300 + index, expectedAccumulator)
+        memory.setByteAt(300 + index, value)
 
         and:
         processor.step(2)
     
         then:
-        expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
+        value == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
         testFlags(Z, N)
     
         where:
-        [index, expectedAccumulator, Z, N, Expected] << withIndex(LDATestData())
+        [index, value, Z, N, Expected] << withIndex(LDATestData())
     }
     
-    @Unroll("LDA (Indirect, X). #Expected: 0x30[#index] -> [#indAddressHi|#indAddressLo] = #expectedAccumulator")
+    @Unroll("LDA (Indirect, X). #Expected: 0x30[#index] -> [#indAddressHi|#indAddressLo] = #value")
     testLDA_IND_IX() {
         when:
-        Program program = loadMemoryWithProgram(LDA_I, expectedAccumulator,    //Value at indirect address
+        Program program = loadMemoryWithProgram(LDA_I, value,    //Value at indirect address
                                                 STA_ABS, indAddressHi, indAddressLo,
                                                 LDX_I, index,
                                                 LDA_I, indAddressHi,  //Indirect address in memory
@@ -199,12 +199,12 @@ class OpCodeSpec extends Specification {
         processor.step(8)
     
         then:
-        expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
+        value == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
         testFlags(Z, N)
     
         where:
-        [indAddressHi, indAddressLo, index, expectedAccumulator, Z, N, Expected] << withWordPointer(withIndex(LDATestData()))
+        [indAddressHi, indAddressLo, index, value, Z, N, Expected] << withWordPointer(withIndex(LDATestData()))
     }
     
     @Unroll("LDA (Indirect, Y). #expected: 0x60 -> *[#pointerHi|#pointerLo]@[#index] = #expectedValue")
