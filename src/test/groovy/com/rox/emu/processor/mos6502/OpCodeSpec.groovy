@@ -44,7 +44,7 @@ class OpCodeSpec extends Specification {
     }
 
     /**
-     * loadValue | Z     | N     | Expected
+     * value | Z  | N | Description
      */
     def LDATestData(){
         [
@@ -59,7 +59,7 @@ class OpCodeSpec extends Specification {
     }
 
     /**
-     * index | {test data ...}
+     * Index | {test data ...}
      */
     def withIndex(testData){
         int i = 0
@@ -67,12 +67,20 @@ class OpCodeSpec extends Specification {
     }
 
     /**
-     * pointerHi | pointerLo | {test data ...}
+     * Pointer Hi | Pointer Low | {test data ...}
      */
     def withWordPointer(testData){
         int hi = 1
         int lo = 10
         testData.collect{ [hi++, lo+=10, *it] }
+    }
+
+    /**
+     * Pointer Low | {test data ...}
+     */
+    def withBytePointer(testData){
+        int lo = 10
+        testData.collect{ [lo+=10, *it] }
     }
     
     @Unroll("LDA (Immediate) #Expected: Load #value")
@@ -248,34 +256,31 @@ class OpCodeSpec extends Specification {
         [value, Z, N, Expected] << LDATestData()
     }
     
-    @Unroll("LDX (Absolute): Load #firstValue from [#addressHi | #addressLo]")
+    @Unroll("LDX (Absolute): Load #value from [#addressHi | #addressLo]")
     testLDX_ABS(){
         when:
         Program program = loadMemoryWithProgram(LDX_ABS, addressHi, addressLo)
     
         and:
-        memory.setByteAt(addressHi << 8 | addressLo, firstValue)
+        memory.setByteAt(addressHi << 8 | addressLo, value)
     
         and:
         processor.step()
     
         then:
-        expectedX == registers.getRegister(Registers.REG_X_INDEX)
+        value == registers.getRegister(Registers.REG_X_INDEX)
         program.length == registers.getPC()
 		testFlags(Z,N)
     
         where:
-        addressHi | addressLo  | firstValue | expectedX  | Z      | N     | Expected
-        1         | 0x20       | 99         | 99         | false  | false | "Simple load"
-        2         | 0x20       | 0          | 0          | true   | false | "Load zero"
-        3         | 0x20       | 0b11111111 | 0b11111111 | false  | true  | "Load negative value"
+        [addressHi, addressLo, value, Z, N, Expected] << withWordPointer(LDATestData())
     }
     
-    @Unroll("LDX (Absolute[Y]): #Expected #firstValue from [#addressHi | #addressLo]")
+    @Unroll("LDX (Absolute[Y]): #Expected #value from [#addressHi | #addressLo]")
     testLDX_ABS_IX(){
         when:
         Program program = loadMemoryWithProgram(LDY_I, index,
-                                                LDA_I, firstValue,
+                                                LDA_I, value,
                                                 STA_ABS_IY, addressHi, addressLo,
                                                 LDX_ABS_IY, addressHi, addressLo)
 
@@ -283,21 +288,18 @@ class OpCodeSpec extends Specification {
         processor.step(4)
     
         then:
-        expectedX == registers.getRegister(Registers.REG_X_INDEX)
+        value == registers.getRegister(Registers.REG_X_INDEX)
         program.length == registers.getPC()
 		testFlags(Z,N)
     
         where:
-        index | addressHi | addressLo  | firstValue | expectedX  | Z      | N     | Expected
-        0     | 1         | 0x20       | 99         | 99         | false  | false | "Simple load"
-        1     | 2         | 0x20       | 0          | 0          | true   | false | "Load zero"
-        2     | 3         | 0x20       | 0b11111111 | 0b11111111 | false  | true  | "Load negative value"
+        [index, addressHi, addressLo, value, Z, N, Expected] << withIndex(withWordPointer(LDATestData()))
     }
     
     @Unroll("LDX (Zero Page): Load #firstValue from [#address]")
     testLX_Z(){
         when:
-        Program program = loadMemoryWithProgram(LDA_I, firstValue,
+        Program program = loadMemoryWithProgram(LDA_I, value,
                                                 STA_Z, address,
                                                 LDX_Z, address)
 
@@ -305,58 +307,49 @@ class OpCodeSpec extends Specification {
         processor.step(3)
     
         then:
-        expectedX == registers.getRegister(Registers.REG_X_INDEX)
+        value == registers.getRegister(Registers.REG_X_INDEX)
         program.length == registers.getPC()
 		testFlags(Z,N)
     
         where:
-        address | firstValue | expectedX  | Z      | N     | Expected
-        1       | 99         | 99         | false  | false | "Simple load"
-        2       | 0          | 0          | true   | false | "Load zero"
-        3       | 0b11111111 | 0b11111111 | false  | true  | "Load negative value"
+        [address, value, Z, N, Expected] << withBytePointer(LDATestData())
     }
     
-    @Unroll("LDX (Zero Page[Y]): Load #firstValue from [#address[#index]")
+    @Unroll("LDX (Zero Page[Y]): Load #value from [#address[#index]")
     testLX_Z_IY(){
         when:
         Program program = loadMemoryWithProgram(LDY_I, index,
-                                                LDA_I, firstValue,
-                                                STA_Z, address,
+                                                LDA_I, value,
+                                                STA_Z, address + index,
                                                 LDX_Z_IY, address)
 
         and:
         processor.step(4)
     
         then:
-        expectedX == registers.getRegister(Registers.REG_X_INDEX)
+        value == registers.getRegister(Registers.REG_X_INDEX)
         program.length == registers.getPC()
-		testFlags(Z,N)
+		testFlags(Z, N)
     
         where:
-        address | index | firstValue | expectedX  | Z      | N     | Expected
-        1       | 0     | 99         | 99         | false  | false | "Simple load"
-        2       | 0     | 0          | 0          | true   | false | "Load zero"
-        3       | 0     | 0b11111111 | 0b11111111 | false  | true  | "Load negative value"
+        [address, index, value, Z, N, Expected] << withBytePointer(withIndex(LDATestData()))
     }
     
-    @Unroll("LDY (Immediate): Load #firstValue")
+    @Unroll("LDY (Immediate): Load #value")
     testLDY(){
         when:
-        Program program = loadMemoryWithProgram(LDY_I, firstValue)
+        Program program = loadMemoryWithProgram(LDY_I, value)
 
         and:
         processor.step()
 
         then:
-        expectedY == registers.getRegister(Registers.REG_Y_INDEX)
+        value == registers.getRegister(Registers.REG_Y_INDEX)
         program.length == registers.getPC()
 		testFlags(Z,N)
     
         where:
-        firstValue | expectedY  | Z      | N     | Expected
-        99         | 99         | false  | false | "Simple load"
-        0          | 0          | true   | false | "Load zero"
-        0b11111111 | 0b11111111 | false  | true  | "Load negative value"
+        [value, Z, N, Expected] << LDATestData()
     }
     
     @Unroll("LDY (Zero Page): Load #firstValue from [#address]")
