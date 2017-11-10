@@ -59,6 +59,17 @@ class OpCodeSpec extends Specification {
     }
 
     /**
+     * First Value | Second  Value | Expected Accumulator | Z | N | C | O | Expected
+     */
+    def adcTestData() {
+        [
+          [0x0,  0x0,  0x0,  true,  false, false, false, "With zero result"],
+          [0x50, 0xD0, 0x20, false, false, true,  false, "With positive, carried result"],
+          [0x50, 0x50, 0xA0, false, true,  false, true,  "With negative overflow"]
+        ]
+    }
+
+    /**
      * Index | {test data ...}
      */
     def withIndex(testData){
@@ -442,22 +453,21 @@ class OpCodeSpec extends Specification {
         then:
         expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
-		testFlags(Z,N,C,O)
+		testFlags(Z,N,C,V)
     
         where:
-        firstValue | secondValue | expectedAccumulator | Z      | N     | C     | O     | Expected
-        0x0        | 0x0         | 0x0                 | true   | false | false | false | "With zero result"
-        0x50       | 0xD0        | 0x20                | false  | false | true  | false | "With positive, carried result"
-        0x50       | 0x50        | 0xA0                | false  | true  | false | true  | "With negative overflow"
+        [firstValue, secondValue, expectedAccumulator, Z, N, C, V, Expected] << adcTestData()
     }
     
     @Unroll("ADC (Zero Page[X]) #Expected: #firstValue + #secondValue = #expectedAccumulator in Accumulator.")
     testADC_Z_IX(){
         when:
-        Program program = loadMemoryWithProgram(LDA_I, firstValue, LDX_I, index, ADC_Z_IX, indexPoint)
+        Program program = loadMemoryWithProgram(LDA_I, firstValue,
+                                                LDX_I, index,
+                                                ADC_Z_IX, indexPoint)
         
         and:
-        memory.setByteAt(memLoc, secondValue)
+        memory.setByteAt(indexPoint+index, secondValue)
         
         and:
         processor.step(3)
@@ -468,10 +478,10 @@ class OpCodeSpec extends Specification {
 		testFlags(Z,N,C,O)
     
         where:
-        memLoc | firstValue  | secondValue | indexPoint  | index | expectedAccumulator | Z      | N     | C     | O     | Expected
-        0x51   | 0x0         | 0x0         | 0x50        | 1     | 0x0                 | true   | false | false | false | "With zero result"
-        0x53   | 0x50        | 0xD0        | 0x50        | 3     | 0x20                | false  | false | true  | false | "With positive, carried result"
-        0x97   | 0x50        | 0x50        | 0x90        | 7     | 0xA0                | false  | true  | false | true  | "With negative overflow"
+        firstValue  | secondValue | indexPoint  | index | expectedAccumulator | Z      | N     | C     | O     | Expected
+        0x0         | 0x0         | 0x50        | 1     | 0x0                 | true   | false | false | false | "With zero result"
+        0x50        | 0xD0        | 0x50        | 3     | 0x20                | false  | false | true  | false | "With positive, carried result"
+        0x50        | 0x50        | 0x90        | 7     | 0xA0                | false  | true  | false | true  | "With negative overflow"
     }
     
     @Unroll("ADC (Zero Page) #Expected:  #firstValue + #secondValue = #expectedAccumulator in Accumulator.")
