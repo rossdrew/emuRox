@@ -46,7 +46,7 @@ class OpCodeSpec extends Specification {
     /**
      * value | Z  | N | Description
      */
-    def LDATestData(){
+    def loadValueTestData(){
         [
           [0x0,        true,   false,  "With zero result"],
           [0x1,        false,  false,  "Generic test 1"],
@@ -97,7 +97,7 @@ class OpCodeSpec extends Specification {
         testFlags(Z, N)
     
         where:
-        [value, Z, N, Expected] << LDATestData()
+        [value, Z, N, Expected] << loadValueTestData()
     }
     
     @Unroll("LDA (Zero Page) #Expected: Expecting #value @ [30]")
@@ -115,7 +115,7 @@ class OpCodeSpec extends Specification {
         testFlags(Z, N)
     
         where:
-        [value, Z, N, Expected] << LDATestData()
+        [value, Z, N, Expected] << loadValueTestData()
     }
     
     @Unroll("LDA (Zero Page[X]) #Expected: Load [0x30 + X(#index)] -> #value")
@@ -133,7 +133,7 @@ class OpCodeSpec extends Specification {
         testFlags(Z, N)
     
         where:
-        [index, value, Z, N, Expected] << withIndex(LDATestData())
+        [index, value, Z, N, Expected] << withIndex(loadValueTestData())
     }
     
     @Unroll("LDA (Absolute) #Expected: Expecting #value @ [300]")
@@ -151,7 +151,7 @@ class OpCodeSpec extends Specification {
         testFlags(Z, N)
     
         where:
-        [value, Z, N, Expected] << LDATestData()
+        [value, Z, N, Expected] << loadValueTestData()
     }
     
     @Unroll("LDA (Absolute[X]). #Expected: 300[#index] = #value")
@@ -169,7 +169,7 @@ class OpCodeSpec extends Specification {
         testFlags(Z, N)
     
         where:
-        [index, value, Z, N, Expected] << withIndex(LDATestData())
+        [index, value, Z, N, Expected] << withIndex(loadValueTestData())
     }
     
     
@@ -188,7 +188,7 @@ class OpCodeSpec extends Specification {
         testFlags(Z, N)
     
         where:
-        [index, value, Z, N, Expected] << withIndex(LDATestData())
+        [index, value, Z, N, Expected] << withIndex(loadValueTestData())
     }
     
     @Unroll("LDA (Indirect, X). #Expected: 0x30[#index] -> [#indAddressHi|#indAddressLo] = #value")
@@ -212,7 +212,7 @@ class OpCodeSpec extends Specification {
         testFlags(Z, N)
     
         where:
-        [indAddressHi, indAddressLo, index, value, Z, N, Expected] << withWordPointer(withIndex(LDATestData()))
+        [indAddressHi, indAddressLo, index, value, Z, N, Expected] << withWordPointer(withIndex(loadValueTestData()))
     }
     
     @Unroll("LDA (Indirect, Y). #expected: 0x60 -> *[#pointerHi|#pointerLo]@[#index] = #expectedValue")
@@ -236,7 +236,7 @@ class OpCodeSpec extends Specification {
         testFlags(Z, N)
     
         where:
-        [pointerHi, pointerLo, index, expectedValue, Z, N, Expected] << withWordPointer(withIndex(LDATestData()))
+        [pointerHi, pointerLo, index, expectedValue, Z, N, Expected] << withWordPointer(withIndex(loadValueTestData()))
     }
     
     @Unroll("LDX (Immediate): Load #value")
@@ -253,7 +253,7 @@ class OpCodeSpec extends Specification {
         testFlags(Z,N)
     
         where:
-        [value, Z, N, Expected] << LDATestData()
+        [value, Z, N, Expected] << loadValueTestData()
     }
     
     @Unroll("LDX (Absolute): Load #value from [#addressHi | #addressLo]")
@@ -273,7 +273,7 @@ class OpCodeSpec extends Specification {
 		testFlags(Z,N)
     
         where:
-        [addressHi, addressLo, value, Z, N, Expected] << withWordPointer(LDATestData())
+        [addressHi, addressLo, value, Z, N, Expected] << withWordPointer(loadValueTestData())
     }
     
     @Unroll("LDX (Absolute[Y]): #Expected #value from [#addressHi | #addressLo]")
@@ -293,7 +293,7 @@ class OpCodeSpec extends Specification {
 		testFlags(Z,N)
     
         where:
-        [index, addressHi, addressLo, value, Z, N, Expected] << withIndex(withWordPointer(LDATestData()))
+        [index, addressHi, addressLo, value, Z, N, Expected] << withIndex(withWordPointer(loadValueTestData()))
     }
     
     @Unroll("LDX (Zero Page): Load #firstValue from [#address]")
@@ -312,7 +312,7 @@ class OpCodeSpec extends Specification {
 		testFlags(Z,N)
     
         where:
-        [address, value, Z, N, Expected] << withBytePointer(LDATestData())
+        [address, value, Z, N, Expected] << withBytePointer(loadValueTestData())
     }
     
     @Unroll("LDX (Zero Page[Y]): Load #value from [#address[#index]")
@@ -332,7 +332,7 @@ class OpCodeSpec extends Specification {
 		testFlags(Z, N)
     
         where:
-        [address, index, value, Z, N, Expected] << withBytePointer(withIndex(LDATestData()))
+        [address, index, value, Z, N, Expected] << withBytePointer(withIndex(loadValueTestData()))
     }
     
     @Unroll("LDY (Immediate): Load #value")
@@ -349,7 +349,7 @@ class OpCodeSpec extends Specification {
 		testFlags(Z,N)
     
         where:
-        [value, Z, N, Expected] << LDATestData()
+        [value, Z, N, Expected] << loadValueTestData()
     }
     
     @Unroll("LDY (Zero Page): Load #value from [#address]")
@@ -368,7 +368,7 @@ class OpCodeSpec extends Specification {
 		testFlags(Z,N)
     
         where:
-        [address, value, Z, N, Expected] << withBytePointer(LDATestData())
+        [address, value, Z, N, Expected] << withBytePointer(loadValueTestData())
     }
     
     @Unroll("LDY (Zero Page[X]): Load Y with #value from #address[#index]")
@@ -388,7 +388,7 @@ class OpCodeSpec extends Specification {
 		testFlags(Z,N)
     
         where:
-        [address, index, value, Z, N, Expected] << withBytePointer(withIndex(LDATestData()))
+        [address, index, value, Z, N, Expected] << withBytePointer(withIndex(loadValueTestData()))
     }
     
     @Unroll("LDY (Absolute): Load Y with #value at [#addressHi | #addressLo]")
@@ -408,7 +408,7 @@ class OpCodeSpec extends Specification {
 		testFlags(Z,N)
     
         where:
-        [addressHi, addressLo, value, Z, N, Expected] << withWordPointer(LDATestData())
+        [addressHi, addressLo, value, Z, N, Expected] << withWordPointer(loadValueTestData())
     }
     
     @Unroll("LDY (Absolute[X]): Load Y with #value at [#addressHi | #addressLo][#index]")
@@ -428,7 +428,7 @@ class OpCodeSpec extends Specification {
 		testFlags(Z,N)
     
         where:
-        [addressHi, addressLo, index, value, Z, N, Expected] << withWordPointer(withIndex(LDATestData()))
+        [addressHi, addressLo, index, value, Z, N, Expected] << withWordPointer(withIndex(loadValueTestData()))
     }
     
     @Unroll("ADC (Immediate) #Expected:  #firstValue + #secondValue = #expectedAccumulator in Accumulator.")
