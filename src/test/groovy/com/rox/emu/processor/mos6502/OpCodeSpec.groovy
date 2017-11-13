@@ -70,6 +70,21 @@ class OpCodeSpec extends Specification {
     }
 
     /**
+     * Value | Result | Z | N | C | Expected
+     */
+    def aslTestData() {
+        [
+          [0b00010101, 0b00101010, false, false, false, "Basic shift"],
+          [0b00000000, 0b00000000, true , false, false, "Zero shift"],
+          [0b01000000, 0b10000000, false, true , false, "Negative shift"],
+          [0b10000001, 0b00000010, false, false, true , "Carried shift"],
+          [0b10000000, 0b00000000, true , false, true , "Carried, zero shift"],
+          [0b11000000, 0b10000000, false, true , true,  "Carried, negative shift"]
+
+        ]
+    }
+
+    /**
      * Index | {test data ...}
      */
     def withIndex(testData){
@@ -1838,7 +1853,7 @@ class OpCodeSpec extends Specification {
     @Unroll("ASL (Accumulator) #Expected: #firstValue becomes #expectedAccumulator")
     testASL(){
         when:
-        Program program = loadMemoryWithProgram(LDA_I, firstValue, ASL_A)
+        Program program = loadMemoryWithProgram(LDA_I, value, ASL_A)
         
         and:
         processor.step(2)
@@ -1849,13 +1864,7 @@ class OpCodeSpec extends Specification {
 		testFlags(Z,N,C)
     
         where:
-        firstValue | expectedAccumulator | Z     | N     | C     | Expected
-        0b00010101 | 0b00101010          | false | false | false | "Basic shift"
-        0b00000000 | 0b00000000          | true  | false | false | "Zero shift"
-        0b01000000 | 0b10000000          | false | true  | false | "Negative shift"
-        0b10000001 | 0b00000010          | false | false | true  | "Carried shift"
-        0b10000000 | 0b00000000          | true  | false | true  | "Carried, zero shift"
-        0b11000000 | 0b10000000          | false | true  | true  | "Carried, negative shift"
+        [value, expectedAccumulator, Z, N, C, Expected] << aslTestData()
     }
     
     @Unroll("ASL (ZeroPage) #Expected: #firstValue becomes #expectedMem")
@@ -1874,13 +1883,7 @@ class OpCodeSpec extends Specification {
 		testFlags(Z,N,C)
     
         where:
-        firstValue | expectedMem | Z     | N     | C     | Expected
-        0b00010101 | 0b00101010  | false | false | false | "Basic shift"
-        0b00000000 | 0b00000000  | true  | false | false | "Zero shift"
-        0b01000000 | 0b10000000  | false | true  | false | "Negative shift"
-        0b10000001 | 0b00000010  | false | false | true  | "Carried shift"
-        0b10000000 | 0b00000000  | true  | false | true  | "Carried, zero shift"
-        0b11000000 | 0b10000000  | false | true  | true  | "Carried, negative shift"
+        [firstValue, expectedMem, Z, N, C, Expected] << aslTestData()
     }
     
     @Unroll("ASL (Absolute) #Expected: #firstValue becomes #expectedMem")
@@ -1899,16 +1902,10 @@ class OpCodeSpec extends Specification {
 		testFlags(Z,N,C)
     
         where:
-        firstValue | expectedMem | Z     | N     | C     | Expected
-        0b00010101 | 0b00101010  | false | false | false | "Basic shift"
-        0b00000000 | 0b00000000  | true  | false | false | "Zero shift"
-        0b01000000 | 0b10000000  | false | true  | false | "Negative shift"
-        0b10000001 | 0b00000010  | false | false | true  | "Carried shift"
-        0b10000000 | 0b00000000  | true  | false | true  | "Carried, zero shift"
-        0b11000000 | 0b10000000  | false | true  | true  | "Carried, negative shift"
+        [firstValue, expectedMem, Z, N, C, Expected] << aslTestData()
     }
     
-    @Unroll("ASL (Zero Page at X) #Expected: #firstValue (@ 0x20[#index]) becomes #expectedMem")
+    @Unroll("ASL (Zero Page[X]) #Expected: #firstValue (@ 0x20[#index]) becomes #expectedMem")
     testASL_Z_IX(){
         when:
         Program program = loadMemoryWithProgram(LDA_I, firstValue,
@@ -1925,13 +1922,7 @@ class OpCodeSpec extends Specification {
 		testFlags(Z,N,C)
     
         where:
-        firstValue | expectedMem | index | Z     | N     | C     | Expected
-        0b00010101 | 0b00101010  | 0     | false | false | false | "Basic shift"
-        0b00000000 | 0b00000000  | 1     | true  | false | false | "Zero shift"
-        0b01000000 | 0b10000000  | 2     | false | true  | false | "Negative shift"
-        0b10000001 | 0b00000010  | 3     | false | false | true  | "Carried shift"
-        0b10000000 | 0b00000000  | 4     | true  | false | true  | "Carried, zero shift"
-        0b11000000 | 0b10000000  | 5     | false | true  | true  | "Carried, negative shift"
+        [index, firstValue, expectedMem, Z, N, C, Expected] << withIndex(aslTestData())
     }
     
     @Unroll("ASL (Absolute[X]) #Expected: #firstValue (@ 0x20[#index]) becomes #expectedMem")
@@ -1951,13 +1942,7 @@ class OpCodeSpec extends Specification {
 		testFlags(Z,N,C)
     
         where:
-        firstValue | expectedMem | index | Z     | N     | C     | Expected
-        0b00010101 | 0b00101010  | 0     | false | false | false | "Basic shift"
-        0b00000000 | 0b00000000  | 1     | true  | false | false | "Zero shift"
-        0b01000000 | 0b10000000  | 2     | false | true  | false | "Negative shift"
-        0b10000001 | 0b00000010  | 3     | false | false | true  | "Carried shift"
-        0b10000000 | 0b00000000  | 4     | true  | false | true  | "Carried, zero shift"
-        0b11000000 | 0b10000000  | 5     | false | true  | true  | "Carried, negative shift"
+        [index, firstValue, expectedMem, Z, N, C, Expected] << withIndex(aslTestData())
     }
     
     @Unroll("LSR (Accumulator) #Expected: #firstValue becomes #expectedAccumulator")
