@@ -59,7 +59,7 @@ class OpCodeSpec extends Specification {
     }
 
     /**
-     * First Value | Second  Value | Expected Accumulator | Z | N | C | O | Expected
+     * First Value | Second  Value | Expected Accumulator | Z | N | C | V | Expected
      */
     def adcTestData() {
         [
@@ -464,10 +464,10 @@ class OpCodeSpec extends Specification {
         when:
         Program program = loadMemoryWithProgram(LDA_I, firstValue,
                                                 LDX_I, index,
-                                                ADC_Z_IX, indexPoint)
+                                                ADC_Z_IX, memoryAddress)
         
         and:
-        memory.setByteAt(indexPoint+index, secondValue)
+        memory.setByteAt(memoryAddress+index, secondValue)
         
         and:
         processor.step(3)
@@ -475,13 +475,10 @@ class OpCodeSpec extends Specification {
         then:
         expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
-		testFlags(Z,N,C,O)
+		testFlags(Z,N,C,V)
     
         where:
-        firstValue  | secondValue | indexPoint  | index | expectedAccumulator | Z      | N     | C     | O     | Expected
-        0x0         | 0x0         | 0x50        | 1     | 0x0                 | true   | false | false | false | "With zero result"
-        0x50        | 0xD0        | 0x50        | 3     | 0x20                | false  | false | true  | false | "With positive, carried result"
-        0x50        | 0x50        | 0x90        | 7     | 0xA0                | false  | true  | false | true  | "With negative overflow"
+        [memoryAddress, index, firstValue, secondValue, expectedAccumulator, Z, N, C, V, Expected] << withBytePointer(withIndex(adcTestData()))
     }
     
     @Unroll("ADC (Zero Page) #Expected:  #firstValue + #secondValue = #expectedAccumulator in Accumulator.")
@@ -499,13 +496,10 @@ class OpCodeSpec extends Specification {
         then:
         expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
-		testFlags(Z,N,C,O)
+		testFlags(Z,N,C,V)
     
         where:
-        firstValue | secondValue | expectedAccumulator | Z      | N     | C     | O     | Expected
-        0x0        | 0x0         | 0x0                 | true   | false | false | false | "With zero result"
-        0x50       | 0xD0        | 0x20                | false  | false | true  | false | "With positive, carried result"
-        0x50       | 0x50        | 0xA0                | false  | true  | false | true  | "With negative overflow"
+        [firstValue, secondValue, expectedAccumulator, Z, N, C, V, Expected] << adcTestData()
     }
     
     @Unroll("ADC (Absolute) #Expected:  #firstValue + #secondValue = #expectedAccumulator in Accumulator.")
@@ -523,19 +517,18 @@ class OpCodeSpec extends Specification {
         then:
         expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
-		testFlags(Z,N,C,O)
+		testFlags(Z,N,C,V)
     
         where:
-        firstValue | secondValue | expectedAccumulator | Z      | N     | C     | O     | Expected
-        0x0        | 0x0         | 0x0                 | true   | false | false | false | "With zero result"
-        0x50       | 0xD0        | 0x20                | false  | false | true  | false | "With positive, carried result"
-        0x50       | 0x50        | 0xA0                | false  | true  | false | true  | "With negative overflow"
+        [firstValue, secondValue, expectedAccumulator, Z, N, C, V, Expected] << adcTestData()
     }
     
     @Unroll("ADC (Absolute[X)) #Expected:  #firstValue + #secondValue = #expectedAccumulator in Accumulator.")
     testADC_ABS_IX(){
         when:
-        Program program = loadMemoryWithProgram(LDX_I, index, LDA_I, firstValue, ADC_ABS_IX, 0x1, 0x2C)
+        Program program = loadMemoryWithProgram(LDX_I, index,
+                                                                 LDA_I, firstValue,
+                                                                 ADC_ABS_IX, 0x1, 0x2C)
 
         and:
         memory.setByteAt(300 + index, secondValue)
@@ -546,13 +539,10 @@ class OpCodeSpec extends Specification {
         then:
         expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
-		testFlags(Z,N,C,O)
+		testFlags(Z,N,C,V)
     
         where:
-        firstValue | secondValue | index | expectedAccumulator | Z      | N     | C     | O     | Expected
-        0x0        | 0x0         | 0     | 0x0                 | true   | false | false | false | "With zero result"
-        0x50       | 0xD0        | 1     | 0x20                | false  | false | true  | false | "With positive, carried result"
-        0x50       | 0x50        | 2     | 0xA0                | false  | true  | false | true  | "With negative overflow"
+        [index, firstValue, secondValue, expectedAccumulator, Z, N, C, V, Expected] << withIndex(adcTestData())
     }
     
     @Unroll("ADC (Absolute[Y]) #Expected:  #firstValue + #secondValue = #expectedAccumulator in Accumulator.")
@@ -571,13 +561,10 @@ class OpCodeSpec extends Specification {
         then:
         expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
-		testFlags(Z,N,C,O)
+		testFlags(Z,N,C,V)
     
         where:
-        firstValue | secondValue | index | expectedAccumulator | Z      | N     | C     | O     | Expected
-        0x0        | 0x0         | 0     | 0x0                 | true   | false | false | false | "With zero result"
-        0x50       | 0xD0        | 1     | 0x20                | false  | false | true  | false | "With positive, carried result"
-        0x50       | 0x50        | 2     | 0xA0                | false  | true  | false | true  | "With negative overflow"
+        [index, firstValue, secondValue, expectedAccumulator, Z, N, C, V, Expected] << withIndex(adcTestData())
     }
     
     @Unroll("ADC (Indirect, X) #Expected: #firstValue *[#locationHi|#locationLo] & #secondValue = #expectedAccumulator")
@@ -600,13 +587,10 @@ class OpCodeSpec extends Specification {
         then:
         expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
-		testFlags(Z,N,C,O)
+		testFlags(Z,N,C,V)
     
         where:
-        locationHi | locationLo | firstValue | secondValue | index | expectedAccumulator | Z      | N     | C     | O     | Expected
-        0x1        | 0x10       | 0x0        | 0x0         | 0     | 0x0                 | true   | false | false | false | "With zero result"
-        0x1        | 0x10       | 0x50       | 0x50        | 2     | 0xA0                | false  | true  | false | true  | "With negative overflow"
-        0x1        | 0x10       | 0x50       | 0xD0        | 1     | 0x20                | false  | false | true  | false | "With positive, carried result"
+        [locationHi, locationLo, index, firstValue, secondValue, expectedAccumulator, Z, N, C, V, Expected] << withWordPointer(withIndex(adcTestData()))
     }
     
     @Unroll("ADC (Indirect, Y) #Expected: #firstValue + #secondValue -> #expectedAccumulator")
@@ -628,13 +612,10 @@ class OpCodeSpec extends Specification {
         then:
         expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
-		testFlags(Z,N,C,O)
+		testFlags(Z,N,C,V)
     
         where:
-        pointerHi | pointerLo | firstValue | secondValue | index | expectedAccumulator | Z      | N     | C     | O     | Expected
-        0x1       | 0x10      | 0x0        | 0x0         | 0     | 0x0                 | true   | false | false | false | "With zero result"
-        0x1       | 0x10      | 0x50       | 0x50        | 2     | 0xA0                | false  | true  | false | true  | "With negative overflow"
-        0x1       | 0x10      | 0x50       | 0xD0        | 1     | 0x20                | false  | false | true  | false | "With positive, carried result"
+        [pointerHi, pointerLo, index, firstValue, secondValue, expectedAccumulator, Z, N, C, V, Expected] << withWordPointer(withIndex(adcTestData()))
     }
     
     @Unroll("ADC 16bit [#lowFirstByte|#highFirstByte] + [#lowSecondByte|#highSecondByte] = #Expected")
