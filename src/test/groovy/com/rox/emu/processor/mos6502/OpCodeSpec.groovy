@@ -59,7 +59,7 @@ class OpCodeSpec extends Specification {
     }
 
     /**
-     * First Value | Second  Value | Expected Accumulator | Z | N | C | V | Expected
+     * First Value | Second  Value | Expected Accumulator | Z | N | C | V | Description
      */
     def adcTestData() {
         [
@@ -70,7 +70,7 @@ class OpCodeSpec extends Specification {
     }
 
     /**
-     * Value | Result | Z | N | C | Expected
+     * Value | Result | Z | N | C | Description
      */
     def aslTestData() {
         [
