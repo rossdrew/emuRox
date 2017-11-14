@@ -44,7 +44,7 @@ class OpCodeSpec extends Specification {
     }
 
     /**
-     * value | Z  | N | Description
+     * Value | Z  | N | Description
      */
     def loadValueTestData(){
         [
@@ -80,12 +80,11 @@ class OpCodeSpec extends Specification {
           [0b10000001, 0b00000010, false, false, true , "Carried shift"],
           [0b10000000, 0b00000000, true , false, true , "Carried, zero shift"],
           [0b11000000, 0b10000000, false, true , true,  "Carried, negative shift"]
-
         ]
     }
 
     /**
-     * Index | {test data ...}
+     * Index | {Test Data ...}
      */
     def withIndex(testData){
         int i = 0
@@ -93,7 +92,7 @@ class OpCodeSpec extends Specification {
     }
 
     /**
-     * Pointer Hi | Pointer Low | {test data ...}
+     * Pointer Hi | Pointer Low | {Test Data ...}
      */
     def withWordPointer(testData){
         int hi = 1
