@@ -97,6 +97,21 @@ class OpCodeSpec extends Specification {
     }
 
     /**
+     * Pre-Instr | First Value | Result | Z | N | C | Description
+     */
+    def rolTestData() {
+        [
+          [CLC, 0b00000001, 0b00000010, false, false, false, "Standard rotate left"],
+          [CLC, 0b00000000, 0b00000000, true,  false, false, "Rotate to zero"],
+          [CLC, 0b01000000, 0b10000000, false, true,  false, "Rotate to negative"],
+          [CLC, 0b10000001, 0b00000010, false, false, true,  "Rotate to carry out"],
+          [SEC, 0b00000001, 0b00000011, false, false, false, "Rotate with carry in, no carry out"],
+          [SEC, 0b10000000, 0b00000001, false, false, true,  "Carry in then carry out"],
+          [SEC, 0b01000000, 0b10000001, false, true,  false, "Carry in to negative"]
+        ]
+    }
+
+    /**
      * Index | {Test Data ...}
      */
     def withIndex(testData){
@@ -133,7 +148,7 @@ class OpCodeSpec extends Specification {
         value == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
         testFlags(Z, N)
-    
+
         where:
         [value, Z, N, Expected] << loadValueTestData()
     }
@@ -2137,14 +2152,7 @@ class OpCodeSpec extends Specification {
 		testFlags(Z,N,C)
     
         where:
-        preInstr | firstValue | expectedAccumulator | Z     | N     | C     | expected
-        CLC      | 0b00000001 | 0b00000010          | false | false | false | "Standard rotate left"
-        CLC      | 0b00000000 | 0b00000000          | true  | false | false | "Rotate to zero"
-        CLC      | 0b01000000 | 0b10000000          | false | true  | false | "Rotate to negative"
-        CLC      | 0b10000001 | 0b00000010          | false | false | true  | "Rotate to carry out"
-        SEC      | 0b00000001 | 0b00000011          | false | false | false | "Rotate with carry in, no carry out"
-        SEC      | 0b10000000 | 0b00000001          | false | false | true  | "Carry in then carry out"
-        SEC      | 0b01000000 | 0b10000001          | false | true  | false | "Carry in to negative"
+        [preInstr, firstValue, expectedAccumulator, Z, N, C, expected] << rolTestData()
     }
     
     @Unroll("ROL (Zero Page) #Expected: #firstValue -> #expectedMem")
@@ -2164,12 +2172,7 @@ class OpCodeSpec extends Specification {
 		testFlags(Z,N,C)
     
         where:
-        firstInstr  |firstValue  | expectedMem | Z     | N     | C     | Expected
-        CLC         | 0b00000001 | 0b00000010  | false | false | false | "Basic rotate left"
-        CLC         | 0b01000000 | 0b10000000  | false | true  | false | "Rotate to negative"
-        CLC         | 0b00000000 | 0b00000000  | true  | false | false | "Rotate to zero without carry"
-        CLC         | 0b10000000 | 0b00000000  | true  | false | true  | "Rotate to zero with carry"
-        SEC         | 0b00000000 | 0b00000001  | false | false | false | "Rotate from zero to carry in"
+        [firstInstr, firstValue, expectedMem, Z, N, C, Expected] << rolTestData()
     }
     
     @Unroll("ROL (Zero Page[X]) #Expected: #firstValue -> #expectedMem")
@@ -2190,12 +2193,7 @@ class OpCodeSpec extends Specification {
 		testFlags(Z,N,C)
     
         where:
-        firstInstr | index | firstValue | expectedMem | Z     | N     | C     | Expected
-        CLC        | 0     | 0b00000001 | 0b00000010  | false | false | false | "Basic rotate left"
-        CLC        | 1     | 0b01000000 | 0b10000000  | false | true  | false | "Rotate to negative"
-        CLC        | 2     | 0b00000000 | 0b00000000  | true  | false | false | "Rotate to zero without carry"
-        CLC        | 3     | 0b10000000 | 0b00000000  | true  | false | true  | "Rotate to zero with carry"
-        SEC        | 4     | 0b00000000 | 0b00000001  | false | false | false | "Rotate from zero to carry in"
+        [index, firstInstr, firstValue, expectedMem, Z, N, C, Expected] << withIndex(rolTestData())
     }
     
     @Unroll("ROL (Absolute) #Expected: #firstValue -> #expectedMem")
@@ -2215,12 +2213,7 @@ class OpCodeSpec extends Specification {
 		testFlags(Z,N,C)
     
         where:
-        firstInstr  |firstValue  | expectedMem | Z     | N     | C     | Expected
-        CLC         | 0b00000001 | 0b00000010  | false | false | false | "Basic rotate left"
-        CLC         | 0b01000000 | 0b10000000  | false | true  | false | "Rotate to negative"
-        CLC         | 0b00000000 | 0b00000000  | true  | false | false | "Rotate to zero without carry"
-        CLC         | 0b10000000 | 0b00000000  | true  | false | true  | "Rotate to zero with carry"
-        SEC         | 0b00000000 | 0b00000001  | false | false | false | "Rotate from zero to carry in"
+        [firstInstr, firstValue, expectedMem, Z, N, C, Expected] << rolTestData()
     }
     
     @Unroll("ROL (Absolute[X]) #Expected: #firstValue -> #expectedMem")
@@ -2241,12 +2234,7 @@ class OpCodeSpec extends Specification {
 		testFlags(Z,N,C)
     
         where:
-        firstInstr  | index | firstValue | expectedMem | Z     | N     | C     | Expected
-        CLC         | 0     | 0b00000001 | 0b00000010  | false | false | false | "Basic rotate left"
-        CLC         | 1     | 0b01000000 | 0b10000000  | false | true  | false | "Rotate to negative"
-        CLC         | 2     | 0b00000000 | 0b00000000  | true  | false | false | "Rotate to zero without carry"
-        CLC         | 3     | 0b10000000 | 0b00000000  | true  | false | true  | "Rotate to zero with carry"
-        SEC         | 4     | 0b00000000 | 0b00000001  | false | false | false | "Rotate from zero to carry in"
+        [index, firstInstr, firstValue, expectedMem, Z, N, C, Expected] << withIndex(rolTestData())
     }
     
     @Unroll("ROR (Accumulator) #expected: #firstValue -> #expectedAccumulator")
