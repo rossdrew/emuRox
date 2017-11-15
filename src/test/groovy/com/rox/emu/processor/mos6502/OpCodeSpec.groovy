@@ -70,6 +70,19 @@ class OpCodeSpec extends Specification {
     }
 
     /**
+     * First Value | Second Value | Result  | Z | N | C | V | Description
+     */
+    def sbcTestData() {
+        [
+          [0x5,         0x3,  0x2,          false, false, true,  false, "Basic subtraction"],
+          [0x5,         0x5,  0x0,          true,  false, true,  false, "With zero result"],
+          [0x5,         0x6,  0xFF,         false, true,  false, false, "With negative result"],
+          [0b10000000,  0x1,  0b01111111,   false, false, true,  true,  "With overflow & carry"],
+          [0x50,        0xB0, 0xA0,         false, true,  false, true,  "With overflow & no carry"]
+        ]
+    }
+
+    /**
      * Value | Result | Z | N | C | Description
      */
     def aslTestData() {
@@ -1360,12 +1373,7 @@ class OpCodeSpec extends Specification {
 		testFlags(Z,N,C,V)
     
         where:
-        firstValue | secondValue | expectedAccumulator  | Z      | N     | V     | C     | Expected
-        0x5        | 0x3         | 0x2                  | false  | false | false | true  | "Basic subtraction"
-        0x5        | 0x5         | 0x0                  | true   | false | false | true  | "With zero result"
-        0x5        | 0x6         | 0xFF                 | false  | true  | false | false | "With negative result"
-        0b10000000 | 0x1         | 0b01111111           | false  | false | true  | true  | "With overflow & carry"
-        0x50       | 0xB0        | 0xA0                 | false  | true  | true  | false | "With overflow & no carry"
+        [firstValue, secondValue, expectedAccumulator, Z, N, C, V, Expected] << sbcTestData()
     }
     
     @Unroll("SBC (Zero Page) #Expected:  #firstValue - #secondValue = #expectedAccumulator in Accumulator.")
@@ -1383,15 +1391,10 @@ class OpCodeSpec extends Specification {
         then:
         expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
-		testFlags(Z,N,C,O)
+		testFlags(Z,N,C,V)
     
         where:
-        firstValue | secondValue | expectedAccumulator  | Z      | N     | O     | C     | Expected
-        0x5        | 0x3         | 0x2                  | false  | false | false | true  | "Basic subtraction"
-        0x5        | 0x5         | 0x0                  | true   | false | false | true  | "With zero result"
-        0x5        | 0x6         | 0xFF                 | false  | true  | false | false | "with negative result"
-        0b10000000 | 0x1         | 0b01111111           | false  | false | true  | true  | "With overflow & carry"
-        0x50       | 0xB0        | 0xA0                 | false  | true  | true  | false | "With overflow & no carry"
+        [firstValue, secondValue, expectedAccumulator, Z, N, C, V, Expected] << sbcTestData()
     }
     
     @Unroll("SBC (Zero Page[X]) #Expected:  #firstValue - #secondValue = #expectedAccumulator in Accumulator.")
@@ -1410,15 +1413,10 @@ class OpCodeSpec extends Specification {
         then:
         expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
-		testFlags(Z,N,C,O)
+		testFlags(Z,N,C,V)
     
         where:
-        firstValue | index | secondValue | expectedAccumulator  | Z      | N     | O     | C     | Expected
-        0x5        | 0     | 0x3         | 0x2                  | false  | false | false | true  | "Basic subtraction"
-        0x5        | 1     | 0x5         | 0x0                  | true   | false | false | true  | "With zero result"
-        0x5        | 2     | 0x6         | 0xFF                 | false  | true  | false | false | "with negative result"
-        0b10000000 | 3     | 0x1         | 0b01111111           | false  | false | true  | true  | "With overflow & carry"
-        0x50       | 4     | 0xB0        | 0xA0                 | false  | true  | true  | false | "With overflow & no carry"
+        [index, firstValue, secondValue, expectedAccumulator, Z, N, C, V, Expected] << withIndex(sbcTestData())
     }
     
     @Unroll("SBC (Absolute) #Expected:  #firstValue - #secondValue = #expectedAccumulator in Accumulator.")
@@ -1436,15 +1434,10 @@ class OpCodeSpec extends Specification {
         then:
         expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
-		testFlags(Z,N,C,O)
+		testFlags(Z,N,C,V)
     
         where:
-        firstValue | secondValue | expectedAccumulator  | Z      | N     | O     | C     | Expected
-        0x5        | 0x3         | 0x2                  | false  | false | false | true  | "Basic subtraction"
-        0x5        | 0x5         | 0x0                  | true   | false | false | true  | "With zero result"
-        0x5        | 0x6         | 0xFF                 | false  | true  | false | false | "with negative result"
-        0b10000000 | 0x1         | 0b01111111           | false  | false | true  | true  | "With overflow & carry"
-        0x50       | 0xB0        | 0xA0                 | false  | true  | true  | false | "With overflow & no carry"
+        [firstValue, secondValue, expectedAccumulator, Z, N, C, V, Expected] << sbcTestData()
     }
     
     @Unroll("SBC (Absolute[X]) #Expected:  #firstValue - #secondValue = #expectedAccumulator in Accumulator.")
@@ -1463,15 +1456,10 @@ class OpCodeSpec extends Specification {
         then:
         expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
-		testFlags(Z,N,C,O)
+		testFlags(Z,N,C,V)
     
         where:
-        index | firstValue | secondValue | expectedAccumulator  | Z      | N     | O     | C     | Expected
-        0     | 0x5        | 0x3         | 0x2                  | false  | false | false | true  | "Basic subtraction"
-        1     | 0x5        | 0x5         | 0x0                  | true   | false | false | true  | "With zero result"
-        2     | 0x5        | 0x6         | 0xFF                 | false  | true  | false | false | "with negative result"
-        3     | 0b10000000 | 0x1         | 0b01111111           | false  | false | true  | true  | "With overflow & carry"
-        4     | 0x50       | 0xB0        | 0xA0                 | false  | true  | true  | false | "With overflow & no carry"
+        [index, firstValue, secondValue, expectedAccumulator, Z, N, C, V, Expected] << withIndex(sbcTestData())
     }
     
     @Unroll("SBC (Absolute[Y]) #Expected:  #firstValue - #secondValue = #expectedAccumulator in Accumulator.")
@@ -1490,26 +1478,21 @@ class OpCodeSpec extends Specification {
         then:
         expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
         program.length == registers.getPC()
-		testFlags(Z,N,C,O)
+		testFlags(Z,N,C,V)
     
         where:
-        index | firstValue | secondValue | expectedAccumulator  | Z      | N     | O     | C     | Expected
-        0     | 0x5        | 0x3         | 0x2                  | false  | false | false | true  | "Basic subtraction"
-        1     | 0x5        | 0x5         | 0x0                  | true   | false | false | true  | "With zero result"
-        2     | 0x5        | 0x6         | 0xFF                 | false  | true  | false | false | "with negative result"
-        3     | 0b10000000 | 0x1         | 0b01111111           | false  | false | true  | true  | "With overflow & carry"
-        4     | 0x50       | 0xB0        | 0xA0                 | false  | true  | true  | false | "With overflow & no carry"
+        [index, firstValue, secondValue, expectedAccumulator, Z, N, C, V, Expected] << withIndex(sbcTestData())
     }
     
     @Unroll("SBC (Indirect, X) #Expected: #firstValue (@[#locationHi|#locationLo]) - #secondValue = #expectedAccumulator")
     testSBC_IND_IX() {
         when:
         Program program = loadMemoryWithProgram(LDA_I, secondValue,    //Value at indirect address
-                                                STA_ABS, locationHi, locationLo,
+                                                STA_ABS, pointerHi, pointerLo,
                                                 LDX_I, index,
-                                                LDA_I, locationHi,                      //Indirect address in memory
+                                                LDA_I, pointerHi,                      //Indirect address in memory
                                                 STA_Z_IX, 0x30,
-                                                LDA_I, locationLo,
+                                                LDA_I, pointerLo,
                                                 STA_Z_IX, 0x31,
                                                 LDA_I, firstValue,
                                                 SEC,
@@ -1524,12 +1507,7 @@ class OpCodeSpec extends Specification {
 		testFlags(Z,N,C,V)
     
         where:
-        locationHi | locationLo | index | firstValue | secondValue | expectedAccumulator | Z      | N     | V     | C     | Expected
-        0x1        | 0x10       | 0     | 0x5        | 0x3         | 0x2                 | false  | false | false | true  | "Basic subtraction"
-        0x2        | 0x13       | 1     | 0x5        | 0x5         | 0x0                 | true   | false | false | true  | "With zero result"
-        0x3        | 0x26       | 2     | 0x5        | 0x6         | 0xFF                | false  | true  | false | false | "with negative result"
-        0x4        | 0x33       | 3     | 0b10000000 | 0x1         | 0b01111111          | false  | false | true  | true  | "With overflow & carry"
-        0x5        | 0x19       | 4     | 0x50       | 0xB0        | 0xA0                | false  | true  | true  | false | "With overflow & no carry"
+        [pointerHi, pointerLo, index, firstValue, secondValue, expectedAccumulator, Z, N, C, V, Expected] << withWordPointer(withIndex(sbcTestData()))
     }
     
     @Unroll("SBC (Indirect, Y) #Expected: #firstValue (@[#locationHi|#locationLo]) - #secondValue = #expectedAccumulator")
@@ -1552,15 +1530,10 @@ class OpCodeSpec extends Specification {
         
         then:
         expectedAccumulator == registers.getRegister(Registers.REG_ACCUMULATOR)
-		testFlags(Z,N)
+		testFlags(Z,N,C,V)
     
         where:
-        pointerHi | pointerLo | index | firstValue | secondValue | expectedAccumulator | Z      | N     | O     | C     | Expected
-        0x1       | 0x10      | 0     | 0x5        | 0x3         | 0x2                 | false  | false | false | true  | "Basic subtraction"
-        0x2       | 0x13      | 1     | 0x5        | 0x5         | 0x0                 | true   | false | false | true  | "With zero result"
-        0x3       | 0x26      | 2     | 0x5        | 0x6         | 0xFF                | false  | true  | false | false | "with negative result"
-        0x4       | 0x33      | 3     | 0b10000000 | 0x1         | 0b01111111          | false  | false | true  | true  | "With overflow & carry"
-        0x5       | 0x19      | 4     | 0x50       | 0xB0        | 0xA0                | false  | true  | true  | false | "With overflow & no carry"
+        [pointerHi, pointerLo, index, firstValue, secondValue, expectedAccumulator, Z, N, C, V, Expected] << withWordPointer(withIndex(sbcTestData()))
     }
     
     @Unroll("INX #Expected: on #firstValue = #expectedX")
