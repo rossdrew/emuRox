@@ -97,6 +97,18 @@ class OpCodeSpec extends Specification {
     }
 
     /**
+     * First Value | Second Value | Z | N | C | Description
+     */
+    def cmpTestData() {
+        [
+          [0x10, 0x10, true,  false, true,  "Basic compare"],
+          [0x11, 0x10, false, false, true,  "Carry flag set"],
+          [0x10, 0x11, false, true,  false, "Smaller value - larger"],
+          [0xFF, 0x01, false, true,  true,  "Negative result"]
+        ]
+    }
+
+    /**
      * Pre-Instr | First Value | Result | Z | N | C | Description
      */
     def rolTestData() {
@@ -2686,11 +2698,7 @@ class OpCodeSpec extends Specification {
 		testFlags(Z,N,C)
     
         where:
-        firstValue | secondValue | Z     | N     | C     | Expected
-        0x10       | 0x10        | true  | false | true  | "Basic compare"
-        0x11       | 0x10        | false | false | true  | "Carry flag set"
-        0x10       | 0x11        | false | true  | false | "Smaller value - larger"
-        0xFF       | 0x01        | false | true  | true  | "Negative result"
+        [firstValue, secondValue, Z, N, C, Expected] << cmpTestData()
     }
     
     @Unroll("CMP (Zero Page) #Expected: #firstValue == #secondValue")
@@ -2710,11 +2718,7 @@ class OpCodeSpec extends Specification {
 		testFlags(Z,N,C)
     
         where:
-        firstValue | secondValue | Z     | N     | C     | Expected
-        0x10       | 0x10        | true  | false | true  | "Basic compare"
-        0x11       | 0x10        | false | false | true  | "Carry flag set"
-        0x10       | 0x11        | false | true  | false | "Smaller value - larger"
-        0xFF       | 0x01        | false | true  | true  | "Negative result"
+        [firstValue, secondValue, Z, N, C, Expected] << cmpTestData()
     }
     
     @Unroll("CMP (Zero Page[X]) #Expected: #firstValue == #secondValue")
@@ -2735,11 +2739,7 @@ class OpCodeSpec extends Specification {
 		testFlags(Z,N,C)
     
         where:
-        firstValue | secondValue | index | Z     | N     | C     | Expected
-        0x10       | 0x10        | 0     | true  | false | true  | "Basic compare"
-        0x11       | 0x10        | 1     | false | false | true  | "Carry flag set"
-        0x10       | 0x11        | 2     | false | true  | false | "Smaller value - larger"
-        0xFF       | 0x01        | 3     | false | true  | true  | "Negative result"
+        [index, firstValue, secondValue, Z, N, C, Expected] << withIndex(cmpTestData())
     }
     
     @Unroll("CMP (Absolute) #Expected: #firstValue == #secondValue")
@@ -2759,11 +2759,7 @@ class OpCodeSpec extends Specification {
 		testFlags(Z,N,C)
     
         where:
-        firstValue | secondValue | Z     | N     | C     | Expected
-        0x10       | 0x10        | true  | false | true  | "Basic compare"
-        0x11       | 0x10        | false | false | true  | "Carry flag set"
-        0x10       | 0x11        | false | true  | false | "Smaller value - larger"
-        0xFF       | 0x01        | false | true  | true  | "Negative result"
+        [firstValue, secondValue, Z, N, C, Expected] << cmpTestData()
     }
     
     @Unroll("CMP (Absolute[X]) #Expected: #firstValue == #secondValue")
@@ -2771,9 +2767,9 @@ class OpCodeSpec extends Specification {
         when:
         Program program = loadMemoryWithProgram(LDX_I, index,
                                                 LDA_I, secondValue,
-                                                STA_ABS_IX, 0x01, 0x20,
+                                                STA_ABS_IX, memHi, memLo,
                                                 LDA_I, firstValue,
-                                                CMP_ABS_IX, 0x01, 0x20)
+                                                CMP_ABS_IX, memHi, memLo)
 
         and:
         processor.step(5)
@@ -2784,11 +2780,7 @@ class OpCodeSpec extends Specification {
 		testFlags(Z,N,C)
     
         where:
-        firstValue | secondValue | index | Z     | N     | C     | Expected
-        0x10       | 0x10        | 0     | true  | false | true  | "Basic compare"
-        0x11       | 0x10        | 1     | false | false | true  | "Carry flag set"
-        0x10       | 0x11        | 2     | false | true  | false | "Smaller value - larger"
-        0xFF       | 0x01        | 3     | false | true  | true  | "Negative result"
+        [memHi, memLo, index, firstValue, secondValue, Z, N, C, Expected] << withWordPointer(withIndex(cmpTestData()))
     }
     
     @Unroll("CMP (Absolute[Y]) #Expected: #firstValue == #secondValue")
@@ -2796,9 +2788,9 @@ class OpCodeSpec extends Specification {
         when:
         Program program = loadMemoryWithProgram(LDY_I, index,
                                                 LDA_I, secondValue,
-                                                STA_ABS_IY, 0x01, 0x20,
+                                                STA_ABS_IY, memHi, memLo,
                                                 LDA_I, firstValue,
-                                                CMP_ABS_IY, 0x01, 0x20)
+                                                CMP_ABS_IY, memHi, memLo)
 
         and:
         processor.step(5)
@@ -2809,11 +2801,7 @@ class OpCodeSpec extends Specification {
 		testFlags(Z,N,C)
     
         where:
-        firstValue | secondValue | index | Z     | N     | C     | Expected
-        0x10       | 0x10        | 0     | true  | false | true  | "Basic compare"
-        0x11       | 0x10        | 1     | false | false | true  | "Carry flag set"
-        0x10       | 0x11        | 2     | false | true  | false | "Smaller value - larger"
-        0xFF       | 0x01        | 3     | false | true  | true  | "Negative result"
+        [memHi, memLo, index, firstValue, secondValue, Z, N, C, Expected] << withWordPointer(withIndex(cmpTestData()))
     }
     
     @Unroll("CMP (Indirect, X). #Expected: #firstValue == #secondValue")
@@ -2837,11 +2825,7 @@ class OpCodeSpec extends Specification {
         testFlags(Z,N,C)
     
         where:
-        pointerHi | pointerLo | firstValue | secondValue | index | Z     | N     | C     | Expected
-        0x02      | 0x20      | 0x10       | 0x10        | 0     | true  | false | true  | "Basic compare"
-        0x02      | 0x22      | 0x11       | 0x10        | 1     | false | false | true  | "Carry flag set"
-        0x03      | 0x35      | 0x10       | 0x11        | 2     | false | true  | false | "Smaller value - larger"
-        0x04      | 0x41      | 0xFF       | 0x01        | 3     | false | true  | true  | "Negative result"
+        [pointerHi, pointerLo, index, firstValue, secondValue, Z, N, C, Expected] << withWordPointer(withIndex(cmpTestData()))
     }
 
     @Unroll("CMP (Indirect, Y) #Expected: #firstValue == #secondValue")
@@ -2884,14 +2868,11 @@ class OpCodeSpec extends Specification {
     
         then:
         program.length == registers.getPC()
-        expectedY == registers.getRegister(Registers.REG_Y_INDEX)
+        firstValue == registers.getRegister(Registers.REG_Y_INDEX)
 		testFlags(Z,N,C)
     
         where:
-        firstValue | secondValue | expectedY | Z     | N     | C     | Expected
-        0x10       | 0x10        | 0x10      | true  | false | true  | "Values are equal"
-        0x11       | 0x10        | 0x11      | false | false | true  | "First value is greater"
-        0x10       | 0x11        | 0x10      | false | true  | false | "Second value is greater"
+        [firstValue, secondValue, Z, N, C, Expected] << cmpTestData()
     }
     
     @Unroll("CPY (Zero Page) #Expected: #firstValue == #secondValue")
@@ -2907,14 +2888,11 @@ class OpCodeSpec extends Specification {
     
         then:
         program.length == registers.getPC()
-        expectedY == registers.getRegister(Registers.REG_Y_INDEX)
+        firstValue == registers.getRegister(Registers.REG_Y_INDEX)
 		testFlags(Z,N,C)
     
         where:
-        firstValue | secondValue | expectedY | Z     | N     | C     | Expected
-        0x10       | 0x10        | 0x10      | true  | false | true  | "Values are equal"
-        0x11       | 0x10        | 0x11      | false | false | true  | "First value is greater"
-        0x10       | 0x11        | 0x10      | false | true  | false | "Second value is greater"
+        [firstValue, secondValue, Z, N, C, Expected] << cmpTestData()
     }
     
     @Unroll("CPY (Absolute) #Expected: #firstValue == #secondValue")
@@ -2930,14 +2908,11 @@ class OpCodeSpec extends Specification {
     
         then:
         program.length == registers.getPC()
-        expectedY == registers.getRegister(Registers.REG_Y_INDEX)
+        firstValue == registers.getRegister(Registers.REG_Y_INDEX)
 		testFlags(Z,N,C)
     
         where:
-        firstValue | secondValue | expectedY | Z     | N     | C     | Expected
-        0x10       | 0x10        | 0x10      | true  | false | true  | "Values are equal"
-        0x11       | 0x10        | 0x11      | false | false | true  | "First value is greater"
-        0x10       | 0x11        | 0x10      | false | true  | false | "Second value is greater"
+        [firstValue, secondValue, Z, N, C, Expected] << cmpTestData()
     }
     
     @Unroll("CPX (Zero Page) #Expected: #firstValue == #secondValue")
@@ -2953,14 +2928,11 @@ class OpCodeSpec extends Specification {
     
         then:
         program.length == registers.getPC()
-        expectedX == registers.getRegister(Registers.REG_X_INDEX)
+        firstValue == registers.getRegister(Registers.REG_X_INDEX)
 		testFlags(Z,N,C)
     
         where:
-        firstValue | secondValue | expectedX | Z     | N     | C     | Expected
-        0x10       | 0x10        | 0x10      | true  | false | true  | "Values are equal"
-        0x11       | 0x10        | 0x11      | false | false | true  | "First value is greater"
-        0x10       | 0x11        | 0x10      | false | true  | false | "Second value is greater"
+        [firstValue, secondValue, Z, N, C, Expected] << cmpTestData()
     }
     
     @Unroll("CPX (Absolute) #Expected: #firstValue == #secondValue")
@@ -2976,14 +2948,11 @@ class OpCodeSpec extends Specification {
     
         then:
         program.length == registers.getPC()
-        expectedX == registers.getRegister(Registers.REG_X_INDEX)
+        firstValue == registers.getRegister(Registers.REG_X_INDEX)
 		testFlags(Z,N,C)
     
         where:
-        firstValue | secondValue | expectedX | Z     | N     | C     | Expected
-        0x10       | 0x10        | 0x10      | true  | false | true  | "Values are equal"
-        0x11       | 0x10        | 0x11      | false | false | true  | "First value is greater"
-        0x10       | 0x11        | 0x10      | false | true  | false | "Second value is greater"
+        [firstValue, secondValue, Z, N, C, Expected] << cmpTestData()
     }
     
     @Unroll("CPX (Immediate) #Expected: #firstValue == #secondValue")
@@ -2996,14 +2965,11 @@ class OpCodeSpec extends Specification {
     
         then:
         program.length == registers.getPC()
-        expectedX == registers.getRegister(Registers.REG_X_INDEX)
+        firstValue == registers.getRegister(Registers.REG_X_INDEX)
 		testFlags(Z,N,C)
     
         where:
-        firstValue | secondValue | expectedX | Z     | N     | C     | Expected
-        0x10       | 0x10        | 0x10      | true  | false | true  | "Values are equal"
-        0x11       | 0x10        | 0x11      | false | false | true  | "First value is greater"
-        0x10       | 0x11        | 0x10      | false | true  | false | "Second value is greater"
+        [firstValue, secondValue, Z, N, C, Expected] << cmpTestData()
     }
     
     @Unroll("STX (Zero Page[X] #expected: #firstValue -> #location[#index]")
