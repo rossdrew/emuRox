@@ -97,6 +97,18 @@ class OpCodeSpec extends Specification {
     }
 
     /**
+     * First Value | Expected Accumulator | Z  | N  | C  | Expected
+     */
+    def lsrTestData() {
+        [
+          [0b01000000, 0b00100000, false, false, false, "Basic shift"],
+          [0b00000000, 0b00000000, true, false, false, "Shift to zero"],
+          [0b00000011, 0b00000001, false, false, true, "Shift with carry"],
+          [0b00000001, 0b00000000, true, false, true, "Shift to zero with carry"]
+        ]
+    }
+
+    /**
      * First Value | Second Value | Z | N | C | Description
      */
     def cmpTestData() {
@@ -1958,11 +1970,7 @@ class OpCodeSpec extends Specification {
 		testFlags(Z,N,C)
     
         where:
-        firstValue | expectedAccumulator | Z     | N     | C     | Expected
-        0b01000000 | 0b00100000          | false | false | false | "Basic shift"
-        0b00000000 | 0b00000000          | true  | false | false | "Shift to zero"
-        0b00000011 | 0b00000001          | false | false | true  | "Shift with carry"
-        0b00000001 | 0b00000000          | true  | false | true  | "Shift to zero with carry"
+        [firstValue, expectedAccumulator, Z, N, C, Expected] << lsrTestData()
     }
     
     @Unroll("LSR (Zero Page) #Expected: #firstValue becomes #expectedMem")
@@ -1981,11 +1989,7 @@ class OpCodeSpec extends Specification {
 		testFlags(Z,N,C)
     
         where:
-        firstValue | expectedMem | Z     | N     | C     | Expected
-        0b01000000 | 0b00100000  | false | false | false | "Basic shift"
-        0b00000000 | 0b00000000  | true  | false | false | "Shift to zero"
-        0b00000011 | 0b00000001  | false | false | true  | "Shift with carry"
-        0b00000001 | 0b00000000  | true  | false | true  | "Shift to zero with carry"
+        [firstValue, expectedMem, Z, N, C, Expected] << lsrTestData()
     }
     
     @Unroll("LSR (Zero Page[X]) #Expected: #firstValue becomes #expectedMem")
@@ -2004,11 +2008,7 @@ class OpCodeSpec extends Specification {
 		testFlags(Z,N,C)
     
         where:
-        firstValue | index | expectedMem | Z     | N     | C     | Expected
-        0b01000000 | 0     | 0b00100000  | false | false | false | "Basic shift"
-        0b00000000 | 1     | 0b00000000  | true  | false | false | "Shift to zero"
-        0b00000011 | 2     | 0b00000001  | false | false | true  | "Shift with carry"
-        0b00000001 | 3     | 0b00000000  | true  | false | true  | "Shift to zero with carry"
+        [index, firstValue, expectedMem, Z, N, C, Expected] << withIndex(lsrTestData())
     }
     
     @Unroll("LSR (Absolute) #Expected: #firstValue becomes #expectedMem")
@@ -2027,11 +2027,7 @@ class OpCodeSpec extends Specification {
 		testFlags(Z,N,C)
     
         where:
-        firstValue | expectedMem | Z     | N     | C     | Expected
-        0b01000000 | 0b00100000  | false | false | false | "Basic shift"
-        0b00000000 | 0b00000000  | true  | false | false | "Shift to zero"
-        0b00000011 | 0b00000001  | false | false | true  | "Shift with carry"
-        0b00000001 | 0b00000000  | true  | false | true  | "Shift to zero with carry"
+        [firstValue, expectedMem, Z, N, C, Expected] << lsrTestData()
     }
     
     @Unroll("LSR (Absolute[X]) #Expected: #firstValue becomes #expectedMem")
@@ -2051,11 +2047,7 @@ class OpCodeSpec extends Specification {
 		testFlags(Z,N,C)
     
         where:
-        firstValue | index | expectedMem | Z     | N     | C     | Expected
-        0b01000000 | 0     | 0b00100000  | false | false | false | "Basic shift"
-        0b00000000 | 1     | 0b00000000  | true  | false | false | "Shift to zero"
-        0b00000011 | 2     | 0b00000001  | false | false | true  | "Shift with carry"
-        0b00000001 | 3     | 0b00000000  | true  | false | true  | "Shift to zero with carry"
+        [index, firstValue, expectedMem, Z, N, C, Expected] << withIndex(lsrTestData())
     }
     
     @Unroll("JMP #expected: [#jmpLocationHi | #jmpLocationLow] -> #expectedPC")
