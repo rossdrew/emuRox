@@ -2846,9 +2846,7 @@ class OpCodeSpec extends Specification {
     
         then:
         program.length == registers.getPC()
-        Z == registers.getFlag(Registers.Z)
-        N == registers.getFlag(Registers.N)
-        C == registers.getFlag(Registers.C)
+        testFlags(Z,N,C)
     
         where:
         pointerHiMem | pointerLoMem | pointerHi | pointerLo | firstValue | secondValue | index | Z     | N     | C     | Expected
