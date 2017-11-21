@@ -6,7 +6,7 @@ import com.rox.emu.processor.mos6502.op.OpCode
 import spock.lang.Specification
 import spock.lang.Unroll
 
-class Mos6502HighLevelFlowSpec extends Specification {
+class Mos6502ImplicitArithmeticSpec extends Specification {
 
     /**
      * Create a memory block of NOP so that we can increment through them
