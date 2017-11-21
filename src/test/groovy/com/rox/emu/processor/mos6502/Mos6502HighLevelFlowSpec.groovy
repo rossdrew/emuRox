@@ -6,7 +6,7 @@ import com.rox.emu.processor.mos6502.op.OpCode
 import spock.lang.Specification
 import spock.lang.Unroll
 
-class Mos6502Spec extends Specification {
+class Mos6502HighLevelFlowSpec extends Specification {
 
     /**
      * Create a memory block of NOP so that we can increment through them
@@ -46,4 +46,7 @@ class Mos6502Spec extends Specification {
         0                   | 300     || 300           | "Zero to overflown low byte"
         0                   | 0x10000 || 0             | "Zero to overflown high byte"
     }
+
+    //TODO Indexed addressing modes & overflows related to them
+    //TODO Branch to & overflows related to them
 }
