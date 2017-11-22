@@ -3,10 +3,14 @@ package com.rox.emu.processor.mos6502
 import com.rox.emu.mem.Memory
 import com.rox.emu.mem.SimpleMemory
 import com.rox.emu.processor.mos6502.op.OpCode
+import com.rox.emu.processor.mos6502.util.Program
 import spock.lang.Specification
 import spock.lang.Unroll
 
 class Mos6502ImplicitArithmeticSpec extends Specification {
+    Memory memory
+    Mos6502 processor
+    Registers registers
 
     /**
      * Create a memory block of NOP so that we can increment through them
@@ -20,18 +24,25 @@ class Mos6502ImplicitArithmeticSpec extends Specification {
         return memory
     }
 
-    @Unroll("PC Flow: #description (#initialValue + #steps -> #expectedValue)")
-    def testProgramCounterProgression(){
-        given: 'A started 6502 processor'
-        final Memory memory = createNOPMemory()
-        final Mos6502 processor = new Mos6502(memory)
-        processor.reset()
-        final Registers registers = processor.getRegisters()
+    private Program loadMemoryWithProgram(Object ... programElements){
+        final Program program = new Program().with(programElements)
+        memory.setBlock(0, program.getProgramAsByteArray())
+        return program
+    }
 
-        when: 'we start at...'
+    def setup(){
+        memory = createNOPMemory()
+        processor = new Mos6502(memory)
+        processor.reset()
+        registers = processor.getRegisters()
+    }
+
+    @Unroll("PC Flow: #description (#initialValue + #steps -> #expectedValue)")
+    def testProgramCounterArithmetic(){
+        given: 'A PC starting point'
         registers.setPC(initialValue)
 
-        and: 'increment by...'
+        when: 'we increment'
         processor.step(steps)
 
         then: 'we are were we are expected to be'
