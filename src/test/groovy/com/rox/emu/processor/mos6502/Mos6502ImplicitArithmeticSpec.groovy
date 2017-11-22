@@ -7,6 +7,8 @@ import com.rox.emu.processor.mos6502.util.Program
 import spock.lang.Specification
 import spock.lang.Unroll
 
+import static com.rox.emu.processor.mos6502.op.OpCode.*
+
 class Mos6502ImplicitArithmeticSpec extends Specification {
     Memory memory
     Mos6502 processor
@@ -16,8 +18,7 @@ class Mos6502ImplicitArithmeticSpec extends Specification {
      * Create a memory block of NOP so that we can increment through them
      * without any side effects for testing program flow.
      */
-    private Memory createNOPMemory() {
-        final Memory memory = new SimpleMemory()
+    private Memory createNOPMemory(Memory memory) {
         for (int i=0; i<0x10000; i++){
             memory.setByteAt(i, OpCode.NOP.byteValue)
         }
@@ -31,7 +32,7 @@ class Mos6502ImplicitArithmeticSpec extends Specification {
     }
 
     def setup(){
-        memory = createNOPMemory()
+        memory = new SimpleMemory()
         processor = new Mos6502(memory)
         processor.reset()
         registers = processor.getRegisters()
@@ -40,6 +41,7 @@ class Mos6502ImplicitArithmeticSpec extends Specification {
     @Unroll("PC Flow: #description (#initialValue + #steps -> #expectedValue)")
     def testProgramCounterArithmetic(){
         given: 'A PC starting point'
+        createNOPMemory(memory)
         registers.setPC(initialValue)
 
         when: 'we increment'
@@ -58,6 +60,34 @@ class Mos6502ImplicitArithmeticSpec extends Specification {
         0                   | 0x10000 || 0             | "Zero to overflown high byte"
     }
 
-    //TODO Indexed addressing modes & overflows related to them
+    @Unroll("Indexed Indirect: #description (#pLoc[#index] -> *(#pHi | #pLo) == #value)")
+    def testIndexedIndirectAddressingArithmetic() {
+        given: 'a value in memory'
+        memory.setByteAt(((pHi<<8)|pLo), value)
+
+        and: 'a pointer in zero page, offset at an index pointing at that values memory location'
+        memory.setBlock(pLoc + index, [pHi, pLo] as int[])
+
+        and: 'a value loaded to the empty Accumulator in an indexed, indirect way'
+        loadMemoryWithProgram(LDA_I, 0,
+                              LDX_I, index,
+                              LDA_IND_IX, pLoc)
+
+
+        when: 'we run the program'
+        processor.step(3)
+
+        then: 'the correct value is in the accumulator'
+        registers.getRegister(Registers.REG_ACCUMULATOR) == value
+
+        where: 'Pointer location base (pLoc), the point (pHi|pLo) and the index are'
+        pLoc | pHi  | pLo  | index | value || description
+        0x30 | 0x0  | 0x50 | 0     | 12    || "Zero index"
+        0x40 | 0x0  | 0x60 | 1     | 9     || "Simplest index"
+        //TODO advanced tests: byte overflows and such
+
+    }
+
+    //TODO Indirect indexed modes & overflows related to them
     //TODO Branch to & overflows related to them
 }
