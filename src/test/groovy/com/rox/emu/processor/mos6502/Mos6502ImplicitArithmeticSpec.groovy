@@ -60,7 +60,7 @@ class Mos6502ImplicitArithmeticSpec extends Specification {
         0                   | 0x10000 || 0             | "Zero to overflown high byte"
     }
 
-    @Unroll("Indexed Indirect: #description (#pLoc[#index] -> *(#pHi | #pLo) == #value)")
+    @Unroll("Indexed Indirect: #description (#pLoc[#index] -> *(#pHi | #pLo) == #expectedAccumulator)")
     def testIndexedIndirectAddressingArithmetic() {
         given: 'a value in memory'
         memory.setByteAt(((pHi<<8)|pLo), value)
@@ -78,14 +78,15 @@ class Mos6502ImplicitArithmeticSpec extends Specification {
         processor.step(3)
 
         then: 'the correct value is in the accumulator'
-        registers.getRegister(Registers.REG_ACCUMULATOR) == value
+        registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
 
         where: 'Pointer location base (pLoc), the point (pHi|pLo) and the index are'
-        pLoc | pHi  | pLo  | index | value || description
-        0x30 | 0x0  | 0x50 | 0     | 12    || "Zero index"
-        0x40 | 0x0  | 0x60 | 1     | 9     || "Simplest index"
-        //TODO advanced tests: byte overflows and such
-
+        pLoc | pHi  | pLo  | index | value || expectedAccumulator   | description
+        0x30 | 0x00 | 0x50 | 0     | 12    || 12                    |"Zero index"
+        0x40 | 0x00 | 0x60 | 1     | 9     || 9                     |"Simplest index"
+        //TODO 0xFE | 0x01 | 0x01 | 1     | 8     || 0                     |"Address with offset partially outwith zero page"
+        //TODO 0xFE | 0x01 | 0x01 | 2     | 7     || 0                     |"Address with offset just outwith zero page"
+        //TODO 0xFF | 0x01 | 0x01 | 2     | 7     || 0                     |"Address with offset wholly outwith zero page"
     }
 
     //TODO Indirect indexed modes & overflows related to them
