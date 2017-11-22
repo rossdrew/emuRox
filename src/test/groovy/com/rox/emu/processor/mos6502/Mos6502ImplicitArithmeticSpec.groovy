@@ -82,11 +82,13 @@ class Mos6502ImplicitArithmeticSpec extends Specification {
 
         where: 'Pointer location base (pLoc), the point (pHi|pLo) and the index are'
         pLoc | pHi  | pLo  | index | value || expectedAccumulator   | description
-        0x30 | 0x00 | 0x50 | 0     | 12    || 12                    |"Zero index"
-        0x40 | 0x00 | 0x60 | 1     | 9     || 9                     |"Simplest index"
-        //TODO 0xFE | 0x01 | 0x01 | 1     | 8     || 0                     |"Address with offset partially outwith zero page"
-        //TODO 0xFE | 0x01 | 0x01 | 2     | 7     || 0                     |"Address with offset just outwith zero page"
-        //TODO 0xFF | 0x01 | 0x01 | 2     | 7     || 0                     |"Address with offset wholly outwith zero page"
+        0x30 | 0x00 | 0x50 | 0     | 12    || 12                    | "Zero index"
+        0x40 | 0x00 | 0x60 | 1     | 9     || 9                     | "Simplest index"
+        0xFE | 0x01 | 0x01 | 0     | 8     || 8                     | "Address with offset just inside zero page"
+
+        //TODO 0xFE | 0x02 | 0x40 | 1     | 7     || BRK.byteValue         | "Address with offset (FF:00 = 01:LDA_I/14) partially outwith zero page"
+        //TODO 0xFE | 0x03 | 0x50 | 2     | 6     || BRK.byteValue         | "Address with offset (00:01 = LDA_I/14:0) just outwith zero page"
+        //TODO 0xFF | 0x04 | 0x60 | 2     | 5     || BRK.byteValue         | "Address with offset (01:02 = 0:LDX_I/43) wholly outwith zero page"
     }
 
     //TODO Indirect indexed modes & overflows related to them
