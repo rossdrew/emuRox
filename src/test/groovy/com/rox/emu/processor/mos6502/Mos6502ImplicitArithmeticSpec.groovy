@@ -68,7 +68,7 @@ class Mos6502ImplicitArithmeticSpec extends Specification {
         and: 'a pointer in zero page, offset at an index pointing at that values memory location'
         memory.setBlock(pLoc + index, [pHi, pLo] as int[])
 
-        and: 'a value loaded to the empty Accumulator in an indexed, indirect way'
+        and: 'a program that takes a value and loads it to the empty Accumulator in an indexed, indirect way'
         loadMemoryWithProgram(LDA_I, 0,
                               LDX_I, index,
                               LDA_IND_IX, pLoc)
@@ -80,17 +80,26 @@ class Mos6502ImplicitArithmeticSpec extends Specification {
         then: 'the correct value is in the accumulator'
         registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
 
-        where: 'Pointer location base (pLoc), the point (pHi|pLo) and the index are'
+        where: 'Pointer location base (pLoc), the points (pHi|pLo) and the index are'
         pLoc | pHi  | pLo  | index | value || expectedAccumulator   | description
         0x30 | 0x00 | 0x50 | 0     | 12    || 12                    | "Zero index"
         0x40 | 0x00 | 0x60 | 1     | 9     || 9                     | "Simplest index"
         0xFE | 0x01 | 0x01 | 0     | 8     || 8                     | "Address with offset just inside zero page"
 
-        //TODO 0xFE | 0x02 | 0x40 | 1     | 7     || BRK.byteValue         | "Address with offset (FF:00 = 01:LDA_I/14) partially outwith zero page"
+        0xFE | 0x02 | 0x40 | 1     | 7     || BRK.byteValue         | "Address with offset (FF:00 = 01:LDA_I/14) partially outwith zero page"
         //TODO 0xFE | 0x03 | 0x50 | 2     | 6     || BRK.byteValue         | "Address with offset (00:01 = LDA_I/14:0) just outwith zero page"
         //TODO 0xFF | 0x04 | 0x60 | 2     | 5     || BRK.byteValue         | "Address with offset (01:02 = 0:LDX_I/43) wholly outwith zero page"
     }
 
     //TODO Indirect indexed modes & overflows related to them
+//    def testIndirectAddressingArithmetic() {
+//        given: 'a value in memory'
+//        and: 'a pointer in zero page'
+//        and: 'a program that takes the value and loads it to the empty Accumulator in an indirect, indexed way'
+//        when: 'we run the program'
+//        then: 'the correct value is in the accumulator'
+//        where:
+//    }
+
     //TODO Branch to & overflows related to them
 }
