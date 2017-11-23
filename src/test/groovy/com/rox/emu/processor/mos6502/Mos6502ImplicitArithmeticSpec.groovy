@@ -86,7 +86,7 @@ class Mos6502ImplicitArithmeticSpec extends Specification {
         0x40 | 0x00 | 0x60 | 1     | 9     || 9                     | "Simplest index"
         0xFE | 0x01 | 0x01 | 0     | 8     || 8                     | "Address with offset just inside zero page"
 
-        0xFE | 0x02 | 0x40 | 1     | 7     || BRK.byteValue         | "Address with offset (FF:00 = 01:LDA_I/14) partially outwith zero page"
+        //TODO 0xFE | 0x02 | 0x40 | 1     | 7     || BRK.byteValue         | "Address with offset (FF:00 = 01:LDA_I/14) partially outwith zero page"
         //TODO 0xFE | 0x03 | 0x50 | 2     | 6     || BRK.byteValue         | "Address with offset (00:01 = LDA_I/14:0) just outwith zero page"
         //TODO 0xFF | 0x04 | 0x60 | 2     | 5     || BRK.byteValue         | "Address with offset (01:02 = 0:LDX_I/43) wholly outwith zero page"
     }
