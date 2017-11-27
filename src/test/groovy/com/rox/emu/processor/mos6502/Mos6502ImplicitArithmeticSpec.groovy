@@ -91,15 +91,35 @@ class Mos6502ImplicitArithmeticSpec extends Specification {
         //TODO 0xFF | 0x04 | 0x60 | 2     | 5     || BRK.byteValue         | "Address with offset (01:02 = 0:LDX_I/43) wholly outwith zero page"
     }
 
-    //TODO Indirect indexed modes & overflows related to them
-//    def testIndirectAddressingArithmetic() {
-//        given: 'a value in memory'
-//        and: 'a pointer in zero page'
-//        and: 'a program that takes the value and loads it to the empty Accumulator in an indirect, indexed way'
-//        when: 'we run the program'
-//        then: 'the correct value is in the accumulator'
-//        where:
-//    }
+    @Unroll("Indirect Indexed: #description (#pLoc + #index -> calculatedPointer == #expectedAccumulator")
+    def testIndirectIndexedAddressingArithmetic() {
+        given: 'a value in memory'
+        memory.setByteAt(((pHi<<8)|pLo) + index, value)
+
+        and: 'a pointer in zero page'
+        memory.setBlock(pLoc, [pHi, pLo] as int[])
+
+        and: 'a program that takes the value and loads it to the empty Accumulator in an indirect, indexed way'
+        loadMemoryWithProgram(LDA_I, 0,
+                              LDY_I, index,
+                              LDA_IND_IY, pLoc)
+
+        when: 'we run the program'
+        processor.step(3)
+
+        then: 'the correct value is in the accumulator'
+        registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
+
+        where:
+        pLoc | pHi  | pLo  | index | value || expectedAccumulator   | description
+        0x30 | 0x00 | 0x50 | 0     | 11    || 11                    | "Zero index"
+        0x30 | 0x00 | 0x50 | 1     | 13    || 13                    | "Simplest index"
+        0xFF | 0x01 | 0x01 | 2     | 9     || 9                     | "Pointer stored just inside zero page"
+
+        //TODO a value just inside the 16 bit address space
+        //TODO a value that cross the 16 bit address space
+        //TODO a value that is "outside" the 16 bit address space
+    }
 
     //TODO Branch to & overflows related to them
 }
