@@ -117,8 +117,8 @@ class Mos6502ImplicitArithmeticSpec extends Specification {
         0xFF | 0x01 | 0x01 | 2     | 9     || 9                     | "Pointer stored just inside zero page"
 
         //TODO a value just inside the 16 bit address space
-        //TODO a value that cross the 16 bit address space
-        //TODO a value that is "outside" the 16 bit address space
+        //TODO a value that cross the 16 bit address space is wrapped to 0x0
+        //TODO a value that is "outside" the 16 bit address space is wrapped to 0x0
     }
 
     //TODO Branch to & overflows related to them
