@@ -140,10 +140,10 @@ class Mos6502ImplicitArithmeticSpec extends Specification {
         registers.getPC() == expectedLocation
 
         where:
-        jumpOffset  || expectedLocation | description
-        0           || 130              | "No jump"
-        1           || 131              | "Simplest forward jump"
-        0b111111110 || 129              | "Simplest backward jump"
+        jumpOffset || expectedLocation | description
+        0          || 130              | "No jump"
+        1          || 131              | "Simplest forward jump"
+        0b11111110 || 129              | "Simplest backward jump"
 
         //TODO jump forward to end of page
         //TODO jump forward past page
