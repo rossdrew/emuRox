@@ -26,8 +26,12 @@ class Mos6502ImplicitArithmeticSpec extends Specification {
     }
 
     private Program loadMemoryWithProgram(Object ... programElements){
+        return loadMemoryAtLocationWithProgram(0, programElements)
+    }
+
+    private Program loadMemoryAtLocationWithProgram(int location, Object ... programElements){
         final Program program = new Program().with(programElements)
-        memory.setBlock(0, program.getProgramAsByteArray())
+        memory.setBlock(location, program.getProgramAsByteArray())
         return program
     }
 
@@ -39,7 +43,7 @@ class Mos6502ImplicitArithmeticSpec extends Specification {
     }
 
     @Unroll("PC Flow: #description (#initialValue + #steps -> #expectedValue)")
-    def testProgramCounterArithmetic(){
+    def programCounterArithmetic(){
         given: 'A PC starting point'
         createNOPMemory(memory)
         registers.setPC(initialValue)
@@ -61,7 +65,7 @@ class Mos6502ImplicitArithmeticSpec extends Specification {
     }
 
     @Unroll("Indexed Indirect: #description (#pLoc[#index] -> *(#pHi | #pLo) == #expectedAccumulator)")
-    def testIndexedIndirectAddressingArithmetic() {
+    def indexedIndirectAddressingArithmetic() {
         given: 'a value in memory'
         memory.setByteAt(((pHi<<8)|pLo), value)
 
@@ -92,7 +96,7 @@ class Mos6502ImplicitArithmeticSpec extends Specification {
     }
 
     @Unroll("Indirect Indexed: #description (#pLoc + #index -> calculatedPointer == #expectedAccumulator")
-    def testIndirectIndexedAddressingArithmetic() {
+    def indirectIndexedAddressingArithmetic() {
         given: 'a value in memory'
         memory.setByteAt(((pHi<<8)|pLo) + index, value)
 
@@ -121,5 +125,25 @@ class Mos6502ImplicitArithmeticSpec extends Specification {
         //TODO a value that is "outside" the 16 bit address space is wrapped to 0x0
     }
 
-    //TODO Branch to & overflows related to them
+    @Unroll("Branching: #description (127 + #jumpOffset == #expectedLocation)")
+    def branchArithmetic() {
+        given: 'a program which consists of a branch'
+        loadMemoryAtLocationWithProgram(127, BCC, jumpOffset)
+
+        and: 'our program counter starts at the start of the program'
+        registers.setPC(127)
+
+        when: 'we run the program'
+        processor.step()
+
+        then: 'we end up at the expected location'
+        registers.getPC() == expectedLocation
+
+        where:
+        jumpOffset || expectedLocation | description
+        0          || 129              | "No jump"
+        1          || 130              | "Simplest jump"
+
+        //TODO backward jumps...
+    }
 }
