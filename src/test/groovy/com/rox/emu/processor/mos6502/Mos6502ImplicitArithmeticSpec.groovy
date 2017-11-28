@@ -42,7 +42,7 @@ class Mos6502ImplicitArithmeticSpec extends Specification {
         registers = processor.getRegisters()
     }
 
-    @Unroll("PC Flow: #description (#initialValue + #steps -> #expectedValue)")
+    @Unroll("Program Counter: #description (#initialValue + #steps -> #expectedValue)")
     def programCounterArithmetic(){
         given: 'A PC starting point'
         createNOPMemory(memory)
