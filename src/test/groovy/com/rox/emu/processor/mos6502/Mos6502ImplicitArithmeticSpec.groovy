@@ -125,7 +125,7 @@ class Mos6502ImplicitArithmeticSpec extends Specification {
         //TODO a value that is "outside" the 16 bit address space is wrapped to 0x0
     }
 
-    @Unroll("Branching: #description (127 + #jumpOffset == #expectedLocation)")
+    @Unroll("Branching: #description (#programLocation + #jumpOffset == #expectedLocation)")
     def branchArithmetic() {
         given: 'a program which consists of a branch'
         loadMemoryAtLocationWithProgram(127, CLC, BCC, jumpOffset)
@@ -140,14 +140,14 @@ class Mos6502ImplicitArithmeticSpec extends Specification {
         registers.getPC() == expectedLocation
 
         where:
-        jumpOffset || expectedLocation | description
-        0          || 130              | "No jump"
-        1          || 131              | "Simplest forward jump"
-        0b11111110 || 129              | "Simplest backward jump"
+        programLocation | jumpOffset || expectedLocation | description
+        127             | 0          || 130              | "No jump"
+        127             | 1          || 131              | "Simplest forward jump"
+        127             | 0b11111110 || 129              | "Simplest backward jump"
+        127             | 125        || 0xFF             | "Jump to end of page"
+        127             | 126        || 0x00             | "Jump off end of page"
+        123             | 126        || 0x00             | "Jump to start of page"
+        //TODO 123             | 0b10000000 || 0xFF             | "Jump off the start of page"
 
-        //TODO jump forward to end of page
-        //TODO jump forward past page
-        //TODO jump backward to start of page
-        //TODO jump backward out of page
     }
 }
