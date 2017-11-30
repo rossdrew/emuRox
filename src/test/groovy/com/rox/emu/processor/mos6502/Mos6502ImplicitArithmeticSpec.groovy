@@ -67,7 +67,8 @@ class Mos6502ImplicitArithmeticSpec extends Specification {
     @Unroll("Indexed Indirect: #description (#pLoc[#index] -> *(#pHi | #pLo) == #expectedAccumulator)")
     def indexedIndirectAddressingArithmetic() {
         given: 'a value in memory'
-        memory.setByteAt(((pHi<<8)|pLo), value)
+        final int pLocation = ((pHi<<8)|pLo)
+        memory.setByteAt(pLocation, value)
 
         and: 'a pointer in zero page, offset at an index pointing at that values memory location'
         memory.setBlock(pLoc + index, [pHi, pLo] as int[])
@@ -98,7 +99,8 @@ class Mos6502ImplicitArithmeticSpec extends Specification {
     @Unroll("Indirect Indexed: #description (#pLoc + #index -> calculatedPointer == #expectedAccumulator")
     def indirectIndexedAddressingArithmetic() {
         given: 'a value in memory'
-        memory.setByteAt(((pHi<<8)|pLo) + index, value)
+        final int pLocation = ((pHi<<8)|pLo) + index
+        memory.setByteAt(pLocation, value)
 
         and: 'a pointer in zero page'
         memory.setBlock(pLoc, [pHi, pLo] as int[])
@@ -148,6 +150,5 @@ class Mos6502ImplicitArithmeticSpec extends Specification {
         127             | 126        || 0x00             | "Jump off end of page"
         123             | 126        || 0x00             | "Jump to start of page"
         //TODO 123             | 0b10000000 || 0xFF             | "Jump off the start of page"
-
     }
 }
