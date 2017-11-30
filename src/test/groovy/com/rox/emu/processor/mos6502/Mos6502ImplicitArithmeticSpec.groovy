@@ -130,10 +130,10 @@ class Mos6502ImplicitArithmeticSpec extends Specification {
     @Unroll("Branching: #description (#programLocation + #jumpOffset == #expectedLocation)")
     def branchArithmetic() {
         given: 'a program which consists of a branch'
-        loadMemoryAtLocationWithProgram(127, CLC, BCC, jumpOffset)
+        loadMemoryAtLocationWithProgram(programLocation, CLC, BCC, jumpOffset)
 
         and: 'our program counter starts at the start of the program'
-        registers.setPC(127)
+        registers.setPC(programLocation)
 
         when: 'we run the program'
         processor.step(2)
@@ -148,7 +148,7 @@ class Mos6502ImplicitArithmeticSpec extends Specification {
         127             | 0b11111110 || 129              | "Simplest backward jump"
         127             | 125        || 0xFF             | "Jump to end of page"
         127             | 126        || 0x00             | "Jump off end of page"
-        123             | 126        || 0x00             | "Jump to start of page"
+        123             | 0b10000001 || 0x00             | "Jump to start of page"
         //TODO 123             | 0b10000000 || 0xFF             | "Jump off the start of page"
     }
 }
