@@ -149,6 +149,6 @@ class Mos6502ImplicitArithmeticSpec extends Specification {
         127             | 125        || 0xFF             | "Jump to end of page"
         127             | 126        || 0x00             | "Jump off end of page"
         123             | 0b10000001 || 0x00             | "Jump to start of page"
-        //TODO 123             | 0b10000000 || 0xFF             | "Jump off the start of page"
+        123             | 0b10000000 || 0xFF             | "Jump off the start of page"
     }
 }
