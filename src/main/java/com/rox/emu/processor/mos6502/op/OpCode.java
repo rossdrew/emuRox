@@ -234,7 +234,7 @@ public enum OpCode {
     }
 
     /**
-     * Get the OpCode for
+     * Get the {@link OpCode} for
      *
      * @param byteValue this byte value
      * @return the OpCode associated with this byte value
@@ -244,7 +244,7 @@ public enum OpCode {
     }
 
     /**
-     * Get the OpCode for
+     * Get the {@link OpCode} for
      *
      * @param opCodeName Three character {@link String} representing an {@link AddressingMode#IMPLIED} addressed OpCode
      * @return The OpCode instance associated with this name in {@link AddressingMode#IMPLIED}
@@ -254,7 +254,7 @@ public enum OpCode {
     }
 
     /**
-     * Get the OpCode for
+     * Get the {@link OpCode} for
      *
      * @param opCodeName Three character {@link String} representing OpCode name
      * @param addressingMode The {@link AddressingMode} of the OpCode
