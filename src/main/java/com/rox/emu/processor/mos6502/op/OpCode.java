@@ -194,6 +194,9 @@ public enum OpCode {
     RTS(0x60),
     RTI(0x40);
 
+    /**
+     * The actual addressing-mode independent operation performed by an {@link OpCode}
+     */
     public enum Operation {
         BRK, ASL, LSR, ADC, LDA, CLV, AND, ORA, EOR, SBC,
         CLC, SEC, LDY, LDX, STY, STA, STX, INY, INX, DEX,
