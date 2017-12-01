@@ -194,14 +194,14 @@ public enum OpCode {
     RTS(0x60),
     RTI(0x40);
 
-//    public enum Operation {
-//        BRK, ASL, LSR, ADC, LDA, CLV, AND, ORA, EOR, SBC,
-//        CLC, SEC, LDY, LDX, STY, STA, STX, INY, INX, DEX,
-//        INC, DEC, DEY, PHA, PLA, PHP, PLP, NOP, JMP, TAX,
-//        TAY, TYA, TXA, TXS, TSX, BIT, CMP, CPX, CPY, JSR,
-//        BPL, BMI, BVC, BVS, BCC, BCS, BNE, BEQ, ROL, ROR,
-//        CLI, SEI, SED, CLD, RTS, RTI
-//    }
+    public enum Operation {
+        BRK, ASL, LSR, ADC, LDA, CLV, AND, ORA, EOR, SBC,
+        CLC, SEC, LDY, LDX, STY, STA, STX, INY, INX, DEX,
+        INC, DEC, DEY, PHA, PLA, PHP, PLP, NOP, JMP, TAX,
+        TAY, TYA, TXA, TXS, TSX, BIT, CMP, CPX, CPY, JSR,
+        BPL, BMI, BVC, BVS, BCC, BCS, BNE, BEQ, ROL, ROR,
+        CLI, SEI, SED, CLD, RTS, RTI
+    }
 
     /**
      * The separator used to delimit different elements in the {@link String} enum id
@@ -223,6 +223,7 @@ public enum OpCode {
      */
     public static final int INDX_I = ADDR_I + 1;
 
+    private final Operation operation;
     private final int byteValue;
     private final String opCodeName;
     private final AddressingMode addressingMode;
@@ -231,6 +232,7 @@ public enum OpCode {
         this.byteValue = byteValue;
         this.addressingMode = OpCodeConverter.getAddressingMode(this.name());
         this.opCodeName = OpCodeConverter.getOpCode(this.name());
+        this.operation = OpCodeConverter.getOperation(this.name());
     }
 
     /**
@@ -291,6 +293,10 @@ public enum OpCode {
             return result.get();
 
         throw new UnknownOpCodeException("Unknown opcode name while creating OpCode object: " + predicateDescription, predicateTerm);
+    }
+
+    public Operation getOperation(){
+        return this.operation;
     }
 
     /**

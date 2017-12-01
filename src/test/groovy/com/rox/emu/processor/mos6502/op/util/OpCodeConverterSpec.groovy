@@ -2,6 +2,7 @@ package com.rox.emu.processor.mos6502.op.util
 
 import com.rox.emu.UnknownOpCodeException
 import com.rox.emu.processor.mos6502.op.AddressingMode
+import com.rox.emu.processor.mos6502.op.OpCode
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -62,5 +63,28 @@ class OpCodeConverterSpec extends Specification{
         opCodeName        | expected
         'ADC_TRX'         | "TRX Not a valid addressing mode"
         'ADC_1'           | "1 Not a valid addressing mode"
+    }
+
+    @Unroll("Get operation from #opCodeName")
+    testGetOperation(){
+        when:
+        final OpCode.Operation operation = OpCodeConverter.getOperation(opCodeName)
+
+        then:
+        operation == expectedOperation
+
+        where:
+        opCodeName    || expectedOperation
+        "BRK"         || OpCode.Operation.BRK
+        "ASL_A"       || OpCode.Operation.ASL
+        "AND_IND_IX"  || OpCode.Operation.AND
+    }
+
+    def testGetOperationForEveryOpcode(){
+        when:
+        boolean mismatches = OpCode.values().any {opCode -> opCode.operation != OpCodeConverter.getOperation(opCode.opCodeName)}
+
+        then:
+        !mismatches
     }
 }

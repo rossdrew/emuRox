@@ -25,6 +25,15 @@ public class OpCodeConverter {
         return tokens[OpCode.CODE_I];
     }
 
+
+    /**
+     * @param internalOpCodeName {@link String} representation of an {@link OpCode}
+     * @return the {@link OpCode.Operation} associated with this {@link OpCode}
+     */
+    public static OpCode.Operation getOperation(final String internalOpCodeName) {
+        return OpCode.Operation.valueOf(getOpCode(internalOpCodeName));
+    }
+
     /**
      * Extract the {@link Mos6502} {@link AddressingMode} from the {@link String} representation of an {@link OpCode}.
      *
