@@ -22,6 +22,8 @@ dependencies {
     testCompile group: 'com.pholser', name: 'junit-quickcheck-core', version: '0.8-alpha-7'
     testCompile group: 'com.pholser', name: 'junit-quickcheck-generators', version: '0.8-alpha-7'
     testCompile group: 'com.nagternal', name : 'spock-genesis', version: '0.6.0'
+    testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
+
 
     compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.6.1'
 }

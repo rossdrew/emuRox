@@ -7,11 +7,14 @@ import java.util.Arrays;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 public class MultiSourceMemoryTest {
     private Memory memoryBlockA;
     private Memory memoryBlockB;
-    private Memory testMemory;
+    private MultiSourceMemory testMemory;
 
     @Before
     public void setup(){
@@ -54,5 +57,16 @@ public class MultiSourceMemoryTest {
         testMemory.setBlock(20, sampleData);
 
         assertTrue("Expected " + Arrays.toString(sampleData) + ", got " + Arrays.toString(memoryBlockB.getBlock(20, 25)), Arrays.equals( sampleData,  memoryBlockB.getBlock(20, 25)));
+    }
+
+    @Test
+    public void testMultipleDestinationReset(){
+        final Memory memory = mock(Memory.class);
+        testMemory = testMemory.with(30, memory);
+        testMemory = testMemory.with(40, memory);
+
+        testMemory.reset();
+
+        verify(memory, times(1)).reset();
     }
 }
