@@ -15,7 +15,7 @@ public class MultiSourceMemory implements Memory {
 
     public MultiSourceMemory(){
         memoryMappings = new HashMap<>();
-        defaultMemory = new SimpleMemory();
+        defaultMemory = null;
     }
 
     private MultiSourceMemory(final Memory defaultMemory, final Map<Integer, Memory> memoryMappings){
@@ -23,7 +23,11 @@ public class MultiSourceMemory implements Memory {
         this.defaultMemory = defaultMemory;
     }
 
-    public MultiSourceMemory with(final Integer address, final Memory mappedMemory){
+    public MultiSourceMemory maintaining(final Memory internalMemory){
+        return new MultiSourceMemory(internalMemory, this.memoryMappings);
+    }
+
+    public MultiSourceMemory withMapping(final Integer address, final Memory mappedMemory){
         final Map<Integer, Memory> newMemoryMappings = new HashMap<>();
         newMemoryMappings.putAll(memoryMappings);
         newMemoryMappings.put(address, mappedMemory);
@@ -31,7 +35,7 @@ public class MultiSourceMemory implements Memory {
         return new MultiSourceMemory(defaultMemory, newMemoryMappings);
     }
 
-    public MultiSourceMemory with(final int[] addresses, final Memory mappedMemory){
+    public MultiSourceMemory withMapping(final int[] addresses, final Memory mappedMemory){
         final Map<Integer, Memory> newMemoryMappings = new HashMap<>();
         newMemoryMappings.putAll(memoryMappings);
         for (Integer address : addresses) {

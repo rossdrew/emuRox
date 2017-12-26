@@ -20,8 +20,9 @@ public class MultiSourceMemoryTest {
     public void setup(){
         memoryBlockA = new SimpleMemory();
         memoryBlockB = new SimpleMemory();
-        testMemory = new MultiSourceMemory().with(10, memoryBlockA)
-                                            .with(new int[] {20,21,22,23,24,25}, memoryBlockB);
+        testMemory = new MultiSourceMemory().maintaining(new SimpleMemory())
+                                            .withMapping(10, memoryBlockA)
+                                            .withMapping(new int[] {20,21,22,23,24,25}, memoryBlockB);
     }
 
     @Test
@@ -57,16 +58,16 @@ public class MultiSourceMemoryTest {
     @Test
     public void testMultipleDestinationReset(){
         final Memory memory1 = mock(Memory.class);
-        testMemory = testMemory.with(20, memory1);
+        testMemory = testMemory.withMapping(20, memory1);
 
         final Memory memory2 = mock(Memory.class);
-        testMemory = testMemory.with(30, memory2);
-        testMemory = testMemory.with(40, memory2);
+        testMemory = testMemory.withMapping(30, memory2);
+        testMemory = testMemory.withMapping(40, memory2);
 
         final Memory memory3 = mock(Memory.class);
-        testMemory = testMemory.with(50, memory3);
-        testMemory = testMemory.with(60, memory3);
-        testMemory = testMemory.with(70, memory3);
+        testMemory = testMemory.withMapping(50, memory3);
+        testMemory = testMemory.withMapping(60, memory3);
+        testMemory = testMemory.withMapping(70, memory3);
 
         testMemory.reset();
 
