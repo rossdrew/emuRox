@@ -7,6 +7,7 @@ import java.util.Arrays;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -23,6 +24,19 @@ public class MultiSourceMemoryTest {
         testMemory = new MultiSourceMemory().maintaining(new SimpleMemory())
                                             .withMapping(10, memoryBlockA)
                                             .withMapping(new int[] {20,21,22,23,24,25}, memoryBlockB);
+    }
+
+    @Test
+    public void testNoMaintainedMemory(){
+        final Memory targetMemory = mock(SimpleMemory.class);
+        final Memory logicalMemory = new MultiSourceMemory().withMapping(2, targetMemory);
+
+        logicalMemory.getByte(2);
+
+        try{
+            logicalMemory.getByte(1);
+            fail("Expected an exception, there is no memory mapped to address 1");
+        }catch(NullPointerException npE){}
     }
 
     @Test
