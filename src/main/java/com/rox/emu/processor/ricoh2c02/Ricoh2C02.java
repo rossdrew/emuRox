@@ -15,7 +15,6 @@ public class Ricoh2C02 {
         this.registers = new Ricoh2C02Registers(cpuRam);
     }
 
-    //This is wrong, registers aren't retrieved from VRAM, they are memory mapped to cpuRam
     public int getRegister(Ricoh2C02Registers.Register register){
         return registers.getRegister(register);
     }

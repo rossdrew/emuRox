@@ -8,7 +8,6 @@ import com.rox.emu.mem.SimpleMemory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static com.rox.emu.processor.ricoh2c02.Ricoh2C02Registers.Register.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.*;
