@@ -10,6 +10,7 @@ import org.junit.runner.RunWith;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.*;
 
 @RunWith(JUnitQuickcheck.class)
 public class Ricoh2C02Test {
@@ -20,22 +21,37 @@ public class Ricoh2C02Test {
     }
 
     @Property(trials = 10)
-    public void testControlRegister1(@InRange(min = "0", max = "255") int byteValue){
+    public void testGetControlRegister1(@InRange(min = "0", max = "255") int byteValue){
         final Memory vRam = new SimpleMemory();
-        final Ricoh2C02 ppu = new Ricoh2C02(vRam, new SimpleMemory());
+        final Memory cpuRam = mock(Memory.class);
+        final Ricoh2C02 ppu = new Ricoh2C02(vRam, cpuRam);
 
-        vRam.setByteAt(0x2000, byteValue);
+        when(cpuRam.getByte(Ricoh2C02Registers.Register.REG_CTRL_1.getMemoryMappedLocation())).thenReturn(byteValue);
 
         assertEquals(byteValue, ppu.getRegister(Ricoh2C02Registers.Register.REG_CTRL_1));
     }
 
     @Property(trials = 10)
-    public void testControlRegister2(@InRange(min = "0", max = "255") int byteValue){
+    public void testGetControlRegister2(@InRange(min = "0", max = "255") int byteValue){
         final Memory vRam = new SimpleMemory();
-        final Ricoh2C02 ppu = new Ricoh2C02(vRam, new SimpleMemory());
+        final Memory cpuRam = mock(Memory.class);
+        final Ricoh2C02 ppu = new Ricoh2C02(vRam, cpuRam);
 
-        vRam.setByteAt(0x2001, byteValue);
+        when(cpuRam.getByte(Ricoh2C02Registers.Register.REG_CTRL_2.getMemoryMappedLocation())).thenReturn(byteValue);
 
         assertEquals(byteValue, ppu.getRegister(Ricoh2C02Registers.Register.REG_CTRL_2));
     }
+
+    @Property(trials = 10)
+    public void testSetControlRegister1(@InRange(min = "0", max = "255") int byteValue){
+        final Memory vRam = new SimpleMemory();
+        final Memory cpuRam = mock(Memory.class);
+        final Ricoh2C02 ppu = new Ricoh2C02(vRam, cpuRam);
+
+        ppu.setRegister(Ricoh2C02Registers.Register.REG_CTRL_1, byteValue);
+
+        verify(cpuRam, times(1)).setByteAt(Ricoh2C02Registers.Register.REG_CTRL_1.getMemoryMappedLocation(), byteValue);
+    }
+
+
 }

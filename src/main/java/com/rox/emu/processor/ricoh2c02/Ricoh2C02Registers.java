@@ -19,7 +19,7 @@ class Ricoh2C02Registers {
         }
     }
 
-    final Memory cpuMemory;
+    private final Memory cpuMemory;
 
     Ricoh2C02Registers(final Memory cpuMemory){
         this.cpuMemory = new MultiSourceMemory().withMapping(Register.REG_CTRL_1.getMemoryMappedLocation(), cpuMemory)
