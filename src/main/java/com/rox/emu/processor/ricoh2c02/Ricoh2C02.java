@@ -46,31 +46,16 @@ import com.rox.emu.mem.MultiSourceMemory;
  *
  */
 public class Ricoh2C02 {
-    public enum Register {
-        REG_CTRL_1(0x2000),
-        REG_CTRL_2(0x2001);
-
-        private final int memoryMappedLocation;
-
-        public int getMemoryMappedLocation(){
-            return memoryMappedLocation;
-        }
-
-        Register(int memoryMappedLocation) {
-            this.memoryMappedLocation = memoryMappedLocation;
-        }
-    }
-
     private final Memory vRam;
-    private final Memory cpuRam;
+    private final Ricoh2C02Registers registers;
 
-    public Ricoh2C02(Memory vRam, Memory cpuRam) {
+    public Ricoh2C02(final Memory vRam, final Memory cpuRam) {
         this.vRam = vRam;
-        this.cpuRam = new MultiSourceMemory().withMapping(Register.REG_CTRL_1.getMemoryMappedLocation(), cpuRam)
-                                             .withMapping(Register.REG_CTRL_2.getMemoryMappedLocation(), cpuRam);
+        this.registers = new Ricoh2C02Registers(cpuRam);
     }
 
-    public int getRegister(Register registerID){
+    //This is wrong, registers aren't retrieved from VRAM, they are retrived from the registers which are memory mapped to cpuRam
+    public int getRegister(Ricoh2C02Registers.Register registerID){
         return vRam.getByte(registerID.getMemoryMappedLocation());
     }
 }

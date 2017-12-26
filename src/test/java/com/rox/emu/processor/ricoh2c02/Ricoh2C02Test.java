@@ -26,7 +26,7 @@ public class Ricoh2C02Test {
 
         vRam.setByteAt(0x2000, byteValue);
 
-        assertEquals(byteValue, ppu.getRegister(Ricoh2C02.Register.REG_CTRL_1));
+        assertEquals(byteValue, ppu.getRegister(Ricoh2C02Registers.Register.REG_CTRL_1));
     }
 
     @Property(trials = 10)
@@ -36,6 +36,6 @@ public class Ricoh2C02Test {
 
         vRam.setByteAt(0x2001, byteValue);
 
-        assertEquals(byteValue, ppu.getRegister(Ricoh2C02.Register.REG_CTRL_2));
+        assertEquals(byteValue, ppu.getRegister(Ricoh2C02Registers.Register.REG_CTRL_2));
     }
 }
