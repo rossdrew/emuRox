@@ -22,25 +22,15 @@ public class Ricoh2C02Test {
     }
 
     @Property(trials = 10)
-    public void testGetControlRegister1(@InRange(min = "0", max = "255") int byteValue){
-        final Memory vRam = new SimpleMemory();
-        final Memory cpuRam = mock(Memory.class);
-        final Ricoh2C02 ppu = new Ricoh2C02(vRam, cpuRam);
-
-        when(cpuRam.getByte(REG_CTRL_1.getMemoryMappedLocation())).thenReturn(byteValue);
-
-        assertEquals(byteValue, ppu.getRegister(REG_CTRL_1));
-    }
-
-    @Property(trials = 10)
     public void testGetControlRegister2(@InRange(min = "0", max = "255") int byteValue){
         final Memory vRam = new SimpleMemory();
         final Memory cpuRam = mock(Memory.class);
         final Ricoh2C02 ppu = new Ricoh2C02(vRam, cpuRam);
 
-        when(cpuRam.getByte(REG_CTRL_2.getMemoryMappedLocation())).thenReturn(byteValue);
-
-        assertEquals(byteValue, ppu.getRegister(REG_CTRL_2));
+        for (Ricoh2C02Registers.Register register : Ricoh2C02Registers.Register.values()) {
+            when(cpuRam.getByte(register.getMemoryMappedLocation())).thenReturn(byteValue);
+            assertEquals(byteValue, ppu.getRegister(register));
+        }
     }
 
     @Property(trials = 10)
@@ -49,9 +39,10 @@ public class Ricoh2C02Test {
         final Memory cpuRam = mock(Memory.class);
         final Ricoh2C02 ppu = new Ricoh2C02(vRam, cpuRam);
 
-        ppu.setRegister(REG_CTRL_1, byteValue);
-
-        verify(cpuRam, times(1)).setByteAt(REG_CTRL_1.getMemoryMappedLocation(), byteValue);
+        for (Ricoh2C02Registers.Register register : Ricoh2C02Registers.Register.values()) {
+            ppu.setRegister(register, byteValue);
+            verify(cpuRam, times(1)).setByteAt(register.getMemoryMappedLocation(), byteValue);
+        }
     }
 
 

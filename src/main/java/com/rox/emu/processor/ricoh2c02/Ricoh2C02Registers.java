@@ -46,8 +46,9 @@ import com.rox.emu.mem.MultiSourceMemory;
  */
 class Ricoh2C02Registers {
     public enum Register {
-        REG_CTRL_1(0x2000),
-        REG_CTRL_2(0x2001);
+        CTRL_1(0x2000),
+        CTRL_2(0x2001),
+        STATUS(0x2002);
 
         private final int memoryMappedLocation;
 
@@ -58,13 +59,23 @@ class Ricoh2C02Registers {
         Register(int memoryMappedLocation) {
             this.memoryMappedLocation = memoryMappedLocation;
         }
+
+        static int[] getMappedAddresses(){
+            int[] addresses = new int[values().length];
+
+            int i=0;
+            for (final Register register : values()) {
+                addresses[i++] = register.getMemoryMappedLocation();
+            }
+
+            return addresses;
+        }
     }
 
     private final Memory cpuMemory;
 
     Ricoh2C02Registers(final Memory cpuMemory){
-        this.cpuMemory = new MultiSourceMemory().withMapping(Register.REG_CTRL_1.getMemoryMappedLocation(), cpuMemory)
-                                                .withMapping(Register.REG_CTRL_2.getMemoryMappedLocation(), cpuMemory);
+        this.cpuMemory = new MultiSourceMemory().withMapping(Register.getMappedAddresses(), cpuMemory);
     }
 
     public int getRegister(Register registerId) {
