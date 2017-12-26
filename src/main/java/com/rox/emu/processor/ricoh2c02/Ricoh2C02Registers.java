@@ -26,4 +26,11 @@ class Ricoh2C02Registers {
                                                 .withMapping(Register.REG_CTRL_2.getMemoryMappedLocation(), cpuMemory);
     }
 
+    public int getRegister(Register registerId) {
+        return cpuMemory.getByte(registerId.getMemoryMappedLocation());
+    }
+
+    public void setRegister(Register register, int value) {
+        cpuMemory.setByteAt(register.getMemoryMappedLocation(), value);
+    }
 }
