@@ -31,6 +31,16 @@ public class MultiSourceMemory implements Memory {
         return new MultiSourceMemory(defaultMemory, newMemoryMappings);
     }
 
+    public MultiSourceMemory with(final int[] addresses, final Memory mappedMemory){
+        final Map<Integer, Memory> newMemoryMappings = new HashMap<>();
+        newMemoryMappings.putAll(memoryMappings);
+        for (Integer address : addresses) {
+            newMemoryMappings.put(address, mappedMemory);
+        }
+
+        return new MultiSourceMemory(defaultMemory, newMemoryMappings);
+    }
+
     private Memory getMemoryMappedTo(final Integer address){
         if (memoryMappings.containsKey(address)){
             return memoryMappings.get(address);
