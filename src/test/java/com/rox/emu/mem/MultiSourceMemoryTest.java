@@ -56,12 +56,23 @@ public class MultiSourceMemoryTest {
 
     @Test
     public void testMultipleDestinationReset(){
-        final Memory memory = mock(Memory.class);
-        testMemory = testMemory.with(30, memory);
-        testMemory = testMemory.with(40, memory);
+        final Memory memory1 = mock(Memory.class);
+        final Memory memory2 = mock(Memory.class);
+        final Memory memory3 = mock(Memory.class);
+
+        testMemory = testMemory.with(20, memory1);
+
+        testMemory = testMemory.with(30, memory2);
+        testMemory = testMemory.with(40, memory2);
+
+        testMemory = testMemory.with(50, memory3);
+        testMemory = testMemory.with(60, memory3);
+        testMemory = testMemory.with(70, memory3);
 
         testMemory.reset();
 
-        verify(memory, times(1)).reset();
+        verify(memory1, times(1)).reset();
+        verify(memory2, times(1)).reset();
+        verify(memory3, times(1)).reset();
     }
 }
