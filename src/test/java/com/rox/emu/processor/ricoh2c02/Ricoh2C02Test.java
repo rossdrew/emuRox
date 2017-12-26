@@ -16,15 +16,16 @@ import static org.mockito.Mockito.*;
 public class Ricoh2C02Test {
     @Test
     public void testCreation(){
-        final Ricoh2C02 ppu = new Ricoh2C02(new SimpleMemory(), new SimpleMemory());
+        final Ricoh2C02 ppu = new Ricoh2C02(new SimpleMemory(), new SimpleMemory(), new SimpleMemory());
         assertNotNull(ppu);
     }
 
     @Property(trials = 10)
     public void testGetControlRegister(@InRange(min = "0", max = "255") int byteValue){
         final Memory vRam = new SimpleMemory();
+        final Memory sprRam = mock(Memory.class);
         final Memory cpuRam = mock(Memory.class);
-        final Ricoh2C02 ppu = new Ricoh2C02(vRam, cpuRam);
+        final Ricoh2C02 ppu = new Ricoh2C02(vRam, sprRam, cpuRam);
 
         for (Ricoh2C02Registers.Register register : Ricoh2C02Registers.Register.values()) {
             when(cpuRam.getByte(register.getMemoryMappedLocation())).thenReturn(byteValue);
@@ -35,8 +36,9 @@ public class Ricoh2C02Test {
     @Property(trials = 10)
     public void testSetControlRegister(@InRange(min = "0", max = "255") int byteValue){
         final Memory vRam = new SimpleMemory();
+        final Memory sprRam = mock(Memory.class);
         final Memory cpuRam = mock(Memory.class);
-        final Ricoh2C02 ppu = new Ricoh2C02(vRam, cpuRam);
+        final Ricoh2C02 ppu = new Ricoh2C02(vRam, sprRam, cpuRam);
 
         for (Ricoh2C02Registers.Register register : Ricoh2C02Registers.Register.values()) {
             ppu.setRegister(register, byteValue);
