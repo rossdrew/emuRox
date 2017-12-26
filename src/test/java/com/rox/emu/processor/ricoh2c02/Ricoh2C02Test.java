@@ -22,7 +22,7 @@ public class Ricoh2C02Test {
     }
 
     @Property(trials = 10)
-    public void testGetControlRegister2(@InRange(min = "0", max = "255") int byteValue){
+    public void testGetControlRegister(@InRange(min = "0", max = "255") int byteValue){
         final Memory vRam = new SimpleMemory();
         final Memory cpuRam = mock(Memory.class);
         final Ricoh2C02 ppu = new Ricoh2C02(vRam, cpuRam);
@@ -34,7 +34,7 @@ public class Ricoh2C02Test {
     }
 
     @Property(trials = 10)
-    public void testSetControlRegister1(@InRange(min = "0", max = "255") int byteValue){
+    public void testSetControlRegister(@InRange(min = "0", max = "255") int byteValue){
         final Memory vRam = new SimpleMemory();
         final Memory cpuRam = mock(Memory.class);
         final Ricoh2C02 ppu = new Ricoh2C02(vRam, cpuRam);
