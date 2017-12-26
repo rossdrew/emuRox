@@ -324,6 +324,7 @@ public class Mos6502 {
                 break;
 
             case LDA_IND_IX: {
+                //TODO this needs to be wrappable for zero page addressing
                 int pointerLocation = getWordOfMemoryXIndexedAt(nextProgramByte());
                 registers.setRegisterAndFlags(REG_ACCUMULATOR, getByteOfMemoryAt(pointerLocation));
             }break;
