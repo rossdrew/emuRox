@@ -1,6 +1,7 @@
 package com.rox.emu.processor.ricoh2c02;
 
 import com.rox.emu.mem.Memory;
+import com.rox.emu.mem.MultiSourceMemory;
 
 /**
  * Emulation of a NES (Nintendo Entertainment System) PPU (Picture Processing Unit) processor, a Ricoh 2C02.<br/>
@@ -60,13 +61,16 @@ public class Ricoh2C02 {
         }
     }
 
-    private final Memory memory;
+    private final Memory vRam;
+    private final Memory cpuRam;
 
-    public Ricoh2C02(Memory memory) {
-        this.memory = memory;
+    public Ricoh2C02(Memory vRam, Memory cpuRam) {
+        this.vRam = vRam;
+        this.cpuRam = new MultiSourceMemory().withMapping(Register.REG_CTRL_1.getMemoryMappedLocation(), cpuRam)
+                                             .withMapping(Register.REG_CTRL_2.getMemoryMappedLocation(), cpuRam);
     }
 
     public int getRegister(Register registerID){
-        return memory.getByte(registerID.getMemoryMappedLocation());
+        return vRam.getByte(registerID.getMemoryMappedLocation());
     }
 }
