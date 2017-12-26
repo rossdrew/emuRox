@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * A partially logical block of memory in which certain blocks can be assigned (memory mapped) to other memory objects
+ */
 public class MultiSourceMemory implements Memory {
 
     private final Map<Integer, Memory> memoryMappings;
