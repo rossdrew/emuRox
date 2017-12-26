@@ -21,12 +21,7 @@ public class MultiSourceMemoryTest {
         memoryBlockA = new SimpleMemory();
         memoryBlockB = new SimpleMemory();
         testMemory = new MultiSourceMemory().with(10, memoryBlockA)
-                                            .with(20, memoryBlockB)
-                                            .with(21, memoryBlockB)
-                                            .with(22, memoryBlockB)
-                                            .with(23, memoryBlockB)
-                                            .with(24, memoryBlockB)
-                                            .with(25, memoryBlockB);
+                                            .with(new int[] {20,21,22,23,24,25}, memoryBlockB);
     }
 
     @Test
