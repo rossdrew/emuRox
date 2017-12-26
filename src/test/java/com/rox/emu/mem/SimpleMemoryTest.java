@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.fail;
 
 public class SimpleMemoryTest {
     private Memory memory;
@@ -11,6 +12,19 @@ public class SimpleMemoryTest {
     @Before
     public void setUp(){
         memory = new SimpleMemory();
+    }
+
+    @Test
+    public void testExplicitlySizedMemory(){
+        final Memory sizedMemory = new SimpleMemory(10);
+
+        sizedMemory.setByteAt(0, 1);
+        sizedMemory.setByteAt(9, 10);
+
+        try {
+            sizedMemory.setByteAt(10, 0);
+            fail("Should not be able to access memory outside the size of addressable memory");
+        }catch(ArrayIndexOutOfBoundsException e){}
     }
 
     @Test

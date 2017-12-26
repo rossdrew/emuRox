@@ -19,6 +19,11 @@ public class SimpleMemory implements Memory {
         reset();
     }
 
+    public SimpleMemory(int size){
+        memoryArray = new RoxByte[size];
+        reset();
+    }
+
     /**
      * {@inheritDoc}
      */
