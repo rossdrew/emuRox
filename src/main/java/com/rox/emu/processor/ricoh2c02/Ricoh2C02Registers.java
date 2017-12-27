@@ -46,9 +46,14 @@ import com.rox.emu.mem.MultiSourceMemory;
  */
 class Ricoh2C02Registers {
     public enum Register {
+        /** Control register 1 */
         CTRL_1(0x2000),
+        /** Control register 2 */
         CTRL_2(0x2001),
-        STATUS(0x2002);
+        /** Status register */
+        STATUS(0x2002),
+        /** Direct memory access register */
+        DMA(0x4014);
 
         private final int memoryMappedLocation;
 
