@@ -40,21 +40,21 @@ public class MultiSourceMemoryTest {
     }
 
     @Test
-    public void testSimpleGetByte(){
+    public void testGetByte(){
         memoryBlockA.setByteAt(10, 99);
 
         assertEquals(99, testMemory.getByte(10));
     }
 
     @Test
-    public void testSimplePutByte(){
+    public void testPutByte(){
         testMemory.setByteAt(10, 99);
 
         assertEquals(99, memoryBlockA.getByte(10));
     }
 
     @Test
-    public void testSimpleGetBlock(){
+    public void testGetBlock(){
         int[] sampleData = new int[] {1,2,3,4,5};
         memoryBlockB.setBlock(20, sampleData);
 
@@ -62,11 +62,18 @@ public class MultiSourceMemoryTest {
     }
 
     @Test
-    public void testSimpleSetBlock(){
+    public void testSetBlock(){
         int[] sampleData = new int[] {1,2,3,4,5};
         testMemory.setBlock(20, sampleData);
 
         assertTrue("Expected " + Arrays.toString(sampleData) + ", got " + Arrays.toString(memoryBlockB.getBlock(20, 25)), Arrays.equals( sampleData,  memoryBlockB.getBlock(20, 25)));
+    }
+
+    @Test
+    public void testGetWord(){
+        memoryBlockB.setBlock(20, new int[] {1, 20});
+
+        assertEquals(276, testMemory.getWord(20));
     }
 
     @Test
