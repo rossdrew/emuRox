@@ -1,5 +1,7 @@
 package com.rox.emu.mem;
 
+import com.sun.istack.internal.NotNull;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -46,11 +48,7 @@ public class MultiSourceMemory implements Memory {
     }
 
     private Memory getMemoryMappedTo(final Integer address){
-        if (memoryMappings.containsKey(address)){
-            return memoryMappings.get(address);
-        }else{
-            return defaultMemory;
-        }
+        return memoryMappings.getOrDefault(address, defaultMemory);
     }
 
     @Override
@@ -105,6 +103,7 @@ public class MultiSourceMemory implements Memory {
             }
         }
 
-        defaultMemory.reset();
+        if (defaultMemory != null)
+            defaultMemory.reset();
     }
 }

@@ -1,3 +1,5 @@
+import proguard.gradle.ProGuardTask
+
 group 'com.rox'
 version '1.0-SNAPSHOT'
 description '6502 Emulator'
@@ -78,7 +80,7 @@ jar {
     }
 }
 
-task obfuscatedJar(dependsOn: 'jar', type: proguard.gradle.ProGuardTask) {
+task obfuscatedJar(dependsOn: 'jar', type: ProGuardTask) {
     configuration 'src/main/resources/proguard.config'
 
     injars "build/libs/${rootProject.name}-${version}.jar"

@@ -220,12 +220,12 @@ public class Compiler {
      */
     public static String extractFirstOccurrence(Pattern pattern, String token){
         final Matcher prefixMatcher = pattern.matcher(token);
-        prefixMatcher.find();
-        try {
-            return prefixMatcher.group(0);
-        }catch(IllegalStateException | ArrayIndexOutOfBoundsException e){
-            return "";
+        if (prefixMatcher.find()) {
+            try {
+                return prefixMatcher.group(0);
+            } catch (IllegalStateException | ArrayIndexOutOfBoundsException e) {}
         }
+        return "";
     }
 
     private String parseLabel(final String opCodeToken) throws UnknownOpCodeException{

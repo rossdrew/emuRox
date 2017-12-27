@@ -276,9 +276,9 @@ public enum OpCode {
      * @param predicate A predicate used to search {@link OpCode}s
      * @param predicateTerm The main term of {@link Object} used in the predicate
      * @return The first {@link OpCode} found
-     * @throws UnknownOpCodeException
+     * @throws UnknownOpCodeException if no {@link OpCode} matches the given predicate
      */
-    private static OpCode from(Predicate<? super OpCode> predicate, Object predicateTerm) throws UnknownOpCodeException{
+    private static OpCode from(Predicate<? super OpCode> predicate, Object predicateTerm) throws UnknownOpCodeException {
         return matching(predicate, ""+predicateTerm, predicateTerm);
     }
 

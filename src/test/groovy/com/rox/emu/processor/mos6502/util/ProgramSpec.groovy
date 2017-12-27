@@ -59,7 +59,7 @@ class ProgramSpec extends Specification {
                             OpCode.LDA_I.byteValue, 0x1,
                             OpCode.LDA_I.byteValue, 0x2,
                             OpCode.BNE.byteValue, 0x0,
-                            OpCode.LDA_I.byteValue, 0x3]
+                            OpCode.LDA_I.byteValue, 0x3] as byte[]
 
         /*
         E:  240, 3,  169, 1,  169, 2,   208, 0, 169, 3
@@ -88,7 +88,7 @@ class ProgramSpec extends Specification {
         final byte[] programBytes = program.getProgramAsByteArray()
 
         then: 'The resulting byte stream is as expected'
-        programBytes == expectedProgramBytes
+        programBytes == expectedProgramBytes as byte[]
 
         where:
         programInputBytes               || expectedProgramBytes                           | expected

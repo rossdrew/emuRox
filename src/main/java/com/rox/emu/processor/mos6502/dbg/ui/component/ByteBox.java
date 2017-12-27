@@ -97,13 +97,13 @@ class ByteBox extends JPanel {
     }
 
     private String to8BitString(int fakeByte){
-        String formattedByteString = Integer.toBinaryString(fakeByte);
+        StringBuilder formattedByteString = new StringBuilder(Integer.toBinaryString(fakeByte));
         if (formattedByteString.length() < 8){
             for (int i=formattedByteString.length(); i<8; i++){
-                formattedByteString = "0" + formattedByteString;
+                formattedByteString.append("0" + formattedByteString);
             }
         }
-        return formattedByteString;
+        return formattedByteString.toString();
     }
 
     private int fromSignedByte(int signedByte){

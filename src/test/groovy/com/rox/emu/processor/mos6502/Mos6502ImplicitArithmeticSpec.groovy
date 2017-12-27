@@ -18,9 +18,9 @@ class Mos6502ImplicitArithmeticSpec extends Specification {
      * Create a memory block of NOP so that we can increment through them
      * without any side effects for testing program flow.
      */
-    private Memory createNOPMemory(Memory memory) {
+    private static Memory createNOPMemory(Memory memory) {
         for (int i=0; i<0x10000; i++){
-            memory.setByteAt(i, OpCode.NOP.byteValue)
+            memory.setByteAt(i, NOP.byteValue)
         }
         return memory
     }

@@ -207,7 +207,7 @@ public class Registers {
 
     /**
      * @param flagNumber for which to get the name
-     * @return the {@lnk String} name of the given flag
+     * @return the {@link String} name of the given flag
      */
     public static String getFlagName(int flagNumber){
         if (flagNumber < 0 || flagNumber > 7)

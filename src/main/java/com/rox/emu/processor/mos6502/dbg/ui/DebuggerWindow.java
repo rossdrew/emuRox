@@ -91,7 +91,7 @@ final class DebuggerWindow extends JFrame {
 
         final Style bodyStyle = sc.addStyle("body", null);
         bodyStyle.addAttribute(StyleConstants.Foreground, new Color(0x789C6C));
-        bodyStyle.addAttribute(StyleConstants.FontSize, Integer.valueOf(13));
+        bodyStyle.addAttribute(StyleConstants.FontSize, 13);
         bodyStyle.addAttribute(StyleConstants.FontFamily, "monospaced");
         bodyStyle.addAttribute(StyleConstants.Bold, true);
 
@@ -252,15 +252,15 @@ final class DebuggerWindow extends JFrame {
         final int pointer = registers.getPC();
         final int instr = memory.getByte(pointer);
 
-        String arguments = "";
+        StringBuilder arguments = new StringBuilder();
         for (int i=0; i<getArgumentCount(instr); i++ ){
-            arguments += " " + MemoryPanel.asHex(memory.getByte(pointer + (i+1)));
+            arguments.append(" " + MemoryPanel.asHex(memory.getByte(pointer + (i+1))));
         }
 
         instructionName = OpCode.from(instr).toString();
         final String instructionLocation = MemoryPanel.asHex(pointer);
         final String instructionCode = MemoryPanel.asHex(instr);
-        final String completeInstructionInfo = "[" + instructionLocation + "] (" + instructionCode + arguments + ") :" + instructionName;
+        final String completeInstructionInfo = "[" + instructionLocation + "] (" + instructionCode + arguments.toString() + ") :" + instructionName;
 
         instruction.setText(completeInstructionInfo);
         listModel.add(0, completeInstructionInfo);
