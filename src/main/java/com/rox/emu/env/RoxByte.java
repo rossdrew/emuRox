@@ -202,7 +202,7 @@ public final class RoxByte {
      * @return weather this byte represents a negative number. i.e. it is signed and bit 7 is set
      */
     public boolean isNegative() {
-        return format == ByteFormat.SIGNED_TWOS_COMPLIMENT && isBitSet(7);
+        return isBitSet(7); //&& format == ByteFormat.SIGNED_TWOS_COMPLIMENT
     }
 
     @Override
