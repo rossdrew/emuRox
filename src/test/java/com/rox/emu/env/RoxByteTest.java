@@ -167,6 +167,16 @@ public class RoxByteTest extends Specification{
         assertTrue(valA.equals(valB));
     }
 
+    @Property(trials = 100)
+    public void testIsNegative(@InRange(min = "0", max = "127") int positiveValue,
+                               @InRange(min = "128", max = "255") int negativeValue){
+        final RoxByte positiveByte = RoxByte.fromLiteral(positiveValue);
+        final RoxByte negativeByte = RoxByte.fromLiteral(negativeValue);
+
+        assertTrue(negativeByte.isNegative());
+        assertFalse(positiveByte.isNegative());
+    }
+
     @Property(trials = 10)
     public void testNotEquals(@InRange(min = "0", max = "127") int byteValueA,
                               @InRange(min = "128", max = "255") int byteValueB){
@@ -207,6 +217,4 @@ public class RoxByteTest extends Specification{
             assertNotNull(e);
         }
     }
-
-
 }
