@@ -37,6 +37,12 @@ public class MultiSourceMemoryTest {
             logicalMemory.getByte(1);
             fail("Expected an exception, there is no memory mapped to address 1");
         }catch(NullPointerException npE){}
+
+        try{
+            logicalMemory.reset();
+        }catch(Exception e){
+            fail("Reset should be clean if there is no maintained memory: " + e.getClass() + " thrown.");
+        }
     }
 
     @Test
