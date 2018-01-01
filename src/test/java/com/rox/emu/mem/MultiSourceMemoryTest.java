@@ -89,12 +89,12 @@ public class MultiSourceMemoryTest {
 
         final Memory memory2 = mock(Memory.class);
         testMemory = testMemory.withMapping(30, memory2);
-        testMemory = testMemory.withMapping(40, memory2);
+        testMemory = testMemory.withMapping(31, memory2);
 
         final Memory memory3 = mock(Memory.class);
-        testMemory = testMemory.withMapping(50, memory3);
-        testMemory = testMemory.withMapping(60, memory3);
-        testMemory = testMemory.withMapping(70, memory3);
+        testMemory = testMemory.withMapping(41, memory3);
+        testMemory = testMemory.withMapping(42, memory3);
+        testMemory = testMemory.withMapping(43, memory3);
 
         testMemory.reset();
 
