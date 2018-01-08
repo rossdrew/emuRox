@@ -6,6 +6,7 @@ import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertNotNull;
 import static junit.framework.TestCase.fail;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class InesRomTest {
     @Test
@@ -33,7 +34,10 @@ public class InesRomTest {
 
         assertEquals(chrRomBlocks, rom.getHeader().getChrBlocks());
         assertEquals(prgRomBlocks, rom.getHeader().getPrgBlocks());
-        //TODO assertEquals(controlOptionsByte, rom.getHeader().getRomControlOptions());
+
+        assertEquals(RomControlOptions.Mirroring.FOUR_SCREEN, rom.getHeader().getRomControlOptions().getMirroring());
+        assertTrue(rom.getHeader().getRomControlOptions().isRamPresent());
+        assertFalse(rom.getHeader().getRomControlOptions().isTrainerPresent());
     }
 
     @Test
