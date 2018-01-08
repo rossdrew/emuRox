@@ -18,17 +18,22 @@ public class InesRomTest {
 
     @Test
     public void testGetHeader(){
-        final int prgBlocks = 0x9;
-        final int charBlocks = 0x4;
+        final int prgRomBlocks = 0x9;
+        final int chrRomBlocks = 0x4; // ChrRom/VRom
+        final int controlOptionsByte = 0b10101010;
 
-        final InesRom rom = InesRom.from(asPaddedHeader(new int[] {0x4E, 0x45, 0x53, 0x1A, prgBlocks, charBlocks}));
+        final InesRom rom = InesRom.from(asPaddedHeader(new int[] {0x4E, 0x45, 0x53, 0x1A, prgRomBlocks, chrRomBlocks, controlOptionsByte}));
         final InesRomHeader header = rom.getHeader();
 
         assertNotNull(header);
         assertFalse(header.getDescription().isEmpty());
-        assertEquals(prgBlocks, header.getPrgBlocks());
-        assertEquals(charBlocks, header.getChrBlocks());
+        assertEquals(prgRomBlocks, header.getPrgBlocks());
+        assertEquals(chrRomBlocks, header.getChrBlocks());
         assertEquals("NES ROM", header.getDescription());
+
+        assertEquals(chrRomBlocks, rom.getHeader().getChrBlocks());
+        assertEquals(prgRomBlocks, rom.getHeader().getPrgBlocks());
+        //TODO assertEquals(controlOptionsByte, rom.getHeader().getRomControlOptions());
     }
 
     @Test

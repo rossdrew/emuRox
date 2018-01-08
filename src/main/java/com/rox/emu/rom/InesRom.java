@@ -29,10 +29,11 @@ public final class InesRom {
             throw new UnknownRomException("Invalid iNES header: iNES prefix missing.");
         }
 
-        int prgBlocks = bytes[4];
-        int chrBlocks = bytes[5];
+        int prgRomBlocks = bytes[4];
+        int chrRomBlocks = bytes[5];
+        RomControlOptions romControlOptions = new RomControlOptions(bytes[6]);
 
-        return new InesRomHeader("NES ROM", prgBlocks, chrBlocks);
+        return new InesRomHeader("NES ROM", prgRomBlocks, chrRomBlocks, romControlOptions);
     }
 
     public String getDescription() {

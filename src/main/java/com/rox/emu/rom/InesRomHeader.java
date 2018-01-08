@@ -26,19 +26,23 @@ package com.rox.emu.rom;
  * 8-15 : byte      These bytes are not used, and should be 00h.
  */
 public final class InesRomHeader{
-    public static final int HEADER_SIZE = 6; //Working value
+    public static final int HEADER_SIZE = 16;
 
     private final String description;
 
     private final int prgBlocks;
     private final int chrBlocks;
 
+    private final RomControlOptions romControlOptions;
+
     public InesRomHeader(final String description,
                          final int prgBlocks,
-                         final int chrBlocks){
+                         final int chrBlocks,
+                         final RomControlOptions romControlOptions){
         this.description = description;
         this.prgBlocks = prgBlocks;
         this.chrBlocks = chrBlocks;
+        this.romControlOptions = romControlOptions;
     }
 
     public String getDescription() {
@@ -51,5 +55,9 @@ public final class InesRomHeader{
 
     public int getChrBlocks() {
         return chrBlocks;
+    }
+
+    public RomControlOptions getRomControlOptions() {
+        return romControlOptions;
     }
 }
