@@ -9,14 +9,14 @@ import static com.rox.emu.rom.RomControlOptions.Mirroring.*
 class InesRomSpec extends Specification {
     @Unroll
     def "ROM Control Options Byte: #description"(){
-        given:
+        given: 'a header containing a control options byte'
         final InesRom rom = InesRom.from(asPaddedHeader([0x4E, 0x45, 0x53, 0x1A, 0x0, 0x0, controlOptionsByte] as int[]))
 
-        when:
+        when: 'that parsed header is retrieved'
         final InesRomHeader header = rom.getHeader()
         final RomControlOptions romCtrlOptions = header.getRomControlOptions()
 
-        then:
+        then: 'it is in the expected state'
         romCtrlOptions.ramPresent == isRamPresent
         romCtrlOptions.trainerPresent == isTrainerPresent
         romCtrlOptions.getMirroring() == mirroring
