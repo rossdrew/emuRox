@@ -11,8 +11,15 @@ package com.rox.emu.rom;
  ++++----- Lower nybble of mapper number
  */
 class RomControlOptions {
+    /**
+     * <h3>Nametable mirroring</h3>
+     * Defines the effect of accessing memory off the right or bottom edges of the current nametable.
+     * When enabled on an axis, addresses wrap around.
+     */
     enum Mirroring {
-        VERTICAL, HORIZONTAL, FOUR_SCREEN
+        VERTICAL,
+        HORIZONTAL,
+        FOUR_SCREEN
     }
 
     private final Mirroring mirroring;
