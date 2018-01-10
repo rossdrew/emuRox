@@ -8,7 +8,7 @@ import static com.rox.emu.rom.RomControlOptions.Mirroring.*
 
 class InesRomSpec extends Specification {
     @Unroll
-    def "ROM Control Options Byte: #description"(){
+    def "ROM Control Options Byte: #mapperNo #description"(){
         given: 'a header containing a control options byte'
         final InesRom rom = InesRom.from(asPaddedHeader([0x4E, 0x45, 0x53, 0x1A, 0x0, 0x0, controlOptionsByte] as int[]))
 
@@ -20,17 +20,17 @@ class InesRomSpec extends Specification {
         romCtrlOptions.ramPresent == isRamPresent
         romCtrlOptions.trainerPresent == isTrainerPresent
         romCtrlOptions.getMirroring() == mirroring
+        romCtrlOptions.mapperNumber == mapperNo
 
         where:
-        controlOptionsByte || isRamPresent | isTrainerPresent | mirroring   | description
-        0b11111111         || true         | true             | FOUR_SCREEN | "All bits switched on"
-        0b11110111         || true         | true             | VERTICAL    | "Four screen set to off, VERTICAL on"
-        0b11110110         || true         | true             | HORIZONTAL  | "Four screen set to off, VERTICAL off"
-        0b11111101         || false        | true             | FOUR_SCREEN | "No ram present"
-        0b11111011         || true         | false            | FOUR_SCREEN | "No trainer present"
-        0b11111001         || false        | false            | FOUR_SCREEN | "No trainer or ram present"
-        0b00000000         || false        | false            | HORIZONTAL  | "All bits switched oFF"
-
+        controlOptionsByte || isRamPresent | isTrainerPresent | mirroring   | mapperNo | description
+        0b00000000         || false        | false            | HORIZONTAL  | 0b0000   | "All bits switched OFF"
+        0b00011111         || true         | true             | FOUR_SCREEN | 0b0001   | "All bits switched on"
+        0b00100111         || true         | true             | VERTICAL    | 0b0010   | "Four screen set to off, VERTICAL on"
+        0b00110110         || true         | true             | HORIZONTAL  | 0b0011   | "Four screen set to off, VERTICAL off"
+        0b01001101         || false        | true             | FOUR_SCREEN | 0b0100   | "No ram present"
+        0b01011011         || true         | false            | FOUR_SCREEN | 0b0101   | "No trainer present"
+        0b01101001         || false        | false            | FOUR_SCREEN | 0b0110   | "No trainer or ram present"
     }
 
     private int[] asPaddedHeader(int[] values){
