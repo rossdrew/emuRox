@@ -15,10 +15,10 @@ class RomControlOptions {
         VERTICAL, HORIZONTAL, FOUR_SCREEN
     }
 
-    private final Mirroring mirroring; // Bit 0: 0=horizontal, 1=vertical.  Bit 3: 1=four-screen
+    private final Mirroring mirroring;
     private final boolean ramPresent;
     private final boolean trainerPresent;
-    private final int mapperNumber; //4 lower bits?
+    private final int mapperNumber;
 
     public RomControlOptions(final int ctrlOptionsByte){
         mirroring = extractMirroring(ctrlOptionsByte);
