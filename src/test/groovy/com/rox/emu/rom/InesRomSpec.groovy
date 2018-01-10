@@ -34,8 +34,8 @@ class InesRomSpec extends Specification {
     }
 
     private int[] asPaddedHeader(int[] values){
-        int[] header = new int[InesRomHeader.HEADER_SIZE];
-        System.arraycopy(values, 0, header, 0, values.length);
-        return header;
+        int[] header = new int[InesRomHeader.HEADER_SIZE]
+        System.arraycopy(values, 0, header, 0, values.length)
+        return header
     }
 }
