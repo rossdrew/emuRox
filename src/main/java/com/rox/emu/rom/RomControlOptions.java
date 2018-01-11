@@ -7,6 +7,8 @@ package com.rox.emu.rom;
     <th>Description</th>
   </tr>
 
+ <tr><th colspan=10>Flag 6</th></tr>
+
   <tr>
      <th>7</th>
      <th>6</th>
@@ -85,6 +87,74 @@ package com.rox.emu.rom;
      <td style="border-bottom: 2px"> Lower nybble of mapper number</td>
  </tr>
 
+ <tr><th colspan=10>Flag 7</th></tr>
+
+ <tr>
+ <th>7</th>
+ <th>6</th>
+ <th>5</th>
+ <th>4</th>
+ <th>3</th>
+ <th>2</th>
+ <th>1</th>
+ <th>0</th>
+ <th></th>
+ <th> </th>
+ </tr>
+
+ <tr>
+ <td style="border-right: 2px">|</td>
+ <td style="border-right: 2px">|</td>
+ <td style="border-bottom: 2px">|</td>
+ <td style="border-bottom: 2px">|</td>
+ <td style="border-bottom: 2px">|</td>
+ <td style="border-bottom: 2px">|</td>
+ <td style="border-bottom: 2px">|</td>
+ <td style="border-bottom: 2px">|</td>
+ <td style="border-bottom: 2px">_</td>
+ <td style="border-bottom: 2px"> VS Unisystem</td>
+ </tr>
+
+ <tr>
+ <td style="border-right: 2px">|</td>
+ <td style="border-right: 2px">|</td>
+ <td style="border-bottom: 2px">|</td>
+ <td style="border-bottom: 2px">|</td>
+ <td style="border-bottom: 2px">|</td>
+ <td style="border-bottom: 2px">|</td>
+ <td style="border-bottom: 2px">|</td>
+ <td style="border-bottom: 2px">_</td>
+ <td style="border-bottom: 2px">_</td>
+ <td style="border-bottom: 2px"> PlayChoice-10 (8KB of Hint Screen data stored after CHR data)</td>
+ </tr>
+
+ <tr>
+ <td style="border-right: 2px">|</td>
+ <td style="border-right: 2px">|</td>
+ <td style="border-bottom: 2px">|</td>
+ <td style="border-bottom: 2px">|</td>
+ <td style="border-bottom: 2px">|_</td>
+ <td style="border-bottom: 2px">|_</td>
+ <td style="border-bottom: 2px">_</td>
+ <td style="border-bottom: 2px">_</td>
+ <td style="border-bottom: 2px">_</td>
+ <td style="border-bottom: 2px"> If equal to 2, flags 8-15 are in NES 2.0 format</td>
+ </tr>
+
+ <tr>
+ <td style="border-right: 2px">|_</td>
+ <td style="border-right: 2px">|_</td>
+ <td style="border-bottom: 2px">|_</td>
+ <td style="border-bottom: 2px">|_</td>
+ <td style="border-bottom: 2px">_</td>
+ <td style="border-bottom: 2px">_</td>
+ <td style="border-bottom: 2px">_</td>
+ <td style="border-bottom: 2px">_</td>
+ <td style="border-bottom: 2px">_</td>
+ <td style="border-bottom: 2px"> Upper nybble of mapper number</td>
+ </tr>
+
+
  </table>
  */
 class RomControlOptions {
@@ -116,22 +186,12 @@ class RomControlOptions {
         trainerPresent = (flagByte6 & 0b00000100) != 0;
         mapperNumberLo = (flagByte6 & 0b11110000) >> 4;
 
-        /**
-         76543210
-         ||||||||
-         |||||||+- VS Unisystem
-         ||||||+-- PlayChoice-10 (8KB of Hint Screen data stored after CHR data)
-         ||||++--- If equal to 2, flags 8-15 are in NES 2.0 format
-         ++++----- Upper nybble of mapper number
-         */
         vsUnisystem = (flagByte7 & 0b00000001) != 0;
         playChoice10 = (flagByte7 & 0b00000010) != 0;
         version = ((flagByte7 & 0b00001100) >> 2) == 2 ? 2 : 1;
         mapperNumberHi = (flagByte7 & 0b11110000);
 
         mapperNumber = mapperNumberLo | mapperNumberHi;
-
-
     }
 
     private Mirroring extractMirroring(final int ctrlOptionsByte){
