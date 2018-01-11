@@ -8,7 +8,7 @@ import static com.rox.emu.rom.RomControlOptions.Mirroring.*
 
 class InesRomSpec extends Specification {
     @Unroll
-    def "ROM Control Options Byte: #mapperNo #description"(){
+    def "ROM Control Options: #mapperNo #description"(){
         given: 'a header containing a control options byte'
         final InesRom rom = InesRom.from(asPaddedHeader([0x4E, 0x45, 0x53, 0x1A, 0x0, 0x0, controlOptionsByte] as int[]))
 
@@ -16,10 +16,16 @@ class InesRomSpec extends Specification {
         final InesRomHeader header = rom.getHeader()
         final RomControlOptions romCtrlOptions = header.getRomControlOptions()
 
-        then: 'it is in the expected state'
+        then: 'it is in the expected state specified by flags6'
         romCtrlOptions.ramPresent == isRamPresent
         romCtrlOptions.trainerPresent == isTrainerPresent
         romCtrlOptions.getMirroring() == mirroring
+
+        and: 'is in the expected state specified by flags7'
+        !romCtrlOptions.isPlayChoice10()
+        !romCtrlOptions.isVsUnisystem()
+
+        and: 'the combination of flags are correct'
         romCtrlOptions.mapperNumber == mapperNo
 
         where:

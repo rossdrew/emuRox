@@ -31,7 +31,7 @@ public final class InesRom {
 
         int prgRomBlocks = bytes[4];
         int chrRomBlocks = bytes[5];
-        RomControlOptions romControlOptions = new RomControlOptions(bytes[6]);
+        RomControlOptions romControlOptions = new RomControlOptions(bytes[6], bytes[7]);
 
         return new InesRomHeader("NES ROM", prgRomBlocks, chrRomBlocks, romControlOptions);
     }

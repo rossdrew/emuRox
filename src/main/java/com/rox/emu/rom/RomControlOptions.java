@@ -104,11 +104,34 @@ class RomControlOptions {
     private final boolean trainerPresent;
     private final int mapperNumber;
 
-    public RomControlOptions(final int ctrlOptionsByte){
-        mirroring = extractMirroring(ctrlOptionsByte);
-        ramPresent = (ctrlOptionsByte & 0b00000010) != 0;
-        trainerPresent = (ctrlOptionsByte & 0b00000100) != 0;
-        mapperNumber = (ctrlOptionsByte & 0b11110000) >> 4;
+    private final boolean vsUnisystem;
+    private final boolean playChoice10;
+    private final int version;
+
+    public RomControlOptions(final int flagByte6, final int flagByte7){
+        int mapperNumberLo, mapperNumberHi;
+
+        mirroring = extractMirroring(flagByte6);
+        ramPresent = (flagByte6 & 0b00000010) != 0;
+        trainerPresent = (flagByte6 & 0b00000100) != 0;
+        mapperNumberLo = (flagByte6 & 0b11110000) >> 4;
+
+        /**
+         76543210
+         ||||||||
+         |||||||+- VS Unisystem
+         ||||||+-- PlayChoice-10 (8KB of Hint Screen data stored after CHR data)
+         ||||++--- If equal to 2, flags 8-15 are in NES 2.0 format
+         ++++----- Upper nybble of mapper number
+         */
+        vsUnisystem = (flagByte7 & 0b00000001) != 0;
+        playChoice10 = (flagByte7 & 0b00000010) != 0;
+        version = (flagByte7 & 0b00001100) >> 2;
+        mapperNumberHi = (flagByte7 & 0b11110000);
+
+        mapperNumber = mapperNumberLo | mapperNumberHi;
+
+
     }
 
     private Mirroring extractMirroring(final int ctrlOptionsByte){
@@ -133,5 +156,17 @@ class RomControlOptions {
 
     public int getMapperNumber(){
         return mapperNumber;
+    }
+
+    public boolean isPlayChoice10() {
+        return playChoice10;
+    }
+
+    public boolean isVsUnisystem() {
+        return vsUnisystem;
+    }
+
+    public int getVersion() {
+        return version;
     }
 }
