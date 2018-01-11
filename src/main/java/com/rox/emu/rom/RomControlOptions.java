@@ -126,7 +126,7 @@ class RomControlOptions {
          */
         vsUnisystem = (flagByte7 & 0b00000001) != 0;
         playChoice10 = (flagByte7 & 0b00000010) != 0;
-        version = (flagByte7 & 0b00001100) >> 2;
+        version = ((flagByte7 & 0b00001100) >> 2) == 2 ? 2 : 1;
         mapperNumberHi = (flagByte7 & 0b11110000);
 
         mapperNumber = mapperNumberLo | mapperNumberHi;
