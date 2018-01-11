@@ -7,7 +7,7 @@ package com.rox.emu.rom;
     <th>Description</th>
   </tr>
 
- <tr><th colspan=10>Flag 6</th></tr>
+ <tr><th colspan=10>[Flag 6]</th></tr>
 
   <tr>
      <th>7</th>
@@ -87,7 +87,7 @@ package com.rox.emu.rom;
      <td style="border-bottom: 2px"> Lower nybble of mapper number</td>
  </tr>
 
- <tr><th colspan=10>Flag 7</th></tr>
+ <tr><th colspan=10>[Flag 7]</th></tr>
 
  <tr>
  <th>7</th>
