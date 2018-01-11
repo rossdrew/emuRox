@@ -40,7 +40,7 @@ class InesRomSpec extends Specification {
     }
 
     @Unroll
-    def "ROM Control Options (Flag 7): #mapperNo #description"(){
+    def "ROM Control Options (Flag 7): #description"(){
         given: 'a header containing a control options byte'
         final InesRom rom = InesRom.from(asPaddedHeader([0x4E, 0x45, 0x53, 0x1A, 0x0, 0x0, 0b00000000, controlOptionsByte] as int[]))
 
@@ -70,6 +70,28 @@ class InesRomSpec extends Specification {
         0b00110010         || true           | false         | 0b00110000 | 1       | "Play Choice 10"
         0b01000000         || false          | false         | 0b01000000 | 1       | "iNES Version 1"
         0b01011000         || false          | false         | 0b01010000 | 2       | "iNES Version 2"
+    }
+
+    @Unroll
+    def "ROM Control Options (Mapper Number): #mapperNo #description"(){
+        given: 'a header containing a control options byte'
+        final InesRom rom = InesRom.from(asPaddedHeader([0x4E, 0x45, 0x53, 0x1A, 0x0, 0x0, flag6Byte, flag7Byte] as int[]))
+
+        when: 'that parsed header is retrieved'
+        final InesRomHeader header = rom.getHeader()
+        final RomControlOptions romCtrlOptions = header.getRomControlOptions()
+
+        then: 'the combination of flags are correct'
+        romCtrlOptions.mapperNumber == mapperNo
+
+        where:
+        flag6Byte  | flag7Byte  || mapperNo   | description
+        0b00000000 | 0b00000000 || 0b00000000 | "All bits switched OFF"
+        0b00001111 | 0b00001111 || 0b00000000 | "All bits OFF for mapper number only"
+        0b00010000 | 0b00000000 || 0b00000001 | "Low byte is used correctly"
+        0b00000000 | 0b00010000 || 0b00010000 | "High byte is used correctly"
+        0b00010000 | 0b00010000 || 0b00010001 | "High & Low byte are combined correctly"
+        0b01010000 | 0b00110000 || 0b00110101 | "Non simple combination of high and low bytes"
     }
 
     private int[] asPaddedHeader(int[] values){
