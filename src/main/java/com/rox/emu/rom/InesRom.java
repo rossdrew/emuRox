@@ -12,13 +12,13 @@ public final class InesRom {
         this.header = header;
     }
 
-    public static InesRom from(final int[] bytes) {
+    public static InesRom from(final byte[] bytes) {
         final InesRomHeader newHeader = processHeader(bytes);
 
         return new InesRom(newHeader);
     }
 
-    private static InesRomHeader processHeader(final int[] bytes){
+    private static InesRomHeader processHeader(final byte[] bytes){
         if (bytes.length < InesRomHeader.HEADER_SIZE)
             throw new UnknownRomException("Invalid iNES header: Too short.");
 
