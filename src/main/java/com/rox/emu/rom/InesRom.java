@@ -35,6 +35,7 @@ public final class InesRom {
     }
 
     private static byte[] extractBinaryData(final byte[] bytes, final int byteCount, final int offset) {
+        //XXX return Arrays.copyOfRange(bytes, offset, offset+byteCount);
         byte[] prg = new byte[byteCount];
         for (int byteIndex=0; byteIndex<byteCount; byteIndex++ ){
             int romByteIndex = offset + byteIndex;
