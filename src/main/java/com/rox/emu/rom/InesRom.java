@@ -1,5 +1,7 @@
 package com.rox.emu.rom;
 
+import java.util.Arrays;
+
 /**
  * A representation of an iNES ROM file.
  *
@@ -35,14 +37,7 @@ public final class InesRom {
     }
 
     private static byte[] extractBinaryData(final byte[] bytes, final int byteCount, final int offset) {
-        //XXX return Arrays.copyOfRange(bytes, offset, offset+byteCount);
-        byte[] prg = new byte[byteCount];
-        for (int byteIndex=0; byteIndex<byteCount; byteIndex++ ){
-            int romByteIndex = offset + byteIndex;
-            prg[byteIndex] = bytes[romByteIndex];
-            System.out.println(prg[byteIndex]);
-        }
-        return prg;
+        return Arrays.copyOfRange(bytes, offset,offset+byteCount);
     }
 
     private static InesRomHeader processHeader(final byte[] bytes){
