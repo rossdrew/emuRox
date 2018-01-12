@@ -27,11 +27,13 @@ public final class InesRom {
         final InesRomHeader newHeader = processHeader(bytes);
 
         //TODO trainer offset will be needed
+        int offset = InesRomHeader.HEADER_SIZE;
         //16-...   ROM banks, in ascending order. If a trainer is present, its 512 bytes precede the ROM bank contents. (PRG ROM (Number of 16384 byte program ROM pages))
-        final byte[] program = extractBinaryData(bytes, newHeader.getPrgBlocks() * PRG_ROM_BLOCK_SIZE, InesRomHeader.HEADER_SIZE);
+        final byte[] program = extractBinaryData(bytes, newHeader.getPrgBlocks() * PRG_ROM_BLOCK_SIZE, offset);
         //TODO Need to deal with 0
         //...-EOF  VROM banks, in ascending order.  (CHR ROM (Number of 8192 byte character ROM pages (0 indicates CHR RAM)))
-        final byte[] character = extractBinaryData(bytes, newHeader.getChrBlocks() * CHR_ROM_BLOCK_SIZE, InesRomHeader.HEADER_SIZE + program.length);
+        offset += program.length;
+        final byte[] character = extractBinaryData(bytes, newHeader.getChrBlocks() * CHR_ROM_BLOCK_SIZE, offset);
 
         return new InesRom(newHeader, program, character);
     }
