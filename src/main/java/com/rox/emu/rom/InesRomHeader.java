@@ -60,4 +60,14 @@ public final class InesRomHeader{
     public RomControlOptions getRomControlOptions() {
         return romControlOptions;
     }
+
+    @Override
+    public String toString() {
+        return "InesRomHeader{" +
+                "description='" + description + '\'' +
+                ", prgBlocks=" + prgBlocks +
+                ", chrBlocks=" + chrBlocks +
+                ", romControlOptions=" + romControlOptions +
+                '}';
+    }
 }

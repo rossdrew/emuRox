@@ -229,4 +229,17 @@ class RomControlOptions {
     public int getVersion() {
         return version;
     }
+
+    @Override
+    public String toString() {
+        return "RomControlOptions{" +
+                "mirroring=" + mirroring +
+                ", ramPresent=" + ramPresent +
+                ", trainerPresent=" + trainerPresent +
+                ", mapperNumber=" + mapperNumber +
+                ", vsUnisystem=" + vsUnisystem +
+                ", playChoice10=" + playChoice10 +
+                ", version=" + version +
+                '}';
+    }
 }
