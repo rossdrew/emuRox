@@ -2,6 +2,8 @@
 
 This was the original intention of this project, to become a NES emulator.  As such I've added this directory as a source for storing information I may need later when I get beyong the CPU.
 
+[iNES Spec](http://fms.komkon.org/EMUL8/NES.html#LABM) 
+
 ## 6502 
 
 #### Unoficial OpCodes
