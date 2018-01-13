@@ -113,7 +113,7 @@ class InesRomSpec extends Specification {
         where:
         prgRomBlocks | hasTrainer | flag6Byte  | prgRomBytes                     || description
         1            | false      | 0b00000000 | [0x1, 0x2, 0x3, 0x4] as byte[]  || "Simple program, no trainer & 1 block"
-        1            | false      | 0b00000100 | [0x1, 0x2, 0x3, 0x4] as byte[]  || "Simple program, with trainer & 1 block"
+        1            | true       | 0b00000100 | [0x1, 0x2, 0x3, 0x4] as byte[]  || "Simple program, with trainer & 1 block"
     }
 
     /**
