@@ -94,33 +94,38 @@ class InesRomSpec extends Specification {
         0b01010000 | 0b00110000 || 0b00110101 | "Non simple combination of high and low bytes"
     }
 
-//    def prgRomTest(){
-//        given:
-//        //I need to take this then append a trainer (0 or 512 bytes long) then add prg rom
-//        byte[] header = asZeroPadded([0x4E, 0x45, 0x53, 0x1A, prgRomBlocks, 0x0, 0b00000000, 0b00000000] as byte[], InesRomHeader.HEADER_SIZE)
-//        byte[] trainer = asZeroPadded([] as byte[], InesRom.TRAINER_SIZE)
-//        byte[] prgRom = asZeroPadded(prgRomBytes as byte[], InesRom.PRG_ROM_BLOCK_SIZE * prgRomBlocks )
-//        byte[] romBytes = combineBytes(header, trainer, prgRom)
-//
-//        final InesRom rom = InesRom.from(romBytes)
-//
-//        when: 'we retrieve the roms'
-//        byte[] prgROM = rom.getCharacterRom()
-//        byte[] chrROM = rom.getCharacterRom()
-//
-//        then:
-//        prgROM[16] == [0x99]
-//
-//        where:
-//        prgRomBlocks | prgRomBytes
-//    }
+    def prgRomTest(){
+        given: 'the parts of a ROM file'
+        byte[] header = asZeroPadded([0x4E, 0x45, 0x53, 0x1A, prgRomBlocks, 0x0, 0b00000000, 0b00000000] as byte[], InesRomHeader.HEADER_SIZE)
+        byte[] trainer = asZeroPadded([] as byte[], InesRom.TRAINER_SIZE)
+        byte[] prgRom = asZeroPadded(prgRomBytes as byte[], InesRom.PRG_ROM_BLOCK_SIZE * prgRomBlocks )
 
+        and: 'they are compiled into a ROM file'
+        byte[] romBytes = combineBytes(header, trainer, prgRom)
+
+        when: 'the ROM is created'
+        final InesRom rom = InesRom.from(romBytes)
+
+        then: 'the program rOM is extracted correctly'
+        rom.getProgramRom() == prgRom
+
+        where:
+        prgRomBlocks | prgRomBytes
+        1            | [0x1, 0x2, 0x3, 0x4] as byte[]
+    }
+
+    /**
+     * Combine the provided byte arrays into one long byte array
+     */
     private byte[] combineBytes(byte[] ... byteArrays) {
         final ByteArrayOutputStream outputStream = new ByteArrayOutputStream()
-        byteArrays.each {outputStream.write(it)}
+        byteArrays.each {byteArray -> outputStream.write(byteArray); println "Adding $byteArray.length bytes: $byteArray"}
         outputStream.toByteArray()
     }
 
+    /**
+     * Zero pad the provided values to size specified
+     */
     private byte[] asZeroPadded(final byte[] values, final int size){
         byte[] header = new byte[size]
         System.arraycopy(values, 0, header, 0, values.length)
