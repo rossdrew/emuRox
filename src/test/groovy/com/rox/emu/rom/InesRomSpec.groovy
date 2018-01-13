@@ -97,7 +97,7 @@ class InesRomSpec extends Specification {
     @Unroll
     def "Program ROM access: #description"(){
         given: 'the parts of a ROM file'
-        byte[] header = asZeroPadded([0x4E, 0x45, 0x53, 0x1A, prgRomBlocks, 0x0, 0b00000000, 0b00000000] as byte[], InesRomHeader.HEADER_SIZE)
+        byte[] header = asZeroPadded([0x4E, 0x45, 0x53, 0x1A, prgRomBlocks, 0x0, flag6Byte, 0b00000000] as byte[], InesRomHeader.HEADER_SIZE)
         byte[] trainer = asZeroPadded([] as byte[], (hasTrainer ? InesRom.TRAINER_SIZE : 0))
         byte[] prgRom = asZeroPadded(prgRomBytes as byte[], InesRom.PRG_ROM_BLOCK_SIZE * prgRomBlocks )
 
@@ -111,8 +111,9 @@ class InesRomSpec extends Specification {
         rom.getProgramRom() == prgRom
 
         where:
-        prgRomBlocks | hasTrainer | prgRomBytes                     || description
-        1            | false      | [0x1, 0x2, 0x3, 0x4] as byte[]  || "Simple program, no trainer & 1 block"
+        prgRomBlocks | hasTrainer | flag6Byte  | prgRomBytes                     || description
+        1            | false      | 0b00000000 | [0x1, 0x2, 0x3, 0x4] as byte[]  || "Simple program, no trainer & 1 block"
+        1            | false      | 0b00000100 | [0x1, 0x2, 0x3, 0x4] as byte[]  || "Simple program, with trainer & 1 block"
     }
 
     /**
