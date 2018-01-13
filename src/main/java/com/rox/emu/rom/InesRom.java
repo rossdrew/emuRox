@@ -12,6 +12,7 @@ public final class InesRom {
     public static final int PRG_ROM_BLOCK_SIZE = 16384;
     /** The predefined CHR ROM block size */
     public static final int CHR_ROM_BLOCK_SIZE = 8192;
+    /** The size of of the trainer in bytes if present */
     public static final int TRAINER_SIZE = 512;
 
     private final InesRomHeader header;
