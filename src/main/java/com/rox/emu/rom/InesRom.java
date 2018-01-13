@@ -8,8 +8,11 @@ import java.util.Arrays;
  * @author Ross Drew
  */
 public final class InesRom {
+    /** The predefined PRG ROM block size */
     public static final int PRG_ROM_BLOCK_SIZE = 16384;
+    /** The predefined CHR ROM block size */
     public static final int CHR_ROM_BLOCK_SIZE = 8192;
+    public static final int TRAINER_SIZE = 512;
 
     private final InesRomHeader header;
     private final byte[] programRom;
@@ -23,17 +26,20 @@ public final class InesRom {
         this.characterRom = chrRom;
     }
 
+    /**
+     * Generate an {@link InesRom} from the provided bytes
+     */
     public static InesRom from(final byte[] bytes) {
         final InesRomHeader newHeader = processHeader(bytes);
 
-        //TODO trainer offset will be needed
-        int offset = InesRomHeader.HEADER_SIZE;
-        //16-...   ROM banks, in ascending order. If a trainer is present, its 512 bytes precede the ROM bank contents. (PRG ROM (Number of 16384 byte program ROM pages))
+        int offset = InesRomHeader.HEADER_SIZE + (newHeader.getRomControlOptions().isTrainerPresent() ? TRAINER_SIZE : 0);
         final byte[] program = extractBinaryData(bytes, newHeader.getPrgBlocks() * PRG_ROM_BLOCK_SIZE, offset);
-        //TODO Need to deal with 0
-        //...-EOF  VROM banks, in ascending order.  (CHR ROM (Number of 8192 byte character ROM pages (0 indicates CHR RAM)))
-        offset += program.length;
-        final byte[] character = extractBinaryData(bytes, newHeader.getChrBlocks() * CHR_ROM_BLOCK_SIZE, offset);
+
+        byte[] character = {};
+        if (newHeader.getChrBlocks() > 0) {
+            offset += program.length;
+            character = extractBinaryData(bytes, newHeader.getChrBlocks() * CHR_ROM_BLOCK_SIZE, offset);
+        } //TODO else CHR RAM
 
         return new InesRom(newHeader, program, character);
     }
