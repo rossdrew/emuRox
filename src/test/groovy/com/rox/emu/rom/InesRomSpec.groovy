@@ -10,7 +10,7 @@ class InesRomSpec extends Specification {
     @Unroll
     def "ROM Control Options (Flag 6): #mapperNo #description"(){
         given: 'a header containing a control options byte'
-        final InesRom rom = InesRom.from(asPaddedHeader([0x4E, 0x45, 0x53, 0x1A, 0x0, 0x0, controlOptionsByte] as byte[]))
+        final InesRom rom = InesRom.from(asZeroPadded([0x4E, 0x45, 0x53, 0x1A, 0x0, 0x0, controlOptionsByte] as byte[], InesRomHeader.HEADER_SIZE))
 
         when: 'that parsed header is retrieved'
         final InesRomHeader header = rom.getHeader()
@@ -42,7 +42,7 @@ class InesRomSpec extends Specification {
     @Unroll
     def "ROM Control Options (Flag 7): #description"(){
         given: 'a header containing a control options byte'
-        final InesRom rom = InesRom.from(asPaddedHeader([0x4E, 0x45, 0x53, 0x1A, 0x0, 0x0, 0b00000000, controlOptionsByte] as byte[]))
+        final InesRom rom = InesRom.from(asZeroPadded([0x4E, 0x45, 0x53, 0x1A, 0x0, 0x0, 0b00000000, controlOptionsByte] as byte[], InesRomHeader.HEADER_SIZE))
 
         when: 'that parsed header is retrieved'
         final InesRomHeader header = rom.getHeader()
@@ -75,7 +75,7 @@ class InesRomSpec extends Specification {
     @Unroll
     def "ROM Control Options (Mapper Number): #mapperNo #description"(){
         given: 'a header containing a control options byte'
-        final InesRom rom = InesRom.from(asPaddedHeader([0x4E, 0x45, 0x53, 0x1A, 0x0, 0x0, flag6Byte, flag7Byte] as byte[]))
+        final InesRom rom = InesRom.from(asZeroPadded([0x4E, 0x45, 0x53, 0x1A, 0x0, 0x0, flag6Byte, flag7Byte] as byte[], InesRomHeader.HEADER_SIZE))
 
         when: 'that parsed header is retrieved'
         final InesRomHeader header = rom.getHeader()
@@ -94,8 +94,22 @@ class InesRomSpec extends Specification {
         0b01010000 | 0b00110000 || 0b00110101 | "Non simple combination of high and low bytes"
     }
 
-    private byte[] asPaddedHeader(byte[] values){
-        byte[] header = new byte[InesRomHeader.HEADER_SIZE]
+//    def prgRomTest(){
+//        given:
+//        byte[] romBytes = asZeroPadded([0x4E, 0x45, 0x53, 0x1A, 0x0, 0x0, 0b00000000, 0b00000000] as byte[], InesRomHeader.HEADER_SIZE)
+//
+//        final InesRom rom = InesRom.from(romBytes)
+//
+//        when: 'we retrieve the roms'
+//        byte[] prgROM = rom.getCharacterRom()
+//        byte[] chrROM = rom.getCharacterRom()
+//
+//        then:
+//        prgROM[16] == [0x99]
+//    }
+
+    private byte[] asZeroPadded(final byte[] values, final int size){
+        byte[] header = new byte[size]
         System.arraycopy(values, 0, header, 0, values.length)
         return header
     }
