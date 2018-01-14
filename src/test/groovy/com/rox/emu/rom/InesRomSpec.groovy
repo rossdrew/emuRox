@@ -110,11 +110,34 @@ class InesRomSpec extends Specification {
         when: 'the ROM is created'
         final InesRom rom = InesRom.from(romBytes)
 
-        then: 'the program rOM is extracted correctly'
+        then: 'the program ROM is extracted correctly'
         rom.getProgramRom() == prgRom
 
         where:
         prgRomBlocks | hasTrainer | flag6Byte  | prgRomBytes                     || description
+        1            | false      | 0b00000000 | [0x1, 0x2, 0x3, 0x4] as byte[]  || "Simple program, no trainer & 1 block"
+        1            | true       | 0b00000100 | [0x1, 0x2, 0x3, 0x4] as byte[]  || "Simple program, with trainer & 1 block"
+    }
+
+    @Unroll
+    def "Character ROM access: #description"(){
+        given: 'the parts of a ROM file'
+        byte[] header = asZeroPadded([0x4E, 0x45, 0x53, 0x1A, 1, chrRomBlocks, flag6Byte, 0b00000000] as byte[], InesRomHeader.HEADER_SIZE)
+        byte[] trainer = asZeroPadded([] as byte[], (hasTrainer ? InesRom.TRAINER_SIZE : 0))
+        byte[] prgRom = asZeroPadded([] as byte[], InesRom.PRG_ROM_BLOCK_SIZE )
+        byte[] chrRom = asZeroPadded(chrRomBytes as byte[], InesRom.CHR_ROM_BLOCK_SIZE * chrRomBlocks )
+
+        and: 'they are compiled into a ROM file'
+        byte[] romBytes = combineBytes(header, trainer, prgRom, chrRom)
+
+        when: 'the ROM is created'
+        final InesRom rom = InesRom.from(romBytes)
+
+        then: 'the program ROM is extracted correctly'
+        rom.getCharacterRom() == chrRom
+
+        where:
+        chrRomBlocks | hasTrainer | flag6Byte  | chrRomBytes                     || description
         1            | false      | 0b00000000 | [0x1, 0x2, 0x3, 0x4] as byte[]  || "Simple program, no trainer & 1 block"
         1            | true       | 0b00000100 | [0x1, 0x2, 0x3, 0x4] as byte[]  || "Simple program, with trainer & 1 block"
     }
