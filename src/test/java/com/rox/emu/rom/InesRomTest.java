@@ -9,9 +9,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class InesRomTest {
+    private static final int ROM_SIZE = InesRomHeader.HEADER_SIZE + InesRom.PRG_ROM_BLOCK_SIZE;
+
     @Test
     public void testFromWithBytes(){
-        final InesRom rom = InesRom.from(asPaddedHeader(new byte[] {0x4E, 0x45, 0x53, 0x1A, 0x0, 0x0}));
+        final InesRom rom = InesRom.from(asZeroPadded(new byte[] {0x4E, 0x45, 0x53, 0x1A, 0x0, 0x0}, ROM_SIZE));
 
         assertNotNull(rom);
         assertFalse(rom.getDescription().isEmpty());
@@ -19,11 +21,11 @@ public class InesRomTest {
 
     @Test
     public void testGetHeader(){
-        final int prgRomBlocks = 0x9;
-        final int chrRomBlocks = 0x4; // ChrRom/VRom
+        final int prgRomBlocks = 0x1;
+        final int chrRomBlocks = 0x0; // ChrRom/VRom
         final byte controlOptionsByte = (byte)0b10101010;
 
-        final InesRom rom = InesRom.from(asPaddedHeader(new byte[] {0x4E, 0x45, 0x53, 0x1A, prgRomBlocks, chrRomBlocks, controlOptionsByte}));
+        final InesRom rom = InesRom.from(asZeroPadded(new byte[] {0x4E, 0x45, 0x53, 0x1A, prgRomBlocks, chrRomBlocks, controlOptionsByte}, ROM_SIZE));
         final InesRomHeader header = rom.getHeader();
 
         assertNotNull(header);
@@ -43,7 +45,7 @@ public class InesRomTest {
     @Test
     public void testInvalidFromWithBytes(){
         try {
-            InesRom.from(asPaddedHeader(new byte[]{0x0, 0x0, 0x0, 0x1A, 0x0, 0x0}));
+            InesRom.from(asZeroPadded(new byte[]{0x0, 0x0, 0x0, 0x1A, 0x0, 0x0}, ROM_SIZE));
             fail("ROM contains an invalid NES header, should throw an exception");
         }catch(UnknownRomException e){
             assertNotNull(e.getMessage());
@@ -74,7 +76,7 @@ public class InesRomTest {
     @Test
     public void testInvalidFirstHeaderPrefixValue(){
         try {
-            InesRom.from(asPaddedHeader(new byte[]{'Z', 'E', 'S', 0x1A, 0x0, 0x0}));
+            InesRom.from(asZeroPadded(new byte[]{'Z', 'E', 'S', 0x1A, 0x0, 0x0}, ROM_SIZE));
             fail("ROM contains an invalid NES header (first byte should be 'N'), should throw an exception");
         }catch(UnknownRomException e){
             assertNotNull(e.getMessage());
@@ -84,7 +86,7 @@ public class InesRomTest {
     @Test
     public void testInvalidSecondHeaderPrefixValue(){
         try {
-            InesRom.from(asPaddedHeader(new byte[]{'N', 'Z', 'S', 0x1A, 0x0, 0x0}));
+            InesRom.from(asZeroPadded(new byte[]{'N', 'Z', 'S', 0x1A, 0x0, 0x0}, ROM_SIZE));
             fail("ROM contains an invalid NES header (second byte should be 0x45), should throw an exception");
         }catch(UnknownRomException e){
             assertNotNull(e.getMessage());
@@ -94,7 +96,7 @@ public class InesRomTest {
     @Test
     public void testInvalidThirdHeaderPrefixValue(){
         try {
-            InesRom.from(asPaddedHeader(new byte[]{'N', 'E', 'Z', 0x1A, 0x0, 0x0}));
+            InesRom.from(asZeroPadded(new byte[]{'N', 'E', 'Z', 0x1A, 0x0, 0x0}, ROM_SIZE));
             fail("ROM contains an invalid NES header (third byte should be 0x53), should throw an exception");
         }catch(UnknownRomException e){
             assertNotNull(e.getMessage());
@@ -104,15 +106,15 @@ public class InesRomTest {
     @Test
     public void testInvalidFourthHeaderPrefixValue(){
         try {
-            InesRom.from(asPaddedHeader(new byte[]{'N', 'E', 'S', 0x1B, 0x0, 0x0}));
+            InesRom.from(asZeroPadded(new byte[]{'N', 'E', 'S', 0x1B, 0x0, 0x0}, ROM_SIZE));
             fail("ROM contains an invalid NES header (fourth byte should be 0x1A), should throw an exception");
         }catch(UnknownRomException e){
             assertNotNull(e.getMessage());
         }
     }
 
-    private byte[] asPaddedHeader(byte[] values){
-        byte[] header = new byte[InesRomHeader.HEADER_SIZE];
+    private byte[] asZeroPadded(final byte[] values, final int size){
+        byte[] header = new byte[size];
         System.arraycopy(values, 0, header, 0, values.length);
         return header;
     }

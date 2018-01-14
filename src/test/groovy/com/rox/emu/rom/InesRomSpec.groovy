@@ -10,7 +10,8 @@ class InesRomSpec extends Specification {
     @Unroll
     def "ROM Control Options (Flag 6): #mapperNo #description"(){
         given: 'a header containing a control options byte'
-        final InesRom rom = InesRom.from(asZeroPadded([0x4E, 0x45, 0x53, 0x1A, 0x0, 0x0, controlOptionsByte] as byte[], InesRomHeader.HEADER_SIZE))
+        final int ROM_SIZE = InesRomHeader.HEADER_SIZE + InesRom.PRG_ROM_BLOCK_SIZE + (isTrainerPresent? InesRom.TRAINER_SIZE : 0)
+        final InesRom rom = InesRom.from(asZeroPadded([0x4E, 0x45, 0x53, 0x1A, 0x0, 0x0, controlOptionsByte] as byte[], ROM_SIZE))
 
         when: 'that parsed header is retrieved'
         final InesRomHeader header = rom.getHeader()
@@ -42,7 +43,8 @@ class InesRomSpec extends Specification {
     @Unroll
     def "ROM Control Options (Flag 7): #description"(){
         given: 'a header containing a control options byte'
-        final InesRom rom = InesRom.from(asZeroPadded([0x4E, 0x45, 0x53, 0x1A, 0x0, 0x0, 0b00000000, controlOptionsByte] as byte[], InesRomHeader.HEADER_SIZE))
+        final int ROM_SIZE = InesRomHeader.HEADER_SIZE + InesRom.PRG_ROM_BLOCK_SIZE
+        final InesRom rom = InesRom.from(asZeroPadded([0x4E, 0x45, 0x53, 0x1A, 0x0, 0x0, 0b00000000, controlOptionsByte] as byte[], ROM_SIZE))
 
         when: 'that parsed header is retrieved'
         final InesRomHeader header = rom.getHeader()
@@ -75,7 +77,8 @@ class InesRomSpec extends Specification {
     @Unroll
     def "ROM Control Options (Mapper Number): #mapperNo #description"(){
         given: 'a header containing a control options byte'
-        final InesRom rom = InesRom.from(asZeroPadded([0x4E, 0x45, 0x53, 0x1A, 0x0, 0x0, flag6Byte, flag7Byte] as byte[], InesRomHeader.HEADER_SIZE))
+        final int ROM_SIZE = InesRomHeader.HEADER_SIZE + InesRom.PRG_ROM_BLOCK_SIZE
+        final InesRom rom = InesRom.from(asZeroPadded([0x4E, 0x45, 0x53, 0x1A, 0x0, 0x0, flag6Byte, flag7Byte] as byte[], ROM_SIZE))
 
         when: 'that parsed header is retrieved'
         final InesRomHeader header = rom.getHeader()
