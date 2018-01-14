@@ -16,13 +16,16 @@ public final class InesRom {
     public static final int TRAINER_SIZE = 512;
 
     private final InesRomHeader header;
+    private final byte[] trainerRom;
     private final byte[] programRom;
     private final byte[] characterRom;
 
     private InesRom(final InesRomHeader header,
+                    byte[] trainerRom,
                     final byte[] prgRom,
                     final byte[] chrRom){
         this.header = header;
+        this.trainerRom = trainerRom;
         this.programRom = prgRom;
         this.characterRom = chrRom;
     }
@@ -33,7 +36,14 @@ public final class InesRom {
     public static InesRom from(final byte[] bytes) {
         final InesRomHeader newHeader = processHeader(bytes);
 
-        int offset = InesRomHeader.HEADER_SIZE + (newHeader.getRomControlOptions().isTrainerPresent() ? TRAINER_SIZE : 0);
+        int offset = InesRomHeader.HEADER_SIZE;
+
+        byte[] trainer = {};
+        if (newHeader.getRomControlOptions().isTrainerPresent()){
+            trainer = extractBinaryData(bytes, TRAINER_SIZE, offset);
+            offset += TRAINER_SIZE;
+        }
+
         final byte[] program = extractBinaryData(bytes, newHeader.getPrgBlocks() * PRG_ROM_BLOCK_SIZE, offset);
 
         byte[] character = {};
@@ -42,7 +52,7 @@ public final class InesRom {
             character = extractBinaryData(bytes, newHeader.getChrBlocks() * CHR_ROM_BLOCK_SIZE, offset);
         } //TODO else CHR RAM
 
-        return new InesRom(newHeader, program, character);
+        return new InesRom(newHeader, trainer, program, character);
     }
 
     private static byte[] extractBinaryData(final byte[] bytes, final int byteCount, final int offset) {
@@ -81,5 +91,9 @@ public final class InesRom {
 
     public byte[] getCharacterRom(){
         return this.characterRom;
+    }
+
+    public byte[] getTrainerRom() {
+        return this.trainerRom;
     }
 }

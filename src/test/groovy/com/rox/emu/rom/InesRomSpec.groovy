@@ -142,6 +142,29 @@ class InesRomSpec extends Specification {
         1            | true       | 0b00000100 | [0x1, 0x2, 0x3, 0x4] as byte[]  || "Simple program, with trainer & 1 block"
     }
 
+    @Unroll
+    def "Trainer ROM access: #description"(){
+        given: 'the parts of a ROM file'
+        byte[] header = asZeroPadded([0x4E, 0x45, 0x53, 0x1A, 1, 1, flag6Byte, 0b00000000] as byte[], InesRomHeader.HEADER_SIZE)
+        byte[] trainer = asZeroPadded(trainerBytes as byte[], (hasTrainer ? InesRom.TRAINER_SIZE : 0))
+        byte[] prgRom = asZeroPadded([] as byte[], InesRom.PRG_ROM_BLOCK_SIZE )
+        byte[] chrRom = asZeroPadded([] as byte[], InesRom.CHR_ROM_BLOCK_SIZE )
+
+        and: 'they are compiled into a ROM file'
+        byte[] romBytes = combineBytes(header, trainer, prgRom, chrRom)
+
+        when: 'the ROM is created'
+        final InesRom rom = InesRom.from(romBytes)
+
+        then: 'the program ROM is extracted correctly'
+        rom.getTrainerRom() == trainer
+
+        where:
+        hasTrainer | flag6Byte  | trainerBytes                    || description
+        false      | 0b00000000 | [] as byte[]                    || "No trainer"
+        true       | 0b00000100 | [0x1, 0x2, 0x3, 0x4] as byte[]  || "Trainer present"
+    }
+
     /**
      * Combine the provided byte arrays into one long byte array
      */
@@ -155,8 +178,10 @@ class InesRomSpec extends Specification {
      * Zero pad the provided values to size specified
      */
     private byte[] asZeroPadded(final byte[] values, final int size){
-        byte[] header = new byte[size]
-        System.arraycopy(values, 0, header, 0, values.length)
-        return header
+        if (size < values.length)
+            return values
+        byte[] paddedValues = new byte[size]
+        System.arraycopy(values, 0, paddedValues, 0, values.length)
+        return paddedValues
     }
 }
