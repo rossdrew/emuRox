@@ -35,7 +35,6 @@ public final class InesRom {
      */
     public static InesRom from(final byte[] bytes) {
         final InesRomHeader newHeader = processHeader(bytes);
-
         int offset = InesRomHeader.HEADER_SIZE;
 
         byte[] trainer = {};
@@ -45,12 +44,13 @@ public final class InesRom {
         }
 
         final byte[] program = extractBinaryData(bytes, newHeader.getPrgBlocks() * PRG_ROM_BLOCK_SIZE, offset);
+        offset += program.length;
 
         byte[] character = {};
         if (newHeader.getChrBlocks() > 0) {
-            offset += program.length;
             character = extractBinaryData(bytes, newHeader.getChrBlocks() * CHR_ROM_BLOCK_SIZE, offset);
         } //TODO else CHR RAM
+        offset += (newHeader.getChrBlocks() * CHR_ROM_BLOCK_SIZE);
 
         return new InesRom(newHeader, trainer, program, character);
     }
