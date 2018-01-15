@@ -10,11 +10,12 @@ import static junit.framework.TestCase.assertTrue;
 import static junit.framework.TestCase.fail;
 
 public class ReadOnlyMemoryTest {
+    int[] memoryValues = new int[] {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19};
     private Memory memory;
 
     @Before
     public void setUp(){
-        memory = new ReadOnlyMemory(new int[] {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19});
+        memory = new ReadOnlyMemory(memoryValues);
     }
 
     @Test
@@ -25,7 +26,6 @@ public class ReadOnlyMemoryTest {
         }catch(RuntimeException e){}
     }
 
-    //TODO test getting bytes
     @Test
     public void testRead(){
         assertEquals(5, memory.getByte(5));
@@ -37,7 +37,17 @@ public class ReadOnlyMemoryTest {
         int[] actual = memory.getBlock(0, 4);
         assertTrue("Expected " + Arrays.toString(expected) + ", got " +  Arrays.toString(actual), Arrays.equals(expected, actual));
     }
-    //TODO test reset
+
+    @Test
+    public void testReset(){
+        int[] actual = memory.getBlock(0, 20);
+        assertTrue("Expected " + Arrays.toString(memoryValues) + ", got " + Arrays.toString(actual),Arrays.equals(memoryValues, actual));
+    }
+
+    @Test
+    public void testReadWord(){
+        assertEquals(((1<<8) | 2), memory.getWord(1));
+    }
 
     @Test
     public void testWrite(){
