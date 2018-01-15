@@ -11,6 +11,7 @@ import com.rox.emu.processor.mos6502.op.AddressingMode;
 import com.rox.emu.processor.mos6502.op.OpCode;
 import com.rox.emu.processor.mos6502.util.Compiler;
 import com.rox.emu.processor.mos6502.util.Program;
+import com.rox.emu.rom.InesRom;
 
 import javax.swing.*;
 import javax.swing.text.DefaultStyledDocument;
@@ -18,6 +19,10 @@ import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 import java.awt.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -147,7 +152,7 @@ final class DebuggerWindow extends JFrame {
         stepButton.addActionListener(e -> step());
 
         JButton resetButton = new JButton("Reset!");
-        resetButton.addActionListener(e -> loadProgram(getProgram()));
+        resetButton.addActionListener(e -> loadProgram(getProgramFromFile()));
 
         JPanel controls = new JPanel();
         controls.setLayout(new FlowLayout());
@@ -155,6 +160,33 @@ final class DebuggerWindow extends JFrame {
         controls.add(stepButton);
 
         return controls;
+    }
+
+    private int[] getProgramFromFile() {
+        final File file = new File( "src" +  File.separator + "main" +  File.separator + "resources" + File.separator + "rom" + File.separator + "SMB1.NES");
+
+        System.out.println("Loading '" + file.getAbsolutePath() + "'...");
+
+        final FileInputStream fis;
+        byte fileContent[] = {};
+        try {
+            fis = new FileInputStream(file);
+            fileContent= new byte[(int)file.length()];
+            fis.read(fileContent);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        final InesRom rom = InesRom.from(fileContent);
+
+        byte[] prgRom = rom.getProgramRom();
+        int[] prgRomAsInts = new int[prgRom.length];
+        for (int i=0; i<prgRomAsInts.length; i++){
+            prgRomAsInts[i] = prgRom[i];
+        }
+        return prgRomAsInts;
     }
 
     private int[] getProgram(){

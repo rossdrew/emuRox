@@ -52,7 +52,7 @@ jacocoTestReport {
     afterEvaluate {
         classDirectories = files(classDirectories.files.collect {
             fileTree(dir: it,
-                     exclude: ['**/ui/**', '**/RomLoader.class'])
+                     exclude: ['**/ui/**'])
         })
     }
 }
