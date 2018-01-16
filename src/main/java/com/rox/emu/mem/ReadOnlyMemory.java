@@ -5,16 +5,6 @@ import com.rox.emu.env.RoxByte;
 public class ReadOnlyMemory implements Memory {
     private final RoxByte[] memoryArray;
 
-    public ReadOnlyMemory(){
-        memoryArray = new RoxByte[0x10000];
-        reset();
-    }
-
-    public ReadOnlyMemory(int size){
-        memoryArray = new RoxByte[size];
-        reset();
-    }
-
     public ReadOnlyMemory(final int[] contents){
         memoryArray = new RoxByte[contents.length];
         for (int memoryIndex = 0; memoryIndex < memoryArray.length; memoryIndex++)
