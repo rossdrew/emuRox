@@ -113,6 +113,19 @@ public class InesRomTest {
         }
     }
 
+    @Test
+    public void testHeaderToString(){
+        InesRomHeader header = new InesRomHeader("myHeader",42,43, new RomControlOptions(0b00000000, 0b00000000));
+        assertEquals("InesRomHeader{description='myHeader', prgBlocks=42, chrBlocks=43, romControlOptions=RomControlOptions{mirroring=HORIZONTAL, ramPresent=false, trainerPresent=false, mapperNumber=0, vsUnisystem=false, playChoice10=false, version=1}}", header.toString());
+    }
+
+    @Test
+    public void testControlOptionsToString(){
+        RomControlOptions ctrlOptions = new RomControlOptions(0b00000000, 0b00000000);
+        assertEquals("RomControlOptions{mirroring=HORIZONTAL, ramPresent=false, trainerPresent=false, mapperNumber=0, vsUnisystem=false, playChoice10=false, version=1}", ctrlOptions.toString());
+    }
+
+
     private byte[] asZeroPadded(final byte[] values, final int size){
         byte[] header = new byte[size];
         System.arraycopy(values, 0, header, 0, values.length);
