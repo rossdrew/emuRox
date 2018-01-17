@@ -92,6 +92,16 @@ public final class RoxByte {
     }
 
     /**
+     * Create an 8 bit byte from the given {@link byte}
+     *
+     * @param value an {@link byte} from which to create this byte representation
+     * @return a {@link RoxByte} made up from the least significant 8 bits of the given value
+     */
+    public static RoxByte fromLiteral(byte value) {
+        return new RoxByte(value, ByteFormat.SIGNED_TWOS_COMPLIMENT);
+    }
+
+    /**
      * Return this single byte value as it's relative Java {@link int} value.
      * This means a single, {@link ByteFormat} SIGNED_TWOS_COMPLIMENT value which is negative will fill out an
      * integer and move the signed bit to the integer msb. i.e.

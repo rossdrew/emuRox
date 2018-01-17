@@ -63,6 +63,15 @@ public class RoxByteTest extends Specification{
     }
 
     @Test
+    public void testLiteralFromByte() throws InvalidDataTypeException {
+        byte fromByte = 0b00000001;
+        final RoxByte myByte = RoxByte.fromLiteral(fromByte);
+        assertNotNull(myByte);
+        assertEquals(RoxByte.ByteFormat.SIGNED_TWOS_COMPLIMENT, myByte.getFormat());
+        assertEquals(0b00000001, myByte.getRawValue());
+    }
+
+    @Test
     public void testByteFromRaw() throws InvalidDataTypeException {
         final RoxByte myByte = RoxByte.fromLiteral(0b11111111);
         assertNotNull(myByte);
