@@ -181,12 +181,8 @@ final class DebuggerWindow extends JFrame {
 
         final InesRom rom = InesRom.from(fileContent);
 
-        byte[] prgRom = rom.getProgramRom();
-        int[] prgRomAsInts = new int[prgRom.length];
-        for (int i=0; i<prgRomAsInts.length; i++){
-            prgRomAsInts[i] = prgRom[i];
-        }
-        return prgRomAsInts;
+        Memory prgRom = rom.getProgramRom();
+        return prgRom.getBlock(0, prgRom.getSize()-1);
     }
 
     private int[] getProgram(){

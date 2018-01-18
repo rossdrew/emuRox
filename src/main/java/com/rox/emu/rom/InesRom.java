@@ -1,5 +1,7 @@
 package com.rox.emu.rom;
 
+import com.rox.emu.mem.ReadOnlyMemory;
+
 import java.util.Arrays;
 
 /**
@@ -16,9 +18,10 @@ public final class InesRom {
     public static final int TRAINER_SIZE = 512;
 
     private final InesRomHeader header;
-    private final byte[] trainerRom;
-    private final byte[] programRom;
-    private final byte[] characterRom;
+    private final byte[] trainerRom; //XXX Move to ReadOnlyMemory
+
+    private final ReadOnlyMemory prgrom;
+    private final ReadOnlyMemory chrrom;
 
     private InesRom(final InesRomHeader header,
                     byte[] trainerRom,
@@ -26,8 +29,9 @@ public final class InesRom {
                     final byte[] chrRom){
         this.header = header;
         this.trainerRom = trainerRom;
-        this.programRom = prgRom;
-        this.characterRom = chrRom;
+
+        this.prgrom = new ReadOnlyMemory(prgRom);
+        this.chrrom = new ReadOnlyMemory(chrRom);
     }
 
     /**
@@ -85,12 +89,12 @@ public final class InesRom {
         return header;
     }
 
-    public byte[] getProgramRom(){
-        return this.programRom;
+    public ReadOnlyMemory getProgramRom(){
+        return this.prgrom;
     }
 
-    public byte[] getCharacterRom(){
-        return this.characterRom;
+    public ReadOnlyMemory getCharacterRom(){
+        return this.chrrom;
     }
 
     public byte[] getTrainerRom() {

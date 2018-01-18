@@ -1,5 +1,6 @@
 package com.rox.emu.rom
 
+import com.rox.emu.mem.ReadOnlyMemory
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -111,7 +112,8 @@ class InesRomSpec extends Specification {
         final InesRom rom = InesRom.from(romBytes)
 
         then: 'the program ROM is extracted correctly'
-        rom.getProgramRom() == prgRom
+        final ReadOnlyMemory programRom = rom.getProgramRom()
+        programRom.getBlock(0, programRom.size) == prgRom
 
         where:
         prgRomBlocks | hasTrainer | flag6Byte  | prgRomBytes                     || description
@@ -134,7 +136,8 @@ class InesRomSpec extends Specification {
         final InesRom rom = InesRom.from(romBytes)
 
         then: 'the program ROM is extracted correctly'
-        rom.getCharacterRom() == chrRom
+        final ReadOnlyMemory characterRom = rom.getCharacterRom()
+        characterRom.getBlock(0, characterRom.size) == chrRom
 
         where:
         chrRomBlocks | hasTrainer | flag6Byte  | chrRomBytes                     || description
