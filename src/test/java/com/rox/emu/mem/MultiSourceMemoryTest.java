@@ -47,7 +47,7 @@ public class MultiSourceMemoryTest {
 
     @Test
     public void testSize(){
-        assertEquals(65536, memoryBlockA.getSize());
+        assertEquals(65536, testMemory.getSize());
     }
 
     @Test
