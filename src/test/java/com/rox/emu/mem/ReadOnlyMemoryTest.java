@@ -31,6 +31,7 @@ public class ReadOnlyMemoryTest {
 
     @Test
     public void testExplicitlySizedMemory(){
+        assertEquals(20, memory.getSize());
         try {
             memory.setByteAt(10, 0);
             fail("Should not be able to access memory outside the size of addressable memory");

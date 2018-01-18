@@ -21,6 +21,7 @@ public class SimpleMemoryTest {
         sizedMemory.setByteAt(0, 1);
         sizedMemory.setByteAt(9, 10);
 
+        assertEquals(10, sizedMemory.getSize());
         try {
             sizedMemory.setByteAt(10, 0);
             fail("Should not be able to access memory outside the size of addressable memory");
@@ -63,6 +64,8 @@ public class SimpleMemoryTest {
     public void testSetMemory(){
         int[] values = new int[] {1,22,33,44,55};
         memory.setBlock(0, values);
+
+        assertEquals(65536, memory.getSize());
 
         assertEquals(1, memory.getByte(0));
         assertEquals(22, memory.getByte(1));
