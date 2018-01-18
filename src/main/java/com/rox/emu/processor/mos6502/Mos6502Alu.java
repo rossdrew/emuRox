@@ -45,12 +45,26 @@ public class Mos6502Alu {
 
         registers.setFlagTo(Registers.C, result.getHighByte().isBitSet(0));
 
-        //Set Overflow if the sign of both inputs is different from the sign of the result i.e. bit 7 set on ((a^result) & (b^result))
-        if (and(xor(byteA, result.getLowByte()),
-                xor(byteB, result.getLowByte())).isBitSet(7))
+        if (isAdcOverflow(byteA, byteB, result))
             registers.setFlag(Registers.V);
 
         return result.getLowByte();
+    }
+
+    /**
+     * Is the sign of both inputs is different from the sign of the result i.e. bit 7 set on the result of
+     * <code>((a^result) & (b^result))</code>
+     *
+     * @param inputByteA
+     * @param inputByteB
+     * @param result
+     * @return if the result of adc(inputByteA,inputByteB) should cause an overflow bit
+     */
+    private boolean isAdcOverflow(final RoxByte inputByteA,
+                                  final RoxByte inputByteB,
+                                  final RoxWord result) {
+        return and(xor(inputByteA, result.getLowByte()),
+                   xor(inputByteB, result.getLowByte())).isBitSet(7);
     }
 
     /**
