@@ -110,9 +110,9 @@ class InesRomSpec extends Specification {
 
         when: 'the ROM is created'
         final InesRom rom = InesRom.from(romBytes)
+        final ReadOnlyMemory programRom = rom.getProgramRom()
 
         then: 'the program ROM is extracted correctly'
-        final ReadOnlyMemory programRom = rom.getProgramRom()
         programRom.getBlock(0, programRom.size) == prgRom
 
         where:
@@ -134,9 +134,9 @@ class InesRomSpec extends Specification {
 
         when: 'the ROM is created'
         final InesRom rom = InesRom.from(romBytes)
+        final ReadOnlyMemory characterRom = rom.getCharacterRom()
 
         then: 'the program ROM is extracted correctly'
-        final ReadOnlyMemory characterRom = rom.getCharacterRom()
         characterRom.getBlock(0, characterRom.size) == chrRom
 
         where:
@@ -158,9 +158,10 @@ class InesRomSpec extends Specification {
 
         when: 'the ROM is created'
         final InesRom rom = InesRom.from(romBytes)
+        final ReadOnlyMemory trainerRom = rom.getTrainerRom()
 
         then: 'the program ROM is extracted correctly'
-        rom.getTrainerRom() == trainer
+        trainerRom.getBlock(0, trainerRom.size) == trainer
 
         where:
         hasTrainer | flag6Byte  | trainerBytes                    || description

@@ -18,20 +18,25 @@ public final class InesRom {
     public static final int TRAINER_SIZE = 512;
 
     private final InesRomHeader header;
-    private final byte[] trainerRom; //XXX Move to ReadOnlyMemory
 
-    private final ReadOnlyMemory prgrom;
-    private final ReadOnlyMemory chrrom;
+    private final ReadOnlyMemory programRom;
+    private final ReadOnlyMemory characterRom;
+    private final ReadOnlyMemory trainerRom;
+
+    private final byte[] footer;
 
     private InesRom(final InesRomHeader header,
                     byte[] trainerRom,
                     final byte[] prgRom,
-                    final byte[] chrRom){
+                    final byte[] chrRom,
+                    final byte[] footer){
         this.header = header;
-        this.trainerRom = trainerRom;
 
-        this.prgrom = new ReadOnlyMemory(prgRom);
-        this.chrrom = new ReadOnlyMemory(chrRom);
+        this.programRom = new ReadOnlyMemory(prgRom);
+        this.characterRom = new ReadOnlyMemory(chrRom);
+        this.trainerRom = new ReadOnlyMemory(trainerRom);
+
+        this.footer = footer;
     }
 
     /**
@@ -56,7 +61,12 @@ public final class InesRom {
         } //TODO else CHR RAM
         offset += (newHeader.getChrBlocks() * CHR_ROM_BLOCK_SIZE);
 
-        return new InesRom(newHeader, trainer, program, character);
+        byte[] footer = new byte[] {};
+        if (bytes.length > offset){
+            footer = extractBinaryData(bytes, bytes.length-offset, offset);
+        }
+
+        return new InesRom(newHeader, trainer, program, character, footer);
     }
 
     private static byte[] extractBinaryData(final byte[] bytes, final int byteCount, final int offset) {
@@ -90,14 +100,14 @@ public final class InesRom {
     }
 
     public ReadOnlyMemory getProgramRom(){
-        return this.prgrom;
+        return this.programRom;
     }
 
     public ReadOnlyMemory getCharacterRom(){
-        return this.chrrom;
+        return this.characterRom;
     }
 
-    public byte[] getTrainerRom() {
+    public ReadOnlyMemory getTrainerRom() {
         return this.trainerRom;
     }
 }
