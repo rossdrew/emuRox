@@ -169,6 +169,30 @@ class InesRomSpec extends Specification {
         true       | 0b00000100 | [0x1, 0x2, 0x3, 0x4] as byte[]  || "Trainer present"
     }
 
+    @Unroll
+    def "Footer access: #description"(){
+        given: 'the parts of a ROM file'
+        byte[] header = asZeroPadded([0x4E, 0x45, 0x53, 0x1A, 1, 1, flag6Byte, 0b00000000] as byte[], InesRomHeader.HEADER_SIZE)
+        byte[] trainer = asZeroPadded([] as byte[], (hasTrainer ? InesRom.TRAINER_SIZE : 0))
+        byte[] prgRom = asZeroPadded([] as byte[], InesRom.PRG_ROM_BLOCK_SIZE )
+        byte[] chrRom = asZeroPadded([] as byte[], InesRom.CHR_ROM_BLOCK_SIZE )
+
+        and: 'they are compiled into a ROM file'
+        byte[] romBytes = combineBytes(header, trainer, prgRom, chrRom, footerBytes)
+
+        when: 'the ROM is created'
+        final InesRom rom = InesRom.from(romBytes)
+        final byte[] romFooter = rom.getFooter()
+
+        then: 'the program ROM is extracted correctly'
+        romFooter == footerBytes
+
+        where:
+        hasTrainer | flag6Byte  | footerBytes                        || description
+        false      | 0b00000000 | "My test footer".getBytes()        || "No trainer"
+        true       | 0b00000100 | "My other test footer".getBytes()  || "Trainer present"
+    }
+
     /**
      * Combine the provided byte arrays into one long byte array
      */

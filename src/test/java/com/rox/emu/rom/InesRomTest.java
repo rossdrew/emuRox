@@ -125,7 +125,6 @@ public class InesRomTest {
         assertEquals("RomControlOptions{mirroring=HORIZONTAL, ramPresent=false, trainerPresent=false, mapperNumber=0, vsUnisystem=false, playChoice10=false, version=1}", ctrlOptions.toString());
     }
 
-
     private byte[] asZeroPadded(final byte[] values, final int size){
         byte[] header = new byte[size];
         System.arraycopy(values, 0, header, 0, values.length);

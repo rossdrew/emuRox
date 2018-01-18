@@ -110,4 +110,8 @@ public final class InesRom {
     public ReadOnlyMemory getTrainerRom() {
         return this.trainerRom;
     }
+
+    public byte[] getFooter() {
+        return footer;
+    }
 }
