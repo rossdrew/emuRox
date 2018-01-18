@@ -19,6 +19,17 @@ public class ReadOnlyMemoryTest {
     }
 
     @Test
+    public void testByteCreatedMemory(){
+        final Memory byteMemory = new ReadOnlyMemory(new byte[] {0x10, 0x20, 0x30, 0x40, 0x50});
+        assertEquals(0x20, byteMemory.getByte(1));
+
+        try{
+            byteMemory.setByteAt(0, 42);
+            fail("Writing to read only memory should throw an exception.");
+        }catch(RuntimeException e){}
+    }
+
+    @Test
     public void testExplicitlySizedMemory(){
         try {
             memory.setByteAt(10, 0);

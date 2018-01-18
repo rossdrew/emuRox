@@ -12,6 +12,13 @@ public class ReadOnlyMemory implements Memory {
         reset();
     }
 
+    public ReadOnlyMemory(final byte[] contents){
+        memoryArray = new RoxByte[contents.length];
+        for (int memoryIndex = 0; memoryIndex < memoryArray.length; memoryIndex++)
+            memoryArray[memoryIndex] = RoxByte.fromLiteral(contents[memoryIndex]);
+        reset();
+    }
+
     @Override
     public void setByteAt(int location, int byteValue) {
         throw new RuntimeException("Cannot write to read only memory");
