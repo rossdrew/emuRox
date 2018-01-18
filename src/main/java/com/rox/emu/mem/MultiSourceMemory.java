@@ -23,10 +23,21 @@ public class MultiSourceMemory implements Memory {
         this.defaultMemory = defaultMemory;
     }
 
+    /**
+     * @param internalMemory {@link Memory} which to link all addresses to
+     * @return a {@link MultiSourceMemory} whose addresses are all mapped to the given {@link Memory}
+     */
     public MultiSourceMemory maintaining(final Memory internalMemory){
         return new MultiSourceMemory(internalMemory, this.memoryMappings);
     }
 
+    /**
+     * Create a copy of this {@link Memory} mapping with the address specified, mapped to the provided {@link Memory}
+     *
+     * @param address to map
+     * @param mappedMemory on which to map the address
+     * @return a new {@link MultiSourceMemory} with the new mapping
+     */
     public MultiSourceMemory withMapping(final Integer address, final Memory mappedMemory){
         final Map<Integer, Memory> newMemoryMappings = new HashMap<>();
         newMemoryMappings.putAll(memoryMappings);
@@ -35,6 +46,12 @@ public class MultiSourceMemory implements Memory {
         return new MultiSourceMemory(defaultMemory, newMemoryMappings);
     }
 
+    /**
+     * Create a copy of this {@link Memory} mapping with the addresses specified, mapped to the provided {@link Memory}
+     * @param addresses to map
+     * @param mappedMemory on which to map the address
+     * @return a new {@link MultiSourceMemory} with the new mapping
+     */
     public MultiSourceMemory withMapping(final int[] addresses, final Memory mappedMemory){
         final Map<Integer, Memory> newMemoryMappings = new HashMap<>();
         newMemoryMappings.putAll(memoryMappings);
