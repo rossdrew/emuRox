@@ -84,4 +84,9 @@ public class SimpleMemory implements Memory {
         for (int i=0; i<memoryArray.length; i++)
             memoryArray[i] = RoxByte.ZERO;
     }
+
+    @Override
+    public int getSize() {
+        return memoryArray.length;
+    }
 }

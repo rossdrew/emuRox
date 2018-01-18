@@ -46,4 +46,9 @@ public interface Memory {
      * Reset all memory to 0
      */
     void reset();
+
+    /**
+     * @return the number of blocks in this memory
+     */
+    int getSize();
 }

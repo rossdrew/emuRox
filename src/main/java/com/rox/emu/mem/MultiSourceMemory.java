@@ -104,4 +104,9 @@ public class MultiSourceMemory implements Memory {
         if (defaultMemory != null)
             defaultMemory.reset();
     }
+
+    @Override
+    public int getSize() {
+        return defaultMemory.getSize(); //XXX
+    }
 }

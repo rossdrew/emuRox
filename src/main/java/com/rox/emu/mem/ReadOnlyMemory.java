@@ -62,4 +62,9 @@ public class ReadOnlyMemory implements Memory {
     public void reset() {
         //Does nothing as this is read only memory
     }
+
+    @Override
+    public int getSize() {
+        return memoryArray.length;
+    }
 }
