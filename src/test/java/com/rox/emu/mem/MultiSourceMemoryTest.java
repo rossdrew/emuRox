@@ -46,8 +46,23 @@ public class MultiSourceMemoryTest {
     }
 
     @Test
-    public void testSize(){
+    public void testMaintainedMemorySize(){
         assertEquals(65536, testMemory.getSize());
+    }
+
+    @Test
+    public void testMemorySize(){
+        MultiSourceMemory testMemory = new MultiSourceMemory().withMapping(50, mock(Memory.class));
+        assertEquals(50, testMemory.getSize());
+    }
+
+    @Test
+    public void testCombinedMemorySize(){
+        MultiSourceMemory largerMaintained = new MultiSourceMemory().maintaining(new SimpleMemory(51)).withMapping(50, mock(Memory.class));
+        MultiSourceMemory largerMapped = new MultiSourceMemory().maintaining(new SimpleMemory(49)).withMapping(50, mock(Memory.class));
+
+        assertEquals(51, largerMaintained.getSize());
+        assertEquals(50, largerMapped.getSize());
     }
 
     @Test

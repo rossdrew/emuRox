@@ -1,9 +1,6 @@
 package com.rox.emu.mem;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * A partially logical block of memory in which certain blocks can be assigned (memory mapped) to other memory objects
@@ -124,6 +121,10 @@ public class MultiSourceMemory implements Memory {
 
     @Override
     public int getSize() {
-        return defaultMemory.getSize(); //XXX
+        //XXX Should the size be the largest addressable byte or should it be the addressable byte count?!
+        int maintainedMemorySize = (defaultMemory != null) ? defaultMemory.getSize() : 0;
+        int maxMappedAddress = memoryMappings.keySet().stream().max(Comparator.comparing(i -> i)).get();
+        maintainedMemorySize = Math.max(maintainedMemorySize, maxMappedAddress);
+        return maintainedMemorySize;
     }
 }
