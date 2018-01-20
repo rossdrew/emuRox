@@ -104,6 +104,9 @@ public class MultiSourceMemoryTest {
 
     @Test
     public void testMultipleDestinationReset(){
+        final Memory internalMemory = mock(Memory.class);
+        MultiSourceMemory testMemory = new MultiSourceMemory().maintaining(internalMemory);
+
         final Memory memory1 = mock(Memory.class);
         testMemory = testMemory.withMapping(20, memory1);
 
@@ -121,5 +124,6 @@ public class MultiSourceMemoryTest {
         verify(memory1, times(1)).reset();
         verify(memory2, times(1)).reset();
         verify(memory3, times(1)).reset();
+        verify(internalMemory, times(1)).reset();
     }
 }
