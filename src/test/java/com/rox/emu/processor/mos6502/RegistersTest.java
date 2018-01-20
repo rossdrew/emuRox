@@ -26,6 +26,18 @@ public class RegistersTest {
     }
 
     @Test
+    public void testInitialState(){
+        assertEquals(0, registers.getRegister(Registers.REG_ACCUMULATOR));
+        assertEquals(0, registers.getRegister(Registers.REG_X_INDEX));
+        assertEquals(0, registers.getRegister(Registers.REG_Y_INDEX));
+        assertEquals(0, registers.getRegister(Registers.REG_PC_HIGH));
+        assertEquals(0, registers.getRegister(Registers.REG_PC_LOW));
+        assertEquals(0b11111111, registers.getRegister(5));
+        assertEquals(0, registers.getRegister(Registers.REG_SP));
+        assertEquals(0, registers.getRegister(Registers.REG_STATUS));
+    }
+
+    @Test
     public void testSetAndGetRegister(){
         registers.setRegister(Registers.REG_ACCUMULATOR, 10);
         registers.setRegister(Registers.REG_PC_HIGH, 1);
