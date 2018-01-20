@@ -9,14 +9,12 @@ public class ReadOnlyMemory implements Memory {
         memoryArray = new RoxByte[contents.length];
         for (int memoryIndex = 0; memoryIndex < memoryArray.length; memoryIndex++)
             memoryArray[memoryIndex] = RoxByte.fromLiteral(contents[memoryIndex]);
-        reset();
     }
 
     public ReadOnlyMemory(final byte[] contents){
         memoryArray = new RoxByte[contents.length];
         for (int memoryIndex = 0; memoryIndex < memoryArray.length; memoryIndex++)
             memoryArray[memoryIndex] = RoxByte.fromLiteral(contents[memoryIndex]);
-        reset();
     }
 
     @Override
@@ -51,7 +49,11 @@ public class ReadOnlyMemory implements Memory {
      */
     @Override
     public int[] getBlock(int from, int to) {
-        int[] extractedData = new int[to-from];
+        if (from >= to)
+            return new int[]{};
+
+        int size = (to - from);
+        int[] extractedData = new int[size];
         for (int i=0; i<extractedData.length; i++){
             extractedData[i] = memoryArray[from + i].getRawValue();
         }

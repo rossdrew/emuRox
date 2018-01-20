@@ -51,6 +51,20 @@ public class ReadOnlyMemoryTest {
     }
 
     @Test
+    public void testReadBlockWithZeroSize(){
+        int[] expected = new int[] {};
+        int[] actual = memory.getBlock(0, 0);
+        assertTrue("Expected " + Arrays.toString(expected) + ", got " +  Arrays.toString(actual), Arrays.equals(expected, actual));
+    }
+
+    @Test
+    public void testReadBlockWithNegativeSize(){
+        int[] expected = new int[] {};
+        int[] actual = memory.getBlock(4, 0);
+        assertTrue("Expected " + Arrays.toString(expected) + ", got " +  Arrays.toString(actual), Arrays.equals(expected, actual));
+    }
+
+    @Test
     public void testReset(){
         int[] actual = memory.getBlock(0, 20);
         assertTrue("Expected " + Arrays.toString(memoryValues) + ", got " + Arrays.toString(actual),Arrays.equals(memoryValues, actual));
