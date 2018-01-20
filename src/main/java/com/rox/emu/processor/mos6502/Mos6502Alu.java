@@ -81,7 +81,7 @@ public class Mos6502Alu {
      * @return the result of the SBC operation
      */
     public RoxByte sbc(RoxByte byteA, RoxByte byteB) {
-        registers.setFlag(Registers.N);
+        registers.setFlag(Registers.N);                 //Pitest: This does nothing to tests?!
         return adc(byteA, byteB.asOnesCompliment());
     }
 
