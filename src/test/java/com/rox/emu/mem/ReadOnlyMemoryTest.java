@@ -68,6 +68,7 @@ public class ReadOnlyMemoryTest {
     @Test
     public void testReset(){
         int[] actual = memory.getBlock(0, 20);
+        memory.reset();
         assertTrue("Expected " + Arrays.toString(memoryValues) + ", got " + Arrays.toString(actual),Arrays.equals(memoryValues, actual));
     }
 
