@@ -59,9 +59,10 @@ public class ReadOnlyMemoryTest {
 
     @Test
     public void testReadBlockWithNegativeSize(){
-        int[] expected = new int[] {};
-        int[] actual = memory.getBlock(4, 0);
-        assertTrue("Expected " + Arrays.toString(expected) + ", got " +  Arrays.toString(actual), Arrays.equals(expected, actual));
+        try {
+            memory.getBlock(4, 0);
+            fail("Requesting a negatively sized memory block should throw an IllegalArgumentException");
+        }catch(IllegalArgumentException e){}
     }
 
     @Test

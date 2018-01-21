@@ -2,6 +2,8 @@ package com.rox.emu.mem;
 
 import com.rox.emu.env.RoxByte;
 
+import java.util.Arrays;
+
 public class ReadOnlyMemory implements Memory {
     private final RoxByte[] memoryArray;
 
@@ -49,13 +51,10 @@ public class ReadOnlyMemory implements Memory {
      */
     @Override
     public int[] getBlock(int from, int to) {
-        if (from >= to)
-            return new int[]{};
-
-        int size = (to - from);
-        int[] extractedData = new int[size];
+        final RoxByte[] roxBytes = Arrays.copyOfRange(memoryArray, from, to);
+        int[] extractedData = new int[roxBytes.length];
         for (int i=0; i<extractedData.length; i++){
-            extractedData[i] = memoryArray[from + i].getRawValue();
+            extractedData[i] = roxBytes[i].getRawValue();
         }
         return extractedData;
     }
