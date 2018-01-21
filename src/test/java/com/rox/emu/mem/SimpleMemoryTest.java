@@ -20,7 +20,7 @@ public class SimpleMemoryTest {
     public void testExplicitlySizedMemory(){
         final Memory sizedMemory = new SimpleMemory(10);
 
-        assert Arrays.equals(sizedMemory.getBlock(0, 10), new int[] {0,0,0,0,0,0,0,0,0,0});
+        assertEquals(sizedMemory.getBlock(0, 10 ), new int[] {0,0,0,0,0,0,0,0,0,0});
 
         sizedMemory.setByteAt(0, 1);
         sizedMemory.setByteAt(9, 10);
