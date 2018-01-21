@@ -61,6 +61,7 @@ pitest {
     excludedClasses = ['com.rox.emu.processor.mos6502.dbg.ui.*']
     outputFormats = ['XML']
     timestampedReports = false
+    //mutators = ['ALL']
 }
 
 task runDebugUI(type: JavaExec, group: 'application') {
