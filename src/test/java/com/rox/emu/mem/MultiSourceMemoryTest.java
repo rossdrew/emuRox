@@ -130,6 +130,17 @@ public class MultiSourceMemoryTest {
     }
 
     @Test
+    public void testControlledLogicalMapping(){
+        final Memory physicalMemory = mock(Memory.class);
+
+        MultiSourceMemory logicalMemory = new MultiSourceMemory().withMappingTo(1000, 1, physicalMemory);
+
+        logicalMemory.getByte(1000);
+
+        verify(physicalMemory, times(1)).getByte(1);
+    }
+
+    @Test
     public void testMirroredMemory(){
         final Memory memory = mock(Memory.class);
 

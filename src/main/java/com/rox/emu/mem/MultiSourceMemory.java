@@ -78,6 +78,21 @@ public class MultiSourceMemory implements Memory {
     }
 
     /**
+     *
+     * @param logicalAddress a logical address to map
+     * @param physicalAddress a physical address to map the logical address to
+     * @param mappedMemory the "physical" memory to map to
+     * @return A new {@link MultiSourceMemory} with the specified mapping
+     */
+    public MultiSourceMemory withMappingTo(final Integer logicalAddress, final Integer physicalAddress, final Memory mappedMemory){
+        final Map<Integer, MemoryMapping> newMemoryMappings = new HashMap<>();
+        newMemoryMappings.putAll(memoryMappings);
+        newMemoryMappings.put(logicalAddress, new MemoryMapping(logicalAddress, physicalAddress, mappedMemory));
+
+        return new MultiSourceMemory(defaultMemory, newMemoryMappings);
+    }
+
+    /**
      * Create a copy of this {@link Memory} mapping with the addresses specified, with the logical addresses mapped
      * to the corresponding physical addresses of the provided {@link Memory}
      * @param logicalAddresses array of logical addresses
