@@ -58,8 +58,10 @@ public class MultiSourceMemoryTest {
 
     @Test
     public void testCombinedMemorySize(){
-        MultiSourceMemory largerMaintained = new MultiSourceMemory().maintaining(new SimpleMemory(51)).withMapping(50, mock(Memory.class));
-        MultiSourceMemory largerMapped = new MultiSourceMemory().maintaining(new SimpleMemory(49)).withMapping(50, mock(Memory.class));
+        MultiSourceMemory largerMaintained = new MultiSourceMemory().maintaining(new SimpleMemory(51))
+                                                                    .withMapping(50, mock(Memory.class));
+        MultiSourceMemory largerMapped = new MultiSourceMemory().maintaining(new SimpleMemory(49))
+                                                                .withMapping(50, mock(Memory.class));
 
         assertEquals(51, largerMaintained.getSize());
         assertEquals(50, largerMapped.getSize());
@@ -126,4 +128,14 @@ public class MultiSourceMemoryTest {
         verify(memory3, times(1)).reset();
         verify(internalMemory, times(1)).reset();
     }
+
+//    @Test
+//    public void testMirroredMemory(){
+//        MultiSourceMemory testMemory = new MultiSourceMemory();
+//
+//        final Memory memory1 = mock(Memory.class);
+//        testMemory = testMemory.withMapping(new int[] {1,2,3,4}, memory1);
+//        testMemory = testMemory.withMappingTo(new int[] {5,6,7,8}, new int[] {1,2,3,4}, memory1);
+//
+//    }
 }

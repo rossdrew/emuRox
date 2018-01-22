@@ -7,7 +7,25 @@ import java.util.*;
  */
 public class MultiSourceMemory implements Memory {
 
-    private final Map<Integer, Memory> memoryMappings;
+    /**
+     * Representation of a memory mapping, consisting of a destination memory, a logical memory location that can be
+     * logically accessed and a physical memory location that will eventually by "physically" accessed.
+     */
+    private class MemoryMapping {
+        public final int logicalAddress;
+        public final int physicalAddress;
+        public final Memory physicalMemory;
+
+        private MemoryMapping(final int logicalAddress,
+                              final int physicalAddress,
+                              final Memory physicalMemory){
+            this.logicalAddress=logicalAddress;
+            this.physicalAddress=physicalAddress;
+            this.physicalMemory=physicalMemory;
+        }
+    }
+
+    private final Map<Integer, MemoryMapping> memoryMappings;
     private final Memory defaultMemory;
 
     public MultiSourceMemory(){
@@ -15,7 +33,7 @@ public class MultiSourceMemory implements Memory {
         defaultMemory = null;
     }
 
-    private MultiSourceMemory(final Memory defaultMemory, final Map<Integer, Memory> memoryMappings){
+    private MultiSourceMemory(final Memory defaultMemory, final Map<Integer, MemoryMapping> memoryMappings){
         this.memoryMappings = memoryMappings;
         this.defaultMemory = defaultMemory;
     }
@@ -36,9 +54,9 @@ public class MultiSourceMemory implements Memory {
      * @return a new {@link MultiSourceMemory} with the new mapping
      */
     public MultiSourceMemory withMapping(final Integer address, final Memory mappedMemory){
-        final Map<Integer, Memory> newMemoryMappings = new HashMap<>();
+        final Map<Integer, MemoryMapping> newMemoryMappings = new HashMap<>();
         newMemoryMappings.putAll(memoryMappings);
-        newMemoryMappings.put(address, mappedMemory);
+        newMemoryMappings.put(address, new MemoryMapping(address,address,mappedMemory));
 
         return new MultiSourceMemory(defaultMemory, newMemoryMappings);
     }
@@ -50,22 +68,31 @@ public class MultiSourceMemory implements Memory {
      * @return a new {@link MultiSourceMemory} with the new mapping
      */
     public MultiSourceMemory withMapping(final int[] addresses, final Memory mappedMemory){
-        final Map<Integer, Memory> newMemoryMappings = new HashMap<>();
+        final Map<Integer, MemoryMapping> newMemoryMappings = new HashMap<>();
         newMemoryMappings.putAll(memoryMappings);
         for (Integer address : addresses) {
-            newMemoryMappings.put(address, mappedMemory);
+            newMemoryMappings.put(address, new MemoryMapping(address, address, mappedMemory));
         }
 
         return new MultiSourceMemory(defaultMemory, newMemoryMappings);
     }
 
-    private Memory getMemoryMappedTo(final Integer address){
-        return memoryMappings.getOrDefault(address, defaultMemory);
+//    public MultiSourceMemory withMappingTo(final int[] logicalAddress,
+//                                           final int[] physicalAddress,
+//                                           final Memory memory) {
+//        assert logicalAddress.length == physicalAddress.length : "Logical and physical address count must match";
+//        //TODO
+//        return null;
+//    }
+
+    private MemoryMapping getMemoryMappedTo(final Integer address){
+        return memoryMappings.getOrDefault(address, new MemoryMapping(address,address, defaultMemory));
     }
 
     @Override
     public void setByteAt(int location, int byteValue) {
-        getMemoryMappedTo(location).setByteAt(location, byteValue);
+        final MemoryMapping mappedMemory = getMemoryMappedTo(location);
+        mappedMemory.physicalMemory.setByteAt(mappedMemory.physicalAddress, byteValue);
     }
 
     @Override
@@ -73,19 +100,21 @@ public class MultiSourceMemory implements Memory {
         //In case a block crosses multiple unique memory mapped blocks
         for (int i=0; i < byteValues.length; i++){
             int address = startLocation + i;
-            getMemoryMappedTo(address).setByteAt(address, byteValues[i]);
+            final MemoryMapping mappedMemory = getMemoryMappedTo(address);
+            mappedMemory.physicalMemory.setByteAt(mappedMemory.physicalAddress, byteValues[i]);
         }
     }
 
     @Override
     public int getByte(int location) {
-        return getMemoryMappedTo(location).getByte(location);
+        final MemoryMapping mappedMemory = getMemoryMappedTo(location);
+        return mappedMemory.physicalMemory.getByte(mappedMemory.physicalAddress);
     }
 
     @Override
     public int getWord(int location) {
-        int byteA = getMemoryMappedTo(location).getByte(location);
-        int byteB = getMemoryMappedTo(location + 1).getByte(location + 1);
+        int byteA = getByte(location);
+        int byteB = getByte(location + 1);
 
         return byteA << 8 | byteB;
     }
@@ -98,7 +127,7 @@ public class MultiSourceMemory implements Memory {
         //In case a block crosses multiple unique memory mapped blocks
         for (int i=0; i<blockSize; i++){
             int address = from + i;
-            block[i] = getMemoryMappedTo(address).getByte(address);
+            block[i] = getByte(address);
         }
         return block;
     }
@@ -108,7 +137,7 @@ public class MultiSourceMemory implements Memory {
         //For each unique memory object, reset it
         List<Memory> reset = new ArrayList<>();
         for (Integer mappedAddress : memoryMappings.keySet()) {
-            final Memory memory = memoryMappings.get(mappedAddress);
+            final Memory memory = memoryMappings.get(mappedAddress).physicalMemory;
             if (!reset.contains(memory)){
                 memory.reset();
                 reset.add(memory);
