@@ -129,13 +129,24 @@ public class MultiSourceMemoryTest {
         verify(internalMemory, times(1)).reset();
     }
 
-//    @Test
-//    public void testMirroredMemory(){
-//        MultiSourceMemory testMemory = new MultiSourceMemory();
-//
-//        final Memory memory1 = mock(Memory.class);
-//        testMemory = testMemory.withMapping(new int[] {1,2,3,4}, memory1);
-//        testMemory = testMemory.withMappingTo(new int[] {5,6,7,8}, new int[] {1,2,3,4}, memory1);
-//
-//    }
+    @Test
+    public void testMirroredMemory(){
+        final Memory memory = mock(Memory.class);
+
+        MultiSourceMemory testMemory = new MultiSourceMemory().withMapping(new int[] {1,2,3,4}, memory)
+                                                              .withMappingTo(new int[] {5,6,7,8}, new int[] {1,2,3,4}, memory);
+
+        testMemory.getByte(5);
+
+        testMemory.getByte(2);
+        testMemory.getByte(6);
+
+        testMemory.getByte(3);
+        testMemory.getByte(7);
+        testMemory.getByte(7);
+
+        verify(memory, times(1)).getByte(1);
+        verify(memory, times(2)).getByte(2);
+        verify(memory, times(3)).getByte(3);
+    }
 }

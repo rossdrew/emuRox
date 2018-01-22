@@ -77,13 +77,29 @@ public class MultiSourceMemory implements Memory {
         return new MultiSourceMemory(defaultMemory, newMemoryMappings);
     }
 
-//    public MultiSourceMemory withMappingTo(final int[] logicalAddress,
-//                                           final int[] physicalAddress,
-//                                           final Memory memory) {
-//        assert logicalAddress.length == physicalAddress.length : "Logical and physical address count must match";
-//        //TODO
-//        return null;
-//    }
+    /**
+     * Create a copy of this {@link Memory} mapping with the addresses specified, with the logical addresses mapped
+     * to the corresponding physical addresses of the provided {@link Memory}
+     * @param logicalAddresses array of logical addresses
+     * @param physicalAddresses array of physical addresses to map <code>logicalAddresses</code> to, in the same order
+     * @param memory the "physical" memory to map to
+     * @return A new {@link MultiSourceMemory} with the specified mappings
+     */
+    public MultiSourceMemory withMappingTo(final int[] logicalAddresses,
+                                           final int[] physicalAddresses,
+                                           final Memory memory) {
+        assert logicalAddresses.length == physicalAddresses.length : "Logical and physical address count must match";
+
+        final Map<Integer, MemoryMapping> newMemoryMappings = new HashMap<>();
+        newMemoryMappings.putAll(memoryMappings);
+
+        for (int a=0; a<logicalAddresses.length; a++){
+            MemoryMapping newMapping = new MemoryMapping(logicalAddresses[a], physicalAddresses[a], memory);
+            newMemoryMappings.put(logicalAddresses[a], newMapping);
+        }
+
+        return new MultiSourceMemory(defaultMemory, newMemoryMappings);
+    }
 
     private MemoryMapping getMemoryMappedTo(final Integer address){
         return memoryMappings.getOrDefault(address, new MemoryMapping(address,address, defaultMemory));
