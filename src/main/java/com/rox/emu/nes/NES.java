@@ -21,20 +21,8 @@ public class NES {
         this.mainMemory = mainMemory;
     }
 
-    /**
-     $0000-$07FF	$0800	2KB internal RAM
-     $0800-$0FFF	$0800	Mirrors of $0000-$07FF
-     $1000-$17FF	$0800
-     $1800-$1FFF	$0800
-     $2000-$2007	$0008	NES PPU registers
-     $2008-$3FFF	$1FF8	Mirrors of $2000-2007 (repeats every 8 bytes)
-     $4000-$4017	$0018	NES APU and I/O registers
-     $4018-$401F	$0008	APU and I/O functionality that is normally disabled. See CPU Test Mode.
-     $4020-$FFFF	$BFE0	Cartridge space: PRG ROM, PRG RAM, and mapper registers (See Note)
-
-     * @return
-     */
 //    private Memory setupCpuMemoryMappings(){
+//        //$0800-$0FFF	$0800	Mirrors of $0000-$07FF
 //        final int RAM_TOP = 0x07FF;
 //        final int MIRRORED_RAM_TOP = 0x0800;
 //
@@ -45,20 +33,29 @@ public class NES {
 //            physicalRam[ramIndex] = ramIndex;
 //        }
 //
+//        //$2008-$3FFF	$1FF8	Mirrors of $2000-2007 (repeats every 8 bytes)
 //        final int PPU_REG_BOT = 0x2000;
 //        final int PPU_REG_TOP = 0x2007;
 //        final int PPU_MIRROR_TOP = 0x3FFF;
 //
+//        int ppuRegisterCount = (PPU_REG_TOP - PPU_REG_BOT);
+//        int mirrors = (PPU_MIRROR_TOP - PPU_REG_TOP) / ppuRegisterCount;
+//
 //        int[] logicalPpuRegistersMirror = new int[PPU_MIRROR_TOP - PPU_REG_TOP];
 //        int[] physicalPpuRegisters = new int[PPU_REG_TOP - PPU_REG_BOT];
-//        for (int registerIndex = 0; registerIndex < (PPU_REG_TOP - PPU_REG_BOT); registerIndex++){
-//            logicalPpuRegistersMirror[registerIndex] = PPU_REG_TOP + registerIndex;
-//            physicalPpuRegisters[registerIndex] = PPU_REG_BOT + registerIndex;
+//
+//        for (int mirrorIndex = 1; mirrorIndex <= mirrors; mirrorIndex++) {
+//            for (int registerIndex = 0; registerIndex < ppuRegisterCount; registerIndex++) {
+//                logicalPpuRegistersMirror[registerIndex] = PPU_REG_TOP + registerIndex;
+//                physicalPpuRegisters[registerIndex * mirrorIndex] = PPU_REG_BOT + registerIndex;
+//            }
 //        }
 //
 //        MultiSourceMemory cpuMemory = new MultiSourceMemory().maintaining(mainMemory)
 //                                                             .withMappingTo(logicalRamMirror, physicalRam, mainMemory)
 //                                                             .withMappingTo(logicalPpuRegistersMirror, physicalPpuRegisters, mainMemory);
+//
+//        return cpuMemory;
 //    }
 
     public void reset(){
