@@ -11,8 +11,12 @@
 </a>
 
 # EmuRox
-An emulator for the [6502 processor](https://en.wikipedia.org/wiki/MOS_Technology_6502).  The plan is to evolve this into a working [NES](https://en.wikipedia.org/wiki/Nintendo_Entertainment_System) emulator so I'm developing the 6502 without BCD mode for now.  If/When I get that working, I'll expand the 6502 and move onto another 6502 system (Atari 2600, Commodore 64...) then perhaps add processors and more emulated hardware, in theory, creating a pluggable multi-emulator.
+The plan is to evolve this into a working [NES](https://en.wikipedia.org/wiki/Nintendo_Entertainment_System) emulator so I'm developing the emulation of the [6502 processor](https://en.wikipedia.org/wiki/MOS_Technology_6502) without BCD mode for now.  If/When I get that working, I'll expand the 6502 and move onto another 6502 system (Atari 2600, Commodore 64...) then perhaps add processors and more emulated hardware, in theory, creating a pluggable multi-emulator. So far we have:-
 
+ - An almost complete Ricoh 2A03 (NES second source version of the 6502)
+ - iNES 1.0 ROM reading
+ - The beginnings of a Ricoh 2C02 processor
+ - An in production NES to hold it all 
 
 
 ## Origins
