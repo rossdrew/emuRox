@@ -11,6 +11,7 @@ import com.rox.emu.processor.ricoh2c02.Ricoh2C02;
  * Perhaps to be later broken down into the Famicom, NES-EU and NES-US if there are signification functional differences.
  *
  * XXX How do I write this in a unit testable way
+ *     - Inject a mock memory, cpu and ppu and make sure their startup and, reset states do as they should and that any memory modifications map onto memory/cpu/ppu as they should
  */
 public class NES {
     private final Mos6502 cpu;
