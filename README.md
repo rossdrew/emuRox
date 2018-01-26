@@ -62,7 +62,7 @@ BCD and proper timing is a thing for another day as my first objective for now, 
  - [JaCoCo](http://www.eclemma.org/jacoco/) reports. To allow us to strive for high [code coverage](https://en.wikipedia.org/wiki/Code_coverage).  Mainly for the GitHub shield using [CodeCov](https://codecov.io). 
  - Static analysis done in my development environment on [IntelliJ IDEA](https://www.jetbrains.com/idea/) and online (including GitHub shield) by [Codeacy](https://www.codacy.com/). 
 
-### Investigated technologies 
+#### Investigated technologies 
 
  Technologies I've experimented with
 
