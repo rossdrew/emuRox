@@ -13,7 +13,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.*;
 
 @RunWith(JUnitQuickcheck.class)
-public class Ricoh2C02Test {
+public class Ricoh2C02Properties {
     @Test
     public void testCreation(){
         final Ricoh2C02 ppu = new Ricoh2C02(new SimpleMemory(), new SimpleMemory(), new SimpleMemory());
