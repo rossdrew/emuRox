@@ -16,7 +16,7 @@ import static org.junit.Assert.assertNotEquals;
 import static com.rox.emu.processor.mos6502.op.OpCode.*;
 
 @RunWith(JUnitQuickcheck.class)
-public class CPUProperty {
+public class Mos6502Properties {
     private Memory memory;
     private Mos6502 processor;
 
