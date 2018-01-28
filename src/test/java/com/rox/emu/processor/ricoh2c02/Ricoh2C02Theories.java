@@ -7,9 +7,7 @@ import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.greaterThanOrEqualTo;
-import static org.hamcrest.Matchers.lessThanOrEqualTo;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assume.assumeThat;
 import static org.mockito.Mockito.mock;
@@ -19,11 +17,12 @@ import static org.mockito.Mockito.when;
 public class Ricoh2C02Theories {
     @DataPoint
     public static int LOWEST_VALID_REGISTER_VALUE = 0;
+    @DataPoint
+    public static int HIGHEST_VALID_REGISTER_VALUE = 255;
 
     @Theory
     public void testGetControlRegister(int byteValue){
-        assumeThat(byteValue, greaterThanOrEqualTo(0));
-        assumeThat(byteValue, lessThanOrEqualTo(255));
+        assumeThat(byteValue, is(both(greaterThanOrEqualTo(0)).and(lessThanOrEqualTo(255))));
 
         final Memory vRam = new SimpleMemory();
         final Memory sprRam = mock(Memory.class);
