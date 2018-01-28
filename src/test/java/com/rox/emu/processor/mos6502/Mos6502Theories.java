@@ -1,18 +1,17 @@
 package com.rox.emu.processor.mos6502;
 
+import com.github.radm.theories.TheorySuite;
 import com.rox.emu.mem.Memory;
 import com.rox.emu.mem.SimpleMemory;
 import org.junit.Before;
-import org.junit.experimental.theories.DataPoint;
-import org.junit.experimental.theories.Theories;
-import org.junit.experimental.theories.Theory;
+import org.junit.contrib.theories.DataPoint;
+import org.junit.contrib.theories.Theory;
 import org.junit.runner.RunWith;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-//@RunWith(TheorySuite.class)  //doesn't work here: "java.lang.Exception: No runnable methods"
-@RunWith(Theories.class)
+@RunWith(TheorySuite.class)
 public class Mos6502Theories {
     private Memory memory;
     private Mos6502 processor;
