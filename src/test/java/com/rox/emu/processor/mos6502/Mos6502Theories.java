@@ -11,6 +11,7 @@ import org.junit.runner.RunWith;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+//@RunWith(TheorySuite.class)  //doesn't work here: "java.lang.Exception: No runnable methods"
 @RunWith(Theories.class)
 public class Mos6502Theories {
     private Memory memory;

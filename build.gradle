@@ -13,6 +13,7 @@ apply plugin: 'application'
 repositories {
     mavenCentral()
     jcenter()
+    maven { url "https://jitpack.io" }
 }
 
 dependencies {
@@ -26,6 +27,7 @@ dependencies {
     testCompile group: 'com.nagternal', name : 'spock-genesis', version: '0.6.0'
     testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
 
+    testCompile group: 'com.github.richard-melvin', name: 'junit-theory-suite', version: '0.7.2'
 
     compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.6.1'
 }
