@@ -10,6 +10,8 @@ import org.junit.runner.RunWith;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assume.assumeThat;
 
 @RunWith(TheorySuite.class)
 public class Mos6502Theories {
@@ -35,6 +37,8 @@ public class Mos6502Theories {
 
     @Theory
     public void testValidStartup(int memHi, int memLo) {
+        assumeThat(memHi, is(both(greaterThanOrEqualTo(0)).and(lessThanOrEqualTo(255))));
+
         memory = new SimpleMemory();
         memory.setByteAt(0xFFFC, memHi);
         memory.setByteAt(0xFFFD, memLo);
