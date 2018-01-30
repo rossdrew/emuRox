@@ -4,8 +4,7 @@ import com.github.radm.theories.TheorySuite;
 import com.rox.emu.mem.Memory;
 import com.rox.emu.mem.SimpleMemory;
 import org.junit.Before;
-import org.junit.contrib.theories.DataPoints;
-import org.junit.contrib.theories.Theory;
+import org.junit.contrib.theories.*;
 import org.junit.runner.RunWith;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -18,8 +17,8 @@ public class Mos6502Theories {
     private Memory memory;
     private Mos6502 processor;
 
-    @DataPoints
-    public static final int[] DATA = new int[] {0, 127, 255};
+    @DataPoints("bytes")
+    public static final int[] BYTE_DATA = new int[] {0, 127, 255};
 
     @Before
     public void setUp() {
@@ -32,7 +31,8 @@ public class Mos6502Theories {
     }
 
     @Theory
-    public void testValidStartup(int memHi, int memLo) {
+    public void testValidStartup(@FromDataPoints("bytes") int memHi,
+                                 @FromDataPoints("bytes") int memLo) {
         assumeThat(memHi, is(both(greaterThanOrEqualTo(0)).and(lessThanOrEqualTo(255))));
 
         memory = new SimpleMemory();
