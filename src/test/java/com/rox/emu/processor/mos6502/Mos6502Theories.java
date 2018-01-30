@@ -4,7 +4,7 @@ import com.github.radm.theories.TheorySuite;
 import com.rox.emu.mem.Memory;
 import com.rox.emu.mem.SimpleMemory;
 import org.junit.Before;
-import org.junit.contrib.theories.DataPoint;
+import org.junit.contrib.theories.DataPoints;
 import org.junit.contrib.theories.Theory;
 import org.junit.runner.RunWith;
 
@@ -18,12 +18,8 @@ public class Mos6502Theories {
     private Memory memory;
     private Mos6502 processor;
 
-    @DataPoint
-    public static final int LOWEST_VALID_BYTE = 0;
-    @DataPoint
-    public static final int HIGHEST_VALID_BYTE = 255;
-    @DataPoint
-    public static final int MIDRANGE_VALID_BYTE = 127;
+    @DataPoints
+    public static final int[] DATA = new int[] {0, 127, 255};
 
     @Before
     public void setUp() {
