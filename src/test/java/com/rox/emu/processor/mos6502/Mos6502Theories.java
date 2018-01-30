@@ -17,8 +17,8 @@ public class Mos6502Theories {
     private Memory memory;
     private Mos6502 processor;
 
-    @DataPoints("bytes")
-    public static final int[] BYTE_DATA = new int[] {0, 127, 255};
+    @DataPoints("validBytes")
+    public static final int[] VALID_BYTE_DATA = new int[] {0, 127, 255};
 
     @Before
     public void setUp() {
@@ -31,8 +31,8 @@ public class Mos6502Theories {
     }
 
     @Theory
-    public void testValidStartup(@FromDataPoints("bytes") int memHi,
-                                 @FromDataPoints("bytes") int memLo) {
+    public void testValidStartup(@FromDataPoints("validBytes") int memHi,
+                                 @FromDataPoints("validBytes") int memLo) {
         assumeThat(memHi, is(both(greaterThanOrEqualTo(0)).and(lessThanOrEqualTo(255))));
 
         memory = new SimpleMemory();
