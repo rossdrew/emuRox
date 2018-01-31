@@ -136,6 +136,11 @@ public class Mos6502Compiler {
         while (tokenizer.hasMoreTokens()){
             final String opCodeToken = tokenizer.nextToken();
 
+            if (LABEL_REGEX.matcher(opCodeToken).matches()){
+                workingProgram = workingProgram.with(opCodeToken.substring(0, opCodeToken.length()-1));
+                continue;
+            }
+
             switch(opCodeToken){
                 //These need to work with hard coded values as well
                 case "BPL": case "BMI": case "BVC": case "BVS": case "BCC": case "BCS": case "BNE": case "BEQ":
@@ -185,9 +190,9 @@ public class Mos6502Compiler {
                     workingProgram = extractArgumentValue(workingProgram, value);
 
                     break;
+
                 default:
-                    workingProgram = workingProgram.with(parseLabel(opCodeToken));
-                    break;
+                    throw new UnknownOpCodeException("Unknown op-code (\"" + opCodeToken + "\") while parsing program", opCodeToken);
             }
         }
 
@@ -224,15 +229,6 @@ public class Mos6502Compiler {
             return prefixMatcher.group(0);
         }
         return "";
-    }
-
-    private String parseLabel(final String opCodeToken) throws UnknownOpCodeException{
-        final String label = extractFirstOccurrence(LABEL_REGEX, opCodeToken);
-
-        if (label.isEmpty())
-            throw new UnknownOpCodeException("Unknown op-code (\"" + opCodeToken + "\") while parsing program", opCodeToken);
-
-        return label;
     }
 
     private AddressingMode getAddressingModeFrom(String prefix, String value, String postfix){

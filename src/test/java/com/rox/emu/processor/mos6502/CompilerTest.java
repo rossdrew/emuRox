@@ -72,12 +72,21 @@ public class CompilerTest {
     }
 
     @Test
-    public void testLabelExtraction(){
+    public void testLabelExtractionMethod(){
         try {
             assertEquals("TEST:", extractFirstOccurrence(LABEL_REGEX, "TEST:"));
         }catch (UnknownOpCodeException e){
             fail(e.getMessage());
         }
+    }
+
+    @Test
+    public void testLabelExtractionInCompilation(){
+        final Mos6502Compiler compiler = new Mos6502Compiler("MyLabel: SEC");
+
+        final Program program = compiler.compileProgram();
+        assertEquals(1, program.getLabels().size());
+        assertEquals(0, program.getLocationOf("MyLabel"));
     }
 
     @Test
@@ -328,7 +337,7 @@ public class CompilerTest {
         int[] expected = new int[] {OpCode.LDA_I.getByteValue(), 0x47, OpCode.CLC.getByteValue(), OpCode.LDA_I.getByteValue(), 0x10, OpCode.SEC.getByteValue()};
         assertArrayEquals("Expected: " + Arrays.toString(expected) + ", Got: " + Arrays.toString(bytes), expected, bytes);
         assertEquals(1, program.getLabels().size());
-        assertEquals(2, program.getLocationOf("LABELA:"));
+        assertEquals(2, program.getLocationOf("LABELA"));
     }
 
     @Test
@@ -398,6 +407,7 @@ public class CompilerTest {
             compiler.compileProgram();
             fail("Exception expected, 'ROX' is an invalid OpCode");
         }catch(UnknownOpCodeException e){
+            assertTrue(e.getMessage().contains("ROX"));
             assertNotNull(e);
         }
     }
@@ -410,6 +420,7 @@ public class CompilerTest {
             compiler.compileProgram();
             fail("Exception expected.  This should not pass a String switch statement");
         }catch(UnknownOpCodeException e){
+            assertTrue(e.getMessage().contains("\0ADC"));
             assertNotNull(e);
         }
     }
@@ -422,6 +433,7 @@ public class CompilerTest {
             compiler.compileProgram();
             fail("Exception expected.  This should not pass a String switch statement");
         }catch(UnknownOpCodeException e){
+            assertTrue(e.getMessage().contains("\0BRK"));
             assertNotNull(e);
         }
     }
