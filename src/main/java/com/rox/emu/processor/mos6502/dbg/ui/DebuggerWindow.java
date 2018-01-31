@@ -9,7 +9,7 @@ import com.rox.emu.processor.mos6502.dbg.ui.component.MemoryPanel;
 import com.rox.emu.processor.mos6502.dbg.ui.component.Registers6502;
 import com.rox.emu.processor.mos6502.op.AddressingMode;
 import com.rox.emu.processor.mos6502.op.OpCode;
-import com.rox.emu.processor.mos6502.util.Compiler;
+import com.rox.emu.processor.mos6502.util.Mos6502Compiler;
 import com.rox.emu.processor.mos6502.util.Program;
 import com.rox.emu.rom.InesRom;
 
@@ -265,7 +265,7 @@ final class DebuggerWindow extends JFrame {
     }
 
     public void compile(String programText){
-        final Compiler compiler = new Compiler(programText);
+        final Mos6502Compiler compiler = new Mos6502Compiler(programText);
         try {
             final Program program = compiler.compileProgram();
             final int[] programAsByteArray = program.getProgramAsByteArray();

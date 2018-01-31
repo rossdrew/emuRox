@@ -8,14 +8,14 @@ import com.rox.emu.mem.Memory;
 import com.rox.emu.mem.SimpleMemory;
 import com.rox.emu.processor.mos6502.op.AddressingMode;
 import com.rox.emu.processor.mos6502.op.OpCode;
-import com.rox.emu.processor.mos6502.util.Compiler;
+import com.rox.emu.processor.mos6502.util.Mos6502Compiler;
 import com.rox.emu.processor.mos6502.util.Program;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.Arrays;
 
-import static com.rox.emu.processor.mos6502.util.Compiler.*;
+import static com.rox.emu.processor.mos6502.util.Mos6502Compiler.*;
 import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.*;
 
@@ -83,7 +83,7 @@ public class CompilerTest {
     @Test
     public void testImpliedInstructions(){
         OpCode.streamOf(AddressingMode.IMPLIED).forEach((opcode)->{
-            final Compiler compiler = new Compiler(opcode.getOpCodeName());
+            final Mos6502Compiler compiler = new Mos6502Compiler(opcode.getOpCodeName());
 
             Program program = compiler.compileProgram();
             int[] bytes = program.getProgramAsByteArray();
@@ -95,7 +95,7 @@ public class CompilerTest {
     @Test
     public void testSingleDigitArgument(){
         OpCode.streamOf(AddressingMode.ZERO_PAGE).forEach((opcode)->{
-            final Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + VALUE_PREFIX + "A");
+            final Mos6502Compiler compiler = new Mos6502Compiler(opcode.getOpCodeName() + " " + VALUE_PREFIX + "A");
 
             final Program program = compiler.compileProgram();
             int[] bytes = program.getProgramAsByteArray();
@@ -107,7 +107,7 @@ public class CompilerTest {
     @Test
     public void testDoubleDigitArgument(){
         OpCode.streamOf(AddressingMode.ZERO_PAGE).forEach((opcode)->{
-            final Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + VALUE_PREFIX + "AB");
+            final Mos6502Compiler compiler = new Mos6502Compiler(opcode.getOpCodeName() + " " + VALUE_PREFIX + "AB");
 
             Program program = compiler.compileProgram();
             int[] bytes = program.getProgramAsByteArray();
@@ -119,7 +119,7 @@ public class CompilerTest {
     @Test
     public void testTripleDigitArgument(){
         OpCode.streamOf(AddressingMode.ABSOLUTE).forEach((opcode)->{
-            final Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + VALUE_PREFIX + "ABC");
+            final Mos6502Compiler compiler = new Mos6502Compiler(opcode.getOpCodeName() + " " + VALUE_PREFIX + "ABC");
 
             Program program = compiler.compileProgram();
             int[] bytes = program.getProgramAsByteArray();
@@ -131,7 +131,7 @@ public class CompilerTest {
     @Test
     public void testQuadrupleDigitArgument(){
         OpCode.streamOf(AddressingMode.ABSOLUTE).forEach((opcode)->{
-            final Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + VALUE_PREFIX + "ABCD");
+            final Mos6502Compiler compiler = new Mos6502Compiler(opcode.getOpCodeName() + " " + VALUE_PREFIX + "ABCD");
 
             Program program = compiler.compileProgram();
             int[] bytes = program.getProgramAsByteArray();
@@ -145,7 +145,7 @@ public class CompilerTest {
         final String hexByte = Integer.toHexString(byteValue);
 
         OpCode.streamOf(AddressingMode.IMMEDIATE).forEach((opcode)->{
-            final Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + IMMEDIATE_VALUE_PREFIX + hexByte);
+            final Mos6502Compiler compiler = new Mos6502Compiler(opcode.getOpCodeName() + " " + IMMEDIATE_VALUE_PREFIX + hexByte);
 
             Program program = compiler.compileProgram(); 
             int[] bytes = program.getProgramAsByteArray();
@@ -159,7 +159,7 @@ public class CompilerTest {
         final String hexByte = Integer.toHexString(byteValue);
 
         OpCode.streamOf(AddressingMode.ACCUMULATOR).forEach((opcode)->{
-            final Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + ACCUMULATOR_PREFIX + hexByte);
+            final Mos6502Compiler compiler = new Mos6502Compiler(opcode.getOpCodeName() + " " + ACCUMULATOR_PREFIX + hexByte);
 
             Program program = compiler.compileProgram();
             int[] bytes = program.getProgramAsByteArray();
@@ -173,7 +173,7 @@ public class CompilerTest {
         final String hexByte = Integer.toHexString(byteValue);
 
         OpCode.streamOf(AddressingMode.ZERO_PAGE).forEach((opcode)->{
-            final Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + VALUE_PREFIX + hexByte);
+            final Mos6502Compiler compiler = new Mos6502Compiler(opcode.getOpCodeName() + " " + VALUE_PREFIX + hexByte);
 
             Program program = compiler.compileProgram();
             int[] bytes = program.getProgramAsByteArray();
@@ -187,7 +187,7 @@ public class CompilerTest {
         final String hexByte = Integer.toHexString(byteValue);
 
         OpCode.streamOf(AddressingMode.ZERO_PAGE_X).forEach((opcode)->{
-            final Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + VALUE_PREFIX + hexByte+ ",X");
+            final Mos6502Compiler compiler = new Mos6502Compiler(opcode.getOpCodeName() + " " + VALUE_PREFIX + hexByte+ ",X");
 
             Program program = compiler.compileProgram();
             int[] bytes = program.getProgramAsByteArray();
@@ -201,7 +201,7 @@ public class CompilerTest {
         final String hexByte = Integer.toHexString(byteValue);
 
         OpCode.streamOf(AddressingMode.ZERO_PAGE_Y).forEach((opcode)->{
-            final Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + VALUE_PREFIX + hexByte + ",Y");
+            final Mos6502Compiler compiler = new Mos6502Compiler(opcode.getOpCodeName() + " " + VALUE_PREFIX + hexByte + ",Y");
 
             Program program = compiler.compileProgram();
             int[] bytes = program.getProgramAsByteArray();
@@ -218,7 +218,7 @@ public class CompilerTest {
         final int lowByte = wordValue & 0xFF;
 
         OpCode.streamOf(AddressingMode.ABSOLUTE).forEach((opcode)->{
-            final Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + VALUE_PREFIX + hexWord);
+            final Mos6502Compiler compiler = new Mos6502Compiler(opcode.getOpCodeName() + " " + VALUE_PREFIX + hexWord);
 
             Program program = compiler.compileProgram();
             int[] bytes = program.getProgramAsByteArray();
@@ -235,7 +235,7 @@ public class CompilerTest {
         final int lowByte = wordValue & 0xFF;
 
         OpCode.streamOf(AddressingMode.ABSOLUTE_X).forEach((opcode)->{
-            final Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + VALUE_PREFIX + hexWord + ",X");
+            final Mos6502Compiler compiler = new Mos6502Compiler(opcode.getOpCodeName() + " " + VALUE_PREFIX + hexWord + ",X");
 
             Program program = compiler.compileProgram();
             int[] bytes = program.getProgramAsByteArray();
@@ -252,7 +252,7 @@ public class CompilerTest {
         final int lowByte = wordValue & 0xFF;
 
         OpCode.streamOf(AddressingMode.ABSOLUTE_Y).forEach((opcode)->{
-            final Compiler compiler = new Compiler(opcode.getOpCodeName() + " " + VALUE_PREFIX + hexWord + ",Y");
+            final Mos6502Compiler compiler = new Mos6502Compiler(opcode.getOpCodeName() + " " + VALUE_PREFIX + hexWord + ",Y");
 
             Program program = compiler.compileProgram();
             int[] bytes = program.getProgramAsByteArray();
@@ -266,7 +266,7 @@ public class CompilerTest {
         final String hexByte = Integer.toHexString(byteValue);
 
         OpCode.streamOf(AddressingMode.INDIRECT_X).forEach((opcode)->{
-            final Compiler compiler = new Compiler(opcode.getOpCodeName() + " (" + VALUE_PREFIX + hexByte + ",X)");
+            final Mos6502Compiler compiler = new Mos6502Compiler(opcode.getOpCodeName() + " (" + VALUE_PREFIX + hexByte + ",X)");
 
             Program program = compiler.compileProgram();
             int[] bytes = program.getProgramAsByteArray();
@@ -280,7 +280,7 @@ public class CompilerTest {
         final String hexByte = Integer.toHexString(byteValue);
 
         OpCode.streamOf(AddressingMode.INDIRECT_Y).forEach((opcode)->{
-            final Compiler compiler = new Compiler(opcode.getOpCodeName() + " (" + VALUE_PREFIX + hexByte + "),Y");
+            final Mos6502Compiler compiler = new Mos6502Compiler(opcode.getOpCodeName() + " (" + VALUE_PREFIX + hexByte + "),Y");
 
             Program program = compiler.compileProgram();
             int[] bytes = program.getProgramAsByteArray();
@@ -291,7 +291,7 @@ public class CompilerTest {
 
     @Test
     public void testChainedInstruction(){
-        final Compiler compiler = new Compiler("SEC LDA " + IMMEDIATE_VALUE_PREFIX + "47");
+        final Mos6502Compiler compiler = new Mos6502Compiler("SEC LDA " + IMMEDIATE_VALUE_PREFIX + "47");
         final Program program = compiler.compileProgram();
         int[] bytes = program.getProgramAsByteArray();
 
@@ -301,7 +301,7 @@ public class CompilerTest {
 
     @Test
     public void testChainedTwoByteInstruction(){
-        final Compiler compiler = new Compiler("LDA " + IMMEDIATE_VALUE_PREFIX + "47 SEC");
+        final Mos6502Compiler compiler = new Mos6502Compiler("LDA " + IMMEDIATE_VALUE_PREFIX + "47 SEC");
         final Program program = compiler.compileProgram();
         int[] bytes = program.getProgramAsByteArray();
 
@@ -311,7 +311,7 @@ public class CompilerTest {
 
     @Test
     public void testChainedTwoByteInstructions(){
-        final Compiler compiler = new Compiler("LDA " + IMMEDIATE_VALUE_PREFIX + "47 CLC LDA " + IMMEDIATE_VALUE_PREFIX + "10 SEC");
+        final Mos6502Compiler compiler = new Mos6502Compiler("LDA " + IMMEDIATE_VALUE_PREFIX + "47 CLC LDA " + IMMEDIATE_VALUE_PREFIX + "10 SEC");
         final Program program = compiler.compileProgram();
         int[] bytes = program.getProgramAsByteArray();
 
@@ -321,7 +321,7 @@ public class CompilerTest {
 
     @Test
     public void testChainedTwoByteInstructionsWithLabel(){
-        final Compiler compiler = new Compiler("LDA " + IMMEDIATE_VALUE_PREFIX + "47 LABELA: CLC LDA " + IMMEDIATE_VALUE_PREFIX + "10 SEC");
+        final Mos6502Compiler compiler = new Mos6502Compiler("LDA " + IMMEDIATE_VALUE_PREFIX + "47 LABELA: CLC LDA " + IMMEDIATE_VALUE_PREFIX + "10 SEC");
         final Program program = compiler.compileProgram();
         int[] bytes = program.getProgramAsByteArray();
 
@@ -333,7 +333,7 @@ public class CompilerTest {
 
     @Test
     public void testProgram(){
-        final Compiler compiler = new Compiler("LDA #$14 ADC #$5 STA $20");
+        final Mos6502Compiler compiler = new Mos6502Compiler("LDA #$14 ADC #$5 STA $20");
         final Program program = compiler.compileProgram();
         int[] bytes = program.getProgramAsByteArray();
 
@@ -345,7 +345,7 @@ public class CompilerTest {
 
     @Test
     public void testIntegration(){
-        final Compiler compiler = new Compiler("LDA #$14 ADC #$5 STA $20");
+        final Mos6502Compiler compiler = new Mos6502Compiler("LDA #$14 ADC #$5 STA $20");
         Program program = compiler.compileProgram();
         final int[] programByte = program.getProgramAsByteArray();
 
@@ -364,7 +364,7 @@ public class CompilerTest {
 
     @Test
     public void testAbsoluteAddressing(){
-        final Compiler compiler = new Compiler("LDA #$1C STA $100 INC $100");
+        final Mos6502Compiler compiler = new Mos6502Compiler("LDA #$1C STA $100 INC $100");
         Program program = compiler.compileProgram();
         final int[] programByte = program.getProgramAsByteArray();
 
@@ -381,7 +381,7 @@ public class CompilerTest {
     @Test
     public void testInvalidArgument(){
         try {
-            final Compiler compiler = new Compiler("INC $12345");
+            final Mos6502Compiler compiler = new Mos6502Compiler("INC $12345");
             Program program = compiler.compileProgram();
             program.getProgramAsByteArray();
             fail("The argument for INC is too long, should throw an error");
@@ -392,7 +392,7 @@ public class CompilerTest {
 
     @Test
     public void firstInvalidOpcode(){
-        final Compiler compiler = new Compiler("ROX");
+        final Mos6502Compiler compiler = new Mos6502Compiler("ROX");
 
         try {
             compiler.compileProgram();
@@ -404,7 +404,7 @@ public class CompilerTest {
 
     @Test
     public void opCode1JaCoCoCoverage(){
-        final Compiler compiler = new Compiler("\0ADC $10");
+        final Mos6502Compiler compiler = new Mos6502Compiler("\0ADC $10");
 
         try {
             compiler.compileProgram();
@@ -416,7 +416,7 @@ public class CompilerTest {
 
     @Test
     public void opCode2JaCoCoCoverage(){
-        final Compiler compiler = new Compiler("\0BRK");
+        final Mos6502Compiler compiler = new Mos6502Compiler("\0BRK");
 
         try {
             compiler.compileProgram();
@@ -429,7 +429,7 @@ public class CompilerTest {
     @Test
     public void testInvalidValuePrefix(){
         try {
-            final Compiler compiler = new Compiler("ADC @$10");
+            final Mos6502Compiler compiler = new Mos6502Compiler("ADC @$10");
             Program program = compiler.compileProgram();
             int[] bytes = program.getProgramAsByteArray();
             fail("Invalid value prefix should throw an exception but was " + Arrays.toString(bytes));
@@ -442,7 +442,7 @@ public class CompilerTest {
     @Test
     public void testInvalidIndirectIndexingMode(){
         try {
-            final Compiler compiler = new Compiler("ADC " + INDIRECT_PREFIX + "10(");
+            final Mos6502Compiler compiler = new Mos6502Compiler("ADC " + INDIRECT_PREFIX + "10(");
             Program program = compiler.compileProgram();
             int[] bytes = program.getProgramAsByteArray();
             fail("Invalid prefix for an indirect value should throw an exception but was " + Arrays.toString(bytes));
@@ -455,7 +455,7 @@ public class CompilerTest {
     @Test
     public void testOversizedValue(){
         try {
-            final Compiler compiler = new Compiler("ADC " + VALUE_PREFIX + "12345");
+            final Mos6502Compiler compiler = new Mos6502Compiler("ADC " + VALUE_PREFIX + "12345");
             Program program = compiler.compileProgram();
             int[] bytes = program.getProgramAsByteArray();
             fail("Argument size over " + 0xFFFF + " should throw an exception but was " + Arrays.toString(bytes));

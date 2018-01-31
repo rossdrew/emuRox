@@ -81,7 +81,7 @@ import java.util.regex.Pattern;
  *
  * @author Ross Drew
  */
-public class Compiler {
+public class Mos6502Compiler {
     /** Regex used to extract an argument prefix */
     public static final Pattern ARG_PREFIX_REGEX = Pattern.compile("^[^0-9a-fA-F]{1,4}");
     /** Regex used to extract an argument value */
@@ -118,7 +118,7 @@ public class Compiler {
      *
      * @param programText The MOS6502 program as {@link String} ready for compilation
      */
-    public Compiler(String programText){
+    public Mos6502Compiler(String programText){
         this.programText = programText;
     }
 
