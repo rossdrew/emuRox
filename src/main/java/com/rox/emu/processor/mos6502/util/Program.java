@@ -20,20 +20,12 @@ public class Program {
      * An inline label reference
      */
     public static class Reference {
-        private String targetLabel;
-        private int rootAddress;
+        private final String targetLabel;
+        private final int rootAddress;
 
         public Reference(final String target, final int root){
             this.targetLabel = target;
             this.rootAddress = root;
-        }
-
-        public int getRootAddress(){
-            return rootAddress;
-        }
-
-        public String getTargetLabel(){
-            return targetLabel;
         }
     }
 
@@ -48,12 +40,6 @@ public class Program {
     private Program(int[] programBytes){
         this.programBytes = programBytes;
         this.programLabels = Collections.emptyMap();
-        this.references = new ArrayList<>();
-    }
-
-    private Program(int[] programBytes, Map<String, Integer> programLabels){
-        this.programBytes = programBytes;
-        this.programLabels = programLabels;
         this.references = new ArrayList<>();
     }
 
