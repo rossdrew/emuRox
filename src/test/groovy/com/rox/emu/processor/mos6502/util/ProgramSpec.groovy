@@ -73,6 +73,18 @@ class ProgramSpec extends Specification {
         thrown NullPointerException
     }
 
+    def testUseOfNonExistentLabel(){
+        given:
+        final Program program = new Program()
+        program = program.with(OpCode.NOP, OpCode.BCC, program.referenceBuilder("ThisDoesntExist"))
+
+        when:
+        program.getProgramAsByteArray()
+
+        then:
+        thrown RuntimeException
+    }
+
     @Unroll("Valid compilation: #expected")
     testValidPrograms(){
         given: 'A program with values pushed to it'
