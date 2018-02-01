@@ -52,7 +52,10 @@ public enum AddressingMode {
     INDIRECT_Y("Indirect, Y", 2),
 
     /** Expects no argument, operation will be performed using the Accumulator Register*/
-    ACCUMULATOR("Accumulator", 1);
+    ACCUMULATOR("Accumulator", 1),
+
+    /** Expects a one byte argument that is the offset for a branch instruction */
+    RELATIVE("Relative", 2);
 
     private final String name;
     /* Bytes required to perform this instruction including a byte for the opcode and then it's arguments */

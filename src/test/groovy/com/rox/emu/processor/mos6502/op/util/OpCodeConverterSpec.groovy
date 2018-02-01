@@ -45,6 +45,7 @@ class OpCodeConverterSpec extends Specification{
         "ADC_IND"         | AddressingMode.INDIRECT
         "ADC_IND_IX"      | AddressingMode.INDIRECT_X
         "ADC_IND_IY"      | AddressingMode.INDIRECT_Y
+        "BEQ"             | AddressingMode.RELATIVE
     }
 
     @Unroll("Get addressing mode (INVALID): #expected")
