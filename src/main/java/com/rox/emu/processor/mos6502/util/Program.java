@@ -3,10 +3,7 @@ package com.rox.emu.processor.mos6502.util;
 
 import com.rox.emu.processor.mos6502.op.OpCode;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * An immutable 6502 Program which is essentially a byte array which can
@@ -17,19 +14,53 @@ import java.util.Set;
 public class Program {
     private final int[] programBytes;
     private final Map<String, Integer> programLabels;
+    private final List<Reference> references;
+
+    /**
+     * An inline label reference
+     */
+    public static class Reference {
+        private String targetLabel;
+        private int rootAddress;
+
+        public Reference(final String target, final int root){
+            this.targetLabel = target;
+            this.rootAddress = root;
+        }
+
+        public int getRootAddress(){
+            return rootAddress;
+        }
+
+        public String getTargetLabel(){
+            return targetLabel;
+        }
+    }
+
+    public Reference referenceBuilder(String targetLabel){
+        return new Reference(targetLabel, programBytes.length);
+    }
 
     public Program(){
-        this(new int[]{});
+            this(new int[]{});
     }
 
     private Program(int[] programBytes){
         this.programBytes = programBytes;
         this.programLabels = Collections.emptyMap();
+        this.references = new ArrayList<>();
     }
 
     private Program(int[] programBytes, Map<String, Integer> programLabels){
         this.programBytes = programBytes;
         this.programLabels = programLabels;
+        this.references = new ArrayList<>();
+    }
+
+    private Program(int[] programBytes, Map<String, Integer> programLabels, List<Reference> references){
+        this.programBytes = programBytes;
+        this.programLabels = programLabels;
+        this.references = references;
     }
 
     /**
@@ -42,7 +73,7 @@ public class Program {
         int[] newProgramBytes = new int[programBytes.length + 1];
         System.arraycopy(programBytes,0, newProgramBytes, 0, programBytes.length);
         newProgramBytes[newProgramBytes.length-1] = byteValue;
-        return new Program(newProgramBytes, this.programLabels);
+        return new Program(newProgramBytes, this.programLabels, references);
     }
 
     /**
@@ -64,7 +95,16 @@ public class Program {
     public Program with(String label){
         final Map<String, Integer> newProgramLabels = new HashMap<>(programLabels);
         newProgramLabels.put(label, programBytes.length);
-        return new Program(this.programBytes, newProgramLabels);
+        return new Program(this.programBytes, newProgramLabels, references);
+    }
+
+    public Program with(Reference reference){
+        int[] newProgramBytes = new int[programBytes.length + 1];
+        System.arraycopy(programBytes,0, newProgramBytes, 0, programBytes.length);
+        newProgramBytes[newProgramBytes.length-1] = 0b1111111100000000;
+        final List<Reference> newReferences = new ArrayList<>(references);
+        newReferences.add(new Reference(reference.targetLabel, newProgramBytes.length-1));
+        return new Program(newProgramBytes, this.programLabels, newReferences);
     }
 
     /**
@@ -80,6 +120,9 @@ public class Program {
 
         if (value instanceof String)
             return this.with((String) value);
+
+        if (value instanceof Reference)
+            return this.with((Reference) value);
 
         return this.with((int)value);
     }
@@ -104,7 +147,21 @@ public class Program {
      * @return This {@link Program} compiled to a "byte" array.
      */
     public int[] getProgramAsByteArray() {
-        return programBytes.clone();
+        int[] clonedBytes = programBytes.clone();
+
+        for (Reference reference : references) {
+            if (programLabels.containsKey(reference.targetLabel)){
+                int targetAddress = programLabels.get(reference.targetLabel);
+
+                //XXX Should be a binary subtraction?
+                int relativeAddress = ((targetAddress & 0xFF) - (reference.rootAddress & 0xFF)) & 0xFF;
+                clonedBytes[reference.rootAddress] = relativeAddress;
+            }else{
+                throw new RuntimeException("Unknown label reference '" + reference.targetLabel + "'");
+            }
+        }
+
+        return clonedBytes;
     }
 
     /**

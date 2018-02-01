@@ -40,32 +40,26 @@ class ProgramSpec extends Specification {
          'C:']                                               || 4           | 3          | 0        | "Multiple labels"
     }
 
-    @Ignore("Failing test for label replacement")
-    testLabelReplacement(){
+    def testLabelReplacement(){
         given:
-        final Program labelProgram = new Program().with("Start",
-                                                         OpCode.BEQ, "MyLabel",
-                                                         OpCode.LDA_I, 0x1,
-                                                         "MyLabel",
-                                                         OpCode.LDA_I, 0x2,
-                                                         OpCode.BNE, "Start",
-                                                         OpCode.LDA_I, 0x3)
+        Program myProgram = new Program()
+        myProgram = myProgram.with("Start",
+                                   OpCode.BEQ, myProgram.referenceBuilder("MyLabel"),
+                                   OpCode.LDA_I, 0x1,
+                                   "MyLabel",
+                                   OpCode.LDA_I, 0x2,
+                                   OpCode.BNE, myProgram.referenceBuilder("Start"),
+                                   OpCode.LDA_I, 0x3)
 
         when:
-        byte[] compiledProgram = labelProgram.getProgramAsByteArray()
+        byte[] compiledProgram = myProgram.getProgramAsByteArray()
 
         then:
         compiledProgram == [OpCode.BEQ.byteValue, 0b00000011,
                             OpCode.LDA_I.byteValue, 0x1,
                             OpCode.LDA_I.byteValue, 0x2,
-                            OpCode.BNE.byteValue, 0x0,
+                            OpCode.BNE.byteValue, 0b11111001,
                             OpCode.LDA_I.byteValue, 0x3] as byte[]
-
-        /*
-        E:  240, 3,  169, 1,  169, 2,   208, 0, 169, 3
-        A: -16, -87, 1,  -87, 2,  -48, -87,  3
-
-         */
     }
 
     def testInvalidLabel(){

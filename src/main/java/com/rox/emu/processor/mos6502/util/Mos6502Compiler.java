@@ -144,13 +144,13 @@ public class Mos6502Compiler {
             switch(opCodeToken){
                 //These need to work with hard coded values as well
                 case "BPL": case "BMI": case "BVC": case "BVS": case "BCC": case "BCS": case "BNE": case "BEQ":
-//                    final String argToken = tokenizer.nextToken().trim();
-//                    //XXX Check for label.
-//                    //    -> on compilation, check for markets and do (label.index - label.reference)
-//                    final String labelReference = extractFirstOccurrence(LABEL_REF_REGEX, argToken).trim();
-//                    if (labelReference != null && !labelReference.isEmpty()){
-//                        System.out.println("FOUND LABEL '" + labelReference + "'");
-//                    }
+                    final String argToken = tokenizer.nextToken().trim();
+                    if (Character.isDigit(argToken.charAt(0))) {
+                        extractArgumentValue(workingProgram, argToken); //This will deal with 2 byte args but it should only ever be one byte in this case
+                    }else if (Character.isAlphabetic(argToken.charAt(0))) {
+                        System.out.println("Found token...");
+                        workingProgram = workingProgram.with(workingProgram.referenceBuilder(argToken));
+                    }
                 case "TAX": case "TAY":
                 case "TYA": case "TXA": case "TXS": case "TXY": case "TSX":
                 case "PHA": case "PLA":

@@ -5,6 +5,10 @@ import com.rox.emu.processor.mos6502.Mos6502;
 import com.rox.emu.processor.mos6502.op.AddressingMode;
 import com.rox.emu.processor.mos6502.op.OpCode;
 
+import java.util.EnumSet;
+
+import static com.rox.emu.processor.mos6502.op.OpCode.*;
+
 
 /**
  * Utility for converting internal {@link Mos6502} {@link OpCode} representation names to human readable descriptions
@@ -28,10 +32,10 @@ public class OpCodeConverter {
 
     /**
      * @param internalOpCodeName {@link String} representation of an {@link OpCode}
-     * @return the {@link OpCode.Operation} associated with this {@link OpCode}
+     * @return the {@link Operation} associated with this {@link OpCode}
      */
-    public static OpCode.Operation getOperation(final String internalOpCodeName) {
-        return OpCode.Operation.valueOf(getOpCode(internalOpCodeName));
+    public static Operation getOperation(final String internalOpCodeName) {
+        return Operation.valueOf(getOpCode(internalOpCodeName));
     }
 
     /**
@@ -42,8 +46,13 @@ public class OpCodeConverter {
      */
     public static AddressingMode getAddressingMode(String internalOpCodeName){
         final String tokens[] = internalOpCodeName.split(OpCode.TOKEN_SEPARATOR);
-        if (tokens.length <= OpCode.ADDR_I)
+        if (tokens.length <= OpCode.ADDR_I) {
+            //TODO Write this less ugly
+            if (EnumSet.of(Operation.JSR, Operation.BPL, Operation.BMI, Operation.BVC, Operation.BVS, Operation.BCC, Operation.BCS, Operation.BNE, Operation.BEQ).contains(getOperation(internalOpCodeName)))
+                return AddressingMode.RELATIVE;
+
             return AddressingMode.IMPLIED;
+        }
 
         final String addressingModeDescriptor = tokens[OpCode.ADDR_I];
 
