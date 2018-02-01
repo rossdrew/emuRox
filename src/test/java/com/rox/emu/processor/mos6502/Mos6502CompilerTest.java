@@ -106,6 +106,18 @@ public class Mos6502CompilerTest {
     }
 
     @Test
+    public void testNumericalLabelError(){
+        try {
+            final Mos6502Compiler compiler = new Mos6502Compiler("MyLabel: SEC BCS 42");
+            compiler.compileProgram();
+            fail("Expected compilation to fail, '42' is not a valid label");
+        }catch (RuntimeException e){
+            assertTrue(e.getMessage().contains("BCS"));
+            assertTrue(e.getMessage().contains("42"));
+        }
+    }
+
+    @Test
     public void testImpliedInstructions(){
         OpCode.streamOf(AddressingMode.IMPLIED).forEach((opcode)->{
             final Mos6502Compiler compiler = new Mos6502Compiler(opcode.getOpCodeName());
