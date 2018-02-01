@@ -20,7 +20,7 @@ import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.*;
 
 @RunWith(JUnitQuickcheck.class)
-public class CompilerTest {
+public class Mos6502CompilerTest {
     @Test
     public void testPrefixExtraction(){
         try {
@@ -87,6 +87,22 @@ public class CompilerTest {
         final Program program = compiler.compileProgram();
         assertEquals(1, program.getLabels().size());
         assertEquals(0, program.getLocationOf("MyLabel"));
+    }
+
+    @Test
+    public void testRelativeNavigationBackwards(){
+        final Mos6502Compiler compiler = new Mos6502Compiler("MyLabel: SEC BCS MyLabel");
+
+        final Program program = compiler.compileProgram();
+        Arrays.equals(program.getProgramAsByteArray(), new int[] {OpCode.SEC.getByteValue(), OpCode.BCS.getByteValue(), 0x11111110});
+    }
+
+    @Test
+    public void testRelativeNavigationForwards(){
+        final Mos6502Compiler compiler = new Mos6502Compiler("SEC BCS MyLabel NOP MyLabel: SED");
+
+        final Program program = compiler.compileProgram();
+        Arrays.equals(program.getProgramAsByteArray(), new int[] {OpCode.SEC.getByteValue(), OpCode.BCS.getByteValue(), 0b00000010, OpCode.NOP.getByteValue(), OpCode.SED.getByteValue()});
     }
 
     @Test
