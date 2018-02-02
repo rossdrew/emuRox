@@ -140,7 +140,7 @@ public class Program {
                 int targetAddress = programLabels.get(reference.targetLabel);
 
                 //XXX Should be a binary subtraction?
-                int relativeAddress = ((targetAddress & 0xFF) - (reference.rootAddress & 0xFF)) & 0xFF;
+                int relativeAddress = ((targetAddress & 0xFF) - (reference.rootAddress + 1 & 0xFF)) & 0xFF;
                 clonedBytes[reference.rootAddress] = relativeAddress;
             }else{
                 throw new RuntimeException("Unknown label reference '" + reference.targetLabel + "'");

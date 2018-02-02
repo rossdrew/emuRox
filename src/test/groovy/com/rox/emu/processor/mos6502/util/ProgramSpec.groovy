@@ -55,10 +55,10 @@ class ProgramSpec extends Specification {
         byte[] compiledProgram = myProgram.getProgramAsByteArray()
 
         then:
-        compiledProgram == [OpCode.BEQ.byteValue, 0b00000011,
+        compiledProgram == [OpCode.BEQ.byteValue, 0b00000010,
                             OpCode.LDA_I.byteValue, 0x1,
                             OpCode.LDA_I.byteValue, 0x2,
-                            OpCode.BNE.byteValue, 0b11111001,
+                            OpCode.BNE.byteValue, 0b11111000,
                             OpCode.LDA_I.byteValue, 0x3] as byte[]
     }
 

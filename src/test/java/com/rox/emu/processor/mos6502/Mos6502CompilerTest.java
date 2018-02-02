@@ -95,7 +95,7 @@ public class Mos6502CompilerTest {
 
         final int[] expectedResult = new int[] {OpCode.SEC.getByteValue(),
                                                 OpCode.BCS.getByteValue(),
-                                                0b11111110};
+                                                0b11111101};
 
         final Program program = compiler.compileProgram();
         final int[] actualResult = program.getProgramAsByteArray();
@@ -109,7 +109,7 @@ public class Mos6502CompilerTest {
 
         final int[] expectedResult = new int[] {OpCode.SEC.getByteValue(),
                                                 OpCode.BCS.getByteValue(),
-                                                0b00000010,
+                                                0b00000001,
                                                 OpCode.NOP.getByteValue(),
                                                 OpCode.SED.getByteValue()};
 
