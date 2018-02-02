@@ -139,7 +139,7 @@ public class MultiSourceMemoryTest {
     }
 
     @Test
-    public void testMappingArraysAreOfEqualSize(){
+    public void testMappingArraysAreOfEqualSize1(){
         final Memory memory = mock(Memory.class);
 
         try {
@@ -148,7 +148,18 @@ public class MultiSourceMemoryTest {
         }catch(AssertionError e){
             assertNotNull(e);
         }
+    }
 
+    @Test
+    public void testMappingArraysAreOfEqualSize2(){
+        final Memory memory = mock(Memory.class);
+
+        try {
+            new MultiSourceMemory().withMappingTo(new int[]{5, 6, 7, 8}, new int[]{1, 2, 3, 4, 5}, memory);
+            fail("Should not be able to map 5 memory addresses to 4");
+        }catch(AssertionError e){
+            assertNotNull(e);
+        }
     }
 
     @Test
