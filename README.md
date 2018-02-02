@@ -33,16 +33,7 @@ Any small chunks of time I get, I'm looking into improving on what's already wri
   - compressing the data driven tests;  extracting out common patterns, etc
   - abstracting away bytes into a custom class so that I don't need workarounds for Java types
   - abstracting away the concept of a Register into an enum to clean up the code
-  - making the 6502 emulator, compiler and debugger available to 6502 community for testing.  This means getting labels to work, which means a refactor of Program, i.e.
-                                                                                                                                                                   
-```6502 Assembly
-        LDA #$1
-        STA $3C
-        TESTLABEL:
-        INC $3C
-        LDA #$0
-        BCC TESTLABEL
-```
+  - making the 6502 emulator, compiler and debugger available to 6502 community for testing.  
   
 BCD and proper timing is a thing for another day as my first objective for now, is the NES emulator.
 
