@@ -144,12 +144,15 @@ public class Mos6502Compiler {
             switch(opCodeToken){
                 //These need to work with hard coded values as well
                 case "BPL": case "BMI": case "BVC": case "BVS": case "BCC": case "BCS": case "BNE": case "BEQ":
+                    workingProgram = workingProgram.with(OpCode.from(opCodeToken).getByteValue());
+
                     final String argToken = tokenizer.nextToken().trim();
                     if (Character.isAlphabetic(argToken.charAt(0))) {
                         workingProgram = workingProgram.with(workingProgram.referenceBuilder(argToken));
                     }else{
                         throw new RuntimeException("Invalid label ('" + argToken + "') specified for " + opCodeToken);
                     }
+                    break;
                 case "TAX": case "TAY":
                 case "TYA": case "TXA": case "TXS": case "TXY": case "TSX":
                 case "PHA": case "PLA":

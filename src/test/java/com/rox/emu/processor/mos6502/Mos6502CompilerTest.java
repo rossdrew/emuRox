@@ -93,16 +93,30 @@ public class Mos6502CompilerTest {
     public void testRelativeNavigationBackwards(){
         final Mos6502Compiler compiler = new Mos6502Compiler("MyLabel: SEC BCS MyLabel");
 
+        final int[] expectedResult = new int[] {OpCode.SEC.getByteValue(),
+                                                OpCode.BCS.getByteValue(),
+                                                0b11111110};
+
         final Program program = compiler.compileProgram();
-        Arrays.equals(program.getProgramAsByteArray(), new int[] {OpCode.SEC.getByteValue(), OpCode.BCS.getByteValue(), 0x11111110});
+        final int[] actualResult = program.getProgramAsByteArray();
+
+        assertTrue("Expected " + Arrays.toString(expectedResult) + ", got " + Arrays.toString(actualResult), Arrays.equals(actualResult, expectedResult));
     }
 
     @Test
     public void testRelativeNavigationForwards(){
         final Mos6502Compiler compiler = new Mos6502Compiler("SEC BCS MyLabel NOP MyLabel: SED");
 
+        final int[] expectedResult = new int[] {OpCode.SEC.getByteValue(),
+                                                OpCode.BCS.getByteValue(),
+                                                0b00000010,
+                                                OpCode.NOP.getByteValue(),
+                                                OpCode.SED.getByteValue()};
+
         final Program program = compiler.compileProgram();
-        Arrays.equals(program.getProgramAsByteArray(), new int[] {OpCode.SEC.getByteValue(), OpCode.BCS.getByteValue(), 0b00000010, OpCode.NOP.getByteValue(), OpCode.SED.getByteValue()});
+        final int[] actualResult = program.getProgramAsByteArray();
+
+        assertTrue("Expected " + Arrays.toString(expectedResult) + ", got " + Arrays.toString(actualResult), Arrays.equals(actualResult, expectedResult));
     }
 
     @Test
