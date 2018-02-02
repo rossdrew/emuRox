@@ -5,9 +5,7 @@ import org.junit.Test;
 
 import java.util.Arrays;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -138,6 +136,19 @@ public class MultiSourceMemoryTest {
         logicalMemory.getByte(1000);
 
         verify(physicalMemory, times(1)).getByte(1);
+    }
+
+    @Test
+    public void testMappingArraysAreOfEqualSize(){
+        final Memory memory = mock(Memory.class);
+
+        try {
+            new MultiSourceMemory().withMappingTo(new int[]{5, 6, 7, 8, 9}, new int[]{1, 2, 3, 4}, memory);
+            fail("Should not be able to map 5 memory addresses to 4");
+        }catch(AssertionError e){
+            assertNotNull(e);
+        }
+
     }
 
     @Test
