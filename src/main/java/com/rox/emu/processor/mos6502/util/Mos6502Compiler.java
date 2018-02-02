@@ -77,8 +77,6 @@ import java.util.regex.Pattern;
  *
  *  </Table>
  *
- *  TODO accept tokens as arguments.
- *
  * @author Ross Drew
  */
 public class Mos6502Compiler {
