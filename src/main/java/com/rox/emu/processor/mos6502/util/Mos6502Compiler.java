@@ -130,7 +130,7 @@ public class Mos6502Compiler {
     public Program compileProgram() throws UnknownOpCodeException{
         Program workingProgram = new Program();
 
-        final StringTokenizer tokenizer = new StringTokenizer(programText);
+        final StringTokenizer tokenizer = new StringTokenizer(sanitize(programText));
         while (tokenizer.hasMoreTokens()){
             final String opCodeToken = tokenizer.nextToken();
 
@@ -197,6 +197,29 @@ public class Mos6502Compiler {
         }
 
         return workingProgram;
+    }
+
+    private String sanitize(final String programText) {
+        final StringBuilder sanitizedText = new StringBuilder();
+
+        boolean notComment = true;
+        for (int i=0; i < programText.length(); i++){
+            final char charAtIndex = programText.charAt(i);
+
+            if (notComment){
+                if (charAtIndex == ';'){
+                    notComment = false;
+                }else{
+                    sanitizedText.append(charAtIndex);
+                }
+            }else{
+                if (charAtIndex == '\n'){
+                    notComment = true;
+                }
+            }
+        }
+
+        return sanitizedText.toString();
     }
 
     private Program extractArgumentValue(Program workingProgram, String value) {

@@ -518,4 +518,22 @@ public class Mos6502CompilerTest {
             assertFalse(e.getOpCode() == null);
         }
     }
+
+    @Test
+    public void testInlineCommentRemoval(){
+        final Mos6502Compiler compiler = new Mos6502Compiler("SEC ;this should not be parsed\nCLC");
+        Program program = compiler.compileProgram();
+        int[] bytes = program.getProgramAsByteArray();
+
+        assertEquals(2, bytes.length);
+    }
+
+    @Test
+    public void testFullLineCommentRemoval(){
+        final Mos6502Compiler compiler = new Mos6502Compiler("SEC \n;this should not be parsed\nCLC");
+        Program program = compiler.compileProgram();
+        int[] bytes = program.getProgramAsByteArray();
+
+        assertEquals(2, bytes.length);
+    }
 }
