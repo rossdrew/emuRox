@@ -4,6 +4,9 @@ import com.rox.emu.env.RoxByte;
 
 import java.util.Arrays;
 
+/**
+ * A block of read only memory, writes will throw a {@link RuntimeException} and resetting will have no effect.
+ */
 public class ReadOnlyMemory implements Memory {
     private final RoxByte[] memoryArray;
 
