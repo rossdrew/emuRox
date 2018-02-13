@@ -75,7 +75,7 @@ public final class InesRom {
 
     private static InesRomHeader processHeader(final byte[] bytes){
         if (bytes.length < InesRomHeader.HEADER_SIZE)
-            throw new UnknownRomException("Invalid iNES header: Too short.");
+            throw new UnknownRomException("Invalid iNES header: Expected " + InesRomHeader.HEADER_SIZE + " byte header, rom is only " + bytes.length + " bytes.");
 
         if (bytes[0] != 'N'
          || bytes[1] != 'E'
