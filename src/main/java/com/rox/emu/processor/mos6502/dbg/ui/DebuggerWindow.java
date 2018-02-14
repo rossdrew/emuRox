@@ -106,6 +106,23 @@ final class DebuggerWindow extends JFrame {
     }
 
     private JComponent getMemoryPanel(){
+//        JPanel memoryPanel = new JPanel();
+//        memoryPanel.setLayout(new BorderLayout());
+//
+//        final Map<String, Component> memoryComponents = getMemoryComponents();
+//
+//        final Object[] objects = memoryComponents.keySet().toArray();
+//        final String[] memoryStrings = new String[objects.length];
+//        for (int i=0; i<objects.length; i++){
+//            memoryStrings[i] = (String)objects[i];
+//        }
+//        JComboBox petList = new JComboBox(memoryStrings);
+//
+//        memoryPanel.add(petList, BorderLayout.NORTH);
+//        memoryPanel.add(memoryComponents.get("1"));
+//
+//        return memoryPanel;
+
         JTabbedPane memoryTabs = new JTabbedPane();
 
         final Map<String, Component> memoryComponentBlocks = getMemoryComponents();
@@ -119,10 +136,15 @@ final class DebuggerWindow extends JFrame {
     private Map<String, Component> getMemoryComponents(){
         final Map<String, Component> memoryBlocks = new LinkedHashMap<>();
 
-        final String[] blocks = new String[] {"Zero Page", "Stack Page", "P2", "P3"};
+        final String[] blocks2 = new String[260];
+        for (int i=0; i<260; i++){
+            int start = i * 256;
+            blocks2[i] = ""+ i;//(i + " (" + start + "-" + (start + 255) + ")");
+        }
 
-        for (int i=0; i<blocks.length; i++)
-            memoryBlocks.put(blocks[i], getMemoryComponent(i * 256));
+        for (int i=0; i<7; i++)
+//        for (int i=0; i<blocks2.length; i++)
+            memoryBlocks.put(blocks2[i], getMemoryComponent(i * 256));
 
         return memoryBlocks;
     }
