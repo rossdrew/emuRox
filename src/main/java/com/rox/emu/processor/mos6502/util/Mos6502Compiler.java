@@ -140,8 +140,9 @@ public class Mos6502Compiler {
             }
 
             switch(opCodeToken){
-                //These need to work with hard coded values as well
-                case "BPL": case "BMI": case "BVC": case "BVS": case "BCC": case "BCS": case "BNE": case "BEQ":
+                //OpCodes with label arguments
+                //XXX Do these need to work with hard coded values as well
+                case "BPL": case "BMI": case "BVC": case "BVS": case "BCC": case "BCS": case "BNE": case "BEQ": case "JSR":
                     workingProgram = workingProgram.with(OpCode.from(opCodeToken).getByteValue());
 
                     final String argToken = tokenizer.nextToken().trim();
@@ -151,6 +152,8 @@ public class Mos6502Compiler {
                         throw new RuntimeException("Invalid label ('" + argToken + "') specified for " + opCodeToken);
                     }
                     break;
+
+                //Opcodes with no arguments
                 case "TAX": case "TAY":
                 case "TYA": case "TXA": case "TXS": case "TXY": case "TSX":
                 case "PHA": case "PLA":
@@ -158,7 +161,6 @@ public class Mos6502Compiler {
                 case "INY": case "DEY":
                 case "INX": case "DEX":
                 case "RTS": case "RTI":
-                case "JSR":
                 case "SEC": case "CLC":
                 case "SEI": case "SED":
                 case "CLD": case "CLI": case "CLV":
@@ -166,6 +168,8 @@ public class Mos6502Compiler {
                 case "NOP":
                     workingProgram = workingProgram.with(OpCode.from(opCodeToken).getByteValue());
                     break;
+
+                //Opcodes with non label arguments
                 case "ADC": case "SBC":
                 case "LDA": case "LDY": case "LDX":
                 case "AND": case "ORA": case "EOR":
