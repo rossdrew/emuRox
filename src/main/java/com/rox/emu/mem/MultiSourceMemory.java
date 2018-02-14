@@ -103,7 +103,8 @@ public class MultiSourceMemory implements Memory {
     public MultiSourceMemory withMappingTo(final int[] logicalAddresses,
                                            final int[] physicalAddresses,
                                            final Memory memory) {
-        assert logicalAddresses.length == physicalAddresses.length : "Logical and physical address count must match";
+        if (logicalAddresses.length != physicalAddresses.length)
+            throw new RuntimeException("The same number of logical and physical addresses are required for multiple mappings.  Received " + logicalAddresses.length + " logical addresses to " + physicalAddresses.length + " physical.");
 
         final Map<Integer, MemoryMapping> newMemoryMappings = new HashMap<>();
         newMemoryMappings.putAll(memoryMappings);
