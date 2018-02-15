@@ -203,6 +203,11 @@ public class Mos6502Compiler {
         return workingProgram;
     }
 
+    /**
+     * Essentially, just create a new string from <code>programTest</code> with all comments removed
+     * <br/><br/>
+     * Comment = <code>;{...}\n</code>.
+     */
     private String sanitize(final String programText) {
         final StringBuilder sanitizedText = new StringBuilder();
 
