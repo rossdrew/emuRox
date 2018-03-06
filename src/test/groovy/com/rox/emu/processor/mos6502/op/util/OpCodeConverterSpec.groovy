@@ -7,7 +7,7 @@ import spock.lang.Specification
 import spock.lang.Unroll
 
 class OpCodeConverterSpec extends Specification{
-    @Unroll("Get opCode: #opCodeName -> #expectedOpCodeName")
+    @Unroll("Get token: #opCodeName -> #expectedOpCodeName")
     testGetOpcode(){
         when:
         String opCode = OpCodeConverter.getOpCode(opCodeName)

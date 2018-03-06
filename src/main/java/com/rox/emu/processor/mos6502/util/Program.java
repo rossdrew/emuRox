@@ -1,6 +1,7 @@
 package com.rox.emu.processor.mos6502.util;
 
 
+import com.rox.emu.UnknownTokenException;
 import com.rox.emu.processor.mos6502.op.OpCode;
 
 import java.util.*;
@@ -143,7 +144,7 @@ public class Program {
                 int relativeAddress = ((targetAddress & 0xFF) - (reference.rootAddress + 1 & 0xFF)) & 0xFF;
                 clonedBytes[reference.rootAddress] = relativeAddress;
             }else{
-                throw new RuntimeException("Unknown label reference '" + reference.targetLabel + "'");
+                throw new UnknownTokenException("Unknown label reference '" + reference.targetLabel + "'", reference.targetLabel );
             }
         }
 

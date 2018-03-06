@@ -1,6 +1,7 @@
 package com.rox.emu.processor.mos6502.util;
 
 import com.rox.emu.UnknownOpCodeException;
+import com.rox.emu.UnknownTokenException;
 import com.rox.emu.processor.mos6502.Mos6502;
 import com.rox.emu.processor.mos6502.op.AddressingMode;
 import com.rox.emu.processor.mos6502.op.OpCode;
@@ -149,7 +150,7 @@ public class Mos6502Compiler {
                     if (Character.isAlphabetic(argToken.charAt(0))) {
                         workingProgram = workingProgram.with(workingProgram.referenceBuilder(argToken));
                     }else{
-                        throw new RuntimeException("Invalid label ('" + argToken + "') specified for " + opCodeToken);
+                        throw new UnknownTokenException("Invalid label ('" + argToken + "') specified for " + opCodeToken, opCodeToken);
                     }
                     break;
 
