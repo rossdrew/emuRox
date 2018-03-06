@@ -15,6 +15,6 @@ public class UnknownTokenExceptionTest {
         assertNotNull(e.getMessage());
         assertFalse(e.getMessage().isEmpty());
         assertNotNull(e.getOpCode());
-        assertEquals(OpCode.ADC_ABS, e.getOpCode());
+        assertEquals("UNKNOWN_TOKEN", e.getOpCode());
     }
 }
