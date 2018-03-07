@@ -99,41 +99,6 @@ public class Registers {
             return placeValue;
         }
     }
-//
-//    /** Place value of Carry status flag in bit {@value #C} */
-//    public static final int STATUS_FLAG_CARRY = 0x1;
-//    /** Place value of Zero status flag in bit {@value #Z} */
-//    public static final int STATUS_FLAG_ZERO = 0x2;
-//    /** Place value of Interrupt status flag in bit {@value #I} */
-//    public static final int STATUS_FLAG_IRQ_DISABLE = 0x4;
-//    /** Place value of Binary Coded Decimal status flag in bit {@value #D} */
-//    public static final int STATUS_FLAG_DEC = 0x8;
-//    /** Place value of Break status flag in bit {@value #B} */
-//    public static final int STATUS_FLAG_BREAK = 0x10;
-//    private static final int STATUS_FLAG_UNUSED = 0x20; //Placeholder only
-//    /** Place value of Overflow status flag in bit {@value #V} */
-//    public static final int STATUS_FLAG_OVERFLOW = 0x40;
-//    /** Place value of Negative status flag in bit {@value #N} */
-//    public static final int STATUS_FLAG_NEGATIVE = 0x80;
-//
-//    /** Bit place of Negative status flag */
-//    public static final int N = 7;
-//    /** Bit place of Overflow status flag */
-//    public static final int V = 6;
-//    /** - <em>UNUSED</em> (Placeholder flag only) **/
-//    private static final int U = 5; //Placeholder only
-//    /** Bit place of Break status flag */
-//    public static final int B = 4;
-//    /** Bit place of Binary Coded Decimal status flag */
-//    public static final int D = 3;
-//    /** Bit place of Interrupt status flag */
-//    public static final int I = 2;
-//    /** Bit place of Zero status flag */
-//    public static final int Z = 1;
-//    /** Bit place ofCarry status flag */
-//    public static final int C = 0;
-
-//    private static final String[] flagNames = new String[] {"Carry", "Zero", "IRQ Disable", "Decimal Mode", "BRK Command", "<UNUSED>", "Overflow", "Negative"};
 
     private final RoxByte[] register;
 
@@ -236,7 +201,7 @@ public class Registers {
      * NOT    > 1111 1101
      * AND(R) > .... ..0.
      *
-     * @param flag int with bits to clear, turned on
+     * @param flag to be cleared
      */
     public void clearFlag(Flag flag){
         LOG.debug("'F:" + flag.getDescription() + "' -> CLEARED");
