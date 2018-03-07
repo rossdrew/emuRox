@@ -318,7 +318,7 @@ public class Mos6502Test {
         processor.step();
 
         assertEquals(program.getLength(), registers.getPC());
-        assertEquals(true, registers.getFlag(Registers.C));
+        assertEquals(true, registers.getFlag(Registers.Flag.CARRY));
     }
 
     @Test
@@ -328,11 +328,11 @@ public class Mos6502Test {
         Registers registers = processor.getRegisters();
 
         processor.step();
-        assert (processor.getRegisters().getFlag(Registers.C));
+        assert (processor.getRegisters().getFlag(Registers.Flag.CARRY));
         processor.step();
 
         assertEquals(program.getLength(), registers.getPC());
-        assertEquals(false, registers.getFlag(Registers.C));
+        assertEquals(false, registers.getFlag(Registers.Flag.CARRY));
     }
 
     @Test
@@ -342,11 +342,11 @@ public class Mos6502Test {
         Registers registers = processor.getRegisters();
 
         processor.step(2);
-        assert (registers.getFlag(Registers.V));
+        assert (registers.getFlag(Registers.Flag.OVERFLOW));
         processor.step();
 
         assertEquals(program.getLength(), registers.getPC());
-        assertEquals(false, registers.getFlag(Registers.V));
+        assertEquals(false, registers.getFlag(Registers.Flag.OVERFLOW));
     }
 
     @Test
@@ -751,9 +751,9 @@ public class Mos6502Test {
         processor.step(4);
 
         assertEquals(program.getLength(), registers.getPC());
-        assertEquals(true, registers.getFlag(Registers.Z));
-        assertEquals(false, registers.getFlag(Registers.N));
-        assertEquals(false, registers.getFlag(Registers.V));
+        assertEquals(true, registers.getFlag(Registers.Flag.ZERO));
+        assertEquals(false, registers.getFlag(Registers.Flag.NEGATIVE));
+        assertEquals(false, registers.getFlag(Registers.Flag.OVERFLOW));
     }
 
     @Test
@@ -766,9 +766,9 @@ public class Mos6502Test {
 
         assertEquals(program.getLength(), registers.getPC());
         assertEquals(0x10, registers.getRegister(Registers.Register.ACCUMULATOR));
-        assertEquals(true, registers.getFlag(Registers.Z));
-        assertEquals(false, registers.getFlag(Registers.N));
-        assertEquals(true, registers.getFlag(Registers.C));
+        assertEquals(true, registers.getFlag(Registers.Flag.ZERO));
+        assertEquals(false, registers.getFlag(Registers.Flag.NEGATIVE));
+        assertEquals(true, registers.getFlag(Registers.Flag.CARRY));
     }
 
     @Test
@@ -781,9 +781,9 @@ public class Mos6502Test {
 
         assertEquals(program.getLength(), registers.getPC());
         assertEquals(0x10, registers.getRegister(Registers.Register.X_INDEX));
-        assertEquals(true, registers.getFlag(Registers.Z));
-        assertEquals(false, registers.getFlag(Registers.N));
-        assertEquals(true, registers.getFlag(Registers.C));
+        assertEquals(true, registers.getFlag(Registers.Flag.ZERO));
+        assertEquals(false, registers.getFlag(Registers.Flag.NEGATIVE));
+        assertEquals(true, registers.getFlag(Registers.Flag.CARRY));
     }
 
     @Test
@@ -796,9 +796,9 @@ public class Mos6502Test {
 
         assertEquals(program.getLength(), registers.getPC());
         assertEquals(0x10, registers.getRegister(Registers.Register.Y_INDEX));
-        assertEquals(true, registers.getFlag(Registers.Z));
-        assertEquals(false, registers.getFlag(Registers.N));
-        assertEquals(true, registers.getFlag(Registers.C));
+        assertEquals(true, registers.getFlag(Registers.Flag.ZERO));
+        assertEquals(false, registers.getFlag(Registers.Flag.NEGATIVE));
+        assertEquals(true, registers.getFlag(Registers.Flag.CARRY));
     }
 
     @Test
@@ -942,7 +942,7 @@ public class Mos6502Test {
         assertEquals(0x00, memory.getByte(0x1FF));
 
         //Status (on stack) with B set
-        assertEquals(Registers.STATUS_FLAG_BREAK, memory.getByte(0x1FD));
+        assertEquals(Registers.Flag.BREAK.getPlaceValue(), memory.getByte(0x1FD));
 
         //PC is set to value of [FFFE:FFFF]
         assertEquals(memory.getByte(0xFFFE), registers.getRegister(Registers.Register.PROGRAM_COUNTER_HI));
@@ -971,7 +971,7 @@ public class Mos6502Test {
         assertEquals(0x00, memory.getByte(0x1FF));
 
         //Status (on stack) with B set
-        assertTrue((Registers.STATUS_FLAG_IRQ_DISABLE & memory.getByte(0x1FD)) == Registers.STATUS_FLAG_IRQ_DISABLE);
+        assertTrue((Registers.Flag.IRQ_DISABLE.getPlaceValue() & memory.getByte(0x1FD)) == Registers.Flag.IRQ_DISABLE.getPlaceValue());
 
         //PC is set to value of [FFFE:FFFF]
         assertEquals(memory.getByte(0xFFFE), registers.getRegister(Registers.Register.PROGRAM_COUNTER_HI));

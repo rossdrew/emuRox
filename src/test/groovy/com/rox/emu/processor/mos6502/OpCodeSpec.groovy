@@ -29,18 +29,18 @@ class OpCodeSpec extends Specification {
 
     boolean testFlags(boolean Z,
                       boolean N,
-                      boolean C = registers.getFlag(Registers.C),
-                      boolean V = registers.getFlag(Registers.V)){
+                      boolean C = registers.getFlag(Registers.Flag.CARRY),
+                      boolean V = registers.getFlag(Registers.Flag.OVERFLOW)){
 
-        assert Z == registers.getFlag(Registers.Z) : "Expected Z to be " + Z + ", was " + registers.getFlag(Registers.Z)
-        assert N == registers.getFlag(Registers.N) : "Expected N to be " + N + ", was " + registers.getFlag(Registers.N)
-        assert C == registers.getFlag(Registers.C) : "Expected C to be " + C + ", was " + registers.getFlag(Registers.C)
-        assert V == registers.getFlag(Registers.V) : "Expected V to be " + V + ", was " + registers.getFlag(Registers.V)
+        assert Z == registers.getFlag(Registers.Flag.ZERO) : "Expected Z to be " + Z + ", was " + registers.getFlag(Registers.Flag.ZERO)
+        assert N == registers.getFlag(Registers.Flag.NEGATIVE) : "Expected N to be " + N + ", was " + registers.getFlag(Registers.Flag.NEGATIVE)
+        assert C == registers.getFlag(Registers.Flag.CARRY) : "Expected C to be " + C + ", was " + registers.getFlag(Registers.Flag.CARRY)
+        assert V == registers.getFlag(Registers.Flag.OVERFLOW) : "Expected V to be " + V + ", was " + registers.getFlag(Registers.Flag.OVERFLOW)
 
-        return Z == registers.getFlag(Registers.Z) &&
-               N == registers.getFlag(Registers.N) &&
-               C == registers.getFlag(Registers.C) &&
-               V == registers.getFlag(Registers.V)
+        return Z == registers.getFlag(Registers.Flag.ZERO) &&
+               N == registers.getFlag(Registers.Flag.NEGATIVE) &&
+               C == registers.getFlag(Registers.Flag.CARRY) &&
+               V == registers.getFlag(Registers.Flag.OVERFLOW)
     }
 
     /**
@@ -695,7 +695,7 @@ class OpCodeSpec extends Specification {
                                                 ADC_I, highSecondByte)
 
         and:
-        registers.clearFlag(Registers.C)
+        registers.clearFlag(Registers.Flag.CARRY)
 
         and:
         processor.step(6)
@@ -2534,7 +2534,7 @@ class OpCodeSpec extends Specification {
     
         then:
         program.length == registers.getPC()
-		testFlags(Z,N, registers.getFlag(Registers.C), O)
+		testFlags(Z,N, registers.getFlag(Registers.Flag.CARRY), O)
     
         where:
         firstValue | secondValue | memLoc | O     | Z     | N     | expected
@@ -2558,7 +2558,7 @@ class OpCodeSpec extends Specification {
     
         then:
         program.length == registers.getPC()
-		testFlags(Z,N, registers.getFlag(Registers.C), O)
+		testFlags(Z,N, registers.getFlag(Registers.Flag.CARRY), O)
     
         where:
         firstValue | secondValue | memLocHi | memLocLo | O     | Z     | N     | expected
@@ -2679,7 +2679,7 @@ class OpCodeSpec extends Specification {
         Program program = loadMemoryWithProgram(LDA_I, firstValue, CMP_I, secondValue)
 
         and: 'We set C to make sure we KNOW its been changed'
-        !C ? registers.setFlag(Registers.C) : registers.clearFlag(Registers.C)
+        !C ? registers.setFlag(Registers.Flag.CARRY) : registers.clearFlag(Registers.Flag.CARRY)
 
         and:
         processor.step(2)
@@ -3018,14 +3018,14 @@ class OpCodeSpec extends Specification {
         loadMemoryWithProgram(BRK)
         processor.step(1)
     
-        then: 'registers now contain the expect values'
+        then: 'Registers.Flag.NEGATIVEow contain the expect values'
         registers.getRegister(Registers.Register.PROGRAM_COUNTER_HI) == newPCHi
         registers.getRegister(Registers.Register.PROGRAM_COUNTER_LOW) == newPCLo
         registers.getRegister(Registers.Register.STACK_POINTER_HI) == 0xFC
 
         and: 'the pushed status register has the break flag set'
-        memory.getByte(0x1FD) == (statusReg | Registers.STATUS_FLAG_BREAK)
-
+        memory.getByte(0x1FD) == (statusReg | Registers.Flag.BREAK.getPlaceValue())
+        
         and: 'the pushed program counter is correct'
         memory.getByte(0x1FE) == 0x03
         memory.getByte(0x1FF) == 0x00

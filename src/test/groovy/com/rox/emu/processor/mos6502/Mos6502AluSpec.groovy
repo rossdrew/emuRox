@@ -13,7 +13,7 @@ class Mos6502AluSpec extends Specification {
     private static final int RANDOM_ITERATIONS = 10
 
     def clearRegisters(){
-        for (flagNumber in 0..7) registers.setFlagTo(flagNumber, false)
+        for (flag in Registers.Flag.values()) registers.setFlagTo(flag, false)
     }
 
     def setup(){
@@ -29,7 +29,7 @@ class Mos6502AluSpec extends Specification {
         final RoxByte b = RoxByte.fromLiteral(operandB)
 
         and: 'The status flags are setup beforehand'
-        registers.setFlagTo(Registers.C, carryIn)
+        registers.setFlagTo(Registers.Flag.CARRY, carryIn)
 
         when: 'The operation is performed'
         final RoxByte result = alu.adc(a, b)
@@ -37,8 +37,8 @@ class Mos6502AluSpec extends Specification {
         then: 'The values and flags are as expected'
         expectedResult == result.rawValue
         expectedValue == result.asInt
-        registers.getFlag(Registers.C) == carryOut
-        registers.getFlag(Registers.V) == overflow
+        registers.getFlag(Registers.Flag.CARRY) == carryOut
+        registers.getFlag(Registers.Flag.OVERFLOW) == overflow
 
         where:
         operandA   | operandB   | carryIn || expectedResult | expectedValue | carryOut | overflow | description
@@ -83,7 +83,7 @@ class Mos6502AluSpec extends Specification {
         final RoxByte b = RoxByte.fromLiteral(operandB)
 
         and: 'Carry is set before an SBC operation'
-        registers.setFlag(Registers.C)
+        registers.setFlag(Registers.Flag.CARRY)
 
         when:
         final RoxByte result = alu.sbc(a, b)
@@ -91,10 +91,10 @@ class Mos6502AluSpec extends Specification {
         then:
         expectedResult == result.rawValue
         expectedValue == result.asInt
-        registers.getFlag(Registers.C) == carryOut
+        registers.getFlag(Registers.Flag.CARRY) == carryOut
 
         and: 'The overflow flag, which functions as an underflow in this context is as expected'
-        registers.getFlag(Registers.V) == underflow
+        registers.getFlag(Registers.Flag.OVERFLOW) == underflow
 
         where:
         operandA   | operandB   || expectedResult | expectedValue | carryOut | underflow | description
@@ -111,7 +111,7 @@ class Mos6502AluSpec extends Specification {
     @Unroll
     def "Expected value for: #randomValueA - #randomValueB"(){
         when: 'The status flags are setup beforehand'
-        registers.setFlag(Registers.C)
+        registers.setFlag(Registers.Flag.CARRY)
 
         and: 'we subtract a number from another'
         final RoxByte result = alu.sbc(RoxByte.fromLiteral(randomValueA),
@@ -254,7 +254,7 @@ class Mos6502AluSpec extends Specification {
         final RoxByte a = RoxByte.fromLiteral(operandA)
 
         and: 'The status flags are setup beforehand'
-        registers.setFlagTo(Registers.C, carryIn)
+        registers.setFlagTo(Registers.Flag.CARRY, carryIn)
 
         when:
         final RoxByte result = alu.asl(a)
@@ -264,7 +264,7 @@ class Mos6502AluSpec extends Specification {
         expectedValue == result.asInt
 
         and: 'bits shifted out of the end, end up in the carry'
-        registers.getFlag(Registers.C) == carryOut
+        registers.getFlag(Registers.Flag.CARRY) == carryOut
 
         where:
         operandA   | carryIn || expectedResult | expectedValue | carryOut | description
@@ -298,7 +298,7 @@ class Mos6502AluSpec extends Specification {
         final RoxByte a = RoxByte.fromLiteral(operandA)
 
         and: 'The status flags are setup beforehand'
-        registers.setFlagTo(Registers.C, carryIn)
+        registers.setFlagTo(Registers.Flag.CARRY, carryIn)
 
         when:
         final RoxByte result = alu.rol(a)
@@ -308,7 +308,7 @@ class Mos6502AluSpec extends Specification {
         expectedValue == result.asInt
 
         and: 'bits shifted out of the end, end up in the carry'
-        registers.getFlag(Registers.C) == carryOut
+        registers.getFlag(Registers.Flag.CARRY) == carryOut
 
         where:
         operandA   | carryIn || expectedResult | expectedValue | carryOut | description
@@ -349,7 +349,7 @@ class Mos6502AluSpec extends Specification {
         final RoxByte a = RoxByte.fromLiteral(operandA)
 
         and: 'The status flags are setup beforehand'
-        registers.setFlagTo(Registers.C, carryIn)
+        registers.setFlagTo(Registers.Flag.CARRY, carryIn)
 
         when:
         final RoxByte result = alu.lsr(a)
@@ -359,7 +359,7 @@ class Mos6502AluSpec extends Specification {
         expectedValue == result.asInt
 
         and: 'bits shifted out of the end, end up in the carry'
-        registers.getFlag(Registers.C) == carryOut
+        registers.getFlag(Registers.Flag.CARRY) == carryOut
 
         where:
         operandA   | carryIn || expectedResult | expectedValue | carryOut | description
@@ -376,7 +376,7 @@ class Mos6502AluSpec extends Specification {
         final RoxByte a = RoxByte.fromLiteral(operandA)
 
         and: 'The status flags are setup beforehand'
-        registers.setFlagTo(Registers.C, carryIn)
+        registers.setFlagTo(Registers.Flag.CARRY, carryIn)
 
         when:
         final RoxByte result = alu.ror(a)
@@ -386,7 +386,7 @@ class Mos6502AluSpec extends Specification {
         expectedValue == result.asInt
 
         and: 'bits shifted out of the end, end up in the carry'
-        registers.getFlag(Registers.C) == carryOut
+        registers.getFlag(Registers.Flag.CARRY) == carryOut
 
         where:
         operandA   | carryIn || expectedResult | expectedValue | carryOut | description
