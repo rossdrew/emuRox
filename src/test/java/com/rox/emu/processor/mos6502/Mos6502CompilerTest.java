@@ -408,7 +408,7 @@ public class Mos6502CompilerTest {
         processor.step(3);
 
         Registers registers = processor.getRegisters();
-        assertEquals(0x19, registers.getRegister(Registers.REG_ACCUMULATOR));
+        assertEquals(0x19, registers.getRegister(Registers.Register.ACCUMULATOR));
         assertEquals(0x19, memory.getByte(0x20));
         assertEquals(programByte.length, registers.getPC());
     }

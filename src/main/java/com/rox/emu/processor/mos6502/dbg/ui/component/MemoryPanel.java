@@ -55,7 +55,7 @@ public class MemoryPanel extends JPanel {
     private void drawIndexedBlock(Graphics g, int[] memoryBlock, int memoryOffset, int columns) {
         int pcLoLocation = -1;
         if (registers!=null)
-            pcLoLocation = registers.getRegister(Registers.REG_PC_LOW);
+            pcLoLocation = registers.getRegister(Registers.Register.PROGRAM_COUNTER_LOW);
 
         for (int i=0; i<memoryBlock.length; i++){
             final int column = i % columns;
