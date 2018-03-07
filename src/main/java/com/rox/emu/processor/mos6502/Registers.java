@@ -12,6 +12,9 @@ import org.slf4j.LoggerFactory;
 public class Registers {
     private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
+    /**
+     * A single register for a MOS 6502 containing information on register id and name
+     */
     public enum Register {
         ACCUMULATOR(0),
         Y_INDEX(1),
@@ -24,11 +27,9 @@ public class Registers {
 
         private final String description;
         private final int index;
-        private final int placeValue;
 
         Register(int index){
             this.index = index;
-            this.placeValue = 1 << index;
             description = prettifyName(name());
         }
 
@@ -52,31 +53,8 @@ public class Registers {
         public int getIndex(){
             return this.index;
         }
-
-        public int getPlaceValue(){
-            return this.placeValue;
-        }
     }
 
-//    /** Register ID of the Accumulator */
-//    public static final int REG_ACCUMULATOR = 0;
-//    /** Register ID of the Y Index register */
-//    public static final int REG_Y_INDEX = 1;
-//    /** Register ID of the X Index register */
-//    public static final int REG_X_INDEX = 2;
-//    /** Register ID of the high byte of the Program Counter */
-//    public static final int REG_PC_HIGH = 3;
-//    /** Register ID of the low byte of the Program Counter */
-//    public static final int REG_PC_LOW = 4;
-//    /** Register ID of the <em>fixed value</em> high byte of the Stack Pointer */
-//    private static final int REG_SP_X = 5;
-//    /** Register ID of the low byte of the Stack Pointer */
-//    public static final int REG_SP = 6;
-//    /** Register ID of the Status flag byte */
-//    public static final int REG_STATUS = 7;
-//
-//    private static final String[] registerNames = new String[] {"Accumulator", "Y Index", "X Index", "Program Counter (Hi)", "Program Counter (Low)", "<SP>", "Stack Pointer", "Status Flags"};
-//
     /** Place value of Carry status flag in bit {@value #C} */
     public static final int STATUS_FLAG_CARRY = 0x1;
     /** Place value of Zero status flag in bit {@value #Z} */
