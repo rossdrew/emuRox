@@ -83,7 +83,7 @@ class Mos6502ImplicitArithmeticSpec extends Specification {
         processor.step(3)
 
         then: 'the correct value is in the accumulator'
-        registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
+        registers.getRegister(Registers.Register.ACCUMULATOR) == expectedAccumulator
 
         where: 'Pointer location base (pLoc), the points (pHi|pLo) and the index are'
         pLoc | pHi  | pLo  | index | value || expectedAccumulator   | description
@@ -114,7 +114,7 @@ class Mos6502ImplicitArithmeticSpec extends Specification {
         processor.step(3)
 
         then: 'the correct value is in the accumulator'
-        registers.getRegister(Registers.REG_ACCUMULATOR) == expectedAccumulator
+        registers.getRegister(Registers.Register.ACCUMULATOR) == expectedAccumulator
 
         where:
         pLoc | pHi  | pLo  | index | value || expectedAccumulator   | description

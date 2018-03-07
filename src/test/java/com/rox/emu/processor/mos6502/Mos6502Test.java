@@ -38,14 +38,14 @@ public class Mos6502Test {
 
         Registers registers = processor.getRegisters();
 
-        assertEquals(0x34, registers.getRegister(Registers.REG_STATUS)); //Status flags reset
-        assertEquals(0x1, registers.getRegister(Registers.REG_PC_LOW));  //PC Set to location pointed to by mem[FFFC:FFFD]
-        assertEquals(0x1, registers.getRegister(Registers.REG_PC_HIGH)); // ...
-        assertEquals(0xFF, registers.getRegister(Registers.REG_SP));     //Stack Pointer at top of stack
+        assertEquals(0x34, registers.getRegister(Registers.Register.STATUS_FLAGS)); //Status flags reset
+        assertEquals(0x1, registers.getRegister(Registers.Register.PROGRAM_COUNTER_LOW));  //PC Set to location pointed to by mem[FFFC:FFFD]
+        assertEquals(0x1, registers.getRegister(Registers.Register.PROGRAM_COUNTER_HI)); // ...
+        assertEquals(0xFF, registers.getRegister(Registers.Register.STACK_POINTER_HI));     //Stack Pointer at top of stack
 
-        assertEquals(0, registers.getRegister(Registers.REG_ACCUMULATOR)); //All cleared
-        assertEquals(0, registers.getRegister(Registers.REG_X_INDEX));
-        assertEquals(0, registers.getRegister(Registers.REG_Y_INDEX));
+        assertEquals(0, registers.getRegister(Registers.Register.ACCUMULATOR)); //All cleared
+        assertEquals(0, registers.getRegister(Registers.Register.X_INDEX));
+        assertEquals(0, registers.getRegister(Registers.Register.Y_INDEX));
     }
 
     @Test
@@ -59,24 +59,24 @@ public class Mos6502Test {
 
         Registers registers = processor.getRegisters();
 
-        registers.setRegister(Registers.REG_STATUS, 0x99);
-        registers.setRegister(Registers.REG_PC_LOW, 0x99);
-        registers.setRegister(Registers.REG_PC_HIGH, 0x99);
-        registers.setRegister(Registers.REG_SP, 0x99);
-        registers.setRegister(Registers.REG_ACCUMULATOR, 0x99);
-        registers.setRegister(Registers.REG_X_INDEX, 0x99);
-        registers.setRegister(Registers.REG_Y_INDEX, 0x99);
+        registers.setRegister(Registers.Register.STATUS_FLAGS, 0x99);
+        registers.setRegister(Registers.Register.PROGRAM_COUNTER_LOW, 0x99);
+        registers.setRegister(Registers.Register.PROGRAM_COUNTER_HI, 0x99);
+        registers.setRegister(Registers.Register.STACK_POINTER_HI, 0x99);
+        registers.setRegister(Registers.Register.ACCUMULATOR, 0x99);
+        registers.setRegister(Registers.Register.X_INDEX, 0x99);
+        registers.setRegister(Registers.Register.Y_INDEX, 0x99);
 
         processor.step(3);
         processor.reset();
 
-        assertEquals(0x34, registers.getRegister(Registers.REG_STATUS));
-        assertEquals(0x0, registers.getRegister(Registers.REG_PC_LOW));
-        assertEquals(0x0, registers.getRegister(Registers.REG_PC_HIGH));
-        assertEquals(0xFF, registers.getRegister(Registers.REG_SP));
-        assertEquals(0, registers.getRegister(Registers.REG_ACCUMULATOR));
-        assertEquals(0, registers.getRegister(Registers.REG_X_INDEX));
-        assertEquals(0, registers.getRegister(Registers.REG_Y_INDEX));
+        assertEquals(0x34, registers.getRegister(Registers.Register.STATUS_FLAGS));
+        assertEquals(0x0, registers.getRegister(Registers.Register.PROGRAM_COUNTER_LOW));
+        assertEquals(0x0, registers.getRegister(Registers.Register.PROGRAM_COUNTER_HI));
+        assertEquals(0xFF, registers.getRegister(Registers.Register.STACK_POINTER_HI));
+        assertEquals(0, registers.getRegister(Registers.Register.ACCUMULATOR));
+        assertEquals(0, registers.getRegister(Registers.Register.X_INDEX));
+        assertEquals(0, registers.getRegister(Registers.Register.Y_INDEX));
     }
 
     @Test
@@ -87,7 +87,7 @@ public class Mos6502Test {
         processor.step();
 
         Registers registers = processor.getRegisters();
-        assertEquals(0xAA, registers.getRegister(Registers.REG_ACCUMULATOR));
+        assertEquals(0xAA, registers.getRegister(Registers.Register.ACCUMULATOR));
         assertEquals(0x0, 0);
         assertEquals(program.getLength(), registers.getPC());
     }
@@ -185,7 +185,7 @@ public class Mos6502Test {
         processor.step();
 
         Registers registers = processor.getRegisters();
-        assertEquals(0xAA, registers.getRegister(Registers.REG_X_INDEX));
+        assertEquals(0xAA, registers.getRegister(Registers.Register.X_INDEX));
         assertEquals(0x0, 0);
         assertEquals(program.getLength(), registers.getPC());
     }
@@ -198,7 +198,7 @@ public class Mos6502Test {
         processor.step();
 
         Registers registers = processor.getRegisters();
-        assertEquals(0xAA, registers.getRegister(Registers.REG_Y_INDEX));
+        assertEquals(0xAA, registers.getRegister(Registers.Register.Y_INDEX));
         assertEquals(0x0, 0);
         assertEquals(program.getLength(), registers.getPC());
     }
@@ -215,7 +215,7 @@ public class Mos6502Test {
         processor.step(3);
 
         Registers registers = processor.getRegisters();
-        assertEquals(0x2, registers.getRegister(Registers.REG_ACCUMULATOR));  //Accumulator is 0x2 == (0x1 + 0x1) == (mem[0x1] + mem[0x3])
+        assertEquals(0x2, registers.getRegister(Registers.Register.ACCUMULATOR));  //Accumulator is 0x2 == (0x1 + 0x1) == (mem[0x1] + mem[0x3])
         assertEquals(program.getLength(), registers.getPC());
         assertEquals(0x0, 0);
     }
@@ -232,7 +232,7 @@ public class Mos6502Test {
         processor.step(3);
 
         Registers registers = processor.getRegisters();
-        assertEquals(0x3, registers.getRegister(Registers.REG_ACCUMULATOR));
+        assertEquals(0x3, registers.getRegister(Registers.Register.ACCUMULATOR));
         assertEquals(program.getLength(), registers.getPC());
         assertEquals(0x0, 0);
     }
@@ -244,7 +244,7 @@ public class Mos6502Test {
         processor.step(3);
 
         Registers registers = processor.getRegisters();
-        assertEquals(0x5, registers.getRegister(Registers.REG_ACCUMULATOR));
+        assertEquals(0x5, registers.getRegister(Registers.Register.ACCUMULATOR));
         assertEquals(program.getLength(), registers.getPC());
     }
 
@@ -257,7 +257,7 @@ public class Mos6502Test {
         processor.step(3);
 
         Registers registers = processor.getRegisters();
-        assertEquals(0x4, registers.getRegister(Registers.REG_ACCUMULATOR));
+        assertEquals(0x4, registers.getRegister(Registers.Register.ACCUMULATOR));
         assertEquals(program.getLength(), registers.getPC());
     }
 
@@ -272,7 +272,7 @@ public class Mos6502Test {
         processor.step(2);
 
         Registers registers = processor.getRegisters();
-        assertEquals(0b00000101, registers.getRegister(Registers.REG_ACCUMULATOR));
+        assertEquals(0b00000101, registers.getRegister(Registers.Register.ACCUMULATOR));
         assertEquals(program.getLength(), registers.getPC());
         assertEquals(0x0, 0);
     }
@@ -288,7 +288,7 @@ public class Mos6502Test {
         processor.step(2);
 
         Registers registers = processor.getRegisters();
-        assertEquals(0b00010101, registers.getRegister(Registers.REG_ACCUMULATOR));
+        assertEquals(0b00010101, registers.getRegister(Registers.Register.ACCUMULATOR));
         assertEquals(program.getLength(), registers.getPC());
         assertEquals(0x0, 0);
     }
@@ -304,7 +304,7 @@ public class Mos6502Test {
         processor.step(2);
 
         Registers registers = processor.getRegisters();
-        assertEquals(0b00010000, registers.getRegister(Registers.REG_ACCUMULATOR));
+        assertEquals(0b00010000, registers.getRegister(Registers.Register.ACCUMULATOR));
         assertEquals(program.getLength(), registers.getPC());
         assertEquals(0x0, 0);
     }
@@ -356,11 +356,11 @@ public class Mos6502Test {
         Registers registers = processor.getRegisters();
 
         processor.step();
-        assert (processor.getRegisters().getRegister(Registers.REG_X_INDEX) == 1);
+        assert (processor.getRegisters().getRegister(Registers.Register.X_INDEX) == 1);
         processor.step();
 
         assertEquals(program.getLength(), registers.getPC());
-        assertEquals(2, processor.getRegisters().getRegister(Registers.REG_X_INDEX));
+        assertEquals(2, processor.getRegisters().getRegister(Registers.Register.X_INDEX));
     }
 
     @Test
@@ -370,11 +370,11 @@ public class Mos6502Test {
         Registers registers = processor.getRegisters();
 
         processor.step();
-        assert (processor.getRegisters().getRegister(Registers.REG_Y_INDEX) == 1);
+        assert (processor.getRegisters().getRegister(Registers.Register.Y_INDEX) == 1);
         processor.step();
 
         assertEquals(program.getLength(), registers.getPC());
-        assertEquals(2, processor.getRegisters().getRegister(Registers.REG_Y_INDEX));
+        assertEquals(2, processor.getRegisters().getRegister(Registers.Register.Y_INDEX));
     }
 
     @Test
@@ -408,11 +408,11 @@ public class Mos6502Test {
         Registers registers = processor.getRegisters();
 
         processor.step();
-        assert (processor.getRegisters().getRegister(Registers.REG_Y_INDEX) == 1);
+        assert (processor.getRegisters().getRegister(Registers.Register.Y_INDEX) == 1);
         processor.step();
 
         assertEquals(program.getLength(), registers.getPC());
-        assertEquals(0, processor.getRegisters().getRegister(Registers.REG_Y_INDEX));
+        assertEquals(0, processor.getRegisters().getRegister(Registers.Register.Y_INDEX));
     }
 
     @Test
@@ -422,11 +422,11 @@ public class Mos6502Test {
         Registers registers = processor.getRegisters();
 
         processor.step();
-        assert (processor.getRegisters().getRegister(Registers.REG_X_INDEX) == 1);
+        assert (processor.getRegisters().getRegister(Registers.Register.X_INDEX) == 1);
         processor.step();
 
         assertEquals(program.getLength(), registers.getPC());
-        assertEquals(0, processor.getRegisters().getRegister(Registers.REG_X_INDEX));
+        assertEquals(0, processor.getRegisters().getRegister(Registers.Register.X_INDEX));
     }
 
     @Test
@@ -449,11 +449,11 @@ public class Mos6502Test {
         Registers registers = processor.getRegisters();
 
         processor.step();
-        assert (processor.getRegisters().getRegister(Registers.REG_SP) == 0xFF);
+        assert (processor.getRegisters().getRegister(Registers.Register.STACK_POINTER_HI) == 0xFF);
         processor.step();
 
         assertEquals(program.getLength(), registers.getPC());
-        assertEquals(0xFE, processor.getRegisters().getRegister(Registers.REG_SP));
+        assertEquals(0xFE, processor.getRegisters().getRegister(Registers.Register.STACK_POINTER_HI));
         assertEquals(0x99, memory.getByte(0x01FF));
     }
 
@@ -464,14 +464,14 @@ public class Mos6502Test {
         Registers registers = processor.getRegisters();
 
         processor.step(2);
-        assert (processor.getRegisters().getRegister(Registers.REG_ACCUMULATOR) == 0x99);
+        assert (processor.getRegisters().getRegister(Registers.Register.ACCUMULATOR) == 0x99);
         processor.step();
-        assert (processor.getRegisters().getRegister(Registers.REG_ACCUMULATOR) == 0x11);
+        assert (processor.getRegisters().getRegister(Registers.Register.ACCUMULATOR) == 0x11);
         processor.step();
 
         assertEquals(program.getLength(), registers.getPC());
-        assertEquals(0xFF, processor.getRegisters().getRegister(Registers.REG_SP));
-        assertEquals(0x99, processor.getRegisters().getRegister(Registers.REG_ACCUMULATOR));
+        assertEquals(0xFF, processor.getRegisters().getRegister(Registers.Register.STACK_POINTER_HI));
+        assertEquals(0x99, processor.getRegisters().getRegister(Registers.Register.ACCUMULATOR));
     }
 
     @Test
@@ -483,8 +483,8 @@ public class Mos6502Test {
         processor.step(2);
 
         assertEquals(program.getLength(), registers.getPC());
-        assertEquals("Expected 10101010, got " + Integer.toBinaryString(processor.getRegisters().getRegister(Registers.REG_ACCUMULATOR)),
-                0b10101010, processor.getRegisters().getRegister(Registers.REG_ACCUMULATOR));
+        assertEquals("Expected 10101010, got " + Integer.toBinaryString(processor.getRegisters().getRegister(Registers.Register.ACCUMULATOR)),
+                0b10101010, processor.getRegisters().getRegister(Registers.Register.ACCUMULATOR));
     }
 
     @Test
@@ -496,8 +496,8 @@ public class Mos6502Test {
         processor.step(2);
 
         assertEquals(program.getLength(), registers.getPC());
-        assertEquals("Expected 00101101, got " + Integer.toBinaryString(processor.getRegisters().getRegister(Registers.REG_ACCUMULATOR)),
-                0b00101101, processor.getRegisters().getRegister(Registers.REG_ACCUMULATOR));
+        assertEquals("Expected 00101101, got " + Integer.toBinaryString(processor.getRegisters().getRegister(Registers.Register.ACCUMULATOR)),
+                0b00101101, processor.getRegisters().getRegister(Registers.Register.ACCUMULATOR));
     }
 
     @Test
@@ -524,9 +524,9 @@ public class Mos6502Test {
         processor.step(3);
 
         assertEquals(program.getLength(), registers.getPC());
-        assertEquals(0x8, registers.getRegister(Registers.REG_X_INDEX));
-        assertEquals(0x0, registers.getRegister(Registers.REG_Y_INDEX));
-        assertEquals(0x10, registers.getRegister(Registers.REG_ACCUMULATOR));
+        assertEquals(0x8, registers.getRegister(Registers.Register.X_INDEX));
+        assertEquals(0x0, registers.getRegister(Registers.Register.Y_INDEX));
+        assertEquals(0x10, registers.getRegister(Registers.Register.ACCUMULATOR));
     }
 
     @Test
@@ -538,9 +538,9 @@ public class Mos6502Test {
         processor.step(3);
 
         assertEquals(program.getLength(), registers.getPC());
-        assertEquals(0x0, registers.getRegister(Registers.REG_ACCUMULATOR));
-        assertEquals(0x0, registers.getRegister(Registers.REG_X_INDEX));
-        assertEquals(0x97, registers.getRegister(Registers.REG_Y_INDEX));
+        assertEquals(0x0, registers.getRegister(Registers.Register.ACCUMULATOR));
+        assertEquals(0x0, registers.getRegister(Registers.Register.X_INDEX));
+        assertEquals(0x97, registers.getRegister(Registers.Register.Y_INDEX));
     }
 
     @Test
@@ -552,9 +552,9 @@ public class Mos6502Test {
         processor.step(3);
 
         assertEquals(program.getLength(), registers.getPC());
-        assertEquals(0x0, registers.getRegister(Registers.REG_ACCUMULATOR));
-        assertEquals(0x0, registers.getRegister(Registers.REG_X_INDEX));
-        assertEquals(0x97, registers.getRegister(Registers.REG_Y_INDEX));
+        assertEquals(0x0, registers.getRegister(Registers.Register.ACCUMULATOR));
+        assertEquals(0x0, registers.getRegister(Registers.Register.X_INDEX));
+        assertEquals(0x97, registers.getRegister(Registers.Register.Y_INDEX));
     }
 
     @Test
@@ -566,9 +566,9 @@ public class Mos6502Test {
         processor.step(3);
 
         assertEquals(program.getLength(), registers.getPC());
-        assertEquals(0x1, registers.getRegister(Registers.REG_ACCUMULATOR));
-        assertEquals(0x0, registers.getRegister(Registers.REG_X_INDEX));
-        assertEquals(0x97, registers.getRegister(Registers.REG_Y_INDEX));
+        assertEquals(0x1, registers.getRegister(Registers.Register.ACCUMULATOR));
+        assertEquals(0x0, registers.getRegister(Registers.Register.X_INDEX));
+        assertEquals(0x97, registers.getRegister(Registers.Register.Y_INDEX));
     }
 
     @Test
@@ -580,9 +580,9 @@ public class Mos6502Test {
         processor.step(3);
 
         assertEquals(program.getLength(), registers.getPC());
-        assertEquals(0x0, registers.getRegister(Registers.REG_ACCUMULATOR));
-        assertEquals(0x0, registers.getRegister(Registers.REG_X_INDEX));
-        assertEquals(0x97, registers.getRegister(Registers.REG_Y_INDEX));
+        assertEquals(0x0, registers.getRegister(Registers.Register.ACCUMULATOR));
+        assertEquals(0x0, registers.getRegister(Registers.Register.X_INDEX));
+        assertEquals(0x97, registers.getRegister(Registers.Register.Y_INDEX));
     }
 
     @Test
@@ -594,7 +594,7 @@ public class Mos6502Test {
         processor.step(3);
 
         assertEquals(program.getLength(), registers.getPC());
-        assertEquals(0b00000011, registers.getRegister(Registers.REG_ACCUMULATOR));
+        assertEquals(0b00000011, registers.getRegister(Registers.Register.ACCUMULATOR));
     }
 
     @Test
@@ -606,7 +606,7 @@ public class Mos6502Test {
         processor.step(3);
 
         assertEquals(program.getLength(), registers.getPC());
-        assertEquals(0b10000001, registers.getRegister(Registers.REG_ACCUMULATOR));
+        assertEquals(0b10000001, registers.getRegister(Registers.Register.ACCUMULATOR));
     }
 
     @Test
@@ -618,9 +618,9 @@ public class Mos6502Test {
         processor.step(3);
 
         assertEquals(program.getLength(), registers.getPC());
-        assertEquals(0b11111110, registers.getRegister(Registers.REG_ACCUMULATOR));
-        assertEquals(0x0, registers.getRegister(Registers.REG_X_INDEX));
-        assertEquals(0x97, registers.getRegister(Registers.REG_Y_INDEX));
+        assertEquals(0b11111110, registers.getRegister(Registers.Register.ACCUMULATOR));
+        assertEquals(0x0, registers.getRegister(Registers.Register.X_INDEX));
+        assertEquals(0x97, registers.getRegister(Registers.Register.Y_INDEX));
     }
 
     @Test
@@ -632,9 +632,9 @@ public class Mos6502Test {
         processor.step(3);
 
         assertEquals(program.getLength(), registers.getPC());
-        assertEquals(0b00000001, registers.getRegister(Registers.REG_ACCUMULATOR));
-        assertEquals(0x0, registers.getRegister(Registers.REG_X_INDEX));
-        assertEquals(0x97, registers.getRegister(Registers.REG_Y_INDEX));
+        assertEquals(0b00000001, registers.getRegister(Registers.Register.ACCUMULATOR));
+        assertEquals(0x0, registers.getRegister(Registers.Register.X_INDEX));
+        assertEquals(0x97, registers.getRegister(Registers.Register.Y_INDEX));
     }
 
     @Test
@@ -646,9 +646,9 @@ public class Mos6502Test {
         processor.step(4);
 
         assertEquals(program.getLength(), registers.getPC());
-        assertEquals(0xA0, registers.getRegister(Registers.REG_ACCUMULATOR));
-        assertEquals(0x0, registers.getRegister(Registers.REG_X_INDEX));
-        assertEquals(0x97, registers.getRegister(Registers.REG_Y_INDEX));
+        assertEquals(0xA0, registers.getRegister(Registers.Register.ACCUMULATOR));
+        assertEquals(0x0, registers.getRegister(Registers.Register.X_INDEX));
+        assertEquals(0x97, registers.getRegister(Registers.Register.Y_INDEX));
     }
 
     @Test
@@ -660,9 +660,9 @@ public class Mos6502Test {
         processor.step(4);
 
         assertEquals(program.getLength(), registers.getPC());
-        assertEquals(0x10, registers.getRegister(Registers.REG_ACCUMULATOR));
-        assertEquals(0x0, registers.getRegister(Registers.REG_X_INDEX));
-        assertEquals(0x97, registers.getRegister(Registers.REG_Y_INDEX));
+        assertEquals(0x10, registers.getRegister(Registers.Register.ACCUMULATOR));
+        assertEquals(0x0, registers.getRegister(Registers.Register.X_INDEX));
+        assertEquals(0x97, registers.getRegister(Registers.Register.Y_INDEX));
     }
 
     @Test
@@ -674,8 +674,8 @@ public class Mos6502Test {
         processor.step(2);
 
         assertEquals(program.getLength(), registers.getPC());
-        assertEquals(0x0F, registers.getRegister(Registers.REG_ACCUMULATOR));
-        assertEquals(0x0F, registers.getRegister(Registers.REG_X_INDEX));
+        assertEquals(0x0F, registers.getRegister(Registers.Register.ACCUMULATOR));
+        assertEquals(0x0F, registers.getRegister(Registers.Register.X_INDEX));
     }
 
     @Test
@@ -687,8 +687,8 @@ public class Mos6502Test {
         processor.step(2);
 
         assertEquals(program.getLength(), registers.getPC());
-        assertEquals(0x0F, registers.getRegister(Registers.REG_ACCUMULATOR));
-        assertEquals(0x0F, registers.getRegister(Registers.REG_Y_INDEX));
+        assertEquals(0x0F, registers.getRegister(Registers.Register.ACCUMULATOR));
+        assertEquals(0x0F, registers.getRegister(Registers.Register.Y_INDEX));
     }
 
     @Test
@@ -700,8 +700,8 @@ public class Mos6502Test {
         processor.step(2);
 
         assertEquals(program.getLength(), registers.getPC());
-        assertEquals(0x0D, registers.getRegister(Registers.REG_Y_INDEX));
-        assertEquals(0x0D, registers.getRegister(Registers.REG_ACCUMULATOR));
+        assertEquals(0x0D, registers.getRegister(Registers.Register.Y_INDEX));
+        assertEquals(0x0D, registers.getRegister(Registers.Register.ACCUMULATOR));
     }
 
     @Test
@@ -713,8 +713,8 @@ public class Mos6502Test {
         processor.step(2);
 
         assertEquals(program.getLength(), registers.getPC());
-        assertEquals(0x0D, registers.getRegister(Registers.REG_X_INDEX));
-        assertEquals(0x0D, registers.getRegister(Registers.REG_ACCUMULATOR));
+        assertEquals(0x0D, registers.getRegister(Registers.Register.X_INDEX));
+        assertEquals(0x0D, registers.getRegister(Registers.Register.ACCUMULATOR));
     }
 
     @Test
@@ -726,8 +726,8 @@ public class Mos6502Test {
         processor.step(2);
 
         assertEquals(program.getLength(), registers.getPC());
-        assertEquals(0xAA, registers.getRegister(Registers.REG_X_INDEX));
-        assertEquals(0xAA, registers.getRegister(Registers.REG_SP));
+        assertEquals(0xAA, registers.getRegister(Registers.Register.X_INDEX));
+        assertEquals(0xAA, registers.getRegister(Registers.Register.STACK_POINTER_HI));
     }
 
     @Test
@@ -739,7 +739,7 @@ public class Mos6502Test {
         processor.step();
 
         assertEquals(program.getLength(), registers.getPC());
-        assertEquals(0xFF, registers.getRegister(Registers.REG_X_INDEX));
+        assertEquals(0xFF, registers.getRegister(Registers.Register.X_INDEX));
     }
 
     @Test
@@ -765,7 +765,7 @@ public class Mos6502Test {
         processor.step(2);
 
         assertEquals(program.getLength(), registers.getPC());
-        assertEquals(0x10, registers.getRegister(Registers.REG_ACCUMULATOR));
+        assertEquals(0x10, registers.getRegister(Registers.Register.ACCUMULATOR));
         assertEquals(true, registers.getFlag(Registers.Z));
         assertEquals(false, registers.getFlag(Registers.N));
         assertEquals(true, registers.getFlag(Registers.C));
@@ -780,7 +780,7 @@ public class Mos6502Test {
         processor.step(2);
 
         assertEquals(program.getLength(), registers.getPC());
-        assertEquals(0x10, registers.getRegister(Registers.REG_X_INDEX));
+        assertEquals(0x10, registers.getRegister(Registers.Register.X_INDEX));
         assertEquals(true, registers.getFlag(Registers.Z));
         assertEquals(false, registers.getFlag(Registers.N));
         assertEquals(true, registers.getFlag(Registers.C));
@@ -795,7 +795,7 @@ public class Mos6502Test {
         processor.step(2);
 
         assertEquals(program.getLength(), registers.getPC());
-        assertEquals(0x10, registers.getRegister(Registers.REG_Y_INDEX));
+        assertEquals(0x10, registers.getRegister(Registers.Register.Y_INDEX));
         assertEquals(true, registers.getFlag(Registers.Z));
         assertEquals(false, registers.getFlag(Registers.N));
         assertEquals(true, registers.getFlag(Registers.C));
@@ -809,11 +809,11 @@ public class Mos6502Test {
 
         processor.step();
 
-        int stackLoc = (registers.getRegister(Registers.REG_SP) + 1);
+        int stackLoc = (registers.getRegister(Registers.Register.STACK_POINTER_HI) + 1);
         int stackValue = (memory.getByte(0x100 | stackLoc));
 
         assertEquals(program.getLength(), registers.getPC());
-        assertEquals(registers.getRegister(Registers.REG_STATUS), stackValue);
+        assertEquals(registers.getRegister(Registers.Register.STATUS_FLAGS), stackValue);
     }
 
     @Test
@@ -823,13 +823,13 @@ public class Mos6502Test {
         Registers registers = processor.getRegisters();
 
         //Load status, push to stack then clear it and pull it from stack
-        registers.setRegister(Registers.REG_STATUS, 0b11111111);
+        registers.setRegister(Registers.Register.STATUS_FLAGS, 0b11111111);
         processor.step(1);
-        registers.setRegister(Registers.REG_STATUS, 0b00000000);
+        registers.setRegister(Registers.Register.STATUS_FLAGS, 0b00000000);
         processor.step(1);
 
         assertEquals(program.getLength(), registers.getPC());
-        assertEquals(0b11111111, registers.getRegister(Registers.REG_STATUS));
+        assertEquals(0b11111111, registers.getRegister(Registers.Register.STATUS_FLAGS));
     }
 
     @Test
@@ -839,11 +839,11 @@ public class Mos6502Test {
         Registers registers = processor.getRegisters();
 
         //Load status, push to stack then clear it and pull it from stack
-        registers.setRegister(Registers.REG_STATUS, 0b00000100);
+        registers.setRegister(Registers.Register.STATUS_FLAGS, 0b00000100);
         processor.step(1);
 
         assertEquals(program.getLength(), registers.getPC());
-        assertEquals(0b00000000, registers.getRegister(Registers.REG_STATUS));
+        assertEquals(0b00000000, registers.getRegister(Registers.Register.STATUS_FLAGS));
     }
 
     @Test
@@ -853,11 +853,11 @@ public class Mos6502Test {
         Registers registers = processor.getRegisters();
 
         //Load status, push to stack then clear it and pull it from stack
-        registers.setRegister(Registers.REG_STATUS, 0b11111011);
+        registers.setRegister(Registers.Register.STATUS_FLAGS, 0b11111011);
         processor.step(1);
 
         assertEquals(program.getLength(), registers.getPC());
-        assertEquals(0b11111111, registers.getRegister(Registers.REG_STATUS));
+        assertEquals(0b11111111, registers.getRegister(Registers.Register.STATUS_FLAGS));
     }
 
     @Test
@@ -867,11 +867,11 @@ public class Mos6502Test {
         Registers registers = processor.getRegisters();
 
         //Load status, push to stack then clear it and pull it from stack
-        registers.setRegister(Registers.REG_STATUS, 0b11110111);
+        registers.setRegister(Registers.Register.STATUS_FLAGS, 0b11110111);
         processor.step(1);
 
         assertEquals(program.getLength(), registers.getPC());
-        assertEquals(0b11111111, registers.getRegister(Registers.REG_STATUS));
+        assertEquals(0b11111111, registers.getRegister(Registers.Register.STATUS_FLAGS));
     }
 
     @Test
@@ -881,11 +881,11 @@ public class Mos6502Test {
         Registers registers = processor.getRegisters();
 
         //Load status, push to stack then clear it and pull it from stack
-        registers.setRegister(Registers.REG_STATUS, 0b00001000);
+        registers.setRegister(Registers.Register.STATUS_FLAGS, 0b00001000);
         processor.step(1);
 
         assertEquals(program.getLength(), registers.getPC());
-        assertEquals(0b00000000, registers.getRegister(Registers.REG_STATUS));
+        assertEquals(0b00000000, registers.getRegister(Registers.Register.STATUS_FLAGS));
     }
 
     @Test
@@ -897,8 +897,8 @@ public class Mos6502Test {
         processor.step(1);
 
         assertEquals(0x020F, registers.getPC());
-        assertEquals(0x02, registers.getRegister(Registers.REG_PC_HIGH)); //Jump address
-        assertEquals(0x0F, registers.getRegister(Registers.REG_PC_LOW));
+        assertEquals(0x02, registers.getRegister(Registers.Register.PROGRAM_COUNTER_HI)); //Jump address
+        assertEquals(0x0F, registers.getRegister(Registers.Register.PROGRAM_COUNTER_LOW));
 
         assertEquals(0x00, memory.getByte(0x1FF)); //Return address
         assertEquals(0x03, memory.getByte(0x1FE));
@@ -916,11 +916,11 @@ public class Mos6502Test {
         memory.setBlock(0, program.getProgramAsByteArray());
         Registers registers = processor.getRegisters();
 
-        while (registers.getRegister(Registers.REG_PC_LOW) < program.getLength())
+        while (registers.getRegister(Registers.Register.PROGRAM_COUNTER_LOW) < program.getLength())
             processor.step();
 
-        assertEquals(10, registers.getRegister(Registers.REG_ACCUMULATOR));
-        assertEquals(0, registers.getRegister(Registers.REG_X_INDEX));
+        assertEquals(10, registers.getRegister(Registers.Register.ACCUMULATOR));
+        assertEquals(0, registers.getRegister(Registers.Register.X_INDEX));
     }
 
     @Test
@@ -931,11 +931,11 @@ public class Mos6502Test {
         memory.setByteAt(0xFFFF, 0);
 
         Registers registers = processor.getRegisters();
-        registers.setRegister(Registers.REG_STATUS, 0b00000000);         //Sample register values
+        registers.setRegister(Registers.Register.STATUS_FLAGS, 0b00000000);         //Sample register values
 
         processor.step(1);
 
-        assertEquals(0xFC, registers.getRegister(Registers.REG_SP));
+        assertEquals(0xFC, registers.getRegister(Registers.Register.STACK_POINTER_HI));
 
         //PC (on Stack)
         assertEquals(0x03, memory.getByte(0x1FE));
@@ -945,8 +945,8 @@ public class Mos6502Test {
         assertEquals(Registers.STATUS_FLAG_BREAK, memory.getByte(0x1FD));
 
         //PC is set to value of [FFFE:FFFF]
-        assertEquals(memory.getByte(0xFFFE), registers.getRegister(Registers.REG_PC_HIGH));
-        assertEquals(memory.getByte(0xFFFF), registers.getRegister(Registers.REG_PC_LOW));
+        assertEquals(memory.getByte(0xFFFE), registers.getRegister(Registers.Register.PROGRAM_COUNTER_HI));
+        assertEquals(memory.getByte(0xFFFF), registers.getRegister(Registers.Register.PROGRAM_COUNTER_LOW));
     }
 
     @Test
@@ -959,12 +959,12 @@ public class Mos6502Test {
         memory.setByteAt(0xFFFF, 0x10); //->PCL
 
         Registers registers = processor.getRegisters();
-        registers.setRegister(Registers.REG_STATUS, 0b00000000);         //Sample register values
+        registers.setRegister(Registers.Register.STATUS_FLAGS, 0b00000000);         //Sample register values
 
         processor.step(1);
         processor.irq();
 
-        assertEquals(0xFC, registers.getRegister(Registers.REG_SP));
+        assertEquals(0xFC, registers.getRegister(Registers.Register.STACK_POINTER_HI));
 
         //PC (on Stack)
         assertEquals(0x02, memory.getByte(0x1FE));
@@ -974,8 +974,8 @@ public class Mos6502Test {
         assertTrue((Registers.STATUS_FLAG_IRQ_DISABLE & memory.getByte(0x1FD)) == Registers.STATUS_FLAG_IRQ_DISABLE);
 
         //PC is set to value of [FFFE:FFFF]
-        assertEquals(memory.getByte(0xFFFE), registers.getRegister(Registers.REG_PC_HIGH));
-        assertEquals(memory.getByte(0xFFFF), registers.getRegister(Registers.REG_PC_LOW));
+        assertEquals(memory.getByte(0xFFFE), registers.getRegister(Registers.Register.PROGRAM_COUNTER_HI));
+        assertEquals(memory.getByte(0xFFFF), registers.getRegister(Registers.Register.PROGRAM_COUNTER_LOW));
     }
 
     @Test

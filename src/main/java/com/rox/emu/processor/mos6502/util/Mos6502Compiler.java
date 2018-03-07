@@ -197,7 +197,7 @@ public class Mos6502Compiler {
                     break;
 
                 default:
-                    throw new UnknownOpCodeException("Unknown op-code (\"" + opCodeToken + "\") while parsing program", opCodeToken);
+                    throw new UnknownTokenException("Unknown token (\"" + opCodeToken + "\") while parsing program", opCodeToken);
             }
         }
 

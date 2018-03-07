@@ -4,6 +4,7 @@ import com.pholser.junit.quickcheck.Property;
 import com.pholser.junit.quickcheck.generator.InRange;
 import com.pholser.junit.quickcheck.runner.JUnitQuickcheck;
 import com.rox.emu.UnknownOpCodeException;
+import com.rox.emu.UnknownTokenException;
 import com.rox.emu.mem.Memory;
 import com.rox.emu.mem.SimpleMemory;
 import com.rox.emu.processor.mos6502.op.AddressingMode;
@@ -408,7 +409,7 @@ public class Mos6502CompilerTest {
         processor.step(3);
 
         Registers registers = processor.getRegisters();
-        assertEquals(0x19, registers.getRegister(Registers.REG_ACCUMULATOR));
+        assertEquals(0x19, registers.getRegister(Registers.Register.ACCUMULATOR));
         assertEquals(0x19, memory.getByte(0x20));
         assertEquals(programByte.length, registers.getPC());
     }
@@ -448,7 +449,7 @@ public class Mos6502CompilerTest {
         try {
             compiler.compileProgram();
             fail("Exception expected, 'ROX' is an invalid OpCode");
-        }catch(UnknownOpCodeException e){
+        }catch(UnknownTokenException e){
             assertTrue(e.getMessage().contains("ROX"));
             assertNotNull(e);
         }
@@ -461,7 +462,7 @@ public class Mos6502CompilerTest {
         try {
             compiler.compileProgram();
             fail("Exception expected.  This should not pass a String switch statement");
-        }catch(UnknownOpCodeException e){
+        }catch(UnknownTokenException e){
             assertTrue(e.getMessage().contains("\0ADC"));
             assertNotNull(e);
         }
@@ -474,7 +475,7 @@ public class Mos6502CompilerTest {
         try {
             compiler.compileProgram();
             fail("Exception expected.  This should not pass a String switch statement");
-        }catch(UnknownOpCodeException e){
+        }catch(UnknownTokenException e){
             assertTrue(e.getMessage().contains("\0BRK"));
             assertNotNull(e);
         }

@@ -44,15 +44,15 @@ public class Mos6502Theories {
 
         Registers registers = processor.getRegisters();
 
-        assertThat(memHi, equalTo(registers.getRegister(Registers.REG_PC_HIGH)));           // PC Set to location pointed to by mem[FFFC:FFFD]
-        assertThat(memLo, equalTo(registers.getRegister(Registers.REG_PC_LOW)));            // ...
+        assertThat(memHi, equalTo(registers.getRegister(Registers.Register.PROGRAM_COUNTER_HI)));           // PC Set to location pointed to by mem[FFFC:FFFD]
+        assertThat(memLo, equalTo(registers.getRegister(Registers.Register.PROGRAM_COUNTER_LOW)));            // ...
 
-        assertThat(registers.getRegister(Registers.REG_STATUS), equalTo(0x34));     //Status flags reset
+        assertThat(registers.getRegister(Registers.Register.STATUS_FLAGS), equalTo(0x34));     //Status flags reset
 
-        assertThat(registers.getRegister(Registers.REG_STATUS), equalTo(0x34));     //Stack Pointer at top of stack
-        assertThat(registers.getRegister(Registers.REG_SP), equalTo(0xFF));         //All cleared
-        assertThat(registers.getRegister(Registers.REG_ACCUMULATOR), equalTo(0));
-        assertThat(registers.getRegister(Registers.REG_X_INDEX), equalTo(0));
-        assertThat(registers.getRegister(Registers.REG_Y_INDEX), equalTo(0));
+        assertThat(registers.getRegister(Registers.Register.STATUS_FLAGS), equalTo(0x34));     //Stack Pointer at top of stack
+        assertThat(registers.getRegister(Registers.Register.STACK_POINTER_HI), equalTo(0xFF));         //All cleared
+        assertThat(registers.getRegister(Registers.Register.ACCUMULATOR), equalTo(0));
+        assertThat(registers.getRegister(Registers.Register.X_INDEX), equalTo(0));
+        assertThat(registers.getRegister(Registers.Register.Y_INDEX), equalTo(0));
     }
 }

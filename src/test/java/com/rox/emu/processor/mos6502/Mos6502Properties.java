@@ -42,14 +42,14 @@ public class Mos6502Properties {
 
         Registers registers = processor.getRegisters();
 
-        assertEquals(memHi, registers.getRegister(Registers.REG_PC_HIGH));        // PC Set to location pointed to by mem[FFFC:FFFD]
-        assertEquals(memLo, registers.getRegister(Registers.REG_PC_LOW));         // ...
+        assertEquals(memHi, registers.getRegister(Registers.Register.PROGRAM_COUNTER_HI));        // PC Set to location pointed to by mem[FFFC:FFFD]
+        assertEquals(memLo, registers.getRegister(Registers.Register.PROGRAM_COUNTER_LOW));         // ...
 
-        assertEquals(0x34, registers.getRegister(Registers.REG_STATUS));   //Status flags reset
-        assertEquals(0xFF, registers.getRegister(Registers.REG_SP));       //Stack Pointer at top of stack
-        assertEquals(0, registers.getRegister(Registers.REG_ACCUMULATOR)); //All cleared
-        assertEquals(0, registers.getRegister(Registers.REG_X_INDEX));
-        assertEquals(0, registers.getRegister(Registers.REG_Y_INDEX));
+        assertEquals(0x34, registers.getRegister(Registers.Register.STATUS_FLAGS));   //Status flags reset
+        assertEquals(0xFF, registers.getRegister(Registers.Register.STACK_POINTER_HI));       //Stack Pointer at top of stack
+        assertEquals(0, registers.getRegister(Registers.Register.ACCUMULATOR)); //All cleared
+        assertEquals(0, registers.getRegister(Registers.Register.X_INDEX));
+        assertEquals(0, registers.getRegister(Registers.Register.Y_INDEX));
     }
 
     @Property (trials = 100)
@@ -60,7 +60,7 @@ public class Mos6502Properties {
         processor.step();
 
         Registers registers = processor.getRegisters();
-        assertEquals(value, registers.getRegister(Registers.REG_ACCUMULATOR));
+        assertEquals(value, registers.getRegister(Registers.Register.ACCUMULATOR));
         assertEquals(program.getLength(), registers.getPC());
     }
 
@@ -72,7 +72,7 @@ public class Mos6502Properties {
         processor.step();
 
         Registers registers = processor.getRegisters();
-        assertNotEquals(value, registers.getRegister(Registers.REG_ACCUMULATOR));
+        assertNotEquals(value, registers.getRegister(Registers.Register.ACCUMULATOR));
         assertEquals(program.getLength(), registers.getPC());
     }
 }

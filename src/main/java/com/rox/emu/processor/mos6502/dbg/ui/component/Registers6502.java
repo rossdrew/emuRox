@@ -97,14 +97,14 @@ public class Registers6502 extends JPanel {
         if (registers == null)
             return;
 
-        accumulator.setValue(registers.getRegister(Registers.REG_ACCUMULATOR));
-        xIndex.setValue(registers.getRegister(Registers.REG_X_INDEX));
-        yIndex.setValue(registers.getRegister(Registers.REG_Y_INDEX));
+        accumulator.setValue(registers.getRegister(Registers.Register.ACCUMULATOR));
+        xIndex.setValue(registers.getRegister(Registers.Register.X_INDEX));
+        yIndex.setValue(registers.getRegister(Registers.Register.Y_INDEX));
         stackPointerHi.setValue(0x01);
-        stackPointerLo.setValue(registers.getRegister(Registers.REG_SP));
-        programCounterHi.setValue(registers.getRegister(Registers.REG_PC_HIGH));
-        programCounterLo.setValue(registers.getRegister(Registers.REG_PC_LOW));
+        stackPointerLo.setValue(registers.getRegister(Registers.Register.STACK_POINTER_HI));
+        programCounterHi.setValue(registers.getRegister(Registers.Register.PROGRAM_COUNTER_HI));
+        programCounterLo.setValue(registers.getRegister(Registers.Register.PROGRAM_COUNTER_LOW));
 
-        statusRegister.setValue(registers.getRegister(Registers.REG_STATUS));
+        statusRegister.setValue(registers.getRegister(Registers.Register.STATUS_FLAGS));
     }
 }
