@@ -55,6 +55,53 @@ public class Registers {
         }
     }
 
+    /**
+     * A MOS 6502 status flag
+     */
+    public enum Flag {
+        CARRY(0),
+        ZERO(1),
+        IRQ_DISABLE(2),
+        DECIMAL_MODE(3),
+        BREAK(4),
+        UNUSED(5),
+        OVERFLOW(6),
+        NEGATIVE(7);
+
+        private final int index;
+        private final int placeValue;
+        private final String description;
+
+        private static String prettifyName(String originalName){
+            String name = originalName.replaceAll("_"," ").toLowerCase();
+            name = name.substring(0, 1).toUpperCase() + name.substring(1);
+            int spaceIndex = name.indexOf(' ');
+            if (spaceIndex > 0)
+                name = name.substring(0, spaceIndex) + name.substring(spaceIndex, spaceIndex+2).toUpperCase() + name.substring(spaceIndex+2);
+            return name;
+        }
+
+        Flag(int index) {
+            this.index = index;
+            this.placeValue = (1 << index); //TODO this doesn't work
+            description = prettifyName(name());
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public int getIndex() {
+            return index;
+        }
+    }
+
+    public static void main(String[] args) {
+        for (Flag flag : Flag.values()) {
+            System.out.println(flag.getIndex() + "." + flag.getDescription() + " (" + Integer.toBinaryString(flag.index) + ")");
+        }
+    }
+
     /** Place value of Carry status flag in bit {@value #C} */
     public static final int STATUS_FLAG_CARRY = 0x1;
     /** Place value of Zero status flag in bit {@value #Z} */
