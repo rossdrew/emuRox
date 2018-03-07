@@ -55,40 +55,50 @@ public class Registers {
         }
     }
 
-    /** Place value of Carry status flag in bit {@value #C} */
-    public static final int STATUS_FLAG_CARRY = 0x1;
-    /** Place value of Zero status flag in bit {@value #Z} */
-    public static final int STATUS_FLAG_ZERO = 0x2;
-    /** Place value of Interrupt status flag in bit {@value #I} */
-    public static final int STATUS_FLAG_IRQ_DISABLE = 0x4;
-    /** Place value of Binary Coded Decimal status flag in bit {@value #D} */
-    public static final int STATUS_FLAG_DEC = 0x8;
-    /** Place value of Break status flag in bit {@value #B} */
-    public static final int STATUS_FLAG_BREAK = 0x10;
-    private static final int STATUS_FLAG_UNUSED = 0x20; //Placeholder only
-    /** Place value of Overflow status flag in bit {@value #V} */
-    public static final int STATUS_FLAG_OVERFLOW = 0x40;
-    /** Place value of Negative status flag in bit {@value #N} */
-    public static final int STATUS_FLAG_NEGATIVE = 0x80;
+    /**
+     * A MOS 6502 status flag
+     */
+    public enum Flag {
+        CARRY(0),
+        ZERO(1),
+        IRQ_DISABLE(2),
+        DECIMAL_MODE(3),
+        BREAK(4),
+        UNUSED(5),
+        OVERFLOW(6),
+        NEGATIVE(7);
 
-    /** Bit place of Negative status flag */
-    public static final int N = 7;
-    /** Bit place of Overflow status flag */
-    public static final int V = 6;
-    /** - <em>UNUSED</em> (Placeholder flag only) **/
-    private static final int U = 5; //Placeholder only
-    /** Bit place of Break status flag */
-    public static final int B = 4;
-    /** Bit place of Binary Coded Decimal status flag */
-    public static final int D = 3;
-    /** Bit place of Interrupt status flag */
-    public static final int I = 2;
-    /** Bit place of Zero status flag */
-    public static final int Z = 1;
-    /** Bit place ofCarry status flag */
-    public static final int C = 0;
+        private final int index;
+        private final int placeValue;
+        private final String description;
 
-    private static final String[] flagNames = new String[] {"Carry", "Zero", "IRQ Disable", "Decimal Mode", "BRK Command", "<UNUSED>", "Overflow", "Negative"};
+        private static String prettifyName(String originalName){
+            String name = originalName.replaceAll("_"," ").toLowerCase();
+            name = name.substring(0, 1).toUpperCase() + name.substring(1);
+            int spaceIndex = name.indexOf(' ');
+            if (spaceIndex > 0)
+                name = name.substring(0, spaceIndex) + name.substring(spaceIndex, spaceIndex+2).toUpperCase() + name.substring(spaceIndex+2);
+            return name;
+        }
+
+        Flag(int index) {
+            this.index = index;
+            this.placeValue = (1 << index);
+            description = prettifyName(name());
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public int getIndex() {
+            return index;
+        }
+
+        public int getPlaceValue() {
+            return placeValue;
+        }
+    }
 
     private final RoxByte[] register;
 
@@ -156,40 +166,30 @@ public class Registers {
     }
 
     /**
-     * @param flagNumber for which to get the name
-     * @return the {@link String} name of the given flag
-     */
-    public static String getFlagName(int flagNumber){
-        if (flagNumber < 0 || flagNumber > 7)
-            throw new IllegalArgumentException("Unknown 6502 Flag ID:" + flagNumber);
-        return flagNames[flagNumber];
-    }
-
-    /**
-     * @param flagBitNumber flag to test
+     * @param flag flag to test
      * @return <code>true</code> if the specified flag is set, <code>false</code> otherwise
      */
-    public boolean getFlag(int flagBitNumber) {
-        return register[Register.STATUS_FLAGS.index].isBitSet(flagBitNumber);
+    public boolean getFlag(Flag flag) {
+        return register[Register.STATUS_FLAGS.getIndex()].isBitSet(flag.getIndex());
     }
 
     /**
-     * @param flagBitNumber for which to set the state
+     * @param flag for which to set the state
      * @param state to set the flag to
      */
-    public void setFlagTo(int flagBitNumber, boolean state) {
+    public void setFlagTo(Flag flag, boolean state) {
         if (state)
-            setFlag(flagBitNumber);
+            setFlag(flag);
         else
-            clearFlag(flagBitNumber);
+            clearFlag(flag);
     }
 
     /**
-     * @param flagBitNumber for which to set to true
+     * @param flag for which to set to true
      */
-    public void setFlag(int flagBitNumber) {
-        LOG.debug("'F:" + getFlagName(flagBitNumber) +"' -> SET");
-        register[Register.STATUS_FLAGS.index] = register[Register.STATUS_FLAGS.index].withBit(flagBitNumber);
+    public void setFlag(Flag flag) {
+        LOG.debug("'F:" + flag.description +"' -> SET");
+        register[Register.STATUS_FLAGS.getIndex()] = register[Register.STATUS_FLAGS.getIndex()].withBit(flag.getIndex());
     }
 
     /**
@@ -201,11 +201,11 @@ public class Registers {
      * NOT    > 1111 1101
      * AND(R) > .... ..0.
      *
-     * @param flagBitNumber int with bits to clear, turned on
+     * @param flag to be cleared
      */
-    public void clearFlag(int flagBitNumber){
-        LOG.debug("'F:" + getFlagName(flagBitNumber) + "' -> CLEARED");
-        register[Register.STATUS_FLAGS.index] = register[Register.STATUS_FLAGS.index].withoutBit(flagBitNumber);
+    public void clearFlag(Flag flag){
+        LOG.debug("'F:" + flag.getDescription() + "' -> CLEARED");
+        register[Register.STATUS_FLAGS.getIndex()] = register[Register.STATUS_FLAGS.getIndex()].withoutBit(flag.getIndex());
     }
 
     /**
@@ -222,9 +222,9 @@ public class Registers {
      */
     public void setZeroFlagFor(int value){
         if (value == 0)
-            setFlag(Z);
+            setFlag(Flag.ZERO);
         else
-            clearFlag(Z);
+            clearFlag(Flag.ZERO);
     }
 
     /**
@@ -232,9 +232,9 @@ public class Registers {
      */
     public void setNegativeFlagFor(int value){
         if (isNegative(value))
-            setFlag(N);
+            setFlag(Flag.NEGATIVE);
         else
-            clearFlag(N);
+            clearFlag(Flag.NEGATIVE);
     }
 
     private boolean isNegative(int fakeByte){

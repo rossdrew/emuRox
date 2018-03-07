@@ -66,7 +66,7 @@ public class Mos6502 {
      */
     public void irq() {
         LOG.debug("IRQ!");
-        registers.setFlag(I);
+        registers.setFlag(Flag.IRQ_DISABLE);
 
         pushRegister(Register.PROGRAM_COUNTER_HI);
         pushRegister(Register.PROGRAM_COUNTER_LOW);
@@ -84,7 +84,7 @@ public class Mos6502 {
      */
     public void nmi() {
         LOG.debug("NMI!");
-        registers.setFlag(I);
+        registers.setFlag(Flag.IRQ_DISABLE);
 
         pushRegister(Register.PROGRAM_COUNTER_HI);
         pushRegister(Register.PROGRAM_COUNTER_LOW);
@@ -129,7 +129,7 @@ public class Mos6502 {
                 registers.setPC(performSilently(this::performADC, registers.getPC(), 2, false));
                 push(registers.getRegister(Register.PROGRAM_COUNTER_HI));
                 push(registers.getRegister(Register.PROGRAM_COUNTER_LOW));
-                push(registers.getRegister(Register.STATUS_FLAGS) | STATUS_FLAG_BREAK);
+                push(registers.getRegister(Register.STATUS_FLAGS) | Flag.BREAK.getPlaceValue());
 
                 registers.setRegister(Register.PROGRAM_COUNTER_HI, getByteOfMemoryAt(0xFFFE));
                 registers.setRegister(Register.PROGRAM_COUNTER_LOW, getByteOfMemoryAt(0xFFFF));
@@ -201,15 +201,15 @@ public class Mos6502 {
                 break;
 
             case SEC:
-                registers.setFlag(C);
+                registers.setFlag(Flag.CARRY);
                 break;
 
             case CLC:
-                registers.clearFlag(C);
+                registers.clearFlag(Flag.CARRY);
                 break;
 
             case CLV:
-                registers.clearFlag(V);
+                registers.clearFlag(Flag.OVERFLOW);
                 break;
 
             case INC_Z:
@@ -655,23 +655,23 @@ public class Mos6502 {
             }break;
 
             case BCS:
-                branchIf(registers.getFlag(C));
+                branchIf(registers.getFlag(Flag.CARRY));
                 break;
 
             case BCC:
-                branchIf(!registers.getFlag(C));
+                branchIf(!registers.getFlag(Flag.CARRY));
                 break;
 
             case BEQ:
-                branchIf(registers.getFlag(Z));
+                branchIf(registers.getFlag(Flag.ZERO));
                 break;
 
             case BNE:
-                branchIf(!registers.getFlag(Z));
+                branchIf(!registers.getFlag(Flag.ZERO));
                 break;
 
             case BMI:
-                branchIf(registers.getFlag(N));
+                branchIf(registers.getFlag(Flag.NEGATIVE));
                 break;
 
             case JSR:
@@ -684,15 +684,15 @@ public class Mos6502 {
                 break;
 
             case BPL:
-                branchIf(!registers.getFlag(N));
+                branchIf(!registers.getFlag(Flag.NEGATIVE));
                 break;
 
             case BVS:
-                branchIf(registers.getFlag(V));
+                branchIf(registers.getFlag(Flag.OVERFLOW));
                 break;
 
             case BVC:
-                branchIf(!registers.getFlag(V));
+                branchIf(!registers.getFlag(Flag.OVERFLOW));
                 break;
 
             case TAX:
@@ -725,19 +725,19 @@ public class Mos6502 {
                 break;
 
             case SEI:
-                registers.setFlag(I);
+                registers.setFlag(Flag.IRQ_DISABLE);
                 break;
 
             case CLI:
-                registers.clearFlag(I);
+                registers.clearFlag(Flag.IRQ_DISABLE);
                 break;
 
             case SED:
-                registers.setFlag(D);
+                registers.setFlag(Flag.DECIMAL_MODE);
                 break;
 
             case CLD:
-                registers.clearFlag(D);
+                registers.clearFlag(Flag.DECIMAL_MODE);
                 break;
 
             case RTS:
@@ -917,7 +917,7 @@ public class Mos6502 {
         int result = performSilently(this::performSBC, getRegisterValue(toRegister), value, true);
         registers.setFlagsBasedOn(result & 0xFF);
 
-        registers.setFlagTo(C, (fromTwosComplimented(result) >=0));
+        registers.setFlagTo(Flag.CARRY, (fromTwosComplimented(result) >=0));
     }
 
     @FunctionalInterface
@@ -977,7 +977,7 @@ public class Mos6502 {
     }
 
     private void performBIT(int memData) {
-       registers.setFlagTo(Z, ((memData & getRegisterValue(Register.ACCUMULATOR)) == memData));
+       registers.setFlagTo(Flag.ZERO, ((memData & getRegisterValue(Register.ACCUMULATOR)) == memData));
 
        //Set N, V to bits 7 and 6 of memory data
        setRegisterValue(Register.STATUS_FLAGS, (memData & 0b11000000) | (getRegisterValue(Register.STATUS_FLAGS) & 0b00111111));
@@ -1000,7 +1000,7 @@ public class Mos6502 {
     private int performSilently(TwoByteOperation operation, int byteA, int byteB, boolean carryInState){
        int statusState = registers.getRegister(Register.STATUS_FLAGS);
 
-       registers.setFlagTo(C, carryInState);            //To allow ignore of the carry: ignore = 0 for ADC, 1 for SBC
+       registers.setFlagTo(Flag.CARRY, carryInState);            //To allow ignore of the carry: ignore = 0 for ADC, 1 for SBC
        int result = operation.perform(byteA, byteB);
 
        registers.setRegister(Register.STATUS_FLAGS, statusState);

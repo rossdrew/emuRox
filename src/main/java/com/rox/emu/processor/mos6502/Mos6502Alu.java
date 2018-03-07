@@ -39,14 +39,14 @@ public class Mos6502Alu {
      * @return the result of <code>byteA ADD byteB</code>
      */
     public RoxByte adc(final RoxByte byteA, final RoxByte byteB){
-        int carry = registers.getFlag(Registers.C) ? 1 : 0;
+        int carry = registers.getFlag(Registers.Flag.CARRY) ? 1 : 0;
 
         final RoxWord result = RoxWord.literalFrom(byteA.getRawValue() + byteB.getRawValue() + carry);
 
-        registers.setFlagTo(Registers.C, result.getHighByte().isBitSet(0));
+        registers.setFlagTo(Registers.Flag.CARRY, result.getHighByte().isBitSet(0));
 
         if (isAdcOverflow(byteA, byteB, result))
-            registers.setFlag(Registers.V);
+            registers.setFlag(Registers.Flag.OVERFLOW);
 
         return result.getLowByte();
     }
@@ -113,7 +113,7 @@ public class Mos6502Alu {
      */
     public RoxByte asl(RoxByte byteA) {
         final RoxWord result = RoxWord.literalFrom((byteA.getRawValue() << 1));
-        registers.setFlagTo(Registers.C, result.getHighByte().isBitSet(0));
+        registers.setFlagTo(Registers.Flag.CARRY, result.getHighByte().isBitSet(0));
         return result.getLowByte();
     }
 
@@ -124,9 +124,9 @@ public class Mos6502Alu {
      * @return the result of <code>ROL byteA</code>
      */
     public RoxByte rol(RoxByte byteA) {
-        int carry = registers.getFlag(Registers.C) ? 1 : 0;
+        int carry = registers.getFlag(Registers.Flag.CARRY) ? 1 : 0;
         final RoxWord result = RoxWord.literalFrom((byteA.getRawValue() << 1) + carry);
-        registers.setFlagTo(Registers.C, result.getHighByte().isBitSet(0));
+        registers.setFlagTo(Registers.Flag.CARRY, result.getHighByte().isBitSet(0));
         return result.getLowByte();
     }
 
@@ -138,7 +138,7 @@ public class Mos6502Alu {
      */
     public RoxByte lsr(RoxByte byteA) {
         final RoxByte result = RoxByte.fromLiteral((byteA.getRawValue() >> 1));
-        registers.setFlagTo(Registers.C, byteA.isBitSet(0));
+        registers.setFlagTo(Registers.Flag.CARRY, byteA.isBitSet(0));
         return result;
     }
 
@@ -149,9 +149,9 @@ public class Mos6502Alu {
      * @return the result of <code>ROR byteA</code>
      */
     public RoxByte ror(RoxByte byteA) {
-        int carry = registers.getFlag(Registers.C) ? 0b10000000 : 0;
+        int carry = registers.getFlag(Registers.Flag.CARRY) ? 0b10000000 : 0;
         final RoxByte result = RoxByte.fromLiteral((byteA.getRawValue() >> 1) | carry);
-        registers.setFlagTo(Registers.C, byteA.isBitSet(0));
+        registers.setFlagTo(Registers.Flag.CARRY, byteA.isBitSet(0));
         return result;
     }
 }
