@@ -99,50 +99,13 @@ public class RegistersTest {
                      0, registers.getRegister(Registers.Register.STATUS_FLAGS));
     }
 
-//    @Test
-//    public void testFlagPlaceValueToFlagID(){
-//        for (int i=0; i<8; i++){
-//            int placevalue = 1 << i;
-//            assertEquals(i, Registers.getFlagID(placevalue));
-//        }
-//    }
-//
-//    @Property(trials = 10)
-//    public void testInvalidFlagPlaceValueToFlagID(@When(satisfies = "#_ < 0 || #_ > 128") int placeValue){
-//        try{
-//            Registers.getFlagID(placeValue);
-//            fail("Place value " + Integer.toHexString(placeValue) + " should be invalid.");
-//        }catch(IllegalArgumentException e){
-//            assertNotNull(e);
-//        }
-//    }
-//
-//    @Test
-//    public void testGetValidRegisterName(){
-//        for (int i=0; i<8; i++){
-//            try {
-//                final String name = Registers.getRegisterName(i);
-//
-//                assertNotNull(name);
-//                assertNotEquals("", name);
-//            }catch(ArrayIndexOutOfBoundsException e){
-//                TestCase.fail("Register #" + i + " should have a name");
-//            }
-//        }
-//    }
-//
-//    @Test
-//    public void testGetInvalidRegisterName(){
-//        for (int i=9; i<11; i++){
-//            try {
-//                Registers.getRegisterName(i);
-//                fail(i + " is an invalid register ID");
-//            }catch(ArrayIndexOutOfBoundsException e){
-//                assertNotNull(e);
-//                assertFalse(e.getMessage().isEmpty());
-//            }
-//        }
-//    }
+    @Test
+    public void testRegisterDetails(){
+        for (Registers.Register register : Registers.Register.values()) {
+            assertFalse(register.getDescription().isEmpty());
+            assertTrue(register.getIndex() >= 0 && register.getIndex() <= 8);
+        }
+    }
 
     @Test
     public void testGetValidFlagName(){
