@@ -108,7 +108,7 @@ public class Registers {
         registerValue = new RoxByte[8];
         for (int i=0; i<8; i++)
             registerValue[i] = RoxByte.ZERO;
-        registerValue[STACK_POINTER_LOW.index]   = RoxByte.fromLiteral(0b11111111);
+        registerValue[STACK_POINTER_LOW.index] = RoxByte.fromLiteral(0b11111111);
         registerValue[STATUS_FLAGS.index] = RoxByte.fromLiteral(0b00000000);
     }
 
@@ -187,6 +187,8 @@ public class Registers {
     }
 
     /**
+     * Set* the specified flag of the status register to 1
+     *
      * @param flag for which to set to true
      */
     public void setFlag(Flag flag) {
@@ -195,13 +197,7 @@ public class Registers {
     }
 
     /**
-     * Bitwise clear flag by OR-ing the int carrying flags to be cleared
-     * then AND-ing with status flag registerValue.
-     *
-     * Clear bit 1 (place value 2)
-     *          0000 0010
-     * NOT    > 1111 1101
-     * AND(R) > .... ..0.
+     * Set/clear the specified flag of the status register to 0
      *
      * @param flag to be cleared
      */
