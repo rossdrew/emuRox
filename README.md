@@ -39,7 +39,7 @@ BCD and proper timing is a thing for another day as my first objective for now, 
 
 ## Development & Testing
 
-<a href="http://sorensiebuhr.dk/">
+<a href="https://codecov.io/">
  <img align="right" src="https://codecov.io/gh/rossdrew/emuRox/graphs/sunburst.svg" data-canonical-src="https://codecov.io/gh/rossdrew/emuRox/graphs/sunburst.svg" alt="The current codecov.io coverage chart" width="150" />
 </a>
 
