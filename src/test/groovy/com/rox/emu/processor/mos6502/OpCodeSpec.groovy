@@ -3011,7 +3011,7 @@ class OpCodeSpec extends Specification {
         memory.setByteAt(0xFFFE, newPCHi)
         memory.setByteAt(0xFFFF, newPCLo)
 
-        and: 'The status register is set to a value that will be pushed to stack'
+        and: 'The status registerValue is set to a value that will be pushed to stack'
         registers.setRegister(Registers.Register.STATUS_FLAGS, statusReg)
     
         and: 'the program is executed'
@@ -3023,7 +3023,7 @@ class OpCodeSpec extends Specification {
         registers.getRegister(Registers.Register.PROGRAM_COUNTER_LOW) == newPCLo
         registers.getRegister(Registers.Register.STACK_POINTER_HI) == 0xFC
 
-        and: 'the pushed status register has the break flag set'
+        and: 'the pushed status registerValue has the break flag set'
         memory.getByte(0x1FD) == (statusReg | Registers.Flag.BREAK.getPlaceValue())
         
         and: 'the pushed program counter is correct'
@@ -3034,9 +3034,9 @@ class OpCodeSpec extends Specification {
     
         where:
         newPCHi | newPCLo | statusReg  | expected
-        0x0     | 0x0     | 0b00000000 | "With empty status register and B not set"
-        0x0     | 0x0     | 0b00100000 | "With empty status register and B already set"
-        0x1     | 0x1     | 0b00100101 | "With loaded status register"
+        0x0     | 0x0     | 0b00000000 | "With empty status registerValue and B not set"
+        0x0     | 0x0     | 0b00100000 | "With empty status registerValue and B already set"
+        0x1     | 0x1     | 0b00100101 | "With loaded status registerValue"
     }
     
     @Unroll("IRQ #expected #statusValue->#pushedStatus")
@@ -3065,7 +3065,7 @@ class OpCodeSpec extends Specification {
         pushedPCLo == memory.getByte(0x1FE)
         pushedPCHi == memory.getByte(0x1FF)
     
-        and: 'Status register is moved to stack with B set'
+        and: 'Status registerValue is moved to stack with B set'
         pushedStatus == memory.getByte(0x1FD)
     
         and: 'The PC is set to 0xFFFE:0xFFFF'
@@ -3074,9 +3074,9 @@ class OpCodeSpec extends Specification {
     
         where:
         statusValue | steps | pushedStatus | pushedPCHi | pushedPCLo | expected
-        0b00000000  | 1     | 0b00000100   | 0x00       | 0x02       | "Empty status register"
-        0b11111111  | 1     | 0b11111111   | 0x00       | 0x02       | "Full status register"
-        0b10101010  | 1     | 0b10101110   | 0x00       | 0x02       | "Random status register"
+        0b00000000  | 1     | 0b00000100   | 0x00       | 0x02       | "Empty status registerValue"
+        0b11111111  | 1     | 0b11111111   | 0x00       | 0x02       | "Full status registerValue"
+        0b10101010  | 1     | 0b10101110   | 0x00       | 0x02       | "Random status registerValue"
         0b00000000  | 2     | 0b00000100   | 0x00       | 0x04       | "Two steps"
         0b00000000  | 3     | 0b00000100   | 0x00       | 0x06       | "Three steps"
     }
@@ -3107,7 +3107,7 @@ class OpCodeSpec extends Specification {
         pushedPCLo == memory.getByte(0x1FE)
         pushedPCHi == memory.getByte(0x1FF)
     
-        and: 'Status register is moved to stack with B set'
+        and: 'Status registerValue is moved to stack with B set'
         pushedStatus == memory.getByte(0x1FD)
     
         and: 'The PC is set to 0xFFFE:0xFFFF'
@@ -3116,9 +3116,9 @@ class OpCodeSpec extends Specification {
     
         where:
         statusValue | steps | pushedStatus | pushedPCHi | pushedPCLo | expected
-        0b00000000  | 1     | 0b00000100   | 0x00       | 0x02       | "Empty status register"
-        0b11111111  | 1     | 0b11111111   | 0x00       | 0x02       | "Full status register"
-        0b10101010  | 1     | 0b10101110   | 0x00       | 0x02       | "Random status register"
+        0b00000000  | 1     | 0b00000100   | 0x00       | 0x02       | "Empty status registerValue"
+        0b11111111  | 1     | 0b11111111   | 0x00       | 0x02       | "Full status registerValue"
+        0b10101010  | 1     | 0b10101110   | 0x00       | 0x02       | "Random status registerValue"
         0b00000000  | 2     | 0b00000100   | 0x00       | 0x04       | "Two steps"
         0b00000000  | 3     | 0b00000100   | 0x00       | 0x06       | "Three steps"
     }
@@ -3152,7 +3152,7 @@ class OpCodeSpec extends Specification {
         restoredPCHi == registers.getRegister(Registers.Register.PROGRAM_COUNTER_HI)
         restoredPCLo == registers.getRegister(Registers.Register.PROGRAM_COUNTER_LOW)
     
-        and: 'Status register is moved to stack with B set'
+        and: 'Status registerValue is moved to stack with B set'
         restoredStatus == registers.getRegister(Registers.Register.STATUS_FLAGS)
     
         and: 'The PC is set to where it was before IRQ'
@@ -3161,9 +3161,9 @@ class OpCodeSpec extends Specification {
     
         where:
         statusValue | restoredStatus | restoredPCHi | restoredPCLo | expected
-        0b00000000  | 0b00000100     | 0x00         | 0x04         | "Empty status register"
-        0b11111111  | 0b11111111     | 0x00         | 0x04         | "Full status register"
-        0b10101010  | 0b10101110     | 0x00         | 0x04         | "Random status register"
+        0b00000000  | 0b00000100     | 0x00         | 0x04         | "Empty status registerValue"
+        0b11111111  | 0b11111111     | 0x00         | 0x04         | "Full status registerValue"
+        0b10101010  | 0b10101110     | 0x00         | 0x04         | "Random status registerValue"
     }
     
     //    @Ignore

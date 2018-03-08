@@ -4,6 +4,8 @@ import com.rox.emu.env.RoxByte;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static com.rox.emu.processor.mos6502.Registers.Register.*;
+
 /**
  * A representation of the MOS 6502 CPU registers
  *
@@ -13,7 +15,7 @@ public class Registers {
     private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
     /**
-     * A single register for a MOS 6502 containing information on register id and name
+     * A single registerValue for a MOS 6502 containing information on registerValue id and name
      */
     public enum Register {
         ACCUMULATOR(0),
@@ -100,59 +102,59 @@ public class Registers {
         }
     }
 
-    private final RoxByte[] register;
+    private final RoxByte[] registerValue;
 
     public Registers(){
-        register = new RoxByte[8];
+        registerValue = new RoxByte[8];
         for (int i=0; i<8; i++)
-            register[i] = RoxByte.ZERO;
-        register[Register.STACK_POINTER_LOW.index]   = RoxByte.fromLiteral(0b11111111);
-        register[Register.STATUS_FLAGS.index] = RoxByte.fromLiteral(0b00000000);
+            registerValue[i] = RoxByte.ZERO;
+        registerValue[STACK_POINTER_LOW.index]   = RoxByte.fromLiteral(0b11111111);
+        registerValue[STATUS_FLAGS.index] = RoxByte.fromLiteral(0b00000000);
     }
 
     /**
-     * @param reg of the register to set
-     * @param val to set the register to
+     * @param register the registerValue to set
+     * @param value to set the registerValue to
      */
-    public void setRegister(Register reg, int val){
-        LOG.debug("'R:" + reg.getDescription() + "' := " + val);
-        register[reg.index] = RoxByte.fromLiteral(val);
+    public void setRegister(Register register, int value){
+        LOG.debug("'R:" + register.getDescription() + "' := " + value);
+        registerValue[register.index] = RoxByte.fromLiteral(value);
     }
 
     /**
-     * @param reg for which to get the value
-     * @return the value of the desired register
+     * @param register from which to get the value
+     * @return the value of the desired registerValue
      */
-    public int getRegister(Register reg){
-        return register[reg.index].getRawValue();
+    public int getRegister(Register register){
+        return registerValue[register.index].getRawValue();
     }
 
     /**
-     * Set the given register to the given value and set the flags register based on that value
+     * Set the given registerValue to the given value and set the flags registerValue based on that value
      *
-     * @param reg of the register to set
-     * @param value to set the register to
+     * @param register the registerValue to set
+     * @param value to set the registerValue to
      */
-    public void setRegisterAndFlags(Register reg, int value){
+    public void setRegisterAndFlags(Register register, int value){
         int valueByte = value & 0xFF;
-        setRegister(reg, valueByte);
+        setRegister(register, valueByte);
         setFlagsBasedOn(valueByte);
     }
 
     /**
-     * @param newPCWord to set the Program Counter to
+     * @param pcWordValue to set the Program Counter to
      */
-    public void setPC(int newPCWord){
-        setRegister(Register.PROGRAM_COUNTER_HI, newPCWord >> 8);
-        setRegister(Register.PROGRAM_COUNTER_LOW, newPCWord & 0xFF);
-        LOG.debug("'R+:Program Counter' := " + newPCWord + " [ " + getRegister(Register.PROGRAM_COUNTER_HI) + " | " + getRegister(Register.PROGRAM_COUNTER_LOW) + " ]");
+    public void setPC(int pcWordValue){
+        setRegister(PROGRAM_COUNTER_HI, pcWordValue >> 8);
+        setRegister(PROGRAM_COUNTER_LOW, pcWordValue & 0xFF);
+        LOG.debug("'R+:Program Counter' := " + pcWordValue + " [ " + getRegister(PROGRAM_COUNTER_HI) + " | " + getRegister(PROGRAM_COUNTER_LOW) + " ]");
     }
 
     /**
      * @return the two byte value of the Program Counter
      */
     public int getPC(){
-        return (getRegister(Register.PROGRAM_COUNTER_HI) << 8) | getRegister(Register.PROGRAM_COUNTER_LOW);
+        return (getRegister(PROGRAM_COUNTER_HI) << 8) | getRegister(PROGRAM_COUNTER_LOW);
     }
 
     /**
@@ -170,7 +172,7 @@ public class Registers {
      * @return <code>true</code> if the specified flag is set, <code>false</code> otherwise
      */
     public boolean getFlag(Flag flag) {
-        return register[Register.STATUS_FLAGS.getIndex()].isBitSet(flag.getIndex());
+        return registerValue[STATUS_FLAGS.getIndex()].isBitSet(flag.getIndex());
     }
 
     /**
@@ -189,12 +191,12 @@ public class Registers {
      */
     public void setFlag(Flag flag) {
         LOG.debug("'F:" + flag.description +"' -> SET");
-        register[Register.STATUS_FLAGS.getIndex()] = register[Register.STATUS_FLAGS.getIndex()].withBit(flag.getIndex());
+        registerValue[STATUS_FLAGS.getIndex()] = registerValue[STATUS_FLAGS.getIndex()].withBit(flag.getIndex());
     }
 
     /**
      * Bitwise clear flag by OR-ing the int carrying flags to be cleared
-     * then AND-ing with status flag register.
+     * then AND-ing with status flag registerValue.
      *
      * Clear bit 1 (place value 2)
      *          0000 0010
@@ -205,11 +207,11 @@ public class Registers {
      */
     public void clearFlag(Flag flag){
         LOG.debug("'F:" + flag.getDescription() + "' -> CLEARED");
-        register[Register.STATUS_FLAGS.getIndex()] = register[Register.STATUS_FLAGS.getIndex()].withoutBit(flag.getIndex());
+        registerValue[STATUS_FLAGS.getIndex()] = registerValue[STATUS_FLAGS.getIndex()].withoutBit(flag.getIndex());
     }
 
     /**
-     * @param value to set the register flags based on
+     * @param value to set the status flags based on
      */
     public void setFlagsBasedOn(int value){
         int valueByte = value & 0xFF;
