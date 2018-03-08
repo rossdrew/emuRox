@@ -39,7 +39,11 @@ BCD and proper timing is a thing for another day as my first objective for now, 
 
 ## Development & Testing
 
-![Current Code Coverage](https://codecov.io/gh/rossdrew/emuRox/graphs/sunburst.svg "The current codecov.io coverage chart") The plan was to develop this, a larger personal project, in a TDD (Test Driven Development) centric way, that is via Red-Green testing.  This means writing failing tests (red) that describe functionality then writing that functionality to make the tests pass (green) and iteratively writing a complete application.
+<a href="http://sorensiebuhr.dk/">
+ <img align="right" src="https://codecov.io/gh/rossdrew/emuRox/graphs/sunburst.svg" data-canonical-src="https://codecov.io/gh/rossdrew/emuRox/graphs/sunburst.svg" alt="The current codecov.io coverage chart" width="150" />
+</a>
+
+The plan was to develop this, a larger personal project, in a TDD (Test Driven Development) centric way, that is via Red-Green testing.  This means writing failing tests (red) that describe functionality then writing that functionality to make the tests pass (green) and iteratively writing a complete application.
  Here is a list of those that I am using or have used along the way:-
  
 #### Current technologies
