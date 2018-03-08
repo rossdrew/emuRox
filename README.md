@@ -39,7 +39,7 @@ BCD and proper timing is a thing for another day as my first objective for now, 
 
 ## Development & Testing
 
- The plan was to develop this, a larger personal project, in a TDD (Test Driven Development) centric way, that is via Red-Green testing.  This means writing failing tests (red) that describe functionality then writing that functionality to make the tests pass (green) and iteratively writing a complete application.
+![Current Code Coverage](https://codecov.io/gh/rossdrew/emuRox/graphs/sunburst.svg "The current codecov.io coverage chart") The plan was to develop this, a larger personal project, in a TDD (Test Driven Development) centric way, that is via Red-Green testing.  This means writing failing tests (red) that describe functionality then writing that functionality to make the tests pass (green) and iteratively writing a complete application.
  Here is a list of those that I am using or have used along the way:-
  
 #### Current technologies
@@ -60,12 +60,6 @@ BCD and proper timing is a thing for another day as my first objective for now, 
  - [JUnit QuickTheories](https://github.com/ncredinburgh/QuickTheories) for property based testing but it's much more verbose for no added benefit over [junit-quickcheck](https://www.google.co.uk/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&cad=rja&uact=8&ved=0ahUKEwjq4-PF-aPSAhWHDsAKHV17BCIQFggaMAA&url=https%3A%2F%2Fgithub.com%2Fpholser%2Fjunit-quickcheck&usg=AFQjCNE37M0yEi68OG8Hr7y1MDoJwcLOaQ&sig2=AUpnbmKM5Sk9efhw1r-bKw&bvm=bv.147448319,d.d2s)
  - [Spockito](https://github.com/tools4j/spockito) to give the ability to unroll [JUnit](http://junit.org/junit4/) [Theories](http://junit.org/junit4/javadoc/4.12/org/junit/experimental/theories/Theories.html) like in [Spock](http://spockframework.org/) data-driven tests but I'm not a big fan of the syntax and attaches `@DataPoint`s to the methods.  It would be great for adding data-driven tests if you were limited to [JUnit](http://junit.org/junit4/), however
 
-
-#### Coverage 
-
- ![Current Code Coverage](https://codecov.io/gh/rossdrew/emuRox/graphs/sunburst.svg "The current codecov.io coverage chart")
-
- 
 #### Branches
 
  - [Main](https://github.com/rossdrew/emuRox/commits/master) branch, now pushing towards a working NES PPU, then a working NES
