@@ -184,7 +184,7 @@ public class MultiSourceMemory implements Memory {
     public int getSize() {
         //XXX Should the size be the largest addressable byte or should it be the addressable byte count?!
         int maintainedMemorySize = (defaultMemory != null) ? defaultMemory.getSize() : 0;
-        int maxMappedAddress = memoryMappings.keySet().stream().max(Comparator.comparing(i -> i)).get();
+        int maxMappedAddress = memoryMappings.keySet().stream().max(Comparator.comparing(i -> i)).orElse(0);
         maintainedMemorySize = Math.max(maintainedMemorySize, maxMappedAddress);
         return maintainedMemorySize;
     }
