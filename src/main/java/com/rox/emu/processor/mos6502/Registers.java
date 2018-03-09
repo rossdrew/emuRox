@@ -108,8 +108,8 @@ public class Registers {
         registerValue = new RoxByte[8];
         for (int i=0; i<8; i++)
             registerValue[i] = RoxByte.ZERO;
-        registerValue[STACK_POINTER_LOW.index] = RoxByte.fromLiteral(0b11111111);
-        registerValue[STATUS_FLAGS.index] = RoxByte.fromLiteral(0b00000000);
+        registerValue[STACK_POINTER_LOW.getIndex()] = RoxByte.fromLiteral(0b11111111);
+        registerValue[STATUS_FLAGS.getIndex()] = RoxByte.fromLiteral(0b00000000);
     }
 
     /**
@@ -118,7 +118,7 @@ public class Registers {
      */
     public void setRegister(Register register, int value){
         LOG.debug("'R:" + register.getDescription() + "' := " + value);
-        registerValue[register.index] = RoxByte.fromLiteral(value);
+        registerValue[register.getIndex()] = RoxByte.fromLiteral(value);
     }
 
     /**
@@ -126,7 +126,7 @@ public class Registers {
      * @return the value of the desired registerValue
      */
     public int getRegister(Register register){
-        return registerValue[register.index].getRawValue();
+        return registerValue[register.getIndex()].getRawValue();
     }
 
     /**
