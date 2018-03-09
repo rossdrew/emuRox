@@ -9,6 +9,7 @@ apply plugin: 'groovy'
 apply plugin: 'jacoco'
 apply plugin: 'info.solidsoft.pitest'
 apply plugin: 'application'
+apply plugin: 'idea'
 
 repositories {
     mavenCentral()
