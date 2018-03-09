@@ -1,5 +1,20 @@
 import proguard.gradle.ProGuardTask
 
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.1.11"
+        classpath 'net.sf.proguard:proguard-gradle:5.3.3'
+    }
+}
+
+plugins {
+    id "org.sonarqube" version "2.6"
+}
+
 group 'com.rox'
 version '1.0-SNAPSHOT'
 description '6502 Emulator'
@@ -36,16 +51,7 @@ dependencies {
     compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.6.1'
 }
 
-buildscript {
-    repositories {
-        mavenCentral()
-    }
 
-    dependencies {
-        classpath "info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.1.11"
-        classpath 'net.sf.proguard:proguard-gradle:5.3.3'
-    }
-}
 
 jacocoTestReport {
     reports {
