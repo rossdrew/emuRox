@@ -438,7 +438,7 @@ public class Mos6502Test {
             processor.step();
             fail("Invalid opCode exception expected!");
         } catch (UnknownOpCodeException e) {
-            assertEquals(231, e.getOpCode());
+            assertEquals("231", e.getOpCode());
         }
     }
 

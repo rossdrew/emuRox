@@ -13,7 +13,7 @@ public class UnknownOpcodeExceptionTest {
         assertNotNull(e.getMessage());
         assertFalse(e.getMessage().isEmpty());
         assertNotNull(e.getOpCode());
-        assertEquals(1234, e.getOpCode());
+        assertEquals("1234", e.getOpCode());
     }
 
     @Test
@@ -23,7 +23,7 @@ public class UnknownOpcodeExceptionTest {
         assertNotNull(e.getMessage());
         assertFalse(e.getMessage().isEmpty());
         assertNotNull(e.getOpCode());
-        assertEquals(OpCode.ADC_ABS, e.getOpCode());
+        assertEquals(OpCode.ADC_ABS.toString(), e.getOpCode());
     }
 
     @Test
@@ -34,7 +34,7 @@ public class UnknownOpcodeExceptionTest {
         assertNotNull(e.getMessage());
         assertFalse(e.getMessage().isEmpty());
         assertNotNull(e.getOpCode());
-        assertEquals(OpCode.ADC_ABS, e.getOpCode());
+        assertEquals(OpCode.ADC_ABS.toString(), e.getOpCode());
         assertEquals(cause, e.getCause());
     }
 }
