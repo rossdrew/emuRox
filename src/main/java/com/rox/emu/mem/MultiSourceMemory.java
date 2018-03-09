@@ -168,8 +168,8 @@ public class MultiSourceMemory implements Memory {
     public void reset() {
         //For each unique memory object, reset it
         List<Memory> reset = new ArrayList<>();
-        for (Integer mappedAddress : memoryMappings.keySet()) {
-            final Memory memory = memoryMappings.get(mappedAddress).physicalMemory;
+        for (Map.Entry<Integer, MemoryMapping> mappingEntry : memoryMappings.entrySet()) {
+            final Memory memory = mappingEntry.getValue().physicalMemory;
             if (!reset.contains(memory)){
                 memory.reset();
                 reset.add(memory);
