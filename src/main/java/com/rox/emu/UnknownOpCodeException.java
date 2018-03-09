@@ -6,16 +6,16 @@ package com.rox.emu;
  * @author Ross Drew
  */
 public class UnknownOpCodeException extends RuntimeException {
-    private final Object opCode;
+    private final String opCode;
 
     public UnknownOpCodeException(String message, Object opCode, Exception cause) {
         super(message, cause);
-        this.opCode = opCode;
+        this.opCode = opCode.toString();
     }
 
     public UnknownOpCodeException(String message, Object opCode) {
         super(message);
-        this.opCode = opCode;
+        this.opCode = opCode.toString();
     }
 
     public Object getOpCode() {
