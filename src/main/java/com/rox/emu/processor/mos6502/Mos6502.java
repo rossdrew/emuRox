@@ -195,7 +195,6 @@ public class Mos6502 {
                 withByteXIndexedAt(nextProgramWord(), this::performROL);
              break;
 
-            /* Not implemented and/or not published on older 6502s */
             case ROR_A:
                 withRegister(Register.ACCUMULATOR, this::performROR);
                 break;

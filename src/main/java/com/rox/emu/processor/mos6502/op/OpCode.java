@@ -184,6 +184,7 @@ public enum OpCode {
     ROL_ABS(0x2E),
     ROL_ABS_IX(0x3E),
 
+    /** Not implemented and/or not published on older 6502s */
     ROR_A(0x6A),
 
     CLI(0x58),
