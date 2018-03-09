@@ -18,14 +18,11 @@ import static com.rox.emu.processor.mos6502.Registers.*;
  * @author Ross Drew
  */
 public class Mos6502 {
-    private final Logger LOG = LoggerFactory.getLogger(this.getClass());
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     private final Memory memory;
     private final Registers registers = new Registers();
     private final Mos6502Alu alu = new Mos6502Alu(registers);
-
-    /** The bit set on a byte when a it is negative */
-    private static final int NEGATIVE_INDICATOR_BIT = 0x80;
 
     public Mos6502(Memory memory) {
         this.memory = memory;
@@ -46,7 +43,7 @@ public class Mos6502 {
      * Note: IRL this takes 6 CPU cycles but we'll cross that bridge IF we come to it-
      */
     public void reset(){
-       LOG.debug("RESETTING...");
+       log.debug("RESETTING...");
        setRegisterValue(Register.ACCUMULATOR, 0x0);
        setRegisterValue(Register.X_INDEX, 0x0);
        setRegisterValue(Register.Y_INDEX, 0x0);
@@ -54,7 +51,7 @@ public class Mos6502 {
        setRegisterValue(Register.PROGRAM_COUNTER_HI, getByteOfMemoryAt(0xFFFC));
        setRegisterValue(Register.PROGRAM_COUNTER_LOW, getByteOfMemoryAt(0xFFFD));
        setRegisterValue(Register.STACK_POINTER_HI, 0xFF);
-       LOG.debug("...READY!");
+       log.debug("...READY!");
     }
 
     /**
@@ -65,7 +62,7 @@ public class Mos6502 {
      * <b>R</b>outine is expected to be
      */
     public void irq() {
-        LOG.debug("IRQ!");
+        log.debug("IRQ!");
         registers.setFlag(Flag.IRQ_DISABLE);
 
         pushRegister(Register.PROGRAM_COUNTER_HI);
@@ -83,7 +80,7 @@ public class Mos6502 {
      * and <code>0xFFFB</code> where the <b>I</b>nterrupt <b>S</b>ervice <b>R</b>outine is expected to be
      */
     public void nmi() {
-        LOG.debug("NMI!");
+        log.debug("NMI!");
         registers.setFlag(Flag.IRQ_DISABLE);
 
         pushRegister(Register.PROGRAM_COUNTER_HI);
@@ -115,26 +112,14 @@ public class Mos6502 {
      * Execute the next program instruction as per {@link Registers#getNextProgramCounter()}
      */
     public void step() {
-        LOG.debug("STEP >>>");
+        log.debug("STEP >>>");
 
         final int opCodeByte = nextProgramByte();
         final OpCode opCode = OpCode.from(opCodeByte);
 
         //Execute the opcode
-        LOG.debug("Instruction: " + opCode.getOpCodeName() + "...");
+        log.debug("Instruction: {0}...", opCode.getOpCodeName());
         switch (opCode){
-            default:
-            case BRK:
-                //XXX Why do we do this at all? A program of [BRK] will push 0x03 as the PC...why is that right?
-                registers.setPC(performSilently(this::performADC, registers.getPC(), 2, false));
-                push(registers.getRegister(Register.PROGRAM_COUNTER_HI));
-                push(registers.getRegister(Register.PROGRAM_COUNTER_LOW));
-                push(registers.getRegister(Register.STATUS_FLAGS) | Flag.BREAK.getPlaceValue());
-
-                registers.setRegister(Register.PROGRAM_COUNTER_HI, getByteOfMemoryAt(0xFFFE));
-                registers.setRegister(Register.PROGRAM_COUNTER_LOW, getByteOfMemoryAt(0xFFFF));
-                break;
-
             case ASL_A:
                 withRegister(Register.ACCUMULATOR, this::performASL);
             break;
@@ -749,6 +734,18 @@ public class Mos6502 {
                 setRegisterValue(Register.PROGRAM_COUNTER_LOW, pop());
                 setRegisterValue(Register.PROGRAM_COUNTER_HI, pop());
                 break;
+
+            case BRK:
+            default:
+                //XXX Why do we do this at all? A program of [BRK] will push 0x03 as the PC...why is that right?
+                registers.setPC(performSilently(this::performADC, registers.getPC(), 2, false));
+                push(registers.getRegister(Register.PROGRAM_COUNTER_HI));
+                push(registers.getRegister(Register.PROGRAM_COUNTER_LOW));
+                push(registers.getRegister(Register.STATUS_FLAGS) | Flag.BREAK.getPlaceValue());
+
+                registers.setRegister(Register.PROGRAM_COUNTER_HI, getByteOfMemoryAt(0xFFFE));
+                registers.setRegister(Register.PROGRAM_COUNTER_LOW, getByteOfMemoryAt(0xFFFF));
+                break;
         }
     }
 
@@ -811,8 +808,15 @@ public class Mos6502 {
        setRegisterValue(Register.STACK_POINTER_HI, getRegisterValue(Register.STACK_POINTER_HI) + 1);
        int address = 0x0100 | getRegisterValue(Register.STACK_POINTER_HI);
        int value = getByteOfMemoryAt(address);
-       LOG.debug("POP " + value + "(0b" + Integer.toBinaryString(value) + ") from mem[0x" + Integer.toHexString(address).toUpperCase() + "]");
+       debug("POP {0}(0b{1}) from mem[0x{2}]", Integer.toString(value), Integer.toBinaryString(value), Integer.toHexString(address).toUpperCase());
        return value;
+    }
+
+    private void debug(final String message, String ... args){
+        if (!log.isDebugEnabled())
+            return;
+
+        log.debug(message, args);
     }
 
     private void pushRegister(Register registerID){
@@ -825,7 +829,10 @@ public class Mos6502 {
      * @param value value to push
      */
     private void push(int value){
-       LOG.debug("PUSH " + value + "(0b" + Integer.toBinaryString(value) + ") to mem[0x" + Integer.toHexString(getRegisterValue(Register.STACK_POINTER_HI)).toUpperCase() + "]");
+       debug("PUSH {0}(0b{1}) to mem[0x{2}]", Integer.toString(value),
+                                                       Integer.toBinaryString(value),
+                                                       Integer.toHexString(getRegisterValue(Register.STACK_POINTER_HI)).toUpperCase());
+
        setByteOfMemoryAt(0x0100 | getRegisterValue(Register.STACK_POINTER_HI), value);
        setRegisterValue(Register.STACK_POINTER_HI, getRegisterValue(Register.STACK_POINTER_HI) - 1);
     }
@@ -848,7 +855,7 @@ public class Mos6502 {
 
     private int getByteOfMemoryAt(int location, int index){
        final int memoryByte = memory.getByte(location + index);
-       LOG.debug("Got 0x" + Integer.toHexString(memoryByte) + " from mem[" + location + (index != 0 ? "[" + index + "]" : "") +"]");
+       debug("Got 0x{0} from mem[{1}]", Integer.toHexString(memoryByte), (location + (index != 0 ? "[" + index + "]" : "")));
        return memoryByte;
     }
 
@@ -862,7 +869,7 @@ public class Mos6502 {
 
     private void setByteOfMemoryAt(int location, int index, int newByte){
        memory.setByteAt(location + index, newByte);
-       LOG.debug("Stored 0x" + Integer.toHexString(newByte) + " at mem[" + location + (index != 0 ? "[" + index + "]" : "") +"]");
+       debug("Stored 0x{0} at mem[{1}]", Integer.toHexString(newByte), (location + (index != 0 ? "[" + index + "]" : "")));
     }
 
     private int getWordOfMemoryXIndexedAt(int location){
@@ -872,7 +879,7 @@ public class Mos6502 {
 
     private int getWordOfMemoryAt(int location) {
        int memoryWord = memory.getWord(location);
-       LOG.debug("Got 0x" + Integer.toHexString(memoryWord) + " from mem[" + location +"]");
+       debug("Got 0x{0} from mem[{1}]", Integer.toHexString(memoryWord), Integer.toString(location));
        return memoryWord;
     }
 
@@ -883,7 +890,7 @@ public class Mos6502 {
      */
     private void branchIf(boolean condition){
         int location = nextProgramByte();
-        LOG.debug("{Branch:0x" + Integer.toHexString(registers.getPC()) + " by " + Integer.toBinaryString(location) + "} " + (condition ? "YES->" : "NO..."));
+        debug("Branch:0x{0} by {1} {2}", Integer.toHexString(registers.getPC()), Integer.toBinaryString(location), (condition ? "YES->" : "NO..."));
         if (condition) branchTo(location);
     }
 
@@ -905,7 +912,7 @@ public class Mos6502 {
     }
 
     private int fromOnesComplimented(int byteValue){
-        return ((~byteValue)) & 0xFF;
+        return (~byteValue) & 0xFF;
     }
 
     private int fromTwosComplimented(int byteValue){
