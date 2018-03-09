@@ -219,20 +219,14 @@ public class Registers {
      * Set zero flag if given argument is 0
      */
     public void setZeroFlagFor(int value){
-        if (value == 0)
-            setFlag(Flag.ZERO);
-        else
-            clearFlag(Flag.ZERO);
+        setFlagTo(Flag.ZERO, value == 0);
     }
 
     /**
      * Set negative flag if given argument is 0
      */
     public void setNegativeFlagFor(int value){
-        if (isNegative(value))
-            setFlag(Flag.NEGATIVE);
-        else
-            clearFlag(Flag.NEGATIVE);
+        setFlagTo(Flag.NEGATIVE, isNegative(value));
     }
 
     private boolean isNegative(int fakeByte){
