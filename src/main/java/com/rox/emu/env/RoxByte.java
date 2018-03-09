@@ -43,7 +43,7 @@ public final class RoxByte {
     /**
      * A {@link RoxByte} representing zero
      */
-    public static RoxByte ZERO = new RoxByte(0, ByteFormat.SIGNED_TWOS_COMPLIMENT);
+    public static final RoxByte ZERO = new RoxByte(0, ByteFormat.SIGNED_TWOS_COMPLIMENT);
 
     private RoxByte(int value, ByteFormat format){
         this.byteValue = value;
@@ -61,11 +61,7 @@ public final class RoxByte {
      * @return a new {@link RoxByte} representing this value converted to it's ones compliment value
      */
     public RoxByte asOnesCompliment(){
-        return RoxByte.fromLiteral(((~getRawValue())) & 0xFF);
-    }
-
-    private boolean bitInRange(int bit){
-        return ((bit >= 0) && (bit <= 7));
+        return RoxByte.fromLiteral((~getRawValue()) & 0xFF);
     }
 
     /**
@@ -74,7 +70,7 @@ public final class RoxByte {
      * @return A {@link RoxByte}, SIGNED_TWOS_COMPLIMENT, with the specified value
      * @throws InvalidDataTypeException if the given value doesn't fit inside a SIGNED_TWOS_COMPLIMENT byte
      */
-    public static RoxByte signedFrom(int value) throws InvalidDataTypeException {
+    public static RoxByte signedFrom(int value) {
         if (value > 127 || value < -128)
             throw new InvalidDataTypeException("Cannot convert " + value + " to unsigned byte.  Expected range (-128 -> 127)");
 
@@ -147,15 +143,15 @@ public final class RoxByte {
      */
     public int getAsInt() {
         switch (format){
-            default:
             case SIGNED_TWOS_COMPLIMENT:
+            default:
                 return intFromTwosComplimented(byteValue);
         }
     }
 
     private int intFromTwosComplimented(int byteValue){
         if (isBitSet(7))
-            return -(((~(byteValue-1))) & 0xFF);
+            return -((~(byteValue-1)) & 0xFF);
         else
             return byteValue;
     }
@@ -181,8 +177,7 @@ public final class RoxByte {
      * @return A new {@link RoxByte} which is this one, with the specified bit set
      */
     public RoxByte withBit(int bitToSet) {
-        if (!bitInRange(bitToSet))
-            throw new ArrayIndexOutOfBoundsException("Bit #"+ bitToSet +" is out of range, expected (0-7)");
+        validateBit(bitToSet);
         return new RoxByte(PLACE_VALUE[bitToSet] | this.byteValue, ByteFormat.SIGNED_TWOS_COMPLIMENT);
     }
 
@@ -191,9 +186,7 @@ public final class RoxByte {
      * @return A new {@link RoxByte} which is this one, with the specified bit cleared
      */
     public RoxByte withoutBit(int bitToClear) {
-        if (!bitInRange(bitToClear))
-            throw new ArrayIndexOutOfBoundsException("Bit #"+ bitToClear +" is out of range, expected (0-7)");
-
+        validateBit(bitToClear);
         int withoutBit = (~(PLACE_VALUE[bitToClear])) & byteValue;
         return new RoxByte(withoutBit, ByteFormat.SIGNED_TWOS_COMPLIMENT);
     }
@@ -203,9 +196,13 @@ public final class RoxByte {
      * @return weather the specified bit is set in this byte
      */
     public boolean isBitSet(int bitToTest) {
-        if (!bitInRange(bitToTest))
-            throw new ArrayIndexOutOfBoundsException("Bit #"+ bitToTest +" is out of range, expected (0-7)");
+        validateBit(bitToTest);
         return (byteValue & PLACE_VALUE[bitToTest]) == PLACE_VALUE[bitToTest];
+    }
+
+    private void validateBit(final int bit){
+        if ((bit < 0) || (bit > 7))
+            throw new ArrayIndexOutOfBoundsException("Bit #"+ bit +" is out of range, expected (0-7)");
     }
 
     /**
