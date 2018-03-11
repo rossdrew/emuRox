@@ -60,7 +60,7 @@ public class SimpleMemory implements Memory {
     @Override
     public int getWord(int location) {
         int word = (memoryArray[location].getRawValue() << 8 | memoryArray[location+1].getRawValue());
-        if (log.isTraceEnabled()) log.trace("mem[{}] >> {}", word);
+        if (log.isTraceEnabled()) log.trace("mem[{}] >> {}", location, word);
         return word;
     }
 
