@@ -45,8 +45,7 @@ public class ReadOnlyMemory implements Memory {
      */
     @Override
     public int getWord(int location) {
-        int word = (memoryArray[location].getRawValue() << 8 | memoryArray[location+1].getRawValue());
-        return word;
+        return (memoryArray[location].getRawValue() << 8 | memoryArray[location+1].getRawValue());
     }
 
     /**
