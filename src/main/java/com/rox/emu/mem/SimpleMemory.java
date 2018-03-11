@@ -29,7 +29,7 @@ public class SimpleMemory implements Memory {
      */
     @Override
     public void setByteAt(int location, int byteValue) {
-        if (log.isTraceEnabled()) log.trace("mem[{0}] << {1}", location, byteValue);
+        if (log.isTraceEnabled()) log.trace("mem[%d] << {%d}", location, byteValue);
         memoryArray[location] = RoxByte.fromLiteral(byteValue & 0xFF);
     }
 
@@ -38,7 +38,7 @@ public class SimpleMemory implements Memory {
      */
     @Override
     public void setBlock(int startLocation, int[] byteValues) {
-        if (log.isTraceEnabled()) log.trace("mem[{0}] << {1} bytes", startLocation, byteValues.length);
+        if (log.isTraceEnabled()) log.trace("mem[%d] << {%d} bytes", startLocation, byteValues.length);
         for (int i=0; i<byteValues.length; i++){
             memoryArray[startLocation + i] = RoxByte.fromLiteral(byteValues[i]);
         }
@@ -49,7 +49,7 @@ public class SimpleMemory implements Memory {
      */
     @Override
     public int getByte(int location) {
-        if (log.isTraceEnabled()) log.trace("mem[{0}] >> {1}", location, memoryArray[location]);
+        if (log.isTraceEnabled()) log.trace("mem[%d] >> {%d}", location, memoryArray[location]);
 
         return memoryArray[location].getRawValue();
     }
@@ -60,7 +60,7 @@ public class SimpleMemory implements Memory {
     @Override
     public int getWord(int location) {
         int word = (memoryArray[location].getRawValue() << 8 | memoryArray[location+1].getRawValue());
-        if (log.isTraceEnabled()) log.trace("mem[{0}] >> {1}", word);
+        if (log.isTraceEnabled()) log.trace("mem[%d] >> %d", word);
         return word;
     }
 
