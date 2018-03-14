@@ -117,7 +117,7 @@ public class Registers {
      * @param value to set the registerValue to
      */
     public void setRegister(Register register, int value){
-        log.debug("'R:" + register.getDescription() + "' := " + value);
+        log.debug("'R:{}' := {}", register.getDescription(), value);
         registerValue[register.getIndex()] = RoxByte.fromLiteral(value);
     }
 
@@ -147,7 +147,9 @@ public class Registers {
     public void setPC(int pcWordValue){
         setRegister(PROGRAM_COUNTER_HI, pcWordValue >> 8);
         setRegister(PROGRAM_COUNTER_LOW, pcWordValue & 0xFF);
-        log.debug("'R+:Program Counter' := " + pcWordValue + " [ " + getRegister(PROGRAM_COUNTER_HI) + " | " + getRegister(PROGRAM_COUNTER_LOW) + " ]");
+        log.debug("'R+:Program Counter' := {} [ {} | {} ]", new String[] {Integer.toString(pcWordValue),
+                                                                          Integer.toString(getRegister(PROGRAM_COUNTER_HI)),
+                                                                          Integer.toString(getRegister(PROGRAM_COUNTER_LOW))});
     }
 
     /**
@@ -192,7 +194,7 @@ public class Registers {
      * @param flag for which to set to true
      */
     public void setFlag(Flag flag) {
-        log.debug("'F:" + flag.description +"' -> SET");
+        log.debug("'F:{}' -> SET", flag.description);
         registerValue[STATUS_FLAGS.getIndex()] = registerValue[STATUS_FLAGS.getIndex()].withBit(flag.getIndex());
     }
 
@@ -202,7 +204,7 @@ public class Registers {
      * @param flag to be cleared
      */
     public void clearFlag(Flag flag){
-        log.debug("'F:" + flag.getDescription() + "' -> CLEARED");
+        log.debug("'F:{}' -> CLEARED", flag.getDescription());
         registerValue[STATUS_FLAGS.getIndex()] = registerValue[STATUS_FLAGS.getIndex()].withoutBit(flag.getIndex());
     }
 

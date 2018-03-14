@@ -128,7 +128,7 @@ public class Mos6502Compiler {
      * @return A compiled {@link Program} object
      * @throws UnknownOpCodeException if during the course of compilation, we encounter an unknown where we expect an op-code to be
      */
-    public Program compileProgram() throws UnknownOpCodeException{
+    public Program compileProgram() {
         Program workingProgram = new Program();
 
         final StringTokenizer tokenizer = new StringTokenizer(sanitize(programText));
@@ -264,6 +264,7 @@ public class Mos6502Compiler {
         return "";
     }
 
+    //XXX This could be better, 4 returns or a duplicated exception is ugly
     private AddressingMode getAddressingModeFrom(String prefix, String value, String postfix){
         if (prefix.equalsIgnoreCase(IMMEDIATE_VALUE_PREFIX)) {
             return AddressingMode.IMMEDIATE;

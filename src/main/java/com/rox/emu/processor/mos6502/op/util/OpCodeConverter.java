@@ -18,6 +18,8 @@ import static com.rox.emu.processor.mos6502.op.OpCode.*;
  * @author Ross Drew
  */
 public class OpCodeConverter {
+    private OpCodeConverter(){/* Used to hide implicitly public constructor for a utility class*/}
+
     /**
      * Extract a command line op-code of the {@link Mos6502} instruction set from the {@link String} representation of an {@link OpCode}.
      *
@@ -25,7 +27,7 @@ public class OpCodeConverter {
      * @return A {@link String} instruction from the {@link Mos6502} instruction set, associated with the intended {@link OpCode}
      */
     public static String getOpCode(String internalOpCodeName){
-        final String tokens[] = internalOpCodeName.split(OpCode.TOKEN_SEPARATOR);
+        final String[] tokens = internalOpCodeName.split(OpCode.TOKEN_SEPARATOR);
         return tokens[OpCode.CODE_I];
     }
 
@@ -45,9 +47,9 @@ public class OpCodeConverter {
      * @return An {@link AddressingMode} object that represents the intended addressing mode of the {@link OpCode} in question
      */
     public static AddressingMode getAddressingMode(String internalOpCodeName){
-        final String tokens[] = internalOpCodeName.split(OpCode.TOKEN_SEPARATOR);
+        final String[] tokens = internalOpCodeName.split(OpCode.TOKEN_SEPARATOR);
         if (tokens.length <= OpCode.ADDR_I) {
-            //TODO Write this less ugly
+            //XXX Write this less ugly
             if (EnumSet.of(Operation.JSR, Operation.BPL, Operation.BMI, Operation.BVC, Operation.BVS, Operation.BCC, Operation.BCS, Operation.BNE, Operation.BEQ).contains(getOperation(internalOpCodeName)))
                 return AddressingMode.RELATIVE;
 

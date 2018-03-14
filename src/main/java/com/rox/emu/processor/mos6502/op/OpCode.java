@@ -279,7 +279,7 @@ public enum OpCode {
      * @return The first {@link OpCode} found
      * @throws UnknownOpCodeException if no {@link OpCode} matches the given predicate
      */
-    private static OpCode from(Predicate<? super OpCode> predicate, Object predicateTerm) throws UnknownOpCodeException {
+    private static OpCode from(Predicate<? super OpCode> predicate, Object predicateTerm) {
         return matching(predicate, ""+predicateTerm, predicateTerm);
     }
 
@@ -290,7 +290,7 @@ public enum OpCode {
      * @return The first {@link OpCode} found
      * @throws UnknownOpCodeException if no {@link OpCode} matches the given predicate
      */
-    private static OpCode matching(Predicate<? super OpCode> predicate, String predicateDescription, Object predicateTerm) throws UnknownOpCodeException{
+    private static OpCode matching(Predicate<? super OpCode> predicate, String predicateDescription, Object predicateTerm) {
         Optional<OpCode> result = Arrays.stream(OpCode.values()).filter(predicate).findFirst();
 
         if (result.isPresent())

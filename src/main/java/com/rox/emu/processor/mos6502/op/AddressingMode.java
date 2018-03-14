@@ -90,7 +90,7 @@ public enum AddressingMode {
      * @return the {@link AddressingMode} that corresponds to this {@link AddressingMode}, but indexed by X
      * @throws UnknownOpCodeException if there is an attempt to X index an addressing mode that cannot be X indexed
      */
-    public AddressingMode xIndexed() throws UnknownOpCodeException{
+    public AddressingMode xIndexed() {
         if (this == ZERO_PAGE){
             return ZERO_PAGE_X;
         }else if (this == ABSOLUTE) {

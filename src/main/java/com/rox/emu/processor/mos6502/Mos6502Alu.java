@@ -19,7 +19,7 @@ import com.rox.emu.env.RoxWord;
  *  <li> {@link #ror} </li>
  * </ul>
  *
- * TODO think about multi byte addition - using this calculating > 1 byte memory doesn't work, of course.
+ * XXX think about multi byte addition - using this calculating > 1 byte memory doesn't work, of course.
  */
 public class Mos6502Alu {
 

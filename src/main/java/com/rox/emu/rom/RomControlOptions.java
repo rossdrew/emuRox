@@ -179,7 +179,8 @@ class RomControlOptions {
     private final int version;
 
     public RomControlOptions(final int flagByte6, final int flagByte7){
-        int mapperNumberLo, mapperNumberHi;
+        int mapperNumberLo;
+        int mapperNumberHi;
 
         mirroring = extractMirroring(flagByte6);
         ramPresent = (flagByte6 & 0b00000010) != 0;
