@@ -12,7 +12,7 @@ import static com.rox.emu.processor.mos6502.Registers.Register.*;
  * @author Ross Drew
  */
 public class Registers {
-    private final Logger LOG = LoggerFactory.getLogger(this.getClass());
+    private static final Logger log = LoggerFactory.getLogger(Registers.class);
 
     /**
      * A single registerValue for a MOS 6502 containing information on registerValue id and name
@@ -117,7 +117,7 @@ public class Registers {
      * @param value to set the registerValue to
      */
     public void setRegister(Register register, int value){
-        LOG.debug("'R:" + register.getDescription() + "' := " + value);
+        log.debug("'R:" + register.getDescription() + "' := " + value);
         registerValue[register.getIndex()] = RoxByte.fromLiteral(value);
     }
 
@@ -147,7 +147,7 @@ public class Registers {
     public void setPC(int pcWordValue){
         setRegister(PROGRAM_COUNTER_HI, pcWordValue >> 8);
         setRegister(PROGRAM_COUNTER_LOW, pcWordValue & 0xFF);
-        LOG.debug("'R+:Program Counter' := " + pcWordValue + " [ " + getRegister(PROGRAM_COUNTER_HI) + " | " + getRegister(PROGRAM_COUNTER_LOW) + " ]");
+        log.debug("'R+:Program Counter' := " + pcWordValue + " [ " + getRegister(PROGRAM_COUNTER_HI) + " | " + getRegister(PROGRAM_COUNTER_LOW) + " ]");
     }
 
     /**
@@ -192,7 +192,7 @@ public class Registers {
      * @param flag for which to set to true
      */
     public void setFlag(Flag flag) {
-        LOG.debug("'F:" + flag.description +"' -> SET");
+        log.debug("'F:" + flag.description +"' -> SET");
         registerValue[STATUS_FLAGS.getIndex()] = registerValue[STATUS_FLAGS.getIndex()].withBit(flag.getIndex());
     }
 
@@ -202,7 +202,7 @@ public class Registers {
      * @param flag to be cleared
      */
     public void clearFlag(Flag flag){
-        LOG.debug("'F:" + flag.getDescription() + "' -> CLEARED");
+        log.debug("'F:" + flag.getDescription() + "' -> CLEARED");
         registerValue[STATUS_FLAGS.getIndex()] = registerValue[STATUS_FLAGS.getIndex()].withoutBit(flag.getIndex());
     }
 
