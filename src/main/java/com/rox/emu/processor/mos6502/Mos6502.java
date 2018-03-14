@@ -118,7 +118,7 @@ public class Mos6502 {
         final OpCode opCode = OpCode.from(opCodeByte);
 
         //Execute the opcode
-        log.debug("Instruction: {0}...", opCode.getOpCodeName());
+        log.debug("Instruction: {}...", opCode.getOpCodeName());
         switch (opCode){
             case ASL_A:
                 withRegister(Register.ACCUMULATOR, this::performASL);
@@ -808,7 +808,7 @@ public class Mos6502 {
        setRegisterValue(Register.STACK_POINTER_HI, getRegisterValue(Register.STACK_POINTER_HI) + 1);
        int address = 0x0100 | getRegisterValue(Register.STACK_POINTER_HI);
        int value = getByteOfMemoryAt(address);
-       debug("POP {0}(0b{1}) from mem[0x{2}]", Integer.toString(value), Integer.toBinaryString(value), Integer.toHexString(address).toUpperCase());
+       debug("POP {}(0b{}) from mem[0x{}]", Integer.toString(value), Integer.toBinaryString(value), Integer.toHexString(address).toUpperCase());
        return value;
     }
 
@@ -829,9 +829,9 @@ public class Mos6502 {
      * @param value value to push
      */
     private void push(int value){
-       debug("PUSH {0}(0b{1}) to mem[0x{2}]", Integer.toString(value),
-                                                       Integer.toBinaryString(value),
-                                                       Integer.toHexString(getRegisterValue(Register.STACK_POINTER_HI)).toUpperCase());
+       debug("PUSH {}(0b{}) to mem[0x{}]",  Integer.toString(value),
+                                                    Integer.toBinaryString(value),
+                                                    Integer.toHexString(getRegisterValue(Register.STACK_POINTER_HI)).toUpperCase());
 
        setByteOfMemoryAt(0x0100 | getRegisterValue(Register.STACK_POINTER_HI), value);
        setRegisterValue(Register.STACK_POINTER_HI, getRegisterValue(Register.STACK_POINTER_HI) - 1);
@@ -855,7 +855,7 @@ public class Mos6502 {
 
     private int getByteOfMemoryAt(int location, int index){
        final int memoryByte = memory.getByte(location + index);
-       debug("Got 0x{0} from mem[{1}]", Integer.toHexString(memoryByte), (location + (index != 0 ? "[" + index + "]" : "")));
+       debug("Got 0x{} from mem[{}]", Integer.toHexString(memoryByte), (location + (index != 0 ? "[" + index + "]" : "")));
        return memoryByte;
     }
 
@@ -869,7 +869,7 @@ public class Mos6502 {
 
     private void setByteOfMemoryAt(int location, int index, int newByte){
        memory.setByteAt(location + index, newByte);
-       debug("Stored 0x{0} at mem[{1}]", Integer.toHexString(newByte), (location + (index != 0 ? "[" + index + "]" : "")));
+       debug("Stored 0x{} at mem[{}]", Integer.toHexString(newByte), (location + (index != 0 ? "[" + index + "]" : "")));
     }
 
     private int getWordOfMemoryXIndexedAt(int location){
@@ -879,7 +879,7 @@ public class Mos6502 {
 
     private int getWordOfMemoryAt(int location) {
        int memoryWord = memory.getWord(location);
-       debug("Got 0x{0} from mem[{1}]", Integer.toHexString(memoryWord), Integer.toString(location));
+       debug("Got 0x{} from mem[{}]", Integer.toHexString(memoryWord), Integer.toString(location));
        return memoryWord;
     }
 
@@ -890,7 +890,7 @@ public class Mos6502 {
      */
     private void branchIf(boolean condition){
         int location = nextProgramByte();
-        debug("Branch:0x{0} by {1} {2}", Integer.toHexString(registers.getPC()), Integer.toBinaryString(location), (condition ? "YES->" : "NO..."));
+        debug("Branch:0x{} by {} {}", Integer.toHexString(registers.getPC()), Integer.toBinaryString(location), (condition ? "YES->" : "NO..."));
         if (condition) branchTo(location);
     }
 
