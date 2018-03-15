@@ -608,19 +608,17 @@ public class Mos6502 {
                 registers.setRegister(Register.STATUS_FLAGS, pop());
                 break;
 
-            case JMP_ABS: {
-                int h = nextProgramByte();
-                int l = nextProgramByte();
-                registers.setRegister(Register.PROGRAM_COUNTER_HI, h);
-                setRegisterValue(Register.PROGRAM_COUNTER_LOW, l);
-            }break;
+            case JMP_ABS:
+                final RoxWord absoluteAddress = RoxWord.literalFrom(nextProgramWord());
+                setRegisterValue(Register.PROGRAM_COUNTER_HI, absoluteAddress.getHighByte().getAsInt());
+                setRegisterValue(Register.PROGRAM_COUNTER_LOW, absoluteAddress.getLowByte().getAsInt());
+            break;
 
-            case JMP_IND: {
-                final RoxByte h = RoxByte.fromLiteral(nextProgramByte());
-                final RoxByte l = RoxByte.fromLiteral(nextProgramByte());
-                int pointer = RoxWord.from(h,l).getAsInt();
-                registers.setPC(getWordOfMemoryAt(pointer));
-            }break;
+            case JMP_IND:
+                final RoxWord indirectAddress = RoxWord.literalFrom(nextProgramWord());
+                //XXX Why does't this work as: registers.setPC(getWordOfMemoryAt(nextProgramWord()));
+                registers.setPC(getWordOfMemoryAt(indirectAddress.getAsInt()));
+            break;
 
             case BCS:
                 branchIf(registers.getFlag(Flag.CARRY));
