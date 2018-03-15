@@ -616,7 +616,7 @@ public class Mos6502 {
 
             case JMP_IND:
                 final RoxWord indirectAddress = RoxWord.literalFrom(nextProgramWord());
-                //XXX Why does't this work as: registers.setPC(getWordOfMemoryAt(nextProgramWord()));
+                //XXX Why does't this work by just using nextProgramWord
                 registers.setPC(getWordOfMemoryAt(indirectAddress.getAsInt()));
             break;
 
