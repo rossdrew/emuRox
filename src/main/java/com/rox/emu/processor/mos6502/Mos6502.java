@@ -308,15 +308,14 @@ public class Mos6502 {
                 break;
 
             case LDA_IND_IX: {
-                //TODO this needs to be wrappable for zero page addressing
+                //XXX this needs to be wrappable for zero page addressing
                 int pointerLocation = getWordOfMemoryXIndexedAt(nextProgramByte());
                 registers.setRegisterAndFlags(Register.ACCUMULATOR, getByteOfMemoryAt(pointerLocation));
             }break;
 
-            case LDA_IND_IY: {
-                final int pointerLocation = getWordOfMemoryAt(nextProgramByte()) + getRegisterValue(Register.Y_INDEX);
-                registers.setRegisterAndFlags(Register.ACCUMULATOR, getByteOfMemoryAt(pointerLocation));
-            }break;
+            case LDA_IND_IY:
+                registers.setRegisterAndFlags(Register.ACCUMULATOR, getByteOfMemoryAt(getIndirectYPointer()));
+            break;
 
             case AND_Z:
                 withRegisterAndByteAt(Register.ACCUMULATOR, nextProgramByte(), this::performAND);
@@ -347,10 +346,9 @@ public class Mos6502 {
                 withRegisterAndByteAt(Register.ACCUMULATOR, pointerLocation, this::performAND);
             }break;
 
-            case AND_IND_IY: {
-                int pointerLocation = getWordOfMemoryAt(nextProgramByte()) + getRegisterValue(Register.Y_INDEX);
-                withRegisterAndByteAt(Register.ACCUMULATOR, pointerLocation, this::performAND);
-            }break;
+            case AND_IND_IY:
+                withRegisterAndByteAt(Register.ACCUMULATOR, getIndirectYPointer(), this::performAND);
+            break;
 
             case BIT_Z:
                 performBIT(getByteOfMemoryAt(nextProgramByte()));
@@ -389,10 +387,9 @@ public class Mos6502 {
                 withRegisterAndByteAt(Register.ACCUMULATOR, pointerLocation, this::performORA);
             }break;
 
-            case ORA_IND_IY: {
-                int pointerLocation = getWordOfMemoryAt(nextProgramByte()) + getRegisterValue(Register.Y_INDEX);
-                withRegisterAndByteAt(Register.ACCUMULATOR, pointerLocation, this::performORA);
-            }break;
+            case ORA_IND_IY:
+                withRegisterAndByteAt(Register.ACCUMULATOR, getIndirectYPointer(), this::performORA);
+            break;
 
             case EOR_I:
                 withRegisterAndByte(Register.ACCUMULATOR, nextProgramByte(), this::performEOR);
@@ -423,10 +420,9 @@ public class Mos6502 {
                 withRegisterAndByteAt(Register.ACCUMULATOR, pointerLocation, this::performEOR);
             }break;
 
-            case EOR_IND_IY: {
-                int pointerLocation = getWordOfMemoryAt(nextProgramByte()) + getRegisterValue(Register.Y_INDEX);
-                withRegisterAndByteAt(Register.ACCUMULATOR, pointerLocation, this::performEOR);
-            }break;
+            case EOR_IND_IY:
+                withRegisterAndByteAt(Register.ACCUMULATOR, getIndirectYPointer(), this::performEOR);
+            break;
 
             case ADC_Z:
                 withRegisterAndByteAt(Register.ACCUMULATOR, nextProgramByte(), this::performADC);
@@ -457,10 +453,9 @@ public class Mos6502 {
                 withRegisterAndByteAt(Register.ACCUMULATOR, pointerLocation, this::performADC);
             }break;
 
-            case ADC_IND_IY: {
-                int pointerLocation = getWordOfMemoryAt(nextProgramByte()) + getRegisterValue(Register.Y_INDEX);
-                withRegisterAndByteAt(Register.ACCUMULATOR, pointerLocation, this::performADC);
-            }break;
+            case ADC_IND_IY:
+                withRegisterAndByteAt(Register.ACCUMULATOR, getIndirectYPointer(), this::performADC);
+            break;
 
             case CMP_I:
                 performCMP(nextProgramByte(), Register.ACCUMULATOR);
@@ -491,10 +486,9 @@ public class Mos6502 {
                 performCMP(getByteOfMemoryAt(pointerLocation), Register.ACCUMULATOR);
             }break;
 
-            case CMP_IND_IY: {
-                int pointerLocation = getWordOfMemoryAt(nextProgramByte()) + getRegisterValue(Register.Y_INDEX);
-                performCMP(getByteOfMemoryAt(pointerLocation), Register.ACCUMULATOR);
-            }break;
+            case CMP_IND_IY:
+                performCMP(getByteOfMemoryAt(getIndirectYPointer()), Register.ACCUMULATOR);
+            break;
 
             case CPX_I:
                 performCMP(nextProgramByte(), Register.X_INDEX);
@@ -549,10 +543,9 @@ public class Mos6502 {
                 withRegisterAndByteAt(Register.ACCUMULATOR, pointerLocation, this::performSBC);
             }break;
 
-            case SBC_IND_IY: {
-                int pointerLocation = getWordOfMemoryAt(nextProgramByte()) + getRegisterValue(Register.Y_INDEX);
-                withRegisterAndByteAt(Register.ACCUMULATOR, pointerLocation, this::performSBC);
-            }break;
+            case SBC_IND_IY:
+                withRegisterAndByteAt(Register.ACCUMULATOR, getIndirectYPointer(), this::performSBC);
+            break;
 
             case STY_Z:
                 setByteOfMemoryAt(nextProgramByte(), getRegisterValue(Register.Y_INDEX));
@@ -591,10 +584,9 @@ public class Mos6502 {
                 setByteOfMemoryAt(pointerLocation, getRegisterValue(Register.ACCUMULATOR));
             }break;
 
-            case STA_IND_IY: {
-                int pointerLocation = getWordOfMemoryAt(nextProgramByte()) + getRegisterValue(Register.Y_INDEX);
-                setByteOfMemoryAt(pointerLocation, getRegisterValue(Register.ACCUMULATOR));
-            }break;
+            case STA_IND_IY:
+                setByteOfMemoryAt(getIndirectYPointer(), getRegisterValue(Register.ACCUMULATOR));
+            break;
 
             case STX_Z:
                 setByteOfMemoryAt(nextProgramByte(), getRegisterValue(Register.X_INDEX));
@@ -870,6 +862,10 @@ public class Mos6502 {
     private void setByteOfMemoryAt(int location, int index, int newByte){
        memory.setByteAt(location + index, newByte);
        debug("Stored 0x{} at mem[{}]", Integer.toHexString(newByte), (location + (index != 0 ? "[" + index + "]" : "")));
+    }
+
+    private int getIndirectYPointer(){
+        return (getWordOfMemoryAt(nextProgramByte()) + getRegisterValue(Register.Y_INDEX));
     }
 
     private int getWordOfMemoryXIndexedAt(int location){
