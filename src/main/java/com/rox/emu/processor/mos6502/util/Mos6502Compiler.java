@@ -272,11 +272,10 @@ public class Mos6502Compiler {
             return AddressingMode.ACCUMULATOR;
         }else if (prefix.equalsIgnoreCase(VALUE_PREFIX)){
             return getIndexedAddressingMode(prefix, value, postfix);
-        }else if (prefix.equalsIgnoreCase(INDIRECT_PREFIX)){
-            return getIndirectIndexMode(prefix, value, postfix);
         }
 
-        throw new UnknownOpCodeException("Invalid or unimplemented argument: '" + prefix + value + postfix + "'", prefix+value);
+        //INDIRECT_PREFIX
+        return getIndirectIndexMode(prefix, value, postfix);
     }
 
     private AddressingMode getIndirectIndexMode(String prefix, String value, String postfix){
