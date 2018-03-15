@@ -307,11 +307,10 @@ public class Mos6502 {
                 registers.setRegisterAndFlags(Register.ACCUMULATOR, getByteOfMemoryXIndexedAt(nextProgramWord()));
                 break;
 
-            case LDA_IND_IX: {
+            case LDA_IND_IX:
                 //XXX this needs to be wrappable for zero page addressing
-                int pointerLocation = getWordOfMemoryXIndexedAt(nextProgramByte());
-                registers.setRegisterAndFlags(Register.ACCUMULATOR, getByteOfMemoryAt(pointerLocation));
-            }break;
+                registers.setRegisterAndFlags(Register.ACCUMULATOR, getByteOfMemoryAt(getWordOfMemoryXIndexedAt(nextProgramByte())));
+            break;
 
             case LDA_IND_IY:
                 registers.setRegisterAndFlags(Register.ACCUMULATOR, getByteOfMemoryAt(getIndirectYPointer()));
@@ -341,10 +340,9 @@ public class Mos6502 {
                 withRegisterAndByteYIndexedAt(Register.ACCUMULATOR, nextProgramWord(), this::performAND);
                 break;
 
-            case AND_IND_IX: {
-                int pointerLocation = getWordOfMemoryXIndexedAt(nextProgramByte());
-                withRegisterAndByteAt(Register.ACCUMULATOR, pointerLocation, this::performAND);
-            }break;
+            case AND_IND_IX:
+                withRegisterAndByteAt(Register.ACCUMULATOR, getWordOfMemoryXIndexedAt(nextProgramByte()), this::performAND);
+            break;
 
             case AND_IND_IY:
                 withRegisterAndByteAt(Register.ACCUMULATOR, getIndirectYPointer(), this::performAND);
@@ -382,10 +380,9 @@ public class Mos6502 {
                 withRegisterAndByteYIndexedAt(Register.ACCUMULATOR, nextProgramWord(), this::performORA);
                 break;
 
-            case ORA_IND_IX: {
-                int pointerLocation = getWordOfMemoryXIndexedAt(nextProgramByte());
-                withRegisterAndByteAt(Register.ACCUMULATOR, pointerLocation, this::performORA);
-            }break;
+            case ORA_IND_IX:
+                withRegisterAndByteAt(Register.ACCUMULATOR, getWordOfMemoryXIndexedAt(nextProgramByte()), this::performORA);
+            break;
 
             case ORA_IND_IY:
                 withRegisterAndByteAt(Register.ACCUMULATOR, getIndirectYPointer(), this::performORA);
@@ -415,10 +412,9 @@ public class Mos6502 {
                 withRegisterAndByteYIndexedAt(Register.ACCUMULATOR, nextProgramWord(), this::performEOR);
                 break;
 
-            case EOR_IND_IX: {
-                int pointerLocation = getWordOfMemoryXIndexedAt(nextProgramByte());
-                withRegisterAndByteAt(Register.ACCUMULATOR, pointerLocation, this::performEOR);
-            }break;
+            case EOR_IND_IX:
+                withRegisterAndByteAt(Register.ACCUMULATOR, getWordOfMemoryXIndexedAt(nextProgramByte()), this::performEOR);
+            break;
 
             case EOR_IND_IY:
                 withRegisterAndByteAt(Register.ACCUMULATOR, getIndirectYPointer(), this::performEOR);
@@ -448,10 +444,9 @@ public class Mos6502 {
                 withRegisterAndByteXIndexedAt(Register.ACCUMULATOR, nextProgramByte(), this::performADC);
                 break;
 
-            case ADC_IND_IX: {
-                int pointerLocation = getWordOfMemoryXIndexedAt(nextProgramByte());
-                withRegisterAndByteAt(Register.ACCUMULATOR, pointerLocation, this::performADC);
-            }break;
+            case ADC_IND_IX:
+                withRegisterAndByteAt(Register.ACCUMULATOR, getWordOfMemoryXIndexedAt(nextProgramByte()), this::performADC);
+            break;
 
             case ADC_IND_IY:
                 withRegisterAndByteAt(Register.ACCUMULATOR, getIndirectYPointer(), this::performADC);
@@ -481,10 +476,9 @@ public class Mos6502 {
                 performCMP(getByteOfMemoryYIndexedAt(nextProgramWord()), Register.ACCUMULATOR);
                 break;
 
-            case CMP_IND_IX: {
-                int pointerLocation = getWordOfMemoryXIndexedAt(nextProgramByte());
-                performCMP(getByteOfMemoryAt(pointerLocation), Register.ACCUMULATOR);
-            }break;
+            case CMP_IND_IX:
+                performCMP(getByteOfMemoryAt(getWordOfMemoryXIndexedAt(nextProgramByte())), Register.ACCUMULATOR);
+            break;
 
             case CMP_IND_IY:
                 performCMP(getByteOfMemoryAt(getIndirectYPointer()), Register.ACCUMULATOR);
@@ -538,10 +532,9 @@ public class Mos6502 {
                 withRegisterAndByteYIndexedAt(Register.ACCUMULATOR, nextProgramWord(), this::performSBC);
                 break;
 
-            case SBC_IND_IX: {
-                int pointerLocation = getWordOfMemoryXIndexedAt(nextProgramByte());
-                withRegisterAndByteAt(Register.ACCUMULATOR, pointerLocation, this::performSBC);
-            }break;
+            case SBC_IND_IX:
+                withRegisterAndByteAt(Register.ACCUMULATOR, getWordOfMemoryXIndexedAt(nextProgramByte()), this::performSBC);
+            break;
 
             case SBC_IND_IY:
                 withRegisterAndByteAt(Register.ACCUMULATOR, getIndirectYPointer(), this::performSBC);
@@ -579,10 +572,9 @@ public class Mos6502 {
                 setByteOfMemoryYIndexedAt(nextProgramWord(), getRegisterValue(Register.ACCUMULATOR));
                 break;
 
-            case STA_IND_IX: {
-                int pointerLocation = getWordOfMemoryXIndexedAt(nextProgramByte());
-                setByteOfMemoryAt(pointerLocation, getRegisterValue(Register.ACCUMULATOR));
-            }break;
+            case STA_IND_IX:
+                setByteOfMemoryAt(getWordOfMemoryXIndexedAt(nextProgramByte()), getRegisterValue(Register.ACCUMULATOR));
+            break;
 
             case STA_IND_IY:
                 setByteOfMemoryAt(getIndirectYPointer(), getRegisterValue(Register.ACCUMULATOR));
