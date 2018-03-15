@@ -142,11 +142,7 @@ public final class RoxByte {
      * @return this SIGNED_TWOS_COMPLIMENT byte as an integer
      */
     public int getAsInt() {
-        switch (format){
-            case SIGNED_TWOS_COMPLIMENT:
-            default:
-                return intFromTwosComplimented(byteValue);
-        }
+        return intFromTwosComplimented(byteValue);
     }
 
     private int intFromTwosComplimented(int byteValue){

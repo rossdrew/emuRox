@@ -5,7 +5,7 @@ import com.rox.emu.env.RoxByte;
 import java.util.Arrays;
 
 /**
- * A block of read only memory, writes will throw a {@link RuntimeException} and resetting will have no effect.
+ * A block of read only memory, writes will throw a {@link MemoryMappingException} and resetting will have no effect.
  */
 public class ReadOnlyMemory implements Memory {
     private final RoxByte[] memoryArray;
@@ -24,12 +24,12 @@ public class ReadOnlyMemory implements Memory {
 
     @Override
     public void setByteAt(int location, int byteValue) {
-        throw new RuntimeException("Cannot write to read only memory");
+        throw new MemoryMappingException("Cannot write to read only memory");
     }
 
     @Override
     public void setBlock(int startLocation, int[] byteValues) {
-        throw new RuntimeException("Cannot write to read only memory");
+        throw new MemoryMappingException("Cannot write to read only memory");
     }
 
     /**

@@ -104,7 +104,7 @@ public class MultiSourceMemory implements Memory {
                                            final int[] physicalAddresses,
                                            final Memory memory) {
         if (logicalAddresses.length != physicalAddresses.length)
-            throw new RuntimeException("The same number of logical and physical addresses are required for multiple mappings.  Received " + logicalAddresses.length + " logical addresses to " + physicalAddresses.length + " physical.");
+            throw new MemoryMappingException("The same number of logical and physical addresses are required for multiple mappings.  Received " + logicalAddresses.length + " logical addresses to " + physicalAddresses.length + " physical.");
 
         final Map<Integer, MemoryMapping> newMemoryMappings = new HashMap<>();
         newMemoryMappings.putAll(memoryMappings);
