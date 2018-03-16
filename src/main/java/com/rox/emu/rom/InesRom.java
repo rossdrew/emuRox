@@ -1,7 +1,8 @@
 package com.rox.emu.rom;
 
 import com.rox.emu.mem.ReadOnlyMemory;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 
@@ -11,6 +12,8 @@ import java.util.Arrays;
  * @author Ross Drew
  */
 public final class InesRom {
+    private static final Logger log = LoggerFactory.getLogger(InesRom.class);
+
     /** The predefined PRG ROM block size */
     public static final int PRG_ROM_BLOCK_SIZE = 16384;
     /** The predefined CHR ROM block size */
@@ -61,7 +64,7 @@ public final class InesRom {
             character = extractBinaryData(bytes, newHeader.getChrBlocks() * CHR_ROM_BLOCK_SIZE, offset);
         } else {
             //CHR RAM
-            throw new NotImplementedException();
+            log.error("CHR RAM Not implemented...");
         }
         offset += (newHeader.getChrBlocks() * CHR_ROM_BLOCK_SIZE);
 
