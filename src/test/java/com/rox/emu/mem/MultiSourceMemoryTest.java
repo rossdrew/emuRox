@@ -145,7 +145,7 @@ public class MultiSourceMemoryTest {
         try {
             new MultiSourceMemory().withMappingTo(new int[]{5, 6, 7, 8, 9}, new int[]{1, 2, 3, 4}, memory);
             fail("Should not be able to map 5 memory addresses to 4");
-        }catch(RuntimeException e){
+        }catch(MemoryMappingException e){
             assertNotNull(e);
         }
     }
@@ -157,7 +157,7 @@ public class MultiSourceMemoryTest {
         try {
             new MultiSourceMemory().withMappingTo(new int[]{5, 6, 7, 8}, new int[]{1, 2, 3, 4, 5}, memory);
             fail("Should not be able to map 5 memory addresses to 4");
-        }catch(RuntimeException e){
+        }catch(MemoryMappingException e){
             assertNotNull(e);
         }
     }
