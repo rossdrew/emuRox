@@ -1,6 +1,7 @@
 package com.rox.emu.rom;
 
 import com.rox.emu.mem.ReadOnlyMemory;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.Arrays;
 
@@ -58,7 +59,10 @@ public final class InesRom {
         byte[] character = {};
         if (newHeader.getChrBlocks() > 0) {
             character = extractBinaryData(bytes, newHeader.getChrBlocks() * CHR_ROM_BLOCK_SIZE, offset);
-        } //TODO else CHR RAM
+        } else {
+            //CHR RAM
+            throw new NotImplementedException();
+        }
         offset += (newHeader.getChrBlocks() * CHR_ROM_BLOCK_SIZE);
 
         byte[] footer = new byte[] {};
