@@ -50,7 +50,7 @@ The plan was to develop this, a larger personal project, in a TDD (Test Driven D
 #### Current technologies
 
  - [Trello](https://trello.com/b/ZWcFxEu3/emurox) for work breakdown and project management. 
- - [Java](https://www.java.com/)/[JUnit](http://junit.org/junit4/) for basic functionality tests, adding mocks and more expressive syntax with [Mockito](http://site.mockito.org/).  This includes features such a [Theories](http://junit.org/junit4/javadoc/4.12/org/junit/experimental/theories/Theories.html).  
+ - [Java](https://www.java.com/)/[JUnit](http://junit.org/junit4/) for basic functionality tests, adding mocks and more expressive syntax with [Mockito](http://site.mockito.org/).  This includes features such as [Theories](http://junit.org/junit4/javadoc/4.12/org/junit/experimental/theories/Theories.html).  
  - [Groovy](http://www.groovy-lang.org/)/[Spock](http://spockframework.org/) for [data-driven tests](https://en.wikipedia.org/wiki/Data-driven_testing), adding mocks and more expressive syntax with [Hamcrest](http://hamcrest.org/).  For covering various variations of class creation and method use in a clear, concise way that JUnit struggles with.  
  - [junit-quickcheck](https://github.com/pholser/junit-quickcheck) and [Spock Genesis](https://github.com/Bijnagte/spock-genesis) for [property-based testing](http://blog.jessitron.com/2013/04/property-based-testing-what-is-it.html) in Java and Groovy respectively.
  - [JUnit Theory Suite](https://github.com/richard-melvin/junit-theory-suite) for unrolling [JUnit](http://junit.org/junit4/) [Theories](http://junit.org/junit4/javadoc/4.12/org/junit/experimental/theories/Theories.html).  This will unroll all data points combinatorially to a [Theory](http://junit.org/junit4/javadoc/4.12/org/junit/experimental/theories/Theories.html)
@@ -61,7 +61,7 @@ The plan was to develop this, a larger personal project, in a TDD (Test Driven D
 
 #### Investigated technologies 
 
- - [JParams toStringTester](https://github.com/jparams/to-string-tester) for `toString` testing but it didn't seem to work very well, I filed an [issue](https://github.com/jparams/to-string-tester/issues/1)
+ - [JParams toStringTester](https://github.com/jparams/to-string-tester) for `toString` testing but it didn't seem to work very well, I filed an [issue](https://github.com/jparams/to-string-tester/issues/1) but the project has since been archived.
  - [JUnit QuickTheories](https://github.com/ncredinburgh/QuickTheories) for property based testing but it's much more verbose for no added benefit over [junit-quickcheck](https://www.google.co.uk/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&cad=rja&uact=8&ved=0ahUKEwjq4-PF-aPSAhWHDsAKHV17BCIQFggaMAA&url=https%3A%2F%2Fgithub.com%2Fpholser%2Fjunit-quickcheck&usg=AFQjCNE37M0yEi68OG8Hr7y1MDoJwcLOaQ&sig2=AUpnbmKM5Sk9efhw1r-bKw&bvm=bv.147448319,d.d2s)
  - [Spockito](https://github.com/tools4j/spockito) to give the ability to unroll [JUnit](http://junit.org/junit4/) [Theories](http://junit.org/junit4/javadoc/4.12/org/junit/experimental/theories/Theories.html) like in [Spock](http://spockframework.org/) data-driven tests but I'm not a big fan of the syntax and attaches `@DataPoint`s to the methods.  It would be great for adding data-driven tests if you were limited to [JUnit](http://junit.org/junit4/), however
 
