@@ -43,10 +43,11 @@ BCD and proper timing is a thing for another day as my first objective for now, 
  <img align="right" src="https://codecov.io/gh/rossdrew/emuRox/graphs/sunburst.svg" data-canonical-src="https://codecov.io/gh/rossdrew/emuRox/graphs/sunburst.svg" alt="The current codecov.io coverage chart" width="150" />
 </a>
 
-The plan was to develop this, a larger personal project, in a TDD (Test Driven Development) centric way, that is via Red-Green testing.  This means writing failing tests (red) that describe functionality then writing that functionality to make the tests pass (green) and iteratively writing a complete application.
- Here is a list of those that I am using or have used along the way:-
+The plan was to develop in a TDD (Test Driven Development) centric way, that is via Red-Green testing; i.e. writing failing/red tests that describe functionality then writing that functionality to make the tests pass/green and iteratively writing a complete application.
  
 #### Current technologies
+
+ Technologies that I have used, liked and continued to use as part of the project...
 
  - [Trello](https://trello.com/b/ZWcFxEu3/emurox) for work breakdown and project management. 
  - [Java](https://www.java.com/)/[JUnit](http://junit.org/junit4/) for basic functionality tests, adding mocks and more expressive syntax with [Mockito](http://site.mockito.org/).  This includes features such as [Theories](http://junit.org/junit4/javadoc/4.12/org/junit/experimental/theories/Theories.html).  
@@ -59,6 +60,8 @@ The plan was to develop this, a larger personal project, in a TDD (Test Driven D
  - Static analysis done in my development environment on [IntelliJ IDEA](https://www.jetbrains.com/idea/) and online (including GitHub shield) by [Codeacy](https://www.codacy.com/). 
 
 #### Investigated technologies 
+
+ Technologies that I have used, disliked or haven't saw a place for them in my project for whatever reason...
 
  - [JParams toStringTester](https://github.com/jparams/to-string-tester) for `toString` testing but it didn't seem to work very well, I filed an [issue](https://github.com/jparams/to-string-tester/issues/1) but the project has since been archived.
  - [JUnit QuickTheories](https://github.com/ncredinburgh/QuickTheories) for property based testing but it's much more verbose for no added benefit over [junit-quickcheck](https://www.google.co.uk/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&cad=rja&uact=8&ved=0ahUKEwjq4-PF-aPSAhWHDsAKHV17BCIQFggaMAA&url=https%3A%2F%2Fgithub.com%2Fpholser%2Fjunit-quickcheck&usg=AFQjCNE37M0yEi68OG8Hr7y1MDoJwcLOaQ&sig2=AUpnbmKM5Sk9efhw1r-bKw&bvm=bv.147448319,d.d2s)
