@@ -61,7 +61,7 @@ The plan was to develop in a TDD (Test Driven Development) centric way, that is 
 
 #### Investigated technologies 
 
- _Technologies that I have used, disliked or haven't saw a place for them in my project for whatever reason..._
+ _Technologies that I have used yet disliked or haven't saw a place for them in my project for whatever reason..._
 
  - [JParams toStringTester](https://github.com/jparams/to-string-tester) for `toString` testing but it didn't seem to work very well, I filed an [issue](https://github.com/jparams/to-string-tester/issues/1) but the project has since been archived.
  - [JUnit QuickTheories](https://github.com/ncredinburgh/QuickTheories) for property based testing but it's much more verbose for no added benefit over [junit-quickcheck](https://www.google.co.uk/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&cad=rja&uact=8&ved=0ahUKEwjq4-PF-aPSAhWHDsAKHV17BCIQFggaMAA&url=https%3A%2F%2Fgithub.com%2Fpholser%2Fjunit-quickcheck&usg=AFQjCNE37M0yEi68OG8Hr7y1MDoJwcLOaQ&sig2=AUpnbmKM5Sk9efhw1r-bKw&bvm=bv.147448319,d.d2s)
