@@ -114,8 +114,7 @@ public class Mos6502 {
     public void step() {
         log.debug("STEP >>>");
 
-        final int opCodeByte = nextProgramByte();
-        final OpCode opCode = OpCode.from(opCodeByte);
+        final OpCode opCode = OpCode.from(nextProgramByte());
 
         //Execute the opcode
         log.debug("Instruction: {}...", opCode.getOpCodeName());
