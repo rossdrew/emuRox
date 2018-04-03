@@ -80,11 +80,11 @@ public class Mos6502Alu {
      * addition.<br/>
      * <br>
      * <pre>
-     *                                  (1) <-
-     *   0000 1010  [10]   =>    0000 1010
-     * - 0000 0100  [4]    =>  + 1111 1011
-     *                         -----------
-     *                    <- (1) 0000 0110  [6]     =>  10 - 4 = 6
+     *                                           (1) <-
+     * byteA =>   0000 1010  [10]   =>    0000 1010
+     * byteB =>   0000 0100  [4]    =>  + 1111 1011
+     *                                    -----------
+     *                             <- (1) 0000 0110  [6]     =>  10 - 4 = 6
      *
      * </pre>
      * This means the opposite of {@link #adc}s carry behaviour is expected.  Any usage that doesn't need
