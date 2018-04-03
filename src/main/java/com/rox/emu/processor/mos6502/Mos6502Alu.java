@@ -75,6 +75,14 @@ public class Mos6502Alu {
      * Combined with a <em>loaded carry flag</em> used as a borrow, this gives subtraction via twos compliment
      * addition.<br/>
      * <br>
+     * <pre>
+     *                                  (1)
+     *   0000 1010  [10]   ->    0000 1010
+     * - 0000 0100  [4]    ->  + 1111 1011
+     *                         -----------
+     *                    (1) <- 0000 0110  [6]     ->  10 - 4 = 6
+     *
+     * </pre>
      * This means the opposite of {@link #adc}s carry behaviour is expected.  Any usage that doesn't need
      * to take into account of a previous bytes borrow, should load the carry flag to get normal behaviour.
      *
