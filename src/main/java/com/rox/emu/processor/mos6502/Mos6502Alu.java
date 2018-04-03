@@ -30,6 +30,8 @@ public class Mos6502Alu {
     }
 
     /**
+     * <b>Sets the {@link Registers} carry flag to the carry of the operation</b><br/>
+     * <br/>
      * Return the addition of <code>byteA</code>, <code>byteB</code> and the contents of the {@link Registers} carry
      * flag.<br/>
      * <br>
@@ -68,6 +70,8 @@ public class Mos6502Alu {
     }
 
     /**
+     * <b>Sets the {@link Registers} carry flag to the borrow of the operation</b><br/>
+     * <br/>
      * Return the subtraction of <code>byteB</code> from <code>byteA</code> using the contents of the
      * {@link Registers} carry flag as a borrow.<br/>
      * <br/>
