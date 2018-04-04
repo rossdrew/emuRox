@@ -30,7 +30,7 @@ public final class InesRom {
     private final byte[] footer;
 
     private InesRom(final InesRomHeader header,
-                    byte[] trainerRom,
+                    final byte[] trainerRom,
                     final byte[] prgRom,
                     final byte[] chrRom,
                     final byte[] footer){
@@ -50,11 +50,8 @@ public final class InesRom {
         final InesRomHeader newHeader = processHeader(bytes);
         int offset = InesRomHeader.HEADER_SIZE;
 
-        byte[] trainer = {};
-        if (newHeader.getRomControlOptions().isTrainerPresent()){
-            trainer = extractBinaryData(bytes, TRAINER_SIZE, offset);
-            offset += TRAINER_SIZE;
-        }
+        byte[] trainer = newHeader.getRomControlOptions().isTrainerPresent() ? extractBinaryData(bytes, TRAINER_SIZE, offset) : new byte[] {};
+        offset += trainer.length;
 
         final byte[] program = extractBinaryData(bytes, newHeader.getPrgBlocks() * PRG_ROM_BLOCK_SIZE, offset);
         offset += program.length;
@@ -66,7 +63,7 @@ public final class InesRom {
             //CHR RAM
             log.error("CHR RAM Not implemented...");
         }
-        offset += (newHeader.getChrBlocks() * CHR_ROM_BLOCK_SIZE);
+        offset += character.length;
 
         byte[] footer = new byte[] {};
         if (bytes.length > offset){
