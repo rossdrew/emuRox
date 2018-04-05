@@ -885,10 +885,6 @@ public class Mos6502 {
      * @param displacement relative (-127 &rarr; 128) location from end of branch instruction
      */
     private void branchTo(int displacement) {
-        //possible improvement?
-//        int v = performSilently(this::performADC, getRegisterValue(Register.PROGRAM_COUNTER_LOW), displacement, registers.getFlag(STATUS_FLAG_CARRY));
-//        setRegisterValue(Register.PROGRAM_COUNTER_LOW, v);
-
         final RoxByte displacementByte = RoxByte.fromLiteral(displacement);
         if (displacementByte.isNegative())
             setRegisterValue(Register.PROGRAM_COUNTER_LOW, getRegisterValue(Register.PROGRAM_COUNTER_LOW) - displacementByte.asOnesCompliment().getRawValue());
