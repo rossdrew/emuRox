@@ -789,10 +789,8 @@ public class Mos6502 {
     }
 
     private void debug(final String message, String ... args){
-        if (!log.isDebugEnabled())
-            return;
-
-        log.debug(message, args);
+        if (log.isDebugEnabled())
+            log.debug(message, args);
     }
 
     private void pushRegister(Register registerID){
