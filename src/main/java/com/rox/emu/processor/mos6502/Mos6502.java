@@ -608,15 +608,11 @@ public class Mos6502 {
                 break;
 
             case JMP_ABS:
-                final RoxWord absoluteAddress = RoxWord.literalFrom(nextProgramWord());
-                setRegisterValue(Register.PROGRAM_COUNTER_HI, absoluteAddress.getHighByte().getAsInt());
-                setRegisterValue(Register.PROGRAM_COUNTER_LOW, absoluteAddress.getLowByte().getAsInt());
+                registers.setPC(nextProgramWord());
             break;
 
             case JMP_IND:
-                final RoxWord indirectAddress = RoxWord.literalFrom(nextProgramWord());
-                //XXX Why does't this work by just using nextProgramWord
-                registers.setPC(getWordOfMemoryAt(indirectAddress.getAsInt()));
+                registers.setPC(getWordOfMemoryAt(nextProgramWord()));
             break;
 
             case BCS:
