@@ -739,7 +739,9 @@ public class Mos6502 {
     }
 
     /**
-     * Get the value of the 16 bit Program Counter (PC) and increment
+     * Get the value of the 16 bit Program Counter (PC) and increment. Equivalent of <br/>
+     * <br/>
+     * <code>PC++</code>
      */
     private int getAndStepPC(){
        final int originalPC = registers.getPC();
@@ -758,8 +760,7 @@ public class Mos6502 {
      * @return byte {@code from mem[ PC[0] ]}
      */
     private int nextProgramByte(){
-       int memoryLocation = getAndStepPC();
-       return getByteOfMemoryAt(memoryLocation);
+       return getByteOfMemoryAt(getAndStepPC());
     }
 
     /**
@@ -774,9 +775,7 @@ public class Mos6502 {
      * @return word made up of both bytes
      */
     private int nextProgramWord(){
-       int byte1 = nextProgramByte();
-
-       return RoxWord.from(RoxByte.fromLiteral(byte1),
+       return RoxWord.from(RoxByte.fromLiteral(nextProgramByte()),
                            RoxByte.fromLiteral(nextProgramByte())).getAsInt();
     }
 
