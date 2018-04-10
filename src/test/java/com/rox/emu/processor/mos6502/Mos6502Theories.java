@@ -18,7 +18,7 @@ public class Mos6502Theories {
     private Mos6502 processor;
 
     @DataPoints("validBytes")
-    public static final int[] VALID_BYTE_DATA = new int[] {0, 127, 255};
+    public static final int[] VALID_BYTE_DATA = new int[] {0, 5, 127, 128, 200, 255};
 
     @Before
     public void setUp() {

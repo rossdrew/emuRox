@@ -22,7 +22,7 @@ public class Ricoh2C02Theories {
 
     @Theory
     public void testGetControlRegister(int byteValue){
-        assumeThat(byteValue, is(both(greaterThanOrEqualTo(0)).and(lessThanOrEqualTo(255))));
+        assumeThat(byteValue, is(both(greaterThanOrEqualTo(LOWEST_VALID_REGISTER_VALUE)).and(lessThanOrEqualTo(HIGHEST_VALID_REGISTER_VALUE))));
 
         final Memory vRam = new SimpleMemory();
         final Memory sprRam = mock(Memory.class);
