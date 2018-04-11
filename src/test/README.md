@@ -58,6 +58,18 @@ In order to make tests repeatable & more useful, Property Based testing framewor
 
 TODO
 
+### Mutation Testing
+
+_I want to verify that if something goes wrong in my code, that my tests will discover this error_
+
+In essence, Mutation Testing is automated unit testing for your unit tests.  If I write bad code, I expect my unit tests
+to catch it but what if I write bad unit tests?
+
+Mutation testing will take your passing test and "mutate" the code being tested.  For example, replacing `>=` with `<=`
+and running the test again.  If the test catches this issue (fails) then the mutation is "killed" and your test passes a
+test.  If the test doesn't fail with the mutation, the mutation "survives" and it's an indication of you not testing the
+piece of mutated code comprehensively enough.
+
 ### Integration Testing
 
 This is making sure one or more units work together when tested.  They are longer running and ideally there are less of
