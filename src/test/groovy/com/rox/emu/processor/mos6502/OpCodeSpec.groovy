@@ -706,28 +706,6 @@ class OpCodeSpec extends Specification {
 		testFlags(Z,N,C,O)
         storedValue == memory.getByte(40)
 
-        /**
-         This should result in an Accumulator of 01 with no flags set
-
-         CLC
-         LDA #$50
-         ADC #$D0
-         STA $40
-         LDA #$0
-         ADC #$0
-
-         same with (with 02 in Accumulator)
-
-         CLC
-         LDA #$50
-         ADC #$D3
-         STA $40
-         LDA #$0
-         ADC #$1
-
-         C is being set in both
-         */
-
         where:
         lowFirstByte | lowSecondByte | highFirstByte | highSecondByte | expectedAccumulator         | storedValue | Z     | N     | C     | O     | Expected
         0            | 0             | 0             | 0              | 0                           | 0           | true  | false | false | false | "With zero result"
@@ -3018,7 +2996,7 @@ class OpCodeSpec extends Specification {
         loadMemoryWithProgram(BRK)
         processor.step(1)
     
-        then: 'Registers.Flag.NEGATIVEow contain the expect values'
+        then: 'Negative flag now contains the expect values'
         registers.getRegister(Registers.Register.PROGRAM_COUNTER_HI) == newPCHi
         registers.getRegister(Registers.Register.PROGRAM_COUNTER_LOW) == newPCLo
         registers.getRegister(Registers.Register.STACK_POINTER_HI) == 0xFC

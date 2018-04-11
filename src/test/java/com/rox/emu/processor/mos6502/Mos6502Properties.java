@@ -43,11 +43,11 @@ public class Mos6502Properties {
         Registers registers = processor.getRegisters();
 
         assertEquals(memHi, registers.getRegister(Registers.Register.PROGRAM_COUNTER_HI));        // PC Set to location pointed to by mem[FFFC:FFFD]
-        assertEquals(memLo, registers.getRegister(Registers.Register.PROGRAM_COUNTER_LOW));         // ...
+        assertEquals(memLo, registers.getRegister(Registers.Register.PROGRAM_COUNTER_LOW));       // ...
 
-        assertEquals(0x34, registers.getRegister(Registers.Register.STATUS_FLAGS));   //Status flags reset
-        assertEquals(0xFF, registers.getRegister(Registers.Register.STACK_POINTER_HI));       //Stack Pointer at top of stack
-        assertEquals(0, registers.getRegister(Registers.Register.ACCUMULATOR)); //All cleared
+        assertEquals(0x34, registers.getRegister(Registers.Register.STATUS_FLAGS));      //Status flags reset
+        assertEquals(0xFF, registers.getRegister(Registers.Register.STACK_POINTER_HI));  //Stack Pointer at top of stack
+        assertEquals(0, registers.getRegister(Registers.Register.ACCUMULATOR));          //All cleared
         assertEquals(0, registers.getRegister(Registers.Register.X_INDEX));
         assertEquals(0, registers.getRegister(Registers.Register.Y_INDEX));
     }
