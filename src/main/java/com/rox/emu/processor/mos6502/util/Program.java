@@ -44,7 +44,9 @@ public class Program {
         this.references = new ArrayList<>();
     }
 
-    private Program(int[] programBytes, Map<String, Integer> programLabels, List<Reference> references){
+    private Program(final int[] programBytes,
+                    final Map<String, Integer> programLabels,
+                    final List<Reference> references){
         this.programBytes = programBytes;
         this.programLabels = programLabels;
         this.references = references;
@@ -85,6 +87,12 @@ public class Program {
         return new Program(this.programBytes, newProgramLabels, references);
     }
 
+    /**
+     * Create a new {@link Program} with a label reference appended
+     *
+     * @param reference the {@link Reference} to the desired program label
+     * @return a new {@link Program} that is a copy of this one with the new label {@link Reference} appended
+     */
     public Program with(Reference reference){
         int[] newProgramBytes = new int[programBytes.length + 1];
         System.arraycopy(programBytes,0, newProgramBytes, 0, programBytes.length);
