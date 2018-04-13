@@ -56,7 +56,14 @@ In order to make tests repeatable & more useful, Property Based testing framewor
 
 ### Theory Testing
 
-TODO
+_I want to verify that a piece of functionality works across all possible uses of a given set of data points_
+
+We have tests, which are theories i.e. identity property of addition ('addition of any number + 0 is the original
+number').  Then we have sample data and the test will be run against each of these.  The focus here is in how the test
+is described.  We say given certain conditions, the expected behaviour should be x and the Theory Testing suite should
+use test data to run combinatorial testing of that theory.
+This is very useful where Data Driven tests would be
+
 
 ### Mutation Testing
 
