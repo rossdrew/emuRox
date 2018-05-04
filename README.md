@@ -68,12 +68,6 @@ The plan was to develop in a TDD (Test Driven Development) centric way, that is 
  - [Spockito](https://github.com/tools4j/spockito) to give the ability to unroll [JUnit](http://junit.org/junit4/) [Theories](http://junit.org/junit4/javadoc/4.12/org/junit/experimental/theories/Theories.html) like in [Spock](http://spockframework.org/) data-driven tests but I'm not a big fan of the syntax and attaches `@DataPoint`s to the methods.  It would be great for adding data-driven tests if you were limited to [JUnit](http://junit.org/junit4/), however
  - [Kotlin](https://kotlinlang.org/) for testing and various testing frameworks like [Spek](https://github.com/spekframework/spek) and [kotlintest](https://github.com/kotlintest/kotlintest) but it offers nothing I don't already have and property/data-driven/theory testing is pretty ugly and/or weak.
 
-#### Branches
-
- - [Main](https://github.com/rossdrew/emuRox/commits/master) branch, now pushing towards a working NES PPU, then a working NES
- - A [Concourse](https://concourse.ci/) CI [branch](https://github.com/rossdrew/emuRox/commits/concourse-ci), to get that working and learn a little something along the way
- - A [RoxByte](https://github.com/rossdrew/emuRox/blob/migration-roxbyte/src/main/java/com/rox/emu/env/RoxByte.java) migration [branch](https://github.com/rossdrew/emuRox/tree/migration-roxbyte) for attempting to move towards an abstracted "_byte_" and away from trying to warp Java types to do what we need.
-
 -----
 
 ### Problems
