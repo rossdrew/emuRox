@@ -15,13 +15,13 @@ This is an emulator.  I want it to be composable so anything emulated should be 
 This is a TDD driven project.  That means for each step of functionality, I write a test to describe it then write the minimal amount of code required to pass that test and increment in that way.
 So I expect any code written to at least be fully covered by tests.  These tests should also be backed up by mutation coverage to ensure their strength.
 
-### Tt is as well designed as possible for testability and adaptability
+### It is as well designed as possible for testability and adaptability
 
 I'm not the worlds greatest software designer but this is a learning process as much as anything else so improvements & comments on design are most welcome.
 
 ### It is well written and documented code
 
-An important goal of a large software project should be maintainability.  Code should be written, not in the most clever way you can think, but in the clearest way you can.  The faster it can be understood by someone who's never seen it before; the quicker improvements will come.  This is more important than shaving off some lines of code or getting rid of a variable declaration.
+An important goal of a large software project should be maintainability.  Code should be written, clear over clever.  The faster it can be understood by someone who's never seen it before; the quicker improvements will come.  This is more important than shaving off some lines of code, making it look concise or getting rid of a variable declaration.
 Secondly, Javadoc.  I want this to be pluggable so Javadoc will be important as it grows.  
 
 So there it is, if you have something to contribute to this project and you can write well tested, clear and accurate code or have a better design idea, I'm all ears.
