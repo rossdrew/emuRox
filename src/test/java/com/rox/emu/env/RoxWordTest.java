@@ -1,23 +1,49 @@
 package com.rox.emu.env;
 
-import junit.framework.TestCase;
 import org.junit.Test;
 
 import static junit.framework.TestCase.assertNotNull;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
 
 public class RoxWordTest {
     @Test
-    public void comparisons(){
+    public void testEquality(){
+        assertTrue(RoxWord.ZERO.equals(RoxWord.ZERO));
+        assertEquals(RoxWord.ZERO, RoxWord.ZERO);
+        assertEquals(RoxWord.ZERO, 0);
+        assertEquals(RoxWord.ZERO.hashCode(), RoxWord.ZERO.hashCode());
+
         assertTrue(RoxWord.fromLiteral(1).equals(1));
-        TestCase.assertEquals(RoxWord.fromLiteral(1), 1);
-        TestCase.assertEquals(RoxWord.fromLiteral(1), RoxWord.fromLiteral(1));
+        assertEquals(RoxWord.fromLiteral(1), 1);
+        assertEquals(RoxWord.fromLiteral(1), RoxWord.fromLiteral(1));
+        assertEquals(RoxWord.fromLiteral(1).hashCode(), RoxWord.fromLiteral(1).hashCode());
 
         assertTrue(RoxWord.fromLiteral(0b1111111111111110).equals(0b1111111111111110));
-        TestCase.assertEquals(RoxWord.fromLiteral(0b1111111111111110), 0b1111111111111110);
-
+        assertEquals(RoxWord.fromLiteral(0b1111111111111110), 0b1111111111111110);
         assertEquals(RoxWord.fromLiteral(99), RoxByte.fromLiteral(99));
+        assertEquals(RoxWord.fromLiteral(99).hashCode(), RoxByte.fromLiteral(99).hashCode());
+    }
+
+    @Test
+    public void testInequality(){
+        assertFalse(RoxWord.ZERO.equals(RoxWord.fromLiteral(10)));
+        assertNotEquals(RoxWord.ZERO, RoxWord.fromLiteral(1));
+        assertNotEquals(RoxWord.ZERO, 1);;
+
+        assertFalse(RoxWord.fromLiteral(1).equals(2));
+        assertNotEquals(RoxWord.fromLiteral(1), 2);
+        assertNotEquals(RoxWord.fromLiteral(1), RoxWord.fromLiteral(2));
+        assertNotEquals(RoxWord.fromLiteral(1).hashCode(), RoxWord.fromLiteral(2).hashCode());
+
+        assertFalse(RoxWord.fromLiteral(0b1111111111111110).equals(0b1111111111111100));
+        assertNotEquals(RoxWord.fromLiteral(0b1111111111111110), 0b1111111111111100);
+        assertNotEquals(RoxWord.fromLiteral(99), RoxByte.fromLiteral(98));
+        assertNotEquals(RoxWord.fromLiteral(99).hashCode(), RoxByte.fromLiteral(98).hashCode());
+
+        assertFalse(RoxWord.fromLiteral(23).equals("Test 1"));
+        assertNotEquals(RoxWord.fromLiteral(23), "Test 2");
+        assertNotEquals(RoxWord.fromLiteral(23).hashCode(), "Test 3".hashCode());
     }
 
     @Test
