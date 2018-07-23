@@ -1,5 +1,7 @@
 package com.rox.emu.rom
 
+import com.rox.emu.env.RoxByte
+import com.rox.emu.env.RoxWord
 import com.rox.emu.mem.ReadOnlyMemory
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -113,7 +115,9 @@ class InesRomSpec extends Specification {
         final ReadOnlyMemory programRom = rom.getProgramRom()
 
         then: 'the program ROM is extracted correctly'
-        programRom.getBlock(0, programRom.size) == prgRom
+        for (int i=0; i<programRom.size; i++){
+            RoxByte.fromLiteral(prgRom[i]) == programRom.getByte(RoxWord.fromLiteral(i))
+        }
 
         where:
         prgRomBlocks | hasTrainer | flag6Byte  | prgRomBytes                     || description
@@ -136,8 +140,10 @@ class InesRomSpec extends Specification {
         final InesRom rom = InesRom.from(romBytes)
         final ReadOnlyMemory characterRom = rom.getCharacterRom()
 
-        then: 'the program ROM is extracted correctly'
-        characterRom.getBlock(0, characterRom.size) == chrRom
+        then: 'the character ROM is extracted correctly'
+        for (int i=0; i<characterRom.size; i++){
+            RoxByte.fromLiteral(chrRom[i]) == characterRom.getByte(RoxWord.fromLiteral(i))
+        }
 
         where:
         chrRomBlocks | hasTrainer | flag6Byte  | chrRomBytes                     || description
@@ -160,8 +166,10 @@ class InesRomSpec extends Specification {
         final InesRom rom = InesRom.from(romBytes)
         final ReadOnlyMemory trainerRom = rom.getTrainerRom()
 
-        then: 'the program ROM is extracted correctly'
-        trainerRom.getBlock(0, trainerRom.size) == trainer
+        then: 'the trainer ROM is extracted correctly'
+        for (int i=0; i<trainerRom.size; i++){
+            RoxByte.fromLiteral(trainer[i]) == trainerRom.getByte(RoxWord.fromLiteral(i))
+        }
 
         where:
         hasTrainer | flag6Byte  | trainerBytes                    || description

@@ -1,6 +1,7 @@
 package com.rox.emu.mem;
 
 import com.rox.emu.env.RoxByte;
+import com.rox.emu.env.RoxWord;
 
 import java.util.Arrays;
 
@@ -23,12 +24,12 @@ public class ReadOnlyMemory implements Memory {
     }
 
     @Override
-    public void setByteAt(int location, int byteValue) {
+    public void setByteAt(RoxWord location, RoxByte byteValue) {
         throw new MemoryMappingException("Cannot write to read only memory");
     }
 
     @Override
-    public void setBlock(int startLocation, int[] byteValues) {
+    public void setBlock(RoxWord startLocation, RoxByte[] byteValues) {
         throw new MemoryMappingException("Cannot write to read only memory");
     }
 
@@ -36,29 +37,24 @@ public class ReadOnlyMemory implements Memory {
      * {@inheritDoc}
      */
     @Override
-    public int getByte(int location) {
-        return memoryArray[location].getRawValue();
+    public RoxByte getByte(RoxWord location) {
+        return memoryArray[location.getRawValue()];
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public int getWord(int location) {
-        return (memoryArray[location].getRawValue() << 8 | memoryArray[location+1].getRawValue());
+    public RoxWord getWord(RoxWord location) {
+        return RoxWord.from(memoryArray[location.getRawValue()], memoryArray[location.getRawValue()+1]);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public int[] getBlock(int from, int to) {
-        final RoxByte[] roxBytes = Arrays.copyOfRange(memoryArray, from, to);
-        int[] extractedData = new int[roxBytes.length];
-        for (int i=0; i<extractedData.length; i++){
-            extractedData[i] = roxBytes[i].getRawValue();
-        }
-        return extractedData;
+    public RoxByte[] getBlock(RoxWord from, RoxWord to) {
+        return Arrays.copyOfRange(memoryArray, from.getRawValue(), to.getRawValue());
     }
 
     @Override

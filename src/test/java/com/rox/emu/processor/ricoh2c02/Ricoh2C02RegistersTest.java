@@ -1,5 +1,7 @@
 package com.rox.emu.processor.ricoh2c02;
 
+import com.rox.emu.env.RoxByte;
+import com.rox.emu.env.RoxWord;
 import com.rox.emu.mem.Memory;
 import com.rox.emu.mem.SimpleMemory;
 import org.junit.Test;
@@ -14,9 +16,10 @@ public class Ricoh2C02RegistersTest {
         final Memory cpuMemory = mock(SimpleMemory.class);
         final Ricoh2C02Registers registers = new Ricoh2C02Registers(cpuMemory);
 
-        when(cpuMemory.getByte(CTRL_1.getMemoryMappedLocation())).thenReturn(42);
+        RoxWord location = RoxWord.fromLiteral(CTRL_1.getMemoryMappedLocation());
+        when(cpuMemory.getByte(location)).thenReturn(RoxByte.fromLiteral(42));
 
-        assertEquals(42, registers.getRegister(CTRL_1));
+        assertEquals(RoxByte.fromLiteral(42), registers.getRegister(CTRL_1));
     }
 
     @Test
@@ -24,8 +27,9 @@ public class Ricoh2C02RegistersTest {
         final Memory cpuMemory = mock(SimpleMemory.class);
         final Ricoh2C02Registers registers = new Ricoh2C02Registers(cpuMemory);
 
-        registers.setRegister(CTRL_1, 99);
+        registers.setRegister(CTRL_1, RoxByte.fromLiteral(99));
 
-        verify(cpuMemory, times(1)).setByteAt(CTRL_1.getMemoryMappedLocation(), 99);
+        RoxWord location = RoxWord.fromLiteral(CTRL_1.getMemoryMappedLocation());
+        verify(cpuMemory, times(1)).setByteAt(location, RoxByte.fromLiteral(99));
     }
 }

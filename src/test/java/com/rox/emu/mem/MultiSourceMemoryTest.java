@@ -1,5 +1,7 @@
 package com.rox.emu.mem;
 
+import com.rox.emu.env.RoxByte;
+import com.rox.emu.env.RoxWord;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -29,10 +31,10 @@ public class MultiSourceMemoryTest {
         final Memory targetMemory = mock(SimpleMemory.class);
         final Memory logicalMemory = new MultiSourceMemory().withMapping(2, targetMemory);
 
-        logicalMemory.getByte(2);
+        logicalMemory.getByte(RoxWord.fromLiteral(2));
 
         try{
-            logicalMemory.getByte(1);
+            logicalMemory.getByte(RoxWord.fromLiteral(1));
             fail("Expected an exception, there is no memory mapped to address 1");
         }catch(NullPointerException npE){}
 
@@ -67,39 +69,43 @@ public class MultiSourceMemoryTest {
 
     @Test
     public void testGetByte(){
-        memoryBlockA.setByteAt(10, 99);
+        memoryBlockA.setByteAt(RoxWord.fromLiteral(10), RoxByte.fromLiteral(99));
 
-        assertEquals(99, testMemory.getByte(10));
+        assertEquals(RoxByte.fromLiteral(99), testMemory.getByte(RoxWord.fromLiteral(10)));
     }
 
     @Test
     public void testPutByte(){
-        testMemory.setByteAt(10, 99);
+        testMemory.setByteAt(RoxWord.fromLiteral(10), RoxByte.fromLiteral(99));
 
-        assertEquals(99, memoryBlockA.getByte(10));
+        assertEquals(RoxByte.fromLiteral(99), memoryBlockA.getByte(RoxWord.fromLiteral(10)));
     }
 
     @Test
     public void testGetBlock(){
         int[] sampleData = new int[] {1,2,3,4,5};
-        memoryBlockB.setBlock(20, sampleData);
+        memoryBlockB.setBlock(RoxWord.fromLiteral(20), toRoxByteArray(sampleData));
 
-        assertTrue("Expected " + Arrays.toString(sampleData) + ", got " + Arrays.toString(testMemory.getBlock(20, 25)), Arrays.equals( sampleData,  testMemory.getBlock(20, 25)));
+        final int[] memoryBlock = toIntArray(testMemory.getBlock(RoxWord.fromLiteral(20), RoxWord.fromLiteral(25)));
+
+        assertTrue("Expected " + Arrays.toString(sampleData) + ", got " + Arrays.toString(memoryBlock), Arrays.equals(sampleData, memoryBlock));
     }
 
     @Test
     public void testSetBlock(){
         int[] sampleData = new int[] {1,2,3,4,5};
-        testMemory.setBlock(20, sampleData);
+        testMemory.setBlock(RoxWord.fromLiteral(20), toRoxByteArray(sampleData));
 
-        assertTrue("Expected " + Arrays.toString(sampleData) + ", got " + Arrays.toString(memoryBlockB.getBlock(20, 25)), Arrays.equals( sampleData,  memoryBlockB.getBlock(20, 25)));
+        final int[] memoryBlock = toIntArray(testMemory.getBlock(RoxWord.fromLiteral(20), RoxWord.fromLiteral(25)));
+
+        assertTrue("Expected " + Arrays.toString(sampleData) + ", got " + Arrays.toString(memoryBlock), Arrays.equals(sampleData, memoryBlock));
     }
 
     @Test
     public void testGetWord(){
-        memoryBlockB.setBlock(20, new int[] {1, 20});
+        memoryBlockB.setBlock(RoxWord.fromLiteral(20), toRoxByteArray(new int[] {1, 20}));
 
-        assertEquals(276, testMemory.getWord(20));
+        assertEquals(RoxWord.fromLiteral(276), testMemory.getWord(RoxWord.fromLiteral(20)));
     }
 
     @Test
@@ -133,9 +139,9 @@ public class MultiSourceMemoryTest {
 
         MultiSourceMemory logicalMemory = new MultiSourceMemory().withMappingTo(1000, 1, physicalMemory);
 
-        logicalMemory.getByte(1000);
+        logicalMemory.getByte(RoxWord.fromLiteral(1000));
 
-        verify(physicalMemory, times(1)).getByte(1);
+        verify(physicalMemory, times(1)).getByte(RoxWord.fromLiteral(1));
     }
 
     @Test
@@ -169,17 +175,35 @@ public class MultiSourceMemoryTest {
         MultiSourceMemory testMemory = new MultiSourceMemory().withMapping(new int[] {1,2,3,4}, memory)
                                                               .withMappingTo(new int[] {5,6,7,8}, new int[] {1,2,3,4}, memory);
 
-        testMemory.getByte(5);
+        testMemory.getByte(RoxWord.fromLiteral(5));
 
-        testMemory.getByte(2);
-        testMemory.getByte(6);
+        testMemory.getByte(RoxWord.fromLiteral(2));
+        testMemory.getByte(RoxWord.fromLiteral(6));
 
-        testMemory.getByte(3);
-        testMemory.getByte(7);
-        testMemory.getByte(7);
+        testMemory.getByte(RoxWord.fromLiteral(3));
+        testMemory.getByte(RoxWord.fromLiteral(7));
+        testMemory.getByte(RoxWord.fromLiteral(7));
 
-        verify(memory, times(1)).getByte(1);
-        verify(memory, times(2)).getByte(2);
-        verify(memory, times(3)).getByte(3);
+        verify(memory, times(1)).getByte(RoxWord.fromLiteral(1));
+        verify(memory, times(2)).getByte(RoxWord.fromLiteral(2));
+        verify(memory, times(3)).getByte(RoxWord.fromLiteral(3));
+    }
+
+    private int[] toIntArray(RoxByte[] byteArray) {
+        int i=0;
+        final int[] result = new int[byteArray.length];
+        for (RoxByte roxByte : byteArray) {
+            result[i++] = roxByte.getRawValue();
+        }
+        return result;
+    }
+
+    private RoxByte[] toRoxByteArray(int[] byteArray) {
+        int i=0;
+        final RoxByte[] result = new RoxByte[byteArray.length];
+        for (int intByte : byteArray) {
+            result[i++] = RoxByte.fromLiteral(intByte);
+        }
+        return result;
     }
 }

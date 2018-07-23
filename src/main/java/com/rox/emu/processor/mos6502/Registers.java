@@ -1,6 +1,7 @@
 package com.rox.emu.processor.mos6502;
 
 import com.rox.emu.env.RoxByte;
+import com.rox.emu.env.RoxWord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -116,17 +117,17 @@ public class Registers {
      * @param register the registerValue to set
      * @param value to set the registerValue to
      */
-    public void setRegister(Register register, int value){
+    public void setRegister(Register register, RoxByte value){
         log.debug("'R:{}' := {}", register.getDescription(), value);
-        registerValue[register.getIndex()] = RoxByte.fromLiteral(value);
+        registerValue[register.getIndex()] = value;
     }
 
     /**
      * @param register from which to get the value
      * @return the value of the desired registerValue
      */
-    public int getRegister(Register register){
-        return registerValue[register.getIndex()].getRawValue();
+    public RoxByte getRegister(Register register){
+        return registerValue[register.getIndex()];
     }
 
     /**
@@ -135,28 +136,27 @@ public class Registers {
      * @param register the registerValue to set
      * @param value to set the registerValue to
      */
-    public void setRegisterAndFlags(Register register, int value){
-        int valueByte = value & 0xFF;
-        setRegister(register, valueByte);
-        setFlagsBasedOn(valueByte);
+    public void setRegisterAndFlags(Register register, RoxByte value){
+        setRegister(register, value);
+        setFlagsBasedOn(value);
     }
 
     /**
      * @param pcWordValue to set the Program Counter to
      */
-    public void setPC(int pcWordValue){
-        setRegister(PROGRAM_COUNTER_HI, pcWordValue >> 8);
-        setRegister(PROGRAM_COUNTER_LOW, pcWordValue & 0xFF);
-        log.debug("'R+:Program Counter' := {} [ {} | {} ]", new String[] {Integer.toString(pcWordValue),
-                                                                          Integer.toString(getRegister(PROGRAM_COUNTER_HI)),
-                                                                          Integer.toString(getRegister(PROGRAM_COUNTER_LOW))});
+    public void setPC(RoxWord pcWordValue){
+        setRegister(PROGRAM_COUNTER_HI, pcWordValue.getHighByte());
+        setRegister(PROGRAM_COUNTER_LOW, pcWordValue.getLowByte());
+        log.debug("'R+:Program Counter' := {} [ {} | {} ]", new String[] {pcWordValue.toString(),
+                                                                          getRegister(PROGRAM_COUNTER_HI).toString(),
+                                                                          getRegister(PROGRAM_COUNTER_LOW).toString()});
     }
 
     /**
      * @return the two byte value of the Program Counter
      */
-    public int getPC(){
-        return (getRegister(PROGRAM_COUNTER_HI) << 8) | getRegister(PROGRAM_COUNTER_LOW);
+    public RoxWord getPC(){
+        return (RoxWord.from(getRegister(PROGRAM_COUNTER_HI), getRegister(PROGRAM_COUNTER_LOW)));
     }
 
     /**
@@ -164,8 +164,8 @@ public class Registers {
      *
      * @return the new value of the Program Counter
      */
-    public int getNextProgramCounter(){
-        setPC(getPC()+1);
+    public RoxWord getNextProgramCounter(){
+        setPC(RoxWord.fromLiteral(getPC().getRawValue()+1));
         return getPC();
     }
 
@@ -211,10 +211,9 @@ public class Registers {
     /**
      * @param value to set the status flags based on
      */
-    public void setFlagsBasedOn(int value){
-        int valueByte = value & 0xFF;
-        setZeroFlagFor(valueByte);
-        setNegativeFlagFor(valueByte);
+    public void setFlagsBasedOn(RoxByte value){
+        setZeroFlagFor(value.getRawValue());
+        setNegativeFlagFor(value.getRawValue());
     }
 
     /**

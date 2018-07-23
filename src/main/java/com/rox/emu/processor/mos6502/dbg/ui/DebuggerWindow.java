@@ -1,6 +1,8 @@
 package com.rox.emu.processor.mos6502.dbg.ui;
 
 import com.rox.emu.UnknownOpCodeException;
+import com.rox.emu.env.RoxByte;
+import com.rox.emu.env.RoxWord;
 import com.rox.emu.mem.Memory;
 import com.rox.emu.mem.SimpleMemory;
 import com.rox.emu.processor.mos6502.Mos6502;
@@ -184,7 +186,7 @@ final class DebuggerWindow extends JFrame {
         return controls;
     }
 
-    private int[] getProgramFromFile() {
+    private RoxByte[] getProgramFromFile() {
         final File file = new File( "src" +  File.separator + "main" +  File.separator + "resources" + File.separator + "rom" + File.separator + "SMB1.NES");
 
         System.out.println("Loading '" + file.getAbsolutePath() + "'...");
@@ -204,10 +206,10 @@ final class DebuggerWindow extends JFrame {
         final InesRom rom = InesRom.from(fileContent);
 
         Memory prgRom = rom.getProgramRom();
-        return prgRom.getBlock(0, prgRom.getSize()-1);
+        return prgRom.getBlock(RoxWord.ZERO, RoxWord.fromLiteral(prgRom.getSize()-1));
     }
 
-    private int[] getProgram(){
+    private RoxByte[] getProgram(){
         int data_offset = 0x32;
         int MPD = data_offset + 0x10;
         int MPR = data_offset + 0x11;
@@ -263,9 +265,9 @@ final class DebuggerWindow extends JFrame {
         newRegisterPanel = new Registers6502(processor.getRegisters());
     }
 
-    public void loadProgram(int[] program){
+    public void loadProgram(RoxByte[] program){
         reset();
-        memory.setBlock(0, program);
+        memory.setBlock(RoxWord.ZERO, program);
     }
 
     public void reset(){
@@ -290,7 +292,7 @@ final class DebuggerWindow extends JFrame {
         final Mos6502Compiler compiler = new Mos6502Compiler(programText);
         try {
             final Program program = compiler.compileProgram();
-            final int[] programAsByteArray = program.getProgramAsByteArray();
+            final RoxByte[] programAsByteArray = program.getProgramAsByteArray();
             loadProgram(programAsByteArray);
         }catch (UnknownOpCodeException e){
             JOptionPane.showMessageDialog(this, e.getMessage());
@@ -299,17 +301,18 @@ final class DebuggerWindow extends JFrame {
 
     private void upDateWithNextInstruction() {
         final Registers registers = processor.getRegisters();
-        final int pointer = registers.getPC();
-        final int instr = memory.getByte(pointer);
+        final RoxWord pointer = registers.getPC();
+        final RoxByte instr = memory.getByte(pointer);
 
         StringBuilder arguments = new StringBuilder();
-        for (int i=0; i<getArgumentCount(instr); i++ ){
-            arguments.append(" " + MemoryPanel.asHex(memory.getByte(pointer + (i+1))));
+        for (int i=0; i<getArgumentCount(instr.getRawValue()); i++ ){
+            RoxWord n = RoxWord.fromLiteral(pointer.getRawValue() + (i+1));
+            arguments.append(" " + MemoryPanel.asHex(memory.getByte(n).getRawValue()));
         }
 
-        instructionName = OpCode.from(instr).toString();
-        final String instructionLocation = MemoryPanel.asHex(pointer);
-        final String instructionCode = MemoryPanel.asHex(instr);
+        instructionName = OpCode.from(instr.getRawValue()).toString();
+        final String instructionLocation = MemoryPanel.asHex(pointer.getRawValue());
+        final String instructionCode = MemoryPanel.asHex(instr.getRawValue());
         final String completeInstructionInfo = "[" + instructionLocation + "] (" + instructionCode + arguments.toString() + ") :" + instructionName;
 
         instruction.setText(completeInstructionInfo);

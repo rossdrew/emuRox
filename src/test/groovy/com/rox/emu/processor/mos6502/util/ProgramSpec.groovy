@@ -1,5 +1,6 @@
 package com.rox.emu.processor.mos6502.util
 
+import com.rox.emu.env.RoxByte
 import com.rox.emu.processor.mos6502.op.OpCode
 import spock.lang.Ignore
 import spock.lang.Specification
@@ -17,13 +18,32 @@ class ProgramSpec extends Specification {
         program != null
     }
 
+    @Unroll("Test comparing #description program")
+    def testComparisons(){
+        given:
+        Program program
+
+        when:
+        program = new Program().with(programInputBytes as Object[])
+
+        then:
+        program.equals(programInputBytes)
+
+        where:
+        programInputBytes            | description
+        []                           | "empty"
+        [OpCode.LDA_I, 0x01]         | "OpCode constructed"
+        [0xA9, 0x02]                 | "integer constructed"
+        [0xA9 as byte, 0x03 as byte] | "byte constructed"
+    }
+
     @Unroll("Valid labels: #expected")
     testValidLabel(){
         given:
         final Program program = new Program().with(programInputBytes as Object[])
 
         when:
-        byte[] programBytes = program.getProgramAsByteArray()
+        RoxByte[] programBytes = program.getProgramAsByteArray()
 
         then:
         programBytes.length == programSize
@@ -41,7 +61,7 @@ class ProgramSpec extends Specification {
     }
 
     def testLabelReplacement(){
-        given:
+        given: 'a program'
         Program myProgram = new Program()
         myProgram = myProgram.with("Start",
                                    OpCode.BEQ, myProgram.referenceBuilder("MyLabel"),
@@ -51,15 +71,20 @@ class ProgramSpec extends Specification {
                                    OpCode.BNE, myProgram.referenceBuilder("Start"),
                                    OpCode.LDA_I, 0x3)
 
-        when:
-        byte[] compiledProgram = myProgram.getProgramAsByteArray()
+        and: 'its expected compiled code'
+        int[] expectedProgramCode = [OpCode.BEQ.byteValue, 0b00000010,
+                                     OpCode.LDA_I.byteValue, 0x1,
+                                     OpCode.LDA_I.byteValue, 0x2,
+                                     OpCode.BNE.byteValue, 0b11111000,
+                                     OpCode.LDA_I.byteValue, 0x3]
 
-        then:
-        compiledProgram == [OpCode.BEQ.byteValue, 0b00000010,
-                            OpCode.LDA_I.byteValue, 0x1,
-                            OpCode.LDA_I.byteValue, 0x2,
-                            OpCode.BNE.byteValue, 0b11111000,
-                            OpCode.LDA_I.byteValue, 0x3] as byte[]
+        when: 'we get the compiled code'
+        RoxByte[] compiledProgram = myProgram.getProgramAsByteArray()
+
+        then: 'it is exactly as expected'
+        for (int i=0; i<compiledProgram.length; i++){
+            compiledProgram[i].getRawValue() == expectedProgramCode[i]
+        }
     }
 
     def testInvalidLabel(){
@@ -87,14 +112,14 @@ class ProgramSpec extends Specification {
 
     @Unroll("Valid compilation: #expected")
     testValidPrograms(){
-        given: 'A program with values pushed to it'
-        final Program program = new Program().with(programInputBytes as Object[])
+        given: 'A program'
+        final Program program
 
-        when: 'It is converted into a byte stream'
-        final byte[] programBytes = program.getProgramAsByteArray()
+        when: 'values are pushed into it'
+        program = new Program().with(programInputBytes as Object[])
 
         then: 'The resulting byte stream is as expected'
-        programBytes == expectedProgramBytes as byte[]
+        program.equals(expectedProgramBytes as Object[])
 
         where:
         programInputBytes               || expectedProgramBytes                           | expected

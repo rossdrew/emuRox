@@ -1,5 +1,7 @@
 package com.rox.emu.processor.ricoh2c02;
 
+import com.rox.emu.env.RoxByte;
+import com.rox.emu.env.RoxWord;
 import com.rox.emu.mem.Memory;
 import com.rox.emu.mem.SimpleMemory;
 import org.junit.experimental.theories.DataPoint;
@@ -30,8 +32,9 @@ public class Ricoh2C02Theories {
         final Ricoh2C02 ppu = new Ricoh2C02(vRam, sprRam, cpuRam);
 
         for (Ricoh2C02Registers.Register register : Ricoh2C02Registers.Register.values()) {
-            when(cpuRam.getByte(register.getMemoryMappedLocation())).thenReturn(byteValue);
-            assertThat(byteValue, equalTo(ppu.getRegister(register)));
+            RoxWord addr = RoxWord.fromLiteral(register.getMemoryMappedLocation());
+            when(cpuRam.getByte(addr)).thenReturn(RoxByte.fromLiteral(byteValue));
+            assertThat(RoxByte.fromLiteral(byteValue), equalTo(ppu.getRegister(register)));
         }
     }
 }

@@ -97,14 +97,14 @@ public class Registers6502 extends JPanel {
         if (registers == null)
             return;
 
-        accumulator.setValue(registers.getRegister(Registers.Register.ACCUMULATOR));
-        xIndex.setValue(registers.getRegister(Registers.Register.X_INDEX));
-        yIndex.setValue(registers.getRegister(Registers.Register.Y_INDEX));
+        accumulator.setValue(registers.getRegister(Registers.Register.ACCUMULATOR).getRawValue());
+        xIndex.setValue(registers.getRegister(Registers.Register.X_INDEX).getRawValue());
+        yIndex.setValue(registers.getRegister(Registers.Register.Y_INDEX).getRawValue());
         stackPointerHi.setValue(0x01);
-        stackPointerLo.setValue(registers.getRegister(Registers.Register.STACK_POINTER_HI));
-        programCounterHi.setValue(registers.getRegister(Registers.Register.PROGRAM_COUNTER_HI));
-        programCounterLo.setValue(registers.getRegister(Registers.Register.PROGRAM_COUNTER_LOW));
+        stackPointerLo.setValue(registers.getRegister(Registers.Register.STACK_POINTER_HI).getRawValue());
+        programCounterHi.setValue(registers.getRegister(Registers.Register.PROGRAM_COUNTER_HI).getRawValue());
+        programCounterLo.setValue(registers.getRegister(Registers.Register.PROGRAM_COUNTER_LOW).getRawValue());
 
-        statusRegister.setValue(registers.getRegister(Registers.Register.STATUS_FLAGS));
+        statusRegister.setValue(registers.getRegister(Registers.Register.STATUS_FLAGS).getRawValue());
     }
 }

@@ -2,9 +2,11 @@ package com.rox.emu.processor.mos6502.util;
 
 
 import com.rox.emu.UnknownTokenException;
+import com.rox.emu.env.RoxByte;
 import com.rox.emu.processor.mos6502.op.OpCode;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * An immutable 6502 Program which is essentially a byte array which can
@@ -119,7 +121,10 @@ public class Program {
         if (value instanceof Reference)
             return this.with((Reference) value);
 
-        return this.with((int)value);
+        if (value instanceof Number)
+            return this.with(((Number) value).intValue());
+
+        return this.with((int) value);
     }
 
     /**
@@ -141,7 +146,7 @@ public class Program {
     /**
      * @return This {@link Program} compiled to a "byte" array.
      */
-    public int[] getProgramAsByteArray() {
+    public RoxByte[] getProgramAsByteArray() {
         int[] clonedBytes = programBytes.clone();
 
         for (Reference reference : references) {
@@ -156,7 +161,12 @@ public class Program {
             }
         }
 
-        return clonedBytes;
+        final RoxByte[] programBytes = new RoxByte[clonedBytes.length];
+        for (int i=0; i<programBytes.length; i++)
+            programBytes[i] = RoxByte.fromLiteral(clonedBytes[i]);
+
+
+        return programBytes;
     }
 
     /**
@@ -179,5 +189,44 @@ public class Program {
      */
     public int getLocationOf(String labelName) {
         return programLabels.get(labelName);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (o == null) return false;
+
+        if (getClass() != o.getClass()){
+            if (o instanceof Collection)
+                return arrayMatches(((Collection)o).toArray());
+
+            if (o.getClass().isArray()){
+                return arrayMatches((Object[])o);
+
+            }else{
+                return false;
+            }
+        }
+
+        Program program = (Program) o;
+        return Arrays.equals(programBytes, program.programBytes);
+    }
+
+    private boolean arrayMatches(final Object[] o){
+        if (o.length != programBytes.length)
+            return false;
+
+        for (int i=0; i<o.length; i++){
+            if (o[i] instanceof Number)
+                if ((((Number)o[i]).intValue() != programBytes[i]))
+                    return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(programBytes);
     }
 }

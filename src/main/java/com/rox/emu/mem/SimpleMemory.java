@@ -1,6 +1,7 @@
 package com.rox.emu.mem;
 
 import com.rox.emu.env.RoxByte;
+import com.rox.emu.env.RoxWord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,39 +29,37 @@ public class SimpleMemory implements Memory {
      * {@inheritDoc}
      */
     @Override
-    public void setByteAt(int location, int byteValue) {
+    public void setByteAt(RoxWord location, RoxByte byteValue) {
         log.trace("mem[{}] << {}", location, byteValue);
-        memoryArray[location] = RoxByte.fromLiteral(byteValue & 0xFF);
+        memoryArray[location.getRawValue()] = byteValue;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void setBlock(int startLocation, int[] byteValues) {
+    public void setBlock(RoxWord startLocation, RoxByte[] byteValues) {
         log.trace("mem[{}] << {} bytes", startLocation, byteValues.length);
-        for (int i=0; i<byteValues.length; i++){
-            memoryArray[startLocation + i] = RoxByte.fromLiteral(byteValues[i]);
-        }
+        System.arraycopy(byteValues, 0, memoryArray, startLocation.getRawValue(), byteValues.length);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public int getByte(int location) {
-        log.trace("mem[{}] >> {}", location, memoryArray[location]);
+    public RoxByte getByte(RoxWord location) {
+        log.trace("mem[{}] >> {}", location, memoryArray[location.getRawValue()]);
 
-        return memoryArray[location].getRawValue();
+        return memoryArray[location.getRawValue()];
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public int getWord(int location) {
-        int word = (memoryArray[location].getRawValue() << 8 | memoryArray[location+1].getRawValue());
-        log.trace("mem[{}] >> {}", location, word);
+    public RoxWord getWord(RoxWord location) {
+        RoxWord word = RoxWord.from(memoryArray[location.getRawValue()], memoryArray[location.getRawValue()+1]);
+        log.trace("mem[{}] >> {}", location, word.getRawValue());
         return word;
     }
 
@@ -68,10 +67,10 @@ public class SimpleMemory implements Memory {
      * {@inheritDoc}
      */
     @Override
-    public int[] getBlock(int from, int to) {
-        int[] extractedData = new int[to-from];
+    public RoxByte[] getBlock(RoxWord from, RoxWord to) {
+        RoxByte[] extractedData = new RoxByte[to.getRawValue()-from.getRawValue()];
         for (int i=0; i<extractedData.length; i++){
-            extractedData[i] = memoryArray[from + i].getRawValue();
+            extractedData[i] = RoxByte.fromLiteral(memoryArray[from.getRawValue() + i].getRawValue());
         }
         return extractedData;
     }

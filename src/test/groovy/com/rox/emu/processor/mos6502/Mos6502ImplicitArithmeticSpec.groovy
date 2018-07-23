@@ -1,5 +1,7 @@
 package com.rox.emu.processor.mos6502
 
+import com.rox.emu.env.RoxByte
+import com.rox.emu.env.RoxWord
 import com.rox.emu.mem.Memory
 import com.rox.emu.mem.SimpleMemory
 import com.rox.emu.processor.mos6502.op.OpCode
@@ -20,16 +22,16 @@ class Mos6502ImplicitArithmeticSpec extends Specification {
      */
     private static Memory createNOPMemory(Memory memory) {
         for (int i=0; i<0x10000; i++){
-            memory.setByteAt(i, NOP.byteValue)
+            memory.setByteAt(RoxWord.fromLiteral(i), RoxByte.fromLiteral(NOP.byteValue))
         }
         return memory
     }
 
     private Program loadMemoryWithProgram(Object ... programElements){
-        return loadMemoryAtLocationWithProgram(0, programElements)
+        return loadMemoryAtLocationWithProgram(RoxWord.ZERO, programElements)
     }
 
-    private Program loadMemoryAtLocationWithProgram(int location, Object ... programElements){
+    private Program loadMemoryAtLocationWithProgram(RoxWord location, Object ... programElements){
         final Program program = new Program().with(programElements)
         memory.setBlock(location, program.getProgramAsByteArray())
         return program
@@ -46,7 +48,7 @@ class Mos6502ImplicitArithmeticSpec extends Specification {
     def programCounterArithmetic(){
         given: 'A PC starting point'
         createNOPMemory(memory)
-        registers.setPC(initialValue)
+        registers.setPC(RoxWord.fromLiteral(initialValue))
 
         when: 'we increment'
         processor.step(steps)
@@ -67,11 +69,11 @@ class Mos6502ImplicitArithmeticSpec extends Specification {
     @Unroll("Indexed Indirect: #description (#pLoc[#index] -> *(#pHi | #pLo) == #expectedAccumulator)")
     def indexedIndirectAddressingArithmetic() {
         given: 'a value in memory'
-        final int pLocation = ((pHi<<8)|pLo)
-        memory.setByteAt(pLocation, value)
+        final RoxWord pLocation = RoxWord.fromLiteral((pHi<<8)|pLo)
+        memory.setByteAt(pLocation, RoxByte.fromLiteral(value))
 
         and: 'a pointer in zero page, offset at an index pointing at that values memory location'
-        memory.setBlock(pLoc + index, [pHi, pLo] as int[])
+        memory.setBlock(RoxWord.fromLiteral(pLoc + index), RoxByte.fromIntArray([pHi, pLo] as int[]))
 
         and: 'a program that takes a value and loads it to the empty Accumulator in an indexed, indirect way'
         loadMemoryWithProgram(LDA_I, 0,
@@ -96,14 +98,15 @@ class Mos6502ImplicitArithmeticSpec extends Specification {
         //TODO 0xFF | 0x04 | 0x60 | 2     | 5     || BRK.byteValue         | "Address with offset (01:02 = 0:LDX_I/43) wholly outwith zero page"
     }
 
-    @Unroll("Indirect Indexed: #description (#pLoc + #index -> calculatedPointer == #expectedAccumulator")
+    @Unroll("Indirect Indexed: #description (mem[mem[#pLoc] + #index] -> #expectedAccumulator")
     def indirectIndexedAddressingArithmetic() {
         given: 'a value in memory'
-        final int pLocation = ((pHi<<8)|pLo) + index
-        memory.setByteAt(pLocation, value)
+        final RoxWord pDestination = RoxWord.fromLiteral(((pHi<<8)|pLo) + index)
+        memory.setByteAt(pDestination, RoxByte.fromLiteral(value))
 
         and: 'a pointer in zero page'
-        memory.setBlock(pLoc, [pHi, pLo] as int[])
+        memory.setBlock(RoxWord.fromLiteral(pLoc),
+                        RoxByte.fromIntArray([pHi, pLo] as int[]))
 
         and: 'a program that takes the value and loads it to the empty Accumulator in an indirect, indexed way'
         loadMemoryWithProgram(LDA_I, 0,
@@ -130,10 +133,11 @@ class Mos6502ImplicitArithmeticSpec extends Specification {
     @Unroll("Branching: #description (#programLocation + #jumpOffset == #expectedLocation)")
     def branchArithmetic() {
         given: 'a program which consists of a branch'
-        loadMemoryAtLocationWithProgram(programLocation, CLC, BCC, jumpOffset)
+        final RoxWord pointer = RoxWord.fromLiteral(programLocation)
+        loadMemoryAtLocationWithProgram(pointer, CLC, BCC, jumpOffset)
 
         and: 'our program counter starts at the start of the program'
-        registers.setPC(programLocation)
+        registers.setPC(pointer)
 
         when: 'we run the program'
         processor.step(2)

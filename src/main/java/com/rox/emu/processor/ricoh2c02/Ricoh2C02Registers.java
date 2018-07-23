@@ -1,5 +1,7 @@
 package com.rox.emu.processor.ricoh2c02;
 
+import com.rox.emu.env.RoxByte;
+import com.rox.emu.env.RoxWord;
 import com.rox.emu.mem.Memory;
 import com.rox.emu.mem.MultiSourceMemory;
 
@@ -83,11 +85,11 @@ class Ricoh2C02Registers {
         this.cpuMemory = new MultiSourceMemory().withMapping(Register.getMappedAddresses(), cpuMemory);
     }
 
-    public int getRegister(Register registerId) {
-        return cpuMemory.getByte(registerId.getMemoryMappedLocation());
+    public RoxByte getRegister(Register registerId) {
+        return cpuMemory.getByte(RoxWord.fromLiteral(registerId.getMemoryMappedLocation()));
     }
 
-    public void setRegister(Register register, int value) {
-        cpuMemory.setByteAt(register.getMemoryMappedLocation(), value);
+    public void setRegister(Register register, RoxByte value) {
+        cpuMemory.setByteAt(RoxWord.fromLiteral(register.getMemoryMappedLocation()), value);
     }
 }

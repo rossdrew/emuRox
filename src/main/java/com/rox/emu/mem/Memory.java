@@ -1,5 +1,8 @@
 package com.rox.emu.mem;
 
+import com.rox.emu.env.RoxByte;
+import com.rox.emu.env.RoxWord;
+
 /**
  * An interface to any "memory" store in which data can
  * be saved and retrieved from specific locations.
@@ -11,19 +14,19 @@ public interface Memory {
      * @param location where to place the given byte
      * @param byteValue to place in that location
      */
-    void setByteAt(int location, int byteValue);
+    void setByteAt(RoxWord location, RoxByte byteValue);
 
     /**
      * @param startLocation to place byte array
      * @param byteValues byte array to place from <code>startLocation</code> to <code>startLocation + byteValues.size</code>
      */
-    void setBlock(int startLocation, int[] byteValues);
+    void setBlock(RoxWord startLocation, RoxByte[] byteValues);
 
     /**
      * @param location to query
      * @return the byte value at the given location
      */
-    int getByte(int location);
+    RoxByte getByte(RoxWord location);
 
     /**
      * Return two bytes, as a word
@@ -31,7 +34,7 @@ public interface Memory {
      * @param location start location of the word
      * @return the word consisting of two bytes combines into a word, little endian
      */
-    int getWord(int location);
+    RoxWord getWord(RoxWord location);
 
     /**
      * Return a block of bytes
@@ -40,7 +43,7 @@ public interface Memory {
      * @param to the required blocks ending memory address
      * @return the entire block [<code>from</code> ... <code>to</code>] as an array
      */
-    int[] getBlock(int from, int to);
+    RoxByte[] getBlock(RoxWord from, RoxWord to);
 
     /**
      * Reset all memory to 0

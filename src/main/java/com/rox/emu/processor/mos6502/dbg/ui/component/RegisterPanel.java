@@ -25,27 +25,27 @@ class RegisterPanel extends JPanel {
         int rowSize = padding + bitSize;
         int secondByteColumn = byteSize + xLocation + padding;
 
-        drawByte(g, new Point(secondByteColumn, yLocation), registers.getRegister(Registers.Register.ACCUMULATOR), Registers.Register.ACCUMULATOR.getDescription());
+        drawByte(g, new Point(secondByteColumn, yLocation), registers.getRegister(Registers.Register.ACCUMULATOR).getRawValue(), Registers.Register.ACCUMULATOR.getDescription());
 
         yLocation += rowSize;
-        drawByte(g, new Point(secondByteColumn, yLocation), registers.getRegister(Registers.Register.X_INDEX), Registers.Register.X_INDEX.getDescription());
+        drawByte(g, new Point(secondByteColumn, yLocation), registers.getRegister(Registers.Register.X_INDEX).getRawValue(), Registers.Register.X_INDEX.getDescription());
 
         yLocation += rowSize;
-        drawByte(g, new Point(secondByteColumn, yLocation), registers.getRegister(Registers.Register.Y_INDEX), Registers.Register.Y_INDEX.getDescription());
+        drawByte(g, new Point(secondByteColumn, yLocation), registers.getRegister(Registers.Register.Y_INDEX).getRawValue(), Registers.Register.Y_INDEX.getDescription());
 
         yLocation += rowSize;
         drawByte(g, new Point(xLocation, yLocation), 0b00000001, "");
-        drawByte(g, new Point(secondByteColumn, yLocation), registers.getRegister(Registers.Register.STACK_POINTER_HI), Registers.Register.STACK_POINTER_HI.getDescription());
+        drawByte(g, new Point(secondByteColumn, yLocation), registers.getRegister(Registers.Register.STACK_POINTER_HI).getRawValue(), Registers.Register.STACK_POINTER_HI.getDescription());
 
         //TODO this needs a combined value display
         yLocation += rowSize;
-        drawByte(g, new Point(xLocation, yLocation), registers.getRegister(Registers.Register.PROGRAM_COUNTER_HI), Registers.Register.PROGRAM_COUNTER_HI.getDescription());
-        drawByte(g, new Point(secondByteColumn, yLocation), registers.getRegister(Registers.Register.PROGRAM_COUNTER_LOW), Registers.Register.PROGRAM_COUNTER_LOW.getDescription());
+        drawByte(g, new Point(xLocation, yLocation), registers.getRegister(Registers.Register.PROGRAM_COUNTER_HI).getRawValue(), Registers.Register.PROGRAM_COUNTER_HI.getDescription());
+        drawByte(g, new Point(secondByteColumn, yLocation), registers.getRegister(Registers.Register.PROGRAM_COUNTER_LOW).getRawValue(), Registers.Register.PROGRAM_COUNTER_LOW.getDescription());
 
         yLocation += rowSize;
         g.setColor(Color.lightGray);
         g.fillRect(secondByteColumn + (2 * bitSize), yLocation, bitSize, bitSize);
-        drawFlags(g, new Point(secondByteColumn, yLocation), registers.getRegister(Registers.Register.STATUS_FLAGS), "NV BDIZC".toCharArray());
+        drawFlags(g, new Point(secondByteColumn, yLocation), registers.getRegister(Registers.Register.STATUS_FLAGS).getRawValue(), "NV BDIZC".toCharArray());
     }
 
     private void drawFlags(Graphics g, Point point, int byteValue, char[] values){

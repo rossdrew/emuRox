@@ -1,5 +1,7 @@
 package com.rox.emu.nes;
 
+import com.rox.emu.env.RoxByte;
+import com.rox.emu.env.RoxWord;
 import com.rox.emu.mem.Memory;
 import com.rox.emu.processor.mos6502.Mos6502;
 import com.rox.emu.processor.ricoh2c02.Ricoh2C02;
@@ -36,6 +38,6 @@ public class NESTest {
     public void testReset(){
         nes.reset();
 
-        verify(mem, times(1)).setBlock(0xFFFC, new int[] {0x80, 0x00});
+        verify(mem, times(1)).setBlock(RoxWord.fromLiteral(0xFFFC), new RoxByte[] {RoxByte.fromLiteral(0x80), RoxByte.ZERO});
     }
 }

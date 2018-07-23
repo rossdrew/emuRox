@@ -1,5 +1,7 @@
 package com.rox.emu.processor.mos6502.dbg.ui.component;
 
+import com.rox.emu.env.RoxByte;
+import com.rox.emu.env.RoxWord;
 import com.rox.emu.mem.Memory;
 import com.rox.emu.processor.mos6502.Registers;
 
@@ -47,15 +49,15 @@ public class MemoryPanel extends JPanel {
     private void drawMemory(Graphics g, int from) {
         setTextFormatting(g, standardFont, standardColor);
 
-        final int[] memoryBlock = memory.getBlock(from, from + blockSize);
+        final RoxByte[] memoryBlock = memory.getBlock(RoxWord.fromLiteral(from), RoxWord.fromLiteral(from + blockSize));
 
         drawIndexedBlock(g, memoryBlock, from, 4);
     }
 
-    private void drawIndexedBlock(Graphics g, int[] memoryBlock, int memoryOffset, int columns) {
+    private void drawIndexedBlock(Graphics g, RoxByte[] memoryBlock, int memoryOffset, int columns) {
         int pcLoLocation = -1;
-        if (registers!=null)
-            pcLoLocation = registers.getRegister(Registers.Register.PROGRAM_COUNTER_LOW);
+        if (registers != null)
+            pcLoLocation = registers.getRegister(Registers.Register.PROGRAM_COUNTER_LOW).getRawValue();
 
         for (int i=0; i<memoryBlock.length; i++){
             final int column = i % columns;
@@ -69,12 +71,12 @@ public class MemoryPanel extends JPanel {
 
             if ((memoryOffset + i) == pcLoLocation){
                 setTextFormatting(g, emphasisFont, currentInstructionColor);
-                drawValue(g, colLoc, rowLoc, asHex(memoryBlock[i]));
+                drawValue(g, colLoc, rowLoc, asHex(memoryBlock[i].getRawValue()));
                 setTextFormatting(g, standardFont, standardColor);
-            }else if (memoryBlock[i] != 0x0){
-                drawEmphasisedValue(g, rowLoc, colLoc, asHex(memoryBlock[i]));
+            }else if (memoryBlock[i] != RoxByte.ZERO){
+                drawEmphasisedValue(g, rowLoc, colLoc, asHex(memoryBlock[i].getRawValue()));
             }else {
-                drawValue(g, colLoc, rowLoc, asHex(memoryBlock[i]));
+                drawValue(g, colLoc, rowLoc, asHex(memoryBlock[i].getRawValue()));
             }
         }
     }

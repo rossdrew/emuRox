@@ -1,6 +1,8 @@
 package com.rox.emu.processor.mos6502;
 
 import com.github.radm.theories.TheorySuite;
+import com.rox.emu.env.RoxByte;
+import com.rox.emu.env.RoxWord;
 import com.rox.emu.mem.Memory;
 import com.rox.emu.mem.SimpleMemory;
 import org.junit.Before;
@@ -23,8 +25,8 @@ public class Mos6502Theories {
     @Before
     public void setUp() {
         memory = new SimpleMemory();
-        memory.setByteAt(0x0, 0xFFFC);
-        memory.setByteAt(0x0, 0xFFFD);
+        memory.setByteAt(RoxWord.ZERO, RoxByte.fromLiteral(0xFFFC)); //XXX FFFC is not a byte, it's a word?!!
+        memory.setByteAt(RoxWord.ZERO, RoxByte.fromLiteral(0xFFFD));
 
         processor = new Mos6502(memory);
         processor.reset();
@@ -36,23 +38,23 @@ public class Mos6502Theories {
         assumeThat(memHi, is(both(greaterThanOrEqualTo(0)).and(lessThanOrEqualTo(255))));
 
         memory = new SimpleMemory();
-        memory.setByteAt(0xFFFC, memHi);
-        memory.setByteAt(0xFFFD, memLo);
+        memory.setByteAt(RoxWord.fromLiteral(0xFFFC), RoxByte.fromLiteral(memHi));
+        memory.setByteAt(RoxWord.fromLiteral(0xFFFD), RoxByte.fromLiteral(memLo));
 
         processor = new Mos6502(memory);
         processor.reset();
 
         Registers registers = processor.getRegisters();
 
-        assertThat(memHi, equalTo(registers.getRegister(Registers.Register.PROGRAM_COUNTER_HI)));               // PC Set to location pointed to by mem[FFFC:FFFD]
-        assertThat(memLo, equalTo(registers.getRegister(Registers.Register.PROGRAM_COUNTER_LOW)));              // ...
+        assertThat(RoxByte.fromLiteral(memHi), equalTo(registers.getRegister(Registers.Register.PROGRAM_COUNTER_HI)));               // PC Set to location pointed to by mem[FFFC:FFFD]
+        assertThat(RoxByte.fromLiteral(memLo), equalTo(registers.getRegister(Registers.Register.PROGRAM_COUNTER_LOW)));              // ...
 
-        assertThat(registers.getRegister(Registers.Register.STATUS_FLAGS), equalTo(0x34));              //Status flags reset
+        assertThat(registers.getRegister(Registers.Register.STATUS_FLAGS), equalTo(RoxByte.fromLiteral(0x34)));              //Status flags reset
 
-        assertThat(registers.getRegister(Registers.Register.STATUS_FLAGS), equalTo(0x34));              //Stack Pointer at top of stack
-        assertThat(registers.getRegister(Registers.Register.STACK_POINTER_HI), equalTo(0xFF));          //All cleared
-        assertThat(registers.getRegister(Registers.Register.ACCUMULATOR), equalTo(0));
-        assertThat(registers.getRegister(Registers.Register.X_INDEX), equalTo(0));
-        assertThat(registers.getRegister(Registers.Register.Y_INDEX), equalTo(0));
+        assertThat(registers.getRegister(Registers.Register.STATUS_FLAGS), equalTo(RoxByte.fromLiteral(0x34)));              //Stack Pointer at top of stack
+        assertThat(registers.getRegister(Registers.Register.STACK_POINTER_HI), equalTo(RoxByte.fromLiteral(0xFF)));          //All cleared
+        assertThat(registers.getRegister(Registers.Register.ACCUMULATOR), equalTo(RoxByte.ZERO));
+        assertThat(registers.getRegister(Registers.Register.X_INDEX), equalTo(RoxByte.ZERO));
+        assertThat(registers.getRegister(Registers.Register.Y_INDEX), equalTo(RoxByte.ZERO));
     }
 }

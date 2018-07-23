@@ -44,13 +44,13 @@ public class Mos6502 {
      */
     public void reset(){
        log.debug("RESETTING...");
-       setRegisterValue(Register.ACCUMULATOR, 0x0);
-       setRegisterValue(Register.X_INDEX, 0x0);
-       setRegisterValue(Register.Y_INDEX, 0x0);
-       setRegisterValue(Register.STATUS_FLAGS, 0x34);
-       setRegisterValue(Register.PROGRAM_COUNTER_HI, getByteOfMemoryAt(0xFFFC));
-       setRegisterValue(Register.PROGRAM_COUNTER_LOW, getByteOfMemoryAt(0xFFFD));
-       setRegisterValue(Register.STACK_POINTER_HI, 0xFF);
+       setRegisterValue(Register.ACCUMULATOR, RoxByte.ZERO);
+       setRegisterValue(Register.X_INDEX, RoxByte.ZERO);
+       setRegisterValue(Register.Y_INDEX, RoxByte.ZERO);
+       setRegisterValue(Register.STATUS_FLAGS, RoxByte.fromLiteral(0x34));
+       setRegisterValue(Register.PROGRAM_COUNTER_HI, getByteOfMemoryAt(RoxWord.fromLiteral(0xFFFC)));
+       setRegisterValue(Register.PROGRAM_COUNTER_LOW, getByteOfMemoryAt(RoxWord.fromLiteral(0xFFFD)));
+       setRegisterValue(Register.STACK_POINTER_HI, RoxByte.fromLiteral(0xFF));  //XXX Shouldmaybe be a max
        log.debug("...READY!");
     }
 
@@ -69,8 +69,8 @@ public class Mos6502 {
         pushRegister(Register.PROGRAM_COUNTER_LOW);
         pushRegister(Register.STATUS_FLAGS);
 
-        setRegisterValue(Register.PROGRAM_COUNTER_HI, getByteOfMemoryAt(0xFFFe));
-        setRegisterValue(Register.PROGRAM_COUNTER_LOW, getByteOfMemoryAt(0xFFFF));
+        setRegisterValue(Register.PROGRAM_COUNTER_HI, getByteOfMemoryAt(RoxWord.fromLiteral(0xFFFe)));
+        setRegisterValue(Register.PROGRAM_COUNTER_LOW, getByteOfMemoryAt(RoxWord.fromLiteral(0xFFFF)));
     }
 
     /**
@@ -87,8 +87,8 @@ public class Mos6502 {
         pushRegister(Register.PROGRAM_COUNTER_LOW);
         pushRegister(Register.STATUS_FLAGS);
 
-        setRegisterValue(Register.PROGRAM_COUNTER_HI, getByteOfMemoryAt(0xFFFA));
-        setRegisterValue(Register.PROGRAM_COUNTER_LOW, getByteOfMemoryAt(0xFFFB));
+        setRegisterValue(Register.PROGRAM_COUNTER_HI, getByteOfMemoryAt(RoxWord.fromLiteral(0xFFFA)));
+        setRegisterValue(Register.PROGRAM_COUNTER_LOW, getByteOfMemoryAt(RoxWord.fromLiteral(0xFFFB)));
     }
 
     /**
@@ -114,21 +114,23 @@ public class Mos6502 {
     public void step() {
         log.debug("STEP >>>");
 
-        final OpCode opCode = OpCode.from(nextProgramByte());
+        final OpCode opCode = OpCode.from(nextProgramByte().getRawValue());
 
         //Execute the opcode
         log.debug("Instruction: {}...", opCode.getOpCodeName());
         switch (opCode){
             case ASL_A:
-                withRegister(Register.ACCUMULATOR, this::performASL);
+                //withRegister(Register.ACCUMULATOR, this::performASL);
+                opCode.perform(registers, memory, alu);
             break;
 
             case ASL_Z:
-                withByteAt(nextProgramByte(), this::performASL);
+                withByteAt(RoxWord.from(nextProgramByte()), this::performASL);
+                //opCode.perform(registers, memory, alu);
             break;
 
             case ASL_Z_IX:
-                withByteXIndexedAt(nextProgramByte(), this::performASL);
+                withByteXIndexedAt(RoxWord.from(nextProgramByte()), this::performASL);
             break;
 
             case ASL_ABS_IX:
@@ -144,11 +146,11 @@ public class Mos6502 {
             break;
 
             case LSR_Z:
-                withByteAt(nextProgramByte(), this::performLSR);
+                withByteAt(RoxWord.from(nextProgramByte()), this::performLSR);
             break;
 
             case LSR_Z_IX:
-                withByteXIndexedAt(nextProgramByte(), this::performLSR);
+                withByteXIndexedAt(RoxWord.from(nextProgramByte()), this::performLSR);
             break;
 
             case LSR_ABS:
@@ -164,11 +166,11 @@ public class Mos6502 {
             break;
 
             case ROL_Z:
-                withByteAt(nextProgramByte(), this::performROL);
+                withByteAt(RoxWord.from(nextProgramByte()), this::performROL);
             break;
 
             case ROL_Z_IX:
-                withByteXIndexedAt(nextProgramByte(), this::performROL);
+                withByteXIndexedAt(RoxWord.from(nextProgramByte()), this::performROL);
              break;
 
             case ROL_ABS:
@@ -196,11 +198,11 @@ public class Mos6502 {
                 break;
 
             case INC_Z:
-                withByteAt(nextProgramByte(), this::performINC);
+                withByteAt(RoxWord.from(nextProgramByte()), this::performINC);
             break;
 
             case INC_Z_IX:
-                withByteXIndexedAt(nextProgramByte(), this::performINC);
+                withByteXIndexedAt(RoxWord.from(nextProgramByte()), this::performINC);
             break;
 
             case INC_ABS:
@@ -211,11 +213,11 @@ public class Mos6502 {
             break;
 
             case DEC_Z:
-                withByteAt(nextProgramByte(), this::performDEC);
+                withByteAt(RoxWord.from(nextProgramByte()), this::performDEC);
             break;
 
             case DEC_Z_IX:
-                withByteXIndexedAt(nextProgramByte(), this::performDEC);
+                withByteXIndexedAt(RoxWord.from(nextProgramByte()), this::performDEC);
             break;
 
             case DEC_ABS:
@@ -247,11 +249,11 @@ public class Mos6502 {
                 break;
 
             case LDX_Z:
-                registers.setRegisterAndFlags(Register.X_INDEX, getByteOfMemoryAt(nextProgramByte()));
+                registers.setRegisterAndFlags(Register.X_INDEX, getByteOfMemoryAt(RoxWord.from(nextProgramByte())));
                 break;
 
             case LDX_Z_IY:
-                registers.setRegisterAndFlags(Register.X_INDEX, getByteOfMemoryYIndexedAt(nextProgramByte()));
+                registers.setRegisterAndFlags(Register.X_INDEX, getByteOfMemoryYIndexedAt(RoxWord.from(nextProgramByte())));
                 break;
 
             case LDX_ABS:
@@ -267,11 +269,11 @@ public class Mos6502 {
                 break;
 
             case LDY_Z:
-                registers.setRegisterAndFlags(Register.Y_INDEX, getByteOfMemoryAt(nextProgramByte()));
+                registers.setRegisterAndFlags(Register.Y_INDEX, getByteOfMemoryAt(RoxWord.from(nextProgramByte())));
                 break;
 
             case LDY_Z_IX:
-                registers.setRegisterAndFlags(Register.Y_INDEX, getByteOfMemoryXIndexedAt(nextProgramByte()));
+                registers.setRegisterAndFlags(Register.Y_INDEX, getByteOfMemoryXIndexedAt(RoxWord.from(nextProgramByte())));
                 break;
 
             case LDY_ABS:
@@ -287,11 +289,11 @@ public class Mos6502 {
                 break;
 
             case LDA_Z:
-                registers.setRegisterAndFlags(Register.ACCUMULATOR, getByteOfMemoryAt(nextProgramByte()));
+                registers.setRegisterAndFlags(Register.ACCUMULATOR, getByteOfMemoryAt(RoxWord.from(nextProgramByte())));
                 break;
 
             case LDA_Z_IX:
-                registers.setRegisterAndFlags(Register.ACCUMULATOR, getByteOfMemoryXIndexedAt(nextProgramByte()));
+                registers.setRegisterAndFlags(Register.ACCUMULATOR, getByteOfMemoryXIndexedAt(RoxWord.from(nextProgramByte())));
                 break;
 
             case LDA_ABS:
@@ -308,15 +310,17 @@ public class Mos6502 {
 
             case LDA_IND_IX:
                 //XXX this needs to be wrappable for zero page addressing
-                registers.setRegisterAndFlags(Register.ACCUMULATOR, getByteOfMemoryAt(getWordOfMemoryXIndexedAt(nextProgramByte())));
+                registers.setRegisterAndFlags(Register.ACCUMULATOR, getByteOfMemoryAt(getWordOfMemoryXIndexedAt(RoxWord.from(nextProgramByte()))));
             break;
 
             case LDA_IND_IY:
-                registers.setRegisterAndFlags(Register.ACCUMULATOR, getByteOfMemoryAt(getIndirectYPointer()));
+                final RoxWord l = getIndirectYPointer();
+                final RoxByte v = getByteOfMemoryAt(l);
+                registers.setRegisterAndFlags(Register.ACCUMULATOR, v);
             break;
 
             case AND_Z:
-                withRegisterAndByteAt(Register.ACCUMULATOR, nextProgramByte(), this::performAND);
+                withRegisterAndByteAt(Register.ACCUMULATOR, RoxWord.from(nextProgramByte()), this::performAND);
                 break;
 
             case AND_ABS:
@@ -328,7 +332,7 @@ public class Mos6502 {
                 break;
 
             case AND_Z_IX:
-                withRegisterAndByteXIndexedAt(Register.ACCUMULATOR, nextProgramByte(), this::performAND);
+                withRegisterAndByteXIndexedAt(Register.ACCUMULATOR, RoxWord.from(nextProgramByte()), this::performAND);
                 break;
 
             case AND_ABS_IX:
@@ -340,7 +344,7 @@ public class Mos6502 {
                 break;
 
             case AND_IND_IX:
-                withRegisterAndByteAt(Register.ACCUMULATOR, getWordOfMemoryXIndexedAt(nextProgramByte()), this::performAND);
+                withRegisterAndByteAt(Register.ACCUMULATOR, getWordOfMemoryXIndexedAt(RoxWord.from(nextProgramByte())), this::performAND);
             break;
 
             case AND_IND_IY:
@@ -348,7 +352,7 @@ public class Mos6502 {
             break;
 
             case BIT_Z:
-                performBIT(getByteOfMemoryAt(nextProgramByte()));
+                performBIT(getByteOfMemoryAt(RoxWord.from(nextProgramByte())));
             break;
 
             case BIT_ABS:
@@ -360,11 +364,11 @@ public class Mos6502 {
                 break;
 
             case ORA_Z:
-                withRegisterAndByteAt(Register.ACCUMULATOR, nextProgramByte(), this::performORA);
+                withRegisterAndByteAt(Register.ACCUMULATOR, RoxWord.from(nextProgramByte()), this::performORA);
                 break;
 
             case ORA_Z_IX:
-                withRegisterAndByteXIndexedAt(Register.ACCUMULATOR, nextProgramByte(), this::performORA);
+                withRegisterAndByteXIndexedAt(Register.ACCUMULATOR, RoxWord.from(nextProgramByte()), this::performORA);
                 break;
 
             case ORA_ABS:
@@ -380,7 +384,7 @@ public class Mos6502 {
                 break;
 
             case ORA_IND_IX:
-                withRegisterAndByteAt(Register.ACCUMULATOR, getWordOfMemoryXIndexedAt(nextProgramByte()), this::performORA);
+                withRegisterAndByteAt(Register.ACCUMULATOR, getWordOfMemoryXIndexedAt(RoxWord.from(nextProgramByte())), this::performORA);
             break;
 
             case ORA_IND_IY:
@@ -392,11 +396,11 @@ public class Mos6502 {
                 break;
 
             case EOR_Z:
-                withRegisterAndByteAt(Register.ACCUMULATOR, nextProgramByte(), this::performEOR);
+                withRegisterAndByteAt(Register.ACCUMULATOR, RoxWord.from(nextProgramByte()), this::performEOR);
                 break;
 
             case EOR_Z_IX:
-                withRegisterAndByteXIndexedAt(Register.ACCUMULATOR, nextProgramByte(), this::performEOR);
+                withRegisterAndByteXIndexedAt(Register.ACCUMULATOR, RoxWord.from(nextProgramByte()), this::performEOR);
                 break;
 
             case EOR_ABS:
@@ -412,7 +416,7 @@ public class Mos6502 {
                 break;
 
             case EOR_IND_IX:
-                withRegisterAndByteAt(Register.ACCUMULATOR, getWordOfMemoryXIndexedAt(nextProgramByte()), this::performEOR);
+                withRegisterAndByteAt(Register.ACCUMULATOR, getWordOfMemoryXIndexedAt(RoxWord.from(nextProgramByte())), this::performEOR);
             break;
 
             case EOR_IND_IY:
@@ -420,7 +424,7 @@ public class Mos6502 {
             break;
 
             case ADC_Z:
-                withRegisterAndByteAt(Register.ACCUMULATOR, nextProgramByte(), this::performADC);
+                withRegisterAndByteAt(Register.ACCUMULATOR, RoxWord.from(nextProgramByte()), this::performADC);
                 break;
 
             case ADC_I:
@@ -440,11 +444,11 @@ public class Mos6502 {
                 break;
 
             case ADC_Z_IX:
-                withRegisterAndByteXIndexedAt(Register.ACCUMULATOR, nextProgramByte(), this::performADC);
+                withRegisterAndByteXIndexedAt(Register.ACCUMULATOR, RoxWord.from(nextProgramByte()), this::performADC);
                 break;
 
             case ADC_IND_IX:
-                withRegisterAndByteAt(Register.ACCUMULATOR, getWordOfMemoryXIndexedAt(nextProgramByte()), this::performADC);
+                withRegisterAndByteAt(Register.ACCUMULATOR, getWordOfMemoryXIndexedAt(RoxWord.from(nextProgramByte())), this::performADC);
             break;
 
             case ADC_IND_IY:
@@ -456,11 +460,11 @@ public class Mos6502 {
                 break;
 
             case CMP_Z:
-                performCMP(getByteOfMemoryAt(nextProgramByte()), Register.ACCUMULATOR);
+                performCMP(getByteOfMemoryAt(RoxWord.from(nextProgramByte())), Register.ACCUMULATOR);
                 break;
 
             case CMP_Z_IX:
-                performCMP(getByteOfMemoryXIndexedAt(nextProgramByte()), Register.ACCUMULATOR);
+                performCMP(getByteOfMemoryXIndexedAt(RoxWord.from(nextProgramByte())), Register.ACCUMULATOR);
                 break;
 
             case CMP_ABS:
@@ -476,7 +480,7 @@ public class Mos6502 {
                 break;
 
             case CMP_IND_IX:
-                performCMP(getByteOfMemoryAt(getWordOfMemoryXIndexedAt(nextProgramByte())), Register.ACCUMULATOR);
+                performCMP(getByteOfMemoryAt(getWordOfMemoryXIndexedAt(RoxWord.from(nextProgramByte()))), Register.ACCUMULATOR);
             break;
 
             case CMP_IND_IY:
@@ -488,7 +492,7 @@ public class Mos6502 {
                 break;
 
             case CPX_Z:
-                performCMP(getByteOfMemoryAt(nextProgramByte()), Register.X_INDEX);
+                performCMP(getByteOfMemoryAt(RoxWord.from(nextProgramByte())), Register.X_INDEX);
                 break;
 
             case CPX_ABS:
@@ -500,7 +504,7 @@ public class Mos6502 {
                 break;
 
             case CPY_Z:
-                performCMP(getByteOfMemoryAt(nextProgramByte()), Register.Y_INDEX);
+                performCMP(getByteOfMemoryAt(RoxWord.from(nextProgramByte())), Register.Y_INDEX);
                 break;
 
             case CPY_ABS:
@@ -512,11 +516,11 @@ public class Mos6502 {
                 break;
 
             case SBC_Z:
-                withRegisterAndByteAt(Register.ACCUMULATOR, nextProgramByte(), this::performSBC);
+                withRegisterAndByteAt(Register.ACCUMULATOR, RoxWord.from(nextProgramByte()), this::performSBC);
                 break;
 
             case SBC_Z_IX:
-                withRegisterAndByteXIndexedAt(Register.ACCUMULATOR, nextProgramByte(), this::performSBC);
+                withRegisterAndByteXIndexedAt(Register.ACCUMULATOR, RoxWord.from(nextProgramByte()), this::performSBC);
                 break;
 
             case SBC_ABS:
@@ -532,7 +536,7 @@ public class Mos6502 {
                 break;
 
             case SBC_IND_IX:
-                withRegisterAndByteAt(Register.ACCUMULATOR, getWordOfMemoryXIndexedAt(nextProgramByte()), this::performSBC);
+                withRegisterAndByteAt(Register.ACCUMULATOR, getWordOfMemoryXIndexedAt(RoxWord.from(nextProgramByte())), this::performSBC);
             break;
 
             case SBC_IND_IY:
@@ -540,7 +544,7 @@ public class Mos6502 {
             break;
 
             case STY_Z:
-                setByteOfMemoryAt(nextProgramByte(), getRegisterValue(Register.Y_INDEX));
+                setByteOfMemoryAt(RoxWord.from(nextProgramByte()), getRegisterValue(Register.Y_INDEX));
                 break;
 
             case STY_ABS:
@@ -548,11 +552,11 @@ public class Mos6502 {
                 break;
 
             case STY_Z_IX:
-                setByteOfMemoryXIndexedAt(nextProgramByte(), getRegisterValue(Register.Y_INDEX));
+                setByteOfMemoryXIndexedAt(RoxWord.from(nextProgramByte()), getRegisterValue(Register.Y_INDEX));
                 break;
 
             case STA_Z:
-                setByteOfMemoryAt(nextProgramByte(), getRegisterValue(Register.ACCUMULATOR));
+                setByteOfMemoryAt(RoxWord.from(nextProgramByte()), getRegisterValue(Register.ACCUMULATOR));
                 break;
 
             case STA_ABS:
@@ -560,7 +564,7 @@ public class Mos6502 {
                 break;
 
             case STA_Z_IX:
-                setByteOfMemoryXIndexedAt(nextProgramByte(), getRegisterValue(Register.ACCUMULATOR));
+                setByteOfMemoryXIndexedAt(RoxWord.from(nextProgramByte()), getRegisterValue(Register.ACCUMULATOR));
                 break;
 
             case STA_ABS_IX:
@@ -572,7 +576,7 @@ public class Mos6502 {
                 break;
 
             case STA_IND_IX:
-                setByteOfMemoryAt(getWordOfMemoryXIndexedAt(nextProgramByte()), getRegisterValue(Register.ACCUMULATOR));
+                setByteOfMemoryAt(getWordOfMemoryXIndexedAt(RoxWord.from(nextProgramByte())), getRegisterValue(Register.ACCUMULATOR));
             break;
 
             case STA_IND_IY:
@@ -580,11 +584,11 @@ public class Mos6502 {
             break;
 
             case STX_Z:
-                setByteOfMemoryAt(nextProgramByte(), getRegisterValue(Register.X_INDEX));
+                setByteOfMemoryAt(RoxWord.from(nextProgramByte()), getRegisterValue(Register.X_INDEX));
                 break;
 
             case STX_Z_IY:
-                setByteOfMemoryYIndexedAt(nextProgramByte(), getRegisterValue(Register.X_INDEX));
+                setByteOfMemoryYIndexedAt(RoxWord.from(nextProgramByte()), getRegisterValue(Register.X_INDEX));
                 break;
 
             case STX_ABS:
@@ -636,8 +640,8 @@ public class Mos6502 {
                 break;
 
             case JSR:
-                int hi = nextProgramByte();
-                int lo = nextProgramByte();
+                RoxByte hi = nextProgramByte();
+                RoxByte lo = nextProgramByte();
                 pushRegister(Register.PROGRAM_COUNTER_HI);
                 pushRegister(Register.PROGRAM_COUNTER_LOW);
                 setRegisterValue(Register.PROGRAM_COUNTER_HI, hi);
@@ -713,24 +717,27 @@ public class Mos6502 {
                 break;
 
             case BRK:
+                //BRK is unlike an interrupt in that PC+2 is saved to the stack, this may not be the next instruction
+                //    and a correction may be necessary.  Due to the assumed use of BRK to path existing programs where
+                //    BRK replaces a 2-byte instruction.
             default:
-                //XXX Why do we do this at all? A program of [BRK] will push 0x03 as the PC...why is that right?
-                registers.setPC(performSilently(this::performADC, registers.getPC(), 2, false));
+                registers.setPC(RoxWord.fromLiteral(registers.getPC().getRawValue() + 2));
+
                 push(registers.getRegister(Register.PROGRAM_COUNTER_HI));
                 push(registers.getRegister(Register.PROGRAM_COUNTER_LOW));
-                push(registers.getRegister(Register.STATUS_FLAGS) | Flag.BREAK.getPlaceValue());
+                push(RoxByte.fromLiteral(registers.getRegister(Register.STATUS_FLAGS).getRawValue() | Flag.BREAK.getPlaceValue()));
 
-                registers.setRegister(Register.PROGRAM_COUNTER_HI, getByteOfMemoryAt(0xFFFE));
-                registers.setRegister(Register.PROGRAM_COUNTER_LOW, getByteOfMemoryAt(0xFFFF));
+                registers.setRegister(Register.PROGRAM_COUNTER_HI, getByteOfMemoryAt(RoxWord.fromLiteral(0xFFFE)));
+                registers.setRegister(Register.PROGRAM_COUNTER_LOW, getByteOfMemoryAt(RoxWord.fromLiteral(0xFFFF)));
                 break;
         }
     }
 
-    private int getRegisterValue(Register registerID){
+    private RoxByte getRegisterValue(Register registerID){
         return registers.getRegister(registerID);
     }
 
-    private void setRegisterValue(Register registerID, int value){
+    private void setRegisterValue(Register registerID, RoxByte value){
         registers.setRegister(registerID, value);
     }
 
@@ -739,10 +746,11 @@ public class Mos6502 {
      * <br/>
      * <code>PC++</code>
      */
-    private int getAndStepPC(){
-       final int originalPC = registers.getPC();
+    private RoxWord getAndStepPC(){
+       final RoxWord originalPC = registers.getPC();
+       final RoxWord newPC = RoxWord.fromLiteral(originalPC.getRawValue() + 1);
 
-       registers.setPC(originalPC + 1);
+       registers.setPC(newPC);
 
        return originalPC;
     }
@@ -755,7 +763,7 @@ public class Mos6502 {
      *
      * @return byte {@code from mem[ PC[0] ]}
      */
-    private int nextProgramByte(){
+    private RoxByte nextProgramByte(){
        return getByteOfMemoryAt(getAndStepPC());
     }
 
@@ -770,9 +778,8 @@ public class Mos6502 {
      *
      * @return word made up of both bytes
      */
-    private int nextProgramWord(){
-       return RoxWord.from(RoxByte.fromLiteral(nextProgramByte()),
-                           RoxByte.fromLiteral(nextProgramByte())).getAsInt();
+    private RoxWord nextProgramWord(){
+       return RoxWord.from(nextProgramByte(), nextProgramByte());
     }
 
     /**
@@ -780,11 +787,13 @@ public class Mos6502 {
      *
      * @return popped value
      */
-    private int pop(){
-       setRegisterValue(Register.STACK_POINTER_HI, getRegisterValue(Register.STACK_POINTER_HI) + 1);
-       int address = 0x0100 | getRegisterValue(Register.STACK_POINTER_HI);
-       int value = getByteOfMemoryAt(address);
-       debug("POP {}(0b{}) from mem[0x{}]", Integer.toString(value), Integer.toBinaryString(value), Integer.toHexString(address).toUpperCase());
+    private RoxByte pop(){
+       setRegisterValue(Register.STACK_POINTER_HI, RoxByte.fromLiteral(getRegisterValue(Register.STACK_POINTER_HI).getRawValue() + 1));
+       RoxWord address = RoxWord.from(RoxByte.fromLiteral(0x01), getRegisterValue(Register.STACK_POINTER_HI));
+       RoxByte value = getByteOfMemoryAt(address);
+       debug("POP {}(0b{}) from mem[0x{}]", value.toString(),
+                                                    Integer.toBinaryString(value.getRawValue()),
+                                                    Integer.toHexString(address.getRawValue()).toUpperCase());
        return value;
     }
 
@@ -802,73 +811,77 @@ public class Mos6502 {
      *
      * @param value value to push
      */
-    private void push(int value){
-       debug("PUSH {}(0b{}) to mem[0x{}]",  Integer.toString(value),
-                                                    Integer.toBinaryString(value),
-                                                    Integer.toHexString(getRegisterValue(Register.STACK_POINTER_HI)).toUpperCase());
+    private void push(RoxByte value){
+       debug("PUSH {}(0b{}) to mem[0x{}]",  value.toString(),
+                                                    Integer.toBinaryString(value.getRawValue()),
+                                                    Integer.toHexString(getRegisterValue(Register.STACK_POINTER_HI).getRawValue()).toUpperCase());
 
-       setByteOfMemoryAt(0x0100 | getRegisterValue(Register.STACK_POINTER_HI), value);
-       setRegisterValue(Register.STACK_POINTER_HI, getRegisterValue(Register.STACK_POINTER_HI) - 1);
+       setByteOfMemoryAt(RoxWord.from(RoxByte.fromLiteral(0x01), getRegisterValue(Register.STACK_POINTER_HI)), value);
+       setRegisterValue(Register.STACK_POINTER_HI, RoxByte.fromLiteral(getRegisterValue(Register.STACK_POINTER_HI).getRawValue() - 1));
     }
 
-    private int getByteOfMemoryXIndexedAt(int location){
+    private RoxByte getByteOfMemoryXIndexedAt(RoxWord location){
        return getByteOfMemoryAt(location, getRegisterValue(Register.X_INDEX));
     }
 
-    private int getByteOfMemoryYIndexedAt(int location){
-       return getByteOfMemoryAt(location, getRegisterValue(Register.Y_INDEX));
+    private RoxByte getByteOfMemoryYIndexedAt(RoxWord location){
+        return getByteOfMemoryAt(location, getRegisterValue(Register.Y_INDEX));
     }
 
-    private void setByteOfMemoryYIndexedAt(int location, int newByte){
+    private void setByteOfMemoryYIndexedAt(RoxWord location, RoxByte newByte){
        setByteOfMemoryAt(location, getRegisterValue(Register.Y_INDEX), newByte);
     }
 
-    private int getByteOfMemoryAt(int location){
-        return getByteOfMemoryAt(location, 0);
+    private RoxByte getByteOfMemoryAt(RoxWord location){
+        return getByteOfMemoryAt(location, RoxByte.ZERO);
     }
 
-    private int getByteOfMemoryAt(int location, int index){
-       final int memoryByte = memory.getByte(location + index);
-       debug("Got 0x{} from mem[{}]", Integer.toHexString(memoryByte), (location + (index != 0 ? "[" + index + "]" : "")));
+    private RoxByte getByteOfMemoryAt(RoxWord location, RoxByte index){
+       final RoxByte memoryByte = memory.getByte(RoxWord.fromLiteral(location.getRawValue() + index.getRawValue()));
+       debug("Got 0x{} from mem[{}]", Integer.toHexString(memoryByte.getRawValue()), (location + (index != RoxByte.ZERO ? "[" + index + "]" : "")));
        return memoryByte;
     }
 
-    private void setByteOfMemoryXIndexedAt(int location, int newByte){
+    private void setByteOfMemoryXIndexedAt(RoxWord location, RoxByte newByte){
        setByteOfMemoryAt(location, getRegisterValue(Register.X_INDEX), newByte);
     }
 
-    private void setByteOfMemoryAt(int location, int newByte){
-        setByteOfMemoryAt(location, 0, newByte);
+    private void setByteOfMemoryAt(RoxWord location, RoxByte newByte){
+        setByteOfMemoryAt(location, RoxByte.ZERO, newByte);
     }
 
-    private void setByteOfMemoryAt(int location, int index, int newByte){
-       memory.setByteAt(location + index, newByte);
-       debug("Stored 0x{} at mem[{}]", Integer.toHexString(newByte), (location + (index != 0 ? "[" + index + "]" : "")));
+    private void setByteOfMemoryAt(RoxWord location, RoxByte index, RoxByte newByte){
+       memory.setByteAt(RoxWord.fromLiteral(location.getRawValue() + index.getRawValue()), newByte);
+       debug("Stored 0x{} at mem[{}]", Integer.toHexString(newByte.getRawValue()), (location + (index != RoxByte.ZERO ? "[" + index + "]" : "")));
     }
 
-    private int getIndirectYPointer(){
-        return (getWordOfMemoryAt(nextProgramByte()) + getRegisterValue(Register.Y_INDEX));
+    private RoxWord getIndirectYPointer(){
+        RoxByte loc = nextProgramByte();
+        RoxWord pointer = getWordOfMemoryAt(RoxWord.from(loc));
+        RoxByte off = getRegisterValue(Register.Y_INDEX);
+
+        return RoxWord.fromLiteral(pointer.getRawValue() + off.getRawValue());
     }
 
-    private int getWordOfMemoryXIndexedAt(int location){
-       int indexedLocation = location + getRegisterValue(Register.X_INDEX);
+    private RoxWord getWordOfMemoryXIndexedAt(RoxWord location){
+       RoxWord indexedLocation = RoxWord.fromLiteral(location.getRawValue() + getRegisterValue(Register.X_INDEX).getRawValue());
        return getWordOfMemoryAt(indexedLocation);
     }
 
-    private int getWordOfMemoryAt(int location) {
-       int memoryWord = memory.getWord(location);
-       debug("Got 0x{} from mem[{}]", Integer.toHexString(memoryWord), Integer.toString(location));
+    private RoxWord getWordOfMemoryAt(RoxWord location) {
+       RoxWord memoryWord = memory.getWord(location);
+       debug("Got 0x{} from mem[{}]", Integer.toHexString(memoryWord.getRawValue()), location.toString());
        return memoryWord;
     }
 
     /**
-     * Call {@link Mos6502#branchTo(int)} with next program byte
+     * Call {@link Mos6502#branchTo(RoxWord)} with next program byte
      *
      * @param condition if {@code true} then branch is followed
      */
     private void branchIf(boolean condition){
-        int location = nextProgramByte();
-        debug("Branch:0x{} by {} {}", Integer.toHexString(registers.getPC()), Integer.toBinaryString(location), (condition ? "YES->" : "NO..."));
+        RoxByte location = nextProgramByte();
+        debug("Branch:0x{} by {} {}", Integer.toHexString(registers.getPC().getRawValue()), Integer.toBinaryString(location.getRawValue()), (condition ? "YES->" : "NO..."));
         if (condition) branchTo(location);
     }
 
@@ -877,12 +890,14 @@ public class Mos6502 {
      *
      * @param displacement relative (-127 &rarr; 128) location from end of branch instruction
      */
-    private void branchTo(int displacement) {
-        final RoxByte displacementByte = RoxByte.fromLiteral(displacement);
-        if (displacementByte.isNegative())
-            setRegisterValue(Register.PROGRAM_COUNTER_LOW, getRegisterValue(Register.PROGRAM_COUNTER_LOW) - displacementByte.asOnesCompliment().getRawValue());
-        else
-            setRegisterValue(Register.PROGRAM_COUNTER_LOW, getRegisterValue(Register.PROGRAM_COUNTER_LOW) + displacementByte.getRawValue());
+    private void branchTo(RoxByte displacement) {
+        RoxByte addr;
+        if (displacement.isNegative()) {
+            addr = RoxByte.fromLiteral(getRegisterValue(Register.PROGRAM_COUNTER_LOW).getRawValue() - displacement.asOnesCompliment().getRawValue());
+        }else {
+            addr = RoxByte.fromLiteral(getRegisterValue(Register.PROGRAM_COUNTER_LOW).getRawValue() + displacement.getRawValue());
+        }
+        setRegisterValue(Register.PROGRAM_COUNTER_LOW, addr);
     }
 
     private int fromOnesComplimented(int byteValue){
@@ -893,79 +908,81 @@ public class Mos6502 {
         return fromOnesComplimented(byteValue) - 1;
     }
 
-    private void performCMP(int value, Register toRegister){
-        int result = performSilently(this::performSBC, getRegisterValue(toRegister), value, true);
-        registers.setFlagsBasedOn(result & 0xFF);
+    private void performCMP(RoxByte value, Register toRegister){
+        RoxByte result = performSilently(this::performSBC, getRegisterValue(toRegister), value, true);
+        registers.setFlagsBasedOn(result);
 
-        registers.setFlagTo(Flag.CARRY, (fromTwosComplimented(result) >=0));
+        registers.setFlagTo(Flag.CARRY, (fromTwosComplimented(result.getRawValue()) >=0));
     }
 
     @FunctionalInterface
     private interface SingleByteOperation {
-        int perform(int byteValue);
+        RoxByte perform(RoxByte byteValue);
     }
 
-    private void withByteAt(int location, SingleByteOperation singleByteOperation){
-        int b = getByteOfMemoryAt(location);
+    private void withByteAt(RoxWord location, SingleByteOperation singleByteOperation){
+        RoxByte b = getByteOfMemoryAt(location);
         setByteOfMemoryAt(location, singleByteOperation.perform(b));
     }
 
-    private void withByteXIndexedAt(int location, SingleByteOperation singleByteOperation){
-        int b = getByteOfMemoryXIndexedAt(location);
+    private void withByteXIndexedAt(RoxWord location, SingleByteOperation singleByteOperation){
+        RoxByte b = getByteOfMemoryXIndexedAt(location);
         setByteOfMemoryXIndexedAt(location, singleByteOperation.perform(b));
     }
 
     private void withRegister(Register registerId, SingleByteOperation singleByteOperation){
-        int b = getRegisterValue(registerId);
+        RoxByte b = getRegisterValue(registerId);
         setRegisterValue(registerId, singleByteOperation.perform(b));
     }
 
-    private int performASL(int byteValue){
-        int newValue = alu.asl(RoxByte.fromLiteral(byteValue)).getRawValue();
+    private RoxByte performASL(RoxByte byteValue){
+        RoxByte newValue = alu.asl(byteValue);
         registers.setFlagsBasedOn(newValue);
         return newValue;
     }
 
-    private int performROL(int initialValue){
-        int rotatedValue = alu.rol(RoxByte.fromLiteral(initialValue)).getRawValue();
+    private RoxByte performROL(RoxByte initialValue){
+        RoxByte rotatedValue = alu.rol(initialValue);
         registers.setFlagsBasedOn(rotatedValue);
         return rotatedValue;
     }
 
-    private int performROR(int initialValue){
-        int rotatedValue = alu.ror(RoxByte.fromLiteral(initialValue)).getRawValue();
+    private RoxByte performROR(RoxByte initialValue){
+        RoxByte rotatedValue = alu.ror(initialValue);
         registers.setFlagsBasedOn(rotatedValue);
         return rotatedValue;
     }
 
-    private int performLSR(int initialValue){
-        int rotatedValue = alu.lsr(RoxByte.fromLiteral(initialValue)).getRawValue();
+    private RoxByte performLSR(RoxByte initialValue){
+        RoxByte rotatedValue = alu.lsr(initialValue);
         registers.setFlagsBasedOn(rotatedValue);
         return rotatedValue;
     }
 
-    private int performINC(int initialValue){
-        int incrementedValue = performSilently(this::performADC, initialValue, 1,false);
+    private RoxByte performINC(RoxByte initialValue){
+        RoxByte incrementedValue = performSilently(this::performADC, initialValue, RoxByte.fromLiteral(1),false);
         registers.setFlagsBasedOn(incrementedValue);
         return incrementedValue;
     }
 
-    private int performDEC(int initialValue){
-        int incrementedValue = performSilently(this::performSBC, initialValue, 1,true);
+    private RoxByte performDEC(RoxByte initialValue){
+        RoxByte incrementedValue = performSilently(this::performSBC, initialValue, RoxByte.fromLiteral(1),true);
         registers.setFlagsBasedOn(incrementedValue);
         return incrementedValue;
     }
 
-    private void performBIT(int memData) {
-       registers.setFlagTo(Flag.ZERO, ((memData & getRegisterValue(Register.ACCUMULATOR)) == memData));
+    private void performBIT(RoxByte memData) {
+       int comparison = (memData.getRawValue() & getRegisterValue(Register.ACCUMULATOR).getRawValue());
+       registers.setFlagTo(Flag.ZERO, comparison == memData.getRawValue());
 
        //Set N, V to bits 7 and 6 of memory data
-       setRegisterValue(Register.STATUS_FLAGS, (memData & 0b11000000) | (getRegisterValue(Register.STATUS_FLAGS) & 0b00111111));
+       RoxByte val = RoxByte.fromLiteral((memData.getRawValue() & 0b11000000) | (getRegisterValue(Register.STATUS_FLAGS).getRawValue() & 0b00111111));
+       setRegisterValue(Register.STATUS_FLAGS, val);
     }
 
     @FunctionalInterface
     private interface TwoByteOperation {
-       int perform(int byteValueOne, int byteValueTwo);
+       RoxByte perform(RoxByte byteValueOne, RoxByte byteValueTwo);
     }
 
     /**
@@ -977,51 +994,51 @@ public class Mos6502 {
      * @param carryInState the state in which to assume the carry flag is in at the start of the operation
      * @return the result of the operation.
      */
-    private int performSilently(TwoByteOperation operation, int byteA, int byteB, boolean carryInState){
-       int statusState = registers.getRegister(Register.STATUS_FLAGS);
+    private RoxByte performSilently(TwoByteOperation operation, RoxByte byteA, RoxByte byteB, boolean carryInState){
+       RoxByte statusState = registers.getRegister(Register.STATUS_FLAGS);
 
        registers.setFlagTo(Flag.CARRY, carryInState);            //To allow ignore of the carry: ignore = 0 for ADC, 1 for SBC
-       int result = operation.perform(byteA, byteB);
+       RoxByte result = operation.perform(byteA, byteB);
 
        registers.setRegister(Register.STATUS_FLAGS, statusState);
        return result;
     }
 
-    private void withRegisterAndByteAt(Register registerId, int memoryLocation, TwoByteOperation twoByteOperation){
+    private void withRegisterAndByteAt(Register registerId, RoxWord memoryLocation, TwoByteOperation twoByteOperation){
        withRegisterAndByte(registerId, getByteOfMemoryAt(memoryLocation), twoByteOperation);
     }
 
-    private void withRegisterAndByteXIndexedAt(Register registerId, int memoryLocation, TwoByteOperation twoByteOperation){
+    private void withRegisterAndByteXIndexedAt(Register registerId, RoxWord memoryLocation, TwoByteOperation twoByteOperation){
        withRegisterAndByte(registerId, getByteOfMemoryXIndexedAt(memoryLocation), twoByteOperation);
     }
 
-    private void withRegisterAndByteYIndexedAt(Register registerId, int memoryLocation, TwoByteOperation twoByteOperation){
+    private void withRegisterAndByteYIndexedAt(Register registerId, RoxWord memoryLocation, TwoByteOperation twoByteOperation){
        withRegisterAndByte(registerId, getByteOfMemoryYIndexedAt(memoryLocation), twoByteOperation);
     }
 
-    private void withRegisterAndByte(Register registerId, int byteValue, TwoByteOperation twoByteOperation){
-       int registerByte = getRegisterValue(registerId);
+    private void withRegisterAndByte(Register registerId, RoxByte byteValue, TwoByteOperation twoByteOperation){
+       RoxByte registerByte = getRegisterValue(registerId);
 
        registers.setRegisterAndFlags(registerId, twoByteOperation.perform(registerByte, byteValue));
     }
 
-    private int performAND(int byteValueA, int byteValueB){
-        return alu.and(RoxByte.fromLiteral(byteValueA), RoxByte.fromLiteral(byteValueB)).getRawValue();
+    private RoxByte performAND(RoxByte byteValueA, RoxByte byteValueB){
+        return alu.and(byteValueA, byteValueB);
     }
 
-    private int performEOR(int byteValueA, int byteValueB){
-        return alu.xor(RoxByte.fromLiteral(byteValueA), RoxByte.fromLiteral(byteValueB)).getRawValue();
+    private RoxByte performEOR(RoxByte byteValueA, RoxByte byteValueB){
+        return alu.xor(byteValueA, byteValueB);
     }
 
-    private int performORA(int byteValueA, int byteValueB){
-        return alu.or(RoxByte.fromLiteral(byteValueA), RoxByte.fromLiteral(byteValueB)).getRawValue();
+    private RoxByte performORA(RoxByte byteValueA, RoxByte byteValueB){
+        return alu.or(byteValueA, byteValueB);
     }
 
-    private int performADC(int byteValueA, int byteValueB){
-       return alu.adc(RoxByte.fromLiteral(byteValueA), RoxByte.fromLiteral(byteValueB)).getRawValue();
+    private RoxByte performADC(RoxByte byteValueA, RoxByte byteValueB){
+       return alu.adc(byteValueA, byteValueB);
     }
 
-    private int performSBC(int byteValueA, int byteValueB){
-       return alu.sbc(RoxByte.fromLiteral(byteValueA), RoxByte.fromLiteral(byteValueB)).getRawValue();
+    private RoxByte performSBC(RoxByte byteValueA, RoxByte byteValueB){
+       return alu.sbc(byteValueA, byteValueB);
     }
 }

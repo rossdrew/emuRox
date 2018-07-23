@@ -1,5 +1,8 @@
 package com.rox.emu.mem;
 
+import com.rox.emu.env.RoxByte;
+import com.rox.emu.env.RoxWord;
+
 import java.util.*;
 
 /**
@@ -122,43 +125,43 @@ public class MultiSourceMemory implements Memory {
     }
 
     @Override
-    public void setByteAt(int location, int byteValue) {
-        final MemoryMapping mappedMemory = getMemoryMappedTo(location);
-        mappedMemory.physicalMemory.setByteAt(mappedMemory.physicalAddress, byteValue);
+    public void setByteAt(RoxWord location, RoxByte byteValue) {
+        final MemoryMapping mappedMemory = getMemoryMappedTo(location.getRawValue());
+        mappedMemory.physicalMemory.setByteAt(RoxWord.fromLiteral(mappedMemory.physicalAddress), byteValue);
     }
 
     @Override
-    public void setBlock(int startLocation, int[] byteValues) {
+    public void setBlock(RoxWord startLocation, RoxByte[] byteValues) {
         //In case a block crosses multiple unique memory mapped blocks
-        for (int i=0; i < byteValues.length; i++){
-            int address = startLocation + i;
+        int address = startLocation.getRawValue();
+        for (int i=0; i < byteValues.length; i++, address++){
             final MemoryMapping mappedMemory = getMemoryMappedTo(address);
-            mappedMemory.physicalMemory.setByteAt(mappedMemory.physicalAddress, byteValues[i]);
+            mappedMemory.physicalMemory.setByteAt(RoxWord.fromLiteral(mappedMemory.physicalAddress), byteValues[i]);
         }
     }
 
     @Override
-    public int getByte(int location) {
-        final MemoryMapping mappedMemory = getMemoryMappedTo(location);
-        return mappedMemory.physicalMemory.getByte(mappedMemory.physicalAddress);
+    public RoxByte getByte(RoxWord location) {
+        final MemoryMapping mappedMemory = getMemoryMappedTo(location.getRawValue());
+        return mappedMemory.physicalMemory.getByte(RoxWord.fromLiteral(mappedMemory.physicalAddress));
     }
 
     @Override
-    public int getWord(int location) {
-        int byteA = getByte(location);
-        int byteB = getByte(location + 1);
+    public RoxWord getWord(RoxWord location) {
+        RoxByte byteA = getByte(location);
+        RoxByte byteB = getByte(RoxWord.fromLiteral(location.getRawValue() + 1));
 
-        return byteA << 8 | byteB;
+        return RoxWord.from(byteA, byteB);
     }
 
     @Override
-    public int[] getBlock(int from, int to) {
-        int blockSize = to - from;
-        int[] block = new int[blockSize];
+    public RoxByte[] getBlock(RoxWord from, RoxWord to) {
+        int blockSize = to.getRawValue() - from.getRawValue();
+        RoxByte[] block = new RoxByte[blockSize];
 
         //In case a block crosses multiple unique memory mapped blocks
         for (int i=0; i<blockSize; i++){
-            int address = from + i;
+            RoxWord address = RoxWord.fromLiteral(from.getRawValue() + i);
             block[i] = getByte(address);
         }
         return block;

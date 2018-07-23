@@ -2,6 +2,8 @@ package com.rox.emu.env;
 
 import com.rox.emu.InvalidDataTypeException;
 
+import java.util.Objects;
+
 /**
  * A representation of a byte that can be in different formats, so far only SIGNED_TWOS_COMPLIMENT.
  */
@@ -208,23 +210,40 @@ public final class RoxByte {
         return isBitSet(7); //&& format == ByteFormat.SIGNED_TWOS_COMPLIMENT
     }
 
+    public String toBinaryString(){
+        return Integer.toBinaryString(getAsInt());
+    }
+
+    public static RoxByte[] fromIntArray(final int[] bytes){
+        final RoxByte[] newByteArray = new RoxByte[bytes.length];
+        for (int i=0; i<bytes.length; i++){
+            newByteArray[i] = RoxByte.fromLiteral(bytes[i]);
+        }
+        return newByteArray;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
 
+        if (o==null)
+            return false;
+
+        if (o instanceof Integer)
+            return (byteValue == RoxByte.fromLiteral((Integer)o).byteValue);
+
+        if (getClass() != o.getClass()) return false;
         RoxByte roxByte = (RoxByte) o;
-
-        return (byteValue == roxByte.getRawValue());
+        return byteValue == roxByte.byteValue;
     }
 
     @Override
     public int hashCode() {
-        return (31 * byteValue);
+        return Objects.hash(byteValue);
     }
 
     @Override
     public String toString() {
-        return "RoxByte{" + getAsInt() +"}";
+        return "RoxByte{" + getAsInt() + "}";
     }
 }

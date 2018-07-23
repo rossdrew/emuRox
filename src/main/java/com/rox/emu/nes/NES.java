@@ -1,7 +1,8 @@
 package com.rox.emu.nes;
 
+import com.rox.emu.env.RoxByte;
+import com.rox.emu.env.RoxWord;
 import com.rox.emu.mem.Memory;
-import com.rox.emu.mem.MultiSourceMemory;
 import com.rox.emu.processor.mos6502.Mos6502;
 import com.rox.emu.processor.ricoh2c02.Ricoh2C02;
 
@@ -97,6 +98,6 @@ public class NES {
         //0xFFFC->0x80
         //0xFFFD->0x00
         // 0x4000 of ROM should be memory mapped to both 0x8000 and 0xC000
-        mainMemory.setBlock(0xFFFC, new int[] {0x80, 0x00});
+        mainMemory.setBlock(RoxWord.fromLiteral(0xFFFC), RoxByte.fromIntArray(new int[] {0x80, 0x00}));
     }
 }

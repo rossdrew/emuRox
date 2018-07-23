@@ -43,7 +43,7 @@ public class Mos6502Alu {
     public RoxByte adc(final RoxByte byteA, final RoxByte byteB){
         int carry = registers.getFlag(Registers.Flag.CARRY) ? 1 : 0;
 
-        final RoxWord result = RoxWord.literalFrom(byteA.getRawValue() + byteB.getRawValue() + carry);
+        final RoxWord result = RoxWord.fromLiteral(byteA.getRawValue() + byteB.getRawValue() + carry);
 
         registers.setFlagTo(Registers.Flag.CARRY, result.getHighByte().isBitSet(0));
 
@@ -124,7 +124,7 @@ public class Mos6502Alu {
      * @return the result of <code>ASL byteA</code>
      */
     public RoxByte asl(RoxByte byteA) {
-        final RoxWord result = RoxWord.literalFrom((byteA.getRawValue() << 1));
+        final RoxWord result = RoxWord.fromLiteral((byteA.getRawValue() << 1));
         registers.setFlagTo(Registers.Flag.CARRY, result.getHighByte().isBitSet(0));
         return result.getLowByte();
     }
@@ -137,7 +137,7 @@ public class Mos6502Alu {
      */
     public RoxByte rol(RoxByte byteA) {
         int carry = registers.getFlag(Registers.Flag.CARRY) ? 1 : 0;
-        final RoxWord result = RoxWord.literalFrom((byteA.getRawValue() << 1) + carry);
+        final RoxWord result = RoxWord.fromLiteral((byteA.getRawValue() << 1) + carry);
         registers.setFlagTo(Registers.Flag.CARRY, result.getHighByte().isBitSet(0));
         return result.getLowByte();
     }

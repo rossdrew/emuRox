@@ -1,5 +1,7 @@
 package com.rox.emu.processor.mos6502
 
+import com.rox.emu.env.RoxByte
+import com.rox.emu.env.RoxWord
 import com.rox.emu.mem.Memory
 
 import com.rox.emu.mem.SimpleMemory
@@ -23,7 +25,7 @@ class OpCodeSpec extends Specification {
 
     Program loadMemoryWithProgram(Object ... programElements){
         final Program program = new Program().with(programElements)
-        memory.setBlock(0, program.getProgramAsByteArray())
+        memory.setBlock(RoxWord.ZERO, program.getProgramAsByteArray())
         return program
     }
 
@@ -169,8 +171,8 @@ class OpCodeSpec extends Specification {
         processor.step()
     
         then:
-        value == registers.getRegister(Registers.Register.ACCUMULATOR)
-        program.length == registers.getPC()
+        registers.getRegister(Registers.Register.ACCUMULATOR) == value
+        registers.getPC() == program.length
         testFlags(Z, N)
 
         where:
@@ -181,14 +183,14 @@ class OpCodeSpec extends Specification {
     testLDAFromZeroPage() {
         when:
         Program program = loadMemoryWithProgram(LDA_Z, 30)
-        memory.setByteAt(30, value)
+        memory.setByteAt(RoxWord.fromLiteral(30), RoxByte.fromLiteral(value))
 
         and:
         processor.step()
     
         then:
-        value == registers.getRegister(Registers.Register.ACCUMULATOR)
-        program.length == registers.getPC()
+        registers.getRegister(Registers.Register.ACCUMULATOR) == value
+        registers.getPC() == program.length
         testFlags(Z, N)
     
         where:
@@ -199,14 +201,14 @@ class OpCodeSpec extends Specification {
     testLDAFromZeroPageIndexedByX() {
         when:
         Program program = loadMemoryWithProgram(LDX_I, index, LDA_Z_IX, 0x30)
-        memory.setByteAt(0x30 + index, value)
+        memory.setByteAt(RoxWord.fromLiteral(0x30 + index), RoxByte.fromLiteral(value))
 
         and:
         processor.step(2)
     
         then:
-        value == registers.getRegister(Registers.Register.ACCUMULATOR)
-        program.length == registers.getPC()
+        registers.getRegister(Registers.Register.ACCUMULATOR) == value
+        registers.getPC() == program.length
         testFlags(Z, N)
     
         where:
@@ -217,14 +219,14 @@ class OpCodeSpec extends Specification {
     testAbsoluteLDA() {
         when:
         Program program = loadMemoryWithProgram(LDA_ABS, 0x1, 0x2C)
-        memory.setByteAt(300, value)
+        memory.setByteAt(RoxWord.fromLiteral(300), RoxByte.fromLiteral(value))
 
         and:
         processor.step()
     
         then:
-        value == registers.getRegister(Registers.Register.ACCUMULATOR)
-        program.length == registers.getPC()
+        registers.getRegister(Registers.Register.ACCUMULATOR) == value
+        registers.getPC() == program.length
         testFlags(Z, N)
     
         where:
@@ -235,14 +237,14 @@ class OpCodeSpec extends Specification {
     testLDAIndexedByX() {
         when:
         Program program = loadMemoryWithProgram(LDX_I, index, LDA_ABS_IX, 1, 0x2C)
-        memory.setByteAt(300 + index, value)
+        memory.setByteAt(RoxWord.fromLiteral(300 + index), RoxByte.fromLiteral(value))
 
         and:
         processor.step(2)
     
         then:
-        value == registers.getRegister(Registers.Register.ACCUMULATOR)
-        program.length == registers.getPC()
+        registers.getRegister(Registers.Register.ACCUMULATOR) == value
+        registers.getPC() == program.length
         testFlags(Z, N)
     
         where:
@@ -254,14 +256,14 @@ class OpCodeSpec extends Specification {
     testLDAIndexedByY() {
         when:
         Program program = loadMemoryWithProgram(LDY_I, index, LDA_ABS_IY, 1, 0x2C)
-        memory.setByteAt(300 + index, value)
+        memory.setByteAt(RoxWord.fromLiteral(300 + index), RoxByte.fromLiteral(value))
 
         and:
         processor.step(2)
     
         then:
-        value == registers.getRegister(Registers.Register.ACCUMULATOR)
-        program.length == registers.getPC()
+        registers.getRegister(Registers.Register.ACCUMULATOR) == value
+        registers.getPC() == program.length
         testFlags(Z, N)
     
         where:
@@ -284,32 +286,33 @@ class OpCodeSpec extends Specification {
         processor.step(8)
     
         then:
-        value == registers.getRegister(Registers.Register.ACCUMULATOR)
-        program.length == registers.getPC()
+        registers.getRegister(Registers.Register.ACCUMULATOR) == value
+        registers.getPC() == program.length
         testFlags(Z, N)
     
         where:
         [indAddressHi, indAddressLo, index, value, Z, N, Expected] << withWordPointer(withIndex(loadValueTestData()))
     }
     
-    @Unroll("LDA (Indirect, Y). #expected: 0x60 -> *[#pointerHi|#pointerLo]@[#index] = #expectedValue")
+    @Unroll("LDA (Indirect, Y). #expectedValue: 0x60 -> mem[mem[#pointerHi:#pointerLo] + #index] = #expectedValue")
     testLDA_IND_IY() {
         when:
-        loadMemoryWithProgram(LDY_I, index,           //Index to use
-                              LDA_I, expectedValue,   //High order byte at pointer
+        int pointerLocation = 0x60
+        loadMemoryWithProgram(LDY_I, index,         //Index to use
+                              LDA_I, expectedValue,                 //High order byte at pointer destination
                               STA_ABS_IY, pointerHi, pointerLo,
-                              LDA_I, pointerHi,       //Pointer location
-                              STA_Z, 0x60,
-                              LDA_I, pointerLo,       //Pointer location
-                              STA_Z, 0x61,
-                              LDA_I, 0x0,             //Reset accumulator
+                              LDA_I, pointerHi,                     //Pointer destination
+                              STA_Z, pointerLocation,
+                              LDA_I, pointerLo,                     //Pointer destination
+                              STA_Z, pointerLocation + 1,
+                              LDA_I, 0x0,                           //Reset accumulator
                               LDA_IND_IY, 0x60)
 
         and:
         processor.step(9)
     
         then:
-        expectedValue == registers.getRegister(Registers.Register.ACCUMULATOR)
+        registers.getRegister(Registers.Register.ACCUMULATOR) == expectedValue
         testFlags(Z, N)
     
         where:
@@ -325,8 +328,8 @@ class OpCodeSpec extends Specification {
         processor.step()
     
         then:
-        value == registers.getRegister(Registers.Register.X_INDEX)
-        program.length == registers.getPC()
+        registers.getRegister(Registers.Register.X_INDEX) == value
+        registers.getPC() == program.length
         testFlags(Z,N)
     
         where:
@@ -339,14 +342,14 @@ class OpCodeSpec extends Specification {
         Program program = loadMemoryWithProgram(LDX_ABS, addressHi, addressLo)
     
         and:
-        memory.setByteAt(addressHi << 8 | addressLo, value)
+        memory.setByteAt(RoxWord.fromLiteral(addressHi << 8 | addressLo), RoxByte.fromLiteral(value))
     
         and:
         processor.step()
     
         then:
-        value == registers.getRegister(Registers.Register.X_INDEX)
-        program.length == registers.getPC()
+        registers.getRegister(Registers.Register.X_INDEX) == value
+        registers.getPC() == program.length
 		testFlags(Z,N)
     
         where:
@@ -365,8 +368,8 @@ class OpCodeSpec extends Specification {
         processor.step(4)
     
         then:
-        value == registers.getRegister(Registers.Register.X_INDEX)
-        program.length == registers.getPC()
+        registers.getRegister(Registers.Register.X_INDEX) == value
+        registers.getPC() == program.length
 		testFlags(Z,N)
     
         where:
@@ -384,8 +387,8 @@ class OpCodeSpec extends Specification {
         processor.step(3)
     
         then:
-        value == registers.getRegister(Registers.Register.X_INDEX)
-        program.length == registers.getPC()
+        registers.getRegister(Registers.Register.X_INDEX) == value
+        registers.getPC() == program.length
 		testFlags(Z,N)
     
         where:
@@ -404,8 +407,8 @@ class OpCodeSpec extends Specification {
         processor.step(4)
     
         then:
-        value == registers.getRegister(Registers.Register.X_INDEX)
-        program.length == registers.getPC()
+        registers.getRegister(Registers.Register.X_INDEX) == value
+        registers.getPC() == program.length
 		testFlags(Z, N)
     
         where:
@@ -421,8 +424,8 @@ class OpCodeSpec extends Specification {
         processor.step()
 
         then:
-        value == registers.getRegister(Registers.Register.Y_INDEX)
-        program.length == registers.getPC()
+        registers.getRegister(Registers.Register.Y_INDEX) == value
+        registers.getPC() == program.length
 		testFlags(Z,N)
     
         where:
@@ -440,8 +443,8 @@ class OpCodeSpec extends Specification {
         processor.step(3)
     
         then:
-        value == registers.getRegister(Registers.Register.Y_INDEX)
-        program.length == registers.getPC()
+        registers.getRegister(Registers.Register.Y_INDEX) == value
+        registers.getPC() == program.length
 		testFlags(Z,N)
     
         where:
@@ -460,8 +463,8 @@ class OpCodeSpec extends Specification {
         processor.step(4)
 
         then:
-        value == registers.getRegister(Registers.Register.Y_INDEX)
-        program.length == registers.getPC()
+        registers.getRegister(Registers.Register.Y_INDEX) == value
+        registers.getPC() == program.length
 		testFlags(Z,N)
     
         where:
@@ -474,14 +477,14 @@ class OpCodeSpec extends Specification {
         Program program = loadMemoryWithProgram(LDY_ABS, addressHi, addressLo)
 
         and: 'The required value is present in memory'
-        memory.setByteAt(addressHi << 8 | addressLo, value)
+        memory.setByteAt(RoxWord.fromLiteral(addressHi << 8 | addressLo), RoxByte.fromLiteral(value))
     
         and:
         processor.step()
     
         then:
-        value == registers.getRegister(Registers.Register.Y_INDEX)
-        program.length == registers.getPC()
+        registers.getRegister(Registers.Register.Y_INDEX) == value
+        registers.getPC() == program.length
 		testFlags(Z,N)
     
         where:
@@ -494,14 +497,14 @@ class OpCodeSpec extends Specification {
         Program program = loadMemoryWithProgram(LDX_I, index, LDY_ABS_IX, addressHi, addressLo)
 
         and: 'The required value is present in memory'
-        memory.setByteAt((addressHi << 8 | addressLo)+index, value)
+        memory.setByteAt(RoxWord.fromLiteral((addressHi << 8 | addressLo)+index), RoxByte.fromLiteral(value))
     
         and:
         processor.step(2)
     
         then:
-        value == registers.getRegister(Registers.Register.Y_INDEX)
-        program.length == registers.getPC()
+        registers.getRegister(Registers.Register.Y_INDEX) == value
+        registers.getPC() == program.length
 		testFlags(Z,N)
     
         where:
@@ -517,8 +520,8 @@ class OpCodeSpec extends Specification {
         processor.step(2)
 
         then:
-        expectedAccumulator == registers.getRegister(Registers.Register.ACCUMULATOR)
-        program.length == registers.getPC()
+        registers.getRegister(Registers.Register.ACCUMULATOR) == expectedAccumulator
+        registers.getPC() == program.length
 		testFlags(Z,N,C,V)
     
         where:
@@ -533,14 +536,14 @@ class OpCodeSpec extends Specification {
                                                 ADC_Z_IX, memoryAddress)
         
         and:
-        memory.setByteAt(memoryAddress+index, secondValue)
+        memory.setByteAt(RoxWord.fromLiteral(memoryAddress+index), RoxByte.fromLiteral(secondValue))
         
         and:
         processor.step(3)
     
         then:
-        expectedAccumulator == registers.getRegister(Registers.Register.ACCUMULATOR)
-        program.length == registers.getPC()
+        registers.getRegister(Registers.Register.ACCUMULATOR) == expectedAccumulator
+        registers.getPC() == program.length
 		testFlags(Z,N,C,V)
     
         where:
@@ -553,15 +556,15 @@ class OpCodeSpec extends Specification {
         Program program = loadMemoryWithProgram(LDA_I, firstValue, ADC_Z, 0x30)
 
         and:
-        memory.setByteAt(0x30, secondValue)
+        memory.setByteAt(RoxWord.fromLiteral(0x30), RoxByte.fromLiteral(secondValue))
     
         and:
         processor.step(2)
         
     
         then:
-        expectedAccumulator == registers.getRegister(Registers.Register.ACCUMULATOR)
-        program.length == registers.getPC()
+        registers.getRegister(Registers.Register.ACCUMULATOR) == expectedAccumulator
+        registers.getPC() == program.length
 		testFlags(Z,N,C,V)
     
         where:
@@ -574,15 +577,15 @@ class OpCodeSpec extends Specification {
         Program program = loadMemoryWithProgram(LDA_I, firstValue, ADC_ABS, 0x1, 0x2C)
 
         and:
-        memory.setByteAt(300, secondValue)
+        memory.setByteAt(RoxWord.fromLiteral(300), RoxByte.fromLiteral(secondValue))
     
         and:
         processor.step(2)
         
     
         then:
-        expectedAccumulator == registers.getRegister(Registers.Register.ACCUMULATOR)
-        program.length == registers.getPC()
+        registers.getRegister(Registers.Register.ACCUMULATOR) == expectedAccumulator
+        registers.getPC() == program.length
 		testFlags(Z,N,C,V)
     
         where:
@@ -597,14 +600,14 @@ class OpCodeSpec extends Specification {
                                                                  ADC_ABS_IX, 0x1, 0x2C)
 
         and:
-        memory.setByteAt(300 + index, secondValue)
+        memory.setByteAt(RoxWord.fromLiteral(300 + index), RoxByte.fromLiteral(secondValue))
     
         and:
         processor.step(3)
     
         then:
-        expectedAccumulator == registers.getRegister(Registers.Register.ACCUMULATOR)
-        program.length == registers.getPC()
+        registers.getRegister(Registers.Register.ACCUMULATOR) == expectedAccumulator
+        registers.getPC() == program.length
 		testFlags(Z,N,C,V)
     
         where:
@@ -619,14 +622,14 @@ class OpCodeSpec extends Specification {
                                                 ADC_ABS_IY, 0x1, 0x2C)
         
         and:
-        memory.setByteAt(300 + index, secondValue)
+        memory.setByteAt(RoxWord.fromLiteral(300 + index), RoxByte.fromLiteral(secondValue))
     
         and:
         processor.step(3)
 
         then:
-        expectedAccumulator == registers.getRegister(Registers.Register.ACCUMULATOR)
-        program.length == registers.getPC()
+        registers.getRegister(Registers.Register.ACCUMULATOR) == expectedAccumulator
+        registers.getPC() == program.length
 		testFlags(Z,N,C,V)
     
         where:
@@ -651,8 +654,8 @@ class OpCodeSpec extends Specification {
         processor.step(9)
 
         then:
-        expectedAccumulator == registers.getRegister(Registers.Register.ACCUMULATOR)
-        program.length == registers.getPC()
+        registers.getRegister(Registers.Register.ACCUMULATOR) == expectedAccumulator
+        registers.getPC() == program.length
 		testFlags(Z,N,C,V)
     
         where:
@@ -676,8 +679,8 @@ class OpCodeSpec extends Specification {
         processor.step(9)
 
         then:
-        expectedAccumulator == registers.getRegister(Registers.Register.ACCUMULATOR)
-        program.length == registers.getPC()
+        registers.getRegister(Registers.Register.ACCUMULATOR) == expectedAccumulator
+        registers.getPC() == program.length
 		testFlags(Z,N,C,V)
     
         where:
@@ -701,10 +704,10 @@ class OpCodeSpec extends Specification {
         processor.step(6)
 
         then:
-        expectedAccumulator == registers.getRegister(Registers.Register.ACCUMULATOR)
-        program.length == registers.getPC()
+        registers.getRegister(Registers.Register.ACCUMULATOR) == expectedAccumulator
+        registers.getPC() == program.length
 		testFlags(Z,N,C,O)
-        storedValue == memory.getByte(40)
+        memory.getByte(RoxWord.fromLiteral(40)) == storedValue
 
         where:
         lowFirstByte | lowSecondByte | highFirstByte | highSecondByte | expectedAccumulator         | storedValue | Z     | N     | C     | O     | Expected
@@ -724,8 +727,8 @@ class OpCodeSpec extends Specification {
         processor.step(2)
 
         then:
-        expectedAccumulator == registers.getRegister(Registers.Register.ACCUMULATOR)
-        program.length == registers.getPC()
+        registers.getRegister(Registers.Register.ACCUMULATOR) == expectedAccumulator
+        registers.getPC() == program.length
 		testFlags(Z,N)
     
         where:
@@ -748,8 +751,8 @@ class OpCodeSpec extends Specification {
         processor.step(4)
 
         then:
-        expectedAccumulator == registers.getRegister(Registers.Register.ACCUMULATOR)
-        program.length == registers.getPC()
+        registers.getRegister(Registers.Register.ACCUMULATOR) == expectedAccumulator
+        registers.getPC() == program.length
 		testFlags(Z,N)
     
         where:
@@ -773,8 +776,8 @@ class OpCodeSpec extends Specification {
         processor.step(5)
 
         then:
-        expectedAccumulator == registers.getRegister(Registers.Register.ACCUMULATOR)
-        program.length == registers.getPC()
+        registers.getRegister(Registers.Register.ACCUMULATOR) == expectedAccumulator
+        registers.getPC() == program.length
 		testFlags(Z,N)
     
         where:
@@ -797,8 +800,8 @@ class OpCodeSpec extends Specification {
         processor.step(4)
 
         then:
-        expectedAccumulator == registers.getRegister(Registers.Register.ACCUMULATOR)
-        program.length == registers.getPC()
+        registers.getRegister(Registers.Register.ACCUMULATOR) == expectedAccumulator
+        registers.getPC() == program.length
 		testFlags(Z,N)
     
         where:
@@ -822,8 +825,8 @@ class OpCodeSpec extends Specification {
         processor.step(5)
 
         then:
-        expectedAccumulator == registers.getRegister(Registers.Register.ACCUMULATOR)
-        program.length == registers.getPC()
+        registers.getRegister(Registers.Register.ACCUMULATOR) == expectedAccumulator
+        registers.getPC() == program.length
 		testFlags(Z,N)
     
         where:
@@ -847,8 +850,8 @@ class OpCodeSpec extends Specification {
         processor.step(5)
         
         then:
-        expectedAccumulator == registers.getRegister(Registers.Register.ACCUMULATOR)
-        program.length == registers.getPC()
+        registers.getRegister(Registers.Register.ACCUMULATOR) == expectedAccumulator
+        registers.getPC() == program.length
 		testFlags(Z,N)
     
         where:
@@ -876,8 +879,8 @@ class OpCodeSpec extends Specification {
         processor.step(9)
 
         then:
-        expectedAccumulator == registers.getRegister(Registers.Register.ACCUMULATOR)
-        program.length == registers.getPC()
+        registers.getRegister(Registers.Register.ACCUMULATOR) == expectedAccumulator
+        registers.getPC() == program.length
 		testFlags(Z,N)
     
         where:
@@ -905,7 +908,7 @@ class OpCodeSpec extends Specification {
         processor.step(9)
 
         then:
-        expectedAccumulator == registers.getRegister(Registers.Register.ACCUMULATOR)
+        registers.getRegister(Registers.Register.ACCUMULATOR) == expectedAccumulator
     
         where:
     
@@ -925,8 +928,8 @@ class OpCodeSpec extends Specification {
         processor.step(2)
         
         then:
-        expectedAccumulator == registers.getRegister(Registers.Register.ACCUMULATOR)
-        program.length == registers.getPC()
+        registers.getRegister(Registers.Register.ACCUMULATOR) == expectedAccumulator
+        registers.getPC() == program.length
 		testFlags(Z,N)
     
         where:
@@ -950,8 +953,8 @@ class OpCodeSpec extends Specification {
         processor.step(4)
         
         then:
-        expectedAccumulator == registers.getRegister(Registers.Register.ACCUMULATOR)
-        program.length == registers.getPC()
+        registers.getRegister(Registers.Register.ACCUMULATOR) == expectedAccumulator
+        registers.getPC() == program.length
 		testFlags(Z,N)
     
         where:
@@ -976,8 +979,8 @@ class OpCodeSpec extends Specification {
         processor.step(5)
         
         then:
-        expectedAccumulator == registers.getRegister(Registers.Register.ACCUMULATOR)
-        program.length == registers.getPC()
+        registers.getRegister(Registers.Register.ACCUMULATOR) == expectedAccumulator
+        registers.getPC() == program.length
 		testFlags(Z,N)
     
         where:
@@ -1001,8 +1004,8 @@ class OpCodeSpec extends Specification {
         processor.step(4)
         
         then:
-        expectedAccumulator == registers.getRegister(Registers.Register.ACCUMULATOR)
-        program.length == registers.getPC()
+        registers.getRegister(Registers.Register.ACCUMULATOR) == expectedAccumulator
+        registers.getPC() == program.length
 		testFlags(Z,N)
     
         where:
@@ -1027,8 +1030,8 @@ class OpCodeSpec extends Specification {
         processor.step(5)
         
         then:
-        expectedAccumulator == registers.getRegister(Registers.Register.ACCUMULATOR)
-        program.length == registers.getPC()
+        registers.getRegister(Registers.Register.ACCUMULATOR) == expectedAccumulator
+        registers.getPC() == program.length
 		testFlags(Z,N)
     
         where:
@@ -1054,8 +1057,8 @@ class OpCodeSpec extends Specification {
         
     
         then:
-        expectedAccumulator == registers.getRegister(Registers.Register.ACCUMULATOR)
-        program.length == registers.getPC()
+        registers.getRegister(Registers.Register.ACCUMULATOR) == expectedAccumulator
+        registers.getPC() == program.length
 		testFlags(Z,N)
     
         where:
@@ -1084,8 +1087,8 @@ class OpCodeSpec extends Specification {
         processor.step(9)
         
         then:
-        expectedAccumulator == registers.getRegister(Registers.Register.ACCUMULATOR)
-        program.length == registers.getPC()
+        registers.getRegister(Registers.Register.ACCUMULATOR) == expectedAccumulator
+        registers.getPC() == program.length
 		testFlags(Z,N)
     
         where:
@@ -1115,7 +1118,7 @@ class OpCodeSpec extends Specification {
         processor.step(9)
         
         then:
-        expectedAccumulator == registers.getRegister(Registers.Register.ACCUMULATOR)
+        registers.getRegister(Registers.Register.ACCUMULATOR) == expectedAccumulator
     
         where:
         pointerHi | pointerLo | firstValue | index | secondValue | expectedAccumulator | Z      | N     | Expected
@@ -1135,8 +1138,8 @@ class OpCodeSpec extends Specification {
         processor.step(2)
 
         then:
-        expectedAccumulator == registers.getRegister(Registers.Register.ACCUMULATOR)
-        program.length == registers.getPC()
+        registers.getRegister(Registers.Register.ACCUMULATOR) == expectedAccumulator
+        registers.getPC() == program.length
 		testFlags(Z,N)
     
         where:
@@ -1158,8 +1161,8 @@ class OpCodeSpec extends Specification {
         processor.step(4)
 
         then:
-        expectedAccumulator == registers.getRegister(Registers.Register.ACCUMULATOR)
-        program.length == registers.getPC()
+        registers.getRegister(Registers.Register.ACCUMULATOR) == expectedAccumulator
+        registers.getPC() == program.length
 		testFlags(Z,N)
     
         where:
@@ -1182,8 +1185,8 @@ class OpCodeSpec extends Specification {
         processor.step(5)
 
         then:
-        expectedAccumulator == registers.getRegister(Registers.Register.ACCUMULATOR)
-        program.length == registers.getPC()
+        registers.getRegister(Registers.Register.ACCUMULATOR) == expectedAccumulator
+        registers.getPC() == program.length
 		testFlags(Z,N)
     
         where:
@@ -1205,8 +1208,8 @@ class OpCodeSpec extends Specification {
         processor.step(4)
 
         then:
-        expectedAccumulator == registers.getRegister(Registers.Register.ACCUMULATOR)
-        program.length == registers.getPC()
+        registers.getRegister(Registers.Register.ACCUMULATOR) == expectedAccumulator
+        registers.getPC() == program.length
 		testFlags(Z,N)
     
         where:
@@ -1229,8 +1232,8 @@ class OpCodeSpec extends Specification {
         processor.step(5)
 
         then:
-        expectedAccumulator == registers.getRegister(Registers.Register.ACCUMULATOR)
-        program.length == registers.getPC()
+        registers.getRegister(Registers.Register.ACCUMULATOR) == expectedAccumulator
+        registers.getPC() == program.length
 		testFlags(Z,N)
     
         where:
@@ -1253,8 +1256,8 @@ class OpCodeSpec extends Specification {
         processor.step(5)
 
         then:
-        expectedAccumulator == registers.getRegister(Registers.Register.ACCUMULATOR)
-        program.length == registers.getPC()
+        registers.getRegister(Registers.Register.ACCUMULATOR) == expectedAccumulator
+        registers.getPC() == program.length
 		testFlags(Z,N)
     
         where:
@@ -1281,8 +1284,8 @@ class OpCodeSpec extends Specification {
         processor.step(9)
 
         then:
-        expectedAccumulator == registers.getRegister(Registers.Register.ACCUMULATOR)
-        program.length == registers.getPC()
+        registers.getRegister(Registers.Register.ACCUMULATOR) == expectedAccumulator
+        registers.getPC() == program.length
 		testFlags(Z,N)
     
         where:
@@ -1311,7 +1314,7 @@ class OpCodeSpec extends Specification {
         
     
         then:
-        expectedAccumulator == registers.getRegister(Registers.Register.ACCUMULATOR)
+        registers.getRegister(Registers.Register.ACCUMULATOR) == expectedAccumulator
     
         where:
         pointerHi | pointerLo | index | firstValue | secondValue | expectedAccumulator | Z      | N     | Expected
@@ -1334,9 +1337,12 @@ class OpCodeSpec extends Specification {
     
         and:
         processor.step(7)
-    
+
+        and:
+        RoxWord finalLocation = RoxWord.fromLiteral((locationHi << 8) | locationLo)
+
         then: 'The value has been stored at the expected address'
-        memory.getByte( (locationHi << 8) | locationLo ) == value
+        memory.getByte(finalLocation) == value
     
         where:
         locationHi | locationLo | value | index | Expected
@@ -1362,10 +1368,13 @@ class OpCodeSpec extends Specification {
         and:
         processor.step(7)
 
-        then: 'The value has been stored at the expected address'
+        and:
         int address = (locationHi << 8) | locationLo
-        int yIndex = registers.getRegister(Registers.Register.Y_INDEX)
-        memory.getByte( address + yIndex )  == value
+        RoxByte yIndex = registers.getRegister(Registers.Register.Y_INDEX)
+        RoxWord finalLocation = RoxWord.fromLiteral(address + yIndex.getRawValue())
+
+        then: 'The value has been stored at the expected address'
+        memory.getByte(finalLocation) == value
     
         where:
         locationHi | locationLo | value | index | Expected
@@ -1386,7 +1395,7 @@ class OpCodeSpec extends Specification {
 
         then:
         registers.getRegister(Registers.Register.ACCUMULATOR) == expectedAccumulator
-        program.length == registers.getPC()
+        registers.getPC() == program.length
 		testFlags(Z,N,C,V)
     
         where:
@@ -1406,8 +1415,8 @@ class OpCodeSpec extends Specification {
         processor.step(5)
 
         then:
-        expectedAccumulator == registers.getRegister(Registers.Register.ACCUMULATOR)
-        program.length == registers.getPC()
+        registers.getRegister(Registers.Register.ACCUMULATOR) == expectedAccumulator
+        registers.getPC() == program.length
 		testFlags(Z,N,C,V)
     
         where:
@@ -1428,8 +1437,8 @@ class OpCodeSpec extends Specification {
         processor.step(6)
     
         then:
-        expectedAccumulator == registers.getRegister(Registers.Register.ACCUMULATOR)
-        program.length == registers.getPC()
+        registers.getRegister(Registers.Register.ACCUMULATOR) == expectedAccumulator
+        registers.getPC() == program.length
 		testFlags(Z,N,C,V)
     
         where:
@@ -1449,8 +1458,8 @@ class OpCodeSpec extends Specification {
         processor.step(5)
 
         then:
-        expectedAccumulator == registers.getRegister(Registers.Register.ACCUMULATOR)
-        program.length == registers.getPC()
+        registers.getRegister(Registers.Register.ACCUMULATOR) == expectedAccumulator
+        registers.getPC() == program.length
 		testFlags(Z,N,C,V)
     
         where:
@@ -1471,8 +1480,8 @@ class OpCodeSpec extends Specification {
         processor.step(6)
 
         then:
-        expectedAccumulator == registers.getRegister(Registers.Register.ACCUMULATOR)
-        program.length == registers.getPC()
+        registers.getRegister(Registers.Register.ACCUMULATOR) == expectedAccumulator
+        registers.getPC() == program.length
 		testFlags(Z,N,C,V)
     
         where:
@@ -1493,8 +1502,8 @@ class OpCodeSpec extends Specification {
         processor.step(6)
 
         then:
-        expectedAccumulator == registers.getRegister(Registers.Register.ACCUMULATOR)
-        program.length == registers.getPC()
+        registers.getRegister(Registers.Register.ACCUMULATOR) == expectedAccumulator
+        registers.getPC() == program.length
 		testFlags(Z,N,C,V)
     
         where:
@@ -1519,8 +1528,8 @@ class OpCodeSpec extends Specification {
         processor.step(10)
 
         then:
-        expectedAccumulator == registers.getRegister(Registers.Register.ACCUMULATOR)
-        program.length == registers.getPC()
+        registers.getRegister(Registers.Register.ACCUMULATOR) == expectedAccumulator
+        registers.getPC() == program.length
 		testFlags(Z,N,C,V)
     
         where:
@@ -1546,7 +1555,7 @@ class OpCodeSpec extends Specification {
         processor.step(10)
         
         then:
-        expectedAccumulator == registers.getRegister(Registers.Register.ACCUMULATOR)
+        registers.getRegister(Registers.Register.ACCUMULATOR) == expectedAccumulator
 		testFlags(Z,N,C,V)
     
         where:
@@ -1562,8 +1571,8 @@ class OpCodeSpec extends Specification {
         processor.step(2)
     
         then:
-        expectedX == registers.getRegister(Registers.Register.X_INDEX)
-        program.length == registers.getPC()
+        registers.getRegister(Registers.Register.X_INDEX) == expectedX
+        registers.getPC() == program.length
 		testFlags(Z,N)
     
         where:
@@ -1582,10 +1591,10 @@ class OpCodeSpec extends Specification {
         
         and:
         processor.step(3)
-        
+
         then:
-        expectedMem == memory.getByte(0x20)
-        program.length == registers.getPC()
+        memory.getByte(RoxWord.fromLiteral(0x20)) == expectedMem
+        registers.getPC() == program.length
 		testFlags(Z,N)
     
         where:
@@ -1606,9 +1615,12 @@ class OpCodeSpec extends Specification {
         and:
         processor.step(4)
 
+        and:
+        RoxWord finalLocation = RoxWord.fromLiteral(0x20 + index)
+
         then:
-        expectedMem == memory.getByte(0x20 + index)
-        program.length == registers.getPC()
+        memory.getByte(finalLocation) == expectedMem
+        registers.getPC() == program.length
 		testFlags(Z,N)
     
         where:
@@ -1629,8 +1641,8 @@ class OpCodeSpec extends Specification {
         processor.step(3)
 
         then:
-        expectedMem == memory.getByte(0x0120)
-        program.length == registers.getPC()
+        memory.getByte(RoxWord.fromLiteral(0x0120)) == expectedMem
+        registers.getPC() == program.length
 		testFlags(Z,N)
     
         where:
@@ -1650,10 +1662,13 @@ class OpCodeSpec extends Specification {
         
         and:
         processor.step(4)
-        
+
+        and:
+        RoxWord finalLocation = RoxWord.fromLiteral(0x0120 + index)
+
         then:
-        expectedMem == memory.getByte(0x0120 + index)
-        program.length == registers.getPC()
+        memory.getByte(finalLocation) == expectedMem
+        registers.getPC() == program.length
 		testFlags(Z,N)
     
         where:
@@ -1674,8 +1689,8 @@ class OpCodeSpec extends Specification {
         processor.step(3)
         
         then:
-        expectedMem == memory.getByte(0x20)
-        program.length == registers.getPC()
+        memory.getByte(RoxWord.fromLiteral(0x20)) == expectedMem
+        registers.getPC() == program.length
 		testFlags(Z,N)
     
         where:
@@ -1695,10 +1710,13 @@ class OpCodeSpec extends Specification {
         
         and:
         processor.step(4)
-        
+
+        and:
+        RoxWord finalLocation = RoxWord.fromLiteral(loc + index)
+
         then:
-        expectedMem == memory.getByte(loc + index)
-        program.length == registers.getPC()
+        memory.getByte(finalLocation) == expectedMem
+        registers.getPC() == program.length
 		testFlags(Z,N)
     
         where:
@@ -1719,8 +1737,8 @@ class OpCodeSpec extends Specification {
         processor.step(3)
         
         then:
-        expectedMem == memory.getByte(0x0120)
-        program.length == registers.getPC()
+        memory.getByte(RoxWord.fromLiteral(0x0120)) == expectedMem
+        registers.getPC() == program.length
 		testFlags(Z,N)
     
         where:
@@ -1740,10 +1758,13 @@ class OpCodeSpec extends Specification {
         
         and:
         processor.step(4)
-        
+
+        and:
+        RoxWord finalLocation = RoxWord.fromLiteral(0x0120 + index)
+
         then:
-        expectedMem == memory.getByte(0x0120 + index)
-        program.length == registers.getPC()
+        memory.getByte(finalLocation) == expectedMem
+        registers.getPC() == program.length
 		testFlags(Z,N)
     
         where:
@@ -1762,8 +1783,8 @@ class OpCodeSpec extends Specification {
         processor.step(2)
         
         then:
-        expectedX == registers.getRegister(Registers.Register.X_INDEX)
-        program.length == registers.getPC()
+        registers.getRegister(Registers.Register.X_INDEX) == expectedX
+        registers.getPC() == program.length
 		testFlags(Z,N)
     
         where:
@@ -1782,8 +1803,8 @@ class OpCodeSpec extends Specification {
         processor.step(2)
         
         then:
-        expectedX == registers.getRegister(Registers.Register.Y_INDEX)
-        program.length == registers.getPC()
+        registers.getRegister(Registers.Register.Y_INDEX) == expectedX
+        registers.getPC() == program.length
 		testFlags(Z,N)
     
         where:
@@ -1802,8 +1823,8 @@ class OpCodeSpec extends Specification {
         processor.step(2)
         
         then:
-        expectedY == registers.getRegister(Registers.Register.Y_INDEX)
-        program.length == registers.getPC()
+        registers.getRegister(Registers.Register.Y_INDEX) == expectedY
+        registers.getPC() == program.length
 		testFlags(Z,N)
     
         where:
@@ -1827,10 +1848,10 @@ class OpCodeSpec extends Specification {
         processor.step(2)
     
         then:
-        program.length == registers.getPC()
-        expectedSP == registers.getRegister(Registers.Register.STACK_POINTER_HI)
-        expectedAccumulator == registers.getRegister(Registers.Register.ACCUMULATOR)
-        stackItem == memory.getByte(0x01FF)
+        registers.getPC() == program.length
+        registers.getRegister(Registers.Register.STACK_POINTER_HI) == expectedSP
+        registers.getRegister(Registers.Register.ACCUMULATOR) == expectedAccumulator
+        memory.getByte(RoxWord.fromLiteral(0x01FF)) == stackItem
     
         where:
         firstValue | expectedSP | stackItem  | expectedAccumulator  | Z     | N     | Expected
@@ -1848,8 +1869,8 @@ class OpCodeSpec extends Specification {
         processor.step(2)
     
         then:
-        program.length == registers.getPC()
-        expectedAccumulator == registers.getRegister(Registers.Register.ACCUMULATOR)
+        registers.getPC() == program.length
+        registers.getRegister(Registers.Register.ACCUMULATOR) == expectedAccumulator
 		testFlags(Z,N,C)
     
         where:
@@ -1867,8 +1888,8 @@ class OpCodeSpec extends Specification {
         processor.step(3)
     
         then:
-        program.length == registers.getPC()
-        expectedMem == memory.getByte(0x20)
+        registers.getPC() == program.length
+        memory.getByte(RoxWord.fromLiteral(0x20)) == expectedMem
 		testFlags(Z,N,C)
     
         where:
@@ -1886,8 +1907,8 @@ class OpCodeSpec extends Specification {
         processor.step(3)
     
         then:
-        program.length == registers.getPC()
-        expectedMem == memory.getByte(0x120)
+        registers.getPC() == program.length
+        memory.getByte(RoxWord.fromLiteral(0x120)) == expectedMem
 		testFlags(Z,N,C)
     
         where:
@@ -1904,10 +1925,13 @@ class OpCodeSpec extends Specification {
 
         and:
         processor.step(4)
-    
+
+        and:
+        RoxWord finalLocation = RoxWord.fromLiteral(0x20 + index)
+
         then:
-        program.length == registers.getPC()
-        expectedMem == memory.getByte(0x20 + index)
+        registers.getPC() == program.length
+        memory.getByte(finalLocation) == expectedMem
 		testFlags(Z,N,C)
     
         where:
@@ -1924,10 +1948,13 @@ class OpCodeSpec extends Specification {
         
         and:
         processor.step(4)
-    
+
+        and:
+        RoxWord finalLocation = RoxWord.fromLiteral(0x120 + index)
+
         then:
-        program.length == registers.getPC()
-        expectedMem == memory.getByte(0x120 + index)
+        registers.getPC() == program.length
+        memory.getByte(finalLocation) == expectedMem
 		testFlags(Z,N,C)
     
         where:
@@ -1943,8 +1970,8 @@ class OpCodeSpec extends Specification {
         processor.step(2)
     
         then:
-        program.length == registers.getPC()
-        expectedAccumulator == registers.getRegister(Registers.Register.ACCUMULATOR)
+        registers.getPC() == program.length
+        registers.getRegister(Registers.Register.ACCUMULATOR) == expectedAccumulator
 		testFlags(Z,N,C)
     
         where:
@@ -1962,8 +1989,8 @@ class OpCodeSpec extends Specification {
         processor.step(3)
     
         then:
-        program.length == registers.getPC()
-        expectedMem == memory.getByte(0x20)
+        registers.getPC() == program.length
+        memory.getByte(RoxWord.fromLiteral(0x20)) == expectedMem
 		testFlags(Z,N,C)
     
         where:
@@ -1979,10 +2006,13 @@ class OpCodeSpec extends Specification {
                                                 LSR_Z_IX, 0x20)
         and:
         processor.step(4)
-    
+
+        and:
+        RoxWord finalLocation = RoxWord.fromLiteral(0x20 + index)
+
         then:
-        program.length == registers.getPC()
-        expectedMem == memory.getByte(0x20 + index)
+        registers.getPC() == program.length
+        memory.getByte(finalLocation) == expectedMem
 		testFlags(Z,N,C)
     
         where:
@@ -2000,8 +2030,8 @@ class OpCodeSpec extends Specification {
         processor.step(3)
     
         then:
-        program.length == registers.getPC()
-        expectedMem == memory.getByte(0x220)
+        registers.getPC() == program.length
+        memory.getByte(RoxWord.fromLiteral(0x220)) == expectedMem
 		testFlags(Z,N,C)
     
         where:
@@ -2018,10 +2048,13 @@ class OpCodeSpec extends Specification {
 
         and:
         processor.step(4)
-    
+
+        and:
+        RoxWord finalLocation = RoxWord.fromLiteral(0x220 + index)
+
         then:
-        program.length == registers.getPC()
-        expectedMem == memory.getByte(0x220 + index)
+        registers.getPC() == program.length
+        memory.getByte(finalLocation) == expectedMem
 		testFlags(Z,N,C)
     
         where:
@@ -2037,7 +2070,7 @@ class OpCodeSpec extends Specification {
         processor.step(instructions)
     
         then:
-        expectedPC == registers.getPC()
+        registers.getPC() == expectedPC
     
         where:
         jmpLocationHi | jmpLocationLow | instructions | expectedPC | expected
@@ -2068,7 +2101,7 @@ class OpCodeSpec extends Specification {
         processor.step(instructions)
     
         then:
-        expectedPC == registers.getPC()
+        registers.getPC() == expectedPC
     
         where:
         jmpLocationHi | jmpLocationLow | instructions | expectedPC | expected
@@ -2089,7 +2122,7 @@ class OpCodeSpec extends Specification {
         processor.step(instructions)
     
         then:
-        expectedPC == registers.getPC()
+        registers.getPC() == expectedPC
     
         where:
         preInstr | jmpSteps   | instructions | expectedPC | expected
@@ -2109,7 +2142,7 @@ class OpCodeSpec extends Specification {
         processor.step(instructions)
     
         then:
-        expectedPC == registers.getPC()
+        registers.getPC() == expectedPC
     
         where:
         preInstr | jmpSteps   | instructions | expectedPC | expected
@@ -2129,8 +2162,8 @@ class OpCodeSpec extends Specification {
         processor.step(3)
     
         then:
-        program.length == registers.getPC()
-        expectedAccumulator == registers.getRegister(Registers.Register.ACCUMULATOR)
+        registers.getPC() == program.length
+        registers.getRegister(Registers.Register.ACCUMULATOR) == expectedAccumulator
 		testFlags(Z,N,C)
     
         where:
@@ -2149,8 +2182,8 @@ class OpCodeSpec extends Specification {
         processor.step(4)
     
         then:
-        program.length == registers.getPC()
-        expectedMem == memory.getByte(0x20)
+        registers.getPC() == program.length
+        memory.getByte(RoxWord.fromLiteral(0x20)) == expectedMem
 		testFlags(Z,N,C)
     
         where:
@@ -2168,10 +2201,13 @@ class OpCodeSpec extends Specification {
 
         and:
         processor.step(5)
-    
+
+        and:
+        RoxWord finalLocation = RoxWord.fromLiteral(0x20 + index)
+
         then:
-        program.length == registers.getPC()
-        expectedMem == memory.getByte(0x20 + index)
+        registers.getPC() == program.length
+        memory.getByte(finalLocation) == expectedMem
 		testFlags(Z,N,C)
     
         where:
@@ -2188,10 +2224,13 @@ class OpCodeSpec extends Specification {
 
         and:
         processor.step(4)
-    
+
+        and:
+        RoxWord finalLocation = RoxWord.fromLiteral(0x2007)
+
         then:
-        program.length == registers.getPC()
-        expectedMem == memory.getByte( 0x2007 )
+        registers.getPC() == program.length
+        memory.getByte(finalLocation) == expectedMem
 		testFlags(Z,N,C)
     
         where:
@@ -2209,10 +2248,13 @@ class OpCodeSpec extends Specification {
 
         and:
         processor.step(5)
-    
+
+        and:
+        RoxWord finalLocation = RoxWord.fromLiteral(0x2007 + index)
+
         then:
-        program.length == registers.getPC()
-        expectedMem == memory.getByte( 0x2007 + index)
+        registers.getPC() == program.length
+        memory.getByte( finalLocation) == expectedMem
 		testFlags(Z,N,C)
     
         where:
@@ -2230,8 +2272,8 @@ class OpCodeSpec extends Specification {
         processor.step(3)
     
         then:
-        program.length == registers.getPC()
-        expectedAccumulator == registers.getRegister(Registers.Register.ACCUMULATOR)
+        registers.getPC() == program.length
+        registers.getRegister(Registers.Register.ACCUMULATOR) == expectedAccumulator
 		testFlags(Z,N,C)
     
         where:
@@ -2261,7 +2303,7 @@ class OpCodeSpec extends Specification {
         processor.step(instructions)
     
         then:
-        expectedPC == registers.getPC()
+        registers.getPC() == expectedPC
     
         where:
         accumulatorValue | jumpSteps  | instructions | expectedPC | expected
@@ -2282,7 +2324,7 @@ class OpCodeSpec extends Specification {
         processor.step(instructions)
     
         then:
-        expectedPC == registers.getPC()
+        registers.getPC() == expectedPC
     
         where:
         accumulatorValue | jumpSteps  | instructions | expectedPC | expected
@@ -2307,7 +2349,7 @@ class OpCodeSpec extends Specification {
         processor.step(instructions)
     
         then:
-        expectedPC == registers.getPC()
+        registers.getPC() == expectedPC
     
         where:
         accumulatorValue | jumpSteps  | instructions | expectedPC | expected
@@ -2332,7 +2374,7 @@ class OpCodeSpec extends Specification {
         processor.step(instructions)
     
         then:
-        expectedPC == registers.getPC()
+        registers.getPC() == expectedPC
     
         where:
         accumulatorValue | jumpSteps  | instructions | expectedPC | expected
@@ -2358,7 +2400,7 @@ class OpCodeSpec extends Specification {
         processor.step(instructions)
     
         then:
-        expectedPC == registers.getPC()
+        registers.getPC() == expectedPC
     
         where:
         accumulatorValue | addedValue | jumpSteps  | instructions | expectedPC | expected
@@ -2384,7 +2426,7 @@ class OpCodeSpec extends Specification {
         processor.step(instructions)
     
         then:
-        expectedPC == registers.getPC()
+        registers.getPC() == expectedPC
     
         where:
         accumulatorValue | addedValue | jumpSteps  | instructions | expectedPC | expected
@@ -2402,9 +2444,9 @@ class OpCodeSpec extends Specification {
         processor.step(2)
     
         then:
-        program.length == registers.getPC()
-        expectedAccumulator == registers.getRegister(Registers.Register.ACCUMULATOR)
-        X == registers.getRegister(Registers.Register.X_INDEX)
+        registers.getPC() == program.length
+        registers.getRegister(Registers.Register.ACCUMULATOR) == expectedAccumulator
+        registers.getRegister(Registers.Register.X_INDEX) == X
 		testFlags(Z,N)
     
         where:
@@ -2423,9 +2465,9 @@ class OpCodeSpec extends Specification {
         processor.step(2)
     
         then:
-        program.length == registers.getPC()
-        expectedAccumulator == registers.getRegister(Registers.Register.ACCUMULATOR)
-        Y == registers.getRegister(Registers.Register.Y_INDEX)
+        registers.getPC() == program.length
+        registers.getRegister(Registers.Register.ACCUMULATOR) == expectedAccumulator
+        registers.getRegister(Registers.Register.Y_INDEX) == Y
 		testFlags(Z,N)
     
         where:
@@ -2444,9 +2486,9 @@ class OpCodeSpec extends Specification {
         processor.step(2)
     
         then:
-        program.length == registers.getPC()
-        expectedAccumulator == registers.getRegister(Registers.Register.ACCUMULATOR)
-        Y == registers.getRegister(Registers.Register.Y_INDEX)
+        registers.getPC() == program.length
+        registers.getRegister(Registers.Register.ACCUMULATOR) == expectedAccumulator
+        registers.getRegister(Registers.Register.Y_INDEX) == Y
 		testFlags(Z,N)
     
         where:
@@ -2465,9 +2507,9 @@ class OpCodeSpec extends Specification {
         processor.step(2)
     
         then:
-        program.length == registers.getPC()
-        expectedAccumulator == registers.getRegister(Registers.Register.ACCUMULATOR)
-        X == registers.getRegister(Registers.Register.X_INDEX)
+        registers.getPC() == program.length
+        registers.getRegister(Registers.Register.ACCUMULATOR) == expectedAccumulator
+        registers.getRegister(Registers.Register.X_INDEX) == X
 		testFlags(Z,N)
     
         where:
@@ -2483,13 +2525,13 @@ class OpCodeSpec extends Specification {
         Program program = loadMemoryWithProgram(TSX)
 
         and:
-        registers.setRegister(Registers.Register.STACK_POINTER_HI, SPValue)
+        registers.setRegister(Registers.Register.STACK_POINTER_HI, RoxByte.fromLiteral(SPValue))
         processor.step()
     
         then:
-        program.length == registers.getPC()
-        X == registers.getRegister(Registers.Register.X_INDEX)
-        expectedSP == registers.getRegister(Registers.Register.STACK_POINTER_HI)
+        registers.getPC() == program.length
+        registers.getRegister(Registers.Register.X_INDEX) == X
+        registers.getRegister(Registers.Register.STACK_POINTER_HI) == expectedSP
 		testFlags(Z,N)
     
         where:
@@ -2511,7 +2553,7 @@ class OpCodeSpec extends Specification {
         processor.step(4)
     
         then:
-        program.length == registers.getPC()
+        registers.getPC() == program.length
 		testFlags(Z,N, registers.getFlag(Registers.Flag.CARRY), O)
     
         where:
@@ -2535,7 +2577,7 @@ class OpCodeSpec extends Specification {
         processor.step(4)
     
         then:
-        program.length == registers.getPC()
+        registers.getPC() == program.length
 		testFlags(Z,N, registers.getFlag(Registers.Flag.CARRY), O)
     
         where:
@@ -2556,10 +2598,13 @@ class OpCodeSpec extends Specification {
 
         and:
         processor.step(3)
-    
+
+        and:
+        RoxWord finalLocation = RoxWord.fromLiteral(location+index)
+
         then:
-        program.length == registers.getPC()
-        value == memory.getByte(location+index)
+        registers.getPC() == program.length
+        memory.getByte(finalLocation) == value
     
         where:
         location | index | value | expected
@@ -2577,10 +2622,13 @@ class OpCodeSpec extends Specification {
 
         and:
         processor.step(2)
-    
+
+        and:
+        RoxWord finalLocation = RoxWord.fromLiteral((locationHi << 8 | locationLo))
+
         then:
-        program.length == registers.getPC()
-        value == memory.getByte((locationHi << 8 | locationLo))
+        registers.getPC() == program.length
+        memory.getByte(finalLocation) == value
     
         where:
         locationHi | locationLo | value | expected
@@ -2597,10 +2645,13 @@ class OpCodeSpec extends Specification {
 
         and:
         processor.step(3)
-    
+
+        and:
+        RoxWord finalLocation = RoxWord.fromLiteral((locationHi << 8 | locationLo) + index)
+
         then:
-        program.length == registers.getPC()
-        value == memory.getByte((locationHi << 8 | locationLo) + index)
+        registers.getPC() == program.length
+        memory.getByte(finalLocation) == value
     
         where:
         locationHi | locationLo | index | value | expected
@@ -2619,10 +2670,13 @@ class OpCodeSpec extends Specification {
 
         and:
         processor.step(3)
-    
+
+        and:
+        RoxWord finalLocation = RoxWord.fromLiteral((locationHi << 8 | locationLo) + index)
+
         then:
-        program.length == registers.getPC()
-        value == memory.getByte((locationHi << 8 | locationLo) + index)
+        registers.getPC() == program.length
+        memory.getByte(finalLocation) == value
     
         where:
         locationHi | locationLo | index | value | expected
@@ -2639,10 +2693,13 @@ class OpCodeSpec extends Specification {
 
         and:
         processor.step(3)
-    
+
+        and:
+        RoxWord finalLocation = RoxWord.fromLiteral(memLocation + index)
+
         then:
-        program.length == registers.getPC()
-        expectedValue == memory.getByte(memLocation + index)
+        registers.getPC() == program.length
+        memory.getByte(finalLocation) == expectedValue
     
         where:
         firstValue | index | memLocation | expectedValue | expected
@@ -2663,8 +2720,8 @@ class OpCodeSpec extends Specification {
         processor.step(2)
 
         then:
-        program.length == registers.getPC()
-        firstValue == registers.getRegister(Registers.Register.ACCUMULATOR)
+        registers.getPC() == program.length
+        registers.getRegister(Registers.Register.ACCUMULATOR) == firstValue
 		testFlags(Z,N,C)
     
         where:
@@ -2683,8 +2740,8 @@ class OpCodeSpec extends Specification {
         processor.step(4)
     
         then:
-        program.length == registers.getPC()
-        firstValue == registers.getRegister(Registers.Register.ACCUMULATOR)
+        registers.getPC() == program.length
+        registers.getRegister(Registers.Register.ACCUMULATOR) == firstValue
 		testFlags(Z,N,C)
     
         where:
@@ -2704,8 +2761,8 @@ class OpCodeSpec extends Specification {
         processor.step(5)
     
         then:
-        program.length == registers.getPC()
-        firstValue == registers.getRegister(Registers.Register.ACCUMULATOR)
+        registers.getPC() == program.length
+        registers.getRegister(Registers.Register.ACCUMULATOR) == firstValue
 		testFlags(Z,N,C)
     
         where:
@@ -2724,8 +2781,8 @@ class OpCodeSpec extends Specification {
         processor.step(4)
     
         then:
-        program.length == registers.getPC()
-        firstValue == registers.getRegister(Registers.Register.ACCUMULATOR)
+        registers.getPC() == program.length
+        registers.getRegister(Registers.Register.ACCUMULATOR) == firstValue
 		testFlags(Z,N,C)
     
         where:
@@ -2745,8 +2802,8 @@ class OpCodeSpec extends Specification {
         processor.step(5)
     
         then:
-        program.length == registers.getPC()
-        firstValue == registers.getRegister(Registers.Register.ACCUMULATOR)
+        registers.getPC() == program.length
+        registers.getRegister(Registers.Register.ACCUMULATOR) == firstValue
 		testFlags(Z,N,C)
     
         where:
@@ -2766,8 +2823,8 @@ class OpCodeSpec extends Specification {
         processor.step(5)
     
         then:
-        program.length == registers.getPC()
-        firstValue == registers.getRegister(Registers.Register.ACCUMULATOR)
+        registers.getPC() == program.length
+        registers.getRegister(Registers.Register.ACCUMULATOR) == firstValue
 		testFlags(Z,N,C)
     
         where:
@@ -2790,8 +2847,8 @@ class OpCodeSpec extends Specification {
         processor.step(9)
 
         then:
-        firstValue == registers.getRegister(Registers.Register.ACCUMULATOR)
-        program.length == registers.getPC()
+        registers.getRegister(Registers.Register.ACCUMULATOR) == firstValue
+        registers.getPC() == program.length
         testFlags(Z,N,C)
     
         where:
@@ -2815,7 +2872,7 @@ class OpCodeSpec extends Specification {
         
     
         then:
-        program.length == registers.getPC()
+        registers.getPC() == program.length
         testFlags(Z,N,C)
     
         where:
@@ -2835,8 +2892,8 @@ class OpCodeSpec extends Specification {
         processor.step(2)
     
         then:
-        program.length == registers.getPC()
-        firstValue == registers.getRegister(Registers.Register.Y_INDEX)
+        registers.getPC() == program.length
+        registers.getRegister(Registers.Register.Y_INDEX) == firstValue
 		testFlags(Z,N,C)
     
         where:
@@ -2855,8 +2912,8 @@ class OpCodeSpec extends Specification {
         processor.step(4)
     
         then:
-        program.length == registers.getPC()
-        firstValue == registers.getRegister(Registers.Register.Y_INDEX)
+        registers.getPC() == program.length
+        registers.getRegister(Registers.Register.Y_INDEX) == firstValue
 		testFlags(Z,N,C)
     
         where:
@@ -2875,8 +2932,8 @@ class OpCodeSpec extends Specification {
         processor.step(4)
     
         then:
-        program.length == registers.getPC()
-        firstValue == registers.getRegister(Registers.Register.Y_INDEX)
+        registers.getPC() == program.length
+        registers.getRegister(Registers.Register.Y_INDEX) == firstValue
 		testFlags(Z,N,C)
     
         where:
@@ -2895,8 +2952,8 @@ class OpCodeSpec extends Specification {
         processor.step(4)
     
         then:
-        program.length == registers.getPC()
-        firstValue == registers.getRegister(Registers.Register.X_INDEX)
+        registers.getPC() == program.length
+        registers.getRegister(Registers.Register.X_INDEX) == firstValue
 		testFlags(Z,N,C)
     
         where:
@@ -2915,8 +2972,8 @@ class OpCodeSpec extends Specification {
         processor.step(4)
     
         then:
-        program.length == registers.getPC()
-        firstValue == registers.getRegister(Registers.Register.X_INDEX)
+        registers.getPC() == program.length
+        registers.getRegister(Registers.Register.X_INDEX) == firstValue
 		testFlags(Z,N,C)
     
         where:
@@ -2932,8 +2989,8 @@ class OpCodeSpec extends Specification {
         processor.step(2)
     
         then:
-        program.length == registers.getPC()
-        firstValue == registers.getRegister(Registers.Register.X_INDEX)
+        registers.getPC() == program.length
+        registers.getRegister(Registers.Register.X_INDEX) == firstValue
 		testFlags(Z,N,C)
     
         where:
@@ -2949,10 +3006,13 @@ class OpCodeSpec extends Specification {
 
         and:
         processor.step(3)
-    
+
+        and:
+        RoxWord finalLocation = RoxWord.fromLiteral(location + index)
+
         then:
-        program.length == registers.getPC()
-        firstValue == memory.getByte(location + index)
+        registers.getPC() == program.length
+        memory.getByte(finalLocation) == firstValue
     
         where:
         location | index | firstValue | expected
@@ -2975,8 +3035,8 @@ class OpCodeSpec extends Specification {
         processor.step(5)
     
         then:
-        expectedPC == registers.getPC()
-        expectedSP == registers.getRegister(Registers.Register.STACK_POINTER_HI)
+        registers.getPC() == expectedPC
+        registers.getRegister(Registers.Register.STACK_POINTER_HI) == expectedSP
     
         where:
         memHi | memLo | expectedPC | expectedSP | expected
@@ -2986,11 +3046,11 @@ class OpCodeSpec extends Specification {
     @Unroll("BRK #expected")
     testBRK(){
         when: 'vector values for PC are in memory'
-        memory.setByteAt(0xFFFE, newPCHi)
-        memory.setByteAt(0xFFFF, newPCLo)
+        memory.setByteAt(RoxWord.fromLiteral(0xFFFE), RoxByte.fromLiteral(newPCHi))
+        memory.setByteAt(RoxWord.fromLiteral(0xFFFF), RoxByte.fromLiteral(newPCLo))
 
         and: 'The status registerValue is set to a value that will be pushed to stack'
-        registers.setRegister(Registers.Register.STATUS_FLAGS, statusReg)
+        registers.setRegister(Registers.Register.STATUS_FLAGS, RoxByte.fromLiteral(statusReg))
     
         and: 'the program is executed'
         loadMemoryWithProgram(BRK)
@@ -3002,11 +3062,11 @@ class OpCodeSpec extends Specification {
         registers.getRegister(Registers.Register.STACK_POINTER_HI) == 0xFC
 
         and: 'the pushed status registerValue has the break flag set'
-        memory.getByte(0x1FD) == (statusReg | Registers.Flag.BREAK.getPlaceValue())
+        memory.getByte(RoxWord.fromLiteral(0x1FD)) == (statusReg | Registers.Flag.BREAK.getPlaceValue())
         
         and: 'the pushed program counter is correct'
-        memory.getByte(0x1FE) == 0x03
-        memory.getByte(0x1FF) == 0x00
+        memory.getByte(RoxWord.fromLiteral(0x1FE)) == 0x03
+        memory.getByte(RoxWord.fromLiteral(0x1FF)) == 0x00
     
         //XXX Refactor to test when PC overflows to high byte before loading to stack
     
@@ -3028,27 +3088,27 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        memory.setBlock(0xFFFA, 1)
-        memory.setBlock(0xFFFB, 2)
+        memory.setBlock(RoxWord.fromLiteral(0xFFFA), RoxByte.fromLiteral(1))
+        memory.setBlock(RoxWord.fromLiteral(0xFFFB), RoxByte.fromLiteral(2))
 
         and:
         processor.step(steps)
-        registers.setRegister(Registers.Register.STATUS_FLAGS, statusValue)
+        registers.setRegister(Registers.Register.STATUS_FLAGS, RoxByte.fromLiteral(statusValue))
         processor.irq()
     
         then: 'Three items have been added to stack'
         registers.getRegister(Registers.Register.STACK_POINTER_HI) == 0xFC
-    
+
         and: 'The PC on the stack is as expected'
-        pushedPCLo == memory.getByte(0x1FE)
-        pushedPCHi == memory.getByte(0x1FF)
+        memory.getByte(RoxWord.fromLiteral(0x1FE)) == pushedPCLo
+        memory.getByte(RoxWord.fromLiteral(0x1FF)) == pushedPCHi
     
         and: 'Status registerValue is moved to stack with B set'
-        pushedStatus == memory.getByte(0x1FD)
+        memory.getByte(RoxWord.fromLiteral(0x1FD)) == pushedStatus
     
         and: 'The PC is set to 0xFFFE:0xFFFF'
-        registers.getRegister(Registers.Register.PROGRAM_COUNTER_HI) == memory.getByte(0xFFFE)
-        registers.getRegister(Registers.Register.PROGRAM_COUNTER_LOW)  == memory.getByte(0xFFFF)
+        registers.getRegister(Registers.Register.PROGRAM_COUNTER_HI) == memory.getByte(RoxWord.fromLiteral(0xFFFE))
+        registers.getRegister(Registers.Register.PROGRAM_COUNTER_LOW)  == memory.getByte(RoxWord.fromLiteral(0xFFFF))
     
         where:
         statusValue | steps | pushedStatus | pushedPCHi | pushedPCLo | expected
@@ -3070,27 +3130,27 @@ class OpCodeSpec extends Specification {
         
     
         and:
-        memory.setBlock(0xFFFA, 1)
-        memory.setBlock(0xFFFB, 2)
+        memory.setBlock(RoxWord.fromLiteral(0xFFFA), RoxByte.fromLiteral(1))
+        memory.setBlock(RoxWord.fromLiteral(0xFFFB), RoxByte.fromLiteral(2))
 
         and:
         processor.step(steps)
-        registers.setRegister(Registers.Register.STATUS_FLAGS, statusValue)
+        registers.setRegister(Registers.Register.STATUS_FLAGS, RoxByte.fromLiteral(statusValue))
         processor.nmi()
     
         then: 'Three items have been added to stack'
-        0xFC == registers.getRegister(Registers.Register.STACK_POINTER_HI)
+        registers.getRegister(Registers.Register.STACK_POINTER_HI) == 0xFC
     
         and: 'The PC on the stack is as expected'
-        pushedPCLo == memory.getByte(0x1FE)
-        pushedPCHi == memory.getByte(0x1FF)
+        memory.getByte(RoxWord.fromLiteral(0x1FE)) == pushedPCLo
+        memory.getByte(RoxWord.fromLiteral(0x1FF)) == pushedPCHi
     
         and: 'Status registerValue is moved to stack with B set'
-        pushedStatus == memory.getByte(0x1FD)
+        memory.getByte(RoxWord.fromLiteral(0x1FD)) == pushedStatus
     
         and: 'The PC is set to 0xFFFE:0xFFFF'
-        registers.getRegister(Registers.Register.PROGRAM_COUNTER_HI) == memory.getByte(0xFFFA)
-        registers.getRegister(Registers.Register.PROGRAM_COUNTER_LOW)  == memory.getByte(0xFFFB)
+        registers.getRegister(Registers.Register.PROGRAM_COUNTER_HI) == memory.getByte(RoxWord.fromLiteral(0xFFFA))
+        registers.getRegister(Registers.Register.PROGRAM_COUNTER_LOW) == memory.getByte(RoxWord.fromLiteral(0xFFFB))
     
         where:
         statusValue | steps | pushedStatus | pushedPCHi | pushedPCLo | expected
@@ -3113,29 +3173,29 @@ class OpCodeSpec extends Specification {
     
         and: 'An interrupt routine'
         Program irqRoutine = new Program().with(LDA_I, 3, RTI)
-        memory.setBlock(0x100, irqRoutine.getProgramAsByteArray())
-        memory.setByteAt(0xFFFE, 0x01)
-        memory.setByteAt(0xFFFF, 0x00)
+        memory.setBlock(RoxWord.fromLiteral(0x100), irqRoutine.getProgramAsByteArray())
+        memory.setByteAt(RoxWord.fromLiteral(0xFFFE), RoxByte.fromLiteral(0x01))
+        memory.setByteAt(RoxWord.fromLiteral(0xFFFF), RoxByte.fromLiteral(0x00))
 
         and:
         processor.step(2)
-        registers.setRegister(Registers.Register.STATUS_FLAGS, statusValue)
+        registers.setRegister(Registers.Register.STATUS_FLAGS, RoxByte.fromLiteral(statusValue))
         processor.irq()
         processor.step(2)
     
         then: 'Stack is empty again'
-        0xFF == registers.getRegister(Registers.Register.STACK_POINTER_HI)
+        registers.getRegister(Registers.Register.STACK_POINTER_HI) == 0xFF
     
         and: 'The PC on the stack is as expected'
-        restoredPCHi == registers.getRegister(Registers.Register.PROGRAM_COUNTER_HI)
-        restoredPCLo == registers.getRegister(Registers.Register.PROGRAM_COUNTER_LOW)
+        registers.getRegister(Registers.Register.PROGRAM_COUNTER_HI) == restoredPCHi
+        registers.getRegister(Registers.Register.PROGRAM_COUNTER_LOW) == restoredPCLo
     
         and: 'Status registerValue is moved to stack with B set'
-        restoredStatus == registers.getRegister(Registers.Register.STATUS_FLAGS)
+        registers.getRegister(Registers.Register.STATUS_FLAGS) == restoredStatus
     
         and: 'The PC is set to where it was before IRQ'
-        0x00 == registers.getRegister(Registers.Register.PROGRAM_COUNTER_HI)
-        0x04 == registers.getRegister(Registers.Register.PROGRAM_COUNTER_LOW)
+        registers.getRegister(Registers.Register.PROGRAM_COUNTER_HI) == 0x00
+        registers.getRegister(Registers.Register.PROGRAM_COUNTER_LOW) == 0x04
     
         where:
         statusValue | restoredStatus | restoredPCHi | restoredPCLo | expected

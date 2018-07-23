@@ -15,6 +15,17 @@ import static org.junit.Assert.*;
 
 @RunWith(JUnitQuickcheck.class)
 public class RoxByteTest extends Specification{
+
+    @Test
+    public void comparisons(){
+        assertTrue(RoxByte.fromLiteral(1).equals(1));
+        assertEquals(RoxByte.fromLiteral(1), 1);
+        assertEquals(RoxByte.fromLiteral(1), RoxByte.fromLiteral(1));
+
+        assertTrue(RoxByte.fromLiteral(0b11111110).equals(0b11111110));
+        assertEquals(RoxByte.fromLiteral(0b11111110), 0b11111110);
+    }
+
     @Test
     public void testToTwosComplimentSimpleCase(){
         final RoxByte myByte = RoxByte.signedFrom(1);
@@ -102,7 +113,7 @@ public class RoxByteTest extends Specification{
     @Property(trials = 10)
     public void testToStringIsAccurate(@InRange(min = "0", max = "255") int byteValue){
         final RoxByte value = RoxByte.fromLiteral(byteValue);
-        assertTrue(value.toString().contains(""+value.getAsInt()));
+        assertTrue(value.toString() + " expected to contain " + byteValue, value.toString().contains(""+value.getAsInt()));
     }
 
     @Test
