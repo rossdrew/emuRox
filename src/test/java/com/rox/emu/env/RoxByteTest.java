@@ -5,6 +5,7 @@ import com.pholser.junit.quickcheck.When;
 import com.pholser.junit.quickcheck.generator.InRange;
 import com.pholser.junit.quickcheck.runner.JUnitQuickcheck;
 import com.rox.emu.InvalidDataTypeException;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import spock.lang.Specification;
@@ -15,16 +16,45 @@ import static org.junit.Assert.*;
 
 @RunWith(JUnitQuickcheck.class)
 public class RoxByteTest extends Specification{
+        @Test
+    public void testEquality(){
+        assertTrue(RoxWord.ZERO.equals(RoxWord.ZERO));
+        Assert.assertEquals(RoxWord.ZERO, RoxWord.ZERO);
+        Assert.assertEquals(RoxWord.ZERO, 0);
+        Assert.assertEquals(RoxWord.ZERO.hashCode(), RoxWord.ZERO.hashCode());
+
+        assertTrue(RoxWord.fromLiteral(1).equals(1));
+        Assert.assertEquals(RoxWord.fromLiteral(1), 1);
+        Assert.assertEquals(RoxWord.fromLiteral(1), RoxWord.fromLiteral(1));
+        Assert.assertEquals(RoxWord.fromLiteral(1).hashCode(), RoxWord.fromLiteral(1).hashCode());
+
+        assertTrue(RoxWord.fromLiteral(0b11111110).equals(0b11111110));
+        Assert.assertEquals(RoxWord.fromLiteral(0b11111110), 0b11111110);
+        Assert.assertEquals(RoxWord.fromLiteral(99), RoxByte.fromLiteral(99));
+        Assert.assertEquals(RoxWord.fromLiteral(99).hashCode(), RoxByte.fromLiteral(99).hashCode());
+    }
 
     @Test
-    public void comparisons(){
-        assertTrue(RoxByte.fromLiteral(1).equals(1));
-        assertEquals(RoxByte.fromLiteral(1), 1);
-        assertEquals(RoxByte.fromLiteral(1), RoxByte.fromLiteral(1));
+    public void testInequality(){
+        assertFalse(RoxWord.ZERO.equals(RoxWord.fromLiteral(10)));
+        assertNotEquals(RoxWord.ZERO, RoxWord.fromLiteral(1));
+        assertNotEquals(RoxWord.ZERO, 1);;
 
-        assertTrue(RoxByte.fromLiteral(0b11111110).equals(0b11111110));
-        assertEquals(RoxByte.fromLiteral(0b11111110), 0b11111110);
+        assertFalse(RoxWord.fromLiteral(1).equals(2));
+        assertNotEquals(RoxWord.fromLiteral(1), 2);
+        assertNotEquals(RoxWord.fromLiteral(1), RoxWord.fromLiteral(2));
+        assertNotEquals(RoxWord.fromLiteral(1).hashCode(), RoxWord.fromLiteral(2).hashCode());
+
+        assertFalse(RoxWord.fromLiteral(0b11111110).equals(0b11111100));
+        assertNotEquals(RoxWord.fromLiteral(0b11111110), 0b11111100);
+        assertNotEquals(RoxWord.fromLiteral(99), RoxByte.fromLiteral(98));
+        assertNotEquals(RoxWord.fromLiteral(99).hashCode(), RoxByte.fromLiteral(98).hashCode());
+
+        assertFalse(RoxWord.fromLiteral(23).equals("Test 1"));
+        assertNotEquals(RoxWord.fromLiteral(23), "Test 2");
+        assertNotEquals(RoxWord.fromLiteral(23).hashCode(), "Test 3".hashCode());
     }
+
 
     @Test
     public void testToTwosComplimentSimpleCase(){
