@@ -120,8 +120,8 @@ public class Mos6502 {
         log.debug("Instruction: {}...", opCode.getOpCodeName());
         switch (opCode){
             case ASL_A:
-                //withRegister(Register.ACCUMULATOR, this::performASL);
-                opCode.perform(registers, memory, alu);
+                withRegister(Register.ACCUMULATOR, this::performASL);
+                //opCode.perform(registers, memory, alu);
             break;
 
             case ASL_Z:
