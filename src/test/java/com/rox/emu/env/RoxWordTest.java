@@ -44,6 +44,9 @@ public class RoxWordTest {
         assertFalse(RoxWord.fromLiteral(23).equals("Test 1"));
         assertNotEquals(RoxWord.fromLiteral(23), "Test 2");
         assertNotEquals(RoxWord.fromLiteral(23).hashCode(), "Test 3".hashCode());
+
+        assertNotEquals(RoxWord.fromLiteral(63), null);
+        assertFalse(RoxWord.fromLiteral(71).equals(null));
     }
 
     @Test
