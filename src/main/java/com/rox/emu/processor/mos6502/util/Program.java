@@ -5,6 +5,7 @@ import com.rox.emu.UnknownTokenException;
 import com.rox.emu.env.RoxByte;
 import com.rox.emu.processor.mos6502.op.OpCode;
 
+import java.rmi.activation.UnknownObjectException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -124,7 +125,7 @@ public class Program {
         if (value instanceof Number)
             return this.with(((Number) value).intValue());
 
-        return this.with((int) value);
+        throw new RuntimeException("Unknown program element of type " + value.getClass());
     }
 
     /**

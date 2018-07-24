@@ -7,7 +7,7 @@ import spock.lang.Specification
 import spock.lang.Unroll
 
 class ProgramSpec extends Specification {
-    def testCreation(){
+    def testCreation() {
         given:
         Program program
 
@@ -19,7 +19,7 @@ class ProgramSpec extends Specification {
     }
 
     @Unroll("Test comparing #description program")
-    def testComparisons(){
+    def testComparisons() {
         given:
         Program program
 
@@ -37,8 +37,19 @@ class ProgramSpec extends Specification {
         [0xA9 as byte, 0x03 as byte] | "byte constructed"
     }
 
+    def "Create program with invalid program data"() {
+        given:
+        final Class[] invalidProgramData = [Program.class] as Class[]
+
+        when:
+        new Program().with(invalidProgramData)
+
+        then:
+        thrown RuntimeException
+    }
+
     @Unroll("Valid labels: #expected")
-    testValidLabel(){
+    testValidLabel() {
         given:
         final Program program = new Program().with(programInputBytes as Object[])
 
@@ -51,25 +62,25 @@ class ProgramSpec extends Specification {
         program.getLocationOf('A:') == labelLoc
 
         where:
-        programInputBytes                                    || programSize | labelCount | labelLoc | expected
-        ['A:', OpCode.ADC_ABS, 0x10, 0x02, OpCode.CLC]       || 4           | 1          | 0        | "Label at the start"
-        [OpCode.ADC_ABS, 0x10, 0x02, 'A:', OpCode.CLC]       || 4           | 1          | 3        | "Label in the middle"
-        [OpCode.ADC_ABS, 0x10, 0x02, OpCode.CLC, 'A:']       || 4           | 1          | 4        | "Label at the end"
+        programInputBytes                              || programSize | labelCount | labelLoc | expected
+        ['A:', OpCode.ADC_ABS, 0x10, 0x02, OpCode.CLC] || 4           | 1          | 0        | "Label at the start"
+        [OpCode.ADC_ABS, 0x10, 0x02, 'A:', OpCode.CLC] || 4           | 1          | 3        | "Label in the middle"
+        [OpCode.ADC_ABS, 0x10, 0x02, OpCode.CLC, 'A:'] || 4           | 1          | 4        | "Label at the end"
         ["A:", OpCode.ADC_ABS, 0x10, 0x02,
          "B:", OpCode.CLC,
-         'C:']                                               || 4           | 3          | 0        | "Multiple labels"
+         'C:']                                         || 4           | 3          | 0        | "Multiple labels"
     }
 
-    def testLabelReplacement(){
+    def testLabelReplacement() {
         given: 'a program'
         Program myProgram = new Program()
         myProgram = myProgram.with("Start",
-                                   OpCode.BEQ, myProgram.referenceBuilder("MyLabel"),
-                                   OpCode.LDA_I, 0x1,
-                                   "MyLabel",
-                                   OpCode.LDA_I, 0x2,
-                                   OpCode.BNE, myProgram.referenceBuilder("Start"),
-                                   OpCode.LDA_I, 0x3)
+                OpCode.BEQ, myProgram.referenceBuilder("MyLabel"),
+                OpCode.LDA_I, 0x1,
+                "MyLabel",
+                OpCode.LDA_I, 0x2,
+                OpCode.BNE, myProgram.referenceBuilder("Start"),
+                OpCode.LDA_I, 0x3)
 
         and: 'its expected compiled code'
         int[] expectedProgramCode = [OpCode.BEQ.byteValue, 0b00000010,
@@ -82,12 +93,12 @@ class ProgramSpec extends Specification {
         RoxByte[] compiledProgram = myProgram.getProgramAsByteArray()
 
         then: 'it is exactly as expected'
-        for (int i=0; i<compiledProgram.length; i++){
+        for (int i = 0; i < compiledProgram.length; i++) {
             compiledProgram[i].getRawValue() == expectedProgramCode[i]
         }
     }
 
-    def testInvalidLabel(){
+    def testInvalidLabel() {
         given:
         final Program program = new Program()
 
@@ -98,7 +109,7 @@ class ProgramSpec extends Specification {
         thrown NullPointerException
     }
 
-    def testUseOfNonExistentLabel(){
+    def testUseOfNonExistentLabel() {
         given:
         final Program program = new Program()
         program = program.with(OpCode.NOP, OpCode.BCC, program.referenceBuilder("ThisDoesntExist"))
@@ -110,8 +121,26 @@ class ProgramSpec extends Specification {
         thrown RuntimeException
     }
 
+    @Unroll("#description program creation")
+    def testProgramCreation() {
+        given:
+        Program program
+
+        when:
+        program = new Program().with(programInputBytes)
+
+        then:
+        program.getProgramAsByteArray() == RoxByte.fromIntArray(expectedBytes)
+
+        where:
+        programInputBytes                        | expectedBytes                                         | description
+        [OpCode.SEC, OpCode.SED] as OpCode[]     | [OpCode.SEC.byteValue, OpCode.SED.byteValue] as int[] | "Only OpCode data"
+        [OpCode.LDA_I.byteValue, 42] as Number[] | [OpCode.LDA_I.byteValue, 42] as int[]                 | "Only Number data"
+        ["Test Label"] as String[]               | [] as int[]                                           | "Only String data"
+    }
+
     @Unroll("Valid compilation: #expected")
-    testValidPrograms(){
+    testValidPrograms() {
         given: 'A program'
         final Program program
 
@@ -119,13 +148,19 @@ class ProgramSpec extends Specification {
         program = new Program().with(programInputBytes as Object[])
 
         then: 'The resulting byte stream is as expected'
-        program.equals(expectedProgramBytes as Object[])
+        program.getProgramAsByteArray() == RoxByte.fromIntArray(expectedProgramBytes as int[])
 
         where:
-        programInputBytes               || expectedProgramBytes                           | expected
-        [0x2A]                          || [0x2A]                                         | "Byte value added to program"
-        [OpCode.ADC_ABS]                || [OpCode.ADC_ABS.byteValue]                     | "Op-code value added to program"
-        [OpCode.ADC_ABS, 0x10, 0x02]    || [OpCode.ADC_ABS.byteValue, 0x10, 0x02]         | "Op-code and arguments added to program"
-        ["START:"]                      || []                                             | "A program label doesn't change the output"
+        programInputBytes                   || expectedProgramBytes                            | expected
+        [0x2A]                              || [0x2A]                                          | "Byte value added to program"
+        [OpCode.ADC_ABS]                    || [OpCode.ADC_ABS.byteValue]                      | "Op-code value added to program"
+        [OpCode.ADC_ABS, 0x10, 0x02]        || [OpCode.ADC_ABS.byteValue, 0x10, 0x02]          | "Op-code and arguments added to program"
+        ["START:"]                          || []                                              | "A program label doesn't change the output"
+        //TODO [OpCode.SEC, "A:", OpCode.BCS, "A"] || [OpCode.SEC.byteValue, OpCode.BCS.byteValue, 1] | "A program label doesn't change the output"
     }
+
+    //TODO Test Program.with() with a number an int
+    //TODO Test Program.equals() with identical objects, null, non-identical classtype, same class, no array
+    //TODO Test Program.arrayMatches()
+    //TODO Test Program.hashcode()
 }
