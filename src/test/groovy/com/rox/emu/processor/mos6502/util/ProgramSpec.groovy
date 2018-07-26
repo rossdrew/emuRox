@@ -151,12 +151,11 @@ class ProgramSpec extends Specification {
         program.getProgramAsByteArray() == RoxByte.fromIntArray(expectedProgramBytes as int[])
 
         where:
-        programInputBytes                   || expectedProgramBytes                            | expected
-        [0x2A]                              || [0x2A]                                          | "Byte value added to program"
-        [OpCode.ADC_ABS]                    || [OpCode.ADC_ABS.byteValue]                      | "Op-code value added to program"
-        [OpCode.ADC_ABS, 0x10, 0x02]        || [OpCode.ADC_ABS.byteValue, 0x10, 0x02]          | "Op-code and arguments added to program"
-        ["START:"]                          || []                                              | "A program label doesn't change the output"
-        //TODO [OpCode.SEC, "A:", OpCode.BCS, "A"] || [OpCode.SEC.byteValue, OpCode.BCS.byteValue, 1] | "A program label doesn't change the output"
+        programInputBytes                   || expectedProgramBytes                                     | expected
+        [0x2A]                              || [0x2A]                                                   | "Byte value added to program"
+        [OpCode.ADC_ABS]                    || [OpCode.ADC_ABS.byteValue]                               | "Op-code value added to program"
+        [OpCode.ADC_ABS, 0x10, 0x02]        || [OpCode.ADC_ABS.byteValue, 0x10, 0x02]                   | "Op-code and arguments added to program"
+        ["START:"]                          || []                                                       | "A program label doesn't change the output"
     }
 
     //TODO Test Program.with() with a number an int
