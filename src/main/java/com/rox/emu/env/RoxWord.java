@@ -10,6 +10,10 @@ import java.util.Objects;
 public final class RoxWord {
     private final int wordValue;
 
+    /** Binary digit place values */
+    private static final int[] PLACE_VALUE = {1,   2,    4,    8,    16,   32,    64,    128,
+                                              256, 512,  1024, 2048, 4096, 8192,  16384, 32768};
+
     public static final RoxWord ZERO = new RoxWord(0);
 
     private RoxWord(int wordValue) {
@@ -38,18 +42,54 @@ public final class RoxWord {
         return new RoxWord(literalValue & 0xFFFF);
     }
 
+    /**
+     * Take the {@link RoxWord word} and move it's sign bit to the most significant
+     * bit of an {@link int} representation of it
+     *
+     * @return This {@link RoxWord word} as it's {@link int} representation.
+     */
     public int getAsInt() {
-        return wordValue;
+        return intFromTwosComplimented(wordValue);
     }
 
+    private int intFromTwosComplimented(int wordValue){
+        if (isBitSet(15))
+            return -((~(wordValue-1)) & 0xFF);
+        else
+            return wordValue;
+    }
+
+    /**
+     * @param bitToTest bit number (<code>0-7</code>) of the bit to test
+     * @return weather the specified bit is set in this byte
+     */
+    public boolean isBitSet(int bitToTest) {
+        validateBit(bitToTest);
+        return (wordValue & PLACE_VALUE[bitToTest]) == PLACE_VALUE[bitToTest];
+    }
+
+    private void validateBit(final int bit){
+        if ((bit < 0) || (bit > 15))
+            throw new ArrayIndexOutOfBoundsException("Bit #"+ bit +" is out of range, expected (0-15)");
+    }
+
+    /**
+     * @return The least significant {@link RoxByte byte} (lsb) of this {@link RoxWord word}
+     */
     public RoxByte getLowByte() {
         return RoxByte.fromLiteral(wordValue & 0xFF);
     }
 
+    /**
+     * @return The most significant {@link RoxByte byte} (msb) of this {@link RoxWord word}
+     */
     public RoxByte getHighByte() {
         return RoxByte.fromLiteral(wordValue >> 8);
     }
 
+    /**
+     * @return Return an {@link int} with identical two least significant bytes to this {@link RoxWord word}
+     */
     public int getRawValue(){
         return wordValue;
     }
