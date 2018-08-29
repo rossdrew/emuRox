@@ -6,5 +6,7 @@ import com.rox.emu.processor.mos6502.Registers;
 
 @FunctionalInterface
 public interface Instruction {
-    void perform(Registers r, Memory m, Mos6502Alu alu);
+    void perform(final Mos6502Alu alu,
+                 final Registers registers,
+                 final Memory memory);
 }

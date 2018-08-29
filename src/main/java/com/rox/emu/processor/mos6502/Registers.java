@@ -170,6 +170,17 @@ public class Registers {
     }
 
     /**
+     * Get the Program Counter value then increment
+     *
+     * @return the value of the Program Counter
+     */
+    public RoxWord getAndStepProgramCounter(){
+        final RoxWord pc = getPC();
+        setPC(RoxWord.fromLiteral(getPC().getRawValue()+1));
+        return pc;
+    }
+
+    /**
      * @param flag flag to test
      * @return <code>true</code> if the specified flag is set, <code>false</code> otherwise
      */

@@ -120,13 +120,13 @@ public class Mos6502 {
         log.debug("Instruction: {}...", opCode.getOpCodeName());
         switch (opCode){
             case ASL_A:
-                withRegister(Register.ACCUMULATOR, this::performASL);
-                //opCode.perform(registers, memory, alu);
+                //withRegister(Register.ACCUMULATOR, this::performASL);
+                opCode.perform(alu, registers, memory);
             break;
 
             case ASL_Z:
-                withByteAt(RoxWord.from(nextProgramByte()), this::performASL);
-                //opCode.perform(registers, memory, alu);
+                //withByteAt(RoxWord.from(nextProgramByte()), this::performASL);
+                opCode.perform(alu, registers, memory);
             break;
 
             case ASL_Z_IX:
@@ -138,7 +138,8 @@ public class Mos6502 {
             break;
 
             case ASL_ABS:
-                withByteAt(nextProgramWord(), this::performASL);
+//                withByteAt(nextProgramWord(), this::performASL);
+                opCode.perform(alu, registers, memory);
             break;
 
             case LSR_A:
@@ -875,7 +876,7 @@ public class Mos6502 {
     }
 
     /**
-     * Call {@link Mos6502#branchTo(RoxWord)} with next program byte
+     * Call {@link Mos6502#branchTo(RoxByte)} with next program byte
      *
      * @param condition if {@code true} then branch is followed
      */
@@ -988,7 +989,7 @@ public class Mos6502 {
     /**
      * Perform byteA given operation and have the state of the registers be the same as before the operation was performed
      *
-     * @param operation operation to perform
+     * @param operation operation to address
      * @param byteA byte A to pass into the operation
      * @param byteB byte B to pass into the operation
      * @param carryInState the state in which to assume the carry flag is in at the start of the operation
