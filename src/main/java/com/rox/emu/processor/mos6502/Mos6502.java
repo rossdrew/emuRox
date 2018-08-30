@@ -130,7 +130,8 @@ public class Mos6502 {
             break;
 
             case ASL_Z_IX:
-                withByteXIndexedAt(RoxWord.from(nextProgramByte()), this::performASL);
+                //withByteXIndexedAt(RoxWord.from(nextProgramByte()), this::performASL);
+                opCode.perform(alu, registers, memory);
             break;
 
             case ASL_ABS_IX:

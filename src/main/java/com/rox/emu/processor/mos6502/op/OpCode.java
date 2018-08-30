@@ -13,9 +13,6 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import static com.rox.emu.processor.mos6502.op.AddressingMode.*;
-import static com.rox.emu.processor.mos6502.op.OpCode.Operation.*;
-
 /**
  * Enum representation of {@link Mos6502} op-codes.  Each represented by an enum name using the convention
  * '{OP-CODE}{@value #TOKEN_SEPARATOR}{ADDRESSING-MODE}{@value #TOKEN_SEPARATOR}{INDEXING-MODE}'.<br/>
@@ -25,199 +22,193 @@ import static com.rox.emu.processor.mos6502.op.OpCode.Operation.*;
  * @author Ross Drew
  */
 public enum OpCode implements Instruction {
-    BRK(0x00, (a, r, m) -> {}),
+    BRK(0x00),
 
-    ASL_A(0x0A, (a, r, m) -> {
-        ACCUMULATOR.address(r, m, a, ASL::perform);
-    }),
+    ASL_A(0x0A),
 
-    ASL_Z(0x06, (a, r, m) -> {
-        ZERO_PAGE.address(r, m, a, ASL::perform);
-    }),
+    ASL_Z(0x06),
 
-    ASL_ABS(0x0E, (a, r, m) -> {
-        ABSOLUTE.address(r, m, a, ASL::perform);
-    }),
+    ASL_ABS(0x0E),
 
-    ASL_Z_IX(0x16, (a, r, m) -> {}),
+    ASL_Z_IX(0x16),
 
-    ASL_ABS_IX(0x1E, (a, r, m) -> {}),
+    ASL_ABS_IX(0x1E),
 
-    LSR_A(0x4A, (a, r, m) -> {}),
-    LSR_Z(0x46, (a, r, m) -> {}),
-    LSR_Z_IX(0x56, (a, r, m) -> {}),
-    LSR_ABS(0x4E, (a, r, m) -> {}),
-    LSR_ABS_IX(0x5E, (a, r, m) -> {}),
+    LSR_A(0x4A),
+    LSR_Z(0x46),
+    LSR_Z_IX(0x56),
+    LSR_ABS(0x4E),
+    LSR_ABS_IX(0x5E),
 
-    ADC_Z(0x65, (a, r, m) -> {}),
-    ADC_I(0x69, (a, r, m) -> {}),
-    ADC_ABS(0x6D, (a, r, m) -> {}),
-    ADC_ABS_IX(0x7D, (a, r, m) -> {}),
-    ADC_ABS_IY(0x79, (a, r, m) -> {}),
-    ADC_Z_IX(0x75, (a, r, m) -> {}),
-    ADC_IND_IX(0x61, (a, r, m) -> {}),
-    ADC_IND_IY(0x71, (a, r, m) -> {}),
+    ADC_Z(0x65),
+    ADC_I(0x69),
+    ADC_ABS(0x6D),
+    ADC_ABS_IX(0x7D),
+    ADC_ABS_IY(0x79),
+    ADC_Z_IX(0x75),
+    ADC_IND_IX(0x61),
+    ADC_IND_IY(0x71),
 
-    LDA_Z(0xA5, (a, r, m) -> {}),
-    LDA_I(0xA9, (a, r, m) -> {}),
-    LDA_ABS(0xAD, (a, r, m) -> {}),
-    LDA_Z_IX(0xB5, (a, r, m) -> {}),
-    LDA_ABS_IY(0xB9, (a, r, m) -> {}),
-    LDA_IND_IX(0xA1, (a, r, m) -> {}),
-    LDA_IND_IY(0xB1, (a, r, m) -> {}),
-    LDA_ABS_IX(0xBD, (a, r, m) -> {}),
+    LDA_Z(0xA5),
+    LDA_I(0xA9),
+    LDA_ABS(0xAD),
+    LDA_Z_IX(0xB5),
+    LDA_ABS_IY(0xB9),
+    LDA_IND_IX(0xA1),
+    LDA_IND_IY(0xB1),
+    LDA_ABS_IX(0xBD),
 
-    CLV(0xB8, (a, r, m) -> {}),
+    CLV(0xB8),
 
-    AND_Z(0x25, (a, r, m) -> {}),
-    AND_Z_IX(0x35, (a, r, m) -> {}),
-    AND_ABS_IX(0x3D, (a, r, m) -> {}),
-    AND_ABS_IY(0x39, (a, r, m) -> {}),
-    AND_ABS(0x2D, (a, r, m) -> {}),
-    AND_I(0x29, (a, r, m) -> {}),
-    AND_IND_IX(0x21, (a, r, m) -> {}),
-    AND_IND_IY(0x31, (a, r, m) -> {}),
+    AND_Z(0x25),
+    AND_Z_IX(0x35),
+    AND_ABS_IX(0x3D),
+    AND_ABS_IY(0x39),
+    AND_ABS(0x2D),
+    AND_I(0x29),
+    AND_IND_IX(0x21),
+    AND_IND_IY(0x31),
 
-    ORA_I(0x09, (a, r, m) -> {}),
-    ORA_Z(0x05, (a, r, m) -> {}),
-    ORA_Z_IX(0x15, (a, r, m) -> {}),
-    ORA_ABS(0x0D, (a, r, m) -> {}),
-    ORA_ABS_IX(0x1D, (a, r, m) -> {}),
-    ORA_ABS_IY(0x19, (a, r, m) -> {}),
-    ORA_IND_IX(0x01, (a, r, m) -> {}),
-    ORA_IND_IY(0x11, (a, r, m) -> {}),
+    ORA_I(0x09),
+    ORA_Z(0x05),
+    ORA_Z_IX(0x15),
+    ORA_ABS(0x0D),
+    ORA_ABS_IX(0x1D),
+    ORA_ABS_IY(0x19),
+    ORA_IND_IX(0x01),
+    ORA_IND_IY(0x11),
 
-    EOR_I(0x49, (a, r, m) -> {}),
-    EOR_Z(0x45, (a, r, m) -> {}),
-    EOR_Z_IX(0x55, (a, r, m) -> {}),
-    EOR_ABS(0x4D, (a, r, m) -> {}),
-    EOR_ABS_IX(0x5D, (a, r, m) -> {}),
-    EOR_ABS_IY(0x59, (a, r, m) -> {}),
-    EOR_IND_IX(0x41, (a, r, m) -> {}),
-    EOR_IND_IY(0x51, (a, r, m) -> {}),
+    EOR_I(0x49),
+    EOR_Z(0x45),
+    EOR_Z_IX(0x55),
+    EOR_ABS(0x4D),
+    EOR_ABS_IX(0x5D),
+    EOR_ABS_IY(0x59),
+    EOR_IND_IX(0x41),
+    EOR_IND_IY(0x51),
 
-    SBC_I(0xE9, (a, r, m) -> {}),
-    SBC_Z(0xE5, (a, r, m) -> {}),
-    SBC_Z_IX(0xF5, (a, r, m) -> {}),
-    SBC_ABS(0xED, (a, r, m) -> {}),
-    SBC_ABS_IX(0xFD, (a, r, m) -> {}),
-    SBC_ABS_IY(0xF9, (a, r, m) -> {}),
-    SBC_IND_IX(0xE1, (a, r, m) -> {}),
-    SBC_IND_IY(0xF1, (a, r, m) -> {}),
+    SBC_I(0xE9),
+    SBC_Z(0xE5),
+    SBC_Z_IX(0xF5),
+    SBC_ABS(0xED),
+    SBC_ABS_IX(0xFD),
+    SBC_ABS_IY(0xF9),
+    SBC_IND_IX(0xE1),
+    SBC_IND_IY(0xF1),
 
-    CLC(0x18, (a, r, m) -> {}),
-    SEC(0x38, (a, r, m) -> {}),
+    CLC(0x18),
+    SEC(0x38),
 
-    LDY_I(0xA0, (a, r, m) -> {}),
-    LDY_Z(0xA4, (a, r, m) -> {}),
-    LDY_Z_IX(0xB4, (a, r, m) -> {}),
-    LDY_ABS(0xAC, (a, r, m) -> {}),
-    LDY_ABS_IX(0xBC, (a, r, m) -> {}),
+    LDY_I(0xA0),
+    LDY_Z(0xA4),
+    LDY_Z_IX(0xB4),
+    LDY_ABS(0xAC),
+    LDY_ABS_IX(0xBC),
 
-    LDX_I(0xA2, (a, r, m) -> {}),
-    LDX_ABS(0xAE, (a, r, m) -> {}),
-    LDX_ABS_IY(0xBE, (a, r, m) -> {}),
-    LDX_Z(0xA6, (a, r, m) -> {}),
-    LDX_Z_IY(0xB6, (a, r, m) -> {}),
+    LDX_I(0xA2),
+    LDX_ABS(0xAE),
+    LDX_ABS_IY(0xBE),
+    LDX_Z(0xA6),
+    LDX_Z_IY(0xB6),
 
-    STY_Z(0x84, (a, r, m) -> {}),
-    STY_ABS(0x8C, (a, r, m) -> {}),
-    STY_Z_IX(0x94, (a, r, m) -> {}),
+    STY_Z(0x84),
+    STY_ABS(0x8C),
+    STY_Z_IX(0x94),
 
-    STA_Z(0x85, (a, r, m) -> {}),
-    STA_ABS(0x8D, (a, r, m) -> {}),
-    STA_Z_IX(0x95, (a, r, m) -> {}),
-    STA_ABS_IX(0x9D, (a, r, m) -> {}),
-    STA_ABS_IY(0x99, (a, r, m) -> {}),
-    STA_IND_IX(0x81, (a, r, m) -> {}),
-    STA_IND_IY(0x91, (a, r, m) -> {}),
+    STA_Z(0x85),
+    STA_ABS(0x8D),
+    STA_Z_IX(0x95),
+    STA_ABS_IX(0x9D),
+    STA_ABS_IY(0x99),
+    STA_IND_IX(0x81),
+    STA_IND_IY(0x91),
 
-    STX_Z(0x86, (a, r, m) -> {}),
-    STX_Z_IY(0x96, (a, r, m) -> {}),
-    STX_ABS(0x8E, (a, r, m) -> {}),
+    STX_Z(0x86),
+    STX_Z_IY(0x96),
+    STX_ABS(0x8E),
 
-    INY(0xC8, (a, r, m) -> {}),
-    INX(0xE8, (a, r, m) -> {}),
-    DEX(0xCA, (a, r, m) -> {}),
+    INY(0xC8),
+    INX(0xE8),
+    DEX(0xCA),
 
-    INC_Z(0xE6, (a, r, m) -> {}),
-    INC_Z_IX(0xF6, (a, r, m) -> {}),
-    INC_ABS(0xEE, (a, r, m) -> {}),
-    INC_ABS_IX(0xFE, (a, r, m) -> {}),
+    INC_Z(0xE6),
+    INC_Z_IX(0xF6),
+    INC_ABS(0xEE),
+    INC_ABS_IX(0xFE),
 
-    DEC_Z(0xC6, (a, r, m) -> {}),
-    DEC_Z_IX(0xD6, (a, r, m) -> {}),
-    DEC_ABS(0xCE, (a, r, m) -> {}),
-    DEC_ABS_IX(0xDE, (a, r, m) -> {}),
-    DEY(0x88, (a, r, m) -> {}),
+    DEC_Z(0xC6),
+    DEC_Z_IX(0xD6),
+    DEC_ABS(0xCE),
+    DEC_ABS_IX(0xDE),
+    DEY(0x88),
 
-    PHA(0x48, (a, r, m) -> {}),
-    PLA(0x68, (a, r, m) -> {}),
-    PHP(0x08, (a, r, m) -> {}),
-    PLP(0x28, (a, r, m) -> {}),
+    PHA(0x48),
+    PLA(0x68),
+    PHP(0x08),
+    PLP(0x28),
 
-    NOP(0xEA, (a, r, m) -> {}),
+    NOP(0xEA),
 
-    JMP_ABS(0x4C, (a, r, m) -> {}),
-    JMP_IND(0x6C, (a, r, m) -> {}),
+    JMP_ABS(0x4C),
+    JMP_IND(0x6C),
 
-    TAX(0xAA, (a, r, m) -> {}),
-    TAY(0xA8, (a, r, m) -> {}),
-    TYA(0x98, (a, r, m) -> {}),
-    TXA(0x8A, (a, r, m) -> {}),
-    TXS(0x9A, (a, r, m) -> {}),
-    TSX(0xBA, (a, r, m) -> {}),
+    TAX(0xAA),
+    TAY(0xA8),
+    TYA(0x98),
+    TXA(0x8A),
+    TXS(0x9A),
+    TSX(0xBA),
 
-    BIT_Z(0x24, (a, r, m) -> {}),
-    BIT_ABS(0x2C, (a, r, m) -> {}),
+    BIT_Z(0x24),
+    BIT_ABS(0x2C),
 
-    CMP_I(0xC9, (a, r, m) -> {}),
-    CMP_Z(0xC5, (a, r, m) -> {}),
-    CMP_Z_IX(0xD5, (a, r, m) -> {}),
-    CMP_ABS(0xCD, (a, r, m) -> {}),
-    CMP_ABS_IX(0xDD, (a, r, m) -> {}),
-    CMP_ABS_IY(0xD9, (a, r, m) -> {}),
-    CMP_IND_IX(0xC1, (a, r, m) -> {}),
-    CMP_IND_IY(0xD1, (a, r, m) -> {}),
+    CMP_I(0xC9),
+    CMP_Z(0xC5),
+    CMP_Z_IX(0xD5),
+    CMP_ABS(0xCD),
+    CMP_ABS_IX(0xDD),
+    CMP_ABS_IY(0xD9),
+    CMP_IND_IX(0xC1),
+    CMP_IND_IY(0xD1),
 
-    CPX_I(0xE0, (a, r, m) -> {}),
-    CPX_Z(0xE4, (a, r, m) -> {}),
-    CPX_ABS(0xEC, (a, r, m) -> {}),
+    CPX_I(0xE0),
+    CPX_Z(0xE4),
+    CPX_ABS(0xEC),
 
-    CPY_I(0xC0, (a, r, m) -> {}),
-    CPY_Z(0xC4, (a, r, m) -> {}),
-    CPY_ABS(0xCC, (a, r, m) -> {}),
+    CPY_I(0xC0),
+    CPY_Z(0xC4),
+    CPY_ABS(0xCC),
 
-    JSR(0x20, (a, r, m) -> {}),
-    BPL(0x10, (a, r, m) -> {}),
-    BMI(0x30, (a, r, m) -> {}),
-    BVC(0x50, (a, r, m) -> {}),
-    BVS(0x70, (a, r, m) -> {}),
-    BCC(0x90, (a, r, m) -> {}),
-    BCS(0xB0, (a, r, m) -> {}),
-    BNE(0xD0, (a, r, m) -> {}),
-    BEQ(0xF0, (a, r, m) -> {}),
+    JSR(0x20),
+    BPL(0x10),
+    BMI(0x30),
+    BVC(0x50),
+    BVS(0x70),
+    BCC(0x90),
+    BCS(0xB0),
+    BNE(0xD0),
+    BEQ(0xF0),
 
-    ROL_A(0x2A, (a, r, m) -> {}),
-    ROL_Z(0x26, (a, r, m) -> {}),
-    ROL_Z_IX(0x36, (a, r, m) -> {}),
-    ROL_ABS(0x2E, (a, r, m) -> {}),
-    ROL_ABS_IX(0x3E, (a, r, m) -> {}),
+    ROL_A(0x2A),
+    ROL_Z(0x26),
+    ROL_Z_IX(0x36),
+    ROL_ABS(0x2E),
+    ROL_ABS_IX(0x3E),
 
     /** Not implemented and/or not published on older 6502s */
-    ROR_A(0x6A, (a, r, m) -> {}),
+    ROR_A(0x6A),
 
-    CLI(0x58, (a, r, m) -> {}),
-    SEI(0x78, (a, r, m) -> {}),
-    SED(0xF8, (a, r, m) -> {}),
-    CLD(0xD8, (a, r, m) -> {}),
+    CLI(0x58),
+    SEI(0x78),
+    SED(0xF8),
+    CLD(0xD8),
 
-    RTS(0x60, (a, r, m) -> {}),
-    RTI(0x40, (a, r, m) -> {});
+    RTS(0x60),
+    RTI(0x40);
 
     @Override
     public void perform(Mos6502Alu alu, Registers registers, Memory memory) {
-        instruction.perform(alu, registers, memory);
+        addressingMode.address(registers, memory, alu, operation::perform);
     }
 
     /**
@@ -329,15 +320,12 @@ public enum OpCode implements Instruction {
     private final String opCodeName;
     private final AddressingMode addressingMode;
 
-    private final Instruction instruction;
-
-    OpCode(int byteValue, Instruction instruction){
+    OpCode(int byteValue){
         this.byteValue = byteValue;
         this.addressingMode = OpCodeConverter.getAddressingMode(this.name());
         this.opCodeName = OpCodeConverter.getOpCode(this.name());
         this.operation = OpCodeConverter.getOperation(this.name());
 
-        this.instruction = instruction;
     }
 
     /**

@@ -31,7 +31,15 @@ public enum AddressingMode implements Addressable {
 
     /** Expects a one byte argument that contains a zero page address and the X Register to be filled with an
      *  offset value, to use in the operation */
-    ZERO_PAGE_X("Zero Page [X]", 2, (r, m, a, i) -> {}),
+    ZERO_PAGE_X("Zero Page [X]", 2, (r, m, a, i) -> {
+        final RoxWord argumentAddressBase = r.getAndStepProgramCounter();
+        final RoxByte offset = r.getRegister(Registers.Register.X_INDEX);
+        final RoxWord argumentAddress = RoxWord.fromLiteral(argumentAddressBase.getRawValue() + offset.getRawValue());
+        final RoxWord address = RoxWord.from(m.getByte(argumentAddress));
+        final RoxByte value = m.getByte(address);
+        final RoxByte newValue = i.perform(a, r, m, value);
+        m.setByteAt(address, newValue);
+    }),
 
     /** Expects a one byte argument that contains a zero page address and the Y Register to be filled with an
      *  offset value, to use in the operation */
