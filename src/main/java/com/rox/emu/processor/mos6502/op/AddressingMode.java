@@ -32,13 +32,15 @@ public enum AddressingMode implements Addressable {
     /** Expects a one byte argument that contains a zero page address and the X Register to be filled with an
      *  offset value, to use in the operation */
     ZERO_PAGE_X("Zero Page [X]", 2, (r, m, a, i) -> {
-        final RoxWord argumentAddressBase = r.getAndStepProgramCounter();
+        final RoxWord argumentAddress = r.getAndStepProgramCounter();
+        final RoxByte argumentValue = m.getByte(argumentAddress);
+
         final RoxByte offset = r.getRegister(Registers.Register.X_INDEX);
-        final RoxWord argumentAddress = RoxWord.fromLiteral(argumentAddressBase.getRawValue() + offset.getRawValue());
-        final RoxWord address = RoxWord.from(m.getByte(argumentAddress));
-        final RoxByte value = m.getByte(address);
+        final RoxWord valueAddress = RoxWord.fromLiteral(argumentValue.getRawValue() + offset.getRawValue());
+
+        final RoxByte value = m.getByte(valueAddress);
         final RoxByte newValue = i.perform(a, r, m, value);
-        m.setByteAt(address, newValue);
+        m.setByteAt(valueAddress, newValue);
     }),
 
     /** Expects a one byte argument that contains a zero page address and the Y Register to be filled with an
@@ -59,7 +61,20 @@ public enum AddressingMode implements Addressable {
 
     /** Expects a 2 byte argument that contains an absolute address and the X Register to be filled with an
      *  offset value, to use in the operation */
-    ABSOLUTE_X("Absolute [X]", 3, (r, m, a, i) -> {}),
+    ABSOLUTE_X("Absolute [X]", 3, (r, m, a, i) -> {
+        final RoxWord argumentHiByteAddress = r.getAndStepProgramCounter();
+        final RoxByte argumentHiByteValue = m.getByte(argumentHiByteAddress);
+        final RoxWord argumentLoByteAddress = r.getAndStepProgramCounter();
+        final RoxByte argumentLoByteValue = m.getByte(argumentLoByteAddress);
+        final RoxWord argumentValue = RoxWord.from(argumentHiByteValue, argumentLoByteValue);
+
+        final RoxByte offset = r.getRegister(Registers.Register.X_INDEX);
+        final RoxWord valueAddress = RoxWord.fromLiteral(argumentValue.getRawValue() + offset.getRawValue());
+
+        final RoxByte value = m.getByte(valueAddress);
+        final RoxByte newValue = i.perform(a, r, m, value);
+        m.setByteAt(valueAddress, newValue);
+    }),
 
     /** Expects a 2 byte argument that contains an absolute address and the Y Register to be filled with an
      *  offset value, to use in the operation */
@@ -86,7 +101,6 @@ public enum AddressingMode implements Addressable {
         //XXX the problem here is that sometimes we need to address a function on a word and return a word
         //    but with this abstraction we can't know which one
         //    --> This could possibly be solved by anything that is a two byte argument becomes chained performs()
-
     }),
 
     /** Expects a one byte argument that is the offset for a branch instruction */
