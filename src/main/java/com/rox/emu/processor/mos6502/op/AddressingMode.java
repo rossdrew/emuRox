@@ -50,10 +50,10 @@ public enum AddressingMode implements Addressable {
     /** Expects a 2 byte argument that contains an absolute address for use in the operation. Can be indexed
      *  as {@link #ABSOLUTE_X} or {@link #ABSOLUTE_Y} */
     ABSOLUTE("Absolute", 3, (r, m, a, i) -> {
-        final RoxWord argument1Address = r.getAndStepProgramCounter();
-        final RoxWord argument2Address = r.getAndStepProgramCounter();
-        final RoxWord address = RoxWord.from(m.getByte(argument1Address),
-                                             m.getByte(argument2Address));
+        final RoxWord argumentHiByteAddress = r.getAndStepProgramCounter();
+        final RoxWord argumentLoByteAddress = r.getAndStepProgramCounter();
+        final RoxWord address = RoxWord.from(m.getByte(argumentHiByteAddress),
+                                             m.getByte(argumentLoByteAddress));
         final RoxByte value = m.getByte(address);
         final RoxByte newValue = i.perform(a, r, m, value);
         m.setByteAt(address, newValue);
@@ -63,13 +63,12 @@ public enum AddressingMode implements Addressable {
      *  offset value, to use in the operation */
     ABSOLUTE_X("Absolute [X]", 3, (r, m, a, i) -> {
         final RoxWord argumentHiByteAddress = r.getAndStepProgramCounter();
-        final RoxByte argumentHiByteValue = m.getByte(argumentHiByteAddress);
         final RoxWord argumentLoByteAddress = r.getAndStepProgramCounter();
-        final RoxByte argumentLoByteValue = m.getByte(argumentLoByteAddress);
-        final RoxWord argumentValue = RoxWord.from(argumentHiByteValue, argumentLoByteValue);
+        final RoxWord address = RoxWord.from(m.getByte(argumentHiByteAddress),
+                                             m.getByte(argumentLoByteAddress));
 
         final RoxByte offset = r.getRegister(Registers.Register.X_INDEX);
-        final RoxWord valueAddress = RoxWord.fromLiteral(argumentValue.getRawValue() + offset.getRawValue());
+        final RoxWord valueAddress = RoxWord.fromLiteral(address.getRawValue() + offset.getRawValue());
 
         final RoxByte value = m.getByte(valueAddress);
         final RoxByte newValue = i.perform(a, r, m, value);
