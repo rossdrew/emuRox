@@ -231,7 +231,12 @@ public enum OpCode implements Instruction {
 
         ADC((a,r,m,v)->v),
         LDA((a,r,m,v)->v),
-        CLV((a,r,m,v)->v),
+
+        CLV((a,r,m,v)->{
+            r.clearFlag(Registers.Flag.OVERFLOW);
+            return v;
+        }),
+
         AND((a,r,m,v)->v),
         ORA((a,r,m,v)->v),
         EOR((a,r,m,v)->v),
