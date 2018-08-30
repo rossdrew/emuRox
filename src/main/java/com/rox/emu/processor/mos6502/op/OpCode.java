@@ -215,73 +215,73 @@ public enum OpCode implements Instruction {
      * The actual addressing-mode independent operation performed by an {@link OpCode}
      */
     public enum Operation implements AddressedValueInstruction{
-        BRK((r,m,a,i)->i),
+        BRK((a,r,m,v)->v),
 
-        ASL((a, r, m, v) -> {
+        ASL((a,r,m,v) -> {
             final RoxByte newValue = a.asl(v);
             r.setFlagsBasedOn(newValue);
             return newValue;
         }),
 
-        LSR((r,m,a,i)->i),
-        ADC((r,m,a,i)->i),
-        LDA((r,m,a,i)->i),
-        CLV((r,m,a,i)->i),
-        AND((r,m,a,i)->i),
-        ORA((r,m,a,i)->i),
-        EOR((r,m,a,i)->i),
-        SBC((r,m,a,i)->i),
+        LSR((a,r,m,v)->v),
+        ADC((a,r,m,v)->v),
+        LDA((a,r,m,v)->v),
+        CLV((a,r,m,v)->v),
+        AND((a,r,m,v)->v),
+        ORA((a,r,m,v)->v),
+        EOR((a,r,m,v)->v),
+        SBC((a,r,m,v)->v),
        
-        CLC((r,m,a,i)->i),
-        SEC((r,m,a,i)->i),
-        LDY((r,m,a,i)->i),
-        LDX((r,m,a,i)->i),
-        STY((r,m,a,i)->i),
-        STA((r,m,a,i)->i),
-        STX((r,m,a,i)->i),
-        INY((r,m,a,i)->i),
-        INX((r,m,a,i)->i),
-        DEX((r,m,a,i)->i),
+        CLC((a,r,m,v)->v),
+        SEC((a,r,m,v)->v),
+        LDY((a,r,m,v)->v),
+        LDX((a,r,m,v)->v),
+        STY((a,r,m,v)->v),
+        STA((a,r,m,v)->v),
+        STX((a,r,m,v)->v),
+        INY((a,r,m,v)->v),
+        INX((a,r,m,v)->v),
+        DEX((a,r,m,v)->v),
        
-        INC((r,m,a,i)->i),
-        DEC((r,m,a,i)->i),
-        DEY((r,m,a,i)->i),
-        PHA((r,m,a,i)->i),
-        PLA((r,m,a,i)->i), 
-        PHP((r,m,a,i)->i),
-        PLP((r,m,a,i)->i),
-        NOP((r,m,a,i)->i),
-        JMP((r,m,a,i)->i),
-        TAX((r,m,a,i)->i),
+        INC((a,r,m,v)->v),
+        DEC((a,r,m,v)->v),
+        DEY((a,r,m,v)->v),
+        PHA((a,r,m,v)->v),
+        PLA((a,r,m,v)->v), 
+        PHP((a,r,m,v)->v),
+        PLP((a,r,m,v)->v),
+        NOP((a,r,m,v)->v),
+        JMP((a,r,m,v)->v),
+        TAX((a,r,m,v)->v),
        
-        TAY((r,m,a,i)->i),
-        TYA((r,m,a,i)->i),
-        TXA((r,m,a,i)->i),
-        TXS((r,m,a,i)->i),
-        TSX((r,m,a,i)->i),
-        BIT((r,m,a,i)->i),
-        CMP((r,m,a,i)->i),
-        CPX((r,m,a,i)->i),
-        CPY((r,m,a,i)->i),
-        JSR((r,m,a,i)->i),
+        TAY((a,r,m,v)->v),
+        TYA((a,r,m,v)->v),
+        TXA((a,r,m,v)->v),
+        TXS((a,r,m,v)->v),
+        TSX((a,r,m,v)->v),
+        BIT((a,r,m,v)->v),
+        CMP((a,r,m,v)->v),
+        CPX((a,r,m,v)->v),
+        CPY((a,r,m,v)->v),
+        JSR((a,r,m,v)->v),
        
-        BPL((r,m,a,i)->i),
-        BMI((r,m,a,i)->i),
-        BVC((r,m,a,i)->i),
-        BVS((r,m,a,i)->i),
-        BCC((r,m,a,i)->i),
-        BCS((r,m,a,i)->i),
-        BNE((r,m,a,i)->i),
-        BEQ((r,m,a,i)->i),
-        ROL((r,m,a,i)->i),
-        ROR((r,m,a,i)->i),
+        BPL((a,r,m,v)->v),
+        BMI((a,r,m,v)->v),
+        BVC((a,r,m,v)->v),
+        BVS((a,r,m,v)->v),
+        BCC((a,r,m,v)->v),
+        BCS((a,r,m,v)->v),
+        BNE((a,r,m,v)->v),
+        BEQ((a,r,m,v)->v),
+        ROL((a,r,m,v)->v),
+        ROR((a,r,m,v)->v),
        
-        CLI((r,m,a,i)->i),
-        SEI((r,m,a,i)->i),
-        SED((r,m,a,i)->i),
-        CLD((r,m,a,i)->i),
-        RTS((r,m,a,i)->i),
-        RTI((r,m,a,i)->i);
+        CLI((a,r,m,v)->v),
+        SEI((a,r,m,v)->v),
+        SED((a,r,m,v)->v),
+        CLD((a,r,m,v)->v),
+        RTS((a,r,m,v)->v),
+        RTI((a,r,m,v)->v);
         
         private AddressedValueInstruction instruction;
         
@@ -322,6 +322,7 @@ public enum OpCode implements Instruction {
 
     OpCode(int byteValue){
         this.byteValue = byteValue;
+        //XXX Should I keep doing this or just pass them in explicitly?
         this.addressingMode = OpCodeConverter.getAddressingMode(this.name());
         this.opCodeName = OpCodeConverter.getOpCode(this.name());
         this.operation = OpCodeConverter.getOperation(this.name());
