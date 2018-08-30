@@ -14,7 +14,9 @@ import com.rox.emu.processor.mos6502.Registers;
  */
 public enum AddressingMode implements Addressable {
     /** Expects no argument */
-    IMPLIED("Implied", 1, (r, m, a, i) -> {}),
+    IMPLIED("Implied", 1, (r, m, a, i) -> {
+        i.perform(a,r,m,null);
+    }),
 
     /** Expects a one byte argument that is a literal value for use in the operation */
     IMMEDIATE("Immediate", 2, (r, m, a, i) -> {}),

@@ -237,8 +237,16 @@ public enum OpCode implements Instruction {
         EOR((a,r,m,v)->v),
         SBC((a,r,m,v)->v),
        
-        CLC((a,r,m,v)->v),
-        SEC((a,r,m,v)->v),
+        CLC((a,r,m,v)->{
+            r.clearFlag(Registers.Flag.CARRY);
+            return v;
+        }),
+
+        SEC((a,r,m,v)->{
+            r.setFlag(Registers.Flag.CARRY);
+            return v;
+        }),
+
         LDY((a,r,m,v)->v),
         LDX((a,r,m,v)->v),
         STY((a,r,m,v)->v),

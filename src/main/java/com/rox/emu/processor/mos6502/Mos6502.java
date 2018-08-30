@@ -134,19 +134,13 @@ public class Mos6502 {
             case ROL_Z_IX:
             case ROL_ABS:
             case ROL_ABS_IX:
+            case SEC:
+            case CLC:
                 opCode.perform(alu, registers, memory);
             break;
 
             case ROR_A:
                 withRegister(Register.ACCUMULATOR, this::performROR);
-                break;
-
-            case SEC:
-                registers.setFlag(Flag.CARRY);
-                break;
-
-            case CLC:
-                registers.clearFlag(Flag.CARRY);
                 break;
 
             case CLV:
