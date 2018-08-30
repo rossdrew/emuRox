@@ -96,10 +96,6 @@ public enum AddressingMode implements Addressable {
     ACCUMULATOR("Accumulator", 1, (r, m, a, i) -> {
         final RoxByte value = r.getRegister(Registers.Register.ACCUMULATOR);
         r.setRegister(Registers.Register.ACCUMULATOR, i.perform(a, r, m, value));
-
-        //XXX the problem here is that sometimes we need to address a function on a word and return a word
-        //    but with this abstraction we can't know which one
-        //    --> This could possibly be solved by anything that is a two byte argument becomes chained performs()
     }),
 
     /** Expects a one byte argument that is the offset for a branch instruction */
