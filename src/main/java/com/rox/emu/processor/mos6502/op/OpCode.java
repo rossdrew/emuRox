@@ -228,6 +228,7 @@ public enum OpCode implements Instruction {
             r.setFlagsBasedOn(newValue);
             return newValue;
         }),
+
         ADC((a,r,m,v)->v),
         LDA((a,r,m,v)->v),
         CLV((a,r,m,v)->v),
@@ -277,7 +278,13 @@ public enum OpCode implements Instruction {
         BCS((a,r,m,v)->v),
         BNE((a,r,m,v)->v),
         BEQ((a,r,m,v)->v),
-        ROL((a,r,m,v)->v),
+
+        ROL((a,r,m,v)->{
+            final RoxByte newValue = a.rol(v);
+            r.setFlagsBasedOn(newValue);
+            return newValue;
+        }),
+
         ROR((a,r,m,v)->v),
        
         CLI((a,r,m,v)->v),
