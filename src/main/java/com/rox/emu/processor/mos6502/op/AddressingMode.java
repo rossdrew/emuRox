@@ -56,8 +56,10 @@ public enum AddressingMode implements Addressable {
         final RoxWord argumentLoByteAddress = r.getAndStepProgramCounter();
         final RoxWord address = RoxWord.from(m.getByte(argumentHiByteAddress),
                                              m.getByte(argumentLoByteAddress));
+
         final RoxByte value = m.getByte(address);
         final RoxByte newValue = i.perform(a, r, m, value);
+
         m.setByteAt(address, newValue);
     }),
 

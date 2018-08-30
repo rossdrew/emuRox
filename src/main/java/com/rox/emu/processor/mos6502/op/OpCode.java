@@ -261,7 +261,12 @@ public enum OpCode implements Instruction {
         INX((a,r,m,v)->v),
         DEX((a,r,m,v)->v),
        
-        INC((a,r,m,v)->v),
+        INC((a,r,m,v)->{
+            final RoxByte newValue = a.adc(v, RoxByte.fromLiteral(1));
+            r.setFlagsBasedOn(newValue);
+            return newValue;
+        }),
+
         DEC((a,r,m,v)->v),
         DEY((a,r,m,v)->v),
         PHA((a,r,m,v)->v),

@@ -137,27 +137,16 @@ public class Mos6502 {
             case SEC:
             case CLC:
             case CLV:
+            case INC_Z:
+            case INC_Z_IX:
+            case INC_ABS:
+            case INC_ABS_IX:
                 opCode.perform(alu, registers, memory);
             break;
 
             case ROR_A:
                 withRegister(Register.ACCUMULATOR, this::performROR);
                 break;
-
-            case INC_Z:
-                withByteAt(RoxWord.from(nextProgramByte()), this::performINC);
-            break;
-
-            case INC_Z_IX:
-                withByteXIndexedAt(RoxWord.from(nextProgramByte()), this::performINC);
-            break;
-
-            case INC_ABS:
-                withByteAt(nextProgramWord(), this::performINC);break;
-
-            case INC_ABS_IX:
-                withByteXIndexedAt(nextProgramWord(), this::performINC);
-            break;
 
             case DEC_Z:
                 withByteAt(RoxWord.from(nextProgramByte()), this::performDEC);
