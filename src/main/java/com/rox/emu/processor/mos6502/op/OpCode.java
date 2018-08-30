@@ -223,7 +223,11 @@ public enum OpCode implements Instruction {
             return newValue;
         }),
 
-        LSR((a,r,m,v)->v),
+        LSR((a,r,m,v)->{
+            final RoxByte newValue = a.lsr(v);
+            r.setFlagsBasedOn(newValue);
+            return newValue;
+        }),
         ADC((a,r,m,v)->v),
         LDA((a,r,m,v)->v),
         CLV((a,r,m,v)->v),

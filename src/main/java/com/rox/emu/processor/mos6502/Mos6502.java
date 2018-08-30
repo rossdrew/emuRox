@@ -124,27 +124,12 @@ public class Mos6502 {
             case ASL_Z_IX:
             case ASL_ABS_IX:
             case ASL_ABS:
-                opCode.perform(alu, registers, memory);
-            break;
-
             case LSR_A:
-                withRegister(Register.ACCUMULATOR, this::performLSR);
-            break;
-
             case LSR_Z:
-                withByteAt(RoxWord.from(nextProgramByte()), this::performLSR);
-            break;
-
             case LSR_Z_IX:
-                withByteXIndexedAt(RoxWord.from(nextProgramByte()), this::performLSR);
-            break;
-
             case LSR_ABS:
-                withByteAt(nextProgramWord(), this::performLSR);
-            break;
-
             case LSR_ABS_IX:
-                withByteXIndexedAt(nextProgramWord(), this::performLSR);
+                opCode.perform(alu, registers, memory);
             break;
 
             case ROL_A:
