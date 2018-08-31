@@ -149,31 +149,16 @@ public class Mos6502 {
             case DEX:
             case INY:
             case DEY:
+            case LDX_I:
+            case LDX_Z:
+            case LDX_Z_IY:
+            case LDX_ABS:
+            case LDX_ABS_IY:
                 opCode.perform(alu, registers, memory);
             break;
 
             case ROR_A:
                 withRegister(Register.ACCUMULATOR, this::performROR);
-                break;
-
-            case LDX_I:
-                registers.setRegisterAndFlags(Register.X_INDEX, nextProgramByte());
-                break;
-
-            case LDX_Z:
-                registers.setRegisterAndFlags(Register.X_INDEX, getByteOfMemoryAt(RoxWord.from(nextProgramByte())));
-                break;
-
-            case LDX_Z_IY:
-                registers.setRegisterAndFlags(Register.X_INDEX, getByteOfMemoryYIndexedAt(RoxWord.from(nextProgramByte())));
-                break;
-
-            case LDX_ABS:
-                registers.setRegisterAndFlags(Register.X_INDEX, getByteOfMemoryAt(nextProgramWord()));
-                break;
-
-            case LDX_ABS_IY:
-                registers.setRegisterAndFlags(Register.X_INDEX, getByteOfMemoryYIndexedAt(nextProgramWord()));
                 break;
 
             case LDY_I:

@@ -2,6 +2,7 @@ package com.rox.emu.processor.mos6502.op;
 
 import com.rox.emu.UnknownOpCodeException;
 import com.rox.emu.env.RoxByte;
+import com.rox.emu.env.RoxWord;
 import com.rox.emu.mem.Memory;
 import com.rox.emu.processor.mos6502.Mos6502;
 import com.rox.emu.processor.mos6502.Mos6502Alu;
@@ -253,7 +254,13 @@ public enum OpCode implements Instruction {
         }),
 
         LDY((a,r,m,v)->v),
-        LDX((a,r,m,v)->v),
+
+        LDX((a,r,m,v)->{
+            r.setFlagsBasedOn(v);
+            r.setRegister(Registers.Register.X_INDEX, v);
+            return v;
+        }),
+
         STY((a,r,m,v)->v),
         STA((a,r,m,v)->v),
         STX((a,r,m,v)->v),

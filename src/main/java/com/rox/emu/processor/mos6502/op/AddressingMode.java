@@ -20,7 +20,11 @@ public enum AddressingMode implements Addressable {
     }),
 
     /** Expects a one byte argument that is a literal value for use in the operation */
-    IMMEDIATE("Immediate", 2, (r, m, a, i) -> {}),
+    IMMEDIATE("Immediate", 2, (r, m, a, i) -> {
+        final RoxWord argAddress = r.getAndStepProgramCounter();
+        final RoxByte argument = m.getByte(argAddress);
+        i.perform(a,r,m, argument);
+    }),
 
     /** Expects a one byte argument that contains a zero page address to use in the operation. Can be indexed
      *  as {@link #ZERO_PAGE_X} or {@link #ZERO_PAGE_Y} */
@@ -48,7 +52,17 @@ public enum AddressingMode implements Addressable {
 
     /** Expects a one byte argument that contains a zero page address and the Y Register to be filled with an
      *  offset value, to use in the operation */
-    ZERO_PAGE_Y("Zero Page [Y]", 2, (r, m, a, i) -> {}),
+    ZERO_PAGE_Y("Zero Page [Y]", 2, (r, m, a, i) -> {
+        final RoxWord argumentAddress = r.getAndStepProgramCounter();
+        final RoxByte argumentValue = m.getByte(argumentAddress);
+
+        final RoxByte offset = r.getRegister(Registers.Register.Y_INDEX);
+        final RoxWord valueAddress = RoxWord.fromLiteral(argumentValue.getRawValue() + offset.getRawValue());
+
+        final RoxByte value = m.getByte(valueAddress);
+        final RoxByte newValue = i.perform(a, r, m, value);
+        m.setByteAt(valueAddress, newValue);
+    }),
 
     /** Expects a 2 byte argument that contains an absolute address for use in the operation. Can be indexed
      *  as {@link #ABSOLUTE_X} or {@link #ABSOLUTE_Y} */
@@ -82,7 +96,19 @@ public enum AddressingMode implements Addressable {
 
     /** Expects a 2 byte argument that contains an absolute address and the Y Register to be filled with an
      *  offset value, to use in the operation */
-    ABSOLUTE_Y("Absolute [Y]", 3, (r, m, a, i) -> {}),
+    ABSOLUTE_Y("Absolute [Y]", 3, (r, m, a, i) -> {
+        final RoxWord argumentHiByteAddress = r.getAndStepProgramCounter();
+        final RoxWord argumentLoByteAddress = r.getAndStepProgramCounter();
+        final RoxWord address = RoxWord.from(m.getByte(argumentHiByteAddress),
+                m.getByte(argumentLoByteAddress));
+
+        final RoxByte offset = r.getRegister(Registers.Register.Y_INDEX);
+        final RoxWord valueAddress = RoxWord.fromLiteral(address.getRawValue() + offset.getRawValue());
+
+        final RoxByte value = m.getByte(valueAddress);
+        final RoxByte newValue = i.perform(a, r, m, value);
+        m.setByteAt(valueAddress, newValue);
+    }),
 
     /** Expects a one byte argument that contains a zero page address that contains the two byte address,
      *  to use in the operation.  Can be indexed as {@link #INDIRECT_X} or {@link #INDIRECT_Y} */
