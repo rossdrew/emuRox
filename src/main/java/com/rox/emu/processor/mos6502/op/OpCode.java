@@ -267,7 +267,15 @@ public enum OpCode implements Instruction {
             return newValue;
         }),
 
-        DEC((a,r,m,v)->v),
+        DEC((a,r,m,v)->{
+            boolean carryWasSet = r.getFlag(Registers.Flag.CARRY);
+            r.setFlag(Registers.Flag.CARRY);
+            final RoxByte newValue = a.sbc(v, RoxByte.fromLiteral(1));
+            if (carryWasSet) r.setFlag(Registers.Flag.CARRY); else r.clearFlag(Registers.Flag.CARRY);
+            r.setFlagsBasedOn(newValue);
+            return newValue;
+        }),
+
         DEY((a,r,m,v)->v),
         PHA((a,r,m,v)->v),
         PLA((a,r,m,v)->v), 
