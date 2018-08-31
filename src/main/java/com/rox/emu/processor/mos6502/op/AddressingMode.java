@@ -16,6 +16,7 @@ public enum AddressingMode implements Addressable {
     /** Expects no argument */
     IMPLIED("Implied", 1, (r, m, a, i) -> {
         i.perform(a,r,m,null);
+        //XXX might be worth looking into if we could allow the implied to do the addressing of A,Y,X
     }),
 
     /** Expects a one byte argument that is a literal value for use in the operation */

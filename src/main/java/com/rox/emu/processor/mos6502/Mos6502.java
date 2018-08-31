@@ -145,27 +145,15 @@ public class Mos6502 {
             case DEC_Z_IX:
             case DEC_ABS:
             case DEC_ABS_IX:
+            case INX:
+            case DEX:
+            case INY:
+            case DEY:
                 opCode.perform(alu, registers, memory);
             break;
 
             case ROR_A:
                 withRegister(Register.ACCUMULATOR, this::performROR);
-                break;
-
-            case INX:
-                withRegister(Register.X_INDEX, this::performINC);
-                break;
-
-            case DEX:
-                withRegister(Register.X_INDEX, this::performDEC);
-                break;
-
-            case INY:
-                withRegister(Register.Y_INDEX, this::performINC);
-                break;
-
-            case DEY:
-                withRegister(Register.Y_INDEX, this::performDEC);
                 break;
 
             case LDX_I:

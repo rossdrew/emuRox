@@ -257,9 +257,48 @@ public enum OpCode implements Instruction {
         STY((a,r,m,v)->v),
         STA((a,r,m,v)->v),
         STX((a,r,m,v)->v),
-        INY((a,r,m,v)->v),
-        INX((a,r,m,v)->v),
-        DEX((a,r,m,v)->v),
+
+        INY((a,r,m,v)->{
+            final RoxByte xValue = r.getRegister(Registers.Register.Y_INDEX);
+            final RoxByte newValue = a.adc(xValue, RoxByte.fromLiteral(1));
+            r.setFlagsBasedOn(newValue);
+            r.setRegister(Registers.Register.Y_INDEX, newValue);
+            return v;
+        }),
+
+        DEY((a,r,m,v)->{
+            final RoxByte xValue = r.getRegister(Registers.Register.Y_INDEX);
+
+            boolean carryWasSet = r.getFlag(Registers.Flag.CARRY);
+            r.setFlag(Registers.Flag.CARRY);
+            final RoxByte newValue = a.sbc(xValue, RoxByte.fromLiteral(1));
+            if (carryWasSet) r.setFlag(Registers.Flag.CARRY); else r.clearFlag(Registers.Flag.CARRY);
+
+            r.setFlagsBasedOn(newValue);
+            r.setRegister(Registers.Register.Y_INDEX, newValue);
+            return v;
+        }),
+
+        INX((a,r,m,v)->{
+            final RoxByte xValue = r.getRegister(Registers.Register.X_INDEX);
+            final RoxByte newValue = a.adc(xValue, RoxByte.fromLiteral(1));
+            r.setFlagsBasedOn(newValue);
+            r.setRegister(Registers.Register.X_INDEX, newValue);
+            return v;
+        }),
+
+        DEX((a,r,m,v)->{
+            final RoxByte xValue = r.getRegister(Registers.Register.X_INDEX);
+
+            boolean carryWasSet = r.getFlag(Registers.Flag.CARRY);
+            r.setFlag(Registers.Flag.CARRY);
+            final RoxByte newValue = a.sbc(xValue, RoxByte.fromLiteral(1));
+            if (carryWasSet) r.setFlag(Registers.Flag.CARRY); else r.clearFlag(Registers.Flag.CARRY);
+
+            r.setFlagsBasedOn(newValue);
+            r.setRegister(Registers.Register.X_INDEX, newValue);
+            return v;
+        }),
        
         INC((a,r,m,v)->{
             final RoxByte newValue = a.adc(v, RoxByte.fromLiteral(1));
@@ -276,7 +315,6 @@ public enum OpCode implements Instruction {
             return newValue;
         }),
 
-        DEY((a,r,m,v)->v),
         PHA((a,r,m,v)->v),
         PLA((a,r,m,v)->v), 
         PHP((a,r,m,v)->v),
