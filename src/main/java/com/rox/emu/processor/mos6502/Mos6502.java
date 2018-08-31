@@ -154,53 +154,25 @@ public class Mos6502 {
             case LDX_Z_IY:
             case LDX_ABS:
             case LDX_ABS_IY:
-
             case LDY_I:
             case LDY_Z:
             case LDY_Z_IX:
             case LDY_ABS:
             case LDY_ABS_IX:
+            case LDA_I:
+            case LDA_Z:
+            case LDA_Z_IX:
+            case LDA_ABS:
+            case LDA_ABS_IY:
+            case LDA_ABS_IX:
+            case LDA_IND_IX:
+            case LDA_IND_IY:
                 opCode.perform(alu, registers, memory);
             break;
 
             case ROR_A:
                 withRegister(Register.ACCUMULATOR, this::performROR);
                 break;
-
-            case LDA_I:
-                registers.setRegisterAndFlags(Register.ACCUMULATOR, nextProgramByte());
-                break;
-
-            case LDA_Z:
-                registers.setRegisterAndFlags(Register.ACCUMULATOR, getByteOfMemoryAt(RoxWord.from(nextProgramByte())));
-                break;
-
-            case LDA_Z_IX:
-                registers.setRegisterAndFlags(Register.ACCUMULATOR, getByteOfMemoryXIndexedAt(RoxWord.from(nextProgramByte())));
-                break;
-
-            case LDA_ABS:
-                registers.setRegisterAndFlags(Register.ACCUMULATOR, getByteOfMemoryAt(nextProgramWord()));
-                break;
-
-            case LDA_ABS_IY:
-                registers.setRegisterAndFlags(Register.ACCUMULATOR, getByteOfMemoryYIndexedAt(nextProgramWord()));
-                break;
-
-            case LDA_ABS_IX:
-                registers.setRegisterAndFlags(Register.ACCUMULATOR, getByteOfMemoryXIndexedAt(nextProgramWord()));
-                break;
-
-            case LDA_IND_IX:
-                //XXX this needs to be wrappable for zero page addressing
-                registers.setRegisterAndFlags(Register.ACCUMULATOR, getByteOfMemoryAt(getWordOfMemoryXIndexedAt(RoxWord.from(nextProgramByte()))));
-            break;
-
-            case LDA_IND_IY:
-                final RoxWord l = getIndirectYPointer();
-                final RoxByte v = getByteOfMemoryAt(l);
-                registers.setRegisterAndFlags(Register.ACCUMULATOR, v);
-            break;
 
             case AND_Z:
                 withRegisterAndByteAt(Register.ACCUMULATOR, RoxWord.from(nextProgramByte()), this::performAND);

@@ -116,12 +116,33 @@ public enum AddressingMode implements Addressable {
 
     /** <i>Indexed indirect</i>: Expects a one byte argument and an offset in the X Register added together they
      *  give an address in Zero Page that itself contains a two byte address to be used in the operation */
-    INDIRECT_X("Indirect, X", 2, (r, m, a, i) -> {}),
+    INDIRECT_X("Indirect, X", 2, (r, m, a, i) -> {
+        final RoxByte offset = r.getRegister(Registers.Register.X_INDEX);
+        final RoxWord argumentAddress = r.getAndStepProgramCounter();
+        final RoxWord pointerAddress = RoxWord.fromLiteral(m.getByte(argumentAddress).getRawValue() + offset.getRawValue());
+
+        final RoxWord pointer = m.getWord(pointerAddress);
+        final RoxByte value = m.getByte(pointer);
+
+        final RoxByte newValue = i.perform(a, r, m, value);
+        m.setByteAt(pointer, newValue);
+    }),
 
     /** <i>Indirect indexed</i>: Expects a one byte argument and an offset in the Y Register.  A two byte address
      *  is fetched from the Zero Page location pointed to by the argument, the offset is added to this address which
      *  gives the two byte address to be used in the operation  */
-    INDIRECT_Y("Indirect, Y", 2, (r, m, a, i) -> {}),
+    INDIRECT_Y("Indirect, Y", 2, (r, m, a, i) -> {
+        final RoxWord argumentAddress = r.getAndStepProgramCounter();
+        final RoxWord argument = RoxWord.from(m.getByte(argumentAddress));
+
+        final RoxByte offset = r.getRegister(Registers.Register.Y_INDEX);
+        final RoxWord pointerBase = m.getWord(argument);
+        final RoxWord pointer = RoxWord.fromLiteral(pointerBase.getRawValue() + offset.getRawValue());
+        final RoxByte value = m.getByte(pointer);
+
+        final RoxByte newValue = i.perform(a, r, m, value);
+        m.setByteAt(pointer, newValue);
+    }),
 
     /** Expects no argument, operation will be performed using the Accumulator Register*/
     ACCUMULATOR("Accumulator", 1, (r, m, a, i) -> {

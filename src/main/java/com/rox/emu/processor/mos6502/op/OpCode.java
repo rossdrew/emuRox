@@ -231,7 +231,12 @@ public enum OpCode implements Instruction {
         }),
 
         ADC((a,r,m,v)->v),
-        LDA((a,r,m,v)->v),
+
+        LDA((a,r,m,v)->{
+            r.setFlagsBasedOn(v);
+            r.setRegister(Registers.Register.ACCUMULATOR, v);
+            return v;
+        }),
 
         CLV((a,r,m,v)->{
             r.clearFlag(Registers.Flag.OVERFLOW);
