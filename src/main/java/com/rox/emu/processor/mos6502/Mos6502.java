@@ -167,44 +167,20 @@ public class Mos6502 {
             case LDA_ABS_IX:
             case LDA_IND_IX:
             case LDA_IND_IY:
+            case AND_Z:
+            case AND_ABS:
+            case AND_I:
+            case AND_Z_IX:
+            case AND_ABS_IX:
+            case AND_ABS_IY:
+            case AND_IND_IX:
+            case AND_IND_IY:
                 opCode.perform(alu, registers, memory);
             break;
 
             case ROR_A:
                 withRegister(Register.ACCUMULATOR, this::performROR);
                 break;
-
-            case AND_Z:
-                withRegisterAndByteAt(Register.ACCUMULATOR, RoxWord.from(nextProgramByte()), this::performAND);
-                break;
-
-            case AND_ABS:
-                withRegisterAndByteAt(Register.ACCUMULATOR, nextProgramWord(), this::performAND);
-                break;
-
-            case AND_I:
-                withRegisterAndByte(Register.ACCUMULATOR, nextProgramByte(), this::performAND);
-                break;
-
-            case AND_Z_IX:
-                withRegisterAndByteXIndexedAt(Register.ACCUMULATOR, RoxWord.from(nextProgramByte()), this::performAND);
-                break;
-
-            case AND_ABS_IX:
-                withRegisterAndByteXIndexedAt(Register.ACCUMULATOR, nextProgramWord(), this::performAND);
-                break;
-
-            case AND_ABS_IY:
-                withRegisterAndByteYIndexedAt(Register.ACCUMULATOR, nextProgramWord(), this::performAND);
-                break;
-
-            case AND_IND_IX:
-                withRegisterAndByteAt(Register.ACCUMULATOR, getWordOfMemoryXIndexedAt(RoxWord.from(nextProgramByte())), this::performAND);
-            break;
-
-            case AND_IND_IY:
-                withRegisterAndByteAt(Register.ACCUMULATOR, getIndirectYPointer(), this::performAND);
-            break;
 
             case BIT_Z:
                 performBIT(getByteOfMemoryAt(RoxWord.from(nextProgramByte())));
