@@ -253,7 +253,11 @@ public enum OpCode implements Instruction {
             return v;
         }),
 
-        LDY((a,r,m,v)->v),
+        LDY((a,r,m,v)->{
+            r.setFlagsBasedOn(v);
+            r.setRegister(Registers.Register.Y_INDEX, v);
+            return v;
+        }),
 
         LDX((a,r,m,v)->{
             r.setFlagsBasedOn(v);
