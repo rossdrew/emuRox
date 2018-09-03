@@ -547,7 +547,7 @@ class OpCodeSpec extends Specification {
         [memoryAddress, index, firstValue, secondValue, expectedAccumulator, Z, N, C, V, Expected] << withBytePointer(withIndex(adcTestData()))
     }
 
-    @Unroll("ADC (Zero Page) #Expected:  #firstValue + #secondValue = #expectedAccumulator in Accumulator.")
+    @Unroll("ADC (Zero Page) #Expected: #firstValue + #secondValue = #expectedAccumulator in Accumulator.")
     testADC_Z() {
         when:
         Program program = loadMemoryWithProgram(LDA_I, firstValue, ADC_Z, 0x30)

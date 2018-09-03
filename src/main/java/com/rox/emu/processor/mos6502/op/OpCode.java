@@ -230,7 +230,13 @@ public enum OpCode implements Instruction {
             return newValue;
         }),
 
-        ADC((a,r,m,v)->v),
+        ADC((a,r,m,v)->{
+            final RoxByte accumulator = r.getRegister(Registers.Register.ACCUMULATOR);
+            final RoxByte newValue = a.adc(accumulator, v);
+            r.setFlagsBasedOn(newValue);
+            r.setRegister(Registers.Register.ACCUMULATOR, newValue);
+            return v;
+        }),
 
         LDA((a,r,m,v)->{
             r.setFlagsBasedOn(v);
@@ -244,8 +250,8 @@ public enum OpCode implements Instruction {
         }),
 
         AND((a,r,m,v)->{
-            final RoxByte valueA = r.getRegister(Registers.Register.ACCUMULATOR);
-            final RoxByte newValue = a.and(valueA, v);
+            final RoxByte accumulator = r.getRegister(Registers.Register.ACCUMULATOR);
+            final RoxByte newValue = a.and(accumulator, v);
             r.setFlagsBasedOn(newValue);
             r.setRegister(Registers.Register.ACCUMULATOR, newValue);
             return v;
