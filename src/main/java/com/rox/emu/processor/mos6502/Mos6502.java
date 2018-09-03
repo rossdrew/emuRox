@@ -175,19 +175,10 @@ public class Mos6502 {
             case AND_ABS_IY:
             case AND_IND_IX:
             case AND_IND_IY:
-                opCode.perform(alu, registers, memory);
-            break;
-
             case ROR_A:
-                withRegister(Register.ACCUMULATOR, this::performROR);
-                break;
-
-            case BIT_Z:
-                performBIT(getByteOfMemoryAt(RoxWord.from(nextProgramByte())));
-            break;
-
-            case BIT_ABS:
-                performBIT(getByteOfMemoryAt(nextProgramWord()));
+            case BIT_Z:   //XXX Needs reviewed
+            case BIT_ABS: //XXX Needs reviewed
+                opCode.perform(alu, registers, memory);
             break;
 
             case ORA_I:

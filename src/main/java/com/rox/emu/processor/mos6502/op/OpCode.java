@@ -351,7 +351,19 @@ public enum OpCode implements Instruction {
         TXA((a,r,m,v)->v),
         TXS((a,r,m,v)->v),
         TSX((a,r,m,v)->v),
-        BIT((a,r,m,v)->v),
+
+        BIT((a,r,m,v)->{
+            final RoxByte accumulator = r.getRegister(Registers.Register.ACCUMULATOR);
+            final RoxByte result = a.and(accumulator, v);
+
+            //XXX Need to properly look at this, http://obelisk.me.uk/6502/reference.html#BIT
+            //    says that "Set if the result if the AND is zero", so only if no bits match?!
+            r.setFlagTo(Registers.Flag.ZERO, (result.equals(accumulator)));
+            r.setFlagTo(Registers.Flag.OVERFLOW, v.isBitSet(6));
+            r.setFlagTo(Registers.Flag.NEGATIVE, v.isBitSet(7));
+            return v;
+        }),
+
         CMP((a,r,m,v)->v),
         CPX((a,r,m,v)->v),
         CPY((a,r,m,v)->v),
@@ -372,7 +384,11 @@ public enum OpCode implements Instruction {
             return newValue;
         }),
 
-        ROR((a,r,m,v)->v),
+        ROR((a,r,m,v)->{
+            final RoxByte newValue = a.ror(v);
+            r.setFlagsBasedOn(newValue);
+            return newValue;
+        }),
        
         CLI((a,r,m,v)->v),
         SEI((a,r,m,v)->v),
