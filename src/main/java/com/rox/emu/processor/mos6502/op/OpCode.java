@@ -251,7 +251,14 @@ public enum OpCode implements Instruction {
             return v;
         }),
 
-        ORA((a,r,m,v)->v),
+        ORA((a,r,m,v)->{
+            final RoxByte accumulator = r.getRegister(Registers.Register.ACCUMULATOR);
+            final RoxByte result = a.or(accumulator, v);
+            r.setFlagsBasedOn(result);
+            r.setRegister(Registers.Register.ACCUMULATOR, result);
+            return v;
+        }),
+
         EOR((a,r,m,v)->v),
         SBC((a,r,m,v)->v),
        

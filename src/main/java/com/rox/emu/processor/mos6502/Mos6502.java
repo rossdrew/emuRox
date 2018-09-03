@@ -178,39 +178,15 @@ public class Mos6502 {
             case ROR_A:
             case BIT_Z:   //XXX Needs reviewed
             case BIT_ABS: //XXX Needs reviewed
-                opCode.perform(alu, registers, memory);
-            break;
-
             case ORA_I:
-                withRegisterAndByte(Register.ACCUMULATOR, nextProgramByte(), this::performORA);
-                break;
-
             case ORA_Z:
-                withRegisterAndByteAt(Register.ACCUMULATOR, RoxWord.from(nextProgramByte()), this::performORA);
-                break;
-
             case ORA_Z_IX:
-                withRegisterAndByteXIndexedAt(Register.ACCUMULATOR, RoxWord.from(nextProgramByte()), this::performORA);
-                break;
-
             case ORA_ABS:
-                withRegisterAndByteAt(Register.ACCUMULATOR, nextProgramWord(), this::performORA);
-                break;
-
             case ORA_ABS_IX:
-                withRegisterAndByteXIndexedAt(Register.ACCUMULATOR, nextProgramWord(), this::performORA);
-                break;
-
             case ORA_ABS_IY:
-                withRegisterAndByteYIndexedAt(Register.ACCUMULATOR, nextProgramWord(), this::performORA);
-                break;
-
             case ORA_IND_IX:
-                withRegisterAndByteAt(Register.ACCUMULATOR, getWordOfMemoryXIndexedAt(RoxWord.from(nextProgramByte())), this::performORA);
-            break;
-
             case ORA_IND_IY:
-                withRegisterAndByteAt(Register.ACCUMULATOR, getIndirectYPointer(), this::performORA);
+                opCode.perform(alu, registers, memory);
             break;
 
             case EOR_I:

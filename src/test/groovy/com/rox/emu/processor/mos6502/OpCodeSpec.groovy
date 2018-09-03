@@ -2541,9 +2541,9 @@ class OpCodeSpec extends Specification {
     @Unroll("BIT (Zero Page) #expected: #memoryValue and #accumulatorValue")
     testBIT() {
         when:
-        Program program = loadMemoryWithProgram(LDA_I, firstValue,
+        Program program = loadMemoryWithProgram(LDA_I, memoryValue,
                                                 STA_Z, memLoc,
-                                                LDA_I, secondValue,
+                                                LDA_I, accumulatorValue,
                                                 BIT_Z, memLoc)
 
         and:
@@ -2554,12 +2554,12 @@ class OpCodeSpec extends Specification {
         testFlags(Z, N, registers.getFlag(Registers.Flag.CARRY), O)
 
         where:
-        memoryValue | accumulatorValue | memLoc | O     | Z    | N    | expected
-        //     0x01        | 0x01             | 0x20   | false | true  | false | "Equal values"
-        //     0x01        | 0x12             | 0x20   | false | false | false | "Unequal values"
-        0b10000000  | 0b00000000       | 0x20   | false | true | true | "Negative flag on"
-        //     0b01000000  | 0b00000000       | 0x20   | true  | false | false | "Overflow flag on"
-        //     0b11000000  | 0b00000000       | 0x20   | true  | false | true  | "Negative & Overflow flag on"
+        memoryValue | accumulatorValue | memLoc | O     | Z     | N    |  expected
+        0x01        | 0x01             | 0x20   | false | true  | false | "Equal values"
+        0x01        | 0x12             | 0x20   | false | false | false | "Unequal values"
+        0b10000000  | 0b00000000       | 0x20   | false | true  | true  | "Negative flag on"
+        0b01000000  | 0b00000000       | 0x20   | true  | true  | false | "Overflow flag on"
+        0b11000000  | 0b00000000       | 0x20   | true  | true  | true  | "Negative & Overflow flag on"
     }
 
     @Unroll("BIT (Absolute) #expected: #firstValue and #secondValue")
