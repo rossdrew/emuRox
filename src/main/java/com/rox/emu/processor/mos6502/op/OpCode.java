@@ -396,8 +396,29 @@ public enum OpCode implements Instruction {
             return v;
         }),
 
-        PHP((a,r,m,v)->v),
-        PLP((a,r,m,v)->v),
+        PHP((a,r,m,v)->{
+            final RoxByte statusFlags = r.getRegister(Registers.Register.STATUS_FLAGS);
+
+            final RoxByte stackIndex = r.getRegister(Registers.Register.STACK_POINTER_HI);  //XXX Shouldn't this be LOW?
+            final RoxWord stackEntry = RoxWord.from(RoxByte.fromLiteral(0x01), stackIndex);
+            m.setByteAt(stackEntry, statusFlags);
+
+            final RoxByte newStackIndex = RoxByte.fromLiteral(stackIndex.getRawValue() - 1); //XXX Should use alu
+            r.setRegister(Registers.Register.STACK_POINTER_HI, newStackIndex);
+            return v;
+        }),
+
+        PLP((a,r,m,v)->{
+            final RoxByte stackIndex = r.getRegister(Registers.Register.STACK_POINTER_HI);  //XXX Shouldn't this be LOW?
+            final RoxByte newStackIndex = RoxByte.fromLiteral(stackIndex.getRawValue() + 1); //XXX Should use alu
+
+            final RoxWord stackEntry = RoxWord.from(RoxByte.fromLiteral(0x01), newStackIndex);
+            final RoxByte stackValue = m.getByte(stackEntry);
+
+            r.setRegister(Registers.Register.STATUS_FLAGS, stackValue);
+            r.setRegister(Registers.Register.STACK_POINTER_HI, newStackIndex);
+            return v;
+        }),
         NOP((a,r,m,v)->v),
         JMP((a,r,m,v)->v),
         TAX((a,r,m,v)->v),

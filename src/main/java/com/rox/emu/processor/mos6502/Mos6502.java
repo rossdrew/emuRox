@@ -239,16 +239,10 @@ public class Mos6502 {
             case STX_ABS:
             case PHA:
             case PLA:
+            case PHP:
+            case PLP:
                 opCode.perform(alu, registers, memory);
             break;
-
-            case PHP:
-                pushRegister(Register.STATUS_FLAGS);
-                break;
-
-            case PLP:
-                registers.setRegister(Register.STATUS_FLAGS, pop());
-                break;
 
             case JMP_ABS:
                 registers.setPC(nextProgramWord());
