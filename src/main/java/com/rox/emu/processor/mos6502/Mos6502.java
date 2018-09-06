@@ -241,6 +241,10 @@ public class Mos6502 {
             case PLA:
             case PHP:
             case PLP:
+            case TAX:
+            case TAY:
+            case TYA:
+            case TXA:
                 opCode.perform(alu, registers, memory);
             break;
 
@@ -291,22 +295,6 @@ public class Mos6502 {
 
             case BVC:
                 branchIf(!registers.getFlag(Flag.OVERFLOW));
-                break;
-
-            case TAX:
-                setRegisterValue(Register.X_INDEX, getRegisterValue(Register.ACCUMULATOR));
-                break;
-
-            case TAY:
-                setRegisterValue(Register.Y_INDEX, getRegisterValue(Register.ACCUMULATOR));
-                break;
-
-            case TYA:
-                setRegisterValue(Register.ACCUMULATOR, getRegisterValue(Register.Y_INDEX));
-                break;
-
-            case TXA:
-                setRegisterValue(Register.ACCUMULATOR, getRegisterValue(Register.X_INDEX));
                 break;
 
             case TXS:

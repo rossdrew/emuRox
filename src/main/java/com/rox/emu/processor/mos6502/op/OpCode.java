@@ -419,13 +419,35 @@ public enum OpCode implements Instruction {
             r.setRegister(Registers.Register.STACK_POINTER_HI, newStackIndex);
             return v;
         }),
+
         NOP((a,r,m,v)->v),
-        JMP((a,r,m,v)->v),
-        TAX((a,r,m,v)->v),
+
+        JMP((a,r,m,v)->v), /* TODO Needs some thought, it takes in a byte but needs a word */
+
+        TAX((a,r,m,v)->{
+            final RoxByte accumulatorValue = r.getRegister(Registers.Register.ACCUMULATOR);
+            r.setRegister(Registers.Register.X_INDEX, accumulatorValue);
+            return v;
+        }),
        
-        TAY((a,r,m,v)->v),
-        TYA((a,r,m,v)->v),
-        TXA((a,r,m,v)->v),
+        TAY((a,r,m,v)->{
+            final RoxByte accumulatorValue = r.getRegister(Registers.Register.ACCUMULATOR);
+            r.setRegister(Registers.Register.Y_INDEX, accumulatorValue);
+            return v;
+        }),
+
+        TYA((a,r,m,v)->{
+            final RoxByte accumulatorValue = r.getRegister(Registers.Register.Y_INDEX);
+            r.setRegister(Registers.Register.ACCUMULATOR, accumulatorValue);
+            return v;
+        }),
+
+        TXA((a,r,m,v)->{
+            final RoxByte accumulatorValue = r.getRegister(Registers.Register.X_INDEX);
+            r.setRegister(Registers.Register.ACCUMULATOR, accumulatorValue);
+            return v;
+        }),
+
         TXS((a,r,m,v)->v),
         TSX((a,r,m,v)->v),
 
@@ -472,7 +494,9 @@ public enum OpCode implements Instruction {
         BVC((a,r,m,v)->v),
         BVS((a,r,m,v)->v),
         BCC((a,r,m,v)->v),
-        BCS((a,r,m,v)->v),
+
+        BCS((a,r,m,v)->v), //TODO needs some thought: This is a two byte, silent adc/sbc
+
         BNE((a,r,m,v)->v),
         BEQ((a,r,m,v)->v),
 
