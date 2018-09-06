@@ -224,60 +224,21 @@ public class Mos6502 {
             case SBC_ABS_IY:
             case SBC_IND_IX:
             case SBC_IND_IY:
+            case STY_Z:
+            case STY_ABS:
+            case STY_Z_IX:
+            case STA_Z:
+            case STA_ABS:
+            case STA_Z_IX:
+            case STA_ABS_IX:
+            case STA_ABS_IY:
+            case STA_IND_IX:
+            case STA_IND_IY:
+            case STX_Z:
+            case STX_Z_IY:
+            case STX_ABS:
                 opCode.perform(alu, registers, memory);
             break;
-
-            case STY_Z:
-                setByteOfMemoryAt(RoxWord.from(nextProgramByte()), getRegisterValue(Register.Y_INDEX));
-                break;
-
-            case STY_ABS:
-                setByteOfMemoryAt(nextProgramWord(), getRegisterValue(Register.Y_INDEX));
-                break;
-
-            case STY_Z_IX:
-                setByteOfMemoryXIndexedAt(RoxWord.from(nextProgramByte()), getRegisterValue(Register.Y_INDEX));
-                break;
-
-            case STA_Z:
-                setByteOfMemoryAt(RoxWord.from(nextProgramByte()), getRegisterValue(Register.ACCUMULATOR));
-                break;
-
-            case STA_ABS:
-                setByteOfMemoryAt(nextProgramWord(), getRegisterValue(Register.ACCUMULATOR));
-                break;
-
-            case STA_Z_IX:
-                setByteOfMemoryXIndexedAt(RoxWord.from(nextProgramByte()), getRegisterValue(Register.ACCUMULATOR));
-                break;
-
-            case STA_ABS_IX:
-                setByteOfMemoryXIndexedAt(nextProgramWord(), getRegisterValue(Register.ACCUMULATOR));
-                break;
-
-            case STA_ABS_IY:
-                setByteOfMemoryYIndexedAt(nextProgramWord(), getRegisterValue(Register.ACCUMULATOR));
-                break;
-
-            case STA_IND_IX:
-                setByteOfMemoryAt(getWordOfMemoryXIndexedAt(RoxWord.from(nextProgramByte())), getRegisterValue(Register.ACCUMULATOR));
-            break;
-
-            case STA_IND_IY:
-                setByteOfMemoryAt(getIndirectYPointer(), getRegisterValue(Register.ACCUMULATOR));
-            break;
-
-            case STX_Z:
-                setByteOfMemoryAt(RoxWord.from(nextProgramByte()), getRegisterValue(Register.X_INDEX));
-                break;
-
-            case STX_Z_IY:
-                setByteOfMemoryYIndexedAt(RoxWord.from(nextProgramByte()), getRegisterValue(Register.X_INDEX));
-                break;
-
-            case STX_ABS:
-                setByteOfMemoryAt(nextProgramWord(), getRegisterValue(Register.X_INDEX));
-                break;
 
             case PHA:
                 pushRegister(Register.ACCUMULATOR);

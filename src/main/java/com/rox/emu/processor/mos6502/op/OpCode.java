@@ -303,9 +303,17 @@ public enum OpCode implements Instruction {
             return v;
         }),
 
-        STY((a,r,m,v)->v),
-        STA((a,r,m,v)->v),
-        STX((a,r,m,v)->v),
+        STY((a,r,m,v)->{
+            return r.getRegister(Registers.Register.Y_INDEX);
+        }),
+
+        STA((a,r,m,v)->{
+            return r.getRegister(Registers.Register.ACCUMULATOR);
+        }),
+
+        STX((a,r,m,v)->{
+            return r.getRegister(Registers.Register.X_INDEX);
+        }),
 
         INY((a,r,m,v)->{
             final RoxByte xValue = r.getRegister(Registers.Register.Y_INDEX);
