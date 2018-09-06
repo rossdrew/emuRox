@@ -210,32 +210,14 @@ public class Mos6502 {
             case CMP_ABS_IY:
             case CMP_IND_IX:
             case CMP_IND_IY:
+            case CPX_I:
+            case CPX_Z:
+            case CPX_ABS:
+            case CPY_I:
+            case CPY_Z:
+            case CPY_ABS:
                 opCode.perform(alu, registers, memory);
             break;
-
-            case CPX_I:
-                performCMP(nextProgramByte(), Register.X_INDEX);
-                break;
-
-            case CPX_Z:
-                performCMP(getByteOfMemoryAt(RoxWord.from(nextProgramByte())), Register.X_INDEX);
-                break;
-
-            case CPX_ABS:
-                performCMP(getByteOfMemoryAt(nextProgramWord()), Register.X_INDEX);
-                break;
-
-            case CPY_I:
-                performCMP(nextProgramByte(), Register.Y_INDEX);
-                break;
-
-            case CPY_Z:
-                performCMP(getByteOfMemoryAt(RoxWord.from(nextProgramByte())), Register.Y_INDEX);
-                break;
-
-            case CPY_ABS:
-                performCMP(getByteOfMemoryAt(nextProgramWord()), Register.Y_INDEX);
-                break;
 
             case SBC_I:
                 withRegisterAndByte(Register.ACCUMULATOR, nextProgramByte(), this::performSBC);

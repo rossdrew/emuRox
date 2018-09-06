@@ -391,8 +391,23 @@ public enum OpCode implements Instruction {
             r.setFlagsBasedOn(resultOfSbc);
             return v;
         }),
-        CPX((a,r,m,v)->v),
-        CPY((a,r,m,v)->v),
+
+        CPX((a,r,m,v)->{
+            r.setFlag(Registers.Flag.CARRY); //XXX IS this the right place to be doing this?
+            final RoxByte x = r.getRegister(Registers.Register.X_INDEX);
+            final RoxByte resultOfSbc = a.sbc(x, v);
+            r.setFlagsBasedOn(resultOfSbc);
+            return v;
+        }),
+
+        CPY((a,r,m,v)->{
+            r.setFlag(Registers.Flag.CARRY); //XXX IS this the right place to be doing this?
+            final RoxByte y = r.getRegister(Registers.Register.Y_INDEX);
+            final RoxByte resultOfSbc = a.sbc(y, v);
+            r.setFlagsBasedOn(resultOfSbc);
+            return v;
+        }),
+
         JSR((a,r,m,v)->v),
        
         BPL((a,r,m,v)->v),
