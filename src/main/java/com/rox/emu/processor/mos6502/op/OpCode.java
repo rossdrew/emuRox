@@ -372,8 +372,30 @@ public enum OpCode implements Instruction {
             return newValue;
         }),
 
-        PHA((a,r,m,v)->v),
-        PLA((a,r,m,v)->v), 
+        PHA((a,r,m,v)->{
+            final RoxByte accumulatorValue = r.getRegister(Registers.Register.ACCUMULATOR);
+
+            final RoxByte stackIndex = r.getRegister(Registers.Register.STACK_POINTER_HI);  //XXX Shouldn't this be LOW?
+            final RoxWord stackEntry = RoxWord.from(RoxByte.fromLiteral(0x01), stackIndex);
+            m.setByteAt(stackEntry, accumulatorValue);
+
+            final RoxByte newStackIndex = RoxByte.fromLiteral(stackIndex.getRawValue() - 1); //XXX Should use alu
+            r.setRegister(Registers.Register.STACK_POINTER_HI, newStackIndex);
+            return v;
+        }),
+
+        PLA((a,r,m,v)->{
+            final RoxByte stackIndex = r.getRegister(Registers.Register.STACK_POINTER_HI);  //XXX Shouldn't this be LOW?
+            final RoxByte newStackIndex = RoxByte.fromLiteral(stackIndex.getRawValue() + 1); //XXX Should use alu
+
+            final RoxWord stackEntry = RoxWord.from(RoxByte.fromLiteral(0x01), newStackIndex);
+            final RoxByte stackValue = m.getByte(stackEntry);
+
+            r.setRegister(Registers.Register.ACCUMULATOR, stackValue);
+            r.setRegister(Registers.Register.STACK_POINTER_HI, newStackIndex);
+            return v;
+        }),
+
         PHP((a,r,m,v)->v),
         PLP((a,r,m,v)->v),
         NOP((a,r,m,v)->v),
