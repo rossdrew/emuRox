@@ -245,6 +245,11 @@ public class Mos6502 {
             case TAY:
             case TYA:
             case TXA:
+            case NOP:
+            case SEI:
+            case CLI:
+            case SED:
+            case CLD:
                 opCode.perform(alu, registers, memory);
             break;
 
@@ -304,26 +309,6 @@ public class Mos6502 {
             case TSX:
                 setRegisterValue(Register.X_INDEX, getRegisterValue(Register.STACK_POINTER_HI));
                 registers.setFlagsBasedOn(getRegisterValue(Register.X_INDEX));
-                break;
-
-            case NOP:
-                //Do nothing
-                break;
-
-            case SEI:
-                registers.setFlag(Flag.IRQ_DISABLE);
-                break;
-
-            case CLI:
-                registers.clearFlag(Flag.IRQ_DISABLE);
-                break;
-
-            case SED:
-                registers.setFlag(Flag.DECIMAL_MODE);
-                break;
-
-            case CLD:
-                registers.clearFlag(Flag.DECIMAL_MODE);
                 break;
 
             case RTS:

@@ -511,11 +511,27 @@ public enum OpCode implements Instruction {
             r.setFlagsBasedOn(newValue);
             return newValue;
         }),
-       
-        CLI((a,r,m,v)->v),
-        SEI((a,r,m,v)->v),
-        SED((a,r,m,v)->v),
-        CLD((a,r,m,v)->v),
+
+        SEI((a,r,m,v)->{
+            r.setFlag(Registers.Flag.IRQ_DISABLE);
+            return v;
+        }),
+
+        CLI((a,r,m,v)->{
+            r.clearFlag(Registers.Flag.IRQ_DISABLE);
+            return v;
+        }),
+
+        SED((a,r,m,v)->{
+            r.setFlag(Registers.Flag.DECIMAL_MODE);
+            return v;
+        }),
+
+        CLD((a,r,m,v)->{
+            r.clearFlag(Registers.Flag.DECIMAL_MODE);
+            return v;
+        }),
+
         RTS((a,r,m,v)->v),
         RTI((a,r,m,v)->v);
         
