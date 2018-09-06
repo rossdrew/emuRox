@@ -384,7 +384,13 @@ public enum OpCode implements Instruction {
             return v;
         }),
 
-        CMP((a,r,m,v)->v),
+        CMP((a,r,m,v)->{
+            r.setFlag(Registers.Flag.CARRY); //XXX IS this the right place to be doing this?
+            final RoxByte accumulator = r.getRegister(Registers.Register.ACCUMULATOR);
+            final RoxByte resultOfSbc = a.sbc(accumulator, v);
+            r.setFlagsBasedOn(resultOfSbc);
+            return v;
+        }),
         CPX((a,r,m,v)->v),
         CPY((a,r,m,v)->v),
         JSR((a,r,m,v)->v),
