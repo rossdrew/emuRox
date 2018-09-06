@@ -273,7 +273,13 @@ public enum OpCode implements Instruction {
             return v;
         }),
 
-        SBC((a,r,m,v)->v),
+        SBC((a,r,m,v)->{
+            final RoxByte accumulator = r.getRegister(Registers.Register.ACCUMULATOR);
+            final RoxByte newValue = a.sbc(accumulator, v);
+            r.setFlagsBasedOn(newValue);
+            r.setRegister(Registers.Register.ACCUMULATOR, newValue);
+            return v;
+        }),
        
         CLC((a,r,m,v)->{
             r.clearFlag(Registers.Flag.CARRY);

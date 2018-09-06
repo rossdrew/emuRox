@@ -216,39 +216,15 @@ public class Mos6502 {
             case CPY_I:
             case CPY_Z:
             case CPY_ABS:
-                opCode.perform(alu, registers, memory);
-            break;
-
             case SBC_I:
-                withRegisterAndByte(Register.ACCUMULATOR, nextProgramByte(), this::performSBC);
-                break;
-
             case SBC_Z:
-                withRegisterAndByteAt(Register.ACCUMULATOR, RoxWord.from(nextProgramByte()), this::performSBC);
-                break;
-
             case SBC_Z_IX:
-                withRegisterAndByteXIndexedAt(Register.ACCUMULATOR, RoxWord.from(nextProgramByte()), this::performSBC);
-                break;
-
             case SBC_ABS:
-                withRegisterAndByteAt(Register.ACCUMULATOR, nextProgramWord(), this::performSBC);
-                break;
-
             case SBC_ABS_IX:
-                withRegisterAndByteXIndexedAt(Register.ACCUMULATOR, nextProgramWord(), this::performSBC);
-                break;
-
             case SBC_ABS_IY:
-                withRegisterAndByteYIndexedAt(Register.ACCUMULATOR, nextProgramWord(), this::performSBC);
-                break;
-
             case SBC_IND_IX:
-                withRegisterAndByteAt(Register.ACCUMULATOR, getWordOfMemoryXIndexedAt(RoxWord.from(nextProgramByte())), this::performSBC);
-            break;
-
             case SBC_IND_IY:
-                withRegisterAndByteAt(Register.ACCUMULATOR, getIndirectYPointer(), this::performSBC);
+                opCode.perform(alu, registers, memory);
             break;
 
             case STY_Z:
