@@ -218,18 +218,21 @@ public enum OpCode implements Instruction {
     public enum Operation implements AddressedValueInstruction{
         BRK((a,r,m,v)->v),
 
+        /** Shift all bits in byte left by one place, setting flags based on the result */
         ASL((a,r,m,v) -> {
             final RoxByte newValue = a.asl(v);
             r.setFlagsBasedOn(newValue);
             return newValue;
         }),
 
+        /** Shift all bits in byte right by one place, setting flags based on the result */
         LSR((a,r,m,v)->{
             final RoxByte newValue = a.lsr(v);
             r.setFlagsBasedOn(newValue);
             return newValue;
         }),
 
+        /** Add byte to that in the Accumulator and store the result in the accumulator */
         ADC((a,r,m,v)->{
             final RoxByte accumulator = r.getRegister(Registers.Register.ACCUMULATOR);
             final RoxByte newValue = a.adc(accumulator, v);
@@ -238,17 +241,23 @@ public enum OpCode implements Instruction {
             return v;
         }),
 
+        /** Load byte into the accumulator */
         LDA((a,r,m,v)->{
             r.setFlagsBasedOn(v);
             r.setRegister(Registers.Register.ACCUMULATOR, v);
             return v;
         }),
 
+        /** Clear the Overflow flag */
         CLV((a,r,m,v)->{
             r.clearFlag(Registers.Flag.OVERFLOW);
             return v;
         }),
 
+        /**
+         * Logical AND byte with that in the Accumulator and store the result in the accumulator,
+         * setting flags based on the result
+         * */
         AND((a,r,m,v)->{
             final RoxByte accumulator = r.getRegister(Registers.Register.ACCUMULATOR);
             final RoxByte newValue = a.and(accumulator, v);
@@ -257,6 +266,10 @@ public enum OpCode implements Instruction {
             return v;
         }),
 
+        /**
+         * Logical OR byte with that in the Accumulator and store the result in the accumulator,
+         * setting flags based on the result
+         * */
         ORA((a,r,m,v)->{
             final RoxByte accumulator = r.getRegister(Registers.Register.ACCUMULATOR);
             final RoxByte result = a.or(accumulator, v);
@@ -265,6 +278,10 @@ public enum OpCode implements Instruction {
             return v;
         }),
 
+        /**
+         * Logical XOR byte with that in the Accumulator and store the result in the accumulator,
+         * setting flags based on the result
+         */
         EOR((a,r,m,v)->{
             final RoxByte accumulator = r.getRegister(Registers.Register.ACCUMULATOR);
             final RoxByte result = a.xor(accumulator, v);
@@ -273,6 +290,10 @@ public enum OpCode implements Instruction {
             return v;
         }),
 
+        /**
+         * Subtract byte from that in the Accumulator (including carry) and store the result in the accumulator,
+         * setting flags based on the result
+         */
         SBC((a,r,m,v)->{
             final RoxByte accumulator = r.getRegister(Registers.Register.ACCUMULATOR);
             final RoxByte newValue = a.sbc(accumulator, v);
@@ -280,41 +301,49 @@ public enum OpCode implements Instruction {
             r.setRegister(Registers.Register.ACCUMULATOR, newValue);
             return v;
         }),
-       
+
+        /** Clear the carry flag */
         CLC((a,r,m,v)->{
             r.clearFlag(Registers.Flag.CARRY);
             return v;
         }),
 
+        /** Set the carry flag */
         SEC((a,r,m,v)->{
             r.setFlag(Registers.Flag.CARRY);
             return v;
         }),
 
+        /** Load byte into Y, setting flag based on that value */
         LDY((a,r,m,v)->{
             r.setFlagsBasedOn(v);
             r.setRegister(Registers.Register.Y_INDEX, v);
             return v;
         }),
 
+        /** Load byte into X, setting flag based on that value */
         LDX((a,r,m,v)->{
             r.setFlagsBasedOn(v);
             r.setRegister(Registers.Register.X_INDEX, v);
             return v;
         }),
 
+        /** Load byte into Y */
         STY((a,r,m,v)->{
             return r.getRegister(Registers.Register.Y_INDEX);
         }),
 
+        /** Load byte into Accumulator */
         STA((a,r,m,v)->{
             return r.getRegister(Registers.Register.ACCUMULATOR);
         }),
 
+        /** Load byte into X */
         STX((a,r,m,v)->{
             return r.getRegister(Registers.Register.X_INDEX);
         }),
 
+        /** Increment the value of Y and set the flags based on the new value */
         INY((a,r,m,v)->{
             final RoxByte xValue = r.getRegister(Registers.Register.Y_INDEX);
             final RoxByte newValue = a.adc(xValue, RoxByte.fromLiteral(1));
@@ -323,6 +352,7 @@ public enum OpCode implements Instruction {
             return v;
         }),
 
+        /** Decrement the value of Y and set the flags based on the new value */
         DEY((a,r,m,v)->{
             final RoxByte xValue = r.getRegister(Registers.Register.Y_INDEX);
 
@@ -336,6 +366,7 @@ public enum OpCode implements Instruction {
             return v;
         }),
 
+        /** Increment the value of X and set the flags based on the new value */
         INX((a,r,m,v)->{
             final RoxByte xValue = r.getRegister(Registers.Register.X_INDEX);
             final RoxByte newValue = a.adc(xValue, RoxByte.fromLiteral(1));
@@ -344,6 +375,7 @@ public enum OpCode implements Instruction {
             return v;
         }),
 
+        /** Decrement the value of X and set the flags based on the new value */
         DEX((a,r,m,v)->{
             final RoxByte xValue = r.getRegister(Registers.Register.X_INDEX);
 
@@ -356,13 +388,15 @@ public enum OpCode implements Instruction {
             r.setRegister(Registers.Register.X_INDEX, newValue);
             return v;
         }),
-       
+
+        /** Increment the given byte in place and set the flags based on the new value */
         INC((a,r,m,v)->{
             final RoxByte newValue = a.adc(v, RoxByte.fromLiteral(1));
             r.setFlagsBasedOn(newValue);
             return newValue;
         }),
 
+        /** Decrement the given byte in place and set the flags based on the new value */
         DEC((a,r,m,v)->{
             boolean carryWasSet = r.getFlag(Registers.Flag.CARRY);
             r.setFlag(Registers.Flag.CARRY);
@@ -372,6 +406,7 @@ public enum OpCode implements Instruction {
             return newValue;
         }),
 
+        /** Push the Accumulator to the stack */
         PHA((a,r,m,v)->{
             final RoxByte accumulatorValue = r.getRegister(Registers.Register.ACCUMULATOR);
 
@@ -384,6 +419,7 @@ public enum OpCode implements Instruction {
             return v;
         }),
 
+        /** Pull the Accumulator from the stack */
         PLA((a,r,m,v)->{
             final RoxByte stackIndex = r.getRegister(Registers.Register.STACK_POINTER_HI);  //XXX Shouldn't this be LOW?
             final RoxByte newStackIndex = RoxByte.fromLiteral(stackIndex.getRawValue() + 1); //XXX Should use alu
@@ -396,6 +432,7 @@ public enum OpCode implements Instruction {
             return v;
         }),
 
+        /** Push the Status register to the stack */
         PHP((a,r,m,v)->{
             final RoxByte statusFlags = r.getRegister(Registers.Register.STATUS_FLAGS);
 
@@ -408,6 +445,7 @@ public enum OpCode implements Instruction {
             return v;
         }),
 
+        /** Pull the Status register from the stack */
         PLP((a,r,m,v)->{
             final RoxByte stackIndex = r.getRegister(Registers.Register.STACK_POINTER_HI);  //XXX Shouldn't this be LOW?
             final RoxByte newStackIndex = RoxByte.fromLiteral(stackIndex.getRawValue() + 1); //XXX Should use alu
@@ -420,37 +458,61 @@ public enum OpCode implements Instruction {
             return v;
         }),
 
+        /** Do nothing */
         NOP((a,r,m,v)->v),
 
+        /** Set the Program Counter to the specified word value */
         JMP((a,r,m,v)->v), /* TODO Needs some thought, it takes in a byte but needs a word */
 
+        /** Transfer Accumulator to the X register */
         TAX((a,r,m,v)->{
             final RoxByte accumulatorValue = r.getRegister(Registers.Register.ACCUMULATOR);
             r.setRegister(Registers.Register.X_INDEX, accumulatorValue);
             return v;
         }),
-       
+
+        /** Transfer Accumulator to the Y register */
         TAY((a,r,m,v)->{
             final RoxByte accumulatorValue = r.getRegister(Registers.Register.ACCUMULATOR);
             r.setRegister(Registers.Register.Y_INDEX, accumulatorValue);
             return v;
         }),
 
+        /** Transfer the Y register to the Accumulator */
         TYA((a,r,m,v)->{
             final RoxByte accumulatorValue = r.getRegister(Registers.Register.Y_INDEX);
             r.setRegister(Registers.Register.ACCUMULATOR, accumulatorValue);
             return v;
         }),
 
+        /** Transfer the X register to the Accumulator */
         TXA((a,r,m,v)->{
             final RoxByte accumulatorValue = r.getRegister(Registers.Register.X_INDEX);
             r.setRegister(Registers.Register.ACCUMULATOR, accumulatorValue);
             return v;
         }),
 
-        TXS((a,r,m,v)->v),
+        /** Push the X register to the stack */
+        TXS((a,r,m,v)->{
+            final RoxByte xValue = r.getRegister(Registers.Register.X_INDEX);
+
+            final RoxByte stackIndex = r.getRegister(Registers.Register.STACK_POINTER_HI);  //XXX Shouldn't this be LOW?
+            final RoxWord stackEntry = RoxWord.from(RoxByte.fromLiteral(0x01), stackIndex);
+            m.setByteAt(stackEntry, xValue);
+
+            final RoxByte newStackIndex = RoxByte.fromLiteral(stackIndex.getRawValue() - 1); //XXX Should use alu
+            r.setRegister(Registers.Register.STACK_POINTER_HI, newStackIndex);
+
+            return v;
+        }),
+
+        /** Pull the X register from the stack */
         TSX((a,r,m,v)->v),
 
+        /**
+         * Bitwise AND compare the accumulator with byte, set Zero flag if they match
+         * and set Overflow and Negative flags based on bits 6 and 7 of the provided byte
+         */
         BIT((a,r,m,v)->{
             final RoxByte accumulator = r.getRegister(Registers.Register.ACCUMULATOR);
             final RoxByte result = a.and(accumulator, v);
@@ -463,6 +525,7 @@ public enum OpCode implements Instruction {
             return v;
         }),
 
+        /** Compare (via subtraction) value with Accumulator, setting flags based on result */
         CMP((a,r,m,v)->{
             r.setFlag(Registers.Flag.CARRY); //XXX IS this the right place to be doing this?
             final RoxByte accumulator = r.getRegister(Registers.Register.ACCUMULATOR);
@@ -471,6 +534,7 @@ public enum OpCode implements Instruction {
             return v;
         }),
 
+        /** Compare (via subtraction) value with X register, setting flags based on result */
         CPX((a,r,m,v)->{
             r.setFlag(Registers.Flag.CARRY); //XXX IS this the right place to be doing this?
             final RoxByte x = r.getRegister(Registers.Register.X_INDEX);
@@ -479,6 +543,7 @@ public enum OpCode implements Instruction {
             return v;
         }),
 
+        /** Compare (via subtraction) value with Y register, setting flags based on result */
         CPY((a,r,m,v)->{
             r.setFlag(Registers.Flag.CARRY); //XXX IS this the right place to be doing this?
             final RoxByte y = r.getRegister(Registers.Register.Y_INDEX);
