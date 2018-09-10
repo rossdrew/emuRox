@@ -250,6 +250,8 @@ public class Mos6502 {
             case CLI:
             case SED:
             case CLD:
+            case TXS:
+            case TSX:
                 opCode.perform(alu, registers, memory);
             break;
 
@@ -300,15 +302,6 @@ public class Mos6502 {
 
             case BVC:
                 branchIf(!registers.getFlag(Flag.OVERFLOW));
-                break;
-
-            case TXS:
-                setRegisterValue(Register.STACK_POINTER_HI, getRegisterValue(Register.X_INDEX));
-                break;
-
-            case TSX:
-                setRegisterValue(Register.X_INDEX, getRegisterValue(Register.STACK_POINTER_HI));
-                registers.setFlagsBasedOn(getRegisterValue(Register.X_INDEX));
                 break;
 
             case RTS:

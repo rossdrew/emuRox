@@ -495,19 +495,18 @@ public enum OpCode implements Instruction {
         /** Push the X register to the stack */
         TXS((a,r,m,v)->{
             final RoxByte xValue = r.getRegister(Registers.Register.X_INDEX);
-
-            final RoxByte stackIndex = r.getRegister(Registers.Register.STACK_POINTER_HI);  //XXX Shouldn't this be LOW?
-            final RoxWord stackEntry = RoxWord.from(RoxByte.fromLiteral(0x01), stackIndex);
-            m.setByteAt(stackEntry, xValue);
-
-            final RoxByte newStackIndex = RoxByte.fromLiteral(stackIndex.getRawValue() - 1); //XXX Should use alu
-            r.setRegister(Registers.Register.STACK_POINTER_HI, newStackIndex);
-
+            r.setRegister(Registers.Register.STACK_POINTER_HI, xValue); //XXX Shouldn't this be LOW?
             return v;
         }),
 
         /** Pull the X register from the stack */
-        TSX((a,r,m,v)->v),
+        TSX((a,r,m,v)->{
+            final RoxByte stackIndex = r.getRegister(Registers.Register.STACK_POINTER_HI);  //XXX Shouldn't this be LOW?
+
+            r.setRegister(Registers.Register.X_INDEX, stackIndex);
+            r.setFlagsBasedOn(stackIndex);
+            return v;
+        }),
 
         /**
          * Bitwise AND compare the accumulator with byte, set Zero flag if they match
@@ -599,7 +598,7 @@ public enum OpCode implements Instruction {
 
         RTS((a,r,m,v)->v),
         RTI((a,r,m,v)->v);
-        
+
         private AddressedValueInstruction instruction;
         
         Operation(AddressedValueInstruction instruction){
