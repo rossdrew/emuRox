@@ -9,7 +9,7 @@ import com.rox.emu.processor.mos6502.Mos6502;
 import com.rox.emu.processor.mos6502.Registers;
 import com.rox.emu.processor.mos6502.dbg.ui.component.MemoryPanel;
 import com.rox.emu.processor.mos6502.dbg.ui.component.Registers6502;
-import com.rox.emu.processor.mos6502.op.AddressingMode;
+import com.rox.emu.processor.mos6502.op.Mos6502AddressingMode;
 import com.rox.emu.processor.mos6502.op.OpCode;
 import com.rox.emu.processor.mos6502.util.Mos6502Compiler;
 import com.rox.emu.processor.mos6502.util.Program;
@@ -321,7 +321,7 @@ final class DebuggerWindow extends JFrame {
 
     private int getArgumentCount(int instr) {
         final OpCode opCode = OpCode.from(instr);
-        final AddressingMode addressingMode = opCode.getAddressingMode();
+        final Mos6502AddressingMode addressingMode = opCode.getAddressingMode();
         return addressingMode.getInstructionBytes() - 1;
     }
 

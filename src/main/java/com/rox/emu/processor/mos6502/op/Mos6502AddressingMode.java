@@ -12,7 +12,7 @@ import com.rox.emu.processor.mos6502.Registers;
  *
  * @author Ross Drew
  */
-public enum AddressingMode implements Addressable {
+public enum Mos6502AddressingMode implements Addressable {
     /** Expects no argument */
     IMPLIED("Implied", 1, (r, m, a, i) -> {
         i.perform(a,r,m,null);
@@ -165,9 +165,9 @@ public enum AddressingMode implements Addressable {
     }
 
 
-    AddressingMode(final String name,
-                   final int instructionBytes,
-                   final Addressable address) {
+    Mos6502AddressingMode(final String name,
+                          final int instructionBytes,
+                          final Addressable address) {
         this.name = name;
         this.instructionBytes = instructionBytes;
         this.address = address;
@@ -194,10 +194,10 @@ public enum AddressingMode implements Addressable {
      *     <li>{@link #ABSOLUTE}</li>
      *     <li>{@link #INDIRECT}</li>
      * </ul>
-     * @return the {@link AddressingMode} that corresponds to this {@link AddressingMode}, but indexed by X
+     * @return the {@link Mos6502AddressingMode} that corresponds to this {@link Mos6502AddressingMode}, but indexed by X
      * @throws UnknownOpCodeException if there is an attempt to X index an addressing mode that cannot be X indexed
      */
-    public AddressingMode xIndexed() {
+    public Mos6502AddressingMode xIndexed() {
         if (this == ZERO_PAGE){
             return ZERO_PAGE_X;
         }else if (this == ABSOLUTE) {
@@ -216,10 +216,10 @@ public enum AddressingMode implements Addressable {
      *     <li>{@link #ABSOLUTE}</li>
      *     <li>{@link #INDIRECT}</li>
      * </ul>
-     * @return the {@link AddressingMode} that corresponds to this {@link AddressingMode}, but indexed by Y
+     * @return the {@link Mos6502AddressingMode} that corresponds to this {@link Mos6502AddressingMode}, but indexed by Y
      * @throws UnknownOpCodeException if there is an attempt to Y index an addressing mode that cannot be Y indexed
      */
-    public AddressingMode yIndexed(){
+    public Mos6502AddressingMode yIndexed(){
         if (this == ZERO_PAGE){
             return ZERO_PAGE_Y;
         }else if (this == ABSOLUTE){

@@ -3,7 +3,7 @@ package com.rox.emu.processor.mos6502.util;
 import com.rox.emu.UnknownOpCodeException;
 import com.rox.emu.UnknownTokenException;
 import com.rox.emu.processor.mos6502.Mos6502;
-import com.rox.emu.processor.mos6502.op.AddressingMode;
+import com.rox.emu.processor.mos6502.op.Mos6502AddressingMode;
 import com.rox.emu.processor.mos6502.op.OpCode;
 
 import java.util.StringTokenizer;
@@ -189,7 +189,7 @@ public class Mos6502Compiler {
                     final String value = extractFirstOccurrence(ARG_VALUE_REGEX, valueToken).trim();
                     final String postfix = extractFirstOccurrence(ARG_POSTFIX_REGEX, valueToken).trim();
 
-                    final AddressingMode addressingMode = getAddressingModeFrom(prefix, value, postfix);
+                    final Mos6502AddressingMode addressingMode = getAddressingModeFrom(prefix, value, postfix);
 
                     workingProgram = workingProgram.with(OpCode.from(opCodeToken, addressingMode).getByteValue());
                     workingProgram = extractArgumentValue(workingProgram, value);
@@ -265,11 +265,11 @@ public class Mos6502Compiler {
     }
 
     //XXX This could be better, 4 returns or a duplicated exception is ugly
-    private AddressingMode getAddressingModeFrom(String prefix, String value, String postfix){
+    private Mos6502AddressingMode getAddressingModeFrom(String prefix, String value, String postfix){
         if (prefix.equalsIgnoreCase(IMMEDIATE_VALUE_PREFIX)) {
-            return AddressingMode.IMMEDIATE;
+            return Mos6502AddressingMode.IMMEDIATE;
         }else if (prefix.equalsIgnoreCase(ACCUMULATOR_PREFIX)){
-            return AddressingMode.ACCUMULATOR;
+            return Mos6502AddressingMode.ACCUMULATOR;
         }else if (prefix.equalsIgnoreCase(VALUE_PREFIX)){
             return getIndexedAddressingMode(prefix, value, postfix);
         }
@@ -278,27 +278,27 @@ public class Mos6502Compiler {
         return getIndirectIndexMode(prefix, value, postfix);
     }
 
-    private AddressingMode getIndirectIndexMode(String prefix, String value, String postfix){
+    private Mos6502AddressingMode getIndirectIndexMode(String prefix, String value, String postfix){
         if (postfix.equalsIgnoreCase(INDIRECT_X_POSTFIX)){
-            return AddressingMode.INDIRECT_X;
+            return Mos6502AddressingMode.INDIRECT_X;
         }else if (postfix.equalsIgnoreCase(INDIRECT_Y_POSTFIX)){
-            return AddressingMode.INDIRECT_Y;
+            return Mos6502AddressingMode.INDIRECT_Y;
         }
 
         throw new UnknownOpCodeException("Invalid or unimplemented argument: '" + prefix + value + postfix + "'", prefix+value);
     }
 
-    private AddressingMode getIndexedAddressingMode(String prefix, String value, String postfix){
+    private Mos6502AddressingMode getIndexedAddressingMode(String prefix, String value, String postfix){
         if (value.length() <= 2) {
-            return decorateWithIndexingMode(AddressingMode.ZERO_PAGE, postfix);
+            return decorateWithIndexingMode(Mos6502AddressingMode.ZERO_PAGE, postfix);
         }else if (value.length() <= 4){
-            return decorateWithIndexingMode(AddressingMode.ABSOLUTE, postfix);
+            return decorateWithIndexingMode(Mos6502AddressingMode.ABSOLUTE, postfix);
         }
 
         throw new UnknownOpCodeException("Invalid or unimplemented argument: '" + prefix + value + postfix + "'", prefix+value);
     }
 
-    private AddressingMode decorateWithIndexingMode(AddressingMode addressingMode, String postfix){
+    private Mos6502AddressingMode decorateWithIndexingMode(Mos6502AddressingMode addressingMode, String postfix){
         if (postfix.equalsIgnoreCase(X_INDEXED_POSTFIX)){
             return addressingMode.xIndexed();
         }else if (postfix.equalsIgnoreCase(Y_INDEXED_POSTFIX)){
