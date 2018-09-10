@@ -243,6 +243,5 @@ public class Registers {
 
     private boolean isNegative(int fakeByte){
         return RoxByte.fromLiteral(fakeByte).isNegative();
-//        return (fakeByte & STATUS_FLAG_NEGATIVE) == STATUS_FLAG_NEGATIVE;  ///What was this about?
     }
 }
