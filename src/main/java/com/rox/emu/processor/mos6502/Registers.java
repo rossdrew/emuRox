@@ -244,4 +244,11 @@ public class Registers {
     private boolean isNegative(int fakeByte){
         return RoxByte.fromLiteral(fakeByte).isNegative();
     }
+
+    public Registers copy(){
+        final Registers newRegisters = new Registers();
+        for (int i=0; i< registerValue.length; i++)
+            newRegisters.registerValue[i] = registerValue[i].copy();
+        return newRegisters;
+    }
 }
