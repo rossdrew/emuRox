@@ -252,24 +252,18 @@ public class Mos6502 {
             case CLD:
             case TXS:
             case TSX:
+            case BCC:
+            case BCS:
                 opCode.perform(alu, registers, memory);
             break;
 
-            case JMP_ABS:
+            case JMP_ABS: //this is hard to deal with using my functional enums approach
                 registers.setPC(nextProgramWord());
             break;
 
-            case JMP_IND:
+            case JMP_IND: //this is hard to deal with using my functional enums approach
                 registers.setPC(getWordOfMemoryAt(nextProgramWord()));
             break;
-
-            case BCS:
-                branchIf(registers.getFlag(Flag.CARRY));
-                break;
-
-            case BCC:
-                branchIf(!registers.getFlag(Flag.CARRY));
-                break;
 
             case BEQ:
                 branchIf(registers.getFlag(Flag.ZERO));

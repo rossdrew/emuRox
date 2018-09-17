@@ -256,7 +256,7 @@ public enum Mos6502Operation implements AddressedValueInstruction{
     NOP((a,r,m,v)->v),
 
     /** Set the Program Counter to the specified word value */
-    JMP((a,r,m,v)->v), /* TODO Needs some thought, it takes in a byte but needs a word */
+    JMP((a,r,m,v)->v), /* TODO Needs some thought, our structure deals with bytes but this deals with words and ABS is overridden*/
 
     /** Transfer Accumulator to the X register */
     TAX((a,r,m,v)->{
@@ -351,9 +351,18 @@ public enum Mos6502Operation implements AddressedValueInstruction{
     BMI((a,r,m,v)->v),
     BVC((a,r,m,v)->v),
     BVS((a,r,m,v)->v),
-    BCC((a,r,m,v)->v),
 
-    BCS((a,r,m,v)->v), //TODO needs some thought: This is a two byte, silent adc/sbc
+    BCC((a,r,m,v)->{
+        if (!r.getFlag(Registers.Flag.CARRY))
+            branchTo(a,r,m,v);
+        return v;
+    }),
+
+    BCS((a,r,m,v)->{
+        if (r.getFlag(Registers.Flag.CARRY))
+            branchTo(a,r,m,v);
+        return v;
+    }),
 
     BNE((a,r,m,v)->v),
     BEQ((a,r,m,v)->v),
@@ -392,6 +401,22 @@ public enum Mos6502Operation implements AddressedValueInstruction{
 
     RTS((a,r,m,v)->v),
     RTI((a,r,m,v)->v);
+
+    //XXX Is there a better way to do this?
+    private static void branchTo(Mos6502Alu alu, Registers registers, Memory mem, final RoxByte offset){
+        //Create a silent register/alu pair, loading/unloading the carry for sbc/adc
+        final Registers rCopy = registers.copy();
+        rCopy.setFlagTo(Registers.Flag.CARRY, offset.isNegative());
+        final Mos6502Alu silentAlu = new Mos6502Alu(rCopy);
+
+        //Add to low byte, carry to high
+        final RoxByte loAddressByte = silentAlu.adc(registers.getRegister(Registers.Register.PROGRAM_COUNTER_LOW), offset);
+
+        //TODO Test overflow
+        final RoxByte hiAddressByte = silentAlu.adc(registers.getRegister(Registers.Register.PROGRAM_COUNTER_HI), RoxByte.ZERO);
+
+        registers.setPC(RoxWord.from(loAddressByte));
+    }
 
     private AddressedValueInstruction instruction;
 

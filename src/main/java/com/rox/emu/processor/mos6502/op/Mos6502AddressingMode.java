@@ -151,7 +151,13 @@ public enum Mos6502AddressingMode implements Addressable {
     }),
 
     /** Expects a one byte argument that is the offset for a branch instruction */
-    RELATIVE("Relative", 2, (r, m, a, i) -> {});
+    RELATIVE("Relative", 2, (r, m, a, i) -> {
+        final RoxWord argumentAddress = r.getAndStepProgramCounter();
+        final RoxByte argument = m.getByte(argumentAddress);
+
+        //Pass the offset (127 bytes forward or 128 back)
+        i.perform(a, r, m, argument);
+    });
 
     private final String name;
     /* Bytes required to address this instruction including a byte for the opcode and then it's arguments */
