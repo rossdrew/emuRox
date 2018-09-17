@@ -2110,7 +2110,7 @@ class OpCodeSpec extends Specification {
         0b00000001    | 0b00000001     | 8            | 257        | "Double byte jump"
     }
 
-    @Unroll("BCC #expected: ending up at mem[#expectedPC) after #instructions steps")
+    @Unroll("BCC #expected: ending up at mem[#expectedPC] after #instructions steps")
     testBCC() {
         when:
         loadMemoryWithProgram(NOP, NOP, NOP, preInstr, BCC, jmpSteps, NOP, NOP, NOP, NOP)
