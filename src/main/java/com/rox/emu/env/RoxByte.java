@@ -222,6 +222,10 @@ public final class RoxByte {
         return newByteArray;
     }
 
+    public RoxByte copy() {
+        return new RoxByte(byteValue, format);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
