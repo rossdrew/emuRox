@@ -352,9 +352,6 @@ public enum Mos6502Operation implements AddressedValueInstruction{
         final RoxWord arg2Address = r.getAndStepProgramCounter();
         final RoxByte argument2 = m.getByte(arg2Address);
 
-        //new Program().with(JSR, 0x02, 0x0F)
-        System.out.println("JSR 0x" + Integer.toHexString(argument1.getRawValue()) + " 0x" + Integer.toHexString(argument2.getRawValue()));
-
         final RoxByte pcHi = r.getRegister(Registers.Register.PROGRAM_COUNTER_HI);
         final RoxByte pcLo = r.getRegister(Registers.Register.PROGRAM_COUNTER_LOW);
 
@@ -368,7 +365,6 @@ public enum Mos6502Operation implements AddressedValueInstruction{
         r.setRegister(Registers.Register.PROGRAM_COUNTER_HI, argument1);
         r.setRegister(Registers.Register.PROGRAM_COUNTER_LOW, argument2);
 
-        System.out.println("0x" + Integer.toHexString(r.getPC().getRawValue()));
         return v;
     }),
 
