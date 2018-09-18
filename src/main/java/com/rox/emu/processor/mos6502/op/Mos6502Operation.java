@@ -6,6 +6,8 @@ import com.rox.emu.mem.Memory;
 import com.rox.emu.processor.mos6502.Mos6502Alu;
 import com.rox.emu.processor.mos6502.Registers;
 
+import java.util.Arrays;
+
 /**
  * MOS 6502 addressing-mode independent base operation
  */
@@ -345,7 +347,30 @@ public enum Mos6502Operation implements AddressedValueInstruction{
         return v;
     }),
 
-    JSR((a,r,m,v)->v),
+    JSR((a,r,m,v)->{
+        final RoxByte argument1 = v;
+        final RoxWord arg2Address = r.getAndStepProgramCounter();
+        final RoxByte argument2 = m.getByte(arg2Address);
+
+        //new Program().with(JSR, 0x02, 0x0F)
+        System.out.println("JSR 0x" + Integer.toHexString(argument1.getRawValue()) + " 0x" + Integer.toHexString(argument2.getRawValue()));
+
+        final RoxByte pcHi = r.getRegister(Registers.Register.PROGRAM_COUNTER_HI);
+        final RoxByte pcLo = r.getRegister(Registers.Register.PROGRAM_COUNTER_LOW);
+
+        Arrays.asList(pcHi, pcLo).forEach(value -> {
+            RoxByte stackIndex = r.getRegister(Registers.Register.STACK_POINTER_HI);        //XXX Shouldn't this be LOW?
+            RoxByte nextStackIndex = RoxByte.fromLiteral(stackIndex.getRawValue() - 1);     //XXX Should use alu
+            m.setByteAt(RoxWord.from(RoxByte.fromLiteral(0x01), stackIndex), value);
+            r.setRegister(Registers.Register.STACK_POINTER_HI, nextStackIndex);             //XXX Shouldn't this be LOW?
+        });
+
+        r.setRegister(Registers.Register.PROGRAM_COUNTER_HI, argument1);
+        r.setRegister(Registers.Register.PROGRAM_COUNTER_LOW, argument2);
+
+        System.out.println("0x" + Integer.toHexString(r.getPC().getRawValue()));
+        return v;
+    }),
 
     BPL((a,r,m,v)->{
         if (!r.getFlag(Registers.Flag.NEGATIVE))

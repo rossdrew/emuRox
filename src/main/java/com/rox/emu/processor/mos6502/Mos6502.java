@@ -260,6 +260,7 @@ public class Mos6502 {
             case BPL:
             case BVS:
             case BVC:
+            case JSR:
                 opCode.perform(alu, registers, memory);
             break;
 
@@ -270,15 +271,6 @@ public class Mos6502 {
             case JMP_IND: //this is hard to deal with using my functional enums approach
                 registers.setPC(getWordOfMemoryAt(nextProgramWord()));
             break;
-
-            case JSR:
-                RoxByte hi = nextProgramByte();
-                RoxByte lo = nextProgramByte();
-                pushRegister(Register.PROGRAM_COUNTER_HI);
-                pushRegister(Register.PROGRAM_COUNTER_LOW);
-                setRegisterValue(Register.PROGRAM_COUNTER_HI, hi);
-                setRegisterValue(Register.PROGRAM_COUNTER_LOW, lo);
-                break;
 
             case RTS:
                 setRegisterValue(Register.PROGRAM_COUNTER_LOW, pop());
