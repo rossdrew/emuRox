@@ -449,45 +449,12 @@ public class Mos6502 {
        return memoryWord;
     }
 
-    /**
-     * Call {@link Mos6502#branchTo(RoxByte)} with next program byte
-     *
-     * @param condition if {@code true} then branch is followed
-     */
-    private void branchIf(boolean condition){
-        RoxByte location = nextProgramByte();
-        debug("Branch:0x{} by {} {}", Integer.toHexString(registers.getPC().getRawValue()), Integer.toBinaryString(location.getRawValue()), (condition ? "YES->" : "NO..."));
-        if (condition) branchTo(location);
-    }
-
-    /**
-     * Branch to a relative location as defined by a signed byte
-     *
-     * @param displacement relative (-127 &rarr; 128) location from end of branch instruction
-     */
-    private void branchTo(RoxByte displacement) {
-        RoxByte addr;
-        if (displacement.isNegative()) {
-            addr = RoxByte.fromLiteral(getRegisterValue(Register.PROGRAM_COUNTER_LOW).getRawValue() - displacement.asOnesCompliment().getRawValue());
-        }else {
-            addr = RoxByte.fromLiteral(getRegisterValue(Register.PROGRAM_COUNTER_LOW).getRawValue() + displacement.getRawValue());
-        }
-        setRegisterValue(Register.PROGRAM_COUNTER_LOW, addr);
-    }
-
     private int fromOnesComplimented(int byteValue){
         return (~byteValue) & 0xFF;
     }
 
     private int fromTwosComplimented(int byteValue){
         return fromOnesComplimented(byteValue) - 1;
-    }
-
-    private void performCMP(RoxByte value, Register toRegister){
-        RoxByte result = performSilently(this::performSBC, getRegisterValue(toRegister), value, true);
-        registers.setFlagsBasedOn(result);
-
-        registers.setFlagTo(Flag.CARRY, (fromTwosComplimented(result.getRawValue()) >=0));
     }
 
     @FunctionalInterface
@@ -510,73 +477,9 @@ public class Mos6502 {
         setRegisterValue(registerId, singleByteOperation.perform(b));
     }
 
-    private RoxByte performASL(RoxByte byteValue){
-        RoxByte newValue = alu.asl(byteValue);
-        registers.setFlagsBasedOn(newValue);
-        return newValue;
-    }
-
-    private RoxByte performROL(RoxByte initialValue){
-        RoxByte rotatedValue = alu.rol(initialValue);
-        registers.setFlagsBasedOn(rotatedValue);
-        return rotatedValue;
-    }
-
-    private RoxByte performROR(RoxByte initialValue){
-        RoxByte rotatedValue = alu.ror(initialValue);
-        registers.setFlagsBasedOn(rotatedValue);
-        return rotatedValue;
-    }
-
-    private RoxByte performLSR(RoxByte initialValue){
-        RoxByte rotatedValue = alu.lsr(initialValue);
-        registers.setFlagsBasedOn(rotatedValue);
-        return rotatedValue;
-    }
-
-    private RoxByte performINC(RoxByte initialValue){
-        RoxByte incrementedValue = performSilently(this::performADC, initialValue, RoxByte.fromLiteral(1),false);
-        registers.setFlagsBasedOn(incrementedValue);
-        return incrementedValue;
-    }
-
-    private RoxByte performDEC(RoxByte initialValue){
-        RoxByte incrementedValue = performSilently(this::performSBC, initialValue, RoxByte.fromLiteral(1),true);
-        registers.setFlagsBasedOn(incrementedValue);
-        return incrementedValue;
-    }
-
-    private void performBIT(RoxByte memData) {
-       int comparison = (memData.getRawValue() & getRegisterValue(Register.ACCUMULATOR).getRawValue());
-       registers.setFlagTo(Flag.ZERO, comparison == memData.getRawValue());
-
-       //Set N, V to bits 7 and 6 of memory data
-       RoxByte val = RoxByte.fromLiteral((memData.getRawValue() & 0b11000000) | (getRegisterValue(Register.STATUS_FLAGS).getRawValue() & 0b00111111));
-       setRegisterValue(Register.STATUS_FLAGS, val);
-    }
-
     @FunctionalInterface
     private interface TwoByteOperation {
        RoxByte perform(RoxByte byteValueOne, RoxByte byteValueTwo);
-    }
-
-    /**
-     * Perform byteA given operation and have the state of the registers be the same as before the operation was performed
-     *
-     * @param operation operation to address
-     * @param byteA byte A to pass into the operation
-     * @param byteB byte B to pass into the operation
-     * @param carryInState the state in which to assume the carry flag is in at the start of the operation
-     * @return the result of the operation.
-     */
-    private RoxByte performSilently(TwoByteOperation operation, RoxByte byteA, RoxByte byteB, boolean carryInState){
-       RoxByte statusState = registers.getRegister(Register.STATUS_FLAGS);
-
-       registers.setFlagTo(Flag.CARRY, carryInState);            //To allow ignore of the carry: ignore = 0 for ADC, 1 for SBC
-       RoxByte result = operation.perform(byteA, byteB);
-
-       registers.setRegister(Register.STATUS_FLAGS, statusState);
-       return result;
     }
 
     private void withRegisterAndByteAt(Register registerId, RoxWord memoryLocation, TwoByteOperation twoByteOperation){
@@ -597,23 +500,4 @@ public class Mos6502 {
        registers.setRegisterAndFlags(registerId, twoByteOperation.perform(registerByte, byteValue));
     }
 
-    private RoxByte performAND(RoxByte byteValueA, RoxByte byteValueB){
-        return alu.and(byteValueA, byteValueB);
-    }
-
-    private RoxByte performEOR(RoxByte byteValueA, RoxByte byteValueB){
-        return alu.xor(byteValueA, byteValueB);
-    }
-
-    private RoxByte performORA(RoxByte byteValueA, RoxByte byteValueB){
-        return alu.or(byteValueA, byteValueB);
-    }
-
-    private RoxByte performADC(RoxByte byteValueA, RoxByte byteValueB){
-       return alu.adc(byteValueA, byteValueB);
-    }
-
-    private RoxByte performSBC(RoxByte byteValueA, RoxByte byteValueB){
-       return alu.sbc(byteValueA, byteValueB);
-    }
 }
