@@ -347,6 +347,8 @@ public enum Mos6502Operation implements AddressedValueInstruction{
         return v;
     }),
 
+    //TODO This is set as a RELATIVE addresses instruction, but it should be ABSOLUTE
+    /** Jump to the subrouting at the given absolute address */
     JSR((a,r,m,v)->{
         final RoxByte argument1 = v;
         final RoxWord arg2Address = r.getAndStepProgramCounter();
