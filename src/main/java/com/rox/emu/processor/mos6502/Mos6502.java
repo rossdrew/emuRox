@@ -254,6 +254,12 @@ public class Mos6502 {
             case TSX:
             case BCC:
             case BCS:
+            case BEQ:
+            case BNE:
+            case BMI:
+            case BPL:
+            case BVS:
+            case BVC:
                 opCode.perform(alu, registers, memory);
             break;
 
@@ -265,18 +271,6 @@ public class Mos6502 {
                 registers.setPC(getWordOfMemoryAt(nextProgramWord()));
             break;
 
-            case BEQ:
-                branchIf(registers.getFlag(Flag.ZERO));
-                break;
-
-            case BNE:
-                branchIf(!registers.getFlag(Flag.ZERO));
-                break;
-
-            case BMI:
-                branchIf(registers.getFlag(Flag.NEGATIVE));
-                break;
-
             case JSR:
                 RoxByte hi = nextProgramByte();
                 RoxByte lo = nextProgramByte();
@@ -284,18 +278,6 @@ public class Mos6502 {
                 pushRegister(Register.PROGRAM_COUNTER_LOW);
                 setRegisterValue(Register.PROGRAM_COUNTER_HI, hi);
                 setRegisterValue(Register.PROGRAM_COUNTER_LOW, lo);
-                break;
-
-            case BPL:
-                branchIf(!registers.getFlag(Flag.NEGATIVE));
-                break;
-
-            case BVS:
-                branchIf(registers.getFlag(Flag.OVERFLOW));
-                break;
-
-            case BVC:
-                branchIf(!registers.getFlag(Flag.OVERFLOW));
                 break;
 
             case RTS:

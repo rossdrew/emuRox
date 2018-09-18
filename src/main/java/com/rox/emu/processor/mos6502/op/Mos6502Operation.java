@@ -347,10 +347,29 @@ public enum Mos6502Operation implements AddressedValueInstruction{
 
     JSR((a,r,m,v)->v),
 
-    BPL((a,r,m,v)->v),
-    BMI((a,r,m,v)->v),
-    BVC((a,r,m,v)->v),
-    BVS((a,r,m,v)->v),
+    BPL((a,r,m,v)->{
+        if (!r.getFlag(Registers.Flag.NEGATIVE))
+            branchTo(a,r,m,v);
+        return v;
+    }),
+
+    BMI((a,r,m,v)->{
+        if (r.getFlag(Registers.Flag.NEGATIVE))
+            branchTo(a,r,m,v);
+        return v;
+    }),
+
+    BVC((a,r,m,v)->{
+        if (!r.getFlag(Registers.Flag.OVERFLOW))
+            branchTo(a,r,m,v);
+        return v;
+    }),
+
+    BVS((a,r,m,v)->{
+        if (r.getFlag(Registers.Flag.OVERFLOW))
+            branchTo(a,r,m,v);
+        return v;
+    }),
 
     BCC((a,r,m,v)->{
         if (!r.getFlag(Registers.Flag.CARRY))
@@ -364,8 +383,17 @@ public enum Mos6502Operation implements AddressedValueInstruction{
         return v;
     }),
 
-    BNE((a,r,m,v)->v),
-    BEQ((a,r,m,v)->v),
+    BNE((a,r,m,v)->{
+        if (!r.getFlag(Registers.Flag.ZERO))
+            branchTo(a,r,m,v);
+        return v;
+    }),
+
+    BEQ((a,r,m,v)->{
+        if (r.getFlag(Registers.Flag.ZERO))
+            branchTo(a,r,m,v);
+        return v;
+    }),
 
     ROL((a,r,m,v)->{
         final RoxByte newValue = a.rol(v);
