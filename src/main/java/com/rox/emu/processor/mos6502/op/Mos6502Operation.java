@@ -12,7 +12,37 @@ import java.util.Arrays;
  * MOS 6502 addressing-mode independent base operation
  */
 public enum Mos6502Operation implements AddressedValueInstruction{
-    BRK((a,r,m,v)->v),
+    /**
+     * Operates like an interrupt, PC & Status is pushed to stack and PC is set to contents of {@code 0xFFFE}
+     * and {@code 0xFFFF}.<br/>
+     * <br/>
+     * BRK is unlike an interrupt in that PC+2 is saved to the stack, this may not be the next instruction
+     * and a correction may be necessary.  Due to the assumed use of BRK to path existing programs where
+     * BRK replaces a 2-byte instruction.
+     */
+    BRK((a,r,m,v)->{
+        final RoxWord pc = r.getPC();
+        r.setPC(RoxWord.fromLiteral(pc.getRawValue() + 2));
+
+        final RoxByte pcHi = r.getRegister(Registers.Register.PROGRAM_COUNTER_HI);
+        final RoxByte pcLo = r.getRegister(Registers.Register.PROGRAM_COUNTER_LOW);
+        final RoxByte status = r.getRegister(Registers.Register.STATUS_FLAGS).withBit(Registers.Flag.BREAK.getIndex());
+
+        Arrays.asList(pcHi, pcLo, status).forEach(value -> {
+            final RoxByte stackIndex = r.getRegister(Registers.Register.STACK_POINTER_HI);        //XXX Shouldn't this be LOW?
+            final RoxByte nextStackIndex = RoxByte.fromLiteral(stackIndex.getRawValue() - 1);     //XXX Should use alu
+            m.setByteAt(RoxWord.from(RoxByte.fromLiteral(0x01), stackIndex), value);
+            r.setRegister(Registers.Register.STACK_POINTER_HI, nextStackIndex);             //XXX Shouldn't this be LOW?
+        });
+
+        final RoxByte pcHiJmp = m.getByte(RoxWord.fromLiteral(0xFFFE));
+        final RoxByte pcLoJmp = m.getByte(RoxWord.fromLiteral(0xFFFF));
+
+        r.setRegister(Registers.Register.PROGRAM_COUNTER_HI, pcHiJmp);
+        r.setRegister(Registers.Register.PROGRAM_COUNTER_LOW, pcLoJmp);
+
+        return v;
+    }),
 
     /** Shift all bits in byte left by one place, setting flags based on the result */
     ASL((a,r,m,v) -> {
@@ -308,6 +338,8 @@ public enum Mos6502Operation implements AddressedValueInstruction{
     /**
      * Bitwise AND compare the accumulator with byte, set Zero flag if they match
      * and set Overflow and Negative flags based on bits 6 and 7 of the provided byte
+     *
+     * XXX Needs reviewed
      */
     BIT((a,r,m,v)->{
         final RoxByte accumulator = r.getRegister(Registers.Register.ACCUMULATOR);
@@ -371,81 +403,95 @@ public enum Mos6502Operation implements AddressedValueInstruction{
         return v;
     }),
 
+    /** Branch to offset if {@code NEGATIVE} flag is <em>not</em> set */
     BPL((a,r,m,v)->{
         if (!r.getFlag(Registers.Flag.NEGATIVE))
             branchTo(a,r,m,v);
         return v;
     }),
 
+    /** Branch to offset if {@code NEGATIVE} flag <em>is</em> set */
     BMI((a,r,m,v)->{
         if (r.getFlag(Registers.Flag.NEGATIVE))
             branchTo(a,r,m,v);
         return v;
     }),
 
+    /** Branch to offset if {@code OVERFLOW} flag is <em>not</em> set */
     BVC((a,r,m,v)->{
         if (!r.getFlag(Registers.Flag.OVERFLOW))
             branchTo(a,r,m,v);
         return v;
     }),
 
+    /** Branch to offset if {@code OVERFLOW} flag <em>is</em> set */
     BVS((a,r,m,v)->{
         if (r.getFlag(Registers.Flag.OVERFLOW))
             branchTo(a,r,m,v);
         return v;
     }),
 
+    /** Branch to offset if {@code CARRY} flag is <em>not</em> set */
     BCC((a,r,m,v)->{
         if (!r.getFlag(Registers.Flag.CARRY))
             branchTo(a,r,m,v);
         return v;
     }),
 
+    /** Branch to offset if {@code CARRY} flag <em>is</em> set */
     BCS((a,r,m,v)->{
         if (r.getFlag(Registers.Flag.CARRY))
             branchTo(a,r,m,v);
         return v;
     }),
 
+    /** Branch to offset if {@code ZERO} flag is <em>not</em> set */
     BNE((a,r,m,v)->{
         if (!r.getFlag(Registers.Flag.ZERO))
             branchTo(a,r,m,v);
         return v;
     }),
 
+    /** Branch to offset if {@code ZERO} flag <em>is</em> set */
     BEQ((a,r,m,v)->{
         if (r.getFlag(Registers.Flag.ZERO))
             branchTo(a,r,m,v);
         return v;
     }),
 
+    /** Perform a rotate left on the given value */
     ROL((a,r,m,v)->{
         final RoxByte newValue = a.rol(v);
         r.setFlagsBasedOn(newValue);
         return newValue;
     }),
 
+    /** Perform a rotate right on the given value */
     ROR((a,r,m,v)->{
         final RoxByte newValue = a.ror(v);
         r.setFlagsBasedOn(newValue);
         return newValue;
     }),
 
+    /** Set the {@code IRQ} flag */
     SEI((a,r,m,v)->{
         r.setFlag(Registers.Flag.IRQ_DISABLE);
         return v;
     }),
 
+    /** Clear the {@code IRQ} flag */
     CLI((a,r,m,v)->{
         r.clearFlag(Registers.Flag.IRQ_DISABLE);
         return v;
     }),
 
+    /** Set the {@code DECIMAL MODE} flag */
     SED((a,r,m,v)->{
         r.setFlag(Registers.Flag.DECIMAL_MODE);
         return v;
     }),
 
+    /** Clear the {@code DECIMAL MODE} flag */
     CLD((a,r,m,v)->{
         r.clearFlag(Registers.Flag.DECIMAL_MODE);
         return v;
