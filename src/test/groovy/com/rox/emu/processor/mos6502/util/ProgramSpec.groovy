@@ -36,7 +36,7 @@ class ProgramSpec extends Specification {
         [0xA9 as byte, 0x03 as byte] | "byte constructed"
     }
 
-    def testIdenticalProgramCompare(){
+    def testIdenticalProgramCompare() {
         given:
         Program program = new Program().with([OpCode.LDA_I, 0x01] as Object[])
 
@@ -48,7 +48,7 @@ class ProgramSpec extends Specification {
         program.hashCode() == (new Program().with([OpCode.LDA_I, 0x01] as Object[])).hashCode()
     }
 
-    def testUnequalObjects(){
+    def testUnequalObjects() {
         given:
         Program programA = new Program().with([OpCode.LDA_I, 0x01] as Object[])
         Program programB = new Program().with([OpCode.LDA_I, 0x02] as Object[])
@@ -58,7 +58,7 @@ class ProgramSpec extends Specification {
         programA.hashCode() != programB.hashCode()
     }
 
-    @Unroll("Test comparing not equal #description program")
+    @Unroll("Test comparing #description")
     def testInvalidComparisons() {
         given:
         Program program
@@ -70,9 +70,13 @@ class ProgramSpec extends Specification {
         !program.equals(programInputBytes)
 
         where:
-        programInputBytes            | description
-        null                         | "empty"
-        [0xA9, 0x02]                 | "different "
+        programInputBytes                    | description
+        null                                 | "empty program"
+        [0xA9, 0x02]                         | "different program"
+        [OpCode.SEC]                         | "smaller program"
+        [OpCode.SEC, OpCode.SED, OpCode.CLC] | "larger program"
+        OpCode.SED                           | "single opcode"
+        "Just a string"                      | "unsupported class"
     }
 
     def "Create program with invalid program data"() {
@@ -189,11 +193,11 @@ class ProgramSpec extends Specification {
         program.getProgramAsByteArray() == RoxByte.fromIntArray(expectedProgramBytes as int[])
 
         where:
-        programInputBytes                   || expectedProgramBytes                                     | expected
-        [0x2A]                              || [0x2A]                                                   | "Byte value added to program"
-        [OpCode.ADC_ABS]                    || [OpCode.ADC_ABS.byteValue]                               | "Op-code value added to program"
-        [OpCode.ADC_ABS, 0x10, 0x02]        || [OpCode.ADC_ABS.byteValue, 0x10, 0x02]                   | "Op-code and arguments added to program"
-        ["START:"]                          || []                                                       | "A program label doesn't change the output"
+        programInputBytes            || expectedProgramBytes                   | expected
+        [0x2A]                       || [0x2A]                                 | "Byte value added to program"
+        [OpCode.ADC_ABS]             || [OpCode.ADC_ABS.byteValue]             | "Op-code value added to program"
+        [OpCode.ADC_ABS, 0x10, 0x02] || [OpCode.ADC_ABS.byteValue, 0x10, 0x02] | "Op-code and arguments added to program"
+        ["START:"]                   || []                                     | "A program label doesn't change the output"
     }
 
     //TODO Test Program.equals() non-identical classtype, same class, no array
