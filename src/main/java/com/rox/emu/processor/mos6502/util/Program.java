@@ -160,12 +160,12 @@ public class Program {
             }
         }
 
-        final RoxByte[] programBytes = new RoxByte[clonedBytes.length];
-        for (int i=0; i<programBytes.length; i++)
-            programBytes[i] = RoxByte.fromLiteral(clonedBytes[i]);
+        final RoxByte[] programRoxBytes = new RoxByte[clonedBytes.length];
+        for (int i=0; i<programRoxBytes.length; i++)
+            programRoxBytes[i] = RoxByte.fromLiteral(clonedBytes[i]);
 
 
-        return programBytes;
+        return programRoxBytes;
     }
 
     /**
@@ -217,9 +217,8 @@ public class Program {
             return false;
 
         for (int i=0; i<o.length; i++){
-            if (o[i] instanceof Number)
-                if ((((Number)o[i]).intValue() != programBytes[i]))
-                    return false;
+            if (o[i] instanceof Number && (((Number)o[i]).intValue() != programBytes[i]))
+                return false;
         }
         return true;
     }

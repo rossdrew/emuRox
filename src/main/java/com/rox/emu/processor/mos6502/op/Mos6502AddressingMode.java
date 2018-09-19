@@ -14,10 +14,7 @@ import com.rox.emu.processor.mos6502.Registers;
  */
 public enum Mos6502AddressingMode implements Addressable {
     /** Expects no argument */
-    IMPLIED("Implied", 1, (r, m, a, i) -> {
-        i.perform(a,r,m,null);
-        //XXX might be worth looking into if we could allow the implied to do the addressing of A,Y,X
-    }),
+    IMPLIED("Implied", 1, (r, m, a, i) -> i.perform(a,r,m,null)),
 
     /** Expects a one byte argument that is a literal value for use in the operation */
     IMMEDIATE("Immediate", 2, (r, m, a, i) -> {
@@ -30,10 +27,10 @@ public enum Mos6502AddressingMode implements Addressable {
      *  as {@link #ZERO_PAGE_X} or {@link #ZERO_PAGE_Y} */
     ZERO_PAGE("Zero Page", 2, (r, m, a, i) -> {
         final RoxWord argumentAddress = r.getAndStepProgramCounter();
-        final RoxWord address = RoxWord.from(m.getByte(argumentAddress));
-        final RoxByte value = m.getByte(address);
+        final RoxWord pointer = RoxWord.from(m.getByte(argumentAddress));
+        final RoxByte value = m.getByte(pointer);
         final RoxByte newValue = i.perform(a, r, m, value);
-        m.setByteAt(address, newValue);
+        m.setByteAt(pointer, newValue);
     }),
 
     /** Expects a one byte argument that contains a zero page address and the X Register to be filled with an
@@ -69,13 +66,13 @@ public enum Mos6502AddressingMode implements Addressable {
     ABSOLUTE("Absolute", 3, (r, m, a, i) -> {
         final RoxWord argumentHiByteAddress = r.getAndStepProgramCounter();
         final RoxWord argumentLoByteAddress = r.getAndStepProgramCounter();
-        final RoxWord address = RoxWord.from(m.getByte(argumentHiByteAddress),
+        final RoxWord pointer = RoxWord.from(m.getByte(argumentHiByteAddress),
                                              m.getByte(argumentLoByteAddress));
 
-        final RoxByte value = m.getByte(address);
+        final RoxByte value = m.getByte(pointer);
         final RoxByte newValue = i.perform(a, r, m, value);
 
-        m.setByteAt(address, newValue);
+        m.setByteAt(pointer, newValue);
     }),
 
     /** Expects a 2 byte argument that contains an absolute address and the X Register to be filled with an
@@ -83,11 +80,11 @@ public enum Mos6502AddressingMode implements Addressable {
     ABSOLUTE_X("Absolute [X]", 3, (r, m, a, i) -> {
         final RoxWord argumentHiByteAddress = r.getAndStepProgramCounter();
         final RoxWord argumentLoByteAddress = r.getAndStepProgramCounter();
-        final RoxWord address = RoxWord.from(m.getByte(argumentHiByteAddress),
+        final RoxWord pointer = RoxWord.from(m.getByte(argumentHiByteAddress),
                                              m.getByte(argumentLoByteAddress));
 
         final RoxByte offset = r.getRegister(Registers.Register.X_INDEX);
-        final RoxWord valueAddress = RoxWord.fromLiteral(address.getRawValue() + offset.getRawValue());
+        final RoxWord valueAddress = RoxWord.fromLiteral(pointer.getRawValue() + offset.getRawValue());
 
         final RoxByte value = m.getByte(valueAddress);
         final RoxByte newValue = i.perform(a, r, m, value);
@@ -99,11 +96,11 @@ public enum Mos6502AddressingMode implements Addressable {
     ABSOLUTE_Y("Absolute [Y]", 3, (r, m, a, i) -> {
         final RoxWord argumentHiByteAddress = r.getAndStepProgramCounter();
         final RoxWord argumentLoByteAddress = r.getAndStepProgramCounter();
-        final RoxWord address = RoxWord.from(m.getByte(argumentHiByteAddress),
+        final RoxWord pointer = RoxWord.from(m.getByte(argumentHiByteAddress),
                 m.getByte(argumentLoByteAddress));
 
         final RoxByte offset = r.getRegister(Registers.Register.Y_INDEX);
-        final RoxWord valueAddress = RoxWord.fromLiteral(address.getRawValue() + offset.getRawValue());
+        final RoxWord valueAddress = RoxWord.fromLiteral(pointer.getRawValue() + offset.getRawValue());
 
         final RoxByte value = m.getByte(valueAddress);
         final RoxByte newValue = i.perform(a, r, m, value);

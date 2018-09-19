@@ -155,19 +155,13 @@ public enum Mos6502Operation implements AddressedValueInstruction{
     }),
 
     /** Load byte into Y */
-    STY((a,r,m,v)->{
-        return r.getRegister(Registers.Register.Y_INDEX);
-    }),
+    STY((a,r,m,v)->r.getRegister(Registers.Register.Y_INDEX)),
 
     /** Load byte into Accumulator */
-    STA((a,r,m,v)->{
-        return r.getRegister(Registers.Register.ACCUMULATOR);
-    }),
+    STA((a,r,m,v)->r.getRegister(Registers.Register.ACCUMULATOR)),
 
     /** Load byte into X */
-    STX((a,r,m,v)->{
-        return r.getRegister(Registers.Register.X_INDEX);
-    }),
+    STX((a,r,m,v)-> r.getRegister(Registers.Register.X_INDEX)),
 
     /** Increment the value of Y and set the flags based on the new value */
     INY((a,r,m,v)->{
@@ -289,7 +283,7 @@ public enum Mos6502Operation implements AddressedValueInstruction{
     NOP((a,r,m,v)->v),
 
     /** Set the Program Counter to the specified word value */
-    JMP((a,r,m,v)->v), /* TODO Needs some thought, our structure deals with bytes but this deals with words and ABS is overridden*/
+    JMP((a,r,m,v)->v), /* Essentially a NOP - Our structure deals with bytes but this deals with words and ABS is overridden*/
 
     /** Transfer Accumulator to the X register */
     TAX((a,r,m,v)->{
@@ -380,7 +374,6 @@ public enum Mos6502Operation implements AddressedValueInstruction{
         return v;
     }),
 
-    //TODO This is set as a RELATIVE addresses instruction, but it should be ABSOLUTE
     /** Jump to the subroutine at the given absolute address */
     JSR((a,r,m,argument1)->{
         final RoxWord arg2Address = r.getAndStepProgramCounter();
@@ -403,59 +396,59 @@ public enum Mos6502Operation implements AddressedValueInstruction{
     }),
 
     /** Branch to offset if {@code NEGATIVE} flag is <em>not</em> set */
-    BPL((a,r,m,v)->{
+    BPL((a,r,m,offset)->{
         if (!r.getFlag(Registers.Flag.NEGATIVE))
-            branchTo(a,r,m,v);
-        return v;
+            branchTo(r,offset);
+        return offset;
     }),
 
     /** Branch to offset if {@code NEGATIVE} flag <em>is</em> set */
-    BMI((a,r,m,v)->{
+    BMI((a,r,m,offset)->{
         if (r.getFlag(Registers.Flag.NEGATIVE))
-            branchTo(a,r,m,v);
-        return v;
+            branchTo(r,offset);
+        return offset;
     }),
 
     /** Branch to offset if {@code OVERFLOW} flag is <em>not</em> set */
-    BVC((a,r,m,v)->{
+    BVC((a,r,m,offset)->{
         if (!r.getFlag(Registers.Flag.OVERFLOW))
-            branchTo(a,r,m,v);
-        return v;
+            branchTo(r,offset);
+        return offset;
     }),
 
     /** Branch to offset if {@code OVERFLOW} flag <em>is</em> set */
-    BVS((a,r,m,v)->{
+    BVS((a,r,m,offset)->{
         if (r.getFlag(Registers.Flag.OVERFLOW))
-            branchTo(a,r,m,v);
-        return v;
+            branchTo(r,offset);
+        return offset;
     }),
 
     /** Branch to offset if {@code CARRY} flag is <em>not</em> set */
-    BCC((a,r,m,v)->{
+    BCC((a,r,m,offset)->{
         if (!r.getFlag(Registers.Flag.CARRY))
-            branchTo(a,r,m,v);
-        return v;
+            branchTo(r,offset);
+        return offset;
     }),
 
     /** Branch to offset if {@code CARRY} flag <em>is</em> set */
-    BCS((a,r,m,v)->{
+    BCS((a,r,m,offset)->{
         if (r.getFlag(Registers.Flag.CARRY))
-            branchTo(a,r,m,v);
-        return v;
+            branchTo(r,offset);
+        return offset;
     }),
 
     /** Branch to offset if {@code ZERO} flag is <em>not</em> set */
-    BNE((a,r,m,v)->{
+    BNE((a,r,m,offset)->{
         if (!r.getFlag(Registers.Flag.ZERO))
-            branchTo(a,r,m,v);
-        return v;
+            branchTo(r,offset);
+        return offset;
     }),
 
     /** Branch to offset if {@code ZERO} flag <em>is</em> set */
-    BEQ((a,r,m,v)->{
+    BEQ((a,r,m,offset)->{
         if (r.getFlag(Registers.Flag.ZERO))
-            branchTo(a,r,m,v);
-        return v;
+            branchTo(r,offset);
+        return offset;
     }),
 
     /** Perform a rotate left on the given value */
@@ -526,7 +519,7 @@ public enum Mos6502Operation implements AddressedValueInstruction{
     });
 
     //XXX Is there a better way to do this?
-    private static void branchTo(Mos6502Alu alu, Registers registers, Memory mem, final RoxByte offset){
+    private static void branchTo(final Registers registers, final RoxByte offset){
         //Create a silent register/alu pair, loading/unloading the carry for sbc/adc
         final Registers rCopy = registers.copy();
         rCopy.setFlagTo(Registers.Flag.CARRY, offset.isNegative());
@@ -534,9 +527,6 @@ public enum Mos6502Operation implements AddressedValueInstruction{
 
         //Add to low byte, carry to high
         final RoxByte loAddressByte = silentAlu.adc(registers.getRegister(Registers.Register.PROGRAM_COUNTER_LOW), offset);
-
-        //TODO Test overflow
-        final RoxByte hiAddressByte = silentAlu.adc(registers.getRegister(Registers.Register.PROGRAM_COUNTER_HI), RoxByte.ZERO);
 
         registers.setPC(RoxWord.from(loAddressByte));
     }
