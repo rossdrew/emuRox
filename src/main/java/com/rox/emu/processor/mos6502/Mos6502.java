@@ -182,21 +182,6 @@ public class Mos6502 {
        return RoxWord.from(nextProgramByte(), nextProgramByte());
     }
 
-    /**
-     * Pop value from stack
-     *
-     * @return popped value
-     */
-    private RoxByte pop(){
-       setRegisterValue(Register.STACK_POINTER_HI, RoxByte.fromLiteral(getRegisterValue(Register.STACK_POINTER_HI).getRawValue() + 1));
-       RoxWord address = RoxWord.from(RoxByte.fromLiteral(0x01), getRegisterValue(Register.STACK_POINTER_HI));
-       RoxByte value = getByteOfMemoryAt(address);
-       debug("POP {}(0b{}) from mem[0x{}]", value.toString(),
-                                                    Integer.toBinaryString(value.getRawValue()),
-                                                    Integer.toHexString(address.getRawValue()).toUpperCase());
-       return value;
-    }
-
     private void debug(final String message, String ... args){
         if (log.isDebugEnabled())
             log.debug(message, args);
@@ -207,9 +192,20 @@ public class Mos6502 {
     }
 
     /**
-     * Push to stack
-     *
-     * @param value value to push
+     * @return {@link RoxByte} popped from the stack
+     */
+    private RoxByte pop(){
+        setRegisterValue(Register.STACK_POINTER_HI, RoxByte.fromLiteral(getRegisterValue(Register.STACK_POINTER_HI).getRawValue() + 1));
+        RoxWord address = RoxWord.from(RoxByte.fromLiteral(0x01), getRegisterValue(Register.STACK_POINTER_HI));
+        RoxByte value = getByteOfMemoryAt(address);
+        debug("POP {}(0b{}) from mem[0x{}]", value.toString(),
+                Integer.toBinaryString(value.getRawValue()),
+                Integer.toHexString(address.getRawValue()).toUpperCase());
+        return value;
+    }
+
+    /**
+     * @param value {@link RoxByte} to push to the stack
      */
     private void push(RoxByte value){
        debug("PUSH {}(0b{}) to mem[0x{}]",  value.toString(),
@@ -218,18 +214,6 @@ public class Mos6502 {
 
        setByteOfMemoryAt(RoxWord.from(RoxByte.fromLiteral(0x01), getRegisterValue(Register.STACK_POINTER_HI)), value);
        setRegisterValue(Register.STACK_POINTER_HI, RoxByte.fromLiteral(getRegisterValue(Register.STACK_POINTER_HI).getRawValue() - 1));
-    }
-
-    private RoxByte getByteOfMemoryXIndexedAt(RoxWord location){
-       return getByteOfMemoryAt(location, getRegisterValue(Register.X_INDEX));
-    }
-
-    private RoxByte getByteOfMemoryYIndexedAt(RoxWord location){
-        return getByteOfMemoryAt(location, getRegisterValue(Register.Y_INDEX));
-    }
-
-    private void setByteOfMemoryYIndexedAt(RoxWord location, RoxByte newByte){
-       setByteOfMemoryAt(location, getRegisterValue(Register.Y_INDEX), newByte);
     }
 
     private RoxByte getByteOfMemoryAt(RoxWord location){
@@ -242,10 +226,6 @@ public class Mos6502 {
        return memoryByte;
     }
 
-    private void setByteOfMemoryXIndexedAt(RoxWord location, RoxByte newByte){
-       setByteOfMemoryAt(location, getRegisterValue(Register.X_INDEX), newByte);
-    }
-
     private void setByteOfMemoryAt(RoxWord location, RoxByte newByte){
         setByteOfMemoryAt(location, RoxByte.ZERO, newByte);
     }
@@ -255,74 +235,9 @@ public class Mos6502 {
        debug("Stored 0x{} at mem[{}]", Integer.toHexString(newByte.getRawValue()), (location + (index != RoxByte.ZERO ? "[" + index + "]" : "")));
     }
 
-    private RoxWord getIndirectYPointer(){
-        RoxByte loc = nextProgramByte();
-        RoxWord pointer = getWordOfMemoryAt(RoxWord.from(loc));
-        RoxByte off = getRegisterValue(Register.Y_INDEX);
-
-        return RoxWord.fromLiteral(pointer.getRawValue() + off.getRawValue());
-    }
-
-    private RoxWord getWordOfMemoryXIndexedAt(RoxWord location){
-       RoxWord indexedLocation = RoxWord.fromLiteral(location.getRawValue() + getRegisterValue(Register.X_INDEX).getRawValue());
-       return getWordOfMemoryAt(indexedLocation);
-    }
-
     private RoxWord getWordOfMemoryAt(RoxWord location) {
        RoxWord memoryWord = memory.getWord(location);
        debug("Got 0x{} from mem[{}]", Integer.toHexString(memoryWord.getRawValue()), location.toString());
        return memoryWord;
     }
-
-    private int fromOnesComplimented(int byteValue){
-        return (~byteValue) & 0xFF;
-    }
-
-    private int fromTwosComplimented(int byteValue){
-        return fromOnesComplimented(byteValue) - 1;
-    }
-
-    @FunctionalInterface
-    private interface SingleByteOperation {
-        RoxByte perform(RoxByte byteValue);
-    }
-
-    private void withByteAt(RoxWord location, SingleByteOperation singleByteOperation){
-        RoxByte b = getByteOfMemoryAt(location);
-        setByteOfMemoryAt(location, singleByteOperation.perform(b));
-    }
-
-    private void withByteXIndexedAt(RoxWord location, SingleByteOperation singleByteOperation){
-        RoxByte b = getByteOfMemoryXIndexedAt(location);
-        setByteOfMemoryXIndexedAt(location, singleByteOperation.perform(b));
-    }
-
-    private void withRegister(Register registerId, SingleByteOperation singleByteOperation){
-        RoxByte b = getRegisterValue(registerId);
-        setRegisterValue(registerId, singleByteOperation.perform(b));
-    }
-
-    @FunctionalInterface
-    private interface TwoByteOperation {
-       RoxByte perform(RoxByte byteValueOne, RoxByte byteValueTwo);
-    }
-
-    private void withRegisterAndByteAt(Register registerId, RoxWord memoryLocation, TwoByteOperation twoByteOperation){
-       withRegisterAndByte(registerId, getByteOfMemoryAt(memoryLocation), twoByteOperation);
-    }
-
-    private void withRegisterAndByteXIndexedAt(Register registerId, RoxWord memoryLocation, TwoByteOperation twoByteOperation){
-       withRegisterAndByte(registerId, getByteOfMemoryXIndexedAt(memoryLocation), twoByteOperation);
-    }
-
-    private void withRegisterAndByteYIndexedAt(Register registerId, RoxWord memoryLocation, TwoByteOperation twoByteOperation){
-       withRegisterAndByte(registerId, getByteOfMemoryYIndexedAt(memoryLocation), twoByteOperation);
-    }
-
-    private void withRegisterAndByte(Register registerId, RoxByte byteValue, TwoByteOperation twoByteOperation){
-       RoxByte registerByte = getRegisterValue(registerId);
-
-       registers.setRegisterAndFlags(registerId, twoByteOperation.perform(registerByte, byteValue));
-    }
-
 }
