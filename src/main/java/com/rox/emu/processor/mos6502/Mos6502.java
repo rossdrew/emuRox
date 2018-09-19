@@ -44,13 +44,13 @@ public class Mos6502 {
      */
     public void reset(){
        log.debug("RESETTING...");
-       setRegisterValue(Register.ACCUMULATOR, RoxByte.ZERO);
-       setRegisterValue(Register.X_INDEX, RoxByte.ZERO);
-       setRegisterValue(Register.Y_INDEX, RoxByte.ZERO);
-       setRegisterValue(Register.STATUS_FLAGS, RoxByte.fromLiteral(0x34));
-       setRegisterValue(Register.PROGRAM_COUNTER_HI, getByteOfMemoryAt(RoxWord.fromLiteral(0xFFFC)));
-       setRegisterValue(Register.PROGRAM_COUNTER_LOW, getByteOfMemoryAt(RoxWord.fromLiteral(0xFFFD)));
-       setRegisterValue(Register.STACK_POINTER_HI, RoxByte.fromLiteral(0xFF));  //XXX Shouldmaybe be a max
+       registers.setRegister(Register.ACCUMULATOR, RoxByte.ZERO);
+       registers.setRegister(Register.X_INDEX, RoxByte.ZERO);
+       registers.setRegister(Register.Y_INDEX, RoxByte.ZERO);
+       registers.setRegister(Register.STATUS_FLAGS, RoxByte.fromLiteral(0x34));
+       registers.setRegister(Register.PROGRAM_COUNTER_HI, getByteOfMemoryAt(RoxWord.fromLiteral(0xFFFC)));
+       registers.setRegister(Register.PROGRAM_COUNTER_LOW, getByteOfMemoryAt(RoxWord.fromLiteral(0xFFFD)));
+       registers.setRegister(Register.STACK_POINTER_HI, RoxByte.fromLiteral(0xFF));  //XXX Shouldmaybe be a max
        log.debug("...READY!");
     }
 
@@ -69,8 +69,8 @@ public class Mos6502 {
         pushRegister(Register.PROGRAM_COUNTER_LOW);
         pushRegister(Register.STATUS_FLAGS);
 
-        setRegisterValue(Register.PROGRAM_COUNTER_HI, getByteOfMemoryAt(RoxWord.fromLiteral(0xFFFe)));
-        setRegisterValue(Register.PROGRAM_COUNTER_LOW, getByteOfMemoryAt(RoxWord.fromLiteral(0xFFFF)));
+        registers.setRegister(Register.PROGRAM_COUNTER_HI, getByteOfMemoryAt(RoxWord.fromLiteral(0xFFFe)));
+        registers.setRegister(Register.PROGRAM_COUNTER_LOW, getByteOfMemoryAt(RoxWord.fromLiteral(0xFFFF)));
     }
 
     /**
@@ -87,8 +87,8 @@ public class Mos6502 {
         pushRegister(Register.PROGRAM_COUNTER_LOW);
         pushRegister(Register.STATUS_FLAGS);
 
-        setRegisterValue(Register.PROGRAM_COUNTER_HI, getByteOfMemoryAt(RoxWord.fromLiteral(0xFFFA)));
-        setRegisterValue(Register.PROGRAM_COUNTER_LOW, getByteOfMemoryAt(RoxWord.fromLiteral(0xFFFB)));
+        registers.setRegister(Register.PROGRAM_COUNTER_HI, getByteOfMemoryAt(RoxWord.fromLiteral(0xFFFA)));
+        registers.setRegister(Register.PROGRAM_COUNTER_LOW, getByteOfMemoryAt(RoxWord.fromLiteral(0xFFFB)));
     }
 
     /**
@@ -137,24 +137,6 @@ public class Mos6502 {
         return registers.getRegister(registerID);
     }
 
-    private void setRegisterValue(Register registerID, RoxByte value){
-        registers.setRegister(registerID, value);
-    }
-
-    /**
-     * Get the value of the 16 bit Program Counter (PC) and increment. Equivalent of <br/>
-     * <br/>
-     * <code>PC++</code>
-     */
-    private RoxWord getAndStepPC(){
-       final RoxWord originalPC = registers.getPC();
-       final RoxWord newPC = RoxWord.fromLiteral(originalPC.getRawValue() + 1);
-
-       registers.setPC(newPC);
-
-       return originalPC;
-    }
-
     /**
      * Return the next byte from program memory, as defined
      * by the Program Counter.<br/>
@@ -164,7 +146,7 @@ public class Mos6502 {
      * @return byte {@code from mem[ PC[0] ]}
      */
     private RoxByte nextProgramByte(){
-       return getByteOfMemoryAt(getAndStepPC());
+       return getByteOfMemoryAt(registers.getAndStepProgramCounter());
     }
 
     /**
@@ -182,11 +164,6 @@ public class Mos6502 {
        return RoxWord.from(nextProgramByte(), nextProgramByte());
     }
 
-    private void debug(final String message, String ... args){
-        if (log.isDebugEnabled())
-            log.debug(message, args);
-    }
-
     private void pushRegister(Register registerID){
         push(getRegisterValue(registerID));
     }
@@ -195,7 +172,7 @@ public class Mos6502 {
      * @return {@link RoxByte} popped from the stack
      */
     private RoxByte pop(){
-        setRegisterValue(Register.STACK_POINTER_HI, RoxByte.fromLiteral(getRegisterValue(Register.STACK_POINTER_HI).getRawValue() + 1));
+        registers.setRegister(Register.STACK_POINTER_HI, RoxByte.fromLiteral(getRegisterValue(Register.STACK_POINTER_HI).getRawValue() + 1));
         RoxWord address = RoxWord.from(RoxByte.fromLiteral(0x01), getRegisterValue(Register.STACK_POINTER_HI));
         RoxByte value = getByteOfMemoryAt(address);
         debug("POP {}(0b{}) from mem[0x{}]", value.toString(),
@@ -213,31 +190,28 @@ public class Mos6502 {
                                                     Integer.toHexString(getRegisterValue(Register.STACK_POINTER_HI).getRawValue()).toUpperCase());
 
        setByteOfMemoryAt(RoxWord.from(RoxByte.fromLiteral(0x01), getRegisterValue(Register.STACK_POINTER_HI)), value);
-       setRegisterValue(Register.STACK_POINTER_HI, RoxByte.fromLiteral(getRegisterValue(Register.STACK_POINTER_HI).getRawValue() - 1));
+       registers.setRegister(Register.STACK_POINTER_HI, RoxByte.fromLiteral(getRegisterValue(Register.STACK_POINTER_HI).getRawValue() - 1));
     }
 
     private RoxByte getByteOfMemoryAt(RoxWord location){
-        return getByteOfMemoryAt(location, RoxByte.ZERO);
-    }
-
-    private RoxByte getByteOfMemoryAt(RoxWord location, RoxByte index){
-       final RoxByte memoryByte = memory.getByte(RoxWord.fromLiteral(location.getRawValue() + index.getRawValue()));
-       debug("Got 0x{} from mem[{}]", Integer.toHexString(memoryByte.getRawValue()), (location + (index != RoxByte.ZERO ? "[" + index + "]" : "")));
+       final RoxByte memoryByte = memory.getByte(RoxWord.fromLiteral(location.getRawValue()));
+       debug("Got 0x{} from mem[{}]", Integer.toHexString(memoryByte.getRawValue()), Integer.toString(location.getRawValue()));
        return memoryByte;
     }
 
     private void setByteOfMemoryAt(RoxWord location, RoxByte newByte){
-        setByteOfMemoryAt(location, RoxByte.ZERO, newByte);
-    }
-
-    private void setByteOfMemoryAt(RoxWord location, RoxByte index, RoxByte newByte){
-       memory.setByteAt(RoxWord.fromLiteral(location.getRawValue() + index.getRawValue()), newByte);
-       debug("Stored 0x{} at mem[{}]", Integer.toHexString(newByte.getRawValue()), (location + (index != RoxByte.ZERO ? "[" + index + "]" : "")));
+       memory.setByteAt(RoxWord.fromLiteral(location.getRawValue()), newByte);
+       debug("Stored 0x{} at mem[{}]", Integer.toHexString(newByte.getRawValue()), Integer.toString(location.getRawValue()));
     }
 
     private RoxWord getWordOfMemoryAt(RoxWord location) {
-       RoxWord memoryWord = memory.getWord(location);
+       final RoxWord memoryWord = memory.getWord(location);
        debug("Got 0x{} from mem[{}]", Integer.toHexString(memoryWord.getRawValue()), location.toString());
        return memoryWord;
+    }
+
+    private void debug(final String message, String ... args){
+        if (log.isDebugEnabled())
+            log.debug(message, args);
     }
 }
