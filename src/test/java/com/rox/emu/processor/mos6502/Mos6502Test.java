@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import static com.rox.emu.processor.mos6502.op.OpCode.*;
 import static junit.framework.TestCase.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.spockframework.util.Assert.fail;
 
@@ -379,9 +380,11 @@ public class Mos6502Test {
         Registers registers = processor.getRegisters();
 
         processor.step(3);
+        assert !registers.getFlag(Registers.Flag.CARRY);
 
         assertEquals(RoxWord.fromLiteral(program.getLength()), registers.getPC());
         assertEquals(RoxByte.fromLiteral(2), memory.getByte(RoxWord.fromLiteral(0x20)));
+        assertFalse(registers.getFlag(Registers.Flag.CARRY));
     }
 
     @Test
@@ -404,10 +407,12 @@ public class Mos6502Test {
 
         processor.step();
         assert (processor.getRegisters().getRegister(Registers.Register.Y_INDEX).equals(RoxByte.fromLiteral(1)));
+        assert !registers.getFlag(Registers.Flag.CARRY);
         processor.step();
 
         assertEquals(RoxWord.fromLiteral(program.getLength()), registers.getPC());
         assertEquals(RoxByte.ZERO, processor.getRegisters().getRegister(Registers.Register.Y_INDEX));
+        assertFalse(registers.getFlag(Registers.Flag.CARRY));
     }
 
     @Test
@@ -418,10 +423,12 @@ public class Mos6502Test {
 
         processor.step();
         assert (processor.getRegisters().getRegister(Registers.Register.X_INDEX).equals(RoxByte.fromLiteral(1)));
+        assert !registers.getFlag(Registers.Flag.CARRY);
         processor.step();
 
         assertEquals(RoxWord.fromLiteral(program.getLength()), registers.getPC());
         assertEquals(RoxByte.ZERO, processor.getRegisters().getRegister(Registers.Register.X_INDEX));
+        assertFalse(registers.getFlag(Registers.Flag.CARRY));
     }
 
     @Test

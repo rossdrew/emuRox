@@ -185,7 +185,7 @@ public enum Mos6502Operation implements AddressedValueInstruction{
         boolean carryWasSet = r.getFlag(Registers.Flag.CARRY);
         r.setFlag(Registers.Flag.CARRY);
         final RoxByte newValue = a.sbc(xValue, RoxByte.fromLiteral(1));
-        if (carryWasSet) r.setFlag(Registers.Flag.CARRY); else r.clearFlag(Registers.Flag.CARRY);
+        r.setFlagTo(Registers.Flag.CARRY, carryWasSet);
 
         r.setFlagsBasedOn(newValue);
         r.setRegister(Registers.Register.Y_INDEX, newValue);
@@ -208,7 +208,7 @@ public enum Mos6502Operation implements AddressedValueInstruction{
         boolean carryWasSet = r.getFlag(Registers.Flag.CARRY);
         r.setFlag(Registers.Flag.CARRY);
         final RoxByte newValue = a.sbc(xValue, RoxByte.fromLiteral(1));
-        if (carryWasSet) r.setFlag(Registers.Flag.CARRY); else r.clearFlag(Registers.Flag.CARRY);
+        r.setFlagTo(Registers.Flag.CARRY, carryWasSet);
 
         r.setFlagsBasedOn(newValue);
         r.setRegister(Registers.Register.X_INDEX, newValue);
@@ -227,7 +227,7 @@ public enum Mos6502Operation implements AddressedValueInstruction{
         boolean carryWasSet = r.getFlag(Registers.Flag.CARRY);
         r.setFlag(Registers.Flag.CARRY);
         final RoxByte newValue = a.sbc(v, RoxByte.fromLiteral(1));
-        if (carryWasSet) r.setFlag(Registers.Flag.CARRY); else r.clearFlag(Registers.Flag.CARRY);
+        r.setFlagTo(Registers.Flag.CARRY, carryWasSet);
         r.setFlagsBasedOn(newValue);
         return newValue;
     }),
