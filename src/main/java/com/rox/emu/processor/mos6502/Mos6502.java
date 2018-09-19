@@ -169,19 +169,6 @@ public class Mos6502 {
     }
 
     /**
-     * @return {@link RoxByte} popped from the stack
-     */
-    private RoxByte pop(){
-        registers.setRegister(Register.STACK_POINTER_HI, RoxByte.fromLiteral(getRegisterValue(Register.STACK_POINTER_HI).getRawValue() + 1));
-        RoxWord address = RoxWord.from(RoxByte.fromLiteral(0x01), getRegisterValue(Register.STACK_POINTER_HI));
-        RoxByte value = getByteOfMemoryAt(address);
-        debug("POP {}(0b{}) from mem[0x{}]", value.toString(),
-                Integer.toBinaryString(value.getRawValue()),
-                Integer.toHexString(address.getRawValue()).toUpperCase());
-        return value;
-    }
-
-    /**
      * @param value {@link RoxByte} to push to the stack
      */
     private void push(RoxByte value){
