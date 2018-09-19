@@ -3023,10 +3023,10 @@ class OpCodeSpec extends Specification {
     testRTS() {
         when:
         loadMemoryWithProgram(LDA_I, memHi,
-                PHA,
-                LDA_I, memLo,
-                PHA,
-                RTS)
+                              PHA,
+                              LDA_I, memLo,
+                              PHA,
+                              RTS)
 
         and:
         processor.step(5)

@@ -207,11 +207,12 @@ public enum Mos6502Operation implements AddressedValueInstruction{
         final RoxByte accumulatorValue = r.getRegister(Registers.Register.ACCUMULATOR);
 
         final RoxByte stackIndex = r.getRegister(Registers.Register.STACK_POINTER_HI);  //XXX Shouldn't this be LOW?
-        final RoxWord stackEntry = RoxWord.from(RoxByte.fromLiteral(0x01), stackIndex);
-        m.setByteAt(stackEntry, accumulatorValue);
+        final RoxWord stackEntryLocation = RoxWord.from(RoxByte.fromLiteral(0x01), stackIndex);
+        m.setByteAt(stackEntryLocation, accumulatorValue);
 
         final RoxByte newStackIndex = RoxByte.fromLiteral(stackIndex.getRawValue() - 1); //XXX Should use alu
         r.setRegister(Registers.Register.STACK_POINTER_HI, newStackIndex);
+
         return v;
     }),
 
@@ -450,8 +451,34 @@ public enum Mos6502Operation implements AddressedValueInstruction{
         return v;
     }),
 
-    RTS((a,r,m,v)->v),
-    RTI((a,r,m,v)->v);
+    /** Return from subroutine */
+    RTS((a,r,m,v)->{
+        Arrays.asList(Registers.Register.PROGRAM_COUNTER_LOW,
+                      Registers.Register.PROGRAM_COUNTER_HI).forEach(registerId -> {
+            final RoxByte stackIndex = r.getRegister(Registers.Register.STACK_POINTER_HI);
+            final RoxByte nextStackIndex = RoxByte.fromLiteral(stackIndex.getRawValue() + 1);  //XXX alu?
+            r.setRegister(Registers.Register.STACK_POINTER_HI, nextStackIndex);
+            final RoxByte stackValue = m.getByte(RoxWord.from(RoxByte.fromLiteral(0x01), nextStackIndex));
+            r.setRegister(registerId, stackValue);
+        });
+
+        return v;
+    }),
+
+    /** Return from interrupt, setting the status flags from the stack */
+    RTI((a,r,m,v)->{
+        Arrays.asList(Registers.Register.STATUS_FLAGS,
+                      Registers.Register.PROGRAM_COUNTER_LOW,
+                      Registers.Register.PROGRAM_COUNTER_HI).forEach(registerId -> {
+            final RoxByte stackIndex = r.getRegister(Registers.Register.STACK_POINTER_HI);
+            final RoxByte nextStackIndex = RoxByte.fromLiteral(stackIndex.getRawValue() + 1);
+            r.setRegister(Registers.Register.STACK_POINTER_HI, nextStackIndex);
+            final RoxByte stackValue = m.getByte(RoxWord.from(RoxByte.fromLiteral(0x01), nextStackIndex));
+            r.setRegister(registerId, stackValue);
+        });
+
+        return v;
+    });
 
     //XXX Is there a better way to do this?
     private static void branchTo(Mos6502Alu alu, Registers registers, Memory mem, final RoxByte offset){

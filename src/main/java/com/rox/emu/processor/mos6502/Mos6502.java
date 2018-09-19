@@ -261,6 +261,8 @@ public class Mos6502 {
             case BVS:
             case BVC:
             case JSR:
+            case RTS:
+            case RTI:
                 opCode.perform(alu, registers, memory);
             break;
 
@@ -271,17 +273,6 @@ public class Mos6502 {
             case JMP_IND: //this is hard to deal with using my functional enums approach
                 registers.setPC(getWordOfMemoryAt(nextProgramWord()));
             break;
-
-            case RTS:
-                setRegisterValue(Register.PROGRAM_COUNTER_LOW, pop());
-                setRegisterValue(Register.PROGRAM_COUNTER_HI, pop());
-                break;
-
-            case RTI:
-                setRegisterValue(Register.STATUS_FLAGS, pop());
-                setRegisterValue(Register.PROGRAM_COUNTER_LOW, pop());
-                setRegisterValue(Register.PROGRAM_COUNTER_HI, pop());
-                break;
 
             case BRK:
                 //BRK is unlike an interrupt in that PC+2 is saved to the stack, this may not be the next instruction
