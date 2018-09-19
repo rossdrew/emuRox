@@ -1,11 +1,16 @@
 package com.rox.emu.env;
 
+import com.pholser.junit.quickcheck.Property;
+import com.pholser.junit.quickcheck.When;
+import com.pholser.junit.quickcheck.runner.JUnitQuickcheck;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import static junit.framework.TestCase.assertNotNull;
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertFalse;
 
+@RunWith(JUnitQuickcheck.class)
 public class RoxWordTest {
     @Test
     public void testEquality(){
@@ -106,6 +111,46 @@ public class RoxWordTest {
 
             assertEquals(expectedLoByte, word.getLowByte());
             assertEquals(expectedHiByte, word.getHighByte());
+        }
+    }
+
+    @Property(trials = 10)
+    public void testIsBitSetInvalidChoice(@When(satisfies = "#_ < 0 || #_ > 16") int bit){
+        final RoxWord myByte = RoxWord.fromLiteral(0b1111111111111111);
+
+        try {
+            myByte.isBitSet(bit);
+            fail("There is no bit " + bit + ", this should throw an error");
+        }catch(ArrayIndexOutOfBoundsException e){
+            assertNotNull(e);
+        }
+    }
+
+    @Test
+    public void testIsValidBitSet(){
+        RoxWord[] allBitLocations = new RoxWord[] {RoxWord.fromLiteral(0b0000000000000001),
+                                                   RoxWord.fromLiteral(0b0000000000000010),
+                                                   RoxWord.fromLiteral(0b0000000000000100),
+                                                   RoxWord.fromLiteral(0b0000000000001000),
+                                                   RoxWord.fromLiteral(0b0000000000010000),
+                                                   RoxWord.fromLiteral(0b0000000000100000),
+                                                   RoxWord.fromLiteral(0b0000000001000000),
+                                                   RoxWord.fromLiteral(0b0000000010000000),
+                                                   RoxWord.fromLiteral(0b0000000100000000),
+                                                   RoxWord.fromLiteral(0b0000001000000000),
+                                                   RoxWord.fromLiteral(0b0000010000000000),
+                                                   RoxWord.fromLiteral(0b0000100000000000),
+                                                   RoxWord.fromLiteral(0b0001000000000000),
+                                                   RoxWord.fromLiteral(0b0010000000000000),
+                                                   RoxWord.fromLiteral(0b0100000000000000),
+                                                   RoxWord.fromLiteral(0b1000000000000000)};
+
+        for (int w=0; w<15; w++){
+            final RoxWord wordToTest = allBitLocations[w];
+            for (int b=0; b<15; b++){
+                boolean expectedToBeSet = (w==b);
+                assertEquals("Bit " + b + " of word " + w + " (" + Integer.toBinaryString(wordToTest.getRawValue()) +") should be " + (expectedToBeSet ? "set" : "unset"), wordToTest.isBitSet(b), expectedToBeSet);
+            }
         }
     }
 }
