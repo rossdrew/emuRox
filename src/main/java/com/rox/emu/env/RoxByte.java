@@ -207,7 +207,7 @@ public final class RoxByte {
      * @return weather this byte represents a negative number. i.e. it is signed and bit 7 is set
      */
     public boolean isNegative() {
-        return isBitSet(7); //&& format == ByteFormat.SIGNED_TWOS_COMPLIMENT
+        return isBitSet(7);
     }
 
     public String toBinaryString(){
@@ -220,6 +220,10 @@ public final class RoxByte {
             newByteArray[i] = RoxByte.fromLiteral(bytes[i]);
         }
         return newByteArray;
+    }
+
+    public RoxByte copy() {
+        return new RoxByte(byteValue, format);
     }
 
     @Override

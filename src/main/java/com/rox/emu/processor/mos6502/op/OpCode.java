@@ -1,7 +1,10 @@
 package com.rox.emu.processor.mos6502.op;
 
 import com.rox.emu.UnknownOpCodeException;
+import com.rox.emu.mem.Memory;
 import com.rox.emu.processor.mos6502.Mos6502;
+import com.rox.emu.processor.mos6502.Mos6502Alu;
+import com.rox.emu.processor.mos6502.Registers;
 import com.rox.emu.processor.mos6502.op.util.OpCodeConverter;
 
 import java.util.Arrays;
@@ -11,16 +14,23 @@ import java.util.stream.Stream;
 
 /**
  * Enum representation of {@link Mos6502} op-codes.  Each represented by an enum name using the convention
- * '{OP-CODE}{@value #TOKEN_SEPARATOR}{ADDRESSING-MODE}{@value #TOKEN_SEPARATOR}{INDEXING-MODE}'.
+ * '{OP-CODE}{@value #TOKEN_SEPARATOR}{ADDRESSING-MODE}{@value #TOKEN_SEPARATOR}{INDEXING-MODE}'.<br/>
+ * <br/>
+ * {@link Mos6502} op-codes are therefore made of two parts.  The {@link Mos6502AddressingMode} and the {@link Mos6502Operation}
  *
  * @author Ross Drew
  */
-public enum OpCode {
+public enum OpCode implements Mos6502Instruction {
     BRK(0x00),
+
     ASL_A(0x0A),
+
     ASL_Z(0x06),
+
     ASL_ABS(0x0E),
+
     ASL_Z_IX(0x16),
+
     ASL_ABS_IX(0x1E),
 
     LSR_A(0x4A),
@@ -195,16 +205,9 @@ public enum OpCode {
     RTS(0x60),
     RTI(0x40);
 
-    /**
-     * The actual addressing-mode independent operation performed by an {@link OpCode}
-     */
-    public enum Operation {
-        BRK, ASL, LSR, ADC, LDA, CLV, AND, ORA, EOR, SBC,
-        CLC, SEC, LDY, LDX, STY, STA, STX, INY, INX, DEX,
-        INC, DEC, DEY, PHA, PLA, PHP, PLP, NOP, JMP, TAX,
-        TAY, TYA, TXA, TXS, TSX, BIT, CMP, CPX, CPY, JSR,
-        BPL, BMI, BVC, BVS, BCC, BCS, BNE, BEQ, ROL, ROR,
-        CLI, SEI, SED, CLD, RTS, RTI
+    @Override
+    public void perform(Mos6502Alu alu, Registers registers, Memory memory) {
+        addressingMode.address(registers, memory, alu, operation);
     }
 
     /**
@@ -227,16 +230,18 @@ public enum OpCode {
      */
     public static final int INDX_I = ADDR_I + 1;
 
-    private final Operation operation;
+    private final Mos6502Operation operation;
     private final int byteValue;
     private final String opCodeName;
-    private final AddressingMode addressingMode;
+    private final Mos6502AddressingMode addressingMode;
 
     OpCode(int byteValue){
         this.byteValue = byteValue;
+        //XXX Should I keep doing this or just pass them in explicitly?
         this.addressingMode = OpCodeConverter.getAddressingMode(this.name());
         this.opCodeName = OpCodeConverter.getOpCode(this.name());
         this.operation = OpCodeConverter.getOperation(this.name());
+
     }
 
     /**
@@ -252,8 +257,8 @@ public enum OpCode {
     /**
      * Get the {@link OpCode} for
      *
-     * @param opCodeName Three character {@link String} representing an {@link AddressingMode#IMPLIED} addressed OpCode
-     * @return The OpCode instance associated with this name in {@link AddressingMode#IMPLIED}
+     * @param opCodeName Three character {@link String} representing an {@link Mos6502AddressingMode#IMPLIED} addressed OpCode
+     * @return The OpCode instance associated with this name in {@link Mos6502AddressingMode#IMPLIED}
      */
     public static OpCode from(String opCodeName){
         return from(opcode -> opcode.getOpCodeName().equalsIgnoreCase(opCodeName), opCodeName);
@@ -263,14 +268,14 @@ public enum OpCode {
      * Get the {@link OpCode} for
      *
      * @param opCodeName Three character {@link String} representing OpCode name
-     * @param addressingMode The {@link AddressingMode} of the OpCode
-     * @return The OpCode instance associated with this name in this {@link AddressingMode}
+     * @param addressingMode The {@link Mos6502AddressingMode} of the OpCode
+     * @return The OpCode instance associated with this name in this {@link Mos6502AddressingMode}
      */
-    public static OpCode from(String opCodeName, AddressingMode addressingMode){
+    public static OpCode from(String opCodeName, Mos6502AddressingMode addressingMode){
         return matching(opcode -> opcode.getOpCodeName().equalsIgnoreCase(opCodeName) &&
-                                                       opcode.getAddressingMode() == addressingMode,
-                    opCodeName + " in " + addressingMode,
-                    opCodeName);
+                        opcode.getAddressingMode() == addressingMode,
+                opCodeName + " in " + addressingMode,
+                opCodeName);
     }
 
     /**
@@ -299,7 +304,7 @@ public enum OpCode {
         throw new UnknownOpCodeException("Unknown opcode name while creating OpCode object: " + predicateDescription, predicateTerm);
     }
 
-    public Operation getOperation(){
+    public Mos6502Operation getOperation(){
         return this.operation;
     }
 
@@ -316,17 +321,17 @@ public enum OpCode {
     public String getOpCodeName() {return opCodeName;}
 
     /**
-     * @return the {@link AddressingMode} that this {@link OpCode} uses
+     * @return the {@link Mos6502AddressingMode} that this {@link OpCode} uses
      */
-    public AddressingMode getAddressingMode(){
+    public Mos6502AddressingMode getAddressingMode(){
         return this.addressingMode;
     }
 
     /**
      * @param addressingMode from which to get possible {@link OpCode}s
-     * @return a {@link Stream} of all {@link OpCode}s that use the the specified {@link AddressingMode}
+     * @return a {@link Stream} of all {@link OpCode}s that use the the specified {@link Mos6502AddressingMode}
      */
-    public static Stream<OpCode> streamOf(AddressingMode addressingMode){
+    public static Stream<OpCode> streamOf(Mos6502AddressingMode addressingMode){
         return streamOf(opcode -> opcode.getAddressingMode() == addressingMode);
     }
 
@@ -335,7 +340,7 @@ public enum OpCode {
     }
 
     /**
-     * @return The textual description of this {@link OpCode} including the {@link AddressingMode} it uses
+     * @return The textual description of this {@link OpCode} including the {@link Mos6502AddressingMode} it uses
      */
     @Override
     public String toString(){

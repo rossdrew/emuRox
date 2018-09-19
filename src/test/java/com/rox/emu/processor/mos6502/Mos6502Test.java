@@ -742,7 +742,10 @@ public class Mos6502Test {
 
     @Test
     public void testBIT(){
-        Program program = new Program().with(LDA_I, 0x01, STA_Z, 0x20, LDA_I, 0x01, BIT_Z, 0x20);
+        Program program = new Program().with(LDA_I, 0x01,
+                                             STA_Z, 0x20,
+                                             LDA_I, 0x01,
+                                             BIT_Z, 0x20);
         memory.setBlock(RoxWord.ZERO, program.getProgramAsByteArray());
         Registers registers = processor.getRegisters();
 

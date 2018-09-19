@@ -170,6 +170,17 @@ public class Registers {
     }
 
     /**
+     * Get the Program Counter value then increment
+     *
+     * @return the value of the Program Counter
+     */
+    public RoxWord getAndStepProgramCounter(){
+        final RoxWord pc = getPC();
+        setPC(RoxWord.fromLiteral(getPC().getRawValue()+1));
+        return pc;
+    }
+
+    /**
      * @param flag flag to test
      * @return <code>true</code> if the specified flag is set, <code>false</code> otherwise
      */
@@ -219,19 +230,25 @@ public class Registers {
     /**
      * Set zero flag if given argument is 0
      */
-    public void setZeroFlagFor(int value){
+    private void setZeroFlagFor(int value){
         setFlagTo(Flag.ZERO, value == 0);
     }
 
     /**
      * Set negative flag if given argument is 0
      */
-    public void setNegativeFlagFor(int value){
+    private void setNegativeFlagFor(int value){
         setFlagTo(Flag.NEGATIVE, isNegative(value));
     }
 
     private boolean isNegative(int fakeByte){
         return RoxByte.fromLiteral(fakeByte).isNegative();
-//        return (fakeByte & STATUS_FLAG_NEGATIVE) == STATUS_FLAG_NEGATIVE;  ///What was this about?
+    }
+
+    public Registers copy(){
+        final Registers newRegisters = new Registers();
+        for (int i=0; i< registerValue.length; i++)
+            newRegisters.registerValue[i] = registerValue[i].copy();
+        return newRegisters;
     }
 }

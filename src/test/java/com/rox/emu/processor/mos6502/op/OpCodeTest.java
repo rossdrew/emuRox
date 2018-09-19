@@ -32,7 +32,7 @@ public class OpCodeTest {
     @Test
     public void testFromOpcodeName(){
         for (OpCode o : OpCode.values()){
-            if (o.getAddressingMode() == AddressingMode.IMPLIED)
+            if (o.getAddressingMode() == Mos6502AddressingMode.IMPLIED)
                 assertEquals(o, OpCode.from(o.getOpCodeName()));
             assertEquals(o, OpCode.from(o.getOpCodeName(), o.getAddressingMode()));
         }
@@ -41,7 +41,7 @@ public class OpCodeTest {
     @Test
     public void testInvalidFromOpcodeName(){
         try{
-            OpCode.from("ROX", AddressingMode.ABSOLUTE);
+            OpCode.from("ROX", Mos6502AddressingMode.ABSOLUTE);
             fail("ROX is not a valid OpCode");
         }catch(UnknownOpCodeException e){
             assertNotNull(e);
@@ -52,7 +52,7 @@ public class OpCodeTest {
     @Test
     public void testInvalidFromOpcodeNameAndAddressingMode(){
         try{
-            OpCode.from("ADC", AddressingMode.IMPLIED);
+            OpCode.from("ADC", Mos6502AddressingMode.IMPLIED);
             fail("ADC cannot be IMPLIED addressed");
         }catch(UnknownOpCodeException e){
             assertNotNull(e);
@@ -93,7 +93,7 @@ public class OpCodeTest {
 
     @Test
     public void testStreamOf(){
-        OpCode.streamOf(AddressingMode.IMPLIED).forEach( (opcode)->assertEquals(opcode, OpCode.from(opcode.getOpCodeName())) );
-        OpCode.streamOf(AddressingMode.ZERO_PAGE).forEach( (opcode)->assertEquals(opcode, OpCode.from(opcode.getOpCodeName(), opcode.getAddressingMode())) );
+        OpCode.streamOf(Mos6502AddressingMode.IMPLIED).forEach( (opcode)->assertEquals(opcode, OpCode.from(opcode.getOpCodeName())) );
+        OpCode.streamOf(Mos6502AddressingMode.ZERO_PAGE).forEach( (opcode)->assertEquals(opcode, OpCode.from(opcode.getOpCodeName(), opcode.getAddressingMode())) );
     }
 }

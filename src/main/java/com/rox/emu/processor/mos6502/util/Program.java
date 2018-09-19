@@ -5,9 +5,7 @@ import com.rox.emu.UnknownTokenException;
 import com.rox.emu.env.RoxByte;
 import com.rox.emu.processor.mos6502.op.OpCode;
 
-import java.rmi.activation.UnknownObjectException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * An immutable 6502 Program which is essentially a byte array which can
@@ -27,7 +25,7 @@ public class Program {
         private final String targetLabel;
         private final int rootAddress;
 
-        public Reference(final String target, final int root){
+        Reference(final String target, final int root){
             this.targetLabel = target;
             this.rootAddress = root;
         }

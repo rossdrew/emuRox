@@ -1,8 +1,9 @@
 package com.rox.emu.processor.mos6502.op.util
 
 import com.rox.emu.UnknownOpCodeException
-import com.rox.emu.processor.mos6502.op.AddressingMode
+import com.rox.emu.processor.mos6502.op.Mos6502AddressingMode
 import com.rox.emu.processor.mos6502.op.OpCode
+import com.rox.emu.processor.mos6502.op.Mos6502Operation
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -26,26 +27,26 @@ class OpCodeConverterSpec extends Specification{
     @Unroll("Get addressing mode: #opCodeName -> #expectedAddressingMode")
     testAddressingModeExtraction() {
         when:
-        AddressingMode addressingMode = OpCodeConverter.getAddressingMode(opCodeName)
+        Mos6502AddressingMode addressingMode = OpCodeConverter.getAddressingMode(opCodeName)
 
         then:
         addressingMode == expectedAddressingMode
 
         where:
         opCodeName        | expectedAddressingMode
-        "BRK"             | AddressingMode.IMPLIED            //VALID
-        "ADC_I"           | AddressingMode.IMMEDIATE
-        "ROL_A"           | AddressingMode.ACCUMULATOR
-        "ADC_Z"           | AddressingMode.ZERO_PAGE
-        "ADC_Z_IX"        | AddressingMode.ZERO_PAGE_X
-        "ADC_Z_IY"        | AddressingMode.ZERO_PAGE_Y
-        "ADC_ABS"         | AddressingMode.ABSOLUTE
-        "ADC_ABS_IX"      | AddressingMode.ABSOLUTE_X
-        "ADC_ABS_IY"      | AddressingMode.ABSOLUTE_Y
-        "ADC_IND"         | AddressingMode.INDIRECT
-        "ADC_IND_IX"      | AddressingMode.INDIRECT_X
-        "ADC_IND_IY"      | AddressingMode.INDIRECT_Y
-        "BEQ"             | AddressingMode.RELATIVE
+        "BRK"             | Mos6502AddressingMode.IMPLIED            //VALID
+        "ADC_I"           | Mos6502AddressingMode.IMMEDIATE
+        "ROL_A"           | Mos6502AddressingMode.ACCUMULATOR
+        "ADC_Z"           | Mos6502AddressingMode.ZERO_PAGE
+        "ADC_Z_IX"        | Mos6502AddressingMode.ZERO_PAGE_X
+        "ADC_Z_IY"        | Mos6502AddressingMode.ZERO_PAGE_Y
+        "ADC_ABS"         | Mos6502AddressingMode.ABSOLUTE
+        "ADC_ABS_IX"      | Mos6502AddressingMode.ABSOLUTE_X
+        "ADC_ABS_IY"      | Mos6502AddressingMode.ABSOLUTE_Y
+        "ADC_IND"         | Mos6502AddressingMode.INDIRECT
+        "ADC_IND_IX"      | Mos6502AddressingMode.INDIRECT_X
+        "ADC_IND_IY"      | Mos6502AddressingMode.INDIRECT_Y
+        "BEQ"             | Mos6502AddressingMode.RELATIVE
     }
 
     @Unroll("Get addressing mode (INVALID): #expected")
@@ -69,16 +70,16 @@ class OpCodeConverterSpec extends Specification{
     @Unroll("Get operation from #opCodeName")
     testGetOperation(){
         when:
-        final OpCode.Operation operation = OpCodeConverter.getOperation(opCodeName)
+        final Mos6502Operation operation = OpCodeConverter.getOperation(opCodeName)
 
         then:
         operation == expectedOperation
 
         where:
         opCodeName    || expectedOperation
-        "BRK"         || OpCode.Operation.BRK
-        "ASL_A"       || OpCode.Operation.ASL
-        "AND_IND_IX"  || OpCode.Operation.AND
+        "BRK"         || Mos6502Operation.BRK
+        "ASL_A"       || Mos6502Operation.ASL
+        "AND_IND_IX"  || Mos6502Operation.AND
     }
 
     def testGetOperationForEveryOpcode(){

@@ -15,9 +15,9 @@ public class MultiSourceMemory implements Memory {
      * logically accessed and a physical memory location that will eventually by "physically" accessed.
      */
     private class MemoryMapping {
-        public final int logicalAddress;
-        public final int physicalAddress;
-        public final Memory physicalMemory;
+        final int logicalAddress;
+        final int physicalAddress;
+        final Memory physicalMemory;
 
         private MemoryMapping(final int logicalAddress,
                               final int physicalAddress,
@@ -57,8 +57,7 @@ public class MultiSourceMemory implements Memory {
      * @return a new {@link MultiSourceMemory} with the new mapping
      */
     public MultiSourceMemory withMapping(final Integer address, final Memory mappedMemory){
-        final Map<Integer, MemoryMapping> newMemoryMappings = new HashMap<>();
-        newMemoryMappings.putAll(memoryMappings);
+        final Map<Integer, MemoryMapping> newMemoryMappings = new HashMap<>(memoryMappings);
         newMemoryMappings.put(address, new MemoryMapping(address,address,mappedMemory));
 
         return new MultiSourceMemory(defaultMemory, newMemoryMappings);
