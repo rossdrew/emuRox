@@ -92,7 +92,7 @@ public class RoxWordTest {
     @Test
     public void testGetAsInt(){
         assertEquals(-1, RoxWord.fromLiteral(0b1111111111111111).getAsInt());
-        //TODO assertEquals(32768, RoxWord.fromLiteral(0b1000000000000000).getAsInt());
+        //XXX assertEquals(-32768, RoxWord.fromLiteral(0b1000000000000000).getAsInt());
 
         assertEquals(1,  RoxWord.fromLiteral(0b0000000000000001).getAsInt());
         assertEquals(32767, RoxWord.fromLiteral(0b0111111111111111).getAsInt());
