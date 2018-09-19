@@ -2,7 +2,6 @@ package com.rox.emu.processor.mos6502.util
 
 import com.rox.emu.env.RoxByte
 import com.rox.emu.processor.mos6502.op.OpCode
-import spock.lang.Ignore
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -18,8 +17,8 @@ class ProgramSpec extends Specification {
         program != null
     }
 
-    @Unroll("Test comparing #description program")
-    def testComparisons() {
+    @Unroll("Test comparing equal #description program")
+    def testValidComparisons() {
         given:
         Program program
 
@@ -35,6 +34,34 @@ class ProgramSpec extends Specification {
         [OpCode.LDA_I, 0x01]         | "OpCode constructed"
         [0xA9, 0x02]                 | "integer constructed"
         [0xA9 as byte, 0x03 as byte] | "byte constructed"
+    }
+
+    def testIdenticalProgramCompare(){
+        given:
+        Program program = new Program().with([OpCode.LDA_I, 0x01] as Object[])
+
+        when:
+        boolean equal = program.equals(program)
+
+        then:
+        equal
+    }
+
+    @Unroll("Test comparing not equal #description program")
+    def testInvalidComparisons() {
+        given:
+        Program program
+
+        when:
+        program = new Program().with([OpCode.LDA_I, 0x01] as Object[])
+
+        then:
+        !program.equals(programInputBytes)
+
+        where:
+        programInputBytes            | description
+        null                         | "empty"
+        [0xA9, 0x02]                 | "different "
     }
 
     def "Create program with invalid program data"() {
@@ -158,8 +185,8 @@ class ProgramSpec extends Specification {
         ["START:"]                          || []                                                       | "A program label doesn't change the output"
     }
 
+    //TODO Test Program.equals() non-identical classtype, same class, no array
     //TODO Test Program.with() with a number an int
-    //TODO Test Program.equals() with identical objects, null, non-identical classtype, same class, no array
     //TODO Test Program.arrayMatches()
     //TODO Test Program.hashcode()
 }
