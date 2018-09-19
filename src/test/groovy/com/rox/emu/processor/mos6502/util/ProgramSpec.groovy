@@ -45,6 +45,17 @@ class ProgramSpec extends Specification {
 
         then:
         equal
+        program.hashCode() == (new Program().with([OpCode.LDA_I, 0x01] as Object[])).hashCode()
+    }
+
+    def testUnequalObjects(){
+        given:
+        Program programA = new Program().with([OpCode.LDA_I, 0x01] as Object[])
+        Program programB = new Program().with([OpCode.LDA_I, 0x02] as Object[])
+
+        expect:
+        !programA.equals(programB)
+        programA.hashCode() != programB.hashCode()
     }
 
     @Unroll("Test comparing not equal #description program")
