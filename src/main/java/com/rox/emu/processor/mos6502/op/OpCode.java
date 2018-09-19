@@ -207,7 +207,7 @@ public enum OpCode implements Mos6502Instruction {
 
     @Override
     public void perform(Mos6502Alu alu, Registers registers, Memory memory) {
-        addressingMode.address(registers, memory, alu, operation::perform);
+        addressingMode.address(registers, memory, alu, operation);
     }
 
     /**

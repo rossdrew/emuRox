@@ -230,14 +230,14 @@ public class Registers {
     /**
      * Set zero flag if given argument is 0
      */
-    public void setZeroFlagFor(int value){
+    private void setZeroFlagFor(int value){
         setFlagTo(Flag.ZERO, value == 0);
     }
 
     /**
      * Set negative flag if given argument is 0
      */
-    public void setNegativeFlagFor(int value){
+    private void setNegativeFlagFor(int value){
         setFlagTo(Flag.NEGATIVE, isNegative(value));
     }
 

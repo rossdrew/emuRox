@@ -197,9 +197,7 @@ final class DebuggerWindow extends JFrame {
             fis = new FileInputStream(file);
             fileContent= new byte[(int)file.length()];
             fis.read(fileContent);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (IOException e ) {
             e.printStackTrace();
         }
 

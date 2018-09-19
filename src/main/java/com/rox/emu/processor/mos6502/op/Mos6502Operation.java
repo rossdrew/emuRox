@@ -382,8 +382,7 @@ public enum Mos6502Operation implements AddressedValueInstruction{
 
     //TODO This is set as a RELATIVE addresses instruction, but it should be ABSOLUTE
     /** Jump to the subroutine at the given absolute address */
-    JSR((a,r,m,v)->{
-        final RoxByte argument1 = v;
+    JSR((a,r,m,argument1)->{
         final RoxWord arg2Address = r.getAndStepProgramCounter();
         final RoxByte argument2 = m.getByte(arg2Address);
 
@@ -400,7 +399,7 @@ public enum Mos6502Operation implements AddressedValueInstruction{
         r.setRegister(Registers.Register.PROGRAM_COUNTER_HI, argument1);
         r.setRegister(Registers.Register.PROGRAM_COUNTER_LOW, argument2);
 
-        return v;
+        return argument1;
     }),
 
     /** Branch to offset if {@code NEGATIVE} flag is <em>not</em> set */
@@ -542,7 +541,7 @@ public enum Mos6502Operation implements AddressedValueInstruction{
         registers.setPC(RoxWord.from(loAddressByte));
     }
 
-    private AddressedValueInstruction instruction;
+    private final AddressedValueInstruction instruction;
 
     Mos6502Operation(AddressedValueInstruction instruction){
         this.instruction = instruction;

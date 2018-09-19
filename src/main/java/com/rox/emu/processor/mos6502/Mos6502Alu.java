@@ -54,12 +54,12 @@ public class Mos6502Alu {
     }
 
     /**
-     * Is the sign of both inputs is different from the sign of the result i.e. bit 7 set on the result of
+     * Is the sign of both inputs different from the sign of the adc result i.e. bit 7 set on the result of
      * <code>((a^result) & (b^result))</code>
      *
-     * @param inputByteA
-     * @param inputByteB
-     * @param result
+     * @param inputByteA first {@link RoxByte} to compare
+     * @param inputByteB second {@link RoxByte} to compare
+     * @param result {@code true} of overflow, {@code false} otherwise
      * @return if the result of adc(inputByteA,inputByteB) should cause an overflow bit
      */
     private boolean isAdcOverflow(final RoxByte inputByteA,

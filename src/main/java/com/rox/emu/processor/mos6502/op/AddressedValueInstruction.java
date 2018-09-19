@@ -6,7 +6,7 @@ import com.rox.emu.processor.mos6502.Mos6502Alu;
 import com.rox.emu.processor.mos6502.Registers;
 
 @FunctionalInterface
-public interface AddressedValueInstruction {
+interface AddressedValueInstruction {
     RoxByte perform(final Mos6502Alu alu,
                     final Registers registers,
                     final Memory memory,
