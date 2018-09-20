@@ -151,10 +151,10 @@ public class Mos6502 {
 
     /**
      * Combine the next two bytes in program memory, as defined by
-     * the Program Counter into a word so that:-
-     *
-     * PC[0] = high order byte
-     * PC[1] = low order byte
+     * the Program Counter into a word so that:-><br/>
+     * <br/>
+     * PC[0] = high order byte<br/>
+     * PC[1] = low order byte<br/>
      *<br/><br/>
      * <em>Increments the Program Counter by 1</em>
      *
