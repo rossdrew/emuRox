@@ -10,7 +10,7 @@ import com.rox.emu.processor.mos6502.Registers;
 import com.rox.emu.processor.mos6502.dbg.ui.component.MemoryPanel;
 import com.rox.emu.processor.mos6502.dbg.ui.component.Registers6502;
 import com.rox.emu.processor.mos6502.op.Mos6502AddressingMode;
-import com.rox.emu.processor.mos6502.op.OpCode;
+import com.rox.emu.processor.mos6502.op.Mos6502OpCode;
 import com.rox.emu.processor.mos6502.util.Mos6502Compiler;
 import com.rox.emu.processor.mos6502.util.Program;
 import com.rox.emu.rom.InesRom;
@@ -23,7 +23,6 @@ import javax.swing.text.StyleContext;
 import java.awt.*;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -226,31 +225,31 @@ final class DebuggerWindow extends JFrame {
 //                                                        OpCode.CPX_I, 0,
 //                                                        OpCode.BNE, 0b11110111);
 
-        Program multiplicationProgram = new Program().with( OpCode.LDA_I, valMPD,
-                                                            OpCode.STA_Z, MPD,
-                                                            OpCode.LDA_I, valMPR,
-                                                            OpCode.STA_Z, MPR,
-                                                            OpCode.LDA_I, 0,         //<---- start
-                                                            OpCode.STA_Z, TMP,       //Clear
-                                                            OpCode.STA_Z, RESAD_0,   //...
-                                                            OpCode.STA_Z, RESAD_1,   //...
-                                                            OpCode.LDX_I, 8,         //X counts each bit
+        Program multiplicationProgram = new Program().with( Mos6502OpCode.LDA_I, valMPD,
+                                                            Mos6502OpCode.STA_Z, MPD,
+                                                            Mos6502OpCode.LDA_I, valMPR,
+                                                            Mos6502OpCode.STA_Z, MPR,
+                                                            Mos6502OpCode.LDA_I, 0,         //<---- start
+                                                            Mos6502OpCode.STA_Z, TMP,       //Clear
+                                                            Mos6502OpCode.STA_Z, RESAD_0,   //...
+                                                            Mos6502OpCode.STA_Z, RESAD_1,   //...
+                                                            Mos6502OpCode.LDX_I, 8,         //X counts each bit
                                                 //:MULT(18)
-                                                            OpCode.LSR_Z, MPR,       //LSR(MPR)
-                                                            OpCode.BCC, 13,          //Test carry and jump (forward 13) to NOADD
+                                                            Mos6502OpCode.LSR_Z, MPR,       //LSR(MPR)
+                                                            Mos6502OpCode.BCC, 13,          //Test carry and jump (forward 13) to NOADD
 
-                                                            OpCode.LDA_Z, RESAD_0,   //RESAD -> A
-                                                            OpCode.CLC,              //Prepare to add
-                                                            OpCode.ADC_Z, MPD,       //+MPD
-                                                            OpCode.STA_Z, RESAD_0,   //Save result
-                                                            OpCode.LDA_Z, RESAD_1,   //RESAD+1 -> A
-                                                            OpCode.ADC_Z, TMP,       //+TMP
-                                                            OpCode.STA_Z, RESAD_1,   //RESAD+1 <- A
+                                                            Mos6502OpCode.LDA_Z, RESAD_0,   //RESAD -> A
+                                                            Mos6502OpCode.CLC,              //Prepare to add
+                                                            Mos6502OpCode.ADC_Z, MPD,       //+MPD
+                                                            Mos6502OpCode.STA_Z, RESAD_0,   //Save result
+                                                            Mos6502OpCode.LDA_Z, RESAD_1,   //RESAD+1 -> A
+                                                            Mos6502OpCode.ADC_Z, TMP,       //+TMP
+                                                            Mos6502OpCode.STA_Z, RESAD_1,   //RESAD+1 <- A
                                                 //:NOADD(35)
-                                                            OpCode.ASL_Z, MPD,       //ASL(MPD)
-                                                            OpCode.ROL_Z, TMP,       //Save bit from MPD
-                                                            OpCode.DEX,              //--X
-                                                            OpCode.BNE, 0b11100111   //Test equal and jump (back 24) to MULT
+                                                            Mos6502OpCode.ASL_Z, MPD,       //ASL(MPD)
+                                                            Mos6502OpCode.ROL_Z, TMP,       //Save bit from MPD
+                                                            Mos6502OpCode.DEX,              //--X
+                                                            Mos6502OpCode.BNE, 0b11100111   //Test equal and jump (back 24) to MULT
         );
 
         return multiplicationProgram.getProgramAsByteArray();
@@ -308,7 +307,7 @@ final class DebuggerWindow extends JFrame {
             arguments.append(" " + MemoryPanel.asHex(memory.getByte(n).getRawValue()));
         }
 
-        instructionName = OpCode.from(instr.getRawValue()).toString();
+        instructionName = Mos6502OpCode.from(instr.getRawValue()).toString();
         final String instructionLocation = MemoryPanel.asHex(pointer.getRawValue());
         final String instructionCode = MemoryPanel.asHex(instr.getRawValue());
         final String completeInstructionInfo = "[" + instructionLocation + "] (" + instructionCode + arguments.toString() + ") :" + instructionName;
@@ -318,7 +317,7 @@ final class DebuggerWindow extends JFrame {
     }
 
     private int getArgumentCount(int instr) {
-        final OpCode opCode = OpCode.from(instr);
+        final Mos6502OpCode opCode = Mos6502OpCode.from(instr);
         final Mos6502AddressingMode addressingMode = opCode.getAddressingMode();
         return addressingMode.getInstructionBytes() - 1;
     }

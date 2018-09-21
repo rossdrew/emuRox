@@ -9,7 +9,7 @@ import com.rox.emu.processor.mos6502.util.Program;
 import org.junit.Before;
 import org.junit.Test;
 
-import static com.rox.emu.processor.mos6502.op.OpCode.*;
+import static com.rox.emu.processor.mos6502.op.Mos6502OpCode.*;
 import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;

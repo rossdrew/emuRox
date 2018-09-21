@@ -2,7 +2,7 @@ package com.rox.emu.processor.mos6502.op.util
 
 import com.rox.emu.UnknownOpCodeException
 import com.rox.emu.processor.mos6502.op.Mos6502AddressingMode
-import com.rox.emu.processor.mos6502.op.OpCode
+import com.rox.emu.processor.mos6502.op.Mos6502OpCode
 import com.rox.emu.processor.mos6502.op.Mos6502Operation
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -84,7 +84,7 @@ class OpCodeConverterSpec extends Specification{
 
     def testGetOperationForEveryOpcode(){
         when:
-        boolean mismatches = OpCode.values().any {opCode -> opCode.operation != OpCodeConverter.getOperation(opCode.opCodeName)}
+        boolean mismatches = Mos6502OpCode.values().any { opCode -> opCode.operation != OpCodeConverter.getOperation(opCode.opCodeName)}
 
         then:
         !mismatches

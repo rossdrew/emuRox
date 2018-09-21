@@ -3,7 +3,7 @@ package com.rox.emu.processor.mos6502.util;
 
 import com.rox.emu.UnknownTokenException;
 import com.rox.emu.env.RoxByte;
-import com.rox.emu.processor.mos6502.op.OpCode;
+import com.rox.emu.processor.mos6502.op.Mos6502OpCode;
 
 import java.util.*;
 
@@ -67,12 +67,12 @@ public class Program {
     }
 
     /**
-     * Create a new {@link Program} with a {@link OpCode} appended
+     * Create a new {@link Program} with a {@link Mos6502OpCode} appended
      *
-     * @param opCode ({@link OpCode}) to append
-     * @return a new {@link Program} that is a copy of this one with the new {@link OpCode} appended
+     * @param opCode ({@link Mos6502OpCode}) to append
+     * @return a new {@link Program} that is a copy of this one with the new {@link Mos6502OpCode} appended
      */
-    public Program with(OpCode opCode) {
+    public Program with(Mos6502OpCode opCode) {
         return this.with(opCode.getByteValue());
     }
 
@@ -106,13 +106,13 @@ public class Program {
     /**
      * Create a new {@link Program} with new entry appended
      *
-     * @param value [{@link int} | {@link OpCode} | {@link String}] to append
+     * @param value [{@link int} | {@link Mos6502OpCode} | {@link String}] to append
      * @return a new {@link Program} that is a copy of this one with the new entry appended
      */
     public Program with(Object value){
         //XXX I'd need to abstract away the concept of program-byte in order to make this nicer
-        if (value instanceof OpCode)
-            return this.with((OpCode) value);
+        if (value instanceof Mos6502OpCode)
+            return this.with((Mos6502OpCode) value);
 
         if (value instanceof String)
             return this.with((String) value);
@@ -129,7 +129,7 @@ public class Program {
     /**
      * Create a new {@link Program} with new entries appended
      *
-     * @param values [{@link int} | {@link OpCode} | {@link String}] to append
+     * @param values [{@link int} | {@link Mos6502OpCode} | {@link String}] to append
      * @return a new {@link Program} that is a copy of this one with the new entries appended
      */
     public Program with(Object ... values){

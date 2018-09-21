@@ -8,7 +8,7 @@ import com.rox.emu.processor.mos6502.Mos6502Alu;
 import com.rox.emu.processor.mos6502.Registers;
 
 /**
- * An enum representing possible addressing modes for {@link OpCode}
+ * An enum representing possible addressing modes for {@link Mos6502OpCode}
  *
  * @author Ross Drew
  */

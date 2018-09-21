@@ -4,7 +4,7 @@ import com.rox.emu.UnknownOpCodeException;
 import com.rox.emu.UnknownTokenException;
 import com.rox.emu.processor.mos6502.Mos6502;
 import com.rox.emu.processor.mos6502.op.Mos6502AddressingMode;
-import com.rox.emu.processor.mos6502.op.OpCode;
+import com.rox.emu.processor.mos6502.op.Mos6502OpCode;
 
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
@@ -144,7 +144,7 @@ public class Mos6502Compiler {
                 //OpCodes with label arguments
                 //XXX Do these need to work with hard coded values as well
                 case "BPL": case "BMI": case "BVC": case "BVS": case "BCC": case "BCS": case "BNE": case "BEQ": case "JSR":
-                    workingProgram = workingProgram.with(OpCode.from(opCodeToken).getByteValue());
+                    workingProgram = workingProgram.with(Mos6502OpCode.from(opCodeToken).getByteValue());
 
                     final String argToken = tokenizer.nextToken().trim();
                     if (Character.isAlphabetic(argToken.charAt(0))) {
@@ -167,7 +167,7 @@ public class Mos6502Compiler {
                 case "CLD": case "CLI": case "CLV":
                 case "BRK":
                 case "NOP":
-                    workingProgram = workingProgram.with(OpCode.from(opCodeToken).getByteValue());
+                    workingProgram = workingProgram.with(Mos6502OpCode.from(opCodeToken).getByteValue());
                     break;
 
                 //Opcodes with non label arguments
@@ -191,7 +191,7 @@ public class Mos6502Compiler {
 
                     final Mos6502AddressingMode addressingMode = getAddressingModeFrom(prefix, value, postfix);
 
-                    workingProgram = workingProgram.with(OpCode.from(opCodeToken, addressingMode).getByteValue());
+                    workingProgram = workingProgram.with(Mos6502OpCode.from(opCodeToken, addressingMode).getByteValue());
                     workingProgram = extractArgumentValue(workingProgram, value);
 
                     break;

@@ -15,7 +15,7 @@ import org.junit.runner.RunWith;
 import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
-import static com.rox.emu.processor.mos6502.op.OpCode.*;
+import static com.rox.emu.processor.mos6502.op.Mos6502OpCode.*;
 
 @RunWith(JUnitQuickcheck.class)
 public class Mos6502Properties {

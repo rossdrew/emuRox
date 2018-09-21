@@ -3,7 +3,7 @@ package com.rox.emu.processor.mos6502;
 import com.rox.emu.env.RoxByte;
 import com.rox.emu.env.RoxWord;
 import com.rox.emu.mem.Memory;
-import com.rox.emu.processor.mos6502.op.OpCode;
+import com.rox.emu.processor.mos6502.op.Mos6502OpCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -114,7 +114,7 @@ public class Mos6502 {
     public void step() {
         log.debug("STEP >>>");
 
-        final OpCode opCode = OpCode.from(nextProgramByte().getRawValue());
+        final Mos6502OpCode opCode = Mos6502OpCode.from(nextProgramByte().getRawValue());
 
         //Execute the opcode
         log.debug("Instruction: {}...", opCode.getOpCodeName());

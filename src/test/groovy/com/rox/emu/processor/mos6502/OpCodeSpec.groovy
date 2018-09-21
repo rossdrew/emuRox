@@ -9,7 +9,7 @@ import com.rox.emu.processor.mos6502.util.Program
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import static com.rox.emu.processor.mos6502.op.OpCode.*
+import static com.rox.emu.processor.mos6502.op.Mos6502OpCode.*
 
 class OpCodeSpec extends Specification {
     private Memory memory

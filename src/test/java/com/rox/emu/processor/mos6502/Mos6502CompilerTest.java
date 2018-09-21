@@ -10,7 +10,7 @@ import com.rox.emu.env.RoxWord;
 import com.rox.emu.mem.Memory;
 import com.rox.emu.mem.SimpleMemory;
 import com.rox.emu.processor.mos6502.op.Mos6502AddressingMode;
-import com.rox.emu.processor.mos6502.op.OpCode;
+import com.rox.emu.processor.mos6502.op.Mos6502OpCode;
 import com.rox.emu.processor.mos6502.util.Mos6502Compiler;
 import com.rox.emu.processor.mos6502.util.Program;
 import org.junit.Test;
@@ -96,8 +96,8 @@ public class Mos6502CompilerTest {
     public void testRelativeNavigationBackwards(){
         final Mos6502Compiler compiler = new Mos6502Compiler("MyLabel: SEC BCS MyLabel");
 
-        final int[] expectedResult = new int[] {OpCode.SEC.getByteValue(),
-                                                OpCode.BCS.getByteValue(),
+        final int[] expectedResult = new int[] {Mos6502OpCode.SEC.getByteValue(),
+                                                Mos6502OpCode.BCS.getByteValue(),
                                                 0b11111101};
 
         final Program program = compiler.compileProgram();
@@ -110,11 +110,11 @@ public class Mos6502CompilerTest {
     public void testRelativeNavigationForwards(){
         final Mos6502Compiler compiler = new Mos6502Compiler("SEC BCS MyLabel NOP MyLabel: SED");
 
-        final int[] expectedResult = new int[] {OpCode.SEC.getByteValue(),
-                                                OpCode.BCS.getByteValue(),
+        final int[] expectedResult = new int[] {Mos6502OpCode.SEC.getByteValue(),
+                                                Mos6502OpCode.BCS.getByteValue(),
                                                 0b00000001,
-                                                OpCode.NOP.getByteValue(),
-                                                OpCode.SED.getByteValue()};
+                                                Mos6502OpCode.NOP.getByteValue(),
+                                                Mos6502OpCode.SED.getByteValue()};
 
         final Program program = compiler.compileProgram();
         final int[] actualResult = toIntArray(program.getProgramAsByteArray());
@@ -136,7 +136,7 @@ public class Mos6502CompilerTest {
 
     @Test
     public void testImpliedInstructions(){
-        OpCode.streamOf(Mos6502AddressingMode.IMPLIED).forEach((opcode)->{
+        Mos6502OpCode.streamOf(Mos6502AddressingMode.IMPLIED).forEach((opcode)->{
             final Mos6502Compiler compiler = new Mos6502Compiler(opcode.getOpCodeName());
 
             Program program = compiler.compileProgram();
@@ -148,7 +148,7 @@ public class Mos6502CompilerTest {
 
     @Test
     public void testSingleDigitArgument(){
-        OpCode.streamOf(Mos6502AddressingMode.ZERO_PAGE).forEach((opcode)->{
+        Mos6502OpCode.streamOf(Mos6502AddressingMode.ZERO_PAGE).forEach((opcode)->{
             final Mos6502Compiler compiler = new Mos6502Compiler(opcode.getOpCodeName() + " " + VALUE_PREFIX + "A");
 
             final Program program = compiler.compileProgram();
@@ -160,7 +160,7 @@ public class Mos6502CompilerTest {
 
     @Test
     public void testDoubleDigitArgument(){
-        OpCode.streamOf(Mos6502AddressingMode.ZERO_PAGE).forEach((opcode)->{
+        Mos6502OpCode.streamOf(Mos6502AddressingMode.ZERO_PAGE).forEach((opcode)->{
             final Mos6502Compiler compiler = new Mos6502Compiler(opcode.getOpCodeName() + " " + VALUE_PREFIX + "AB");
 
             Program program = compiler.compileProgram();
@@ -172,7 +172,7 @@ public class Mos6502CompilerTest {
 
     @Test
     public void testTripleDigitArgument(){
-        OpCode.streamOf(Mos6502AddressingMode.ABSOLUTE).forEach((opcode)->{
+        Mos6502OpCode.streamOf(Mos6502AddressingMode.ABSOLUTE).forEach((opcode)->{
             final Mos6502Compiler compiler = new Mos6502Compiler(opcode.getOpCodeName() + " " + VALUE_PREFIX + "ABC");
 
             Program program = compiler.compileProgram();
@@ -184,7 +184,7 @@ public class Mos6502CompilerTest {
 
     @Test
     public void testQuadrupleDigitArgument(){
-        OpCode.streamOf(Mos6502AddressingMode.ABSOLUTE).forEach((opcode)->{
+        Mos6502OpCode.streamOf(Mos6502AddressingMode.ABSOLUTE).forEach((opcode)->{
             final Mos6502Compiler compiler = new Mos6502Compiler(opcode.getOpCodeName() + " " + VALUE_PREFIX + "ABCD");
 
             Program program = compiler.compileProgram();
@@ -198,7 +198,7 @@ public class Mos6502CompilerTest {
     public void testImmediateInstructions(@InRange(min = "0", max = "255") int byteValue){
         final String hexByte = Integer.toHexString(byteValue);
 
-        OpCode.streamOf(Mos6502AddressingMode.IMMEDIATE).forEach((opcode)->{
+        Mos6502OpCode.streamOf(Mos6502AddressingMode.IMMEDIATE).forEach((opcode)->{
             final Mos6502Compiler compiler = new Mos6502Compiler(opcode.getOpCodeName() + " " + IMMEDIATE_VALUE_PREFIX + hexByte);
 
             Program program = compiler.compileProgram(); 
@@ -212,7 +212,7 @@ public class Mos6502CompilerTest {
     public void testAccumulatorInstructions(@InRange(min = "0", max = "255") int byteValue){
         final String hexByte = Integer.toHexString(byteValue);
 
-        OpCode.streamOf(Mos6502AddressingMode.ACCUMULATOR).forEach((opcode)->{
+        Mos6502OpCode.streamOf(Mos6502AddressingMode.ACCUMULATOR).forEach((opcode)->{
             final Mos6502Compiler compiler = new Mos6502Compiler(opcode.getOpCodeName() + " " + ACCUMULATOR_PREFIX + hexByte);
 
             Program program = compiler.compileProgram();
@@ -226,7 +226,7 @@ public class Mos6502CompilerTest {
     public void testZeroPageInstructions(@InRange(min = "0", max = "255") int byteValue){
         final String hexByte = Integer.toHexString(byteValue);
 
-        OpCode.streamOf(Mos6502AddressingMode.ZERO_PAGE).forEach((opcode)->{
+        Mos6502OpCode.streamOf(Mos6502AddressingMode.ZERO_PAGE).forEach((opcode)->{
             final Mos6502Compiler compiler = new Mos6502Compiler(opcode.getOpCodeName() + " " + VALUE_PREFIX + hexByte);
 
             Program program = compiler.compileProgram();
@@ -240,7 +240,7 @@ public class Mos6502CompilerTest {
     public void testZeroPageXInstructions(@InRange(min = "0", max = "255") int byteValue){
         final String hexByte = Integer.toHexString(byteValue);
 
-        OpCode.streamOf(Mos6502AddressingMode.ZERO_PAGE_X).forEach((opcode)->{
+        Mos6502OpCode.streamOf(Mos6502AddressingMode.ZERO_PAGE_X).forEach((opcode)->{
             final Mos6502Compiler compiler = new Mos6502Compiler(opcode.getOpCodeName() + " " + VALUE_PREFIX + hexByte+ ",X");
 
             Program program = compiler.compileProgram();
@@ -254,7 +254,7 @@ public class Mos6502CompilerTest {
     public void testZeroPageYInstructions(@InRange(min = "0", max = "255") int byteValue){
         final String hexByte = Integer.toHexString(byteValue);
 
-        OpCode.streamOf(Mos6502AddressingMode.ZERO_PAGE_Y).forEach((opcode)->{
+        Mos6502OpCode.streamOf(Mos6502AddressingMode.ZERO_PAGE_Y).forEach((opcode)->{
             final Mos6502Compiler compiler = new Mos6502Compiler(opcode.getOpCodeName() + " " + VALUE_PREFIX + hexByte + ",Y");
 
             Program program = compiler.compileProgram();
@@ -271,7 +271,7 @@ public class Mos6502CompilerTest {
         final int highByte = (wordValue >> 8) & 0xFF;
         final int lowByte = wordValue & 0xFF;
 
-        OpCode.streamOf(Mos6502AddressingMode.ABSOLUTE).forEach((opcode)->{
+        Mos6502OpCode.streamOf(Mos6502AddressingMode.ABSOLUTE).forEach((opcode)->{
             final Mos6502Compiler compiler = new Mos6502Compiler(opcode.getOpCodeName() + " " + VALUE_PREFIX + hexWord);
 
             Program program = compiler.compileProgram();
@@ -288,7 +288,7 @@ public class Mos6502CompilerTest {
         final int highByte = (wordValue >> 8) & 0xFF;
         final int lowByte = wordValue & 0xFF;
 
-        OpCode.streamOf(Mos6502AddressingMode.ABSOLUTE_X).forEach((opcode)->{
+        Mos6502OpCode.streamOf(Mos6502AddressingMode.ABSOLUTE_X).forEach((opcode)->{
             final Mos6502Compiler compiler = new Mos6502Compiler(opcode.getOpCodeName() + " " + VALUE_PREFIX + hexWord + ",X");
 
             Program program = compiler.compileProgram();
@@ -305,7 +305,7 @@ public class Mos6502CompilerTest {
         final int highByte = (wordValue >> 8) & 0xFF;
         final int lowByte = wordValue & 0xFF;
 
-        OpCode.streamOf(Mos6502AddressingMode.ABSOLUTE_Y).forEach((opcode)->{
+        Mos6502OpCode.streamOf(Mos6502AddressingMode.ABSOLUTE_Y).forEach((opcode)->{
             final Mos6502Compiler compiler = new Mos6502Compiler(opcode.getOpCodeName() + " " + VALUE_PREFIX + hexWord + ",Y");
 
             Program program = compiler.compileProgram();
@@ -319,7 +319,7 @@ public class Mos6502CompilerTest {
     public void testIndirectXInstructions(@InRange(min = "0", max = "255") int byteValue){
         final String hexByte = Integer.toHexString(byteValue);
 
-        OpCode.streamOf(Mos6502AddressingMode.INDIRECT_X).forEach((opcode)->{
+        Mos6502OpCode.streamOf(Mos6502AddressingMode.INDIRECT_X).forEach((opcode)->{
             final Mos6502Compiler compiler = new Mos6502Compiler(opcode.getOpCodeName() + " (" + VALUE_PREFIX + hexByte + ",X)");
 
             Program program = compiler.compileProgram();
@@ -333,7 +333,7 @@ public class Mos6502CompilerTest {
     public void testIndirectYInstructions(@InRange(min = "0", max = "255") int byteValue){
         final String hexByte = Integer.toHexString(byteValue);
 
-        OpCode.streamOf(Mos6502AddressingMode.INDIRECT_Y).forEach((opcode)->{
+        Mos6502OpCode.streamOf(Mos6502AddressingMode.INDIRECT_Y).forEach((opcode)->{
             final Mos6502Compiler compiler = new Mos6502Compiler(opcode.getOpCodeName() + " (" + VALUE_PREFIX + hexByte + "),Y");
 
             Program program = compiler.compileProgram();
@@ -349,7 +349,7 @@ public class Mos6502CompilerTest {
         final Program program = compiler.compileProgram();
         int[] bytes = toIntArray(program.getProgramAsByteArray());
 
-        int[] expected = new int[] {OpCode.SEC.getByteValue(), OpCode.LDA_I.getByteValue(), 0x47};
+        int[] expected = new int[] {Mos6502OpCode.SEC.getByteValue(), Mos6502OpCode.LDA_I.getByteValue(), 0x47};
         assertArrayEquals("Expected: " + Arrays.toString(expected) + ", Got: " + Arrays.toString(bytes), expected, bytes);
     }
 
@@ -359,7 +359,7 @@ public class Mos6502CompilerTest {
         final Program program = compiler.compileProgram();
         int[] bytes = toIntArray(program.getProgramAsByteArray());
 
-        int[] expected = new int[] {OpCode.LDA_I.getByteValue(), 0x47, OpCode.SEC.getByteValue()};
+        int[] expected = new int[] {Mos6502OpCode.LDA_I.getByteValue(), 0x47, Mos6502OpCode.SEC.getByteValue()};
         assertArrayEquals("Expected: " + Arrays.toString(expected) + ", Got: " + Arrays.toString(bytes), expected, bytes);
     }
 
@@ -369,7 +369,7 @@ public class Mos6502CompilerTest {
         final Program program = compiler.compileProgram();
         int[] bytes = toIntArray(program.getProgramAsByteArray());
 
-        int[] expected = new int[] {OpCode.LDA_I.getByteValue(), 0x47, OpCode.CLC.getByteValue(), OpCode.LDA_I.getByteValue(), 0x10, OpCode.SEC.getByteValue()};
+        int[] expected = new int[] {Mos6502OpCode.LDA_I.getByteValue(), 0x47, Mos6502OpCode.CLC.getByteValue(), Mos6502OpCode.LDA_I.getByteValue(), 0x10, Mos6502OpCode.SEC.getByteValue()};
         assertArrayEquals("Expected: " + Arrays.toString(expected) + ", Got: " + Arrays.toString(bytes), expected, bytes);
     }
 
@@ -379,7 +379,7 @@ public class Mos6502CompilerTest {
         final Program program = compiler.compileProgram();
         int[] bytes = toIntArray(program.getProgramAsByteArray());
 
-        int[] expected = new int[] {OpCode.LDA_I.getByteValue(), 0x47, OpCode.CLC.getByteValue(), OpCode.LDA_I.getByteValue(), 0x10, OpCode.SEC.getByteValue()};
+        int[] expected = new int[] {Mos6502OpCode.LDA_I.getByteValue(), 0x47, Mos6502OpCode.CLC.getByteValue(), Mos6502OpCode.LDA_I.getByteValue(), 0x10, Mos6502OpCode.SEC.getByteValue()};
         assertArrayEquals("Expected: " + Arrays.toString(expected) + ", Got: " + Arrays.toString(bytes), expected, bytes);
         assertEquals(1, program.getLabels().size());
         assertEquals(2, program.getLocationOf("LABELA"));
@@ -391,9 +391,9 @@ public class Mos6502CompilerTest {
         final Program program = compiler.compileProgram();
         int[] bytes = toIntArray(program.getProgramAsByteArray());
 
-        int[] expected = new int[] {OpCode.LDA_I.getByteValue(), 0x14,
-                                    OpCode.ADC_I.getByteValue(), 0x5,
-                                    OpCode.STA_Z.getByteValue(), 0x20};
+        int[] expected = new int[] {Mos6502OpCode.LDA_I.getByteValue(), 0x14,
+                                    Mos6502OpCode.ADC_I.getByteValue(), 0x5,
+                                    Mos6502OpCode.STA_Z.getByteValue(), 0x20};
         assertArrayEquals("Expected: " + Arrays.toString(expected) + ", Got: " + Arrays.toString(bytes), expected, bytes);
     }
 
