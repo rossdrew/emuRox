@@ -11,7 +11,7 @@ import java.util.Arrays;
 /**
  * MOS 6502 addressing-mode independent base operation
  */
-public enum Mos6502Operation implements AddressedValueInstruction{
+public enum Mos6502Operation implements AddressedValueInstruction {
     /**
      * Operates like an interrupt, PC & Status is pushed to stack and PC is set to contents of {@code 0xFFFE}
      * and {@code 0xFFFF}.<br/>
