@@ -34,6 +34,7 @@ class ProgramSpec extends Specification {
         [Mos6502OpCode.LDA_I, 0x01]  | "OpCode constructed"
         [0xA9, 0x02]                 | "integer constructed"
         [0xA9 as byte, 0x03 as byte] | "byte constructed"
+        [0xA9, 0x02] as Object[]     | "explicit object array"
     }
 
     def testIdenticalProgramCompare() {
@@ -77,6 +78,7 @@ class ProgramSpec extends Specification {
         [Mos6502OpCode.SEC, Mos6502OpCode.SED, Mos6502OpCode.CLC] | "larger program"
         Mos6502OpCode.SED                                         | "single opcode"
         "Just a string"                                           | "unsupported class"
+        [0xA9, 0x02] as Object[]                                  | "different program as explicit object array"
     }
 
     def "Create program with invalid program data"() {
