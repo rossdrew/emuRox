@@ -131,17 +131,6 @@ public class Registers {
     }
 
     /**
-     * Set the given registerValue to the given value and set the flags registerValue based on that value
-     *
-     * @param register the registerValue to set
-     * @param value to set the registerValue to
-     */
-    public void setRegisterAndFlags(Register register, RoxByte value){
-        setRegister(register, value);
-        setFlagsBasedOn(value);
-    }
-
-    /**
      * @param pcWordValue to set the Program Counter to
      */
     public void setPC(RoxWord pcWordValue){
