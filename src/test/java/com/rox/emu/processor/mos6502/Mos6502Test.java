@@ -732,7 +732,7 @@ public class Mos6502Test {
 
         assertEquals(RoxWord.fromLiteral(program.getLength()), registers.getPC());
         assertEquals(RoxByte.fromLiteral(0xAA), registers.getRegister(Registers.Register.X_INDEX));
-        assertEquals(RoxByte.fromLiteral(0xAA), registers.getRegister(Registers.Register.STACK_POINTER_HI));
+        assertEquals(RoxByte.fromLiteral(0xAA), registers.getRegister(Registers.Register.STACK_POINTER_LOW));
     }
 
     @Test
@@ -817,7 +817,7 @@ public class Mos6502Test {
 
         processor.step();
 
-        int stackLsb = registers.getRegister(Registers.Register.STACK_POINTER_HI).getRawValue() + 1;
+        int stackLsb = registers.getRegister(Registers.Register.STACK_POINTER_LOW).getRawValue() + 1;
         RoxWord stackLocation = RoxWord.fromLiteral(0x100 | stackLsb);
         RoxByte stackValue = memory.getByte(stackLocation);
 

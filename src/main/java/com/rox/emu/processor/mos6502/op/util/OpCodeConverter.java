@@ -49,7 +49,15 @@ public class OpCodeConverter {
         final String[] tokens = internalOpCodeName.split(Mos6502OpCode.TOKEN_SEPARATOR);
         if (tokens.length <= Mos6502OpCode.ADDR_I) {
             //XXX Write this less ugly
-            if (EnumSet.of(Mos6502Operation.JSR, Mos6502Operation.BPL, Mos6502Operation.BMI, Mos6502Operation.BVC, Mos6502Operation.BVS, Mos6502Operation.BCC, Mos6502Operation.BCS, Mos6502Operation.BNE, Mos6502Operation.BEQ).contains(getOperation(internalOpCodeName)))
+            if (EnumSet.of( Mos6502Operation.JSR,
+                            Mos6502Operation.BPL,
+                            Mos6502Operation.BMI,
+                            Mos6502Operation.BVC,
+                            Mos6502Operation.BVS,
+                            Mos6502Operation.BCC,
+                            Mos6502Operation.BCS,
+                            Mos6502Operation.BNE,
+                            Mos6502Operation.BEQ).contains(getOperation(internalOpCodeName)))
                 return Mos6502AddressingMode.RELATIVE;
 
             return Mos6502AddressingMode.IMPLIED;

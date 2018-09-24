@@ -257,25 +257,25 @@ public enum Mos6502Operation implements AddressedValueInstruction {
     PHP((a,r,m,v)->{
         final RoxByte statusFlags = r.getRegister(Registers.Register.STATUS_FLAGS);
 
-        final RoxByte stackIndex = r.getRegister(Registers.Register.STACK_POINTER_HI);  //XXX Shouldn't this be LOW?
+        final RoxByte stackIndex = r.getRegister(Registers.Register.STACK_POINTER_LOW);
         final RoxWord stackEntry = RoxWord.from(RoxByte.fromLiteral(0x01), stackIndex);
         m.setByteAt(stackEntry, statusFlags);
 
         final RoxByte newStackIndex = RoxByte.fromLiteral(stackIndex.getRawValue() - 1); //XXX Should use alu
-        r.setRegister(Registers.Register.STACK_POINTER_HI, newStackIndex);
+        r.setRegister(Registers.Register.STACK_POINTER_LOW, newStackIndex);
         return v;
     }),
 
     /** Pull the Status register from the stack */
     PLP((a,r,m,v)->{
-        final RoxByte stackIndex = r.getRegister(Registers.Register.STACK_POINTER_HI);  //XXX Shouldn't this be LOW?
+        final RoxByte stackIndex = r.getRegister(Registers.Register.STACK_POINTER_LOW);
         final RoxByte newStackIndex = RoxByte.fromLiteral(stackIndex.getRawValue() + 1); //XXX Should use alu
 
         final RoxWord stackEntry = RoxWord.from(RoxByte.fromLiteral(0x01), newStackIndex);
         final RoxByte stackValue = m.getByte(stackEntry);
 
         r.setRegister(Registers.Register.STATUS_FLAGS, stackValue);
-        r.setRegister(Registers.Register.STACK_POINTER_HI, newStackIndex);
+        r.setRegister(Registers.Register.STACK_POINTER_LOW, newStackIndex);
         return v;
     }),
 
@@ -313,16 +313,16 @@ public enum Mos6502Operation implements AddressedValueInstruction {
         return v;
     }),
 
-    /** Push the X register to the stack */
+    /** Push the X register to the stack pointer */
     TXS((a,r,m,v)->{
         final RoxByte xValue = r.getRegister(Registers.Register.X_INDEX);
-        r.setRegister(Registers.Register.STACK_POINTER_HI, xValue); //XXX Shouldn't this be LOW?
+        r.setRegister(Registers.Register.STACK_POINTER_LOW, xValue);
         return v;
     }),
 
-    /** Pull the X register from the stack */
+    /** Pull the X register from the stack pointer */
     TSX((a,r,m,v)->{
-        final RoxByte stackIndex = r.getRegister(Registers.Register.STACK_POINTER_HI);  //XXX Shouldn't this be LOW?
+        final RoxByte stackIndex = r.getRegister(Registers.Register.STACK_POINTER_LOW);
 
         r.setRegister(Registers.Register.X_INDEX, stackIndex);
         r.setFlagsBasedOn(stackIndex);
@@ -383,10 +383,10 @@ public enum Mos6502Operation implements AddressedValueInstruction {
         final RoxByte pcLo = r.getRegister(Registers.Register.PROGRAM_COUNTER_LOW);
 
         Arrays.asList(pcHi, pcLo).forEach(value -> {
-            RoxByte stackIndex = r.getRegister(Registers.Register.STACK_POINTER_HI);        //XXX Shouldn't this be LOW?
+            RoxByte stackIndex = r.getRegister(Registers.Register.STACK_POINTER_LOW);
             RoxByte nextStackIndex = RoxByte.fromLiteral(stackIndex.getRawValue() - 1);     //XXX Should use alu
             m.setByteAt(RoxWord.from(RoxByte.fromLiteral(0x01), stackIndex), value);
-            r.setRegister(Registers.Register.STACK_POINTER_HI, nextStackIndex);             //XXX Shouldn't this be LOW?
+            r.setRegister(Registers.Register.STACK_POINTER_LOW, nextStackIndex);
         });
 
         r.setRegister(Registers.Register.PROGRAM_COUNTER_HI, argument1);

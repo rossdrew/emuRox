@@ -2522,13 +2522,13 @@ class OpCodeSpec extends Specification {
         Program program = loadMemoryWithProgram(TSX)
 
         and:
-        registers.setRegister(Registers.Register.STACK_POINTER_HI, RoxByte.fromLiteral(SPValue))
+        registers.setRegister(Registers.Register.STACK_POINTER_LOW, RoxByte.fromLiteral(SPValue))
         processor.step()
 
         then:
         registers.getPC() == program.length
         registers.getRegister(Registers.Register.X_INDEX) == X
-        registers.getRegister(Registers.Register.STACK_POINTER_HI) == expectedSP
+        registers.getRegister(Registers.Register.STACK_POINTER_LOW) == expectedSP
         testFlags(Z, N)
 
         where:
