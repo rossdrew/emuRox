@@ -123,7 +123,7 @@ public class Program {
         if (value instanceof Number)
             return this.with(((Number) value).intValue());
 
-        throw new RuntimeException("Unknown program element of type " + value.getClass());
+        throw new UnknownProgramElementException("Unknown program element of type " + value.getClass());
     }
 
     /**

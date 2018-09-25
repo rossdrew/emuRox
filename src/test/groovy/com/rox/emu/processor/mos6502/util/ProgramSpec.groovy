@@ -1,5 +1,6 @@
 package com.rox.emu.processor.mos6502.util
 
+import com.rox.emu.UnknownTokenException
 import com.rox.emu.env.RoxByte
 import com.rox.emu.processor.mos6502.op.Mos6502OpCode
 import spock.lang.Specification
@@ -89,7 +90,7 @@ class ProgramSpec extends Specification {
         new Program().with(invalidProgramData)
 
         then:
-        thrown RuntimeException
+        thrown UnknownProgramElementException
     }
 
     @Unroll("Valid labels: #expected")
@@ -162,7 +163,7 @@ class ProgramSpec extends Specification {
         program.getProgramAsByteArray()
 
         then:
-        thrown RuntimeException
+        thrown UnknownTokenException
     }
 
     @Unroll("#description program creation")
