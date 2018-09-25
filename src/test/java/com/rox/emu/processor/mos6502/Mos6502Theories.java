@@ -52,7 +52,7 @@ public class Mos6502Theories {
         assertThat(registers.getRegister(Registers.Register.STATUS_FLAGS), equalTo(RoxByte.fromLiteral(0x34)));              //Status flags reset
 
         assertThat(registers.getRegister(Registers.Register.STATUS_FLAGS), equalTo(RoxByte.fromLiteral(0x34)));              //Stack Pointer at top of stack
-        assertThat(registers.getRegister(Registers.Register.STACK_POINTER_HI), equalTo(RoxByte.fromLiteral(0xFF)));          //All cleared
+        assertThat(registers.getRegister(Registers.Register.STACK_POINTER_LOW), equalTo(RoxByte.fromLiteral(0xFF)));          //All cleared
         assertThat(registers.getRegister(Registers.Register.ACCUMULATOR), equalTo(RoxByte.ZERO));
         assertThat(registers.getRegister(Registers.Register.X_INDEX), equalTo(RoxByte.ZERO));
         assertThat(registers.getRegister(Registers.Register.Y_INDEX), equalTo(RoxByte.ZERO));

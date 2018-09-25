@@ -44,7 +44,7 @@ public class Mos6502Test {
         assertEquals(RoxByte.fromLiteral(0x34), registers.getRegister(Registers.Register.STATUS_FLAGS)); //Status flags reset
         assertEquals(RoxByte.fromLiteral(0x1), registers.getRegister(Registers.Register.PROGRAM_COUNTER_LOW));  //PC Set to location pointed to by mem[FFFC:FFFD]
         assertEquals(RoxByte.fromLiteral(0x1), registers.getRegister(Registers.Register.PROGRAM_COUNTER_HI)); // ...
-        assertEquals(RoxByte.fromLiteral(0xFF), registers.getRegister(Registers.Register.STACK_POINTER_HI));     //Stack Pointer at top of stack
+        assertEquals(RoxByte.fromLiteral(0xFF), registers.getRegister(Registers.Register.STACK_POINTER_LOW));     //Stack Pointer at top of stack
 
         assertEquals(RoxByte.ZERO, registers.getRegister(Registers.Register.ACCUMULATOR)); //All cleared
         assertEquals(RoxByte.ZERO, registers.getRegister(Registers.Register.X_INDEX));
@@ -65,7 +65,7 @@ public class Mos6502Test {
         registers.setRegister(Registers.Register.STATUS_FLAGS, RoxByte.fromLiteral(0x99));
         registers.setRegister(Registers.Register.PROGRAM_COUNTER_LOW, RoxByte.fromLiteral(0x99));
         registers.setRegister(Registers.Register.PROGRAM_COUNTER_HI, RoxByte.fromLiteral(0x99));
-        registers.setRegister(Registers.Register.STACK_POINTER_HI, RoxByte.fromLiteral(0x99));
+        registers.setRegister(Registers.Register.STACK_POINTER_LOW, RoxByte.fromLiteral(0x99));
         registers.setRegister(Registers.Register.ACCUMULATOR, RoxByte.fromLiteral(0x99));
         registers.setRegister(Registers.Register.X_INDEX, RoxByte.fromLiteral(0x99));
         registers.setRegister(Registers.Register.Y_INDEX, RoxByte.fromLiteral(0x99));
@@ -76,7 +76,7 @@ public class Mos6502Test {
         assertEquals(RoxByte.fromLiteral(0x34), registers.getRegister(Registers.Register.STATUS_FLAGS));
         assertEquals(RoxByte.fromLiteral(0x0), registers.getRegister(Registers.Register.PROGRAM_COUNTER_LOW));
         assertEquals(RoxByte.fromLiteral(0x0), registers.getRegister(Registers.Register.PROGRAM_COUNTER_HI));
-        assertEquals(RoxByte.fromLiteral(0xFF), registers.getRegister(Registers.Register.STACK_POINTER_HI));
+        assertEquals(RoxByte.fromLiteral(0xFF), registers.getRegister(Registers.Register.STACK_POINTER_LOW));
         assertEquals(RoxByte.ZERO, registers.getRegister(Registers.Register.ACCUMULATOR));
         assertEquals(RoxByte.ZERO, registers.getRegister(Registers.Register.X_INDEX));
         assertEquals(RoxByte.ZERO, registers.getRegister(Registers.Register.Y_INDEX));
@@ -451,11 +451,11 @@ public class Mos6502Test {
         Registers registers = processor.getRegisters();
 
         processor.step();
-        assert (processor.getRegisters().getRegister(Registers.Register.STACK_POINTER_HI).equals(RoxByte.fromLiteral(0xFF)));
+        assert (processor.getRegisters().getRegister(Registers.Register.STACK_POINTER_LOW).equals(RoxByte.fromLiteral(0xFF)));
         processor.step();
 
         assertEquals(RoxWord.fromLiteral(program.getLength()), registers.getPC());
-        assertEquals(RoxByte.fromLiteral(0xFE), processor.getRegisters().getRegister(Registers.Register.STACK_POINTER_HI));
+        assertEquals(RoxByte.fromLiteral(0xFE), processor.getRegisters().getRegister(Registers.Register.STACK_POINTER_LOW));
         assertEquals(RoxByte.fromLiteral(0x99), memory.getByte(RoxWord.fromLiteral(0x01FF)));
     }
 
@@ -475,7 +475,7 @@ public class Mos6502Test {
         processor.step();
 
         assertEquals(RoxWord.fromLiteral(program.getLength()), registers.getPC());
-        assertEquals(RoxByte.fromLiteral(0xFF), processor.getRegisters().getRegister(Registers.Register.STACK_POINTER_HI));
+        assertEquals(RoxByte.fromLiteral(0xFF), processor.getRegisters().getRegister(Registers.Register.STACK_POINTER_LOW));
         assertEquals("0x99 (-103) was expected to have been popped from the stack with PLA", RoxByte.fromLiteral(0x99), processor.getRegisters().getRegister(Registers.Register.ACCUMULATOR));
     }
 
@@ -944,7 +944,7 @@ public class Mos6502Test {
 
         processor.step(1);
 
-        assertEquals(RoxByte.fromLiteral(0xFC), registers.getRegister(Registers.Register.STACK_POINTER_HI));
+        assertEquals(RoxByte.fromLiteral(0xFC), registers.getRegister(Registers.Register.STACK_POINTER_LOW));
 
         //PC (on Stack)
         assertEquals(RoxByte.fromLiteral(0x03), memory.getByte(RoxWord.fromLiteral(0x1FE)));
@@ -973,7 +973,7 @@ public class Mos6502Test {
         processor.step(1);
         processor.irq();
 
-        assertEquals(RoxByte.fromLiteral(0xFC), registers.getRegister(Registers.Register.STACK_POINTER_HI));
+        assertEquals(RoxByte.fromLiteral(0xFC), registers.getRegister(Registers.Register.STACK_POINTER_LOW));
 
         //PC (on Stack)
         assertEquals(RoxByte.fromLiteral(0x02), memory.getByte(RoxWord.fromLiteral(0x1FE)));

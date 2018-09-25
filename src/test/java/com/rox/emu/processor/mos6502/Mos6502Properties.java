@@ -48,7 +48,7 @@ public class Mos6502Properties {
         assertEquals(RoxByte.fromLiteral(memLo), registers.getRegister(Registers.Register.PROGRAM_COUNTER_LOW));       // ...
 
         assertEquals(RoxByte.fromLiteral(0x34), registers.getRegister(Registers.Register.STATUS_FLAGS));      //Status flags reset
-        assertEquals(RoxByte.fromLiteral(0xFF), registers.getRegister(Registers.Register.STACK_POINTER_HI));  //Stack Pointer at top of stack
+        assertEquals(RoxByte.fromLiteral(0xFF), registers.getRegister(Registers.Register.STACK_POINTER_LOW));  //Stack Pointer at top of stack
         assertEquals(RoxByte.ZERO, registers.getRegister(Registers.Register.ACCUMULATOR));          //All cleared
         assertEquals(RoxByte.ZERO, registers.getRegister(Registers.Register.X_INDEX));
         assertEquals(RoxByte.ZERO, registers.getRegister(Registers.Register.Y_INDEX));

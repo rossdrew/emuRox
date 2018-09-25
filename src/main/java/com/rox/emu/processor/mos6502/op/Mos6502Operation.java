@@ -29,10 +29,10 @@ public enum Mos6502Operation implements AddressedValueInstruction {
         final RoxByte status = r.getRegister(Registers.Register.STATUS_FLAGS).withBit(Registers.Flag.BREAK.getIndex());
 
         Arrays.asList(pcHi, pcLo, status).forEach(value -> {
-            final RoxByte stackIndex = r.getRegister(Registers.Register.STACK_POINTER_HI);        //XXX Shouldn't this be LOW?
+            final RoxByte stackIndex = r.getRegister(Registers.Register.STACK_POINTER_LOW);
             final RoxByte nextStackIndex = RoxByte.fromLiteral(stackIndex.getRawValue() - 1);     //XXX Should use alu
             m.setByteAt(RoxWord.from(RoxByte.fromLiteral(0x01), stackIndex), value);
-            r.setRegister(Registers.Register.STACK_POINTER_HI, nextStackIndex);             //XXX Shouldn't this be LOW?
+            r.setRegister(Registers.Register.STACK_POINTER_LOW, nextStackIndex);
         });
 
         final RoxByte pcHiJmp = m.getByte(RoxWord.fromLiteral(0xFFFE));
@@ -230,26 +230,26 @@ public enum Mos6502Operation implements AddressedValueInstruction {
     PHA((a,r,m,v)->{
         final RoxByte accumulatorValue = r.getRegister(Registers.Register.ACCUMULATOR);
 
-        final RoxByte stackIndex = r.getRegister(Registers.Register.STACK_POINTER_HI);  //XXX Shouldn't this be LOW?
+        final RoxByte stackIndex = r.getRegister(Registers.Register.STACK_POINTER_LOW);
         final RoxWord stackEntryLocation = RoxWord.from(RoxByte.fromLiteral(0x01), stackIndex);
         m.setByteAt(stackEntryLocation, accumulatorValue);
 
         final RoxByte newStackIndex = RoxByte.fromLiteral(stackIndex.getRawValue() - 1); //XXX Should use alu
-        r.setRegister(Registers.Register.STACK_POINTER_HI, newStackIndex);
+        r.setRegister(Registers.Register.STACK_POINTER_LOW, newStackIndex);
 
         return v;
     }),
 
     /** Pull the Accumulator from the stack */
     PLA((a,r,m,v)->{
-        final RoxByte stackIndex = r.getRegister(Registers.Register.STACK_POINTER_HI);  //XXX Shouldn't this be LOW?
+        final RoxByte stackIndex = r.getRegister(Registers.Register.STACK_POINTER_LOW);
         final RoxByte newStackIndex = RoxByte.fromLiteral(stackIndex.getRawValue() + 1); //XXX Should use alu
 
         final RoxWord stackEntry = RoxWord.from(RoxByte.fromLiteral(0x01), newStackIndex);
         final RoxByte stackValue = m.getByte(stackEntry);
 
         r.setRegister(Registers.Register.ACCUMULATOR, stackValue);
-        r.setRegister(Registers.Register.STACK_POINTER_HI, newStackIndex);
+        r.setRegister(Registers.Register.STACK_POINTER_LOW, newStackIndex);
         return v;
     }),
 
@@ -493,9 +493,9 @@ public enum Mos6502Operation implements AddressedValueInstruction {
     RTS((a,r,m,v)->{
         Arrays.asList(Registers.Register.PROGRAM_COUNTER_LOW,
                       Registers.Register.PROGRAM_COUNTER_HI).forEach(registerId -> {
-            final RoxByte stackIndex = r.getRegister(Registers.Register.STACK_POINTER_HI);
+            final RoxByte stackIndex = r.getRegister(Registers.Register.STACK_POINTER_LOW);
             final RoxByte nextStackIndex = RoxByte.fromLiteral(stackIndex.getRawValue() + 1);  //XXX alu?
-            r.setRegister(Registers.Register.STACK_POINTER_HI, nextStackIndex);
+            r.setRegister(Registers.Register.STACK_POINTER_LOW, nextStackIndex);
             final RoxByte stackValue = m.getByte(RoxWord.from(RoxByte.fromLiteral(0x01), nextStackIndex));
             r.setRegister(registerId, stackValue);
         });
@@ -508,9 +508,9 @@ public enum Mos6502Operation implements AddressedValueInstruction {
         Arrays.asList(Registers.Register.STATUS_FLAGS,
                       Registers.Register.PROGRAM_COUNTER_LOW,
                       Registers.Register.PROGRAM_COUNTER_HI).forEach(registerId -> {
-            final RoxByte stackIndex = r.getRegister(Registers.Register.STACK_POINTER_HI);
+            final RoxByte stackIndex = r.getRegister(Registers.Register.STACK_POINTER_LOW);
             final RoxByte nextStackIndex = RoxByte.fromLiteral(stackIndex.getRawValue() + 1);
-            r.setRegister(Registers.Register.STACK_POINTER_HI, nextStackIndex);
+            r.setRegister(Registers.Register.STACK_POINTER_LOW, nextStackIndex);
             final RoxByte stackValue = m.getByte(RoxWord.from(RoxByte.fromLiteral(0x01), nextStackIndex));
             r.setRegister(registerId, stackValue);
         });

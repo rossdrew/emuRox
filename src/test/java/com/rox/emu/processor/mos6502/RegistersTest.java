@@ -30,8 +30,8 @@ public class RegistersTest {
         assertEquals(RoxByte.ZERO, registers.getRegister(Registers.Register.Y_INDEX));
         assertEquals(RoxByte.ZERO, registers.getRegister(Registers.Register.PROGRAM_COUNTER_HI));
         assertEquals(RoxByte.ZERO, registers.getRegister(Registers.Register.PROGRAM_COUNTER_LOW));
-        assertEquals(RoxByte.fromLiteral(0b11111111), registers.getRegister(Registers.Register.STACK_POINTER_LOW));
         assertEquals(RoxByte.ZERO, registers.getRegister(Registers.Register.STACK_POINTER_HI));
+        assertEquals(RoxByte.fromLiteral(0b11111111), registers.getRegister(Registers.Register.STACK_POINTER_LOW));
         assertEquals(RoxByte.ZERO, registers.getRegister(Registers.Register.STATUS_FLAGS));
     }
 
@@ -40,14 +40,14 @@ public class RegistersTest {
         registers.setRegister(Registers.Register.ACCUMULATOR, RoxByte.fromLiteral(10));
         registers.setRegister(Registers.Register.PROGRAM_COUNTER_HI, RoxByte.fromLiteral(1));
         registers.setRegister(Registers.Register.PROGRAM_COUNTER_LOW, RoxByte.fromLiteral(1));
-        registers.setRegister(Registers.Register.STACK_POINTER_HI, RoxByte.fromLiteral(3));
+        registers.setRegister(Registers.Register.STACK_POINTER_LOW, RoxByte.fromLiteral(3));
         registers.setRegister(Registers.Register.STATUS_FLAGS, RoxByte.fromLiteral(0b01000011));
 
 
         assertEquals(RoxByte.fromLiteral(10), registers.getRegister(Registers.Register.ACCUMULATOR));
         assertEquals(RoxByte.fromLiteral(1), registers.getRegister(Registers.Register.PROGRAM_COUNTER_HI));
         assertEquals(RoxByte.fromLiteral(1), registers.getRegister(Registers.Register.PROGRAM_COUNTER_LOW));
-        assertEquals(RoxByte.fromLiteral(3), registers.getRegister(Registers.Register.STACK_POINTER_HI));
+        assertEquals(RoxByte.fromLiteral(3), registers.getRegister(Registers.Register.STACK_POINTER_LOW));
         assertEquals(RoxByte.fromLiteral(0b01000011), registers.getRegister(Registers.Register.STATUS_FLAGS));
     }
 

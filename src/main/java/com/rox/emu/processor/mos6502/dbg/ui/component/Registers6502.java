@@ -101,7 +101,7 @@ public class Registers6502 extends JPanel {
         xIndex.setValue(registers.getRegister(Registers.Register.X_INDEX).getRawValue());
         yIndex.setValue(registers.getRegister(Registers.Register.Y_INDEX).getRawValue());
         stackPointerHi.setValue(0x01);
-        stackPointerLo.setValue(registers.getRegister(Registers.Register.STACK_POINTER_HI).getRawValue());
+        stackPointerLo.setValue(registers.getRegister(Registers.Register.STACK_POINTER_LOW).getRawValue());
         programCounterHi.setValue(registers.getRegister(Registers.Register.PROGRAM_COUNTER_HI).getRawValue());
         programCounterLo.setValue(registers.getRegister(Registers.Register.PROGRAM_COUNTER_LOW).getRawValue());
 

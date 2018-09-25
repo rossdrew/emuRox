@@ -1841,12 +1841,12 @@ class OpCodeSpec extends Specification {
 
         and:
         processor.step(2)
-        assert (registers.getRegister(Registers.Register.STACK_POINTER_HI) == 0xFE)
+        assert (registers.getRegister(Registers.Register.STACK_POINTER_LOW) == 0xFE)
         processor.step(2)
 
         then:
         registers.getPC() == program.length
-        registers.getRegister(Registers.Register.STACK_POINTER_HI) == expectedSP
+        registers.getRegister(Registers.Register.STACK_POINTER_LOW) == expectedSP
         registers.getRegister(Registers.Register.ACCUMULATOR) == expectedAccumulator
         memory.getByte(RoxWord.fromLiteral(0x01FF)) == stackItem
 
@@ -3033,7 +3033,7 @@ class OpCodeSpec extends Specification {
 
         then:
         registers.getPC() == expectedPC
-        registers.getRegister(Registers.Register.STACK_POINTER_HI) == expectedSP
+        registers.getRegister(Registers.Register.STACK_POINTER_LOW) == expectedSP
 
         where:
         memHi | memLo | expectedPC | expectedSP | expected
@@ -3056,7 +3056,7 @@ class OpCodeSpec extends Specification {
         then: 'Negative flag now contains the expect values'
         registers.getRegister(Registers.Register.PROGRAM_COUNTER_HI) == newPCHi
         registers.getRegister(Registers.Register.PROGRAM_COUNTER_LOW) == newPCLo
-        registers.getRegister(Registers.Register.STACK_POINTER_HI) == 0xFC
+        registers.getRegister(Registers.Register.STACK_POINTER_LOW) == 0xFC
 
         and: 'the pushed status registerValue has the break flag set'
         memory.getByte(RoxWord.fromLiteral(0x1FD)) == (statusReg | Registers.Flag.BREAK.getPlaceValue())
@@ -3094,7 +3094,7 @@ class OpCodeSpec extends Specification {
         processor.irq()
 
         then: 'Three items have been added to stack'
-        registers.getRegister(Registers.Register.STACK_POINTER_HI) == 0xFC
+        registers.getRegister(Registers.Register.STACK_POINTER_LOW) == 0xFC
 
         and: 'The PC on the stack is as expected'
         memory.getByte(RoxWord.fromLiteral(0x1FE)) == pushedPCLo
@@ -3136,7 +3136,7 @@ class OpCodeSpec extends Specification {
         processor.nmi()
 
         then: 'Three items have been added to stack'
-        registers.getRegister(Registers.Register.STACK_POINTER_HI) == 0xFC
+        registers.getRegister(Registers.Register.STACK_POINTER_LOW) == 0xFC
 
         and: 'The PC on the stack is as expected'
         memory.getByte(RoxWord.fromLiteral(0x1FE)) == pushedPCLo
@@ -3181,7 +3181,7 @@ class OpCodeSpec extends Specification {
         processor.step(2)
 
         then: 'Stack is empty again'
-        registers.getRegister(Registers.Register.STACK_POINTER_HI) == 0xFF
+        registers.getRegister(Registers.Register.STACK_POINTER_LOW) == 0xFF
 
         and: 'The PC on the stack is as expected'
         registers.getRegister(Registers.Register.PROGRAM_COUNTER_HI) == restoredPCHi

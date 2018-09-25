@@ -35,7 +35,7 @@ class RegisterPanel extends JPanel {
 
         yLocation += rowSize;
         drawByte(g, new Point(xLocation, yLocation), 0b00000001, "");
-        drawByte(g, new Point(secondByteColumn, yLocation), registers.getRegister(Registers.Register.STACK_POINTER_HI).getRawValue(), Registers.Register.STACK_POINTER_HI.getDescription());
+        drawByte(g, new Point(secondByteColumn, yLocation), registers.getRegister(Registers.Register.STACK_POINTER_LOW).getRawValue(), Registers.Register.STACK_POINTER_LOW.getDescription());
 
         //TODO this needs a combined value display
         yLocation += rowSize;
