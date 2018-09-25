@@ -7,7 +7,7 @@ import spock.lang.Unroll
 
 class RoxByteSpec extends Specification {
     @Unroll
-    def "#description: #value becomes a #expectedValue RoxByte that represents #expectedIntRepresentation"(){
+    def "#description: #value becomes a #expectedValue RoxByte that represents #expectedIntRepresentation"() {
         when:
         final RoxByte myByte = RoxByte.signedFrom(value)
 
@@ -18,10 +18,11 @@ class RoxByteSpec extends Specification {
         myByte.getAsInt() == expectedIntRepresentation
 
         where:
-        value       || expectedValue | expectedIntRepresentation | description
-        1           || 1             | 1                         | "Simplest value"
-        50          || 50            | 50                        | "Standard value"
-        //TODO highest value
-        //TODO lowest value
+        value || expectedValue | expectedIntRepresentation | description
+        1     || 1             | 1                         | "Simplest value"
+        50    || 50            | 50                        | "Standard value"
+        //-2    || -2            | -2                        | "Negative value"          XXX: We dont take account of the sign bit
+        127   || 127           | 127                       | "Largest positive value"
+        //-128  || -128          | -127                      | "Smallest negative value" XXX: We dont take account of the sign bit
     }
 }
