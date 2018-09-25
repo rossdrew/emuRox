@@ -5,7 +5,6 @@ import com.pholser.junit.quickcheck.When;
 import com.pholser.junit.quickcheck.generator.InRange;
 import com.pholser.junit.quickcheck.runner.JUnitQuickcheck;
 import com.rox.emu.InvalidDataTypeException;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import spock.lang.Specification;
@@ -19,26 +18,23 @@ public class RoxByteTest extends Specification{
         @Test
     public void testEquality(){
         assertTrue(RoxByte.ZERO.equals(RoxByte.ZERO));
-        Assert.assertTrue(RoxByte.ZERO.equals(RoxByte.ZERO));
-        Assert.assertTrue(RoxByte.ZERO.equals(0));
-        Assert.assertEquals(RoxByte.ZERO.hashCode(), RoxByte.ZERO.hashCode());
+        assertTrue(RoxByte.ZERO.equals(0));
+        assertEquals(RoxByte.ZERO.hashCode(), RoxByte.ZERO.hashCode());
 
         assertTrue(RoxByte.fromLiteral(1).equals(1));
-        Assert.assertTrue(RoxByte.fromLiteral(1).equals(1));
-        Assert.assertEquals(RoxByte.fromLiteral(1), RoxByte.fromLiteral(1));
-        Assert.assertEquals(RoxByte.fromLiteral(1).hashCode(), RoxByte.fromLiteral(1).hashCode());
+        assertEquals(RoxByte.fromLiteral(1), RoxByte.fromLiteral(1));
+        assertEquals(RoxByte.fromLiteral(1).hashCode(), RoxByte.fromLiteral(1).hashCode());
 
         assertTrue(RoxByte.fromLiteral(0b11111110).equals(0b11111110));
-        Assert.assertTrue(RoxByte.fromLiteral(0b11111110).equals(0b11111110));
-        Assert.assertEquals(RoxByte.fromLiteral(99), RoxByte.fromLiteral(99));
-        Assert.assertEquals(RoxByte.fromLiteral(99).hashCode(), RoxByte.fromLiteral(99).hashCode());
+        assertEquals(RoxByte.fromLiteral(99), RoxByte.fromLiteral(99));
+        assertEquals(RoxByte.fromLiteral(99).hashCode(), RoxByte.fromLiteral(99).hashCode());
     }
 
     @Test
     public void testInequality(){
         assertFalse(RoxByte.ZERO.equals(RoxByte.fromLiteral(10)));
         assertNotEquals(RoxByte.ZERO, RoxByte.fromLiteral(1));
-        assertNotEquals(RoxByte.ZERO, 1);;
+        assertNotEquals(RoxByte.ZERO, 1);
 
         assertFalse(RoxByte.fromLiteral(1).equals(2));
         assertNotEquals(RoxByte.fromLiteral(1), 2);
