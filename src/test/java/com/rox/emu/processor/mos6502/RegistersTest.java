@@ -52,6 +52,22 @@ public class RegistersTest {
     }
 
     @Test
+    public void testSettingNUll(){
+        registers.setRegister(Registers.Register.ACCUMULATOR, null);
+        registers.setRegister(Registers.Register.PROGRAM_COUNTER_HI, null);
+        registers.setRegister(Registers.Register.PROGRAM_COUNTER_LOW, null);
+        registers.setRegister(Registers.Register.STACK_POINTER_LOW, null);
+        registers.setRegister(Registers.Register.STATUS_FLAGS, null);
+
+
+        assertEquals(RoxByte.ZERO, registers.getRegister(Registers.Register.ACCUMULATOR));
+        assertEquals(RoxByte.ZERO, registers.getRegister(Registers.Register.PROGRAM_COUNTER_HI));
+        assertEquals(RoxByte.ZERO, registers.getRegister(Registers.Register.PROGRAM_COUNTER_LOW));
+        assertEquals(RoxByte.ZERO, registers.getRegister(Registers.Register.STACK_POINTER_LOW));
+        assertEquals(RoxByte.ZERO, registers.getRegister(Registers.Register.STATUS_FLAGS));
+    }
+
+    @Test
     public void testGetImplicitlyCreatedPC(){
         registers.setRegister(Registers.Register.PROGRAM_COUNTER_HI, RoxByte.fromLiteral(1));
         registers.setRegister(Registers.Register.PROGRAM_COUNTER_LOW, RoxByte.fromLiteral(1));
