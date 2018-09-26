@@ -189,6 +189,27 @@ public class MultiSourceMemoryTest {
         verify(memory, times(3)).getByte(RoxWord.fromLiteral(3));
     }
 
+    @Test
+    public void testMemoryRanges(){
+        final Memory memory1 = mock(Memory.class);
+        final Memory memory2 = mock(Memory.class);
+
+        final Memory rangedMultiSourceMemory = new MultiSourceMemory().withMapping(0,0, 10, memory1)
+                                                                      .withMapping(10, 10, 10, memory2);
+
+        rangedMultiSourceMemory.getByte(RoxWord.ZERO);
+        rangedMultiSourceMemory.getByte(RoxWord.fromLiteral(9));
+        rangedMultiSourceMemory.getByte(RoxWord.fromLiteral(10));
+        rangedMultiSourceMemory.getByte(RoxWord.fromLiteral(19));
+        //XXX What do we expect with 'rangedMultiSourceMemory.getByte(RoxWord.fromLiteral(20));'?
+
+        verify(memory1, times(1)).getByte(RoxWord.ZERO);
+        verify(memory1, times(1)).getByte(RoxWord.fromLiteral(9));
+        verify(memory2, times(1)).getByte(RoxWord.fromLiteral(10));
+        verify(memory2, times(1)).getByte(RoxWord.fromLiteral(19));
+
+    }
+
     private int[] toIntArray(RoxByte[] byteArray) {
         int i=0;
         final int[] result = new int[byteArray.length];

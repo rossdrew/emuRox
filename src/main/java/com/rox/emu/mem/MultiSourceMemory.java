@@ -80,6 +80,31 @@ public class MultiSourceMemory implements Memory {
     }
 
     /**
+     * Create a copy of this {@link Memory} mapping with the address range specified, mapped to the provided {@link Memory}
+     *
+     * @param mapFromAddress the logical start location to map this memory to
+     * @param mapToAddress the physical start location to map this memory to
+     * @param size the size of the range from the start
+     * @param mappedMemory the physical memory to map
+     * @return a new {@link MultiSourceMemory} with the new mapping
+     */
+    public MultiSourceMemory withMapping(final int mapFromAddress,
+                                         final int mapToAddress,
+                                         final int size,
+                                         final Memory mappedMemory){
+        final Map<Integer, MemoryMapping> newMemoryMappings = new HashMap<>();
+        newMemoryMappings.putAll(memoryMappings);
+        for (int i=0; i<size; i++){
+            int logicalAddress = (mapFromAddress + i);
+            int physicalAddress = (mapToAddress + i);
+
+            newMemoryMappings.put(logicalAddress, new MemoryMapping(logicalAddress, physicalAddress, mappedMemory));
+        }
+
+        return new MultiSourceMemory(defaultMemory, newMemoryMappings);
+    }
+
+    /**
      *
      * @param logicalAddress a logical address to map
      * @param physicalAddress a physical address to map the logical address to
