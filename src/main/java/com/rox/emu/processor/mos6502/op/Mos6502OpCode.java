@@ -14,7 +14,7 @@ import java.util.stream.Stream;
 
 /**
  * Enum representation of {@link Mos6502} op-codes.  Each represented by an enum name using the convention
- * '{OP-CODE}{@value #TOKEN_SEPARATOR}{ADDRESSING-MODE}{@value #TOKEN_SEPARATOR}{INDEXING-MODE}'.<br/>
+ * '{OP-CODE}{@literal _}{ADDRESSING-MODE}{@literal _}{INDEXING-MODE}'.<br/>
  * <br/>
  * {@link Mos6502} op-codes are therefore made of two parts.  The {@link Mos6502AddressingMode} and the {@link Mos6502Operation}
  *
