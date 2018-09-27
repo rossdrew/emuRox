@@ -24,13 +24,9 @@ public enum Mos6502OpCode implements Mos6502Instruction {
     BRK(0x00),
 
     ASL_A(0x0A),
-
     ASL_Z(0x06),
-
     ASL_ABS(0x0E),
-
     ASL_Z_IX(0x16),
-
     ASL_ABS_IX(0x1E),
 
     LSR_A(0x4A),
@@ -209,26 +205,6 @@ public enum Mos6502OpCode implements Mos6502Instruction {
     public void perform(Mos6502Alu alu, Registers registers, Memory memory) {
         addressingMode.address(registers, memory, alu, operation);
     }
-
-    /**
-     * The separator used to delimit different elements in the {@link String} enum id
-     */
-    public static final String TOKEN_SEPARATOR = "_";
-    /**
-     * The index of the op-code name in the {@link String} enum id,
-     * using the token delimiter {@value TOKEN_SEPARATOR}
-     */
-    public static final int CODE_I = 0;
-    /**
-     * The index of the addressing mode token in the {@link String} enum id,
-     * using the token delimiter {@value TOKEN_SEPARATOR}
-     */
-    public static final int ADDR_I = CODE_I + 1;
-    /**
-     * The index of the indexing mode token in the {@link String} enum id,
-     * using the token delimiter {@value TOKEN_SEPARATOR}
-     */
-    public static final int INDX_I = ADDR_I + 1;
 
     private final Mos6502Operation operation;
     private final int byteValue;

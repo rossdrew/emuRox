@@ -17,6 +17,26 @@ import java.util.EnumSet;
  * @author Ross Drew
  */
 public class OpCodeConverter {
+    /**
+     * The separator used to delimit different elements in the {@link String} enum id
+     */
+    public static final String TOKEN_SEPARATOR = "_";
+    /**
+     * The index of the op-code name in the {@link String} enum id,
+     * using the token delimiter {@value TOKEN_SEPARATOR}
+     */
+    public static final int CODE_I = 0;
+    /**
+     * The index of the addressing mode token in the {@link String} enum id,
+     * using the token delimiter {@value TOKEN_SEPARATOR}
+     */
+    public static final int ADDR_I = CODE_I + 1;
+    /**
+     * The index of the indexing mode token in the {@link String} enum id,
+     * using the token delimiter {@value TOKEN_SEPARATOR}
+     */
+    public static final int INDX_I = ADDR_I + 1;
+
     private OpCodeConverter(){/* Used to hide implicitly public constructor for a utility class*/}
 
     /**
@@ -26,8 +46,8 @@ public class OpCodeConverter {
      * @return A {@link String} instruction from the {@link Mos6502} instruction set, associated with the intended {@link Mos6502OpCode}
      */
     public static String getOpCode(String internalOpCodeName){
-        final String[] tokens = internalOpCodeName.split(Mos6502OpCode.TOKEN_SEPARATOR);
-        return tokens[Mos6502OpCode.CODE_I];
+        final String[] tokens = internalOpCodeName.split(TOKEN_SEPARATOR);
+        return tokens[CODE_I];
     }
 
 
@@ -46,8 +66,8 @@ public class OpCodeConverter {
      * @return An {@link Mos6502AddressingMode} object that represents the intended addressing mode of the {@link Mos6502OpCode} in question
      */
     public static Mos6502AddressingMode getAddressingMode(String internalOpCodeName){
-        final String[] tokens = internalOpCodeName.split(Mos6502OpCode.TOKEN_SEPARATOR);
-        if (tokens.length <= Mos6502OpCode.ADDR_I) {
+        final String[] tokens = internalOpCodeName.split(TOKEN_SEPARATOR);
+        if (tokens.length <= ADDR_I) {
             //XXX Write this less ugly
             if (EnumSet.of( Mos6502Operation.JSR,
                             Mos6502Operation.BPL,
@@ -63,10 +83,10 @@ public class OpCodeConverter {
             return Mos6502AddressingMode.IMPLIED;
         }
 
-        final String addressingModeDescriptor = tokens[Mos6502OpCode.ADDR_I];
+        final String addressingModeDescriptor = tokens[ADDR_I];
 
         //XXX Not pretty but necessary for proper test coverage - update if JaCoCo ever learns to deal with it
-        final String indexToken = (tokens.length <= Mos6502OpCode.INDX_I) ? "" : tokens[Mos6502OpCode.INDX_I];
+        final String indexToken = (tokens.length <= INDX_I) ? "" : tokens[INDX_I];
         if ("I".equals(addressingModeDescriptor))
             return Mos6502AddressingMode.IMMEDIATE;
         else if ("A".equals(addressingModeDescriptor))
