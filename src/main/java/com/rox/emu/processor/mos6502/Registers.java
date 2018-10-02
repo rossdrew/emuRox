@@ -78,9 +78,10 @@ public class Registers {
         private static String prettifyName(String originalName){
             String name = originalName.replaceAll("_"," ").toLowerCase();
             name = name.substring(0, 1).toUpperCase() + name.substring(1);
-            int spaceIndex = name.indexOf(' ');
-            if (spaceIndex > 0)
-                name = name.substring(0, spaceIndex) + name.substring(spaceIndex, spaceIndex+2).toUpperCase() + name.substring(spaceIndex+2);
+            if (name.contains(" ")) {
+                int spaceIndex = name.indexOf(' ');
+                name = name.substring(0, spaceIndex) + name.substring(spaceIndex, spaceIndex + 2).toUpperCase() + name.substring(spaceIndex + 2);
+            }
             return name;
         }
 
