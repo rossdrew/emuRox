@@ -4,6 +4,9 @@ import com.rox.emu.mem.ReadOnlyMemory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Arrays;
 
 /**
@@ -117,5 +120,32 @@ public final class InesRom {
 
     public byte[] getFooter() {
         return footer;
+    }
+
+    /**
+     * Entry point for getting ROM information
+     *
+     * @param args <code>[0]</code> = Path to ROM file
+     */
+    public static void main(String[] args) throws IOException {
+        final String romPath = args[0];
+        System.out.println("Opening '" + romPath + "'");
+
+        final File romFile = new File(romPath);
+        byte[] romBytes = Files.readAllBytes(romFile.toPath());
+        final InesRom rom = InesRom.from(romBytes);
+
+        System.out.println("Opened " + rom.getDescription() + " (" + rom.getHeader().getDescription() + ")");
+        System.out.println("\tProgram Blocks: " + rom.getHeader().getPrgBlocks());
+        System.out.println("\tCharacter Blocks: " + rom.getHeader().getChrBlocks());
+        System.out.println("\tVersion: " + rom.getHeader().getRomControlOptions().getVersion());
+        System.out.println("\tMirroring: " + rom.getHeader().getRomControlOptions().getMirroring().name());
+        System.out.println("\tMapper Number: " + rom.getHeader().getRomControlOptions().getMapperNumber());
+        System.out.println("\tFooter: " + rom.getFooter().length + " bytes");
+        System.out.println("\t----------------");
+        System.out.println("\tTrainer: " + (rom.getHeader().getRomControlOptions().isTrainerPresent() ? "YES" : "NO"));
+        System.out.println("\tRAM: " + (rom.getHeader().getRomControlOptions().isRamPresent() ? "YES" : "NO"));
+        System.out.println("\tPlaychoice 10: " + (rom.getHeader().getRomControlOptions().isPlayChoice10() ? "YES" : "NO"));
+        System.out.println("\tVS Uni: " + (rom.getHeader().getRomControlOptions().isVsUnisystem() ? "YES" : "NO"));
     }
 }
