@@ -31,7 +31,7 @@ public class Mos6502Alu {
 
     /**
      * <b>Sets the {@link Registers} carry flag to the carry of the operation</b><br/>
-     * <br/>
+     * <br/> 
      * Return the addition of <code>byteA</code>, <code>byteB</code> and the contents of the {@link Registers} carry
      * flag.<br/>
      * <br>
@@ -88,8 +88,10 @@ public class Mos6502Alu {
      *                      carry out _/
      * </pre>
      * This means the opposite of {@link #adc}s carry behaviour is expected.  Any usage that doesn't need
-     * to take into account of a previous bytes borrow, should load the carry flag to get normal behaviour.
+     * to take into account of a previous bytes borrow, should load the carry flag before the operation to
+     * get normal behaviour.
      *
+     * @see #adc(RoxByte, RoxByte)
      * @return the result of the SBC operation
      */
     public RoxByte sbc(RoxByte byteA, RoxByte byteB) {
