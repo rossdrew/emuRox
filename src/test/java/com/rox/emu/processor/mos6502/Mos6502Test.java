@@ -393,10 +393,13 @@ public class Mos6502Test {
         memory.setBlock(RoxWord.ZERO, program.getProgramAsByteArray());
         Registers registers = processor.getRegisters();
 
+        boolean wasCarrySet = registers.getFlag(Registers.Flag.CARRY);
+
         processor.step(3);
 
         assertEquals(RoxWord.fromLiteral(program.getLength()), registers.getPC());
         assertEquals(RoxByte.fromLiteral(8), memory.getByte(RoxWord.fromLiteral(0x20)));
+        assertEquals(wasCarrySet, registers.getFlag(Registers.Flag.CARRY));
     }
 
     @Test
