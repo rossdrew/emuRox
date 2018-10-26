@@ -1682,13 +1682,15 @@ class OpCodeSpec extends Specification {
                                                 STA_Z, 0x20,
                                                 DEC_Z, 0x20)
 
+        boolean carryBefore = registers.getFlag(Registers.Flag.CARRY)
+
         and:
         processor.step(3)
 
         then:
         memory.getByte(RoxWord.fromLiteral(0x20)) == expectedMem
         registers.getPC() == program.length
-        testFlags(Z, N)
+        testFlags(Z, N, carryBefore)
 
         where:
         firstValue | expectedMem | Z     | N     | Expected
@@ -1705,6 +1707,8 @@ class OpCodeSpec extends Specification {
                                                 STA_Z_IX, loc,
                                                 DEC_Z_IX, loc)
 
+        boolean carryBefore = registers.getFlag(Registers.Flag.CARRY)
+
         and:
         processor.step(4)
 
@@ -1714,7 +1718,7 @@ class OpCodeSpec extends Specification {
         then:
         memory.getByte(finalLocation) == expectedMem
         registers.getPC() == program.length
-        testFlags(Z, N)
+        testFlags(Z, N, carryBefore)
 
         where:
         firstValue | loc  | index | expectedMem | Z     | N     | Expected
@@ -1730,13 +1734,15 @@ class OpCodeSpec extends Specification {
                                                 STA_ABS, 0x01, 0x20,
                                                 DEC_ABS, 0x01, 0x20)
 
+        boolean carryBefore = registers.getFlag(Registers.Flag.CARRY)
+
         and:
         processor.step(3)
 
         then:
         memory.getByte(RoxWord.fromLiteral(0x0120)) == expectedMem
         registers.getPC() == program.length
-        testFlags(Z, N)
+        testFlags(Z, N, carryBefore)
 
         where:
         firstValue | expectedMem | Z     | N     | Expected
@@ -1753,6 +1759,8 @@ class OpCodeSpec extends Specification {
                                                 STA_ABS_IX, 0x01, 0x20,
                                                 DEC_ABS_IX, 0x01, 0x20)
 
+        boolean carryBefore = registers.getFlag(Registers.Flag.CARRY)
+
         and:
         processor.step(4)
 
@@ -1762,7 +1770,7 @@ class OpCodeSpec extends Specification {
         then:
         memory.getByte(finalLocation) == expectedMem
         registers.getPC() == program.length
-        testFlags(Z, N)
+        testFlags(Z, N, carryBefore)
 
         where:
         index | firstValue | expectedMem | Z     | N     | Expected
