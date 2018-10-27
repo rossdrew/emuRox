@@ -1657,6 +1657,8 @@ class OpCodeSpec extends Specification {
                                                 STA_ABS_IX, 0x01, 0x20,
                                                 INC_ABS_IX, 0x01, 0x20)
 
+        boolean carryBefore = registers.getFlag(Registers.Flag.CARRY)
+
         and:
         processor.step(4)
 
@@ -1666,7 +1668,7 @@ class OpCodeSpec extends Specification {
         then:
         memory.getByte(finalLocation) == expectedMem
         registers.getPC() == program.length
-        testFlags(Z, N)
+        testFlags(Z, N, carryBefore)
 
         where:
         firstValue | index | expectedMem | Z     | N     | Expected

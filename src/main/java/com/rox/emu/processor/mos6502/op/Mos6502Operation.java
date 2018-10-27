@@ -211,8 +211,10 @@ public enum Mos6502Operation implements AddressedValueInstruction {
 
     /** Increment the given byte in place and set the flags based on the new value */
     INC((a,r,m,v)->{
+        boolean carryWasSet = r.getFlag(Registers.Flag.CARRY);
         final RoxByte newValue = a.adc(v, RoxByte.fromLiteral(1));
         r.setFlagsBasedOn(newValue);
+        r.setFlagTo(Registers.Flag.CARRY, carryWasSet);
         return newValue;
     }),
 
