@@ -8,6 +8,7 @@ import com.rox.emu.processor.mos6502.Registers;
 
 import java.util.Arrays;
 
+import static com.rox.emu.processor.mos6502.Registers.Flag.*;
 import static com.rox.emu.processor.mos6502.Registers.Register.*;
 
 /**
@@ -28,7 +29,7 @@ public enum Mos6502Operation implements AddressedValueInstruction {
 
         final RoxByte pcHi = r.getRegister(PROGRAM_COUNTER_HI);
         final RoxByte pcLo = r.getRegister(PROGRAM_COUNTER_LOW);
-        final RoxByte status = r.getRegister(STATUS_FLAGS).withBit(Registers.Flag.BREAK.getIndex());
+        final RoxByte status = r.getRegister(STATUS_FLAGS).withBit(BREAK.getIndex());
 
         Arrays.asList(pcHi, pcLo, status).forEach(value -> {
             final RoxByte stackIndex = r.getRegister(STACK_POINTER_LOW);
@@ -78,7 +79,7 @@ public enum Mos6502Operation implements AddressedValueInstruction {
 
     /** Clear the Overflow flag */
     CLV((a,r,m,v)->{
-        r.clearFlag(Registers.Flag.OVERFLOW);
+        r.clearFlag(OVERFLOW);
         return v;
     }),
 
@@ -132,13 +133,13 @@ public enum Mos6502Operation implements AddressedValueInstruction {
 
     /** Clear the carry flag */
     CLC((a,r,m,v)->{
-        r.clearFlag(Registers.Flag.CARRY);
+        r.clearFlag(CARRY);
         return v;
     }),
 
     /** Set the carry flag */
     SEC((a,r,m,v)->{
-        r.setFlag(Registers.Flag.CARRY);
+        r.setFlag(CARRY);
         return v;
     }),
 
@@ -178,10 +179,10 @@ public enum Mos6502Operation implements AddressedValueInstruction {
     DEY((a,r,m,v)->{
         final RoxByte xValue = r.getRegister(Y_INDEX);
 
-        boolean carryWasSet = r.getFlag(Registers.Flag.CARRY);
-        r.setFlag(Registers.Flag.CARRY);
+        boolean carryWasSet = r.getFlag(CARRY);
+        r.setFlag(CARRY);
         final RoxByte newValue = a.sbc(xValue, RoxByte.fromLiteral(1));
-        r.setFlagTo(Registers.Flag.CARRY, carryWasSet);
+        r.setFlagTo(CARRY, carryWasSet);
 
         r.setFlagsBasedOn(newValue);
         r.setRegister(Y_INDEX, newValue);
@@ -201,10 +202,10 @@ public enum Mos6502Operation implements AddressedValueInstruction {
     DEX((a,r,m,v)->{
         final RoxByte xValue = r.getRegister(X_INDEX);
 
-        boolean carryWasSet = r.getFlag(Registers.Flag.CARRY);
-        r.setFlag(Registers.Flag.CARRY);
+        boolean carryWasSet = r.getFlag(CARRY);
+        r.setFlag(CARRY);
         final RoxByte newValue = a.sbc(xValue, RoxByte.fromLiteral(1));
-        r.setFlagTo(Registers.Flag.CARRY, carryWasSet);
+        r.setFlagTo(CARRY, carryWasSet);
 
         r.setFlagsBasedOn(newValue);
         r.setRegister(X_INDEX, newValue);
@@ -213,19 +214,19 @@ public enum Mos6502Operation implements AddressedValueInstruction {
 
     /** Increment the given byte in place and set the flags based on the new value */
     INC((a,r,m,v)->{
-        boolean carryWasSet = r.getFlag(Registers.Flag.CARRY);
+        boolean carryWasSet = r.getFlag(CARRY);
         final RoxByte newValue = a.adc(v, RoxByte.fromLiteral(1));
         r.setFlagsBasedOn(newValue);
-        r.setFlagTo(Registers.Flag.CARRY, carryWasSet);
+        r.setFlagTo(CARRY, carryWasSet);
         return newValue;
     }),
 
     /** Decrement the given byte in place and set the flags based on the new value */
     DEC((a,r,m,v)->{
-        boolean carryWasSet = r.getFlag(Registers.Flag.CARRY);
-        r.setFlag(Registers.Flag.CARRY);
+        boolean carryWasSet = r.getFlag(CARRY);
+        r.setFlag(CARRY);
         final RoxByte newValue = a.sbc(v, RoxByte.fromLiteral(1));
-        r.setFlagTo(Registers.Flag.CARRY, carryWasSet);
+        r.setFlagTo(CARRY, carryWasSet);
         r.setFlagsBasedOn(newValue);
         return newValue;
     }),
@@ -345,15 +346,15 @@ public enum Mos6502Operation implements AddressedValueInstruction {
 
         //XXX Need to properly look at this, http://obelisk.me.uk/6502/reference.html#BIT
         //    says that "Set if the result if the AND is zero", so only if no bits match?!
-        r.setFlagTo(Registers.Flag.ZERO, (result.equals(accumulator)));
-        r.setFlagTo(Registers.Flag.OVERFLOW, v.isBitSet(6));
-        r.setFlagTo(Registers.Flag.NEGATIVE, v.isBitSet(7));
+        r.setFlagTo(ZERO, (result.equals(accumulator)));
+        r.setFlagTo(OVERFLOW, v.isBitSet(6));
+        r.setFlagTo(NEGATIVE, v.isBitSet(7));
         return v;
     }),
 
     /** Compare (via subtraction) value with Accumulator, setting flags based on result */
     CMP((a,r,m,v)->{
-        r.setFlag(Registers.Flag.CARRY); //XXX IS this the right place to be doing this?
+        r.setFlag(CARRY); //XXX IS this the right place to be doing this?
         final RoxByte accumulator = r.getRegister(ACCUMULATOR);
         final RoxByte resultOfSbc = a.sbc(accumulator, v);
         r.setFlagsBasedOn(resultOfSbc);
@@ -362,7 +363,7 @@ public enum Mos6502Operation implements AddressedValueInstruction {
 
     /** Compare (via subtraction) value with X register, setting flags based on result */
     CPX((a,r,m,v)->{
-        r.setFlag(Registers.Flag.CARRY); //XXX IS this the right place to be doing this?
+        r.setFlag(CARRY); //XXX IS this the right place to be doing this?
         final RoxByte x = r.getRegister(X_INDEX);
         final RoxByte resultOfSbc = a.sbc(x, v);
         r.setFlagsBasedOn(resultOfSbc);
@@ -371,7 +372,7 @@ public enum Mos6502Operation implements AddressedValueInstruction {
 
     /** Compare (via subtraction) value with Y register, setting flags based on result */
     CPY((a,r,m,v)->{
-        r.setFlag(Registers.Flag.CARRY); //XXX IS this the right place to be doing this?
+        r.setFlag(CARRY); //XXX IS this the right place to be doing this?
         final RoxByte y = r.getRegister(Y_INDEX);
         final RoxByte resultOfSbc = a.sbc(y, v);
         r.setFlagsBasedOn(resultOfSbc);
@@ -401,56 +402,56 @@ public enum Mos6502Operation implements AddressedValueInstruction {
 
     /** Branch to offset if {@code NEGATIVE} flag is <em>not</em> set */
     BPL((a,r,m,offset)->{
-        if (!r.getFlag(Registers.Flag.NEGATIVE))
+        if (!r.getFlag(NEGATIVE))
             branchTo(r,offset);
         return offset;
     }),
 
     /** Branch to offset if {@code NEGATIVE} flag <em>is</em> set */
     BMI((a,r,m,offset)->{
-        if (r.getFlag(Registers.Flag.NEGATIVE))
+        if (r.getFlag(NEGATIVE))
             branchTo(r,offset);
         return offset;
     }),
 
     /** Branch to offset if {@code OVERFLOW} flag is <em>not</em> set */
     BVC((a,r,m,offset)->{
-        if (!r.getFlag(Registers.Flag.OVERFLOW))
+        if (!r.getFlag(OVERFLOW))
             branchTo(r,offset);
         return offset;
     }),
 
     /** Branch to offset if {@code OVERFLOW} flag <em>is</em> set */
     BVS((a,r,m,offset)->{
-        if (r.getFlag(Registers.Flag.OVERFLOW))
+        if (r.getFlag(OVERFLOW))
             branchTo(r,offset);
         return offset;
     }),
 
     /** Branch to offset if {@code CARRY} flag is <em>not</em> set */
     BCC((a,r,m,offset)->{
-        if (!r.getFlag(Registers.Flag.CARRY))
+        if (!r.getFlag(CARRY))
             branchTo(r,offset);
         return offset;
     }),
 
     /** Branch to offset if {@code CARRY} flag <em>is</em> set */
     BCS((a,r,m,offset)->{
-        if (r.getFlag(Registers.Flag.CARRY))
+        if (r.getFlag(CARRY))
             branchTo(r,offset);
         return offset;
     }),
 
     /** Branch to offset if {@code ZERO} flag is <em>not</em> set */
     BNE((a,r,m,offset)->{
-        if (!r.getFlag(Registers.Flag.ZERO))
+        if (!r.getFlag(ZERO))
             branchTo(r,offset);
         return offset;
     }),
 
     /** Branch to offset if {@code ZERO} flag <em>is</em> set */
     BEQ((a,r,m,offset)->{
-        if (r.getFlag(Registers.Flag.ZERO))
+        if (r.getFlag(ZERO))
             branchTo(r,offset);
         return offset;
     }),
@@ -471,25 +472,25 @@ public enum Mos6502Operation implements AddressedValueInstruction {
 
     /** Set the {@code IRQ} flag */
     SEI((a,r,m,v)->{
-        r.setFlag(Registers.Flag.IRQ_DISABLE);
+        r.setFlag(IRQ_DISABLE);
         return v;
     }),
 
     /** Clear the {@code IRQ} flag */
     CLI((a,r,m,v)->{
-        r.clearFlag(Registers.Flag.IRQ_DISABLE);
+        r.clearFlag(IRQ_DISABLE);
         return v;
     }),
 
     /** Set the {@code DECIMAL MODE} flag */
     SED((a,r,m,v)->{
-        r.setFlag(Registers.Flag.DECIMAL_MODE);
+        r.setFlag(DECIMAL_MODE);
         return v;
     }),
 
     /** Clear the {@code DECIMAL MODE} flag */
     CLD((a,r,m,v)->{
-        r.clearFlag(Registers.Flag.DECIMAL_MODE);
+        r.clearFlag(DECIMAL_MODE);
         return v;
     }),
 
@@ -526,7 +527,7 @@ public enum Mos6502Operation implements AddressedValueInstruction {
     private static void branchTo(final Registers registers, final RoxByte offset){
         //Create a silent register/alu pair, loading/unloading the carry for sbc/adc
         final Registers rCopy = registers.copy();
-        rCopy.setFlagTo(Registers.Flag.CARRY, offset.isNegative());
+        rCopy.setFlagTo(CARRY, offset.isNegative());
         final Mos6502Alu silentAlu = new Mos6502Alu(rCopy);
 
         //Add to low byte, carry to high
