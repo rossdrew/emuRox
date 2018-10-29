@@ -354,7 +354,7 @@ public enum Mos6502Operation implements AddressedValueInstruction {
 
     /** Compare (via subtraction) value with Accumulator, setting flags based on result */
     CMP((a,r,m,v)->{
-        r.setFlag(CARRY); //XXX IS this the right place to be doing this?
+        r.setFlag(CARRY);
         final RoxByte accumulator = r.getRegister(ACCUMULATOR);
         final RoxByte resultOfSbc = a.sbc(accumulator, v);
         r.setFlagsBasedOn(resultOfSbc);
@@ -363,7 +363,7 @@ public enum Mos6502Operation implements AddressedValueInstruction {
 
     /** Compare (via subtraction) value with X register, setting flags based on result */
     CPX((a,r,m,v)->{
-        r.setFlag(CARRY); //XXX IS this the right place to be doing this?
+        r.setFlag(CARRY);
         final RoxByte x = r.getRegister(X_INDEX);
         final RoxByte resultOfSbc = a.sbc(x, v);
         r.setFlagsBasedOn(resultOfSbc);
@@ -372,7 +372,7 @@ public enum Mos6502Operation implements AddressedValueInstruction {
 
     /** Compare (via subtraction) value with Y register, setting flags based on result */
     CPY((a,r,m,v)->{
-        r.setFlag(CARRY); //XXX IS this the right place to be doing this?
+        r.setFlag(CARRY);
         final RoxByte y = r.getRegister(Y_INDEX);
         final RoxByte resultOfSbc = a.sbc(y, v);
         r.setFlagsBasedOn(resultOfSbc);
