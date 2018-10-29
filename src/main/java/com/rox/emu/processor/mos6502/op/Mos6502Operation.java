@@ -8,6 +8,8 @@ import com.rox.emu.processor.mos6502.Registers;
 
 import java.util.Arrays;
 
+import static com.rox.emu.processor.mos6502.Registers.Register.*;
+
 /**
  * MOS 6502 addressing-mode independent base operation
  */
@@ -24,22 +26,22 @@ public enum Mos6502Operation implements AddressedValueInstruction {
         final RoxWord pc = r.getPC();
         r.setPC(RoxWord.fromLiteral(pc.getRawValue() + 2));
 
-        final RoxByte pcHi = r.getRegister(Registers.Register.PROGRAM_COUNTER_HI);
-        final RoxByte pcLo = r.getRegister(Registers.Register.PROGRAM_COUNTER_LOW);
-        final RoxByte status = r.getRegister(Registers.Register.STATUS_FLAGS).withBit(Registers.Flag.BREAK.getIndex());
+        final RoxByte pcHi = r.getRegister(PROGRAM_COUNTER_HI);
+        final RoxByte pcLo = r.getRegister(PROGRAM_COUNTER_LOW);
+        final RoxByte status = r.getRegister(STATUS_FLAGS).withBit(Registers.Flag.BREAK.getIndex());
 
         Arrays.asList(pcHi, pcLo, status).forEach(value -> {
-            final RoxByte stackIndex = r.getRegister(Registers.Register.STACK_POINTER_LOW);
+            final RoxByte stackIndex = r.getRegister(STACK_POINTER_LOW);
             final RoxByte nextStackIndex = RoxByte.fromLiteral(stackIndex.getRawValue() - 1);     //XXX Should use alu
             m.setByteAt(RoxWord.from(RoxByte.fromLiteral(0x01), stackIndex), value);
-            r.setRegister(Registers.Register.STACK_POINTER_LOW, nextStackIndex);
+            r.setRegister(STACK_POINTER_LOW, nextStackIndex);
         });
 
         final RoxByte pcHiJmp = m.getByte(RoxWord.fromLiteral(0xFFFE));
         final RoxByte pcLoJmp = m.getByte(RoxWord.fromLiteral(0xFFFF));
 
-        r.setRegister(Registers.Register.PROGRAM_COUNTER_HI, pcHiJmp);
-        r.setRegister(Registers.Register.PROGRAM_COUNTER_LOW, pcLoJmp);
+        r.setRegister(PROGRAM_COUNTER_HI, pcHiJmp);
+        r.setRegister(PROGRAM_COUNTER_LOW, pcLoJmp);
 
         return v;
     }),
@@ -60,17 +62,17 @@ public enum Mos6502Operation implements AddressedValueInstruction {
 
     /** Add byte to that in the Accumulator and store the result in the accumulator */
     ADC((a,r,m,v)->{
-        final RoxByte accumulator = r.getRegister(Registers.Register.ACCUMULATOR);
+        final RoxByte accumulator = r.getRegister(ACCUMULATOR);
         final RoxByte newValue = a.adc(accumulator, v);
         r.setFlagsBasedOn(newValue);
-        r.setRegister(Registers.Register.ACCUMULATOR, newValue);
+        r.setRegister(ACCUMULATOR, newValue);
         return v;
     }),
 
     /** Load byte into the accumulator */
     LDA((a,r,m,v)->{
         r.setFlagsBasedOn(v);
-        r.setRegister(Registers.Register.ACCUMULATOR, v);
+        r.setRegister(ACCUMULATOR, v);
         return v;
     }),
 
@@ -85,10 +87,10 @@ public enum Mos6502Operation implements AddressedValueInstruction {
      * setting flags based on the result
      * */
     AND((a,r,m,v)->{
-        final RoxByte accumulator = r.getRegister(Registers.Register.ACCUMULATOR);
+        final RoxByte accumulator = r.getRegister(ACCUMULATOR);
         final RoxByte newValue = a.and(accumulator, v);
         r.setFlagsBasedOn(newValue);
-        r.setRegister(Registers.Register.ACCUMULATOR, newValue);
+        r.setRegister(ACCUMULATOR, newValue);
         return v;
     }),
 
@@ -97,10 +99,10 @@ public enum Mos6502Operation implements AddressedValueInstruction {
      * setting flags based on the result
      * */
     ORA((a,r,m,v)->{
-        final RoxByte accumulator = r.getRegister(Registers.Register.ACCUMULATOR);
+        final RoxByte accumulator = r.getRegister(ACCUMULATOR);
         final RoxByte result = a.or(accumulator, v);
         r.setFlagsBasedOn(result);
-        r.setRegister(Registers.Register.ACCUMULATOR, result);
+        r.setRegister(ACCUMULATOR, result);
         return v;
     }),
 
@@ -109,10 +111,10 @@ public enum Mos6502Operation implements AddressedValueInstruction {
      * setting flags based on the result
      */
     EOR((a,r,m,v)->{
-        final RoxByte accumulator = r.getRegister(Registers.Register.ACCUMULATOR);
+        final RoxByte accumulator = r.getRegister(ACCUMULATOR);
         final RoxByte result = a.xor(accumulator, v);
         r.setFlagsBasedOn(result);
-        r.setRegister(Registers.Register.ACCUMULATOR, result);
+        r.setRegister(ACCUMULATOR, result);
         return v;
     }),
 
@@ -121,10 +123,10 @@ public enum Mos6502Operation implements AddressedValueInstruction {
      * setting flags based on the result
      */
     SBC((a,r,m,v)->{
-        final RoxByte accumulator = r.getRegister(Registers.Register.ACCUMULATOR);
+        final RoxByte accumulator = r.getRegister(ACCUMULATOR);
         final RoxByte newValue = a.sbc(accumulator, v);
         r.setFlagsBasedOn(newValue);
-        r.setRegister(Registers.Register.ACCUMULATOR, newValue);
+        r.setRegister(ACCUMULATOR, newValue);
         return v;
     }),
 
@@ -143,38 +145,38 @@ public enum Mos6502Operation implements AddressedValueInstruction {
     /** Load byte into Y, setting flag based on that value */
     LDY((a,r,m,v)->{
         r.setFlagsBasedOn(v);
-        r.setRegister(Registers.Register.Y_INDEX, v);
+        r.setRegister(Y_INDEX, v);
         return v;
     }),
 
     /** Load byte into X, setting flag based on that value */
     LDX((a,r,m,v)->{
         r.setFlagsBasedOn(v);
-        r.setRegister(Registers.Register.X_INDEX, v);
+        r.setRegister(X_INDEX, v);
         return v;
     }),
 
     /** Load byte into Y */
-    STY((a,r,m,v)->r.getRegister(Registers.Register.Y_INDEX)),
+    STY((a,r,m,v)->r.getRegister(Y_INDEX)),
 
     /** Load byte into Accumulator */
-    STA((a,r,m,v)->r.getRegister(Registers.Register.ACCUMULATOR)),
+    STA((a,r,m,v)->r.getRegister(ACCUMULATOR)),
 
     /** Load byte into X */
-    STX((a,r,m,v)-> r.getRegister(Registers.Register.X_INDEX)),
+    STX((a,r,m,v)-> r.getRegister(X_INDEX)),
 
     /** Increment the value of Y and set the flags based on the new value */
     INY((a,r,m,v)->{
-        final RoxByte xValue = r.getRegister(Registers.Register.Y_INDEX);
+        final RoxByte xValue = r.getRegister(Y_INDEX);
         final RoxByte newValue = a.adc(xValue, RoxByte.fromLiteral(1));
         r.setFlagsBasedOn(newValue);
-        r.setRegister(Registers.Register.Y_INDEX, newValue);
+        r.setRegister(Y_INDEX, newValue);
         return v;
     }),
 
     /** Decrement the value of Y and set the flags based on the new value */
     DEY((a,r,m,v)->{
-        final RoxByte xValue = r.getRegister(Registers.Register.Y_INDEX);
+        final RoxByte xValue = r.getRegister(Y_INDEX);
 
         boolean carryWasSet = r.getFlag(Registers.Flag.CARRY);
         r.setFlag(Registers.Flag.CARRY);
@@ -182,22 +184,22 @@ public enum Mos6502Operation implements AddressedValueInstruction {
         r.setFlagTo(Registers.Flag.CARRY, carryWasSet);
 
         r.setFlagsBasedOn(newValue);
-        r.setRegister(Registers.Register.Y_INDEX, newValue);
+        r.setRegister(Y_INDEX, newValue);
         return v;
     }),
 
     /** Increment the value of X and set the flags based on the new value */
     INX((a,r,m,v)->{
-        final RoxByte xValue = r.getRegister(Registers.Register.X_INDEX);
+        final RoxByte xValue = r.getRegister(X_INDEX);
         final RoxByte newValue = a.adc(xValue, RoxByte.fromLiteral(1));
         r.setFlagsBasedOn(newValue);
-        r.setRegister(Registers.Register.X_INDEX, newValue);
+        r.setRegister(X_INDEX, newValue);
         return v;
     }),
 
     /** Decrement the value of X and set the flags based on the new value */
     DEX((a,r,m,v)->{
-        final RoxByte xValue = r.getRegister(Registers.Register.X_INDEX);
+        final RoxByte xValue = r.getRegister(X_INDEX);
 
         boolean carryWasSet = r.getFlag(Registers.Flag.CARRY);
         r.setFlag(Registers.Flag.CARRY);
@@ -205,7 +207,7 @@ public enum Mos6502Operation implements AddressedValueInstruction {
         r.setFlagTo(Registers.Flag.CARRY, carryWasSet);
 
         r.setFlagsBasedOn(newValue);
-        r.setRegister(Registers.Register.X_INDEX, newValue);
+        r.setRegister(X_INDEX, newValue);
         return v;
     }),
 
@@ -230,54 +232,54 @@ public enum Mos6502Operation implements AddressedValueInstruction {
 
     /** Push the Accumulator to the stack */
     PHA((a,r,m,v)->{
-        final RoxByte accumulatorValue = r.getRegister(Registers.Register.ACCUMULATOR);
+        final RoxByte accumulatorValue = r.getRegister(ACCUMULATOR);
 
-        final RoxByte stackIndex = r.getRegister(Registers.Register.STACK_POINTER_LOW);
+        final RoxByte stackIndex = r.getRegister(STACK_POINTER_LOW);
         final RoxWord stackEntryLocation = RoxWord.from(RoxByte.fromLiteral(0x01), stackIndex);
         m.setByteAt(stackEntryLocation, accumulatorValue);
 
         final RoxByte newStackIndex = RoxByte.fromLiteral(stackIndex.getRawValue() - 1); //XXX Should use alu
-        r.setRegister(Registers.Register.STACK_POINTER_LOW, newStackIndex);
+        r.setRegister(STACK_POINTER_LOW, newStackIndex);
 
         return v;
     }),
 
     /** Pull the Accumulator from the stack */
     PLA((a,r,m,v)->{
-        final RoxByte stackIndex = r.getRegister(Registers.Register.STACK_POINTER_LOW);
+        final RoxByte stackIndex = r.getRegister(STACK_POINTER_LOW);
         final RoxByte newStackIndex = RoxByte.fromLiteral(stackIndex.getRawValue() + 1); //XXX Should use alu
 
         final RoxWord stackEntry = RoxWord.from(RoxByte.fromLiteral(0x01), newStackIndex);
         final RoxByte stackValue = m.getByte(stackEntry);
 
-        r.setRegister(Registers.Register.ACCUMULATOR, stackValue);
-        r.setRegister(Registers.Register.STACK_POINTER_LOW, newStackIndex);
+        r.setRegister(ACCUMULATOR, stackValue);
+        r.setRegister(STACK_POINTER_LOW, newStackIndex);
         return v;
     }),
 
     /** Push the Status register to the stack */
     PHP((a,r,m,v)->{
-        final RoxByte statusFlags = r.getRegister(Registers.Register.STATUS_FLAGS);
+        final RoxByte statusFlags = r.getRegister(STATUS_FLAGS);
 
-        final RoxByte stackIndex = r.getRegister(Registers.Register.STACK_POINTER_LOW);
+        final RoxByte stackIndex = r.getRegister(STACK_POINTER_LOW);
         final RoxWord stackEntry = RoxWord.from(RoxByte.fromLiteral(0x01), stackIndex);
         m.setByteAt(stackEntry, statusFlags);
 
         final RoxByte newStackIndex = RoxByte.fromLiteral(stackIndex.getRawValue() - 1); //XXX Should use alu
-        r.setRegister(Registers.Register.STACK_POINTER_LOW, newStackIndex);
+        r.setRegister(STACK_POINTER_LOW, newStackIndex);
         return v;
     }),
 
     /** Pull the Status register from the stack */
     PLP((a,r,m,v)->{
-        final RoxByte stackIndex = r.getRegister(Registers.Register.STACK_POINTER_LOW);
+        final RoxByte stackIndex = r.getRegister(STACK_POINTER_LOW);
         final RoxByte newStackIndex = RoxByte.fromLiteral(stackIndex.getRawValue() + 1); //XXX Should use alu
 
         final RoxWord stackEntry = RoxWord.from(RoxByte.fromLiteral(0x01), newStackIndex);
         final RoxByte stackValue = m.getByte(stackEntry);
 
-        r.setRegister(Registers.Register.STATUS_FLAGS, stackValue);
-        r.setRegister(Registers.Register.STACK_POINTER_LOW, newStackIndex);
+        r.setRegister(STATUS_FLAGS, stackValue);
+        r.setRegister(STACK_POINTER_LOW, newStackIndex);
         return v;
     }),
 
@@ -289,44 +291,44 @@ public enum Mos6502Operation implements AddressedValueInstruction {
 
     /** Transfer Accumulator to the X register */
     TAX((a,r,m,v)->{
-        final RoxByte accumulatorValue = r.getRegister(Registers.Register.ACCUMULATOR);
-        r.setRegister(Registers.Register.X_INDEX, accumulatorValue);
+        final RoxByte accumulatorValue = r.getRegister(ACCUMULATOR);
+        r.setRegister(X_INDEX, accumulatorValue);
         return v;
     }),
 
     /** Transfer Accumulator to the Y register */
     TAY((a,r,m,v)->{
-        final RoxByte accumulatorValue = r.getRegister(Registers.Register.ACCUMULATOR);
-        r.setRegister(Registers.Register.Y_INDEX, accumulatorValue);
+        final RoxByte accumulatorValue = r.getRegister(ACCUMULATOR);
+        r.setRegister(Y_INDEX, accumulatorValue);
         return v;
     }),
 
     /** Transfer the Y register to the Accumulator */
     TYA((a,r,m,v)->{
-        final RoxByte accumulatorValue = r.getRegister(Registers.Register.Y_INDEX);
-        r.setRegister(Registers.Register.ACCUMULATOR, accumulatorValue);
+        final RoxByte accumulatorValue = r.getRegister(Y_INDEX);
+        r.setRegister(ACCUMULATOR, accumulatorValue);
         return v;
     }),
 
     /** Transfer the X register to the Accumulator */
     TXA((a,r,m,v)->{
-        final RoxByte accumulatorValue = r.getRegister(Registers.Register.X_INDEX);
-        r.setRegister(Registers.Register.ACCUMULATOR, accumulatorValue);
+        final RoxByte accumulatorValue = r.getRegister(X_INDEX);
+        r.setRegister(ACCUMULATOR, accumulatorValue);
         return v;
     }),
 
     /** Push the X register to the stack pointer */
     TXS((a,r,m,v)->{
-        final RoxByte xValue = r.getRegister(Registers.Register.X_INDEX);
-        r.setRegister(Registers.Register.STACK_POINTER_LOW, xValue);
+        final RoxByte xValue = r.getRegister(X_INDEX);
+        r.setRegister(STACK_POINTER_LOW, xValue);
         return v;
     }),
 
     /** Pull the X register from the stack pointer */
     TSX((a,r,m,v)->{
-        final RoxByte stackIndex = r.getRegister(Registers.Register.STACK_POINTER_LOW);
+        final RoxByte stackIndex = r.getRegister(STACK_POINTER_LOW);
 
-        r.setRegister(Registers.Register.X_INDEX, stackIndex);
+        r.setRegister(X_INDEX, stackIndex);
         r.setFlagsBasedOn(stackIndex);
         return v;
     }),
@@ -338,7 +340,7 @@ public enum Mos6502Operation implements AddressedValueInstruction {
      * XXX Needs reviewed
      */
     BIT((a,r,m,v)->{
-        final RoxByte accumulator = r.getRegister(Registers.Register.ACCUMULATOR);
+        final RoxByte accumulator = r.getRegister(ACCUMULATOR);
         final RoxByte result = a.and(accumulator, v);
 
         //XXX Need to properly look at this, http://obelisk.me.uk/6502/reference.html#BIT
@@ -352,7 +354,7 @@ public enum Mos6502Operation implements AddressedValueInstruction {
     /** Compare (via subtraction) value with Accumulator, setting flags based on result */
     CMP((a,r,m,v)->{
         r.setFlag(Registers.Flag.CARRY); //XXX IS this the right place to be doing this?
-        final RoxByte accumulator = r.getRegister(Registers.Register.ACCUMULATOR);
+        final RoxByte accumulator = r.getRegister(ACCUMULATOR);
         final RoxByte resultOfSbc = a.sbc(accumulator, v);
         r.setFlagsBasedOn(resultOfSbc);
         return v;
@@ -361,7 +363,7 @@ public enum Mos6502Operation implements AddressedValueInstruction {
     /** Compare (via subtraction) value with X register, setting flags based on result */
     CPX((a,r,m,v)->{
         r.setFlag(Registers.Flag.CARRY); //XXX IS this the right place to be doing this?
-        final RoxByte x = r.getRegister(Registers.Register.X_INDEX);
+        final RoxByte x = r.getRegister(X_INDEX);
         final RoxByte resultOfSbc = a.sbc(x, v);
         r.setFlagsBasedOn(resultOfSbc);
         return v;
@@ -370,7 +372,7 @@ public enum Mos6502Operation implements AddressedValueInstruction {
     /** Compare (via subtraction) value with Y register, setting flags based on result */
     CPY((a,r,m,v)->{
         r.setFlag(Registers.Flag.CARRY); //XXX IS this the right place to be doing this?
-        final RoxByte y = r.getRegister(Registers.Register.Y_INDEX);
+        final RoxByte y = r.getRegister(Y_INDEX);
         final RoxByte resultOfSbc = a.sbc(y, v);
         r.setFlagsBasedOn(resultOfSbc);
         return v;
@@ -381,18 +383,18 @@ public enum Mos6502Operation implements AddressedValueInstruction {
         final RoxWord arg2Address = r.getAndStepProgramCounter();
         final RoxByte argument2 = m.getByte(arg2Address);
 
-        final RoxByte pcHi = r.getRegister(Registers.Register.PROGRAM_COUNTER_HI);
-        final RoxByte pcLo = r.getRegister(Registers.Register.PROGRAM_COUNTER_LOW);
+        final RoxByte pcHi = r.getRegister(PROGRAM_COUNTER_HI);
+        final RoxByte pcLo = r.getRegister(PROGRAM_COUNTER_LOW);
 
         Arrays.asList(pcHi, pcLo).forEach(value -> {
-            RoxByte stackIndex = r.getRegister(Registers.Register.STACK_POINTER_LOW);
+            RoxByte stackIndex = r.getRegister(STACK_POINTER_LOW);
             RoxByte nextStackIndex = RoxByte.fromLiteral(stackIndex.getRawValue() - 1);     //XXX Should use alu
             m.setByteAt(RoxWord.from(RoxByte.fromLiteral(0x01), stackIndex), value);
-            r.setRegister(Registers.Register.STACK_POINTER_LOW, nextStackIndex);
+            r.setRegister(STACK_POINTER_LOW, nextStackIndex);
         });
 
-        r.setRegister(Registers.Register.PROGRAM_COUNTER_HI, argument1);
-        r.setRegister(Registers.Register.PROGRAM_COUNTER_LOW, argument2);
+        r.setRegister(PROGRAM_COUNTER_HI, argument1);
+        r.setRegister(PROGRAM_COUNTER_LOW, argument2);
 
         return argument1;
     }),
@@ -493,11 +495,11 @@ public enum Mos6502Operation implements AddressedValueInstruction {
 
     /** Return from subroutine */
     RTS((a,r,m,v)->{
-        Arrays.asList(Registers.Register.PROGRAM_COUNTER_LOW,
-                      Registers.Register.PROGRAM_COUNTER_HI).forEach(registerId -> {
-            final RoxByte stackIndex = r.getRegister(Registers.Register.STACK_POINTER_LOW);
+        Arrays.asList(PROGRAM_COUNTER_LOW,
+                      PROGRAM_COUNTER_HI).forEach(registerId -> {
+            final RoxByte stackIndex = r.getRegister(STACK_POINTER_LOW);
             final RoxByte nextStackIndex = RoxByte.fromLiteral(stackIndex.getRawValue() + 1);  //XXX alu?
-            r.setRegister(Registers.Register.STACK_POINTER_LOW, nextStackIndex);
+            r.setRegister(STACK_POINTER_LOW, nextStackIndex);
             final RoxByte stackValue = m.getByte(RoxWord.from(RoxByte.fromLiteral(0x01), nextStackIndex));
             r.setRegister(registerId, stackValue);
         });
@@ -507,12 +509,12 @@ public enum Mos6502Operation implements AddressedValueInstruction {
 
     /** Return from interrupt, setting the status flags from the stack */
     RTI((a,r,m,v)->{
-        Arrays.asList(Registers.Register.STATUS_FLAGS,
-                      Registers.Register.PROGRAM_COUNTER_LOW,
-                      Registers.Register.PROGRAM_COUNTER_HI).forEach(registerId -> {
-            final RoxByte stackIndex = r.getRegister(Registers.Register.STACK_POINTER_LOW);
+        Arrays.asList(STATUS_FLAGS,
+                      PROGRAM_COUNTER_LOW,
+                      PROGRAM_COUNTER_HI).forEach(registerId -> {
+            final RoxByte stackIndex = r.getRegister(STACK_POINTER_LOW);
             final RoxByte nextStackIndex = RoxByte.fromLiteral(stackIndex.getRawValue() + 1);
-            r.setRegister(Registers.Register.STACK_POINTER_LOW, nextStackIndex);
+            r.setRegister(STACK_POINTER_LOW, nextStackIndex);
             final RoxByte stackValue = m.getByte(RoxWord.from(RoxByte.fromLiteral(0x01), nextStackIndex));
             r.setRegister(registerId, stackValue);
         });
@@ -528,7 +530,7 @@ public enum Mos6502Operation implements AddressedValueInstruction {
         final Mos6502Alu silentAlu = new Mos6502Alu(rCopy);
 
         //Add to low byte, carry to high
-        final RoxByte loAddressByte = silentAlu.adc(registers.getRegister(Registers.Register.PROGRAM_COUNTER_LOW), offset);
+        final RoxByte loAddressByte = silentAlu.adc(registers.getRegister(PROGRAM_COUNTER_LOW), offset);
 
         registers.setPC(RoxWord.from(loAddressByte));
     }
