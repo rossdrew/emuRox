@@ -183,6 +183,30 @@ public class RegistersTest {
         assertTrue(registers.getFlag(NEGATIVE));
     }
 
+    @Test
+    public void testDescriptions(){
+        assertEquals("Carry", Flag.CARRY.getDescription());
+        assertEquals("Zero", Flag.ZERO.getDescription());
+        assertEquals("Irq Disable", Flag.IRQ_DISABLE.getDescription());
+        assertEquals("Decimal Mode", Flag.DECIMAL_MODE.getDescription());
+        assertEquals("Break", Flag.BREAK.getDescription());
+        assertEquals("Unused", Flag.UNUSED.getDescription());
+        assertEquals("Overflow", Flag.OVERFLOW.getDescription());
+        assertEquals("Negative", Flag.NEGATIVE.getDescription());
+    }
+
+    @Test
+    public void testPlaceValue(){
+        assertEquals(1, Flag.CARRY.getPlaceValue());
+        assertEquals(2, Flag.ZERO.getPlaceValue());
+        assertEquals(4, Flag.IRQ_DISABLE.getPlaceValue());
+        assertEquals(8, Flag.DECIMAL_MODE.getPlaceValue());
+        assertEquals(16, Flag.BREAK.getPlaceValue());
+        assertEquals(32, Flag.UNUSED.getPlaceValue());
+        assertEquals(64, Flag.OVERFLOW.getPlaceValue());
+        assertEquals(128, Flag.NEGATIVE.getPlaceValue());
+    }
+
     /*
             registers.setRegister(Registers.Register.ACCUMULATOR, null);
         registers.setRegister(Registers.Register.PROGRAM_COUNTER_HI, null);
