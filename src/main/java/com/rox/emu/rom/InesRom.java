@@ -17,6 +17,8 @@ import java.util.Arrays;
 public final class InesRom {
     private static final Logger log = LoggerFactory.getLogger(InesRom.class);
 
+    private static byte [] PREFIX = new byte[] {'N', 'E', 'S', 0x1A};
+
     /** The predefined PRG ROM block size */
     public static final int PRG_ROM_BLOCK_SIZE = 16384;
     /** The predefined CHR ROM block size */
@@ -84,12 +86,8 @@ public final class InesRom {
         if (bytes.length < InesRomHeader.HEADER_SIZE)
             throw new UnknownRomException("Invalid iNES header: Expected " + InesRomHeader.HEADER_SIZE + " byte header, rom is only " + bytes.length + " bytes.");
 
-        if (bytes[0] != 'N'
-         || bytes[1] != 'E'
-         || bytes[2] != 'S'
-         || bytes[3] != 0x1A ){
-            throw new UnknownRomException("Invalid iNES header: iNES prefix missing.");
-        }
+        for (int i=0; i<PREFIX.length; i++)
+            if (bytes[i] != PREFIX[i]) throw new UnknownRomException("Invalid iNES header: iNES prefix missing.");
 
         int prgRomBlocks = bytes[4];
         int chrRomBlocks = bytes[5];
@@ -133,6 +131,7 @@ public final class InesRom {
 //
 //        final File romFile = new File(romPath);
 //        byte[] romBytes = Files.readAllBytes(romFile.toPath());
+//
 //        final InesRom rom = InesRom.from(romBytes);
 //
 //        System.out.println("Opened " + rom.getDescription() + " (" + rom.getHeader().getDescription() + ")");
