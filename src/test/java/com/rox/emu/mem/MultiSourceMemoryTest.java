@@ -145,7 +145,7 @@ public class MultiSourceMemoryTest {
     }
 
     @Test
-    public void testMappingArraysAreOfEqualSize1(){
+    public void testSecondArrayTooSmall(){
         final Memory memory = mock(Memory.class);
 
         try {
@@ -157,7 +157,7 @@ public class MultiSourceMemoryTest {
     }
 
     @Test
-    public void testMappingArraysAreOfEqualSize2(){
+    public void testSecondArrayTooLarge(){
         final Memory memory = mock(Memory.class);
 
         try {
