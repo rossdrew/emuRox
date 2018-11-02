@@ -30,7 +30,7 @@ Feature development is on a little bit of a lull at the moment.  I went quite ha
 
 Any small chunks of time I get, I'm looking into improving on what's already written.  For example:-
  
-  - getting rid of java performed arithmetic (usually in `+`/`-` cases) in favor of ALU performed arithmetic (and moving to an ALU class)
+  - getting rid of java performed arithmetic (usually in `+`/`-` cases) in favor of ALU performed arithmetic
   - making the 6502 emulator, compiler and debugger available to 6502 community for testing.  
   
 BCD and proper timing is a thing for another day as my first objective for now, is the NES emulator.
