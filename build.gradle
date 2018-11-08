@@ -77,9 +77,11 @@ pitest {
 }
 
 task runDebugUI(type: JavaExec, group: 'application') {
-    println "Running Debugger UI for ${project.name}"
-    classpath sourceSets.main.runtimeClasspath
-    main = mainClassName = 'com.rox.emu.processor.mos6502.dbg.ui.DebuggerWindow'
+    doFirst {
+        println "Running Debugger UI for ${project.name}"
+        classpath sourceSets.main.runtimeClasspath
+        main = mainClassName = 'com.rox.emu.processor.mos6502.dbg.ui.DebuggerWindow'
+    }
 }
 
 jar {
