@@ -56,7 +56,7 @@ jacocoTestReport {
     reports {
         xml {
             enabled true
-            destination "jacocoTestReport.xml"
+            destination file("jacocoTestReport.xml")
         }
     }
 
