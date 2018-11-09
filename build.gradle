@@ -48,10 +48,9 @@ dependencies {
     testCompile group: 'com.nagternal', name : 'spock-genesis', version: '0.6.0'
     testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
 
-    compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.6.1'
+    compile group: 'org.slf4j', name:'slf4j-api', version: '1.7.2'
+    compile group: 'org.slf4j', name:'slf4j-log4j12', version: '1.7.2'
 }
-
-
 
 jacocoTestReport {
     reports {
@@ -71,7 +70,7 @@ jacocoTestReport {
 
 pitest {
     excludedClasses = ['com.rox.emu.processor.mos6502.dbg.ui.*']
-    outputFormats = ['XML']
+    outputFormats = ['HTML']
     timestampedReports = false
     //mutators = ['ALL']
 }
@@ -101,4 +100,4 @@ task obfuscatedJar(dependsOn: 'jar', type: ProGuardTask) {
     injars "build/libs/${rootProject.name}-${version}.jar"
     outjars "build/libs/${rootProject.name}-1.0.jar"
 }
-
+ 
