@@ -172,9 +172,9 @@ public class Mos6502 {
      * @param value {@link RoxByte} to push to the stack
      */
     private void push(RoxByte value){
-       debug("PUSH {}(0b{}) to mem[0x{}]",  value.toString(),
-                                                    Integer.toBinaryString(value.getRawValue()),
-                                                    Integer.toHexString(getRegisterValue(Register.STACK_POINTER_LOW).getRawValue()).toUpperCase());
+        log.debug("PUSH {}(0b{}) to mem[0x{}]", value.toString(),
+                                                Integer.toBinaryString(value.getRawValue()),
+                                                Integer.toHexString(getRegisterValue(Register.STACK_POINTER_LOW).getRawValue()).toUpperCase());
 
        setByteOfMemoryAt(RoxWord.from(RoxByte.fromLiteral(0x01), getRegisterValue(Register.STACK_POINTER_LOW)), value);
        registers.setRegister(Register.STACK_POINTER_LOW, RoxByte.fromLiteral(getRegisterValue(Register.STACK_POINTER_LOW).getRawValue() - 1));
@@ -182,23 +182,18 @@ public class Mos6502 {
 
     private RoxByte getByteOfMemoryAt(RoxWord location){
        final RoxByte memoryByte = memory.getByte(RoxWord.fromLiteral(location.getRawValue()));
-       debug("Got 0x{} from mem[{}]", Integer.toHexString(memoryByte.getRawValue()), Integer.toString(location.getRawValue()));
+       log.debug("Got 0x{} from mem[{}]", Integer.toHexString(memoryByte.getRawValue()), Integer.toString(location.getRawValue()));
        return memoryByte;
     }
 
     private void setByteOfMemoryAt(RoxWord location, RoxByte newByte){
        memory.setByteAt(RoxWord.fromLiteral(location.getRawValue()), newByte);
-       debug("Stored 0x{} at mem[{}]", Integer.toHexString(newByte.getRawValue()), Integer.toString(location.getRawValue()));
+       log.debug("Stored 0x{} at mem[{}]", Integer.toHexString(newByte.getRawValue()), Integer.toString(location.getRawValue()));
     }
 
     private RoxWord getWordOfMemoryAt(RoxWord location) {
        final RoxWord memoryWord = memory.getWord(location);
-       debug("Got 0x{} from mem[{}]", Integer.toHexString(memoryWord.getRawValue()), location.toString());
+       log.debug("Got 0x{} from mem[{}]", Integer.toHexString(memoryWord.getRawValue()), location.toString());
        return memoryWord;
-    }
-
-    private void debug(final String message, String ... args){
-        if (log.isDebugEnabled())
-            log.debug(message, args);
     }
 }
