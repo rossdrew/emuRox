@@ -22,7 +22,7 @@ The plan is to evolve this into a working [NES](https://en.wikipedia.org/wiki/Ni
 ## Usage
 
 Most of my testing is done via the plethora of tests I've written.
-There is a debug UI for the MOS 6502 which provides a basic register and memory overview for running code through step by step in `src/main/java/com/roxemu/processor/mos6502/dbg/ui/DebuggerWindow.java`
+There is a debug UI for the MOS 6502 which provides a basic register and memory overview for running code through step by step in `src/main/java/com/roxemu/processor/mos6502/dbg/ui/DebuggerWindow.java` and run with the Gradle command `runDebugUI`
 
 ## Origins
 This project came about as I wanted a larger scale project to concentrate on building readable, highly tested code that I can refactor as much as I fancy.  That would allow me to play with ticket management, CI, testing, and any other products and learn what works and and what doesn't.  
