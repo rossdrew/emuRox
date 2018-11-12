@@ -81,3 +81,11 @@ piece of mutated code comprehensively enough.
 
 This is making sure one or more units work together when tested.  They are longer running and ideally there are less of
 them and there are more steps in order to test ongoing state.
+
+### System Testing
+
+This is making sure the entire stack works as expected.  Tests against the application running as it would live.
+
+### Combining Testing Methods
+
+Tests are split into Unit, Integration & System tests.  One tests units in isolation, the others, together.  The other testing methods fall as tools to be used within these scopes.  Either of the three can be executed in a data-driven, property and/or theory way which can all be mutation tested.   
