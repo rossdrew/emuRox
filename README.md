@@ -42,14 +42,16 @@ There are also desirable side effects.  I wanted to write my own emulator, play 
 
 ## 6502 and progress towards a working NES...
 
-Feature development is on a little bit of a lull at the moment.  I went quite hard at it to begin with and life got a little hectic.  I need some time to do proper investigation of the PPU and then some exploratory coding and design which my work/personal life isn't allowing at this moment. Should be too long before I'm back bashing at it.
+I've seperate (at least) the NES section of this down into 7 stages:
 
-Any small chunks of time I get, I'm looking into improving on what's already written.  For example:-
- 
-  - getting rid of java performed arithmetic (usually in `+`/`-` cases) in favor of ALU performed arithmetic
-  - making the 6502 emulator, compiler and debugger available to 6502 community for testing.  
-  
-BCD and proper timing is a thing for another day as my first objective for now, is the NES emulator.
+ - [x] I blasted through the first phase due to the massive amount of documentation on the MOS 6502
+ - [x] While researching phase 3, I churned through the relitively basic work of parsing iNES files of phase 2 (without edge cases for now)
+ - [ ] Phase 3 is kinda where I'm stuck at the moment, struggling to find time to consolodate all the documentation and existing on the APU, which is less abundant than of the MOD 6502 and far more messy
+ - [ ] Phase 4 is going to be a decent challenge I think, where I need to start concentrating on timings
+ - [ ] Phase 5 and 6 are bringing it all together into a useable system
+
+So currenly large scale features are undergoing research and early design.  This also gives me time to improve and tweak what is there.
+
 
  <img aligm="right" src="https://github.com/rossdrew/emuRox/blob/master/docs/EmuRox%20Roadmap.png" data-canonical-src="https://github.com/rossdrew/emuRox/blob/master/docs/EmuRox%20Roadmap.png" alt="EmuRox Roadmap" width="900" />
 
