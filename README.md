@@ -18,6 +18,9 @@ The plan is to evolve this into a working [NES](https://en.wikipedia.org/wiki/Ni
  - iNES 1.0 ROM reading
  - The beginnings of a Ricoh 2C02 processor
  - An in production NES to hold it all 
+ 
+ <img aligm="right" src="https://github.com/rossdrew/emuRox/blob/master/docs/EmuRox%20Roadmap.png" data-canonical-src="https://github.com/rossdrew/emuRox/blob/master/docs/EmuRox%20Roadmap.png" alt="EmuRox Roadmap" width="900" />
+ 
 
 ## Usage
 
