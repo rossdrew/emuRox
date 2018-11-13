@@ -18,9 +18,6 @@ The plan is to evolve this into a working [NES](https://en.wikipedia.org/wiki/Ni
  - iNES 1.0 ROM reading
  - The beginnings of a Ricoh 2C02 processor
  - An in production NES to hold it all 
- 
- <img aligm="right" src="https://github.com/rossdrew/emuRox/blob/master/docs/EmuRox%20Roadmap.png" data-canonical-src="https://github.com/rossdrew/emuRox/blob/master/docs/EmuRox%20Roadmap.png" alt="EmuRox Roadmap" width="900" />
- 
 
 ## Usage
 
@@ -53,6 +50,9 @@ Any small chunks of time I get, I'm looking into improving on what's already wri
   - making the 6502 emulator, compiler and debugger available to 6502 community for testing.  
   
 BCD and proper timing is a thing for another day as my first objective for now, is the NES emulator.
+
+ <img aligm="right" src="https://github.com/rossdrew/emuRox/blob/master/docs/EmuRox%20Roadmap.png" data-canonical-src="https://github.com/rossdrew/emuRox/blob/master/docs/EmuRox%20Roadmap.png" alt="EmuRox Roadmap" width="900" />
+
 
 ## Development & Testing
 
