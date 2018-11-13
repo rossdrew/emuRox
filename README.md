@@ -28,7 +28,7 @@ Most of my testing is done via the plethora of tests I've written.
 There is a debug UI for the MOS 6502 which provides a basic register and memory overview for running code through step by step in `src/main/java/com/roxemu/processor/mos6502/dbg/ui/DebuggerWindow.java` and run with the Gradle command `runDebugUI`
 
 ## Origins
-_Any fool can write code that a computer can understand. Good programmers write code that humans can understand. (M. Fowler)_
+> _Any fool can write code that a computer can understand. Good programmers write code that humans can understand. (M. Fowler)_
 
 This project is not about getting a working emulator, for a NES or anything else.  There are plenty of them out there. It's about creating a good abstraction of a complex problem so that the underlying issues can be addressed such that the overseeing humans can talk about it simply in a common language.  
 
