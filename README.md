@@ -30,9 +30,9 @@ There is a debug UI for the MOS 6502 which provides a basic register and memory 
 This project is not about getting a working emulator, for a NES or anything else.  There are plenty of them out there. It's about creating a good abstraction of a complex problem so that the underlying issues can be addressed such that the overseeing humans can talk about it simply in a common language.  
 
 Too often I've:
- - been forced to write bad programs because the functionality was more important than how future proof it is.
- - worked with programmers who look at overly concise code as something that adds value to a program
- - had to spend time spinning up entire software suites and their peripherals to test simple functionality
+ - been forced to write bad programs because the functionality was more important than the implementation.
+ - worked with programmers who value overly concise code, which hampers readability and ability to debug
+ - spent too much time spinning up entire software suites and their peripherals to test simple functionality
  - had to write features that had zero or limited uses cases, then had to rewrite them all over again when they weren't fit for purpose
  - had to quickly get to work on a domain/technology I didn't yet fully understand and had to deal with the fallout of my assumptions for a long time
 
