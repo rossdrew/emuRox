@@ -12,17 +12,8 @@
 </a>
 
 # EmuRox
-The plan is to evolve this into a working [NES](https://en.wikipedia.org/wiki/Nintendo_Entertainment_System) emulator so I'm developing the emulation of the [6502 processor](https://en.wikipedia.org/wiki/MOS_Technology_6502) without BCD mode for now.  If/When I get that working, I'll expand the 6502 and move onto another 6502 system (Atari 2600, Commodore 64...) then perhaps add processors and more emulated hardware, in theory, creating a pluggable multi-emulator. 
-
-## Usage
-
-Most of my testing is done via the plethora of tests I've written.
-There is a debug UI for the MOS 6502 which provides a basic register and memory overview for running code through step by step in `src/main/java/com/roxemu/processor/mos6502/dbg/ui/DebuggerWindow.java` and run with the Gradle command `runDebugUI`
-
-## Origins
-> _Any fool can write code that a computer can understand. Good programmers write code that humans can understand. (M. Fowler)_
-
-This project is not about getting a working emulator, for a NES or anything else.  There are plenty of them out there. It's about creating a good abstraction of a complex problem so that the underlying issues can be addressed such that the overseeing humans can talk about it simply in a common language.  
+Ostensibly, this is a project to first emulate a Nintendo Entertainment System ([NES](https://en.wikipedia.org/wiki/Nintendo_Entertainment_System)) then move on to other systems.   Creating a pluggable multi-emulator.
+In actuality, it is not about getting a working emulator, for a NES or anything else.  There are plenty of them out there. It's about creating a good abstraction of a complex problem so that the underlying issues can be addressed such that the overseeing humans can talk about it simply in a common language.  
 
 Too often I've:
  - been forced to write bad programs because the functionality was more important than the implementation.
@@ -30,10 +21,17 @@ Too often I've:
  - spent too much time spinning up entire software suites and their peripherals to test simple functionality
  - had to write features that had zero or limited uses cases, then had to rewrite them all over again when they weren't fit for purpose
  - had to quickly get to work on a domain/technology I didn't yet fully understand and had to deal with the fallout of my assumptions for a long time
+ 
+ > _Any fool can write code that a computer can understand. Good programmers write code that humans can understand. (M. Fowler)_
 
- I wanted something I could redesign over and over as my knowledge of the domain grew and as I felt the frustrations of having to reaquaint myself with pirces of code I hadn't seen in a while.  Something I could test in a thousand different ways, then tweak and experiment with build processes so that the development cycle is rapid and fluid.  
+ I wanted something I could redesign over and over as my knowledge of the domain grew and as I felt the frustrations of having to reaquaint myself with pirces of code I hadn't seen in a while.  Something I could test in a thousand different ways, then tweak and experiment with build processes so that the development cycle is rapid and fluid.  That I could tweak the code over and over to make it simpler and simpler to understand. 
 
 There are also desirable side effects.  I wanted to write my own emulator, play the games of my childhood and know that I wrote the platform that they were running on and becoming even more familiar with the first pieces of software I fell in love with.  I wanted a large codebase I had complete control over and could try out tools and technologies.  I got to the stage of the latter, quite a while ago and I'm crawling towards the former.
+
+## Usage
+
+Most of my testing is done via the plethora of tests I've written.
+There is a debug UI for the MOS 6502 which provides a basic register and memory overview for running code through step by step in `src/main/java/com/roxemu/processor/mos6502/dbg/ui/DebuggerWindow.java` and run with the Gradle command `runDebugUI`
 
 ## 6502 and progress towards a working NES...
 
