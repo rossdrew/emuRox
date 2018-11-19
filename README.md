@@ -21,6 +21,7 @@ Too often I've:
  - spent too much time spinning up entire software suites and their peripherals to test simple functionality
  - had to write features that had zero or limited uses cases, then had to rewrite them all over again when they weren't fit for purpose
  - had to quickly get to work on a domain/technology I didn't yet fully understand and had to deal with the fallout of my assumptions for a long time
+ - been so time restricted and been forced to write a solution to a problem I had no time to understand
  
  > _Any fool can write code that a computer can understand. Good programmers write code that humans can understand. (M. Fowler)_
 
