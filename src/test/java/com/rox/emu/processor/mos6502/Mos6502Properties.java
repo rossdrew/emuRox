@@ -20,15 +20,17 @@ import static com.rox.emu.processor.mos6502.op.Mos6502OpCode.*;
 @RunWith(JUnitQuickcheck.class)
 public class Mos6502Properties {
     private Memory memory;
+    private Registers registers;
     private Mos6502 processor;
 
     @Before
     public void setUp() {
         memory = new SimpleMemory();
+        registers = new Registers();
         memory.setByteAt(RoxWord.ZERO, RoxByte.fromLiteral(0xFFFC));
         memory.setByteAt(RoxWord.ZERO, RoxByte.fromLiteral(0xFFFD));
 
-        processor = new Mos6502(memory);
+        processor = new Mos6502(memory, registers);
         processor.reset();
     }
 
@@ -39,7 +41,7 @@ public class Mos6502Properties {
         memory.setByteAt(RoxWord.fromLiteral(0xFFFC), RoxByte.fromLiteral(memHi));
         memory.setByteAt(RoxWord.fromLiteral(0xFFFD), RoxByte.fromLiteral(memLo));
 
-        processor = new Mos6502(memory);
+        processor = new Mos6502(memory, registers);
         processor.reset();
 
         Registers registers = processor.getRegisters();

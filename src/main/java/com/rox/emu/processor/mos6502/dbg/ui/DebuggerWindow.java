@@ -35,6 +35,7 @@ import java.util.Map;
 final class DebuggerWindow extends JFrame {
     private Mos6502 processor;
     private Memory memory;
+    private Registers registers;
 
     private Registers6502 newRegisterPanel;
 
@@ -256,10 +257,11 @@ final class DebuggerWindow extends JFrame {
     }
 
     private void init(){
+        registers = new Registers();
         memory = new SimpleMemory();
-        processor = new Mos6502(memory);
+        processor = new Mos6502(memory, registers);
 
-        newRegisterPanel = new Registers6502(processor.getRegisters());
+        newRegisterPanel = new Registers6502(registers);
     }
 
     public void loadProgram(RoxByte[] program){

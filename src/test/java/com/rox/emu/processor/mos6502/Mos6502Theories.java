@@ -17,6 +17,7 @@ import static org.junit.Assume.assumeThat;
 @RunWith(TheorySuite.class)
 public class Mos6502Theories {
     private Memory memory;
+    private Registers registers;
     private Mos6502 processor;
 
     @DataPoints("validBytes")
@@ -24,11 +25,12 @@ public class Mos6502Theories {
 
     @Before
     public void setUp() {
+        registers = new Registers();
         memory = new SimpleMemory();
         memory.setByteAt(RoxWord.ZERO, RoxByte.fromLiteral(0xFFFC)); //XXX FFFC is not a byte, it's a word?!!
         memory.setByteAt(RoxWord.ZERO, RoxByte.fromLiteral(0xFFFD));
 
-        processor = new Mos6502(memory);
+        processor = new Mos6502(memory, registers);
         processor.reset();
     }
 
@@ -41,7 +43,7 @@ public class Mos6502Theories {
         memory.setByteAt(RoxWord.fromLiteral(0xFFFC), RoxByte.fromLiteral(memHi));
         memory.setByteAt(RoxWord.fromLiteral(0xFFFD), RoxByte.fromLiteral(memLo));
 
-        processor = new Mos6502(memory);
+        processor = new Mos6502(memory, registers);
         processor.reset();
 
         Registers registers = processor.getRegisters();

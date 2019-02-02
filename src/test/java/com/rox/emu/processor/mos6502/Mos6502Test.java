@@ -16,17 +16,18 @@ import static org.junit.Assert.assertTrue;
 import static org.spockframework.util.Assert.fail;
 
 public class Mos6502Test {
-
     private Memory memory;
+    private Registers registers;
     private Mos6502 processor;
 
     @Before
     public void setUp() {
+        registers = new Registers();
         memory = new SimpleMemory();
         memory.setByteAt(RoxWord.fromLiteral(0xFFFC), RoxByte.ZERO);
         memory.setByteAt(RoxWord.fromLiteral(0xFFFD), RoxByte.ZERO);
 
-        processor = new Mos6502(memory);
+        processor = new Mos6502(memory, registers);
         processor.reset();
     }
 
@@ -36,7 +37,7 @@ public class Mos6502Test {
         memory.setByteAt(RoxWord.fromLiteral(0xFFFC), RoxByte.fromLiteral(1));
         memory.setByteAt(RoxWord.fromLiteral(0xFFFD), RoxByte.fromLiteral(1));
 
-        processor = new Mos6502(memory);
+        processor = new Mos6502(memory, registers);
         processor.reset();
 
         Registers registers = processor.getRegisters();

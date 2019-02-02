@@ -17,10 +17,10 @@ class OpCodeSpec extends Specification {
     private Registers registers
 
     def setup() {
+        registers = new Registers()
         memory = new SimpleMemory()
-        processor = new Mos6502(memory)
+        processor = new Mos6502(memory, registers)
         processor.reset()
-        registers = processor.getRegisters()
     }
 
     Program loadMemoryWithProgram(Object... programElements) {

@@ -37,10 +37,10 @@ class Mos6502ImplicitArithmeticSpec extends Specification {
     }
 
     def setup(){
+        registers = new Registers()
         memory = new SimpleMemory()
-        processor = new Mos6502(memory)
+        processor = new Mos6502(memory,registers)
         processor.reset()
-        registers = processor.getRegisters()
     }
 
     @Unroll("Program Counter: #description (#initialValue + #steps -> #expectedValue)")

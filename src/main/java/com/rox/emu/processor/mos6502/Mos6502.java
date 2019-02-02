@@ -1,5 +1,6 @@
 package com.rox.emu.processor.mos6502;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.rox.emu.env.RoxByte;
 import com.rox.emu.env.RoxWord;
 import com.rox.emu.mem.Memory;
@@ -21,11 +22,13 @@ public class Mos6502 {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     private final Memory memory;
-    private final Registers registers = new Registers();
-    private final Mos6502Alu alu = new Mos6502Alu(registers);
+    private final Registers registers;
+    private final Mos6502Alu alu;
 
-    public Mos6502(Memory memory) {
+    public Mos6502(final Memory memory, final Registers registers) {
         this.memory = memory;
+        this.registers = registers;
+        this.alu = new Mos6502Alu(registers);
     }
 
     /**
@@ -182,13 +185,13 @@ public class Mos6502 {
 
     private RoxByte getByteOfMemoryAt(RoxWord location){
        final RoxByte memoryByte = memory.getByte(RoxWord.fromLiteral(location.getRawValue()));
-       log.debug("Got 0x{} from mem[{}]", Integer.toHexString(memoryByte.getRawValue()), Integer.toString(location.getRawValue()));
+       log.debug("Got 0x{} from mem[{}]", Integer.toHexString(memoryByte.getRawValue()), location.getRawValue());
        return memoryByte;
     }
 
     private void setByteOfMemoryAt(RoxWord location, RoxByte newByte){
        memory.setByteAt(RoxWord.fromLiteral(location.getRawValue()), newByte);
-       log.debug("Stored 0x{} at mem[{}]", Integer.toHexString(newByte.getRawValue()), Integer.toString(location.getRawValue()));
+       log.debug("Stored 0x{} at mem[{}]", Integer.toHexString(newByte.getRawValue()), location.getRawValue());
     }
 
     private RoxWord getWordOfMemoryAt(RoxWord location) {

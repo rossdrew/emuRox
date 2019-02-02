@@ -399,18 +399,18 @@ public class Mos6502CompilerTest {
 
     @Test
     public void testIntegration(){
+        final Registers registers = new Registers();
         final Mos6502Compiler compiler = new Mos6502Compiler("LDA #$14 ADC #$5 STA $20");
         Program program = compiler.compileProgram();
         final int[] programByte = toIntArray(program.getProgramAsByteArray());
 
         Memory memory = new SimpleMemory();
-        Mos6502 processor = new Mos6502(memory);
+        Mos6502 processor = new Mos6502(memory,registers);
         processor.reset();
         memory.setBlock(RoxWord.ZERO, program.getProgramAsByteArray());
 
         processor.step(3);
 
-        Registers registers = processor.getRegisters();
         assertEquals(RoxByte.fromLiteral(0x19), registers.getRegister(Registers.Register.ACCUMULATOR));
         assertEquals(RoxByte.fromLiteral(0x19), memory.getByte(RoxWord.fromLiteral(0x20)));
         assertEquals(RoxWord.fromLiteral(programByte.length), registers.getPC());
@@ -418,12 +418,13 @@ public class Mos6502CompilerTest {
 
     @Test
     public void testAbsoluteAddressing(){
+        final Registers registers = new Registers();
         final Mos6502Compiler compiler = new Mos6502Compiler("LDA #$1C STA $100 INC $100");
         Program program = compiler.compileProgram();
         final int[] programByte = toIntArray(program.getProgramAsByteArray());
 
         Memory memory = new SimpleMemory();
-        Mos6502 processor = new Mos6502(memory);
+        Mos6502 processor = new Mos6502(memory, registers);
         processor.reset();
         memory.setBlock(RoxWord.ZERO, program.getProgramAsByteArray());
 
