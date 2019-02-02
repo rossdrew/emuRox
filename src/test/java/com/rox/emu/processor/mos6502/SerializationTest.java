@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.rox.emu.env.RoxByte;
 import com.rox.emu.env.RoxWord;
+import com.rox.emu.env.serialize.RoxByteDeserializer;
 import com.rox.emu.env.serialize.RoxByteSerializer;
 import com.rox.emu.env.serialize.RoxWordSerializer;
 import com.rox.emu.mem.Memory;
@@ -16,6 +17,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 
+import java.io.IOException;
+
 import static org.junit.Assert.assertEquals;
 
 public class SerializationTest {
@@ -26,6 +29,7 @@ public class SerializationTest {
         objectMapper = new ObjectMapper();
         SimpleModule customSerializations = new SimpleModule();
         customSerializations.addSerializer(RoxByte.class, new RoxByteSerializer());
+        customSerializations.addDeserializer(RoxByte.class, new RoxByteDeserializer());
         customSerializations.addSerializer(RoxWord.class, new RoxWordSerializer());
         customSerializations.addSerializer(SimpleMemory.class, new SimpleMemorySerializer());
         customSerializations.addSerializer(Registers.class, new RegistersSerializer());
@@ -34,12 +38,14 @@ public class SerializationTest {
     }
 
     @Test
-    public void roxByteTest() throws JsonProcessingException {
+    public void roxByteTest() throws IOException {
         final RoxByte byteValue = RoxByte.fromLiteral(42);
 
         final String serializedToJson = objectMapper.writeValueAsString(byteValue);
+        final RoxByte deserializeByte = objectMapper.readValue(serializedToJson, RoxByte.class);
 
         assertEquals("{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":42}", serializedToJson);
+        assertEquals(byteValue, deserializeByte);
     }
 
     @Test
