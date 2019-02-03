@@ -167,7 +167,7 @@ public class RegistersTest {
 
         final Registers copiedRegisters = registers.copy();
 
-        assertNotEquals(copiedRegisters, registers);
+        assertEquals(copiedRegisters, registers);
         assertEquals(registers.getRegister(ACCUMULATOR), RoxByte.fromLiteral(23));
         assertEquals(registers.getRegister(PROGRAM_COUNTER_HI), RoxByte.fromLiteral(24));
         assertEquals(registers.getRegister(PROGRAM_COUNTER_LOW), RoxByte.fromLiteral(25));
