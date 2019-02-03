@@ -11,17 +11,17 @@ import java.io.IOException;
 
 public class SimpleMemorySerializer extends ClassSerialization<SimpleMemory> {
     public void customSerializations(SimpleMemory memory, JsonGenerator gen, SerializerProvider provider) throws IOException {
-        gen.writeFieldName("data");
-
         serializeMemoryArray(memory, gen);
     }
 
     private void serializeMemoryArray(SimpleMemory simpleMemory, JsonGenerator gen) throws IOException {
         final RoxByte[] memory = simpleMemory.getBlock(RoxWord.ZERO, RoxWord.fromLiteral(simpleMemory.getSize()-1));
+        assert memory.length == simpleMemory.getSize() : "Copied the wrong length of memory";
 
+        gen.writeNumberField("size", memory.length);
+        gen.writeFieldName("data");
         gen.writeStartArray();
-        //XXX Why is the -1 required here?!?!
-        for (int memoryAddress = 0; memoryAddress < simpleMemory.getSize()-1; memoryAddress++){
+        for (int memoryAddress = 0; memoryAddress < memory.length; memoryAddress++){
             if (!RoxByte.ZERO.equals(memory[memoryAddress])){
                 gen.writeStartObject();
                 gen.writeObjectField("" + memoryAddress, memory[memoryAddress]);

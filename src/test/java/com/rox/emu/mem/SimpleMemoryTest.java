@@ -27,7 +27,7 @@ public class SimpleMemoryTest {
         final RoxByte[] expectedMemory = new RoxByte[10];
         IntStream.range(0,10).forEach(i -> expectedMemory[i] = RoxByte.ZERO);
 
-        assertTrue(Arrays.equals(sizedMemory.getBlock(RoxWord.ZERO, RoxWord.fromLiteral(10)), expectedMemory));
+        assertTrue(Arrays.equals(sizedMemory.getBlock(RoxWord.ZERO, RoxWord.fromLiteral(9)), expectedMemory));
 
         sizedMemory.setByteAt(RoxWord.ZERO, RoxByte.fromLiteral(1));
         sizedMemory.setByteAt(RoxWord.fromLiteral(9), RoxByte.fromLiteral(10));

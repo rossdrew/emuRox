@@ -16,6 +16,6 @@ public class RegistersSerializer extends ClassSerialization<Registers> {
         gen.writeObjectField("Y", subject.getRegister(Registers.Register.Y_INDEX));
         gen.writeObjectField("SP Hi", subject.getRegister(Registers.Register.STACK_POINTER_HI));
         gen.writeObjectField("SP Lo", subject.getRegister(Registers.Register.STACK_POINTER_LOW));
-
+        gen.writeObjectField("S", subject.getRegister(Registers.Register.STATUS_FLAGS));
     }
 }

@@ -5,6 +5,8 @@ import com.rox.emu.env.RoxWord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Arrays;
+
 import static com.rox.emu.processor.mos6502.Registers.Register.*;
 
 /**
@@ -240,5 +242,18 @@ public class Registers {
         for (int i=0; i< registerValue.length; i++)
             newRegisters.registerValue[i] = registerValue[i].copy();
         return newRegisters;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Registers registers = (Registers) o;
+        return Arrays.equals(registerValue, registers.registerValue);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(registerValue);
     }
 }

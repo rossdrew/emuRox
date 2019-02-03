@@ -5,6 +5,8 @@ import com.rox.emu.env.RoxWord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Arrays;
+
 /**
  * Simple array representing memory, implementing the memory interface
  *
@@ -68,7 +70,7 @@ public class SimpleMemory implements Memory {
      */
     @Override
     public RoxByte[] getBlock(RoxWord from, RoxWord to) {
-        RoxByte[] extractedData = new RoxByte[to.getRawValue()-from.getRawValue()];
+        final RoxByte[] extractedData = new RoxByte[(to.getRawValue()+1) - from.getRawValue()];
         for (int i=0; i<extractedData.length; i++){
             extractedData[i] = RoxByte.fromLiteral(memoryArray[from.getRawValue() + i].getRawValue());
         }
@@ -87,5 +89,21 @@ public class SimpleMemory implements Memory {
     @Override
     public int getSize() {
         return memoryArray.length;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SimpleMemory that = (SimpleMemory) o;
+
+        System.out.println("A: " + memoryArray.length + ", B: " + this.memoryArray.length);
+
+        return Arrays.equals(memoryArray, that.memoryArray);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(memoryArray);
     }
 }
