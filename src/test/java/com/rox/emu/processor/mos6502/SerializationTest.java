@@ -31,6 +31,7 @@ public class SerializationTest {
     public void setup(){
         objectMapper = new ObjectMapper();
         SimpleModule customSerializations = new SimpleModule();
+
         customSerializations.addSerializer(RoxByte.class, new RoxByteSerializer());
         customSerializations.addDeserializer(RoxByte.class, new RoxByteDeserializer());
 
@@ -102,6 +103,6 @@ public class SerializationTest {
 
         final String serializedToJson = objectMapper.writeValueAsString(cpu);
 
-        assertEquals("{\"class\":\"com.rox.emu.processor.mos6502.Mos6502\",\"registers\":{\"class\":\"com.rox.emu.processor.mos6502.Registers\",\"PC\":{\"class\":\"com.rox.emu.env.RoxWord\",\"value\":0},\"A\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":0},\"X\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":0},\"Y\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":0},\"SP Hi\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":0},\"SP Lo\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":255}}}", serializedToJson);
+        assertEquals("{\"class\":\"com.rox.emu.processor.mos6502.Mos6502\",\"registers\":{\"class\":\"com.rox.emu.processor.mos6502.Registers\",\"PC\":{\"class\":\"com.rox.emu.env.RoxWord\",\"value\":0},\"A\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":0},\"X\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":0},\"Y\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":0},\"SP Hi\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":0},\"SP Lo\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":255},\"S\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":0}}}", serializedToJson);
     }
 }

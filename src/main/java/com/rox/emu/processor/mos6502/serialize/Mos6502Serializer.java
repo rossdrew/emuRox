@@ -11,5 +11,6 @@ public class Mos6502Serializer extends ClassSerialization<Mos6502> {
     public void customSerializations(Mos6502 subject, JsonGenerator gen, SerializerProvider provider) throws IOException {
         gen.writeObjectField("registers", subject.getRegisters());
         //TODO memory
+
     }
 }
