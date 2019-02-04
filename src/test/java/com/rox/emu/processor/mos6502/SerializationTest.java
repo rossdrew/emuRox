@@ -1,6 +1,5 @@
 package com.rox.emu.processor.mos6502;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.rox.emu.env.RoxByte;
@@ -13,6 +12,7 @@ import com.rox.emu.mem.Memory;
 import com.rox.emu.mem.SimpleMemory;
 import com.rox.emu.mem.serialize.SimpleMemoryDeserializer;
 import com.rox.emu.mem.serialize.SimpleMemorySerializer;
+import com.rox.emu.processor.mos6502.serialize.Mos6502Deserializer;
 import com.rox.emu.processor.mos6502.serialize.Mos6502Serializer;
 import com.rox.emu.processor.mos6502.serialize.RegistersDeserializer;
 import com.rox.emu.processor.mos6502.serialize.RegistersSerializer;
@@ -45,6 +45,7 @@ public class SerializationTest {
         customSerializations.addDeserializer(Registers.class, new RegistersDeserializer());
 
         customSerializations.addSerializer(Mos6502.class, new Mos6502Serializer());
+        customSerializations.addDeserializer(Mos6502.class, new Mos6502Deserializer());
 
         objectMapper.registerModule(customSerializations);
     }
@@ -95,14 +96,16 @@ public class SerializationTest {
     }
 
     @Test
-    public void mos6502Test() throws JsonProcessingException {
+    public void mos6502Test() throws IOException {
         final Registers reg = new Registers();
         final Memory mem = new SimpleMemory();
         mem.setBlock(RoxWord.fromLiteral(10), new RoxByte[] {RoxByte.fromLiteral(1), RoxByte.fromLiteral(2), RoxByte.fromLiteral(3), RoxByte.fromLiteral(4), RoxByte.ZERO, RoxByte.fromLiteral(5)});
         final Mos6502 cpu = new Mos6502(mem, reg);
 
         final String serializedToJson = objectMapper.writeValueAsString(cpu);
+        final Mos6502 deserializedCpu = objectMapper.readValue(serializedToJson, Mos6502.class);
 
-        assertEquals("{\"class\":\"com.rox.emu.processor.mos6502.Mos6502\",\"registers\":{\"class\":\"com.rox.emu.processor.mos6502.Registers\",\"PC\":{\"class\":\"com.rox.emu.env.RoxWord\",\"value\":0},\"A\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":0},\"X\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":0},\"Y\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":0},\"SP Hi\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":0},\"SP Lo\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":255},\"S\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":0}}}", serializedToJson);
+        assertEquals("{\"class\":\"com.rox.emu.processor.mos6502.Mos6502\",\"class\":\"com.rox.emu.processor.mos6502.Mos6502\",\"registers\":{\"class\":\"com.rox.emu.processor.mos6502.Registers\",\"PC\":{\"class\":\"com.rox.emu.env.RoxWord\",\"value\":0},\"A\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":0},\"X\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":0},\"Y\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":0},\"SP Hi\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":0},\"SP Lo\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":255},\"S\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":0}},\"memory\":{\"class\":\"com.rox.emu.mem.SimpleMemory\",\"size\":65536,\"data\":[{\"10\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":1}},{\"11\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":2}},{\"12\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":3}},{\"13\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":4}},{\"15\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":5}}]}}", serializedToJson);
+        assertEquals(cpu, deserializedCpu);
     }
 }

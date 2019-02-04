@@ -1,6 +1,5 @@
 package com.rox.emu.processor.mos6502;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.rox.emu.env.RoxByte;
 import com.rox.emu.env.RoxWord;
 import com.rox.emu.mem.Memory;
@@ -198,5 +197,9 @@ public class Mos6502 {
        final RoxWord memoryWord = memory.getWord(location);
        log.debug("Got 0x{} from mem[{}]", Integer.toHexString(memoryWord.getRawValue()), location.toString());
        return memoryWord;
+    }
+
+    public Memory getMemory() {
+        return memory;
     }
 }
