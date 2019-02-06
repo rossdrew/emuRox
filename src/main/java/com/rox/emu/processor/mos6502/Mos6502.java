@@ -7,6 +7,8 @@ import com.rox.emu.processor.mos6502.op.Mos6502OpCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Objects;
+
 import static com.rox.emu.processor.mos6502.Registers.*;
 
 /**
@@ -201,5 +203,19 @@ public class Mos6502 {
 
     public Memory getMemory() {
         return memory;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Mos6502 mos6502 = (Mos6502) o;
+        return Objects.equals(memory, mos6502.memory) &&
+               Objects.equals(registers, mos6502.registers);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(memory, registers);
     }
 }

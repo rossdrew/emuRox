@@ -97,8 +97,6 @@ public class SimpleMemory implements Memory {
         if (o == null || getClass() != o.getClass()) return false;
         SimpleMemory that = (SimpleMemory) o;
 
-        System.out.println("A: " + memoryArray.length + ", B: " + this.memoryArray.length);
-
         return Arrays.equals(memoryArray, that.memoryArray);
     }
 
