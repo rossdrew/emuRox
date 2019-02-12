@@ -15,6 +15,9 @@ plugins {
     id "org.sonarqube" version "2.6"
 }
 
+apply plugin: 'war'
+apply from: 'https://raw.github.com/gretty-gradle-plugin/gretty/master/pluginScripts/gretty.plugin'
+
 group 'com.rox'
 version '1.0-SNAPSHOT'
 description '6502 Emulator'
@@ -30,6 +33,12 @@ repositories {
     mavenCentral()
     jcenter()
     maven { url "https://jitpack.io" }
+}
+
+gretty {
+    httpPort = 8191
+    contextPath = '/roxoft'
+    // ... many more properties
 }
 
 dependencies {
@@ -53,6 +62,9 @@ dependencies {
 
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.9.8'
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.8'
+
+    compile group: 'com.sun.jersey', name: 'jersey-server', version: '1.8'
+    compile group: 'org.glassfish.jersey.media', name: 'jersey-media-json-jackson', version: '2.23.1'
 }
 
 jacocoTestReport {
