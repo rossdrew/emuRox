@@ -41,6 +41,8 @@ gretty {
     // ... many more properties
 }
 
+mainClassName = 'com.rox.emu.processor.mos6502.dbg.ui.DebuggerWindow'
+
 dependencies {
     testCompile group: 'org.codehaus.groovy', name: 'groovy-all', version: '2.3.11'
 
