@@ -16,7 +16,7 @@ import com.rox.emu.processor.mos6502.serialize.Mos6502Deserializer;
 import com.rox.emu.processor.mos6502.serialize.Mos6502Serializer;
 import com.rox.emu.processor.mos6502.serialize.RegistersDeserializer;
 import com.rox.emu.processor.mos6502.serialize.RegistersSerializer;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 
@@ -25,10 +25,10 @@ import java.io.IOException;
 import static org.junit.Assert.assertEquals;
 
 public class SerializationTest {
-    private ObjectMapper objectMapper;
+    private static ObjectMapper objectMapper;
 
-    @Before
-    public void setup(){
+    @BeforeClass
+    public static void before(){
         objectMapper = new ObjectMapper();
         SimpleModule customSerializations = new SimpleModule();
 
