@@ -24,7 +24,7 @@ public class Mos6502Deserializer extends StdDeserializer<Mos6502> {
     @Override
     public Mos6502 deserialize(JsonParser parser, DeserializationContext ctxt) throws IOException, JsonProcessingException {
         final JsonNode node = parser.getCodec().readTree(parser);
-        assert node.get("class").textValue().equals(Mos6502.class.getName());
+        //assert node.get("class").textValue().equals(Mos6502.class.getName());
 
         final Registers registers = deserializeRegisters(node, "registers", parser);
         final SimpleMemory memory = deserializeMemory(node, "memory", parser);

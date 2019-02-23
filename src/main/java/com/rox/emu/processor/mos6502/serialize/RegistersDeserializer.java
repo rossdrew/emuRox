@@ -23,7 +23,7 @@ public class RegistersDeserializer extends StdDeserializer<Registers> {
     @Override
     public Registers deserialize(JsonParser parser, DeserializationContext ctxt) throws IOException, JsonProcessingException {
         final JsonNode node = parser.getCodec().readTree(parser);
-        assert node.get("class").textValue().equals(Registers.class.getName());
+        //assert node.get("class").textValue().equals(Registers.class.getName());
 
         final Registers registers = new Registers();
 

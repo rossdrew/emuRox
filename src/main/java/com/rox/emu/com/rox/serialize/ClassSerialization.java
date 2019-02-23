@@ -25,7 +25,7 @@ public abstract class ClassSerialization<SubjectClass> extends StdSerializer<Sub
     @Override
     public void serialize(SubjectClass classBeingSerialized, JsonGenerator gen, SerializerProvider provider) throws IOException {
         gen.writeStartObject();
-        gen.writeStringField("class", classBeingSerialized.getClass().getName());
+        //gen.writeStringField("class", classBeingSerialized.getClass().getName());
         customSerializations(classBeingSerialized, gen, provider);
         gen.writeEndObject();
     }

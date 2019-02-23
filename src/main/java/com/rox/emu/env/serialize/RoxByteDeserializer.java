@@ -21,7 +21,7 @@ public class RoxByteDeserializer extends StdDeserializer<RoxByte> {
     @Override
     public RoxByte deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
         final JsonNode node = p.getCodec().readTree(p);
-        assert node.get("class").textValue().equals(RoxByte.class.getName());
+        //assert node.get("class").textValue().equals(RoxByte.class.getName());
         int literalValue = (Integer) node.get("value").numberValue();
         return RoxByte.fromLiteral(literalValue);
     }

@@ -26,7 +26,7 @@ public class SimpleMemoryDeserializer extends StdDeserializer<SimpleMemory> {
     @Override
     public SimpleMemory deserialize(JsonParser jsonParser, DeserializationContext ctxt) throws IOException, JsonProcessingException {
         final JsonNode node = jsonParser.getCodec().readTree(jsonParser);
-        assert node.get("class").textValue().equals(SimpleMemory.class.getName());
+        //assert node.get("class").textValue().equals(SimpleMemory.class.getName());
 
         final IntNode sizeNode = (IntNode)node.get("size");
         final Integer size = sizeNode.asInt();

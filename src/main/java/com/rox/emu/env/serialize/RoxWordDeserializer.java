@@ -21,7 +21,7 @@ public class RoxWordDeserializer extends StdDeserializer<RoxWord> {
     @Override
     public RoxWord deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
         final JsonNode node = p.getCodec().readTree(p);
-        assert node.get("class").textValue().equals(RoxWord.class.getName());
+        //assert node.get("class").textValue().equals(RoxWord.class.getName());
         int literalValue = (Integer) node.get("value").numberValue();
         return RoxWord.fromLiteral(literalValue);
     }

@@ -57,7 +57,8 @@ public class SerializationTest {
         final String serializedToJson = objectMapper.writeValueAsString(byteValue);
         final RoxByte deserializeByte = objectMapper.readValue(serializedToJson, RoxByte.class);
 
-        assertEquals("{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":42}", serializedToJson);
+        //assertEquals("{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":42}", serializedToJson);
+        assertEquals("{\"value\":42}", serializedToJson);
         assertEquals(byteValue, deserializeByte);
     }
 
@@ -68,7 +69,8 @@ public class SerializationTest {
         final String serializedToJson = objectMapper.writeValueAsString(wordValue);
         final RoxWord deserializeByte = objectMapper.readValue(serializedToJson, RoxWord.class);
 
-        assertEquals("{\"class\":\"com.rox.emu.env.RoxWord\",\"value\":541}", serializedToJson);
+        //assertEquals("{\"class\":\"com.rox.emu.env.RoxWord\",\"value\":541}", serializedToJson);
+        assertEquals("{\"value\":541}", serializedToJson);
         assertEquals(wordValue, deserializeByte);
     }
 
@@ -80,7 +82,8 @@ public class SerializationTest {
         final String serializedToJson = objectMapper.writeValueAsString(mem);
         final SimpleMemory deserializedMemory = objectMapper.readValue(serializedToJson, SimpleMemory.class);
 
-        assertEquals("{\"class\":\"com.rox.emu.mem.SimpleMemory\",\"size\":65536,\"data\":[{\"10\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":1}},{\"11\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":2}},{\"12\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":3}},{\"13\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":4}},{\"15\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":5}}]}", serializedToJson);
+        //assertEquals("{\"class\":\"com.rox.emu.mem.SimpleMemory\",\"size\":65536,\"data\":[{\"10\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":1}},{\"11\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":2}},{\"12\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":3}},{\"13\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":4}},{\"15\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":5}}]}", serializedToJson);
+        assertEquals("{\"size\":65536,\"data\":[{\"10\":{\"value\":1}},{\"11\":{\"value\":2}},{\"12\":{\"value\":3}},{\"13\":{\"value\":4}},{\"15\":{\"value\":5}}]}", serializedToJson);
         assertEquals(mem, deserializedMemory);
     }
 
@@ -91,7 +94,8 @@ public class SerializationTest {
         final String serializedToJson = objectMapper.writeValueAsString(reg);
         final Registers deserializedRegisters = objectMapper.readValue(serializedToJson, Registers.class);
 
-        assertEquals("{\"class\":\"com.rox.emu.processor.mos6502.Registers\",\"PC\":{\"class\":\"com.rox.emu.env.RoxWord\",\"value\":0},\"A\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":0},\"X\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":0},\"Y\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":0},\"SP Hi\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":0},\"SP Lo\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":255},\"S\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":0}}", serializedToJson);
+        //assertEquals("{\"class\":\"com.rox.emu.processor.mos6502.Registers\",\"PC\":{\"class\":\"com.rox.emu.env.RoxWord\",\"value\":0},\"A\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":0},\"X\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":0},\"Y\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":0},\"SP Hi\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":0},\"SP Lo\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":255},\"S\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":0}}", serializedToJson);
+        assertEquals("{\"PC\":{\"value\":0},\"A\":{\"value\":0},\"X\":{\"value\":0},\"Y\":{\"value\":0},\"SP Hi\":{\"value\":0},\"SP Lo\":{\"value\":255},\"S\":{\"value\":0}}", serializedToJson);
         assertEquals(reg, deserializedRegisters);
     }
 
@@ -105,7 +109,8 @@ public class SerializationTest {
         final String serializedToJson = objectMapper.writeValueAsString(cpu);
         final Mos6502 deserializedCpu = objectMapper.readValue(serializedToJson, Mos6502.class);
 
-        assertEquals("{\"class\":\"com.rox.emu.processor.mos6502.Mos6502\",\"class\":\"com.rox.emu.processor.mos6502.Mos6502\",\"registers\":{\"class\":\"com.rox.emu.processor.mos6502.Registers\",\"PC\":{\"class\":\"com.rox.emu.env.RoxWord\",\"value\":0},\"A\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":0},\"X\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":0},\"Y\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":0},\"SP Hi\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":0},\"SP Lo\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":255},\"S\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":0}},\"memory\":{\"class\":\"com.rox.emu.mem.SimpleMemory\",\"size\":65536,\"data\":[{\"10\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":1}},{\"11\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":2}},{\"12\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":3}},{\"13\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":4}},{\"15\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":5}}]}}", serializedToJson);
+        //assertEquals("{\"class\":\"com.rox.emu.processor.mos6502.Mos6502\",\"class\":\"com.rox.emu.processor.mos6502.Mos6502\",\"registers\":{\"class\":\"com.rox.emu.processor.mos6502.Registers\",\"PC\":{\"class\":\"com.rox.emu.env.RoxWord\",\"value\":0},\"A\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":0},\"X\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":0},\"Y\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":0},\"SP Hi\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":0},\"SP Lo\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":255},\"S\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":0}},\"memory\":{\"class\":\"com.rox.emu.mem.SimpleMemory\",\"size\":65536,\"data\":[{\"10\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":1}},{\"11\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":2}},{\"12\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":3}},{\"13\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":4}},{\"15\":{\"class\":\"com.rox.emu.env.RoxByte\",\"value\":5}}]}}", serializedToJson);
+        assertEquals("{\"registers\":{\"PC\":{\"value\":0},\"A\":{\"value\":0},\"X\":{\"value\":0},\"Y\":{\"value\":0},\"SP Hi\":{\"value\":0},\"SP Lo\":{\"value\":255},\"S\":{\"value\":0}},\"memory\":{\"size\":65536,\"data\":[{\"10\":{\"value\":1}},{\"11\":{\"value\":2}},{\"12\":{\"value\":3}},{\"13\":{\"value\":4}},{\"15\":{\"value\":5}}]}}", serializedToJson);
         assertEquals(cpu, deserializedCpu);
     }
 }

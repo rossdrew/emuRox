@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public class Mos6502Serializer extends ClassSerialization<Mos6502> {
     public void customSerializations(Mos6502 subject, JsonGenerator gen, SerializerProvider provider) throws IOException {
-        gen.writeStringField("class", Mos6502.class.getName());
+        //gen.writeStringField("class", Mos6502.class.getName());
         gen.writeObjectField("registers", subject.getRegisters());
         gen.writeObjectField("memory", subject.getMemory());
     }
