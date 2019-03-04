@@ -13,11 +13,15 @@ This is an emulator.  I want it to be composable so anything emulated should be 
 ### Code in the codebase has high test and mutation coverage.
 
 This is a TDD driven project.  That means for each step of functionality, I write a test to describe it then write the minimal amount of code required to pass that test and increment in that way.
-So I expect any code written to at least be fully covered by tests.  These tests should also be backed up by mutation coverage to ensure their strength.
+So I expect any code written -while not explicitly TDD- to at least be fully covered by tests.  These tests should also be backed up by mutation coverage to ensure their strength.
+
+This means...
 
 ### It is as well designed as possible for testability and adaptability
 
 I'm not the worlds greatest software designer but this is a learning process as much as anything else so improvements & comments on design are most welcome.
+
+At the very least, where possible, everything should be designed to be unit testable.  This means things like dependencys are injected so that they can be mocked and static utility methods are avoided.
 
 ### It is well written and documented code
 
