@@ -67,6 +67,9 @@ class Ricoh2C02Registers {
             this.memoryMappedLocation = memoryMappedLocation;
         }
 
+        /**
+         * @return a list of addresses required to be mapped by these registers
+         */
         static int[] getMappedAddresses(){
             int[] addresses = new int[values().length];
 

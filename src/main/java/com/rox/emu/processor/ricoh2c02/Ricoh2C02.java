@@ -16,16 +16,15 @@ import com.rox.emu.mem.Memory;
  */
 public class Ricoh2C02 {
     private final Memory vRam;
-    private final Memory sprRam;
+    private final Memory oam;
     private final Ricoh2C02Registers registers;
 
-    //XXX Should probably be a nicer interface, the existence of the 2C0s shouldn't depend on a cpu memory
     public Ricoh2C02(final Memory vRam,
-                     final Memory sprRam,
-                     final Memory cpuRam) {
+                     final Memory oam,
+                     final Ricoh2C02Registers registers) {
         this.vRam = vRam;
-        this.sprRam = sprRam;
-        this.registers = new Ricoh2C02Registers(cpuRam);
+        this.oam = oam;
+        this.registers = registers;
     }
 
     public RoxByte getRegister(Ricoh2C02Registers.Register register){
