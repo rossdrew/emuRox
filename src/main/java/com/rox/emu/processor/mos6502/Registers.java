@@ -5,6 +5,8 @@ import com.rox.emu.env.RoxWord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Arrays;
+
 import static com.rox.emu.processor.mos6502.Registers.Register.*;
 
 /**
@@ -108,10 +110,14 @@ public class Registers {
 
     public Registers(){
         registerValue = new RoxByte[8];
-        for (int i=0; i<8; i++)
-            registerValue[i] = RoxByte.ZERO;
+        Arrays.fill(registerValue, RoxByte.ZERO);
         setRegister(STACK_POINTER_LOW, RoxByte.fromLiteral(0b11111111));
         setRegister(STATUS_FLAGS, RoxByte.fromLiteral(0b00000000));
+    }
+
+    public Registers(final RoxByte[] registerValue){
+        this.registerValue = Arrays.copyOf(registerValue, 8);
+        setRegister(STACK_POINTER_LOW, RoxByte.fromLiteral(0b11111111));
     }
 
     /**
@@ -236,9 +242,6 @@ public class Registers {
     }
 
     public Registers copy(){
-        final Registers newRegisters = new Registers();
-        for (int i=0; i< registerValue.length; i++)
-            newRegisters.registerValue[i] = registerValue[i].copy();
-        return newRegisters;
+        return new Registers(registerValue);
     }
 }

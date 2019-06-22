@@ -40,6 +40,29 @@ public class RegistersTest {
     }
 
     @Test
+    public void testInitialSpecifiedState(){
+        RoxByte[] states = new RoxByte[] { RoxByte.fromLiteral(1),
+                                           RoxByte.fromLiteral(2),
+                                           RoxByte.fromLiteral(3),
+                                           RoxByte.fromLiteral(4),
+                                           RoxByte.fromLiteral(5),
+                                           RoxByte.fromLiteral(6),
+                                           RoxByte.fromLiteral(7),
+                                           RoxByte.fromLiteral(8)
+                                         };
+        registers = new Registers(states);
+
+        assertEquals(RoxByte.fromLiteral(1), registers.getRegister(ACCUMULATOR));
+        assertEquals(RoxByte.fromLiteral(2), registers.getRegister(Y_INDEX));
+        assertEquals(RoxByte.fromLiteral(3), registers.getRegister(X_INDEX));
+        assertEquals(RoxByte.fromLiteral(4), registers.getRegister(PROGRAM_COUNTER_HI));
+        assertEquals(RoxByte.fromLiteral(5), registers.getRegister(PROGRAM_COUNTER_LOW));
+        assertEquals(RoxByte.fromLiteral(0b11111111), registers.getRegister(STACK_POINTER_LOW));
+        assertEquals(RoxByte.fromLiteral(7), registers.getRegister(STACK_POINTER_HI));
+        assertEquals(RoxByte.fromLiteral(8), registers.getRegister(STATUS_FLAGS));
+    }
+
+    @Test
     public void testDescription(){
         for (Flag f : Flag.values()){
             assertEquals(f.name(), f.getDescription().toUpperCase().replaceAll(" ", "_"));
