@@ -28,12 +28,12 @@ public class Ricoh2C02Theories {
 
         final Memory vRam = new SimpleMemory();
         final Memory sprRam = mock(Memory.class);
-        final Memory cpuRam = mock(Memory.class);
-        final Ricoh2C02 ppu = new Ricoh2C02(vRam, sprRam, cpuRam);
+        final Ricoh2C02Registers registers = mock(Ricoh2C02Registers.class);
+
+        final Ricoh2C02 ppu = new Ricoh2C02(vRam, sprRam, registers);
 
         for (Ricoh2C02Registers.Register register : Ricoh2C02Registers.Register.values()) {
-            RoxWord addr = RoxWord.fromLiteral(register.getMemoryMappedLocation());
-            when(cpuRam.getByte(addr)).thenReturn(RoxByte.fromLiteral(byteValue));
+            when(registers.getRegister(register)).thenReturn(RoxByte.fromLiteral(byteValue));
             assertThat(RoxByte.fromLiteral(byteValue), equalTo(ppu.getRegister(register)));
         }
     }

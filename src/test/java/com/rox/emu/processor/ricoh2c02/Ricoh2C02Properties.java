@@ -18,7 +18,7 @@ import static org.mockito.Mockito.*;
 public class Ricoh2C02Properties {
     @Test
     public void testCreation(){
-        final Ricoh2C02 ppu = new Ricoh2C02(new SimpleMemory(), new SimpleMemory(), new SimpleMemory());
+        final Ricoh2C02 ppu = new Ricoh2C02(new SimpleMemory(), new SimpleMemory(), new Ricoh2C02Registers(new SimpleMemory()));
         assertNotNull(ppu);
     }
 
@@ -26,12 +26,11 @@ public class Ricoh2C02Properties {
     public void testGetControlRegister(@InRange(min = "0", max = "255") int byteValue){
         final Memory vRam = new SimpleMemory();
         final Memory sprRam = mock(Memory.class);
-        final Memory cpuRam = mock(Memory.class);
-        final Ricoh2C02 ppu = new Ricoh2C02(vRam, sprRam, cpuRam);
+        final Ricoh2C02Registers registers = mock(Ricoh2C02Registers.class);
+        final Ricoh2C02 ppu = new Ricoh2C02(vRam, sprRam, registers);
 
         for (Ricoh2C02Registers.Register register : Ricoh2C02Registers.Register.values()) {
-            final RoxWord addr = RoxWord.fromLiteral(register.getMemoryMappedLocation());
-            when(cpuRam.getByte(addr)).thenReturn(RoxByte.fromLiteral(byteValue));
+            when(registers.getRegister(register)).thenReturn(RoxByte.fromLiteral(byteValue));
             assertEquals(RoxByte.fromLiteral(byteValue), ppu.getRegister(register));
         }
     }
@@ -40,15 +39,14 @@ public class Ricoh2C02Properties {
     public void testSetControlRegister(@InRange(min = "0", max = "255") int byteValue){
         final Memory vRam = new SimpleMemory();
         final Memory sprRam = mock(Memory.class);
-        final Memory cpuRam = mock(Memory.class);
-        final Ricoh2C02 ppu = new Ricoh2C02(vRam, sprRam, cpuRam);
+        final Ricoh2C02Registers registers = mock(Ricoh2C02Registers.class);
+        final Ricoh2C02 ppu = new Ricoh2C02(vRam, sprRam, registers);
 
         for (Ricoh2C02Registers.Register register : Ricoh2C02Registers.Register.values()) {
-            final RoxWord addr = RoxWord.fromLiteral(register.getMemoryMappedLocation());
             final RoxByte val = RoxByte.fromLiteral(byteValue);
 
             ppu.setRegister(register, val);
-            verify(cpuRam, times(1)).setByteAt(addr, val);
+            verify(registers, times(1)).setRegister(register, val);
         }
     }
 
