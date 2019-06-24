@@ -194,14 +194,10 @@ public class MultiSourceMemory implements Memory {
     @Override
     public void reset() {
         //For each unique memory object, reset it
-        List<Memory> reset = new ArrayList<>();
-        for (Map.Entry<Integer, MemoryMapping> mappingEntry : memoryMappings.entrySet()) {
-            final Memory memory = mappingEntry.getValue().physicalMemory;
-            if (!reset.contains(memory)){
-                memory.reset();
-                reset.add(memory);
-            }
-        }
+        memoryMappings.entrySet().stream()
+                      .map(entry -> entry.getValue().physicalMemory)
+                      .distinct()
+                      .forEach(Memory::reset);
 
         if (defaultMemory != null)
             defaultMemory.reset();
