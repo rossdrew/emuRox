@@ -8,6 +8,8 @@ import com.rox.emu.processor.mos6502.op.Mos6502Operation;
 
 import java.util.EnumSet;
 
+import static com.rox.emu.processor.mos6502.op.Mos6502Operation.*;
+
 
 /**
  * Utility for converting internal {@link Mos6502} {@link Mos6502OpCode} representation names to human readable descriptions
@@ -56,7 +58,7 @@ public class OpCodeConverter {
      * @return the {@link Mos6502Operation} associated with this {@link Mos6502OpCode}
      */
     public static Mos6502Operation getOperation(final String internalOpCodeName) {
-        return Mos6502Operation.valueOf(getOpCode(internalOpCodeName));
+        return valueOf(getOpCode(internalOpCodeName));
     }
 
     /**
@@ -69,15 +71,7 @@ public class OpCodeConverter {
         final String[] tokens = internalOpCodeName.split(TOKEN_SEPARATOR);
         if (tokens.length <= ADDR_I) {
             //XXX Write this less ugly
-            if (EnumSet.of( Mos6502Operation.JSR,
-                            Mos6502Operation.BPL,
-                            Mos6502Operation.BMI,
-                            Mos6502Operation.BVC,
-                            Mos6502Operation.BVS,
-                            Mos6502Operation.BCC,
-                            Mos6502Operation.BCS,
-                            Mos6502Operation.BNE,
-                            Mos6502Operation.BEQ).contains(getOperation(internalOpCodeName)))
+            if (EnumSet.of(JSR,BPL,BMI,BVC,BVS,BCC,BCS,BNE,BEQ).contains(getOperation(internalOpCodeName)))
                 return Mos6502AddressingMode.RELATIVE;
 
             return Mos6502AddressingMode.IMPLIED;
