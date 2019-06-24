@@ -274,10 +274,7 @@ public enum Mos6502OpCode implements Mos6502Instruction {
     private static Mos6502OpCode matching(Predicate<? super Mos6502OpCode> predicate, String predicateDescription, Object predicateTerm) {
         Optional<Mos6502OpCode> result = Arrays.stream(Mos6502OpCode.values()).filter(predicate).findFirst();
 
-        if (result.isPresent())
-            return result.get();
-
-        throw new UnknownOpCodeException("Unknown opcode name while creating OpCode object: " + predicateDescription, predicateTerm);
+        return result.orElseThrow(() -> new UnknownOpCodeException("Unknown opcode name while creating OpCode object: " + predicateDescription, predicateTerm));
     }
 
     public Mos6502Operation getOperation(){
