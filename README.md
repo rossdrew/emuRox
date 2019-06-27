@@ -12,17 +12,17 @@
 </a>
 
 # EmuRox
-Ostensibly, this is a project to first emulate a Nintendo Entertainment System ([NES](https://en.wikipedia.org/wiki/Nintendo_Entertainment_System)) then move on to other systems.   Creating a pluggable multi-emulator.
-In actuality, it is not about getting a working emulator, for a NES or anything else.  There are plenty of them out there. It's about creating a good abstraction of a complex problem so that the underlying issues can be addressed such that the overseeing humans can talk about it simply in a common language.  
+Ostensibly, an Nintendo Entertainment System ([NES](https://en.wikipedia.org/wiki/Nintendo_Entertainment_System)) emulator with a view to encompassing other systems. Creating a pluggable multi-emulator. In actuality, it is not about getting a working emulator, for a NES or anything else. There are plenty of them out there.  It's about taking a complex problem and designing the best abstraction possible.  Allowing us to discuss complex ideas in simple language.
 
 Too often I've:
- - been forced to write bad programs because the functionality was more important than the implementation.
- - worked with programmers who value overly concise code, which hampers readability and ability to debug
- - spent too much time spinning up entire software suites and their peripherals to test simple functionality
- - had to write features that had zero or limited uses cases, then had to rewrite them all over again when they weren't fit for purpose
- - had to quickly get to work on a domain/technology I didn't yet fully understand and had to deal with the fallout of my assumptions for a long time
- - been so time restricted and been forced to write a solution to a problem I had no time to understand
- 
+
+ - had to sacrifice good implementation for fast functionality
+ - dealt with code in which concision hampered readability
+ - consumed development time in lengthy, bloated builds.  Usually caused by complex and brittle system testing
+ - written under-specified features which need to be re-written over and over
+ - work with naive domain knowledge due to time pressure
+ - written solutions to problems I had no time to completely understand.
+
  > _Any fool can write code that a computer can understand. Good programmers write code that humans can understand. (M. Fowler)_
 
  I wanted something I could redesign over and over as my knowledge of the domain grew and as I felt the frustrations of having to reaquaint myself with pirces of code I hadn't seen in a while.  Something I could test in a thousand different ways, then tweak and experiment with build processes so that the development cycle is rapid and fluid.  That I could tweak the code over and over to make it simpler and simpler to understand. 
