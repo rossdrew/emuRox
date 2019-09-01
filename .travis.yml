@@ -3,7 +3,7 @@ install: gradle wrapper --gradle-version 4.6
 language: java
 
 jdk:
-- oraclejdk8
+- openjdk8
 
 before_install:
   - sudo apt-get install jq
