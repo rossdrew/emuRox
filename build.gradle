@@ -26,6 +26,8 @@ apply plugin: 'info.solidsoft.pitest'
 apply plugin: 'application'
 apply plugin: 'idea'
 
+mainClassName = 'com.rox.emu.processor.mos6502.dbg.ui.DebuggerWindow'
+
 repositories {
     mavenCentral()
     jcenter()
@@ -79,7 +81,7 @@ task runDebugUI(type: JavaExec, group: 'application') {
     doFirst {
         println "Running Debugger UI for ${project.name}"
         classpath sourceSets.main.runtimeClasspath
-        main = mainClassName = 'com.rox.emu.processor.mos6502.dbg.ui.DebuggerWindow'
+        main = mainClassName
     }
 }
 
