@@ -11,6 +11,8 @@
 </a>
 
 # EmuRox
+NOTE: This is not dead.  Just on a bit of a hiatus while I wrestle with new fatherhood. 
+
 Ostensibly, an Nintendo Entertainment System ([NES](https://en.wikipedia.org/wiki/Nintendo_Entertainment_System)) emulator with a view to encompassing other systems. Creating a pluggable multi-emulator. In actuality, it is not about getting a working emulator, for a NES or anything else. There are plenty of them out there.  It's about taking a complex problem and designing the best abstraction possible.  Allowing us to discuss complex ideas in simple language.
 
 Too often I've:
