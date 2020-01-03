@@ -3,7 +3,9 @@ package com.rox.emu.mem;
 import com.rox.emu.env.RoxByte;
 import com.rox.emu.env.RoxWord;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A partially logical block of memory in which certain blocks can be assigned (memory mapped) to other memory objects
@@ -70,8 +72,8 @@ public class MultiSourceMemory implements Memory {
      * @return a new {@link MultiSourceMemory} with the new mapping
      */
     public MultiSourceMemory withMapping(final int[] addresses, final Memory mappedMemory){
-        final Map<Integer, MemoryMapping> newMemoryMappings = new HashMap<>();
-        newMemoryMappings.putAll(memoryMappings);
+        final Map<Integer, MemoryMapping> newMemoryMappings = new HashMap<>(memoryMappings);
+
         for (Integer address : addresses) {
             newMemoryMappings.put(address, new MemoryMapping(address, address, mappedMemory));
         }
@@ -92,8 +94,8 @@ public class MultiSourceMemory implements Memory {
                                          final int mapToAddress,
                                          final int size,
                                          final Memory mappedMemory){
-        final Map<Integer, MemoryMapping> newMemoryMappings = new HashMap<>();
-        newMemoryMappings.putAll(memoryMappings);
+        final Map<Integer, MemoryMapping> newMemoryMappings = new HashMap<>(memoryMappings);
+
         for (int i=0; i<size; i++){
             int logicalAddress = (mapFromAddress + i);
             int physicalAddress = (mapToAddress + i);
@@ -112,8 +114,8 @@ public class MultiSourceMemory implements Memory {
      * @return A new {@link MultiSourceMemory} with the specified mapping
      */
     public MultiSourceMemory withMappingTo(final Integer logicalAddress, final Integer physicalAddress, final Memory mappedMemory){
-        final Map<Integer, MemoryMapping> newMemoryMappings = new HashMap<>();
-        newMemoryMappings.putAll(memoryMappings);
+        final Map<Integer, MemoryMapping> newMemoryMappings = new HashMap<>(memoryMappings);
+
         newMemoryMappings.put(logicalAddress, new MemoryMapping(logicalAddress, physicalAddress, mappedMemory));
 
         return new MultiSourceMemory(defaultMemory, newMemoryMappings);
@@ -133,8 +135,7 @@ public class MultiSourceMemory implements Memory {
         if (logicalAddresses.length != physicalAddresses.length)
             throw new MemoryMappingException("The same number of logical and physical addresses are required for multiple mappings.  Received " + logicalAddresses.length + " logical addresses to " + physicalAddresses.length + " physical.");
 
-        final Map<Integer, MemoryMapping> newMemoryMappings = new HashMap<>();
-        newMemoryMappings.putAll(memoryMappings);
+        final Map<Integer, MemoryMapping> newMemoryMappings = new HashMap<>(memoryMappings);
 
         for (int a=0; a<logicalAddresses.length; a++){
             MemoryMapping newMapping = new MemoryMapping(logicalAddresses[a], physicalAddresses[a], memory);
@@ -195,9 +196,9 @@ public class MultiSourceMemory implements Memory {
     public void reset() {
         //For each unique memory object, reset it
         memoryMappings.entrySet().stream()
-                      .map(entry -> entry.getValue().physicalMemory)
-                      .distinct()
-                      .forEach(Memory::reset);
+                .map(entry -> entry.getValue().physicalMemory)
+                .distinct()
+                .forEach(Memory::reset);
 
         if (defaultMemory != null)
             defaultMemory.reset();
