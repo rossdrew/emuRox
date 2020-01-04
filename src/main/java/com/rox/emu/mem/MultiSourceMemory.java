@@ -14,7 +14,7 @@ public class MultiSourceMemory implements Memory {
 
     /**
      * Representation of a memory mapping, consisting of a destination memory, a logical memory location that can be
-     * logically accessed and a physical memory location that will eventually by "physically" accessed.
+     * logically accessed and a physical memory location that will eventually be "physically" accessed.
      */
     private class MemoryMapping {
         final int logicalAddress;
