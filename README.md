@@ -98,6 +98,9 @@ The plan was to develop in a TDD (Test Driven Development) centric way, that is 
     - [Reddit](https://www.reddit.com/r/reviewmycode/comments/5oorz1/java_6502_emulator/)
     - [Stack Exchange](http://codereview.stackexchange.com/questions/154600/op-code-decoding-in-an-emulator) 
  
+### Outputs
+ - A Dev.to blog post on [Functional Enums in Java](https://dev.to/rossdrew/functional-enums-in-java-34o1)
+ 
 ## Get involved 
 Found my project interesting or used it in some way?  Contribute by showing your appreciation with a [frosty beverage](https://beerpay.io/rossdrew/emuRox).  In my case this will go towards an [Old Fashioned](https://www.instagram.com/p/BUzyDHOAzkI/?taken-by=ross_drew) but as far as I'm aware there is no Spirit/Bourbon/WhiskeyPay.
   
