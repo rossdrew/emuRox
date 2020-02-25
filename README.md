@@ -33,7 +33,7 @@ There are also desirable side effects.  I wanted to write my own emulator, play 
 ## Usage
 
 Most of my testing is done via the plethora of tests I've written.
-There is a debug UI for the MOS 6502 which provides a basic register and memory overview for running code through step by step in `src/main/java/com/roxemu/processor/mos6502/dbg/ui/DebuggerWindow.java` and run with the Gradle command `runDebugUI` and you'll get an interface that looks something like
+There is a debug UI for the MOS 6502 which provides a basic register and memory overview for running code through step by step in [DebuggerWindow.java](https://github.com/rossdrew/emuRox/blob/master/src/main/java/com/rox/emu/processor/mos6502/dbg/ui/DebuggerWindow.java) and run with the Gradle command `runDebugUI` and you'll get an interface that looks something like
 
 ![EmuRox Test GUI](https://github.com/rossdrew/emuRox/blob/master/docs/EMuRox%20GUI%20Demo%20BIG.gif)
 
