@@ -43,7 +43,7 @@ I've seperate (at least) the NES section of this down into 7 stages:
 
  - [x] I blasted through the first phase due to the massive amount of documentation on the MOS 6502
  - [x] While researching phase 3, I churned through the relitively basic work of parsing iNES files of phase 2 (without edge cases for now)
- - [ ] Phase 3 is kinda where I'm stuck at the moment, struggling to find time to consolodate all the documentation and existing on the APU, which is less abundant than of the MOD 6502 and far more messy
+ - [ ] Phase 3 is kinda where I'm stuck at the moment, struggling to find time to consolodate all the documentation and existing on the APU, which is less abundant than of the MOS 6502 and far more messy
  - [ ] Phase 4 is going to be a decent challenge I think, where I need to start concentrating on timings
  - [ ] Phase 5 and 6 are bringing it all together into a useable system
 
