@@ -36,6 +36,13 @@ There is a debug UI for the MOS 6502 which provides a basic register and memory 
 
 ![EmuRox Test GUI](https://github.com/rossdrew/emuRox/blob/master/docs/EMuRox%20GUI%20Demo%20BIG.gif)
 
+On the left you'll see tabs of the first 5 memory pages organised in blocks of 4 with their locations displayed in red on the left.  The Program Counter location will be colored green.
+In the center we have a choice of two tabs
+ - Registers: Which display all registers and flags, their names in blue and representations of them as decimal and hexadecimal in red.
+ - Code: A simple code window which can be used to compile 6502 assembly and load it into page 0 at location 0.
+Lastly on the bottom we have a reset button which will reset everything to it's initial state and a step button which will issue the next instruction.
+At the top we have the currently executing instruction and on the right a history of instructions both consisting of their location, arguments and a short description.  
+
 ## 6502 and progress towards a working NES...
 
 I've seperate (at least) the NES section of this down into 7 stages:
