@@ -143,9 +143,10 @@ public class Registers {
     public void setPC(RoxWord pcWordValue){
         setRegister(PROGRAM_COUNTER_HI, pcWordValue.getHighByte());
         setRegister(PROGRAM_COUNTER_LOW, pcWordValue.getLowByte());
-        log.debug("'R+:Program Counter' := {} [ {} | {} ]", new Object[] {pcWordValue,
-                                                                          getRegister(PROGRAM_COUNTER_HI),
-                                                                          getRegister(PROGRAM_COUNTER_LOW)});
+        log.debug("'R+:Program Counter' := {} [ {} | {} ]",
+                  pcWordValue,
+                  getRegister(PROGRAM_COUNTER_HI),
+                  getRegister(PROGRAM_COUNTER_LOW));
     }
 
     /**
