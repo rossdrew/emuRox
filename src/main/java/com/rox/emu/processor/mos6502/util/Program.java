@@ -146,7 +146,7 @@ public class Program {
      * @return This {@link Program} compiled to a "byte" array.
      */
     public RoxByte[] getProgramAsByteArray() {
-        int[] clonedBytes = programBytes.clone();
+        int[] clonedProgramBytes = programBytes.clone();
 
         for (Reference reference : references) {
             if (programLabels.containsKey(reference.targetLabel)){
@@ -154,15 +154,16 @@ public class Program {
 
                 //XXX Should be a binary subtraction?
                 int relativeAddress = ((targetAddress & 0xFF) - (reference.rootAddress + 1 & 0xFF)) & 0xFF;
-                clonedBytes[reference.rootAddress] = relativeAddress;
+                clonedProgramBytes[reference.rootAddress] = relativeAddress;
             }else{
                 throw new UnknownTokenException("Unknown label reference '" + reference.targetLabel + "'", reference.targetLabel );
             }
         }
 
-        final RoxByte[] programRoxBytes = new RoxByte[clonedBytes.length];
-        for (int i=0; i<programRoxBytes.length; i++)
-            programRoxBytes[i] = RoxByte.fromLiteral(clonedBytes[i]);
+        final RoxByte[] programRoxBytes = new RoxByte[clonedProgramBytes.length];
+        for (int i=0; i<programRoxBytes.length; i++) {
+            programRoxBytes[i] = RoxByte.fromLiteral(clonedProgramBytes[i]);
+        }
 
 
         return programRoxBytes;
