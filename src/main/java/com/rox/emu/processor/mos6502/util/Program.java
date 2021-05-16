@@ -144,6 +144,8 @@ public class Program {
 
     /**
      * @return This {@link Program} compiled to a "byte" array.
+     *
+     * XXX: I don't like this function, it's unnecessarily complex.  Needs a rethink
      */
     public RoxByte[] getProgramAsByteArray() {
         int[] clonedProgramBytes = programBytes.clone();
