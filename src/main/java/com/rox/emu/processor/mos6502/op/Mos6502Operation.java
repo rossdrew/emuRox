@@ -33,7 +33,10 @@ public enum Mos6502Operation implements AddressedValueInstruction {
 
         Arrays.asList(pcHi, pcLo, status).forEach(value -> {
             final RoxByte stackIndex = r.getRegister(STACK_POINTER_LOW);
-            final RoxByte nextStackIndex = RoxByte.fromLiteral(stackIndex.getRawValue() - 1);     //XXX Should use alu
+            final RoxByte nextStackIndex = RoxByte.fromLiteral(stackIndex.getRawValue() - 1);     //XXX Should use alu like...
+//            final RoxByte nextStackIndexAddress = a.sbc(stackIndex, RoxByte.fromLiteral(1));
+//            final RoxByte nextStackIndex = nextStackIndexAddress;
+            // ^ this needs tests fixed.  Is it because of leftover state?
             m.setByteAt(RoxWord.from(RoxByte.fromLiteral(0x01), stackIndex), value);
             r.setRegister(STACK_POINTER_LOW, nextStackIndex);
         });
