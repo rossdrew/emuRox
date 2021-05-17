@@ -84,23 +84,20 @@ public class MultiSourceMemory implements Memory {
     /**
      * Create a copy of this {@link Memory} mapping with the address range specified, mapped to the provided {@link Memory}
      *
-     * @param mapFromAddress the logical start location to map this memory to
-     * @param mapToAddress the physical start location to map this memory to
+     * @param fromAddress the logical start location to map this memory to
+     * @param toAddress the physical start location to map this memory to
      * @param size the size of the range from the start
      * @param mappedMemory the physical memory to map
      * @return a new {@link MultiSourceMemory} with the new mapping
      */
-    public MultiSourceMemory withMapping(final int mapFromAddress,
-                                         final int mapToAddress,
+    public MultiSourceMemory withMapping(final int fromAddress,
+                                         final int toAddress,
                                          final int size,
                                          final Memory mappedMemory){
         final Map<Integer, MemoryMapping> newMemoryMappings = new HashMap<>(memoryMappings);
 
-        for (int i=0; i<size; i++){
-            int logicalAddress = (mapFromAddress + i);
-            int physicalAddress = (mapToAddress + i);
-
-            newMemoryMappings.put(logicalAddress, new MemoryMapping(logicalAddress, physicalAddress, mappedMemory));
+        for (int from=fromAddress, to=toAddress; from<(fromAddress+size); from++, to++){
+            newMemoryMappings.put(from, new MemoryMapping(from, to, mappedMemory));
         }
 
         return new MultiSourceMemory(defaultMemory, newMemoryMappings);
@@ -137,9 +134,9 @@ public class MultiSourceMemory implements Memory {
 
         final Map<Integer, MemoryMapping> newMemoryMappings = new HashMap<>(memoryMappings);
 
-        for (int a=0; a<logicalAddresses.length; a++){
-            MemoryMapping newMapping = new MemoryMapping(logicalAddresses[a], physicalAddresses[a], memory);
-            newMemoryMappings.put(logicalAddresses[a], newMapping);
+        for (int logicalAddress=0; logicalAddress<logicalAddresses.length; logicalAddress++){
+            MemoryMapping newMapping = new MemoryMapping(logicalAddresses[logicalAddress], physicalAddresses[logicalAddress], memory);
+            newMemoryMappings.put(logicalAddresses[logicalAddress], newMapping);
         }
 
         return new MultiSourceMemory(defaultMemory, newMemoryMappings);
