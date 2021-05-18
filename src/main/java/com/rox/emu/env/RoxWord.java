@@ -69,7 +69,7 @@ public final class RoxWord {
 
     private int intFromTwosComplimented(int wordValue){
         if (isBitSet(15))
-            return -((~(wordValue-1)) & 0xFFFF);
+            return -((-wordValue) & 0xFFFF);
         else
             return wordValue;
     }
