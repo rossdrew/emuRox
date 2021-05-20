@@ -2,6 +2,7 @@ package com.rox.emu.processor.mos6502.dbg.ui.component;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.Path2D;
 
 /**
  *  A UI component that displays a byte as a series of bits with an
@@ -15,12 +16,20 @@ class ByteBox extends JPanel {
     protected final int bitFontSize = 40;
     protected final int valueFontSize = 11;
 
-    protected int byteValue = 0b00000000;
-    protected String byteName = "Unknown";
+    protected int byteValue;
+    protected String byteName;
+    protected Color highlightColor;
 
     public ByteBox(String byteName, int initialValue){
         this.byteValue = initialValue;
         this.byteName = byteName;
+        this.highlightColor = null;
+    }
+
+    public ByteBox(String byteName, int initialValue, Color highlightColor){
+        this.byteValue = initialValue;
+        this.byteName = byteName;
+        this.highlightColor = highlightColor;
     }
 
     public int getByteValue(){
@@ -60,7 +69,26 @@ class ByteBox extends JPanel {
         paintBits(g, point, bitValues);
         paintByteBorder(g, point);
         paintByteName(g, point, name);
+        paintHighlightIndicator(g, point);
         paintByteValues(g, point, byteValue);
+    }
+
+    protected void paintHighlightIndicator(Graphics g, Point point){
+        if (highlightColor == null)
+            return;
+
+        Color originalColor = g.getColor();
+        g.setColor(highlightColor);
+
+        Path2D arrow = new Path2D.Double();
+        arrow.moveTo(point.x, point.y - 7);
+        arrow.lineTo(point.x + 8, point.y - 7 - 5);
+        arrow.lineTo(point.x + 8, point.y - 7 + 5);
+        arrow.lineTo(point.x, point.y - 7);
+        arrow.closePath();
+        ((Graphics2D)g).fill(arrow);
+
+        g.setColor(originalColor);
     }
 
     protected void paintBits(Graphics g, Point point, char[] bitValues) {
@@ -86,7 +114,8 @@ class ByteBox extends JPanel {
     private void paintByteName(Graphics g, Point point, String name) {
         g.setColor(Color.blue);
         g.setFont(new Font("Courier New", Font.PLAIN, valueFontSize));
-        g.drawString(name, point.x, point.y-1);
+        int xLoc = ((highlightColor == null) ? point.x : point.x + 10);
+        g.drawString(name, xLoc, point.y-1);
     }
 
     private void paintByteValues(Graphics g, Point point, int byteValue) {

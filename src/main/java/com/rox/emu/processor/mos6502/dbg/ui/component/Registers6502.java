@@ -56,7 +56,7 @@ public class Registers6502 extends JPanel {
     private final ByteBox stackPointerHi = new ByteBox("Stack Pointer (Hi)", 0);
     private final ByteBox stackPointerLo = new ByteBox("Stack Pointer (Lo)", 0);
 
-    private final ByteBox programCounterHi = new ByteBox("Program Counter (Hi)", 0);
+    private final ByteBox programCounterHi = new ByteBox("Program Counter (Hi)", 0, new Color(9, 178, 0));
     private final ByteBox programCounterLo = new ByteBox("Program Counter (Lo)", 0);
 
     private final FlagByteBox statusRegister = new FlagByteBox("Status Register", 0x0, "NV BDIZC".toCharArray());
