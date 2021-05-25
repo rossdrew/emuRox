@@ -1,4 +1,4 @@
-install: gradle wrapper --gradle-version 4.6
+install: gradle wrapper --gradle-version 6.9
 
 language: java
 
