@@ -2,7 +2,6 @@
 [![Build Status by TravisCI](https://travis-ci.org/rossdrew/emuRox.svg?branch=master)](https://travis-ci.org/rossdrew/emuRox)
 [![Code Coverage by Codecov](https://codecov.io/gh/rossdrew/emuRox/branch/master/graph/badge.svg)](https://codecov.io/gh/rossdrew/emuRox)
 [![Mutation Coverage by Pitest](http://rossdrew.pythonanywhere.com/shield&rnd=1)](http://rossdrew.pythonanywhere.com/report)
-[![Code Quality by Codacy](https://api.codacy.com/project/badge/Grade/519fed1cf9c64216a0c9992eed25a36f)](https://www.codacy.com/app/rossdrew/emuRox?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=rossdrew/emuRox&amp;utm_campaign=Badge_Grade)
 [![Quality Gate by sonarcloud](https://sonarcloud.io/api/project_badges/measure?project=com.rox%3AEmuRox&metric=alert_status)](https://sonarcloud.io/api/project_badges/measure?project=com.rox%3AEmuRox&metric=alert_status)
 [![GitHub Actions CI](https://github.com/rossdrew/emurox/workflows/GitHub%20Actions/badge.svg)](https://github.com/rossdrew/emurox/workflows/GitHub%20Actions/badge.svg)
 
