@@ -113,9 +113,9 @@ The plan was to develop in a TDD (Test Driven Development) centric way, that is 
  - A Dev.to blog post on [Functional Enums in Java](https://dev.to/rossdrew/functional-enums-in-java-34o1)
  
 ## Get involved 
-Found my project interesting or used it in some way?  Contribute by showing your appreciation with a [frosty beverage](https://beerpay.io/rossdrew/emuRox).  In my case this will go towards an [Old Fashioned](https://www.instagram.com/p/BUzyDHOAzkI/?taken-by=ross_drew) but as far as I'm aware there is no Spirit/Bourbon/WhiskeyPay.
+Beerpay seems to have died so no contribution method.  I'll look into replacing it.
   
-Or even [make a feature suggestion](https://beerpay.io/rossdrew/emuRox?focus=wish) if you are so inclined.
+For now, [make a feature suggestion](https://beerpay.io/rossdrew/emuRox?focus=wish) if you are so inclined.
 
 Lastly, feel free to volunteer solutions, fixes, improvements, pull requests, documentation, technology suggestions.  If you are a JavaFX/Swing guru, I'd love to see a better UI on this.  Just note that I'm trying to make this, as well as a working project, a highly tested, nice codebase to work on.
 
