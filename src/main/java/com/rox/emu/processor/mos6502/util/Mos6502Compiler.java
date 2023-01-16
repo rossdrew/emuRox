@@ -211,25 +211,7 @@ public class Mos6502Compiler {
      */
     private String sanitize(final String programText) {
         final StringBuilder sanitizedText = new StringBuilder();
-
-        boolean notComment = true;
-        for (int i=0; i < programText.length(); i++){
-            final char charAtIndex = programText.charAt(i);
-
-            if (notComment){
-                if (charAtIndex == ';'){
-                    notComment = false;
-                }else{
-                    sanitizedText.append(charAtIndex);
-                }
-            }else{
-                if (charAtIndex == '\n'){
-                    notComment = true;
-                }
-            }
-        }
-
-        return sanitizedText.toString();
+        return programText.replaceAll(";.*?\n", "");
     }
 
     private Program extractArgumentValue(Program workingProgram, String value) {
