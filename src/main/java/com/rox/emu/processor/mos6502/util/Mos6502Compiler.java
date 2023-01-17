@@ -25,57 +25,46 @@ import java.util.regex.Pattern;
  *        <th>Format</th>
  *        <th>Addressing Mode</th>
  *    </tr>
- *
  *    <tr>
  *      <td><code>{@value IMMEDIATE_VALUE_PREFIX}V</code></td>
  *      <td>Immediate</td>
  *    </tr>
- *
  *    <tr>
  *      <td><code>{@value ACCUMULATOR_PREFIX}VV</code></td>
  *      <td>Accumulator</td>
  *    </tr>
- *
  *    <tr>
  *      <td><code>{@value VALUE_PREFIX}V</code> / <code>{@value VALUE_PREFIX}VV</code></td>
  *      <td>Zero Page</td>
  *    </tr>
- *
  *    <tr>
  *      <td><code>{@value VALUE_PREFIX}V{@value X_INDEXED_POSTFIX}</code> / <code>{@value VALUE_PREFIX}VV{@value X_INDEXED_POSTFIX}</code></td>
  *      <td>Zero Page[X]</td>
  *    </tr>
- *
  *    <tr>
  *      <td><code>{@value VALUE_PREFIX}V{@value Y_INDEXED_POSTFIX}</code> / <code>{@value VALUE_PREFIX}VV{@value Y_INDEXED_POSTFIX}</code></td>
  *      <td>Zero Page[Y]</td>
  *    </tr>
- *
  *    <tr>
  *      <td><code>{@value VALUE_PREFIX}VVV</code> / <code>{@value VALUE_PREFIX}VVVV</code></td>
  *      <td>Absolute</td>
  *    </tr>
- *
  *    <tr>
  *      <td><code>{@value VALUE_PREFIX}VVV{@value X_INDEXED_POSTFIX}</code> / <code>{@value VALUE_PREFIX}VVVV{@value X_INDEXED_POSTFIX}</code></td>
  *      <td>Absolute[X]</td>
  *    </tr>
- *
  *    <tr>
  *      <td><code>{@value VALUE_PREFIX}VVV{@value Y_INDEXED_POSTFIX}</code> / <code>{@value VALUE_PREFIX}VVVV{@value Y_INDEXED_POSTFIX}</code></td>
  *      <td>Absolute[Y]</td>
  *    </tr>
- *
  *    <tr>
  *      <td><code>{@value INDIRECT_PREFIX}V{@value INDIRECT_X_POSTFIX}</code> / <code>{@value INDIRECT_PREFIX}VV{@value INDIRECT_X_POSTFIX}</code></td>
  *      <td>Indirect, X</td>
  *    </tr>
- *
  *    <tr>
  *      <td><code>{@value INDIRECT_PREFIX}V{@value INDIRECT_Y_POSTFIX}</code> / <code>{@value INDIRECT_PREFIX}VV{@value INDIRECT_Y_POSTFIX}</code></td>
  *      <td>Indirect, Y</td>
  *    </tr>
- *
  *  </Table>
  *
  * @author Ross Drew
@@ -91,6 +80,9 @@ public class Mos6502Compiler {
     public static final Pattern LABEL_REF_REGEX = Pattern.compile("\\w+");
     /** Regex used to extract a program label */
     public static final Pattern LABEL_REGEX = Pattern.compile(LABEL_REF_REGEX + ":");
+
+    /** Regex string used to identify comments */
+    private static final String COMMENT_REGEX = ";.*?\n";
 
     /** The prefix expected for an accumulator addressed argument */
     public static final String ACCUMULATOR_PREFIX = "#";
@@ -210,21 +202,20 @@ public class Mos6502Compiler {
      * Comment = <code>;{...}\n</code>.
      */
     private String sanitize(final String programText) {
-        final StringBuilder sanitizedText = new StringBuilder();
-        return programText.replaceAll(";.*?\n", "");
+        return programText.replaceAll(COMMENT_REGEX, "");
     }
 
     private Program extractArgumentValue(Program workingProgram, String value) {
         //high byte
         if (value.length() == 4 ) {
-            workingProgram = workingProgram.with(Integer.decode("0x" + value.substring(value.length() - 4, 2)));
+            workingProgram = workingProgram.with(Integer.decode("0x" + value.substring(0, 2)));
         }else if (value.length() == 3 ) {
-            workingProgram = workingProgram.with(Integer.decode("0x" + value.substring(value.length() - 3 , 1)));
+            workingProgram = workingProgram.with(Integer.decode("0x" + value.charAt(0)));
         }
 
         //low byte
         if (value.length() == 1)
-            workingProgram = workingProgram.with(Integer.decode("0x" + value.substring(value.length()-1)));
+            workingProgram = workingProgram.with(Integer.decode("0x" + value));
         else if (value.length() > 1)
             workingProgram = workingProgram.with(Integer.decode("0x" + value.substring(value.length()-2)));
 
