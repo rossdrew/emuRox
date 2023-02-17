@@ -1,11 +1,12 @@
 package com.rox.emu.nes.apu;
 
 import com.rox.emu.timing.Clock;
+import com.rox.emu.timing.ClockWatcher;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Divider implements Clock.ClockWatcher {
+public class Divider implements ClockWatcher {
     private final List<ClockWatcher> watchers = new ArrayList<>();
 
     private int period;
@@ -44,10 +45,5 @@ public class Divider implements Clock.ClockWatcher {
     @Override
     public void stop() {
         //Not implemented
-    }
-
-    /** Some class which wants to be informed when the clock progresses */
-    public interface ClockWatcher {
-        void tick();
     }
 }

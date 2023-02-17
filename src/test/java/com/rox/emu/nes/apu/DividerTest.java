@@ -1,5 +1,6 @@
 package com.rox.emu.nes.apu;
 
+import com.rox.emu.timing.ClockWatcher;
 import org.junit.Test;
 
 import static org.junit.Assert.assertNotNull;
@@ -15,7 +16,7 @@ public class DividerTest {
     @Test
     public void acceptsWatchers() {
         final Divider divider = new Divider(1);
-        final Divider.ClockWatcher mockClockWatcher = mock(Divider.ClockWatcher.class);
+        final ClockWatcher mockClockWatcher = mock(ClockWatcher.class);
         divider.addClockWatcher(mockClockWatcher);
 
         verify(mockClockWatcher, never()).tick();
@@ -24,7 +25,7 @@ public class DividerTest {
     @Test
     public void passesTickOn() {
         final Divider divider = new Divider(1);
-        final Divider.ClockWatcher mockClockWatcher = mock(Divider.ClockWatcher.class);
+        final ClockWatcher mockClockWatcher = mock(ClockWatcher.class);
         divider.addClockWatcher(mockClockWatcher);
 
         divider.tick();
@@ -36,7 +37,7 @@ public class DividerTest {
     public void noTicksTillThreshold() {
         final int testedPeriod = 3;
         final Divider divider = new Divider(testedPeriod);
-        final Divider.ClockWatcher mockClockWatcher = mock(Divider.ClockWatcher.class);
+        final ClockWatcher mockClockWatcher = mock(ClockWatcher.class);
         divider.addClockWatcher(mockClockWatcher);
 
         for (int tickNumber=0; tickNumber<testedPeriod; tickNumber++){
@@ -52,7 +53,7 @@ public class DividerTest {
         final int testedPeriod = 3;
         final int testedThresholds = 10;
         final Divider divider = new Divider(testedPeriod);
-        final Divider.ClockWatcher mockClockWatcher = mock(Divider.ClockWatcher.class);
+        final ClockWatcher mockClockWatcher = mock(ClockWatcher.class);
         divider.addClockWatcher(mockClockWatcher);
 
         verify(mockClockWatcher, never()).tick();
@@ -67,7 +68,7 @@ public class DividerTest {
     public void testPeriodChangeEffectOnCurrentCycle() {
         final int testedPeriod = 3;
         final Divider divider = new Divider(testedPeriod);
-        final Divider.ClockWatcher mockClockWatcher = mock(Divider.ClockWatcher.class);
+        final ClockWatcher mockClockWatcher = mock(ClockWatcher.class);
         divider.addClockWatcher(mockClockWatcher);
 
         ticks(divider, 2);
@@ -81,7 +82,7 @@ public class DividerTest {
     public void testPeriodChangeEffectOnFollowingCycle() {
         final int testedPeriod = 3;
         final Divider divider = new Divider(testedPeriod);
-        final Divider.ClockWatcher mockClockWatcher = mock(Divider.ClockWatcher.class);
+        final ClockWatcher mockClockWatcher = mock(ClockWatcher.class);
         divider.addClockWatcher(mockClockWatcher);
 
         ticks(divider, 2);
@@ -96,7 +97,7 @@ public class DividerTest {
     public void resetWorks() {
         final int testedPeriod = 3;
         final Divider divider = new Divider(testedPeriod);
-        final Divider.ClockWatcher mockClockWatcher = mock(Divider.ClockWatcher.class);
+        final ClockWatcher mockClockWatcher = mock(ClockWatcher.class);
         divider.addClockWatcher(mockClockWatcher);
 
         ticks(divider, 2);
