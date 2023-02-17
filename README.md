@@ -2,7 +2,7 @@
 [![Build Status by TravisCI](https://travis-ci.org/rossdrew/emuRox.svg?branch=master)](https://travis-ci.org/rossdrew/emuRox)
 [![Code Coverage by Codecov](https://codecov.io/gh/rossdrew/emuRox/branch/master/graph/badge.svg)](https://codecov.io/gh/rossdrew/emuRox)
 [![Mutation Coverage by Pitest](http://rossdrew.pythonanywhere.com/shield&rnd=1)](http://rossdrew.pythonanywhere.com/report)
-[![Quality Gate by sonarcloud](https://sonarcloud.io/api/project_badges/measure?project=com.rox%3AEmuRox&metric=alert_status)](https://sonarcloud.io/api/project_badges/measure?project=com.rox%3AEmuRox&metric=alert_status)
+(https://sonarcloud.io/api/project_badges/measure?project=com.rox%3AEmuRox&metric=alert_status)
 [![GitHub Actions CI](https://github.com/rossdrew/emurox/workflows/GitHub%20Actions/badge.svg)](https://github.com/rossdrew/emurox/workflows/GitHub%20Actions/badge.svg)
 
 <a href="http://sorensiebuhr.dk/">
