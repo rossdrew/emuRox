@@ -1,5 +1,6 @@
 package com.rox.emu.nes.apu;
 
+import com.rox.emu.nes.apu.Sequencer.EventWatcher;
 import org.junit.Test;
 
 import static org.junit.Assert.assertNotNull;
@@ -8,14 +9,14 @@ import static org.mockito.Mockito.*;
 public class SequencerTest {
     @Test
     public void creation(){
-        final Sequencer sequencer = new Sequencer(new String[0]);
+        final Sequencer<String> sequencer = new Sequencer<>(new String[0]);
         assertNotNull(sequencer);
     }
 
     @Test
     public void outputsEvent(){
-        final Sequencer sequencer = new Sequencer(new String[] {"A"});
-        final Sequencer.EventWatcher eventWatcherMock = mock(Sequencer.EventWatcher.class);
+        final Sequencer<String> sequencer = new Sequencer<>(new String[] {"A"});
+        final EventWatcher<String> eventWatcherMock = mock(EventWatcher.class);
         sequencer.addEventWatcher(eventWatcherMock);
 
         sequencer.tick();
@@ -25,8 +26,8 @@ public class SequencerTest {
 
     @Test
     public void outputsSequentialEvents(){
-        final Sequencer sequencer = new Sequencer(new String[] {"A", "B"});
-        final Sequencer.EventWatcher eventWatcherMock = mock(Sequencer.EventWatcher.class);
+        final Sequencer<String> sequencer = new Sequencer<>(new String[] {"A", "B"});
+        final EventWatcher<String> eventWatcherMock = mock(EventWatcher.class);
         sequencer.addEventWatcher(eventWatcherMock);
 
         sequencer.tick();
@@ -39,8 +40,8 @@ public class SequencerTest {
 
     @Test
     public void emptyScriptEntryDoesntOutputEvent(){
-        final Sequencer sequencer = new Sequencer(new String[] {null, "B"});
-        final Sequencer.EventWatcher eventWatcherMock = mock(Sequencer.EventWatcher.class);
+        final Sequencer<String> sequencer = new Sequencer<>(new String[] {null, "B"});
+        final EventWatcher<String> eventWatcherMock = mock(EventWatcher.class);
         sequencer.addEventWatcher(eventWatcherMock);
 
         sequencer.tick();
