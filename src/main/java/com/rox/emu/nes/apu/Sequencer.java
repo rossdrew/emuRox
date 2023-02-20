@@ -5,6 +5,12 @@ import com.rox.emu.timing.ClockWatcher;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * An NES PPU Sequencer.
+ * Fires events of <EventType> to listeners based on received {@link ClockWatcher} ticks
+ * iterating over a given script.
+ * @param <EventType> for the type of events that will be fired
+ */
 public class Sequencer<EventType> implements ClockWatcher {
     private final EventType[] script;
     private final List<EventWatcher<EventType>> watchers = new ArrayList<>();
