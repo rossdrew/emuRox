@@ -6,8 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A NES APU Divider module.
- *
+ * A NES APU Divider module.*
  * Divides some frequency by a given factor and outputs a {@link ClockWatcher} tick for every <i>n</i> ticks provided.
  */
 public class Divider implements ClockWatcher {
