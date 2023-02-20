@@ -2,11 +2,18 @@ package com.rox.emu.nes.apu;
 
 import com.rox.emu.nes.apu.Sequencer.EventWatcher;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.*;
 
+@RunWith(MockitoJUnitRunner.class)
 public class SequencerTest {
+    @Mock
+    public EventWatcher<String> eventWatcherMock;
+
     @Test
     public void creation(){
         final Sequencer<String> sequencer = new Sequencer<>(new String[0]);
@@ -16,7 +23,6 @@ public class SequencerTest {
     @Test
     public void outputsEvent(){
         final Sequencer<String> sequencer = new Sequencer<>(new String[] {"A"});
-        final EventWatcher<String> eventWatcherMock = mock(EventWatcher.class);
         sequencer.addEventWatcher(eventWatcherMock);
 
         sequencer.tick();
@@ -27,7 +33,6 @@ public class SequencerTest {
     @Test
     public void outputsSequentialEvents(){
         final Sequencer<String> sequencer = new Sequencer<>(new String[] {"A", "B"});
-        final EventWatcher<String> eventWatcherMock = mock(EventWatcher.class);
         sequencer.addEventWatcher(eventWatcherMock);
 
         ticks(sequencer, 2);
@@ -40,7 +45,6 @@ public class SequencerTest {
     @Test
     public void emptyScriptEntryDoesntOutputEvent(){
         final Sequencer<String> sequencer = new Sequencer<>(new String[] {null, "B"});
-        final EventWatcher<String> eventWatcherMock = mock(EventWatcher.class);
         sequencer.addEventWatcher(eventWatcherMock);
 
         ticks(sequencer, 2);
@@ -51,7 +55,6 @@ public class SequencerTest {
     @Test
     public void scriptWrapsAround(){
         final Sequencer<String> sequencer = new Sequencer<>(new String[] {"A", "B", "C"});
-        final EventWatcher<String> eventWatcherMock = mock(EventWatcher.class);
         sequencer.addEventWatcher(eventWatcherMock);
 
         ticks(sequencer, 4);
@@ -63,7 +66,7 @@ public class SequencerTest {
     }
 
     //Helper method to do multiple ticks
-    private void ticks(Sequencer sequencer, int ticks){
+    private void ticks(Sequencer<String> sequencer, int ticks){
         for (int tick=0; tick<ticks; tick++)
             sequencer.tick();
     }

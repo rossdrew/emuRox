@@ -57,10 +57,10 @@ public class DividerTest {
         divider.addClockWatcher(mockClockWatcher);
 
         verify(mockClockWatcher, never()).tick();
-        for (int threshholdNumber=0; threshholdNumber < testedThresholds; threshholdNumber++){
+        for (int threshold=0; threshold < testedThresholds; threshold++){
             ticks(divider, testedPeriod);
 
-            verify(mockClockWatcher, times(threshholdNumber+1)).tick();
+            verify(mockClockWatcher, times(threshold+1)).tick();
         }
     }
 
