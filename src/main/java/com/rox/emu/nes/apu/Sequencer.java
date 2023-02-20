@@ -42,7 +42,7 @@ public class Sequencer<EventType> implements ClockWatcher {
         //Not implemented
     }
 
-    public void addEventWatcher(final EventWatcher eventWatcher) {
+    public void addEventWatcher(final EventWatcher<EventType> eventWatcher) {
         watchers.add(eventWatcher);
     }
 
