@@ -1,11 +1,15 @@
 package com.rox.emu.nes.apu;
 
-import com.rox.emu.timing.Clock;
 import com.rox.emu.timing.ClockWatcher;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A NES APU Divider module.
+ *
+ * Divides some frequency by a given factor and outputs a {@link ClockWatcher} tick for every <i>n</i> ticks provided.
+ */
 public class Divider implements ClockWatcher {
     private final List<ClockWatcher> watchers = new ArrayList<>();
 
