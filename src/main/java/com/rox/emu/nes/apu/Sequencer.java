@@ -27,7 +27,8 @@ public class Sequencer<EventType> implements ClockWatcher {
                 watcher.eventNotification(script[eventIndex]);
             }
         }
-        eventIndex++;
+
+        eventIndex = (eventIndex+1) % script.length;
     }
 
     @Override

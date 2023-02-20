@@ -30,8 +30,7 @@ public class SequencerTest {
         final EventWatcher<String> eventWatcherMock = mock(EventWatcher.class);
         sequencer.addEventWatcher(eventWatcherMock);
 
-        sequencer.tick();
-        sequencer.tick();
+        ticks(sequencer, 2);
 
         verify(eventWatcherMock, times(1)).eventNotification("A");
         verify(eventWatcherMock, times(1)).eventNotification("B");
@@ -44,9 +43,28 @@ public class SequencerTest {
         final EventWatcher<String> eventWatcherMock = mock(EventWatcher.class);
         sequencer.addEventWatcher(eventWatcherMock);
 
-        sequencer.tick();
-        sequencer.tick();
+        ticks(sequencer, 2);
 
         verify(eventWatcherMock, times(1)).eventNotification("B");
+    }
+
+    @Test
+    public void scriptWrapsAround(){
+        final Sequencer<String> sequencer = new Sequencer<>(new String[] {"A", "B", "C"});
+        final EventWatcher<String> eventWatcherMock = mock(EventWatcher.class);
+        sequencer.addEventWatcher(eventWatcherMock);
+
+        ticks(sequencer, 4);
+
+        verify(eventWatcherMock, times(4)).eventNotification(any(String.class));
+        verify(eventWatcherMock, times(2)).eventNotification("A");
+        verify(eventWatcherMock, times(1)).eventNotification("B");
+        verify(eventWatcherMock, times(1)).eventNotification("C");
+    }
+
+    //Helper method to do multiple ticks
+    private void ticks(Sequencer sequencer, int ticks){
+        for (int tick=0; tick<ticks; tick++)
+            sequencer.tick();
     }
 }
