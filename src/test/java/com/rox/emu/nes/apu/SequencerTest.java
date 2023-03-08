@@ -65,6 +65,19 @@ public class SequencerTest {
         verify(eventWatcherMock, times(1)).eventNotification("C");
     }
 
+    @Test
+    public void scriptWrapsAroundAndAround(){
+        final Sequencer<String> sequencer = new Sequencer<>(new String[] {"A", "B", "C"});
+        sequencer.addEventWatcher(eventWatcherMock);
+
+        ticks(sequencer, 13);
+
+        verify(eventWatcherMock, times(13)).eventNotification(any(String.class));
+        verify(eventWatcherMock, times(5)).eventNotification("A");
+        verify(eventWatcherMock, times(4)).eventNotification("B");
+        verify(eventWatcherMock, times(4)).eventNotification("C");
+    }
+
     //Helper method to do multiple ticks
     private void ticks(Sequencer<String> sequencer, int ticks){
         for (int tick=0; tick<ticks; tick++)
