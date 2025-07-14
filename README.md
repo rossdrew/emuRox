@@ -23,7 +23,7 @@ Too often I've:
 
  > _Any fool can write code that a computer can understand. Good programmers write code that humans can understand. (M. Fowler)_
 
- I wanted something I could redesign over and over as my knowledge of the domain grew and as I felt the frustrations of having to reacquaint myself with pieces of code I hadn't seen in a while.  Something I could [test in a thousand different way](https://github.com/rossdrew/emuRox/blob/master/src/test/README.md), then tweak and experiment with build processes so that the development cycle is rapid and fluid.  That I could tweak the code over and over to make it simpler and simpler to understand. 
+ I wanted something I could redesign over and over as my knowledge of the domain grew and as I felt the frustrations of having to reacquaint myself with pieces of code I hadn't seen in a while.  Something I could [test in a thousand different ways](https://github.com/rossdrew/emuRox/blob/master/src/test/README.md), then tweak and experiment with build processes so that the development cycle is rapid and fluid.  That I could tweak the code over and over to make it simpler and simpler to understand. 
 
 There are also desirable side effects.  I wanted to write my own emulator, play the games of my childhood and know that I wrote the platform that they were running on and becoming even more familiar with the first pieces of software I fell in love with.  I wanted a large codebase I had complete control over and could try out tools and technologies.  I got to the stage of the latter, quite a while ago and I'm crawling towards the former.
 
