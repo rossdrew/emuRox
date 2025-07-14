@@ -78,7 +78,7 @@ The plan was to develop in a TDD (Test Driven Development) centric way, that is 
  - [Groovy](http://www.groovy-lang.org/)/[Spock](http://spockframework.org/) for [data-driven tests](https://en.wikipedia.org/wiki/Data-driven_testing), adding mocks and more expressive syntax with [Hamcrest](http://hamcrest.org/).  For covering various variations of class creation and method use in a clear, concise way that JUnit struggles with.
    - [Spock Genesis](https://github.com/Bijnagte/spock-genesis) for [property-based testing](http://blog.jessitron.com/2013/04/property-based-testing-what-is-it.html) in Groovy.
  - [Pitest](http://pitest.org/) reports. To allow us to use [mutation testing](https://en.wikipedia.org/wiki/Mutation_testing) to validate and improve our ([Spock](http://spockframework.org/) & [JUnit](http://junit.org/junit4/)) unit tests.  
-   - A self made, super simple [Python program](https://rossdrew.github.io//pitest-ci/) to generate a simple Pitest GitHub shield.
+   - A self made, super simple [Python program](https://github.com/rossdrew/PitestCI/blob/master/pitestReport.py) to [generate a Pitest GitHub shield](https://rossdrew.github.io//pitest-ci/).
  - [TravisCI](https://travis-ci.org/) for [continuous integration](https://en.wikipedia.org/wiki/Continuous_integration) & build status GitHub Shield, making sure my build always builds and my tests always pass.
  - [JaCoCo](http://www.eclemma.org/jacoco/) reports. To allow us to strive for high [code coverage](https://en.wikipedia.org/wiki/Code_coverage).  Mainly for the GitHub shield using [CodeCov](https://codecov.io). 
  - Static analysis done in my development environment on [IntelliJ IDEA](https://www.jetbrains.com/idea/) and online (including GitHub shield) by [Codeacy](https://www.codacy.com/).
@@ -112,6 +112,7 @@ The plan was to develop in a TDD (Test Driven Development) centric way, that is 
  
 ### Outputs
  - A Dev.to blog post on [Functional Enums in Java](https://dev.to/rossdrew/functional-enums-in-java-34o1)
+ - A Dev.to blog post on making a [custom GitHub shield](https://rossdrew.github.io//pitest-ci/), in this case to report [Pitest](http://pitest.org/) mutation testing results.
  
 ## Get involved 
 Beerpay seems to have died so no contribution method.  I'll look into replacing it.
