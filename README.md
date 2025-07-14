@@ -8,9 +8,9 @@
 </a>
 
 # EmuRox
-NOTE: This is not dead.  Just on a bit of a hiatus while I wrestle with new fatherhood. 
+NOTE: While not dead, I've found it hard to dedicate time to this project over the last few years. 
 
-Ostensibly, an Nintendo Entertainment System ([NES](https://en.wikipedia.org/wiki/Nintendo_Entertainment_System)) emulator with a view to encompassing other systems. Creating a pluggable multi-emulator. In actuality, it is not about getting a working emulator, for a NES or anything else. There are plenty of them out there.  It's about taking a complex problem and designing the best abstraction possible.  Allowing us to discuss complex ideas in simple language.
+Ostensibly, a Nintendo Entertainment System ([NES](https://en.wikipedia.org/wiki/Nintendo_Entertainment_System)) emulator with a view to encompassing other systems. Creating a pluggable multi-emulator. In actuality, it is not about getting a working emulator, for a NES or anything else. There are plenty of them out there.  It's about taking a complex problem and designing the best abstraction possible.  Allowing us to discuss complex ideas in simple language.
 
 Too often I've:
 
@@ -45,7 +45,7 @@ At the top we have the currently executing instruction and on the right a histor
 
 ## 6502 and progress towards a working NES...
 
-I've seperate (at least) the NES section of this down into 7 stages:
+I've seperated (at least) the NES section of this down into 7 stages:
 
  - [x] I blasted through the first phase due to the massive amount of documentation on the MOS 6502
  - [x] While researching phase 3, I churned through the relitively basic work of parsing iNES files of phase 2 (without edge cases for now)
@@ -71,25 +71,28 @@ The plan was to develop in a TDD (Test Driven Development) centric way, that is 
 
  _Technologies that I have used, liked and continued to use as part of the project..._
 
- - [Trello](https://trello.com/b/ZWcFxEu3/emurox) for work breakdown and project management. 
- - [Java](https://www.java.com/)/[JUnit](http://junit.org/junit4/) for basic functionality tests, adding mocks and more expressive syntax with [Mockito](http://site.mockito.org/).  This includes features such as [Theories](http://junit.org/junit4/javadoc/4.12/org/junit/experimental/theories/Theories.html).  
- - [Groovy](http://www.groovy-lang.org/)/[Spock](http://spockframework.org/) for [data-driven tests](https://en.wikipedia.org/wiki/Data-driven_testing), adding mocks and more expressive syntax with [Hamcrest](http://hamcrest.org/).  For covering various variations of class creation and method use in a clear, concise way that JUnit struggles with.  
- - [junit-quickcheck](https://github.com/pholser/junit-quickcheck) and [Spock Genesis](https://github.com/Bijnagte/spock-genesis) for [property-based testing](http://blog.jessitron.com/2013/04/property-based-testing-what-is-it.html) in Java and Groovy respectively.
- - [JUnit Theory Suite](https://github.com/richard-melvin/junit-theory-suite) for unrolling [JUnit](http://junit.org/junit4/) [Theories](http://junit.org/junit4/javadoc/4.12/org/junit/experimental/theories/Theories.html).  This will unroll all data points combinatorially to a [Theory](http://junit.org/junit4/javadoc/4.12/org/junit/experimental/theories/Theories.html)
+ - [Java](https://www.java.com/)/[JUnit](http://junit.org/junit4/) for basic functionality tests, adding mocks 
+   - [Mockito](http://site.mockito.org/) to add more expressive syntax to JUnit, including features such as [Theories](http://junit.org/junit4/javadoc/4.12/org/junit/experimental/theories/Theories.html).
+   - [junit-quickcheck](https://github.com/pholser/junit-quickcheck) for [property-based testing](http://blog.jessitron.com/2013/04/property-based-testing-what-is-it.html) in Java.
+   - [JUnit Theory Suite](https://github.com/richard-melvin/junit-theory-suite) for unrolling [JUnit](http://junit.org/junit4/) [Theories](http://junit.org/junit4/javadoc/4.12/org/junit/experimental/theories/Theories.html).  This will unroll all data points combinatorially to a [Theory](http://junit.org/junit4/javadoc/4.12/org/junit/experimental/theories/Theories.html)
+ - [Groovy](http://www.groovy-lang.org/)/[Spock](http://spockframework.org/) for [data-driven tests](https://en.wikipedia.org/wiki/Data-driven_testing), adding mocks and more expressive syntax with [Hamcrest](http://hamcrest.org/).  For covering various variations of class creation and method use in a clear, concise way that JUnit struggles with.
+   - [Spock Genesis](https://github.com/Bijnagte/spock-genesis) for [property-based testing](http://blog.jessitron.com/2013/04/property-based-testing-what-is-it.html) in Groovy.
+ - [Pitest](http://pitest.org/) reports. To allow us to use [mutation testing](https://en.wikipedia.org/wiki/Mutation_testing) to validate and improve our ([Spock](http://spockframework.org/) & [JUnit](http://junit.org/junit4/)) unit tests.  
+   - A self made, super simple [Python program](https://rossdrew.github.io//pitest-ci/) to generate a simple Pitest GitHub shield.
  - [TravisCI](https://travis-ci.org/) for [continuous integration](https://en.wikipedia.org/wiki/Continuous_integration) & build status GitHub Shield, making sure my build always builds and my tests always pass.
- - [Pitest](http://pitest.org/) reports. To allow us to use [mutation testing](https://en.wikipedia.org/wiki/Mutation_testing) to validate and improve our ([Spock](http://spockframework.org/) & [JUnit](http://junit.org/junit4/)) unit tests.  The Pitest GitHub shield is a [self made Python program](https://rossdrew.github.io//pitest-ci/).
  - [JaCoCo](http://www.eclemma.org/jacoco/) reports. To allow us to strive for high [code coverage](https://en.wikipedia.org/wiki/Code_coverage).  Mainly for the GitHub shield using [CodeCov](https://codecov.io). 
- - Static analysis done in my development environment on [IntelliJ IDEA](https://www.jetbrains.com/idea/) and online (including GitHub shield) by [Codeacy](https://www.codacy.com/). 
+ - Static analysis done in my development environment on [IntelliJ IDEA](https://www.jetbrains.com/idea/) and online (including GitHub shield) by [Codeacy](https://www.codacy.com/).
+ - [Trello](https://trello.com/b/ZWcFxEu3/emurox) for work breakdown and project management.
 
 #### Investigated technologies 
 
  _Technologies that I have used yet disliked or haven't saw a place for them in my project for whatever reason..._
 
- - [JParams toStringTester](https://github.com/jparams/to-string-tester) for `toString` testing but it didn't seem to work very well, I filed an [issue](https://github.com/jparams/to-string-tester/issues/1) but the project has since been archived.
- - [JUnit QuickTheories](https://github.com/ncredinburgh/QuickTheories) for property based testing but it's much more verbose for no added benefit over [junit-quickcheck](https://www.google.co.uk/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&cad=rja&uact=8&ved=0ahUKEwjq4-PF-aPSAhWHDsAKHV17BCIQFggaMAA&url=https%3A%2F%2Fgithub.com%2Fpholser%2Fjunit-quickcheck&usg=AFQjCNE37M0yEi68OG8Hr7y1MDoJwcLOaQ&sig2=AUpnbmKM5Sk9efhw1r-bKw&bvm=bv.147448319,d.d2s)
- - [Spockito](https://github.com/tools4j/spockito) to give the ability to unroll [JUnit](http://junit.org/junit4/) [Theories](http://junit.org/junit4/javadoc/4.12/org/junit/experimental/theories/Theories.html) like in [Spock](http://spockframework.org/) data-driven tests but I'm not a big fan of the syntax and attaches `@DataPoint`s to the methods.  It would be great for adding data-driven tests if you were limited to [JUnit](http://junit.org/junit4/), however
- - [Kotlin](https://kotlinlang.org/) for testing and various testing frameworks like [Spek](https://github.com/spekframework/spek) and [kotlintest](https://github.com/kotlintest/kotlintest) but it offers nothing I don't already have and property/data-driven/theory testing is pretty ugly and/or weak.
- - [Beads Project](https://github.com/orsjb/beads) currently investigating for audio synthesis until I have the knowledge to roll my own.  The library is so small, focused and nice to use I may just keep it.  Unfortunately it's not on any repo so it needs to be manually included.
+ - [JParams toStringTester](https://github.com/jparams/to-string-tester) for `toString` testing.  It didn't seem to work very well, I filed an [issue](https://github.com/jparams/to-string-tester/issues/1) but the project has since been archived.
+ - [JUnit QuickTheories](https://github.com/ncredinburgh/QuickTheories) for property based testing.  It's much more verbose for no added benefit over [junit-quickcheck](https://www.google.co.uk/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&cad=rja&uact=8&ved=0ahUKEwjq4-PF-aPSAhWHDsAKHV17BCIQFggaMAA&url=https%3A%2F%2Fgithub.com%2Fpholser%2Fjunit-quickcheck&usg=AFQjCNE37M0yEi68OG8Hr7y1MDoJwcLOaQ&sig2=AUpnbmKM5Sk9efhw1r-bKw&bvm=bv.147448319,d.d2s)
+ - [Spockito](https://github.com/tools4j/spockito) to give the ability to unroll [JUnit](http://junit.org/junit4/) [Theories](http://junit.org/junit4/javadoc/4.12/org/junit/experimental/theories/Theories.html) like in [Spock](http://spockframework.org/) data-driven tests.  I'm not a big fan of the syntax and attaches `@DataPoint`s to the methods.  It would be great for adding data-driven tests if you were limited to [JUnit](http://junit.org/junit4/), however
+ - [Kotlin](https://kotlinlang.org/) for testing and various testing frameworks like [Spek](https://github.com/spekframework/spek) and [kotlintest](https://github.com/kotlintest/kotlintest).  It offers nothing I don't already have and property/data-driven/theory testing is pretty ugly and/or weak.
+ - [Beads Project](https://github.com/orsjb/beads) currently investigating for audio synthesis until I have the knowledge to roll my own.  The library is so small, focused and nice to use I may just keep it.  Unfortunately it's not distributed so it needs to be manually included.
 
 -----
 
