@@ -23,7 +23,7 @@ Too often I've:
 
  > _Any fool can write code that a computer can understand. Good programmers write code that humans can understand. (M. Fowler)_
 
- I wanted something I could redesign over and over as my knowledge of the domain grew and as I felt the frustrations of having to reaquaint myself with pirces of code I hadn't seen in a while.  Something I could test in a thousand different ways, then tweak and experiment with build processes so that the development cycle is rapid and fluid.  That I could tweak the code over and over to make it simpler and simpler to understand. 
+ I wanted something I could redesign over and over as my knowledge of the domain grew and as I felt the frustrations of having to reacquaint myself with pieces of code I hadn't seen in a while.  Something I could [test in a thousand different way](https://github.com/rossdrew/emuRox/blob/master/src/test/README.md), then tweak and experiment with build processes so that the development cycle is rapid and fluid.  That I could tweak the code over and over to make it simpler and simpler to understand. 
 
 There are also desirable side effects.  I wanted to write my own emulator, play the games of my childhood and know that I wrote the platform that they were running on and becoming even more familiar with the first pieces of software I fell in love with.  I wanted a large codebase I had complete control over and could try out tools and technologies.  I got to the stage of the latter, quite a while ago and I'm crawling towards the former.
 
@@ -48,10 +48,10 @@ At the top we have the currently executing instruction and on the right a histor
 I've seperated (at least) the NES section of this down into 7 stages:
 
  - [x] I blasted through the first phase due to the massive amount of documentation on the MOS 6502
- - [x] While researching phase 3, I churned through the relitively basic work of parsing iNES files of phase 2 (without edge cases for now)
- - [ ] Phase 3 is kinda where I'm stuck at the moment, struggling to find time to consolodate all the documentation and existing on the APU, which is less abundant than of the MOS 6502 and far more messy
+ - [x] While researching phase 3, I churned through the relatively basic work of parsing iNES files of phase 2 (without edge cases for now)
+ - [ ] Phase 3 is kinda where I'm stuck at the moment, struggling to find time to consolidate all the documentation and existing on the APU, which is less abundant than of the MOS 6502 and far more messy
  - [ ] Phase 4 is going to be a decent challenge I think, where I need to start concentrating on timings
- - [ ] Phase 5 and 6 are bringing it all together into a useable system
+ - [ ] Phase 5 and 6 are bringing it all together into a usable system
 
 So currenly large scale features are undergoing research and early design.  This also gives me time to improve and tweak what is there.
 
