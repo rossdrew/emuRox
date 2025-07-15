@@ -187,17 +187,22 @@ final class DebuggerWindow extends JFrame {
     }
 
     private RoxByte[] getProgramFromFile() {
-        final File file = new File( "src" +  File.separator + "main" +  File.separator + "resources" + File.separator + "rom" + File.separator + "SMB1.NES");
+        final File file = new File( "src" +  File.separator + "main" +  File.separator + "resources" + File.separator + "rom" + File.separator + "Stars.NES");
 
         System.out.println("Loading '" + file.getAbsolutePath() + "'...");
 
-        final FileInputStream fis;
-        byte fileContent[] = {};
-        try {
-            fis = new FileInputStream(file);
-            fileContent= new byte[(int)file.length()];
-            fis.read(fileContent);
-        } catch (IOException e ) {
+        byte[] fileContent = {};
+        try (FileInputStream fis = new FileInputStream(file)) {
+            if (!file.exists()) {
+                throw new IOException("File not found: " + file.getAbsolutePath());
+            }
+            fileContent = new byte[(int) file.length()];
+            int read = fis.read(fileContent);
+            if (read != fileContent.length) {
+                throw new IOException("Could not read the entire file: " + file.getAbsolutePath());
+            }
+            System.out.println("Read " + read + " bytes from file: " + file.getAbsolutePath());
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
