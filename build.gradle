@@ -78,10 +78,10 @@ pitest {
 }
 
 task runDebugUI(type: JavaExec, group: 'application') {
+    main = mainClassName
+    classpath sourceSets.main.runtimeClasspath
     doFirst {
         println "Running Debugger UI for ${project.name}"
-        classpath sourceSets.main.runtimeClasspath
-        main = mainClassName
     }
 }
 
