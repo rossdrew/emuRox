@@ -4,7 +4,7 @@
 [![GitHub Actions CI](https://github.com/rossdrew/emurox/workflows/GitHub%20Actions/badge.svg)](https://github.com/rossdrew/emurox/workflows/GitHub%20Actions/badge.svg)
 
 <a href="http://sorensiebuhr.dk/">
- <img align="right" src="https://github.com/rossdrew/rossdrew.github.io/blob/master/src/img/EmuRox.png" data-canonical-src="https://github.com/rossdrew/rossdrew.github.io/blob/master/src/img/EmuRox.png" alt="EmuRox - Image by Søren Siebuhr" width="150" />
+ <img align="right" src="https://github.com/rossdrew/emuRox/blob/master/docs/LogoONE.png" data-canonical-src="https://github.com/rossdrew/emuRox/blob/master/docs/LogoONE.png" alt="EmuRox - Image by ChatGPT" width="150" />
 </a>
 
 # EmuRox
