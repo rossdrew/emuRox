@@ -8,7 +8,7 @@
 </a>
 
 # EmuRox
-NOTE: While not dead, I've found it hard to dedicate time to this project over the last few years. 
+NOTE: While not dead, I've found it hard to dedicate time to this project over the last few years.  I'm currently working on a bit of a restructure making this cycle accurate in order to work well with an APU.  
 
 Ostensibly, a Nintendo Entertainment System ([NES](https://en.wikipedia.org/wiki/Nintendo_Entertainment_System)) emulator with a view to encompassing other systems. Creating a pluggable multi-emulator. In actuality, it is not about getting a working emulator, for a NES or anything else. There are plenty of them out there.  It's about taking a complex problem and designing the best abstraction possible.  Allowing us to discuss complex ideas in simple language.
 
