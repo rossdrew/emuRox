@@ -3,7 +3,7 @@
 [![Mutation Coverage by Pitest](http://rossdrew.pythonanywhere.com/shield&rnd=1)](http://rossdrew.pythonanywhere.com/report)
 [![GitHub Actions CI](https://github.com/rossdrew/emurox/workflows/GitHub%20Actions/badge.svg)](https://github.com/rossdrew/emurox/workflows/GitHub%20Actions/badge.svg)
 
-<a href="http://sorensiebuhr.dk/">
+<a href="https://github.com/rossdrew/emuRox/blob/master/docs/LogoONE.png">
  <img align="right" src="https://github.com/rossdrew/emuRox/blob/master/docs/LogoONE.png" data-canonical-src="https://github.com/rossdrew/emuRox/blob/master/docs/LogoONE.png" alt="EmuRox - Image by ChatGPT" width="150" />
 </a>
 
