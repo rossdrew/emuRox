@@ -110,13 +110,21 @@ public class Mos6502 {
             step();
     }
 
+    public void tick(){
+        log.debug("TICK >>>");
+
+        //TODO are we in the middle of an instruction?
+            //TODO finish it
+        //TODO if not, fetch the next instruction
+    }
+
     /**
      * Execute the next program instruction as per {@link Registers#getNextProgramCounter()}
      */
     public void step() {
         log.debug("STEP >>>");
 
-        final Mos6502OpCode opCode = Mos6502OpCode.from(nextProgramByte().getRawValue());
+        final Mos6502OpCode opCode = Mos6502OpCode.from(nextProgramByte().getRawValue()); //One clock tick
 
         //Execute the opcode
         log.debug("Instruction: {}...", opCode.getOpCodeName());

@@ -1,6 +1,5 @@
 package com.rox.emu.processor.mos6502.util;
 
-
 import com.rox.emu.UnknownTokenException;
 import com.rox.emu.env.RoxByte;
 import com.rox.emu.processor.mos6502.op.Mos6502OpCode;
