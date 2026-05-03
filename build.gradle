@@ -22,6 +22,11 @@ group = 'com.rox'
 version = '1.0-SNAPSHOT'
 description = '6502 Emulator'
 
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(8)
+    }
+}
 
 application {
     mainClass = 'com.rox.emu.processor.mos6502.dbg.ui.DebuggerWindow'
