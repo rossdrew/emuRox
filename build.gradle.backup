@@ -49,8 +49,8 @@ dependencies {
     testImplementation group: 'com.nagternal', name : 'spock-genesis', version: '0.6.0'
     testImplementation group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
 
-    implementation group: 'org.slf4j', name:'slf4j-api', version: '1.7.2'
-    implementation group: 'org.slf4j', name:'slf4j-log4j12', version: '1.7.2'
+    compile group: 'org.slf4j', name:'slf4j-api', version: '1.7.2'
+    compile group: 'org.slf4j', name:'slf4j-log4j12', version: '1.7.2'
 }
 
 jacocoTestReport {
@@ -62,10 +62,10 @@ jacocoTestReport {
     }
 
     afterEvaluate {
-        classDirectories.setFrom(files(classDirectories.files.collect {
+        classDirectories = files(classDirectories.files.collect {
             fileTree(dir: it,
                      exclude: ['**/ui/**'])
-        }))
+        })
     }
 }
 
@@ -78,7 +78,7 @@ pitest {
 
 task runDebugUI(type: JavaExec, group: 'application') {
     doFirst {
-        println "Running Debugger UI for ${project.name}"
+        println "Running Debugger UI for ${project.name}(${mainClassName})"
         classpath sourceSets.main.runtimeClasspath
         main = mainClassName
     }
@@ -87,7 +87,7 @@ task runDebugUI(type: JavaExec, group: 'application') {
 jar {
     //Include third party dependencies
     from {
-        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
     }
 
     manifest {
@@ -101,4 +101,4 @@ task obfuscatedJar(dependsOn: 'jar', type: ProGuardTask) {
     injars "build/libs/${rootProject.name}-${version}.jar"
     outjars "build/libs/${rootProject.name}-1.0.jar"
 }
-
+ 
