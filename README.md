@@ -7,7 +7,7 @@
 </a>
 
 # EmuRox
-NOTE: While not dead, I've found it hard to dedicate time to this project over the last few years.  I'm currently working on a bit of a restructure making this cycle accurate in order to work well with an APU.  
+NOTE: This project has become a little neglected.  I'd love to find the time to dedicate to it but more and more that's less appealing as what's needed is some time bringing everything back up to date.  I'll be back, either to do just that, to try get AI to do it or to rethink my implementation and think at the tick level, rather than the instruction level from the ground up.
 
 Ostensibly, a Nintendo Entertainment System ([NES](https://en.wikipedia.org/wiki/Nintendo_Entertainment_System)) emulator with a view to encompassing other systems. Creating a pluggable multi-emulator. In actuality, it is not about getting a working emulator, for a NES or anything else. There are plenty of them out there.  It's about taking a complex problem and designing the best abstraction possible.  Allowing us to discuss complex ideas in simple language.
 
