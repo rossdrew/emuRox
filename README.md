@@ -1,6 +1,7 @@
 [![License](https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000)](https://opensource.org/licenses/MIT) 
 [![Code Coverage by Codecov](https://codecov.io/gh/rossdrew/emuRox/branch/master/graph/badge.svg)](https://codecov.io/gh/rossdrew/emuRox)
 [![GitHub Actions CI](https://github.com/rossdrew/emurox/workflows/GitHub%20Actions/badge.svg)](https://github.com/rossdrew/emurox/workflows/GitHub%20Actions/badge.svg)
+![AI Free](https://img.shields.io/badge/AI%20Free-green)
 
 <a href="https://github.com/rossdrew/emuRox/blob/master/docs/LogoONE.png">
  <img align="right" src="https://github.com/rossdrew/emuRox/blob/master/docs/LogoONE.png" data-canonical-src="https://github.com/rossdrew/emuRox/blob/master/docs/LogoONE.png" alt="EmuRox - Image by ChatGPT" width="150" />
