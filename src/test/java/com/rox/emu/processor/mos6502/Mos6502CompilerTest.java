@@ -14,9 +14,13 @@ import com.rox.emu.processor.mos6502.op.Mos6502OpCode;
 import com.rox.emu.processor.mos6502.util.Mos6502Compiler;
 import com.rox.emu.processor.mos6502.util.Program;
 import org.junit.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.runner.RunWith;
 
 import java.util.Arrays;
+import java.util.stream.Stream;
 
 import static com.rox.emu.processor.mos6502.util.Mos6502Compiler.*;
 import static junit.framework.TestCase.assertEquals;
@@ -24,6 +28,19 @@ import static org.junit.Assert.*;
 
 @RunWith(JUnitQuickcheck.class)
 public class Mos6502CompilerTest {
+    static Stream<Arguments> invalidPrograms() {
+        return Stream.of(
+                Arguments.of("invalid argument", "INC $12345", UnknownOpCodeException.class, "Invalid or unimplemented argument: '$12345'"),
+                Arguments.of("invalid opcode", "ROX", UnknownTokenException.class, "Unknown token (\"ROX\") while parsing program"),
+                Arguments.of("invalid character (to satisfy JaCoCo 1/2)", "\0ADC $10", UnknownTokenException.class, "Unknown token (\"\0ADC\") while parsing program"),
+                Arguments.of("invalid character (to satisfy JaCoCo 2/2)", "\0BRK", UnknownTokenException.class, "Unknown token (\"\0BRK\") while parsing program"),
+                Arguments.of("invalid argument prefix", "ADC @$10", UnknownOpCodeException.class, "Invalid or unimplemented argument: '@$10'"),
+                Arguments.of("invalid indirect index addressed argument", "ADC " + INDIRECT_PREFIX + "10(", UnknownOpCodeException.class, "Invalid or unimplemented argument: '($10'"),
+                Arguments.of("oversized argument", "ADC " + VALUE_PREFIX + "12345", UnknownOpCodeException.class, "Invalid or unimplemented argument: '$12345'")
+                //Arguments.of("", "", Class.class, "")
+        );
+    }
+
     @Test
     public void testPrefixExtraction(){
         try {
@@ -433,89 +450,12 @@ public class Mos6502CompilerTest {
         assertEquals(RoxByte.fromLiteral(0x1D), memory.getByte(RoxWord.fromLiteral(0x100)));
     }
 
-    @Test
-    public void testInvalidArgument(){
-        final Mos6502Compiler compiler = new Mos6502Compiler("INC $12345");
-        final UnknownOpCodeException e = assertThrows(UnknownOpCodeException.class, compiler::compileProgram);
-        assertEquals("Invalid or unimplemented argument: '$12345'", e.getMessage());
-    }
-
-    @Test
-    public void firstInvalidOpcode(){
-        final Mos6502Compiler compiler = new Mos6502Compiler("ROX");
-
-        try {
-            compiler.compileProgram();
-            fail("Exception expected, 'ROX' is an invalid OpCode");
-        }catch(UnknownTokenException e){
-            assertTrue(e.getMessage().contains("ROX"));
-            assertNotNull(e);
-        }
-    }
-
-    @Test
-    public void opCode1JaCoCoCoverage(){
-        final Mos6502Compiler compiler = new Mos6502Compiler("\0ADC $10");
-
-        try {
-            compiler.compileProgram();
-            fail("Exception expected.  This should not pass a String switch statement");
-        }catch(UnknownTokenException e){
-            assertTrue(e.getMessage().contains("\0ADC"));
-            assertNotNull(e);
-        }
-    }
-
-    @Test
-    public void opCode2JaCoCoCoverage(){
-        final Mos6502Compiler compiler = new Mos6502Compiler("\0BRK");
-
-        try {
-            compiler.compileProgram();
-            fail("Exception expected.  This should not pass a String switch statement");
-        }catch(UnknownTokenException e){
-            assertTrue(e.getMessage().contains("\0BRK"));
-            assertNotNull(e);
-        }
-    }
-
-    @Test
-    public void testInvalidValuePrefix(){
-        try {
-            final Mos6502Compiler compiler = new Mos6502Compiler("ADC @$10");
-            Program program = compiler.compileProgram();
-            int[] bytes = toIntArray(program.getProgramAsByteArray());
-            fail("Invalid value prefix should throw an exception but was " + Arrays.toString(bytes));
-        }catch (UnknownOpCodeException e){
-            assertFalse(e.getMessage().isEmpty());
-            assertNotNull(e.getOpCode());
-        }
-    }
-
-    @Test
-    public void testInvalidIndirectIndexingMode(){
-        try {
-            final Mos6502Compiler compiler = new Mos6502Compiler("ADC " + INDIRECT_PREFIX + "10(");
-            Program program = compiler.compileProgram();
-            int[] bytes = toIntArray(program.getProgramAsByteArray());
-            fail("Invalid prefix for an indirect value should throw an exception but was " + Arrays.toString(bytes));
-        }catch (UnknownOpCodeException e){
-            assertFalse(e.getMessage().isEmpty());
-            assertNotNull(e.getOpCode());
-        }
-    }
-
-    @Test
-    public void testOversizedValue(){
-        try {
-            final Mos6502Compiler compiler = new Mos6502Compiler("ADC " + VALUE_PREFIX + "12345");
-            Program program = compiler.compileProgram();
-            int[] bytes = toIntArray(program.getProgramAsByteArray());
-            fail("Argument size over " + 0xFFFF + " should throw an exception but was " + Arrays.toString(bytes));
-        }catch (UnknownOpCodeException e){
-            assertFalse(e.getMessage().isEmpty());
-            assertNotNull(e.getOpCode());
-        }
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("invalidPrograms")
+    void invalidRomIsRejected(String description, String program, Class<RuntimeException> exception, String expectedMessage) {
+        final Mos6502Compiler compiler = new Mos6502Compiler(program);
+        final RuntimeException e = assertThrows(exception, compiler::compileProgram);
+        assertEquals(expectedMessage, e.getMessage());
     }
 
     @Test
