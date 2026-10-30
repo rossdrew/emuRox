@@ -65,7 +65,7 @@ I've separated (at least) the NES section of this down into 7 stages:
 So currently large scale features are undergoing research and early design.  This also gives me time to improve and tweak what is there.
 
 
- <img aligm="right" src="https://github.com/rossdrew/emuRox/blob/master/docs/EmuRox%20Roadmap.png" data-canonical-src="https://github.com/rossdrew/emuRox/blob/master/docs/EmuRox%20Roadmap.png" alt="EmuRox Roadmap" width="900" />
+ <img align="right" src="https://github.com/rossdrew/emuRox/blob/master/docs/EmuRox%20Roadmap.png" data-canonical-src="https://github.com/rossdrew/emuRox/blob/master/docs/EmuRox%20Roadmap.png" alt="EmuRox Roadmap" width="900" />
 
 
 ## Development & Testing
