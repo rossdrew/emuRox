@@ -73,7 +73,7 @@ jacocoTestReport {
 pitest {
     junit5PluginVersion = '1.2.2'
     excludedClasses = ['com.rox.emu.processor.mos6502.dbg.ui.*']
-    outputFormats = ['HTML']
+    outputFormats = ['XML','HTML']
     timestampedReports = false
     //mutators = ['ALL']
 }
