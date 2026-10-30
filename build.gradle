@@ -36,6 +36,7 @@ dependencies {
 
     testImplementation 'org.quicktheories:quicktheories:0.13'
     testImplementation 'com.github.richard-melvin:junit-theory-suite:1.0.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.13.4'
 
     testImplementation 'com.pholser:junit-quickcheck-core:0.8-alpha-7'
     testImplementation 'com.pholser:junit-quickcheck-generators:0.8-alpha-7'
