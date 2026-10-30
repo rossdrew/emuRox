@@ -17,13 +17,13 @@ import java.util.Arrays;
 public final class InesRom {
     private static final Logger log = LoggerFactory.getLogger(InesRom.class);
 
-    private static byte [] PREFIX = new byte[] {'N', 'E', 'S', 0x1A};
+    private static final byte [] PREFIX = new byte[] {'N', 'E', 'S', 0x1A};
 
     /** The predefined PRG ROM block size */
     public static final int PRG_ROM_BLOCK_SIZE = 16384;
     /** The predefined CHR ROM block size */
     public static final int CHR_ROM_BLOCK_SIZE = 8192;
-    /** The size of of the trainer in bytes if present */
+    /** The size of the trainer in bytes if present */
     public static final int TRAINER_SIZE = 512;
 
     private final InesRomHeader header;
