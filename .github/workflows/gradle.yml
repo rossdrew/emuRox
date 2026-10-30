@@ -1,3 +1,4 @@
+#file: noinspection SpellCheckingInspection
 name: GitHub Actions
 
 on: [push]

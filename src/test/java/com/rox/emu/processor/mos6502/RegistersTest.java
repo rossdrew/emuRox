@@ -65,7 +65,7 @@ public class RegistersTest {
     @Test
     public void testDescription(){
         for (Flag f : Flag.values()){
-            assertEquals(f.name(), f.getDescription().toUpperCase().replaceAll(" ", "_"));
+            assertEquals(f.name(), f.getDescription().toUpperCase().replace(" ", "_"));
         }
     }
 

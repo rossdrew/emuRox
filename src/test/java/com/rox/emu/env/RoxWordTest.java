@@ -31,22 +31,22 @@ public class RoxWordTest {
     public void testInequality(){
         assertFalse(RoxWord.ZERO.equals(RoxWord.fromLiteral(10)));
         assertNotEquals(RoxWord.ZERO, RoxWord.fromLiteral(1));
-        assertNotEquals(RoxWord.ZERO, 1);;
+        assertNotEquals(RoxWord.ZERO, 1);
 
         assertFalse(RoxWord.fromLiteral(1).equals(2));
         assertNotEquals(RoxWord.fromLiteral(1), RoxWord.fromLiteral(2));
         assertNotEquals(RoxWord.fromLiteral(1).hashCode(), RoxWord.fromLiteral(2).hashCode());
 
         assertFalse(RoxWord.fromLiteral(0b1111111111111110).equals(0b1111111111111100));
-        assertNotEquals(RoxWord.fromLiteral(0b1111111111111110), 0b1111111111111100);
+        assertNotEquals(0b1111111111111100, RoxWord.fromLiteral(0b1111111111111110));
         assertNotEquals(RoxWord.fromLiteral(99), RoxByte.fromLiteral(98));
         assertNotEquals(RoxWord.fromLiteral(99).hashCode(), RoxByte.fromLiteral(98).hashCode());
 
         assertFalse(RoxWord.fromLiteral(23).equals("Test 1"));
-        assertNotEquals(RoxWord.fromLiteral(23), "Test 2");
+        assertNotEquals("Test 2", RoxWord.fromLiteral(23));
         assertNotEquals(RoxWord.fromLiteral(23).hashCode(), "Test 3".hashCode());
 
-        assertNotEquals(RoxWord.fromLiteral(63), null);
+        assertNotEquals(null, RoxWord.fromLiteral(63));
         assertFalse(RoxWord.fromLiteral(71).equals(null));
     }
 

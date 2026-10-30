@@ -6,7 +6,7 @@ import com.rox.emu.processor.mos6502.Mos6502Alu;
 import com.rox.emu.processor.mos6502.Registers;
 
 /**
- * A wrapper for an {@link AddressedValueInstruction} for addressing the {@link RoxByte} in it's argument to make it "Addressable"<br/>
+ * A wrapper for an {@link AddressedValueInstruction} for addressing the {@link RoxByte} in its argument to make it "Addressable"<br/>
  *<br/>
  * XXX Perhaps a better name is required?
  */

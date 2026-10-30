@@ -1,7 +1,6 @@
 package com.rox.emu.processor.ricoh2c02;
 
 import com.rox.emu.env.RoxByte;
-import com.rox.emu.env.RoxWord;
 import com.rox.emu.mem.Memory;
 import com.rox.emu.mem.SimpleMemory;
 import org.junit.experimental.theories.DataPoint;
@@ -18,9 +17,9 @@ import static org.mockito.Mockito.when;
 @RunWith(Theories.class)
 public class Ricoh2C02Theories {
     @DataPoint
-    public static int LOWEST_VALID_REGISTER_VALUE = 0;
+    public static final int LOWEST_VALID_REGISTER_VALUE = 0;
     @DataPoint
-    public static int HIGHEST_VALID_REGISTER_VALUE = 255;
+    public static final int HIGHEST_VALID_REGISTER_VALUE = 255;
 
     @Theory
     public void testGetControlRegister(int byteValue){

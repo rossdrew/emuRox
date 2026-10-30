@@ -32,6 +32,7 @@ import java.util.Map;
  *
  * @author Ross Drew
  */
+@SuppressWarnings("SpellCheckingInspection")
 final class DebuggerWindow extends JFrame {
     private Mos6502 processor;
     private Memory memory;
@@ -311,13 +312,14 @@ final class DebuggerWindow extends JFrame {
         StringBuilder arguments = new StringBuilder();
         for (int i=0; i<getArgumentCount(instr.getRawValue()); i++ ){
             RoxWord n = RoxWord.fromLiteral(pointer.getRawValue() + (i+1));
-            arguments.append(" " + MemoryPanel.asHex(memory.getByte(n).getRawValue()));
+            arguments.append(" ")
+                    .append(MemoryPanel.asHex(memory.getByte(n).getRawValue()));
         }
 
         instructionName = Mos6502OpCode.from(instr.getRawValue()).toString();
         final String instructionLocation = MemoryPanel.asHex(pointer.getRawValue());
         final String instructionCode = MemoryPanel.asHex(instr.getRawValue());
-        final String completeInstructionInfo = "[" + instructionLocation + "] (" + instructionCode + arguments.toString() + ") :" + instructionName;
+        final String completeInstructionInfo = "[" + instructionLocation + "] (" + instructionCode + arguments + ") :" + instructionName;
 
         instruction.setText(completeInstructionInfo);
         listModel.add(0, completeInstructionInfo);

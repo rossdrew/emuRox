@@ -6,6 +6,7 @@ import com.rox.emu.env.RoxWord;
 import com.rox.emu.mem.Memory;
 import com.rox.emu.mem.SimpleMemory;
 import com.rox.emu.processor.mos6502.util.Program;
+import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -315,7 +316,7 @@ public class Mos6502Test {
         processor.step();
 
         assertEquals(RoxWord.fromLiteral(program.getLength()), registers.getPC());
-        assertEquals(true, registers.getFlag(Registers.Flag.CARRY));
+        TestCase.assertTrue(registers.getFlag(Registers.Flag.CARRY));
     }
 
     @Test
@@ -329,7 +330,7 @@ public class Mos6502Test {
         processor.step();
 
         assertEquals(RoxWord.fromLiteral(program.getLength()), registers.getPC());
-        assertEquals(false, registers.getFlag(Registers.Flag.CARRY));
+        TestCase.assertFalse(registers.getFlag(Registers.Flag.CARRY));
     }
 
     @Test
@@ -343,7 +344,7 @@ public class Mos6502Test {
         processor.step();
 
         assertEquals(RoxWord.fromLiteral(program.getLength()), registers.getPC());
-        assertEquals(false, registers.getFlag(Registers.Flag.OVERFLOW));
+        TestCase.assertFalse(registers.getFlag(Registers.Flag.OVERFLOW));
     }
 
     @Test
@@ -763,9 +764,9 @@ public class Mos6502Test {
         processor.step(4);
 
         assertEquals(RoxWord.fromLiteral(program.getLength()), registers.getPC());
-        assertEquals(true, registers.getFlag(Registers.Flag.ZERO));
-        assertEquals(false, registers.getFlag(Registers.Flag.NEGATIVE));
-        assertEquals(false, registers.getFlag(Registers.Flag.OVERFLOW));
+        TestCase.assertTrue(registers.getFlag(Registers.Flag.ZERO));
+        TestCase.assertFalse(registers.getFlag(Registers.Flag.NEGATIVE));
+        TestCase.assertFalse(registers.getFlag(Registers.Flag.OVERFLOW));
     }
 
     @Test
@@ -778,9 +779,9 @@ public class Mos6502Test {
 
         assertEquals(RoxWord.fromLiteral(program.getLength()), registers.getPC());
         assertEquals(RoxByte.fromLiteral(0x10), registers.getRegister(Registers.Register.ACCUMULATOR));
-        assertEquals(true, registers.getFlag(Registers.Flag.ZERO));
-        assertEquals(false, registers.getFlag(Registers.Flag.NEGATIVE));
-        assertEquals(true, registers.getFlag(Registers.Flag.CARRY));
+        TestCase.assertTrue(registers.getFlag(Registers.Flag.ZERO));
+        TestCase.assertFalse(registers.getFlag(Registers.Flag.NEGATIVE));
+        TestCase.assertTrue(registers.getFlag(Registers.Flag.CARRY));
     }
 
     @Test
@@ -793,9 +794,9 @@ public class Mos6502Test {
 
         assertEquals(RoxWord.fromLiteral(program.getLength()), registers.getPC());
         assertEquals(RoxByte.fromLiteral(0x10), registers.getRegister(Registers.Register.X_INDEX));
-        assertEquals(true, registers.getFlag(Registers.Flag.ZERO));
-        assertEquals(false, registers.getFlag(Registers.Flag.NEGATIVE));
-        assertEquals(true, registers.getFlag(Registers.Flag.CARRY));
+        TestCase.assertTrue(registers.getFlag(Registers.Flag.ZERO));
+        TestCase.assertFalse(registers.getFlag(Registers.Flag.NEGATIVE));
+        TestCase.assertTrue(registers.getFlag(Registers.Flag.CARRY));
     }
 
     @Test
@@ -808,9 +809,9 @@ public class Mos6502Test {
 
         assertEquals(RoxWord.fromLiteral(program.getLength()), registers.getPC());
         assertEquals(RoxByte.fromLiteral(0x10), registers.getRegister(Registers.Register.Y_INDEX));
-        assertEquals(true, registers.getFlag(Registers.Flag.ZERO));
-        assertEquals(false, registers.getFlag(Registers.Flag.NEGATIVE));
-        assertEquals(true, registers.getFlag(Registers.Flag.CARRY));
+        TestCase.assertTrue(registers.getFlag(Registers.Flag.ZERO));
+        TestCase.assertFalse(registers.getFlag(Registers.Flag.NEGATIVE));
+        TestCase.assertTrue(registers.getFlag(Registers.Flag.CARRY));
     }
 
     @Test

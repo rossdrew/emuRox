@@ -1,10 +1,5 @@
 package com.rox.emu.timing;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 public class Clock {
     /**
      * 1 MHz: 1 million cycles per second.
@@ -29,7 +24,7 @@ public class Clock {
 //    Clock(final double clockSpeed){
 //        this.clockSpeed = clockSpeed;
 //
-//        //TODO this should be programatically determined as the case for 1, for example cannot be divided
+//        //TODO this should be programmatically determined as the case for 1, for example cannot be divided
 //        double roundTicks = clockSpeed / 1000;  //maps directly to group count
 //        double additionalTicks = clockSpeed % 1000; //how do we assign these additional cycles
 //
@@ -39,7 +34,7 @@ public class Clock {
 //         * To take a second (1000ms) and as evenly as possible distributed execution of clock ticks across it.
 //         *
 //         * If we have under 1000MHz (ticks per second) then it's that number of ticks in the second
-//         *   If we have a multiple of 1000MHz then we need to group because Java isn't that time-granular.  So 1 tick for every multiple of 1000MHz seperated by 1ms
+//         *   If we have a multiple of 1000MHz then we need to group because Java isn't that time-granular.  So 1 tick for every multiple of 1000MHz separated by 1ms
 //         *     The remainder needs distributed into these time windows somehow
 //         * If we have 1000MHz then it's 1000 ticks executed with a 1ms gap
 //         */

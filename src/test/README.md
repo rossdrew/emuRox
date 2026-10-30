@@ -34,10 +34,10 @@ Under standard unit testing this would be multiple tests; i.e. "I want to verify
 results in three" would be one standard unit test (called `testStandardAddition()`), adding 3 and 0 would be another
 unit test (titled `testIdentityValue()`) but in Data-Driven testing this would be one test with a table
 
-| inputA | inputB  | expectedResult  |
+| inputA | inputB  |  expectedResult |
 | ------ |:-------:| ---------------:|
-| 1      | 2       | 3               |
-| 3      | 0       | 3               |
+| 1      |    2    |               3 |
+| 3      |    0    |               3 |
 
 this allows flexibility in adding and removing values and can allow for much tidier tests.
 

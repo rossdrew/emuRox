@@ -103,7 +103,7 @@ public class Mos6502CompilerTest {
         final Program program = compiler.compileProgram();
         final int[] actualResult = toIntArray(program.getProgramAsByteArray());
 
-        assertTrue("Expected " + Arrays.toString(expectedResult) + ", got " + Arrays.toString(actualResult), Arrays.equals(actualResult, expectedResult));
+        assertArrayEquals("Expected " + Arrays.toString(expectedResult) + ", got " + Arrays.toString(actualResult), actualResult, expectedResult);
     }
 
     @Test
@@ -119,7 +119,7 @@ public class Mos6502CompilerTest {
         final Program program = compiler.compileProgram();
         final int[] actualResult = toIntArray(program.getProgramAsByteArray());
 
-        assertTrue("Expected " + Arrays.toString(expectedResult) + ", got " + Arrays.toString(actualResult), Arrays.equals(actualResult, expectedResult));
+        assertArrayEquals("Expected " + Arrays.toString(expectedResult) + ", got " + Arrays.toString(actualResult), actualResult, expectedResult);
     }
 
     @Test
@@ -154,7 +154,7 @@ public class Mos6502CompilerTest {
             final Program program = compiler.compileProgram();
             int[] bytes = toIntArray(program.getProgramAsByteArray());
 
-            assertArrayEquals("Output for '" + opcode.toString() + "' was wrong.", new int[] {opcode.getByteValue(), 0xA}, bytes);
+            assertArrayEquals("Output for '" + opcode + "' was wrong.", new int[] {opcode.getByteValue(), 0xA}, bytes);
         });
     }
 
@@ -166,7 +166,7 @@ public class Mos6502CompilerTest {
             Program program = compiler.compileProgram();
             int[] bytes = toIntArray(program.getProgramAsByteArray());
 
-            assertArrayEquals("Output for '" + opcode.toString() + "' was wrong.", new int[] {opcode.getByteValue(), 0xAB}, bytes);
+            assertArrayEquals("Output for '" + opcode + "' was wrong.", new int[] {opcode.getByteValue(), 0xAB}, bytes);
         });
     }
 
@@ -178,7 +178,7 @@ public class Mos6502CompilerTest {
             Program program = compiler.compileProgram();
             int[] bytes = toIntArray(program.getProgramAsByteArray());
 
-            assertArrayEquals("Output for '" + opcode.toString() + "' was wrong.", new int[] {opcode.getByteValue(), 0xA, 0xBC}, bytes);
+            assertArrayEquals("Output for '" + opcode + "' was wrong.", new int[] {opcode.getByteValue(), 0xA, 0xBC}, bytes);
         });
     }
 
@@ -190,7 +190,7 @@ public class Mos6502CompilerTest {
             Program program = compiler.compileProgram();
             int[] bytes = toIntArray(program.getProgramAsByteArray());
 
-            assertArrayEquals("Output for '" + opcode.toString() + "' was wrong.", new int[] {opcode.getByteValue(), 0xAB, 0xCD}, bytes);
+            assertArrayEquals("Output for '" + opcode + "' was wrong.", new int[] {opcode.getByteValue(), 0xAB, 0xCD}, bytes);
         });
     }
 
@@ -204,7 +204,7 @@ public class Mos6502CompilerTest {
             Program program = compiler.compileProgram(); 
             int[] bytes = toIntArray(program.getProgramAsByteArray());
 
-            assertArrayEquals("Output for '" + opcode.toString() + "' was wrong.", new int[] {opcode.getByteValue(), byteValue}, bytes);
+            assertArrayEquals("Output for '" + opcode + "' was wrong.", new int[] {opcode.getByteValue(), byteValue}, bytes);
         });
     }
 
@@ -218,7 +218,7 @@ public class Mos6502CompilerTest {
             Program program = compiler.compileProgram();
             int[] bytes = toIntArray(program.getProgramAsByteArray());
 
-            assertArrayEquals("Output for '" + opcode.toString() + "' was wrong.", new int[] {opcode.getByteValue(), byteValue}, bytes);
+            assertArrayEquals("Output for '" + opcode + "' was wrong.", new int[] {opcode.getByteValue(), byteValue}, bytes);
         });
     }
 
@@ -232,7 +232,7 @@ public class Mos6502CompilerTest {
             Program program = compiler.compileProgram();
             int[] bytes = toIntArray(program.getProgramAsByteArray());
 
-            assertArrayEquals("Output for '" + opcode.toString() + "' was wrong.", new int[] {opcode.getByteValue(), byteValue}, bytes);
+            assertArrayEquals("Output for '" + opcode + "' was wrong.", new int[] {opcode.getByteValue(), byteValue}, bytes);
         });
     }
 
@@ -246,7 +246,7 @@ public class Mos6502CompilerTest {
             Program program = compiler.compileProgram();
             int[] bytes = toIntArray(program.getProgramAsByteArray());
 
-            assertArrayEquals("Output for '" + opcode.toString() + "' was wrong.", new int[] {opcode.getByteValue(), byteValue}, bytes);
+            assertArrayEquals("Output for '" + opcode + "' was wrong.", new int[] {opcode.getByteValue(), byteValue}, bytes);
         });
     }
 
@@ -260,7 +260,7 @@ public class Mos6502CompilerTest {
             Program program = compiler.compileProgram();
             int[] bytes = toIntArray(program.getProgramAsByteArray());
 
-            assertArrayEquals("Output for '" + opcode.toString() + "' was wrong.", new int[] {opcode.getByteValue(), byteValue}, bytes);
+            assertArrayEquals("Output for '" + opcode + "' was wrong.", new int[] {opcode.getByteValue(), byteValue}, bytes);
         });
     }
 
@@ -277,7 +277,7 @@ public class Mos6502CompilerTest {
             Program program = compiler.compileProgram();
             int[] bytes = toIntArray(program.getProgramAsByteArray());
 
-            assertArrayEquals("Output for '" + opcode.toString() + "' was wrong.", new int[] {opcode.getByteValue(), highByte, lowByte}, bytes);
+            assertArrayEquals("Output for '" + opcode + "' was wrong.", new int[] {opcode.getByteValue(), highByte, lowByte}, bytes);
         });
     }
 
@@ -294,7 +294,7 @@ public class Mos6502CompilerTest {
             Program program = compiler.compileProgram();
             int[] bytes = toIntArray(program.getProgramAsByteArray());
 
-            assertArrayEquals("Output for '" + opcode.toString() + " 0x" + hexWord + "' was wrong.", new int[] {opcode.getByteValue(), highByte, lowByte}, bytes);
+            assertArrayEquals("Output for '" + opcode + " 0x" + hexWord + "' was wrong.", new int[] {opcode.getByteValue(), highByte, lowByte}, bytes);
         });
     }
 
@@ -311,7 +311,7 @@ public class Mos6502CompilerTest {
             Program program = compiler.compileProgram();
             int[] bytes = toIntArray(program.getProgramAsByteArray());
 
-            assertArrayEquals("Output for '" + opcode.toString() + " 0x" + hexWord + "' was wrong.", new int[] {opcode.getByteValue(), highByte, lowByte}, bytes);
+            assertArrayEquals("Output for '" + opcode + " 0x" + hexWord + "' was wrong.", new int[] {opcode.getByteValue(), highByte, lowByte}, bytes);
         });
     }
 
@@ -435,14 +435,9 @@ public class Mos6502CompilerTest {
 
     @Test
     public void testInvalidArgument(){
-        try {
-            final Mos6502Compiler compiler = new Mos6502Compiler("INC $12345");
-            Program program = compiler.compileProgram();
-            toIntArray(program.getProgramAsByteArray());
-            fail("The argument for INC is too long, should throw an error");
-        }catch(UnknownOpCodeException e){
-            assertNotNull(e);
-        }
+        final Mos6502Compiler compiler = new Mos6502Compiler("INC $12345");
+        final UnknownOpCodeException e = assertThrows(UnknownOpCodeException.class, compiler::compileProgram);
+        assertEquals("Invalid or unimplemented argument: '$12345'", e.getMessage());
     }
 
     @Test
@@ -493,7 +488,7 @@ public class Mos6502CompilerTest {
             fail("Invalid value prefix should throw an exception but was " + Arrays.toString(bytes));
         }catch (UnknownOpCodeException e){
             assertFalse(e.getMessage().isEmpty());
-            assertFalse(e.getOpCode() == null);
+            assertNotNull(e.getOpCode());
         }
     }
 
@@ -506,7 +501,7 @@ public class Mos6502CompilerTest {
             fail("Invalid prefix for an indirect value should throw an exception but was " + Arrays.toString(bytes));
         }catch (UnknownOpCodeException e){
             assertFalse(e.getMessage().isEmpty());
-            assertFalse(e.getOpCode() == null);
+            assertNotNull(e.getOpCode());
         }
     }
 
@@ -519,7 +514,7 @@ public class Mos6502CompilerTest {
             fail("Argument size over " + 0xFFFF + " should throw an exception but was " + Arrays.toString(bytes));
         }catch (UnknownOpCodeException e){
             assertFalse(e.getMessage().isEmpty());
-            assertFalse(e.getOpCode() == null);
+            assertNotNull(e.getOpCode());
         }
     }
 

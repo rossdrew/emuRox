@@ -1,3 +1,4 @@
+#file: noinspection SpellCheckingInspection
 install: gradle wrapper --gradle-version 6.9
 
 language: java

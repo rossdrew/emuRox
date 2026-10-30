@@ -1,3 +1,4 @@
+//file:noinspection SpellCheckingInspection
 plugins {
     id 'java'
     id 'application'

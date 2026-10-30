@@ -103,7 +103,8 @@ class RegisterPanel extends JPanel {
         StringBuilder formattedByteString = new StringBuilder(Integer.toBinaryString(fakeByte));
         if (formattedByteString.length() < 8){
             for (int i=formattedByteString.length(); i<8; i++){
-                formattedByteString.append("0" + formattedByteString);
+                formattedByteString.append("0")
+                        .append(formattedByteString);
             }
         }
         return formattedByteString.toString();

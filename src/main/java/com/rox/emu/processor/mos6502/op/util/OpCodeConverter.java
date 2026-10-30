@@ -81,18 +81,15 @@ public class OpCodeConverter {
 
         //XXX Not pretty but necessary for proper test coverage - update if JaCoCo ever learns to deal with it
         final String indexToken = (tokens.length <= INDX_I) ? "" : tokens[INDX_I];
-        if ("I".equals(addressingModeDescriptor))
-            return Mos6502AddressingMode.IMMEDIATE;
-        else if ("A".equals(addressingModeDescriptor))
-            return Mos6502AddressingMode.ACCUMULATOR;
-        else if ("Z".equals(addressingModeDescriptor))
-            return withIndexing(Mos6502AddressingMode.ZERO_PAGE, indexToken);
-        else if ("ABS".equals(addressingModeDescriptor))
-            return withIndexing(Mos6502AddressingMode.ABSOLUTE, indexToken);
-        else if ("IND".equals(addressingModeDescriptor))
-            return withIndexing(Mos6502AddressingMode.INDIRECT, indexToken);
-        else
-            throw new UnknownOpCodeException("Unrecognised addressing mode " + addressingModeDescriptor, internalOpCodeName);
+        return switch (addressingModeDescriptor) {
+            case "I" -> Mos6502AddressingMode.IMMEDIATE;
+            case "A" -> Mos6502AddressingMode.ACCUMULATOR;
+            case "Z" -> withIndexing(Mos6502AddressingMode.ZERO_PAGE, indexToken);
+            case "ABS" -> withIndexing(Mos6502AddressingMode.ABSOLUTE, indexToken);
+            case "IND" -> withIndexing(Mos6502AddressingMode.INDIRECT, indexToken);
+            case null, default ->
+                    throw new UnknownOpCodeException("Unrecognised addressing mode " + addressingModeDescriptor, internalOpCodeName);
+        };
     }
 
     private static Mos6502AddressingMode withIndexing(final Mos6502AddressingMode addressingMode, final String indexToken){

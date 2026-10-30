@@ -13,21 +13,10 @@ import java.util.Map;
 public class MultiSourceMemory implements Memory {
 
     /**
-     * Representation of a memory mapping, consisting of a destination memory, a logical memory location that can be
-     * logically accessed and a physical memory location that will eventually be "physically" accessed.
-     */
-    private class MemoryMapping {
-        final int logicalAddress;
-        final int physicalAddress;
-        final Memory physicalMemory;
-
-        private MemoryMapping(final int logicalAddress,
-                              final int physicalAddress,
-                              final Memory physicalMemory){
-            this.logicalAddress=logicalAddress;
-            this.physicalAddress=physicalAddress;
-            this.physicalMemory=physicalMemory;
-        }
+         * Representation of a memory mapping, consisting of a destination memory, a logical memory location that can be
+         * logically accessed and a physical memory location that will eventually be "physically" accessed.
+         */
+        private record MemoryMapping(int logicalAddress, int physicalAddress, Memory physicalMemory) {
     }
 
     private final Map<Integer, MemoryMapping> memoryMappings;
@@ -60,7 +49,7 @@ public class MultiSourceMemory implements Memory {
      */
     public MultiSourceMemory withMapping(final Integer address, final Memory mappedMemory){
         final Map<Integer, MemoryMapping> newMemoryMappings = new HashMap<>(memoryMappings);
-        newMemoryMappings.put(address, new MemoryMapping(address,address,mappedMemory));
+        newMemoryMappings.put(address, new MemoryMapping(address, address, mappedMemory));
 
         return new MultiSourceMemory(defaultMemory, newMemoryMappings);
     }
@@ -143,7 +132,7 @@ public class MultiSourceMemory implements Memory {
     }
 
     private MemoryMapping getMemoryMappedTo(final Integer address){
-        return memoryMappings.getOrDefault(address, new MemoryMapping(address,address, defaultMemory));
+        return memoryMappings.getOrDefault(address, new MemoryMapping(address, address, defaultMemory));
     }
 
     @Override
@@ -192,8 +181,8 @@ public class MultiSourceMemory implements Memory {
     @Override
     public void reset() {
         //For each unique memory object, reset it
-        memoryMappings.entrySet().stream()
-                .map(entry -> entry.getValue().physicalMemory)
+        memoryMappings.values().stream()
+                .map(memoryMapping -> memoryMapping.physicalMemory)
                 .distinct()
                 .forEach(Memory::reset);
 

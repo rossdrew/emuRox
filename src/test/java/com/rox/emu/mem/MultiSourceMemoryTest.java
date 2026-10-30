@@ -88,7 +88,7 @@ public class MultiSourceMemoryTest {
 
         final int[] memoryBlock = toIntArray(testMemory.getBlock(RoxWord.fromLiteral(20), RoxWord.fromLiteral(25)));
 
-        assertTrue("Expected " + Arrays.toString(sampleData) + ", got " + Arrays.toString(memoryBlock), Arrays.equals(sampleData, memoryBlock));
+        assertArrayEquals("Expected " + Arrays.toString(sampleData) + ", got " + Arrays.toString(memoryBlock), sampleData, memoryBlock);
     }
 
     @Test
@@ -98,7 +98,7 @@ public class MultiSourceMemoryTest {
 
         final int[] memoryBlock = toIntArray(testMemory.getBlock(RoxWord.fromLiteral(20), RoxWord.fromLiteral(25)));
 
-        assertTrue("Expected " + Arrays.toString(sampleData) + ", got " + Arrays.toString(memoryBlock), Arrays.equals(sampleData, memoryBlock));
+        assertArrayEquals("Expected " + Arrays.toString(sampleData) + ", got " + Arrays.toString(memoryBlock), sampleData, memoryBlock);
     }
 
     @Test

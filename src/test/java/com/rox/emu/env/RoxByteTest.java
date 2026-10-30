@@ -37,20 +37,20 @@ public class RoxByteTest extends Specification{
         assertNotEquals(RoxByte.ZERO, 1);
 
         assertFalse(RoxByte.fromLiteral(1).equals(2));
-        assertNotEquals(RoxByte.fromLiteral(1), 2);
+        assertNotEquals(2, RoxByte.fromLiteral(1));
         assertNotEquals(RoxByte.fromLiteral(1), RoxByte.fromLiteral(2));
         assertNotEquals(RoxByte.fromLiteral(1).hashCode(), RoxByte.fromLiteral(2).hashCode());
 
         assertFalse(RoxByte.fromLiteral(0b11111110).equals(0b11111100));
-        assertNotEquals(RoxByte.fromLiteral(0b11111110), 0b11111100);
+        assertNotEquals(0b11111100, RoxByte.fromLiteral(0b11111110));
         assertNotEquals(RoxByte.fromLiteral(99), RoxByte.fromLiteral(98));
         assertNotEquals(RoxByte.fromLiteral(99).hashCode(), RoxByte.fromLiteral(98).hashCode());
 
         assertFalse(RoxByte.fromLiteral(23).equals("Test 1"));
-        assertNotEquals(RoxByte.fromLiteral(23), "Test 2");
+        assertNotEquals("Test 2", RoxByte.fromLiteral(23));
         assertNotEquals(RoxByte.fromLiteral(23).hashCode(), "Test 3".hashCode());
 
-        assertNotEquals(RoxByte.fromLiteral(63), null);
+        assertNotEquals(null, RoxByte.fromLiteral(63));
         assertFalse(RoxByte.fromLiteral(71).equals(null));
     }
 
@@ -142,7 +142,7 @@ public class RoxByteTest extends Specification{
     @Property(trials = 10)
     public void testToStringIsAccurate(@InRange(min = "0", max = "255") int byteValue){
         final RoxByte value = RoxByte.fromLiteral(byteValue);
-        assertTrue(value.toString() + " expected to contain " + byteValue, value.toString().contains(""+value.getAsInt()));
+        assertTrue(value + " expected to contain " + byteValue, value.toString().contains(""+value.getAsInt()));
     }
 
     @Test

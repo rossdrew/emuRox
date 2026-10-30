@@ -17,8 +17,8 @@ class ByteBox extends JPanel {
     protected final int valueFontSize = 11;
 
     protected int byteValue;
-    protected String byteName;
-    protected Color highlightColor;
+    protected final String byteName;
+    protected final Color highlightColor;
 
     public ByteBox(String byteName, int initialValue){
         this.byteValue = initialValue;
@@ -128,9 +128,7 @@ class ByteBox extends JPanel {
     private String to8BitString(int fakeByte){
         StringBuilder formattedByteString = new StringBuilder(Integer.toBinaryString(fakeByte));
         if (formattedByteString.length() < 8){
-            for (int i=formattedByteString.length(); i<8; i++){
-                formattedByteString.append("0" + formattedByteString);
-            }
+            formattedByteString.repeat(("0" + formattedByteString), Math.max(0, 8 - formattedByteString.length()));
         }
         return formattedByteString.toString();
     }

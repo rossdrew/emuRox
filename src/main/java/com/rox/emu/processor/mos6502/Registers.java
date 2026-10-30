@@ -39,7 +39,7 @@ public class Registers {
         }
 
         private static String prettifyName(String originalName){
-            String name = originalName.replaceAll("_"," ")
+            String name = originalName.replace("_"," ")
                                       .toLowerCase()
                                       .replace("hi","(High)")
                                       .replace("low","(Low)");
@@ -78,7 +78,7 @@ public class Registers {
         private final String description;
 
         private static String prettifyName(String originalName){
-            String name = originalName.replaceAll("_"," ").toLowerCase();
+            String name = originalName.replace("_"," ").toLowerCase();
             name = name.substring(0, 1).toUpperCase() + name.substring(1);
             if (name.contains(" ")) {
                 int spaceIndex = name.indexOf(' ');
