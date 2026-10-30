@@ -62,8 +62,8 @@ class Mos6502AluSpec extends Specification {
     @Unroll
     def "Expected value for: #randomValueA + #randomValueB"(){
         when: 'we add two random numbers'
-        final RoxByte result = alu.adc(RoxByte.fromLiteral(randomValueA),
-                                       RoxByte.fromLiteral(randomValueB))
+        final RoxByte result = alu.adc(RoxByte.fromLiteral(randomValueA as int),
+                                       RoxByte.fromLiteral(randomValueB as int))
 
         and: 'the expected (one byte) result is'
         final int expected = ((randomValueA + randomValueB) & 0xFF)
@@ -114,8 +114,8 @@ class Mos6502AluSpec extends Specification {
         registers.setFlag(Registers.Flag.CARRY)
 
         and: 'we subtract a number from another'
-        final RoxByte result = alu.sbc(RoxByte.fromLiteral(randomValueA),
-                                       RoxByte.fromLiteral(randomValueB))
+        final RoxByte result = alu.sbc(RoxByte.fromLiteral(randomValueA as int),
+                                       RoxByte.fromLiteral(randomValueB as int))
 
         and: 'the expected (one byte) result is'
         final int expected = ((randomValueA - randomValueB) & 0xFF)
@@ -152,8 +152,8 @@ class Mos6502AluSpec extends Specification {
     @Unroll
     def "Expected value for: #randomValueA OR #randomValueB"(){
         when: 'we OR two random numbers'
-        final RoxByte result = alu.or(RoxByte.fromLiteral(randomValueA),
-                                      RoxByte.fromLiteral(randomValueB))
+        final RoxByte result = alu.or(RoxByte.fromLiteral(randomValueA as int),
+                                      RoxByte.fromLiteral(randomValueB as int))
 
         and: 'the expected (one byte) result is'
         final int expected = ((randomValueA | randomValueB) & 0xFF)
@@ -193,8 +193,8 @@ class Mos6502AluSpec extends Specification {
     @Unroll
     def "Expected value for: #randomValueA AND #randomValueB"(){
         when: 'we AND two random numbers'
-        final RoxByte result = alu.and(RoxByte.fromLiteral(randomValueA),
-                                       RoxByte.fromLiteral(randomValueB))
+        final RoxByte result = alu.and(RoxByte.fromLiteral(randomValueA as int),
+                                       RoxByte.fromLiteral(randomValueB as int))
 
         and: 'the expected (one byte) result is'
         final int expected = ((randomValueA & randomValueB) & 0xFF)
@@ -234,8 +234,8 @@ class Mos6502AluSpec extends Specification {
     @Unroll
     def "Expected value for: #randomValueA XOR #randomValueB"(){
         when: 'we XOR two random numbers'
-        final RoxByte result = alu.xor(RoxByte.fromLiteral(randomValueA),
-                RoxByte.fromLiteral(randomValueB))
+        final RoxByte result = alu.xor(RoxByte.fromLiteral(randomValueA as int),
+                RoxByte.fromLiteral(randomValueB as int))
 
         and: 'the expected (one byte) result is'
         final int expected = ((randomValueA ^ randomValueB) & 0xFF)
@@ -280,7 +280,7 @@ class Mos6502AluSpec extends Specification {
     @Unroll
     def "Expected value for: ASL #randomValueA"(){
         when: 'we ASL a random number'
-        final RoxByte result = alu.asl(RoxByte.fromLiteral(randomValueA))
+        final RoxByte result = alu.asl(RoxByte.fromLiteral(randomValueA as int))
 
         and: 'the expected (one byte) result is'
         final int expected = ((randomValueA << 1) & 0xFF)
@@ -330,7 +330,7 @@ class Mos6502AluSpec extends Specification {
         int carryIn = randomCarryFlag ? 1 : 0
 
         and: 'we ROL a random number'
-        final RoxByte result = alu.rol(RoxByte.fromLiteral(randomValueA))
+        final RoxByte result = alu.rol(RoxByte.fromLiteral(randomValueA as int))
 
         and: 'the expected (one byte) result, including the carry is'
         final int expected = (((randomValueA << 1) | carryIn) & 0xFF)
