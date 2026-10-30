@@ -1,6 +1,7 @@
 [![License](https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000)](https://opensource.org/licenses/MIT) 
 [![Code Coverage by Codecov](https://codecov.io/gh/rossdrew/emuRox/branch/master/graph/badge.svg)](https://codecov.io/gh/rossdrew/emuRox)
 [![GitHub Actions CI](https://github.com/rossdrew/emurox/workflows/GitHub%20Actions/badge.svg)](https://github.com/rossdrew/emurox/workflows/GitHub%20Actions/badge.svg)
+[![Mutation coverage](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/rossdrew/emuRox/badges/pitest.json)](https://github.com/rossdrew/emuRox/actions)
 ![AI Free](https://img.shields.io/badge/AI%20Free-green)
 
 <a href="https://github.com/rossdrew/emuRox/blob/master/docs/LogoONE.png">
@@ -8,7 +9,6 @@
 </a>
 
 # EmuRox
-NOTE: This project has become a little neglected.  I'd love to find the time to dedicate to it but more and more that's less appealing as what's needed is some time bringing everything back up to date.  I'll be back.  But I want to keep this repo as an entirely human written version and that takes more time than I have. For now I'm playing with a [fresh canvas](https://github.com/rossdrew/EmuRoxLab) where I use AI.
 
 Ostensibly, a Nintendo Entertainment System ([NES](https://en.wikipedia.org/wiki/Nintendo_Entertainment_System)) emulator with a view to encompassing other systems. Creating a pluggable multi-emulator. In actuality, it is not about getting a working emulator, for a NES or anything else. There are plenty of them out there.  It's about taking a complex problem and designing the best abstraction possible.  Allowing us to discuss complex ideas in simple language.
 
@@ -27,11 +27,20 @@ Too often I've:
 
 There are also desirable side effects.  I wanted to write my own emulator, play the games of my childhood and know that I wrote the platform that they were running on and becoming even more familiar with the first pieces of software I fell in love with.  I wanted a large codebase I had complete control over and could try out tools and technologies.  I got to the stage of the latter, quite a while ago and I'm crawling towards the former.
 
+I want to keep this project as AI free as I can, it's a learning project after all, so I need some real time to dedicate to it. For now, I'm also playing with a faster moving [fresh canvas](https://github.com/rossdrew/EmuRoxLab) where I primarily use AI, can think at a higher level and not need to dedicate as much time to it.  It's a different sort of learning, so I'm keeping it separate. This repo isn't dead, I have loved this project.<br/>
+
+## Current Status
+
+Eventually I saw a large rework that would need done. I expected it, I even wanted it.  That's where my process is really tested.  With that in mind, I've made 2 bad design decisions I want to fix
+1. This is an instruction level emulator.  Meaning that timing is to the instruction level.  So the implementation needs a large rethink in terms of timing to support sound and video.
+2. The byte. Like many devs, I did what I thought was a clever thing and regretted it.  `RoxByte` & `RoxWord` were a mistake. They have led to confusing and unconcise code. They need replaced.
+
+
 ## Usage
 
 There is a debug UI for the MOS 6502 which provides a basic register and memory overview for running code through step by step in [DebuggerWindow.java](https://github.com/rossdrew/emuRox/blob/master/src/main/java/com/rox/emu/processor/mos6502/dbg/ui/DebuggerWindow.java). Run with the Gradle command `runDebugUI` and you'll get an interface that looks something like
 
-![EmuRox Test GUI](https://github.com/rossdrew/emuRox/blob/master/docs/EMuRox%20GUI%20Demo%20BIG.gif)
+![EmuRox Test GUI](docs/EMuRox%20GUI%20Demo%20BIG.gif)
 
 On the left you'll see tabs of the first 5 memory pages organised in blocks of 4 with their locations displayed in red on the left.  The Program Counter location will be colored green.
 
@@ -45,15 +54,15 @@ At the top we have the currently executing instruction and on the right a histor
 
 ## 6502 and progress towards a working NES...
 
-I've seperated (at least) the NES section of this down into 7 stages:
+I've separated (at least) the NES section of this down into 7 stages:
 
  - [x] I blasted through the first phase due to the massive amount of documentation on the MOS 6502
  - [x] While researching phase 3, I churned through the relatively basic work of parsing iNES files of phase 2 (without edge cases for now)
- - [ ] Phase 3 is kinda where I'm stuck at the moment, struggling to find time to consolidate all the documentation and existing data on the APU, which is less abundant than of the MOS 6502 and far more messy
+ - [ ] Phase 3 The APU: Currently I need a rearchitecture in order to fire more correct timings and drive the APU.  Experiements on [EmuRoxLab](https://github.com/rossdrew/EmuRoxLab) have proven my large scale redesign works. Do I want to do that here or take another route? 
  - [ ] Phase 4 is going to be a decent challenge I think, where I need to start concentrating on timings
  - [ ] Phase 5 and 6 are bringing it all together into a usable system
 
-So currenly large scale features are undergoing research and early design.  This also gives me time to improve and tweak what is there.
+So currently large scale features are undergoing research and early design.  This also gives me time to improve and tweak what is there.
 
 
  <img aligm="right" src="https://github.com/rossdrew/emuRox/blob/master/docs/EmuRox%20Roadmap.png" data-canonical-src="https://github.com/rossdrew/emuRox/blob/master/docs/EmuRox%20Roadmap.png" alt="EmuRox Roadmap" width="900" />
@@ -86,7 +95,7 @@ The plan was to develop in a TDD (Test Driven Development) centric way, that is 
 
 #### Investigated technologies 
 
- _Technologies that I have used yet disliked or haven't saw a place for them in my project for whatever reason..._
+ _Technologies that I have used yet disliked or haven't found a place for them in my project for whatever reason..._
 
  - [JParams toStringTester](https://github.com/jparams/to-string-tester) for `toString` testing.  It didn't seem to work very well, I filed an [issue](https://github.com/jparams/to-string-tester/issues/1) but the project has since been archived.
  - [JUnit QuickTheories](https://github.com/ncredinburgh/QuickTheories) for property based testing.  It's much more verbose for no added benefit over [junit-quickcheck](https://www.google.co.uk/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&cad=rja&uact=8&ved=0ahUKEwjq4-PF-aPSAhWHDsAKHV17BCIQFggaMAA&url=https%3A%2F%2Fgithub.com%2Fpholser%2Fjunit-quickcheck&usg=AFQjCNE37M0yEi68OG8Hr7y1MDoJwcLOaQ&sig2=AUpnbmKM5Sk9efhw1r-bKw&bvm=bv.147448319,d.d2s)
