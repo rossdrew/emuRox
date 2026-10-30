@@ -111,7 +111,6 @@ public class RoxByteTest extends Specification{
     public void testSignedFromInteger() throws InvalidDataTypeException {
         final RoxByte myByte = RoxByte.signedFrom(1);
         assertNotNull(myByte);
-        assertEquals(RoxByte.ByteFormat.SIGNED_TWOS_COMPLIMENT, myByte.getFormat());
         assertEquals(0b00000001, myByte.getRawValue());
     }
 
@@ -119,7 +118,6 @@ public class RoxByteTest extends Specification{
     public void testLiteralFromInteger() throws InvalidDataTypeException {
         final RoxByte myByte = RoxByte.fromLiteral(1);
         assertNotNull(myByte);
-        assertEquals(RoxByte.ByteFormat.SIGNED_TWOS_COMPLIMENT, myByte.getFormat());
         assertEquals(0b00000001, myByte.getRawValue());
     }
 
@@ -128,7 +126,6 @@ public class RoxByteTest extends Specification{
         byte fromByte = 0b00000001;
         final RoxByte myByte = RoxByte.fromLiteral(fromByte);
         assertNotNull(myByte);
-        assertEquals(RoxByte.ByteFormat.SIGNED_TWOS_COMPLIMENT, myByte.getFormat());
         assertEquals(0b00000001, myByte.getRawValue());
     }
 
@@ -136,7 +133,6 @@ public class RoxByteTest extends Specification{
     public void testByteFromRaw() throws InvalidDataTypeException {
         final RoxByte myByte = RoxByte.fromLiteral(0b11111111);
         assertNotNull(myByte);
-        assertEquals(RoxByte.ByteFormat.SIGNED_TWOS_COMPLIMENT, myByte.getFormat());
         assertEquals(0b11111111, myByte.getRawValue());
     }
 

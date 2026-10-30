@@ -13,7 +13,6 @@ class RoxByteSpec extends Specification {
 
         then:
         myByte != null
-        myByte.getFormat() == RoxByte.ByteFormat.SIGNED_TWOS_COMPLIMENT
         myByte.getRawValue() == expectedValue
         myByte.getAsInt() == expectedIntRepresentation
 

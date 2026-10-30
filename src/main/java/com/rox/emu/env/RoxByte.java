@@ -3,42 +3,21 @@ package com.rox.emu.env;
 import com.rox.emu.InvalidDataTypeException;
 
 /**
- * A representation of a byte that can be in different formats, so far only SIGNED_TWOS_COMPLIMENT.
+ * A representation of an 8 bit byte.<br/>
+ * <br/>
+ * {@link #getRawValue()} returns the bits as they are in memory, in the range <code>[0...255]</code>.
+ * {@link #getAsInt()} treats bit 7 as a sign in a <em>two's compliment</em> number, in the range
+ * <code>[-128...127]</code> e.g.
+ * <ul>
+ *     <li><code>0b11111110</code> &rarr; <code>-2</code></li>
+ *     <li><code>0b00000001</code> &rarr; &nbsp; <code>1</code></li>
+ *     <li><code>0b10000001</code> &rarr; <code>-127</code></li>
+ *     <li><code>0b01111110</code> &rarr; &nbsp; <code>126</code></li>
+ * </ul>
  *
  * @param rawValue the 8 bits of this byte, as they are in memory. Only the least significant 8 bits are kept.
  */
 public record RoxByte(int rawValue) {
-    /**
-     * Specifies the format of the information held in a {@link RoxByte} instance, options:-
-     *
-     * <dl>
-     *     <dt>SIGNED_TWOS_COMPLIMENT</dt>
-     *     <dd>will only accept/return values in the range [-128...127] so 0b11111110 will represent -2</dd>
-     *
-     *     <dt>UNSIGNED</dt>
-     *     <dd>will only accept/return values in the range [0...255] so 0b11111110 will represent 254</dd>
-     * </dl>
-     *
-     * Both will only work with values in the binary range [0000 0000...1111 1111]
-     */
-    public enum ByteFormat {
-        /**
-         * Numbers so formatted will only accept/return values in the range <code>[-128...127]</code><br/>
-         * <br/>
-         * This corresponds with bit 7 being treated as a sign in a <em>two's compliment</em> number e.g.
-         * <ul>
-         *     <li><code>0b11111110</code> &rarr; <code>-2</code></li>
-         *     <li><code>0b00000001</code> &rarr; &nbsp; <code>1</code></li>
-         *     <li><code>0b10000001</code> &rarr; <code>-127</code></li>
-         *     <li><code>0b01111110</code> &rarr; &nbsp; <code>126</code></li>
-         * </ul>
-         */
-        SIGNED_TWOS_COMPLIMENT
-    }
-
-    /** Binary digit place values */
-    private static final int[] PLACE_VALUE = {1, 2, 4, 8, 16, 32, 64, 128};
-
     /**
      * A {@link RoxByte} representing zero
      */
@@ -97,7 +76,7 @@ public record RoxByte(int rawValue) {
 
     /**
      * Return this single byte value as it's relative Java {@link int} value.
-     * This means a single, {@link ByteFormat} SIGNED_TWOS_COMPLIMENT value which is negative will fill out an
+     * This means a single, SIGNED_TWOS_COMPLIMENT value which is negative will fill out an
      * integer and move the signed bit to the integer msb. i.e.
      *
      * <table cols="3">
@@ -160,19 +139,12 @@ public record RoxByte(int rawValue) {
     }
 
     /**
-     * @return the format this byte is considered to be, at the moment, only SIGNED_TWOS_COMPLIMENT
-     */
-    public ByteFormat getFormat(){
-        return ByteFormat.SIGNED_TWOS_COMPLIMENT;
-    }
-
-    /**
      * @param bitToSet bit number (<code>0-7</code>) of the bit to set in the new {@link RoxByte}
      * @return A new {@link RoxByte} which is this one, with the specified bit set
      */
     public RoxByte withBit(int bitToSet) {
         validateBit(bitToSet);
-        return new RoxByte(PLACE_VALUE[bitToSet] | this.rawValue);
+        return new RoxByte((1 << bitToSet) | rawValue);
     }
 
     /**
@@ -181,8 +153,7 @@ public record RoxByte(int rawValue) {
      */
     public RoxByte withoutBit(int bitToClear) {
         validateBit(bitToClear);
-        int withoutBit = (~(PLACE_VALUE[bitToClear])) & rawValue;
-        return new RoxByte(withoutBit);
+        return new RoxByte(~(1 << bitToClear) & rawValue);
     }
 
     /**
@@ -191,7 +162,7 @@ public record RoxByte(int rawValue) {
      */
     public boolean isBitSet(int bitToTest) {
         validateBit(bitToTest);
-        return (rawValue & PLACE_VALUE[bitToTest]) == PLACE_VALUE[bitToTest];
+        return (rawValue & (1 << bitToTest)) != 0;
     }
 
     private void validateBit(final int bit){
