@@ -8,7 +8,7 @@
 </a>
 
 # EmuRox
-NOTE: This project has become a little neglected.  I'd love to find the time to dedicate to it but more and more that's less appealing as what's needed is some time bringing everything back up to date.  I'll be back, either to do just that, to try get AI to do it or to rethink my implementation and think at the tick level, rather than the instruction level from the ground up.  For now I'm playing with a [fresh canvas](https://github.com/rossdrew/EmuRoxLab) that will ultimately end up here.
+NOTE: This project has become a little neglected.  I'd love to find the time to dedicate to it but more and more that's less appealing as what's needed is some time bringing everything back up to date.  I'll be back.  But I want to keep this repo as an entirely human written version and that takes more time than I have. For now I'm playing with a [fresh canvas](https://github.com/rossdrew/EmuRoxLab) where I use AI.
 
 Ostensibly, a Nintendo Entertainment System ([NES](https://en.wikipedia.org/wiki/Nintendo_Entertainment_System)) emulator with a view to encompassing other systems. Creating a pluggable multi-emulator. In actuality, it is not about getting a working emulator, for a NES or anything else. There are plenty of them out there.  It's about taking a complex problem and designing the best abstraction possible.  Allowing us to discuss complex ideas in simple language.
 
