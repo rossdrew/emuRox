@@ -69,14 +69,14 @@ public class Mos6502Properties {
     }
 
     @Property (trials = 100)
-    public void testInvalidImmediateADC(@When(satisfies = "#_ < 0 || #_ > 255") int value){
+    public void testNonByteSizeValueInImmediateADC(@When(satisfies = "#_ < 0 || #_ > 255") int value){
         Program program = new Program().with(LDA_I, value);
         memory.setBlock(RoxWord.ZERO, program.getProgramAsByteArray());
 
         processor.step();
 
         Registers registers = processor.getRegisters();
-        assertNotEquals(value, registers.getRegister(Registers.Register.ACCUMULATOR));
+        assertNotEquals(value, registers.getRegister(Registers.Register.ACCUMULATOR).getAsInt());
         assertEquals(RoxWord.fromLiteral(program.getLength()), registers.getPC());
     }
 }
