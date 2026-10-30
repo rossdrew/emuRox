@@ -373,7 +373,7 @@ class OpCodeSpec extends Specification {
         [index, addressHi, addressLo, value, Z, N, Expected] << withIndex(withWordPointer(loadValueTestData()))
     }
 
-    @Unroll("LDX (Zero Page): Load #firstValue from [#address]")
+    @Unroll("LDX (Zero Page): Load #value from [#address]")
     testLX_Z() {
         when:
         Program program = loadMemoryWithProgram(LDA_I, value,
@@ -1507,7 +1507,7 @@ class OpCodeSpec extends Specification {
         [index, firstValue, secondValue, expectedAccumulator, Z, N, C, V, Expected] << withIndex(sbcTestData())
     }
 
-    @Unroll("SBC (Indirect, X) #Expected: #firstValue (@[#locationHi|#locationLo]) - #secondValue = #expectedAccumulator")
+    @Unroll("SBC (Indirect, X) #Expected: #firstValue (@[#pointerHi|#pointerLo]) - #secondValue = #expectedAccumulator")
     testSBC_IND_IX() {
         when:
         Program program = loadMemoryWithProgram(LDA_I, secondValue,    //Value at indirect address
@@ -1533,7 +1533,7 @@ class OpCodeSpec extends Specification {
         [pointerHi, pointerLo, index, firstValue, secondValue, expectedAccumulator, Z, N, C, V, Expected] << withWordPointer(withIndex(sbcTestData()))
     }
 
-    @Unroll("SBC (Indirect, Y) #Expected: #firstValue (@[#locationHi|#locationLo]) - #secondValue = #expectedAccumulator")
+    @Unroll("SBC (Indirect, Y) #Expected: #firstValue (@[#pointerHi|#pointerLo]) - #secondValue = #expectedAccumulator")
     testSBC_IND_IY() {
         when:
         loadMemoryWithProgram(LDY_I, index,           //Index to use
@@ -1867,7 +1867,7 @@ class OpCodeSpec extends Specification {
         0b10001111 | 0x0FF      | 0b10001111 | 0b10001111          | true  | true  | "Negative stack push"
     }
 
-    @Unroll("ASL (Accumulator) #Expected: #firstValue becomes #expectedAccumulator")
+    @Unroll("ASL (Accumulator) #Expected: #value becomes #expectedAccumulator")
     testASL() {
         when:
         Program program = loadMemoryWithProgram(LDA_I, value, ASL_A)

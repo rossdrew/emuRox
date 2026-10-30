@@ -156,7 +156,7 @@ class ProgramSpec extends Specification {
 
     def testUseOfNonExistentLabel() {
         given:
-        final Program program = new Program()
+        Program program = new Program()
         program = program.with(Mos6502OpCode.NOP, Mos6502OpCode.BCC, program.referenceBuilder("ThisDoesntExist"))
 
         when:
