@@ -18,16 +18,37 @@ public class RoxByteTest extends Specification{
         @Test
     public void testEquality(){
         assertTrue(RoxByte.ZERO.equals(RoxByte.ZERO));
-        assertTrue(RoxByte.ZERO.equals(0));
         assertEquals(RoxByte.ZERO.hashCode(), RoxByte.ZERO.hashCode());
 
-        assertTrue(RoxByte.fromLiteral(1).equals(1));
         assertEquals(RoxByte.fromLiteral(1), RoxByte.fromLiteral(1));
         assertEquals(RoxByte.fromLiteral(1).hashCode(), RoxByte.fromLiteral(1).hashCode());
 
-        assertTrue(RoxByte.fromLiteral(0b11111110).equals(0b11111110));
         assertEquals(RoxByte.fromLiteral(99), RoxByte.fromLiteral(99));
         assertEquals(RoxByte.fromLiteral(99).hashCode(), RoxByte.fromLiteral(99).hashCode());
+    }
+
+    @Test
+    public void testEqualityIsIndependentOfHowTheByteWasCreated(){
+        final RoxByte fromInt = RoxByte.fromLiteral(0b11111110);
+
+        assertEquals(fromInt, RoxByte.fromLiteral((byte)0b11111110));
+        assertEquals(fromInt, RoxByte.signedFrom(-2));
+        assertEquals(fromInt, RoxByte.fromLiteral(0b11111110).withBit(1));
+        assertEquals(fromInt.hashCode(), RoxByte.fromLiteral((byte)0b11111110).hashCode());
+        assertEquals(fromInt.hashCode(), RoxByte.signedFrom(-2).hashCode());
+    }
+
+    @Test
+    public void testToBinaryStringIsEightBitsForNegativeBytes(){
+        assertEquals("11111110", RoxByte.signedFrom(-2).toBinaryString());
+        assertEquals("10000000", RoxByte.fromLiteral((byte)0b10000000).toBinaryString());
+    }
+
+    @Test
+    public void testNotEqualToOtherTypes(){
+        assertNotEquals(RoxByte.ZERO, 0);
+        assertNotEquals(RoxByte.fromLiteral(1), 1);
+        assertNotEquals(RoxByte.fromLiteral(99), RoxWord.fromLiteral(99));
     }
 
     @Test

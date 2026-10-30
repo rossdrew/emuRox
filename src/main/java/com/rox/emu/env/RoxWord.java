@@ -1,15 +1,13 @@
 package com.rox.emu.env;
 
-import java.util.Objects;
-
 /**
  * A representation of a word, i.e. the combination of two {@link RoxByte}s.
  *
  * {@see RoxByte}
+ *
+ * @param rawValue the 16 bits of this word. Only the least significant 16 bits are kept.
  */
-public final class RoxWord {
-    private final int wordValue;
-
+public record RoxWord(int rawValue) {
     /** Binary digit place values */
     private static final int[] PLACE_VALUE = {  0b0000000000000001, //Byte 1
                                                 0b0000000000000010,
@@ -31,8 +29,8 @@ public final class RoxWord {
 
     public static final RoxWord ZERO = new RoxWord(0);
 
-    private RoxWord(int wordValue) {
-        this.wordValue = wordValue;
+    public RoxWord {
+        rawValue &= 0xFFFF;
     }
 
     /**
@@ -54,7 +52,7 @@ public final class RoxWord {
      * Extract a literal {@link RoxWord} from the first two least significant bytes of the given {@link int}
      */
     public static RoxWord fromLiteral(final int literalValue) {
-        return new RoxWord(literalValue & 0xFFFF);
+        return new RoxWord(literalValue);
     }
 
     /**
@@ -64,23 +62,23 @@ public final class RoxWord {
      * @return This {@link RoxWord word} as it's {@link int} representation.
      */
     public int getAsInt() {
-        return intFromTwosComplimented(wordValue);
+        return intFromTwosComplimented(rawValue);
     }
 
-    private int intFromTwosComplimented(int wordValue){
+    private int intFromTwosComplimented(int rawValue){
         if (isBitSet(15))
-            return -((-wordValue) & 0xFFFF);
+            return -((-rawValue) & 0xFFFF);
         else
-            return wordValue;
+            return rawValue;
     }
 
     /**
-     * @param bitToTest bit number (<code>0-7</code>) of the bit to test
-     * @return weather the specified bit is set in this byte
+     * @param bitToTest bit number (<code>0-15</code>) of the bit to test
+     * @return weather the specified bit is set in this word
      */
     public boolean isBitSet(int bitToTest) {
         validateBit(bitToTest);
-        return (wordValue & PLACE_VALUE[bitToTest]) == PLACE_VALUE[bitToTest];
+        return (rawValue & PLACE_VALUE[bitToTest]) == PLACE_VALUE[bitToTest];
     }
 
     private void validateBit(final int bit){
@@ -92,42 +90,21 @@ public final class RoxWord {
      * @return The least significant {@link RoxByte byte} (lsb) of this {@link RoxWord word}
      */
     public RoxByte getLowByte() {
-        return RoxByte.fromLiteral(wordValue & 0xFF);
+        return RoxByte.fromLiteral(rawValue & 0xFF);
     }
 
     /**
      * @return The most significant {@link RoxByte byte} (msb) of this {@link RoxWord word}
      */
     public RoxByte getHighByte() {
-        return RoxByte.fromLiteral(wordValue >> 8);
+        return RoxByte.fromLiteral(rawValue >> 8);
     }
 
     /**
      * @return Return an {@link int} with identical two least significant bytes to this {@link RoxWord word}
      */
     public int getRawValue(){
-        return wordValue;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-
-        if (o == null) return false;
-
-        if (o instanceof Integer)
-            return (wordValue == RoxWord.fromLiteral((Integer)o).getRawValue());
-        if (o instanceof RoxByte)
-            return wordValue == RoxWord.from((RoxByte)o).getRawValue();
-        else if (getClass() != o.getClass())
-            return false;
-
-        return wordValue == ((RoxWord) o).wordValue;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(wordValue);
+        return rawValue;
     }
 
     @Override

@@ -15,16 +15,20 @@ public class RoxWordTest {
     @Test
     public void testEquality(){
         assertTrue(RoxWord.ZERO.equals(RoxWord.ZERO));
-        assertTrue(RoxWord.ZERO.equals(0));
         assertEquals(RoxWord.ZERO.hashCode(), RoxWord.ZERO.hashCode());
 
-        assertTrue(RoxWord.fromLiteral(1).equals(1));
         assertEquals(RoxWord.fromLiteral(1), RoxWord.fromLiteral(1));
         assertEquals(RoxWord.fromLiteral(1).hashCode(), RoxWord.fromLiteral(1).hashCode());
 
-        assertTrue(RoxWord.fromLiteral(0b1111111111111110).equals(0b1111111111111110));
-        assertEquals(RoxWord.fromLiteral(99), RoxByte.fromLiteral(99));
-        assertEquals(RoxWord.fromLiteral(99).hashCode(), RoxByte.fromLiteral(99).hashCode());
+        assertEquals(RoxWord.fromLiteral(0b1111111111111110), RoxWord.from(RoxByte.fromLiteral(0b11111111), RoxByte.fromLiteral(0b11111110)));
+        assertEquals(RoxWord.fromLiteral(99), RoxWord.from(RoxByte.fromLiteral(99)));
+    }
+
+    @Test
+    public void testNotEqualToOtherTypes(){
+        assertNotEquals(RoxWord.ZERO, 0);
+        assertNotEquals(RoxWord.fromLiteral(1), 1);
+        assertNotEquals(RoxWord.fromLiteral(99), RoxByte.fromLiteral(99));
     }
 
     @Test

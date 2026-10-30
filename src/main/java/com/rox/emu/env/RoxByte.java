@@ -2,12 +2,12 @@ package com.rox.emu.env;
 
 import com.rox.emu.InvalidDataTypeException;
 
-import java.util.Objects;
-
 /**
  * A representation of a byte that can be in different formats, so far only SIGNED_TWOS_COMPLIMENT.
+ *
+ * @param rawValue the 8 bits of this byte, as they are in memory. Only the least significant 8 bits are kept.
  */
-public final class RoxByte {
+public record RoxByte(int rawValue) {
     /**
      * Specifies the format of the information held in a {@link RoxByte} instance, options:-
      *
@@ -36,20 +36,16 @@ public final class RoxByte {
         SIGNED_TWOS_COMPLIMENT
     }
 
-    private final int byteValue;
-    private final ByteFormat format;
-
     /** Binary digit place values */
     private static final int[] PLACE_VALUE = {1, 2, 4, 8, 16, 32, 64, 128};
 
     /**
      * A {@link RoxByte} representing zero
      */
-    public static final RoxByte ZERO = new RoxByte(0, ByteFormat.SIGNED_TWOS_COMPLIMENT);
+    public static final RoxByte ZERO = new RoxByte(0);
 
-    private RoxByte(int value, ByteFormat format){
-        this.byteValue = value;
-        this.format = format;
+    public RoxByte {
+        rawValue &= 0xFF;
     }
 
     /**
@@ -74,9 +70,9 @@ public final class RoxByte {
      */
     public static RoxByte signedFrom(int value) {
         if (value > 127 || value < -128)
-            throw new InvalidDataTypeException("Cannot convert " + value + " to unsigned byte.  Expected range (-128 -> 127)");
+            throw new InvalidDataTypeException("Cannot convert " + value + " to signed byte.  Expected range (-128 -> 127)");
 
-        return new RoxByte(value, ByteFormat.SIGNED_TWOS_COMPLIMENT);
+        return new RoxByte(value);
     }
 
     /**
@@ -86,7 +82,7 @@ public final class RoxByte {
      * @return a {@link RoxByte} made up from the least significant 8 bits of the given value
      */
     public static RoxByte fromLiteral(int value) {
-        return new RoxByte(value & 0xFF, ByteFormat.SIGNED_TWOS_COMPLIMENT);
+        return new RoxByte(value);
     }
 
     /**
@@ -96,7 +92,7 @@ public final class RoxByte {
      * @return a {@link RoxByte} made up from the least significant 8 bits of the given value
      */
     public static RoxByte fromLiteral(byte value) {
-        return new RoxByte(value, ByteFormat.SIGNED_TWOS_COMPLIMENT);
+        return new RoxByte(value);
     }
 
     /**
@@ -144,14 +140,14 @@ public final class RoxByte {
      * @return this SIGNED_TWOS_COMPLIMENT byte as an integer
      */
     public int getAsInt() {
-        return intFromTwosComplimented(byteValue);
+        return intFromTwosComplimented(rawValue);
     }
 
-    private int intFromTwosComplimented(int byteValue){
+    private int intFromTwosComplimented(int rawValue){
         if (isBitSet(7))
-            return -((~(byteValue-1)) & 0xFF);
+            return -((~(rawValue-1)) & 0xFF);
         else
-            return byteValue;
+            return rawValue;
     }
 
     /**
@@ -160,14 +156,14 @@ public final class RoxByte {
      * @return 8 bits of the byte as an {@link int} as they are in memory
      */
     public int getRawValue(){
-        return byteValue & 0xFF;
+        return rawValue;
     }
 
     /**
      * @return the format this byte is considered to be, at the moment, only SIGNED_TWOS_COMPLIMENT
      */
     public ByteFormat getFormat(){
-        return format;
+        return ByteFormat.SIGNED_TWOS_COMPLIMENT;
     }
 
     /**
@@ -176,7 +172,7 @@ public final class RoxByte {
      */
     public RoxByte withBit(int bitToSet) {
         validateBit(bitToSet);
-        return new RoxByte(PLACE_VALUE[bitToSet] | this.byteValue, ByteFormat.SIGNED_TWOS_COMPLIMENT);
+        return new RoxByte(PLACE_VALUE[bitToSet] | this.rawValue);
     }
 
     /**
@@ -185,8 +181,8 @@ public final class RoxByte {
      */
     public RoxByte withoutBit(int bitToClear) {
         validateBit(bitToClear);
-        int withoutBit = (~(PLACE_VALUE[bitToClear])) & byteValue;
-        return new RoxByte(withoutBit, ByteFormat.SIGNED_TWOS_COMPLIMENT);
+        int withoutBit = (~(PLACE_VALUE[bitToClear])) & rawValue;
+        return new RoxByte(withoutBit);
     }
 
     /**
@@ -195,7 +191,7 @@ public final class RoxByte {
      */
     public boolean isBitSet(int bitToTest) {
         validateBit(bitToTest);
-        return (byteValue & PLACE_VALUE[bitToTest]) == PLACE_VALUE[bitToTest];
+        return (rawValue & PLACE_VALUE[bitToTest]) == PLACE_VALUE[bitToTest];
     }
 
     private void validateBit(final int bit){
@@ -211,7 +207,7 @@ public final class RoxByte {
     }
 
     public String toBinaryString(){
-        return Integer.toBinaryString(getAsInt());
+        return Integer.toBinaryString(rawValue);
     }
 
     public static RoxByte[] fromIntArray(final int[] bytes){
@@ -223,27 +219,7 @@ public final class RoxByte {
     }
 
     public RoxByte copy() {
-        return new RoxByte(byteValue, format);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-
-        if (o==null)
-            return false;
-
-        if (o instanceof Integer)
-            return (byteValue == RoxByte.fromLiteral((Integer)o).byteValue);
-
-        if (getClass() != o.getClass()) return false;
-        RoxByte roxByte = (RoxByte) o;
-        return byteValue == roxByte.byteValue;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(byteValue);
+        return new RoxByte(rawValue);
     }
 
     @Override

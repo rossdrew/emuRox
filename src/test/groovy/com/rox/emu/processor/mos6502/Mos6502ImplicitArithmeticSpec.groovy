@@ -53,7 +53,7 @@ class Mos6502ImplicitArithmeticSpec extends Specification {
         processor.step(steps)
 
         then: 'we are were we are expected to be'
-        registers.getPC() == expectedValue
+        registers.getPC().rawValue == expectedValue
 
         where:
         initialValue        | steps   || expectedValue | description
@@ -84,7 +84,7 @@ class Mos6502ImplicitArithmeticSpec extends Specification {
         processor.step(3)
 
         then: 'the correct value is in the accumulator'
-        registers.getRegister(Registers.Register.ACCUMULATOR) == expectedAccumulator
+        registers.getRegister(Registers.Register.ACCUMULATOR).rawValue == expectedAccumulator
 
         where: 'Pointer location base (pLoc), the points (pHi|pLo) and the index are'
         pLoc | pHi  | pLo  | index | value || expectedAccumulator   | description
@@ -116,7 +116,7 @@ class Mos6502ImplicitArithmeticSpec extends Specification {
         processor.step(3)
 
         then: 'the correct value is in the accumulator'
-        registers.getRegister(Registers.Register.ACCUMULATOR) == expectedAccumulator
+        registers.getRegister(Registers.Register.ACCUMULATOR).rawValue == expectedAccumulator
 
         where:
         pLoc | pHi  | pLo  | index | value || expectedAccumulator   | description
@@ -142,7 +142,7 @@ class Mos6502ImplicitArithmeticSpec extends Specification {
         processor.step(2)
 
         then: 'we end up at the expected location'
-        registers.getPC() == expectedLocation
+        registers.getPC().rawValue == expectedLocation
 
         where:
         programLocation | jumpOffset || expectedLocation | description
